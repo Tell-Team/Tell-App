@@ -1,0 +1,55 @@
+\documentclass{article}
+
+% Imports
+\usepackage[a4paper, total={6in, 8in}]{geometry} % Uses the whole width of the page
+
+% Macros
+\newcommand{\mycount}[1]{\stepcounter{#1}\arabic{#1}}
+
+\title{Tell: Gestore teatrale}
+\date{2025-04-05}
+\author
+{
+    Giuseppe Mariotti\\
+    Riccardo Ripa\\
+    Rodrigo Rengifo\\
+    Mattia Praolini
+}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \newpage
+    \pagenumbering{arabic}
+
+    \section{Descrizione di alto livello}
+        Il progetto prevede la realizzazione di un applicativo che consenta la vendita online di biglietti per eventi teatrali (opere e concerti) e la diffusione di informazioni riguardo gli spettacoli. Il sistema si articolerà, per l’acquirente, in due sezioni: la prima contenente la lista di eventi disponibili al momento, la seconda contenente maggiori informazioni riguardo gli spettacoli che vengono riallestiti periodicamente, inclusi quelli non in programma al momento. Per la biglietteria saranno disponibili sezioni per la gestione degli eventi e dei posti occupati, mentre per lo staff editoriale saranno disponibili sezioni per la gestione delle informazioni visualizzate nella sezione divulgativa. Dall’intervista con i responsabili marketing e ufficio stampa di un ente pesarese operante nel settore sono emerse varie necessità. L’interfaccia dovrà essere ottimizzata per favorire, almeno in fase di primo approccio all’acquirente, la semplicità del processo di acquisto del biglietto: un’eccessiva quantità di informazioni ridurrebbe l’intuitività e l’accessibilità. Il prezzo di un biglietto è determinato dalla tipologia di posto scelto e, talvolta, dal tipo di evento, nonché da una lista di sconti applicabili in base a determinati criteri. Una volta inserite le informazioni ed effettuato il pagamento, l’acquirente potrà scaricare il biglietto digitale o, previa richiesta esplicita nel form, ritirare il biglietto fisico in biglietteria. Le voci delle informazioni riguardo l’evento (direttore d’orchestra, interpreti, tecnici e altri) dovranno essere totalmente flessibili viste le notevoli differenze fra i vari tipi di eventi. Un caso particolare di eventi sono le opere, che possono essere messe in scena solo tramite una regia (una direzione artistica che accoppia alle musiche e al libretto dell’opera i costumi, fondali e altri elementi necessari alla rappresentazione). Nella sezione anagrafica, per ogni opera dovrà essere memorizzato e mostrato all’utente lo storico delle regie presenti e passate. Inoltre, durante il suo primo anno di rappresentazione, una regia è considerata un “nuovo allestimento”, e ciò deve essere memorizzato nel sistema e mostrato all’acquirente nella sezione degli eventi.
+    \newpage
+
+    \section{Requisiti progettuali}
+        \subsection{Requisiti Funzionali}
+            \newcounter{rf}
+
+            \subsubsection{Area Gestione Cliente}
+                \textbf{RF\mycount{rf}: Visualizza eventi} \\
+                Il sistema dovrà mostrare al cliente la lista di eventi disponibili all'acquisto. \\ \\
+                \textbf{RF\mycount{rf}: Inserisci prenotazione} \\
+                Il sistema dovrà permettere al cliente di prenotare uno o più biglietti per un determinato evento. \\ \\
+                \textbf{RF\mycount{rf}: Modifica prenotazione} \\
+                Il sistema dovrà permettere al cliente di rimuovere o aggiungere uno o più biglietti prima che la prenotazione sia confermata. \\ \\
+                \textbf{RF\mycount{rf}: Visualizza importo} \\
+                Il sistema dovrà mostrare al cliente l'importo totale della prenotazione. \\ \\
+                \textbf{RF\mycount{rf}: Produci ricevuta} \\
+                Il sistema dovrà produrre la ricevuta contenente l'identificativo della prenotazione per il pagamento alla cassa.
+
+            \subsubsection{Area Gestione Biglietteria}
+                \textbf{RF\mycount{rf}: Visualizza prenotazioni} \\
+                Il sistema dovrà mostrare alla biglietteria la lista di prenotazioni effettuate per un determinato teatro. \\ \\
+
+        \subsection{Requisiti Non Funzionali}
+            \newcounter{rnf}
+
+            \textbf{RNF\mycount{rnf}: Python3} \\
+            Il sistema dovrà essere implementato in linguaggio Python3. \\
+
+\end{document}
