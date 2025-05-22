@@ -1,6 +1,9 @@
 <html>
+<head>
+    <script defer src="roleManager.js"></script>
+</head>
 <body>
-    <button onclick="window.location.href = './info.html';">&lt; Indietro</button>
+    <button onclick="window.location.href = './info.html?role=' + new URLSearchParams(window.location.search).get('role');">&lt; Indietro</button>
     <h2>Vitrifrigo Arena</h2>
     <div>Inaugurato nel 1996</div>
     <div>Via R. Ripa, 1</div>

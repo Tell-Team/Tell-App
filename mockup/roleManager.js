@@ -1,0 +1,1 @@
+document.getElementById(new URLSearchParams(window.location.search).get('role')).style = "";

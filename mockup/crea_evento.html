@@ -1,0 +1,53 @@
+<html>
+<head>
+    <script defer src="roleManager.js"></script>
+</head>
+<body>
+    <button onclick="window.location.href = './eventi.html?role=' + new URLSearchParams(window.location.search).get('role');">&lt; Indietro</button>
+
+    <br><br>
+
+    <label>Titolo</label>
+    <br>
+    <input type="text" />
+
+    <br><br>
+
+    <label>Note</label>
+    <br>
+    <textarea></textarea>
+
+    <h2>Altri</h2>
+    <div><b>Direttore: </b>Giacomo Sagripanti</div>
+    <div><b>Costumi: </b>Ingo Kr&uuml;gler</div>
+    <div><b>Coro: </b>Coro del Teatro Ventidio Basso</div>
+    <div><b>Orchestra: </b>Orchestra del Teatro Comunale di Bologna</div>
+    <br>
+    <label>Ruolo</label> - <label>Persona</label>
+    <br>
+    <input type="text" /> <input type="text" />
+    <button>Aggiungi</button>
+
+    <h2>Interpreti</h2>
+    <div><b>Polidoro: </b>Andrea Mastroni</div>
+    <div><b>Zelmira: </b>Anastasia Bartoli</div>
+    <br>
+    <label>Ruolo</label> - <label>Interprete</label>
+    <br>
+    <input type="text" /> <input type="text" />
+    <button>Aggiungi</button>
+
+    <h2>Date</h2>
+    <div>Domenica 10 Agosto 2025</div>
+    <div>Mercoledì 13 Agosto 2025</div>
+    <br>
+    <label>Data</label>
+    <br>
+    <input type="date" />
+    <button>Aggiungi</button>
+
+    <br><br>
+
+    <button>Crea evento</button>
+</body>
+</html>

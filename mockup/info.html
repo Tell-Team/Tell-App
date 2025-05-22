@@ -1,10 +1,13 @@
 <html>
+<head>
+    <script defer src="roleManager.js"></script>
+</head>
 <body>
     <button onclick="window.location.href = './index.html';">Logout</button>
 
     <br><br>
 
-    <button onclick="window.location.href = './eventi.html';">Eventi</button>
+    <button onclick="window.location.href = './eventi.html?role=' + new URLSearchParams(window.location.search).get('role');">Eventi</button>
     <span>Info</span>
 
     <h2>Opere</h2>
@@ -12,7 +15,7 @@
         <h3>Zelmira</h3>
         <div>Libretto di Andrea Leone Tottola</div>
         <div>Musica di Gioachino Rossini</div>
-        <button onclick="window.location.href = './info_opera.html';">Maggiori info</button>
+        <button onclick="window.location.href = './info_opera.html?role=' + new URLSearchParams(window.location.search).get('role');">Maggiori info</button>
     </div>
     
     <h2>Teatri</h2>
@@ -20,7 +23,7 @@
         <h3>Vitrifrigo Arena</h3>
         <div>Inaugurato nel 1996</div>
         <div>Via R. Ripa, 1</div>
-        <button onclick="window.location.href = './info_teatro.html';">Maggiori info</button>
+        <button onclick="window.location.href = './info_teatro.html?role=' + new URLSearchParams(window.location.search).get('role');">Maggiori info</button>
     </div>
 </body>
 </html>

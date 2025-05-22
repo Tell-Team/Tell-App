@@ -1,12 +1,25 @@
 <html>
+<head>
+    <script defer src="roleManager.js"></script>
+</head>
 <body>
-    <button onclick="window.location.href = './eventi.html';">&lt; Indietro</button>
+    <button onclick="window.location.href = './eventi.html?role=' + new URLSearchParams(window.location.search).get('role');">&lt; Indietro</button>
     <h2>Zelmira</h2>
     <p>Dramma per musica in due atti di Andrea Leone Tottola.</p>
     <p>Edizione critica della Fondazione Rossini di Pesaro, in collaborazione con Casa Ricordi di Milano, a cura di <b>Helen Greenwald</b> e <b>Kathleen Kuzmick Hansell</b></p>
-    <h2>Scegli posti</h2>
+    <h2>Scegli i biglietti</h2>
     
-    <span>Settore </span>
+    <label>Data</label>
+    <select>
+        <option>Domenica 10 Agosto 2025</option>
+        <option>Mercoledì 13 Agosto 2025</option>
+        <option>Sabato 16 Agosto 2025</option>
+        <option>Martedì 19 Agosto 2025</option>
+    </select>
+
+    <br><br>
+
+    <label>Settore </label>
     <select>
         <option>Tribuna A</option>
         <option>Tribuna B</option>
@@ -14,9 +27,9 @@
         <option>Galleria</option>
     </select>
     
-    <br>
+    <br><br>
     
-    <span>Posto </span>
+    <label>Posto </label>
     <select>
         <option>1</option>
         <option>2</option>
@@ -39,14 +52,15 @@
     <h2>Biglietti</h2>
     <!-- <span>Non hai selezionato nessun posto.</span> -->
     <div style="border: 1px solid black;">
-        <span>Tribuna A, Posto 14</span>
-        <button>Rimuovi</button>
-    </div>
-    <div style="border: 1px solid black;">
-        <span>Tribuna A, Posto 15</span>
+        <span>Sabato 16 Agosto, Tribuna A, Posto 14</span>
         <button>Rimuovi</button>
     </div>
     <br>
-    <button onclick="window.location.href = './ricevuta.html';">Conferma</button>
+    <div style="border: 1px solid black;">
+        <span>Sabato 16 Agosto, Tribuna A, Posto 15</span>
+        <button>Rimuovi</button>
+    </div>
+    <br>
+    <button onclick="window.location.href = './ricevuta.html?role=' + new URLSearchParams(window.location.search).get('role');">Conferma</button>
 </body>
 </html>

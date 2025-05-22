@@ -1,6 +1,9 @@
 <html>
+<head>
+    <script defer src="roleManager.js"></script>
+</head>
 <body>
-    <button onclick="window.location.href = './info.html';">&lt; Indietro</button>
+    <button onclick="window.location.href = './info.html?role=' + new URLSearchParams(window.location.search).get('role');">&lt; Indietro</button>
     <h2>Zelmira</h2>
     <div>Libretto di Andrea Leone Tottola</div>
     <div>Musica di Gioachino Rossini</div>

@@ -1,19 +1,27 @@
 <html>
+<head>
+    <script defer src="roleManager.js"></script>
+</head>
 <body>
     <button onclick="window.location.href = './index.html';">Logout</button>
 
     <br><br>
 
     <span>Eventi</span>
-    <button onclick="window.location.href = './info.html';">Info</button>
+    <button onclick="window.location.href = './info.html?role=' + new URLSearchParams(window.location.search).get('role');">Info</button>
     
     <br><br>
+
+    <div id="biglietteria" style="display: none;">
+        <button onclick="window.location.href = './crea_evento.html?role=' + new URLSearchParams(window.location.search).get('role');">Nuovo Evento</button>
+        <br><br>
+    </div>
 
     <div style="border: 1px solid black;">
         <h3>Zelmira</h3>
         <div>Diretto da Giacomo Sagripanti</div>
         <div>Regia di Calixto Bieito</div>
-        <button onclick="window.location.href = './acquista.html';">Scegli posti</button>
+        <button onclick="window.location.href = './acquista.html?role=' + new URLSearchParams(window.location.search).get('role');">Scegli posti</button>
     </div>
 </body>
 </html>

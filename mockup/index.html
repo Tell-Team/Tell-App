@@ -1,10 +1,13 @@
 <html>
+<head>
+    <script defer src="roleManager.js"></script>
+</head>
 <body>
     <h2>Login</h2>
     <div>Scegliere il tipo di account: </div>
     <br>
-    <button onclick="window.location.href = './eventi.html';">Cliente</button>
-    <button>Biglietteria</button>
-    <button>Admin</button>
+    <button onclick="window.location.href = './eventi.html?role=cliente';">Cliente</button>
+    <button onclick="window.location.href = './eventi.html?role=biglietteria';">Biglietteria</button>
+    <button onclick="window.location.href = './eventi.html?role=admin';">Admin</button>
 </body>
 </html>
