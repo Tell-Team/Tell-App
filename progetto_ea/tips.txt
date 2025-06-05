@@ -1,0 +1,2 @@
+rimuovi namespace davanti ai nomi delle classi :: doppio click sx sul diagramma > diagram > UNCHECK show namespace
+salvare diagramma come immagine :: publish > save > save to file
