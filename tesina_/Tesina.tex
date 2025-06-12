@@ -1,0 +1,103 @@
+\documentclass{article}
+
+% Imports
+\usepackage[a4paper, total={6in, 8in}]{geometry} % Imposta i margini della pagina
+\usepackage{array} % Fornisce per le tabelle il tipo di colonna "m", che consente di impostare una larghezza fissa
+\usepackage{tabularray} % Fornisce per le tabelle i tipi di colonna che permettono l'allineamento verticale
+\usepackage{booktabs} % Fornisce decoratori per le tabelle
+
+% Macros
+\newcommand{\mycount}[1]{\stepcounter{#1}\arabic{#1}}
+
+\title{Tell: Gestore teatrale}
+\date{2025-06-06}
+\author
+{
+    Giuseppe Mariotti\\
+    Riccardo Ripa\\
+    Rodrigo Rengifo\\
+    Mattia Praolini
+}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \newpage
+    \pagenumbering{arabic}
+
+    \section{Panoramica}
+        Il progetto prevede la realizzazione di un applicativo che consenta la vendita di biglietti per eventi teatrali (come opere e concerti) e la divulgazione di informazioni a riguardo. Il sistema si articolerà, per l’acquirente, in due sezioni: la prima conterrà la lista di eventi disponibili all'acquisto, la seconda conterrà maggiori informazioni riguardo le opere, incluse quelle non in programma al momento. Per la biglietteria saranno disponibili sezioni per la gestione degli eventi e delle prenotazioni, mentre per l'amministratore saranno disponibili sezioni per la gestione delle informazioni riguardo le opere e della struttura posti del teatro. Dall’intervista con i responsabili marketing e ufficio stampa di un ente pesarese operante nel settore sono emerse varie necessità. L’interfaccia dovrà essere ottimizzata per favorire la semplicità del processo di acquisto del biglietto: un’eccessiva quantità di informazioni in primo accesso ridurrebbe l’intuitività e l’accessibilità. Il prezzo di un biglietto è determinato dalla tipologia di posto scelto e dal tipo di evento, nonché da una lista di sconti applicabili in base a determinati criteri. Una volta confermata la prenotazione, il totem digitale stamperà una ricevuta contenente l'identificativo che potrà essere usato per effettuare il pagamento in biglietteria. Le voci delle informazioni dell’evento (direttore d’orchestra, interpreti, tecnici e altri) dovranno essere totalmente flessibili viste le notevoli differenze fra i vari tipi di eventi. Un caso particolare di eventi sono le opere, che possono essere messe in scena solo tramite una regia (una direzione artistica che accoppia alle musiche e al libretto dell’opera i costumi, fondali e altri elementi necessari alla rappresentazione). Infine, nella sezione anagrafica, per ogni opera dovrà essere memorizzato e mostrato all’utente lo storico delle regie presenti e passate.
+    \newpage
+
+    \section{Glossario dei termini}
+        % \begin{table}[h]
+        %     \centering
+        %     \caption{Sample Table}
+        %     \begin{tabular}{cc}
+        %         Header 1 & Header 2 \\
+        %         \hline
+        %         Value 1  & Value 2  \\
+        %         Value 3  & Value 4
+        %     \end{tabular}
+        % \end{table}
+
+        \begin{tblr}{h{2cm}h{2cm}m{10cm}}
+            \hline
+            \textbf{Termine} & \textbf{Sinonimi} & \textbf{Definizione} \\
+            \hline
+            Opera & N/A & Il testo e le musiche di un'opera lirica. Questi, a meno di casi li- mite che non interessano la realizzazione del software in questione, non vengono mai modificati. \\
+            Regia & N/A & I costumi, i fondali, la direzione coreografica e degli effetti speciali e, in generale, della narrazione visiva dell'opera. Periodicamente le opere ricevono una nuova regia, che viene realizzata da un regista. \\
+            Spettacolo & N/A & Le informazioni organizzative riguardo una determinata rappresentazione teatrale (di una \textbf{Regia} o altro tipo di spettacolo), come il cast, il direttore o il coro. \\
+            Evento & N/A & La data e l'ora in cui un determinato spettacolo viene messo in scena. Solitamente, ciascuno spettacolo viene ripetuto in molteplici eventi. \\
+            Cliente & N/A & L'aquirente di biglietti \\
+            Biglietteria & N/A & Il dipendente dell'ufficio biglietteria \\
+            Amministratore & N/A & Il gestore del sistema \\
+            Utente & N/A & Uno qualunque tra \textbf{Cliente}, \textbf{Biglietteria} e \textbf{Amministratore} \\
+            \hline
+        \end{tblr}
+    \newpage
+
+    \section{Requisiti progettuali}
+        \subsection{Requisiti Funzionali}
+            \newcounter{rf}
+
+            \subsubsection{Area Cliente}
+                \textbf{RF\mycount{rf}: Visualizza opere} \\
+                Il sistema dovrà mostrare al cliente le anagrafiche delle opere e l'archivio delle relative regie. \\
+                \\
+                \textbf{RF\mycount{rf}: Visualizza spettacoli} \\
+                Il sistema dovrà mostrare al cliente la lista degli spettacoli e dei relativi eventi disponibili all'acquisto. \\
+                \\
+                \textbf{RF\mycount{rf}: Visualizza struttura posti} \\
+                Il sistema dovrà consentire al cliente di visualizzare la struttura posti del teatro durante la composizione della prenotazione. \\
+                \\
+                \textbf{RF\mycount{rf}: Gestisci prenotazione} \\
+                Il sistema dovrà consentire al cliente di creare una prenotazione e modificarne i posti o eliminarla completamente prima di averla confermata. \\
+                \\
+                \textbf{RF\mycount{rf}: Conferma prenotazione} \\
+                Il sistema dovrà consentire al cliente di confermare la prenotazione, e produrre la ricevuta contenente l'identificativo della prenotazione per il pagamento alla cassa. \\
+                \\
+
+            \subsubsection{Area Biglietteria}
+                \textbf{RF\mycount{rf}: Gestisci spettacoli} \\
+                Il sistema dovrà consentire alla biglietteria di creare, modificare e rimuovere gli spettacoli in programma e i relativie eventi. \\
+                \\
+                \textbf{RF\mycount{rf}: Gestisci lista prenotazioni} \\
+                Il sistema dovrà consentire alla biglietteria di visualizzare e modificare tutte le prenotazioni effettuate nel teatro e di contrassegnare le prenotazioni che sono state pagate in cassa. \\
+                \\
+
+            \subsubsection{Area Amministratore}
+                \textbf{RF\mycount{rf}: Gestisci opere} \\
+                Il sistema dovrà consentire all'amministratore di creare, modificare e rimuovere le anagrafiche delle opere e l'archivio delle relative regie. \\
+                \\
+                \textbf{RF\mycount{rf}: Gestisci struttura posti} \\
+                Il sistema dovrà consentire all'amministratore di modificare la struttura posti del teatro. \\
+                \\
+
+        \subsection{Requisiti Non Funzionali}
+            \newcounter{rnf}
+
+            \textbf{RNF\mycount{rnf}: Python3} \\
+            Il sistema dovrà essere implementato in linguaggio Python3. \\
+
+\end{document}
