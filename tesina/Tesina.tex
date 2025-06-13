@@ -5,6 +5,27 @@
 \usepackage{array} % Fornisce per le tabelle il tipo di colonna "m", che consente di impostare una larghezza fissa
 \usepackage{tabularray} % Fornisce per le tabelle i tipi di colonna che permettono l'allineamento verticale
 \usepackage{booktabs} % Fornisce decoratori per le tabelle
+\usepackage{graphicx} % Inserimento immagini
+
+% Use case descriptions imports & settings
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{cancel}
+\usepackage[utf8]{inputenc}
+\usepackage{mathtools}
+\usepackage{comment}
+\usepackage{amssymb}
+\usepackage{pifont}
+\usepackage{subfig}
+\usepackage[dvipsnames, table]{xcolor} % Per colorare celle delle tabelle
+\usepackage{hyphenat}
+\usepackage{tabularx}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{varwidth}
+\usepackage{enumitem}
+\setlist[enumerate]{label*=\arabic*., topsep=0pt} % Imposta gli indici di tutti i livelli di enumerazione come numeri arabi (invece del default che passa alle lettere)
 
 % Macros
 \newcommand{\mycount}[1]{\stepcounter{#1}\arabic{#1}}
@@ -30,18 +51,7 @@
     \newpage
 
     \section{Glossario dei termini}
-        % \begin{table}[h]
-        %     \centering
-        %     \caption{Sample Table}
-        %     \begin{tabular}{cc}
-        %         Header 1 & Header 2 \\
-        %         \hline
-        %         Value 1  & Value 2  \\
-        %         Value 3  & Value 4
-        %     \end{tabular}
-        % \end{table}
-
-        \begin{tblr}{h{2cm}h{2cm}m{10cm}}
+        \begin{tblr}{h{3cm}h{2cm}m{10cm}}
             \hline
             \textbf{Termine} & \textbf{Sinonimi} & \textbf{Definizione} \\
             \hline
@@ -58,6 +68,9 @@
     \newpage
 
     \section{Requisiti progettuali}
+        \subsection{Diagramma}
+            \includegraphics{imgs/requisiti/requisiti}
+
         \subsection{Requisiti Funzionali}
             \newcounter{rf}
 
@@ -76,7 +89,6 @@
                 \\
                 \textbf{RF\mycount{rf}: Conferma prenotazione} \\
                 Il sistema dovrà consentire al cliente di confermare la prenotazione, e produrre la ricevuta contenente l'identificativo della prenotazione per il pagamento alla cassa. \\
-                \\
 
             \subsubsection{Area Biglietteria}
                 \textbf{RF\mycount{rf}: Gestisci spettacoli} \\
@@ -84,7 +96,6 @@
                 \\
                 \textbf{RF\mycount{rf}: Gestisci lista prenotazioni} \\
                 Il sistema dovrà consentire alla biglietteria di visualizzare e modificare tutte le prenotazioni effettuate nel teatro e di contrassegnare le prenotazioni che sono state pagate in cassa. \\
-                \\
 
             \subsubsection{Area Amministratore}
                 \textbf{RF\mycount{rf}: Gestisci opere} \\
@@ -92,12 +103,161 @@
                 \\
                 \textbf{RF\mycount{rf}: Gestisci struttura posti} \\
                 Il sistema dovrà consentire all'amministratore di modificare la struttura posti del teatro. \\
-                \\
 
         \subsection{Requisiti Non Funzionali}
             \newcounter{rnf}
 
             \textbf{RNF\mycount{rnf}: Python3} \\
             Il sistema dovrà essere implementato in linguaggio Python3. \\
+
+    \section{Casi d'uso}
+        \subsection{Attori}
+            \subsubsection{Diagramma}
+                \includegraphics{imgs/use_case/attori}
+
+        \subsection{Cliente}
+            \subsubsection{Diagramma}
+                \includegraphics[width=\textwidth]{imgs/use_case/cliente}
+
+            \subsubsection{Descrizioni}
+                % UC: Lista opere
+                \begin{table}[t]
+                    \centering
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \begin{center}
+                            \color{white}
+                            \textbf{Caso d'uso:} Lista Opere
+                        \end{center} \\
+                        \hline
+                        \textbf{ID:} 1 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} 
+                            
+                        L'utente ottiene la lista di opere memorizzate nel sistema.\\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Cliente \\
+                            Biglietteria \\
+                            Amministratore
+                        \end{minipage}
+                        \vspace{1pt} \\
+                        \hline
+                        \textbf{Attori secondari:}
+
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}[noitemsep]
+                                \item L'utente è posizionato nella sezione informazioni.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Il caso d'uso inizia quando l'utente entra nella sezione informazioni.
+                            \item \textbf{If} nel sistema è memorizzata almeno un'opera
+                            \begin{enumerate}
+                                \item \textbf{For} ogni opera nel sistema
+                                \begin{enumerate}
+                                    \item[] \textbf{punto di estensione:} filtro ricerca
+                                    \item \textbf{include} (Visualizza Opera)
+                                \end{enumerate}
+                            \end{enumerate}
+                            \item \textbf{Else}
+                            \begin{enumerate}
+                                \item Il sistema informa l'utente che non vi sono opere memorizzate.
+                            \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}[noitemsep]
+                                \item Viene presentata la lista delle opere memorizzate.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenze degli eventi alternative:}
+                        
+                        Nessuna. \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+
+                % UC EXT: Ricerca opera
+                \begin{table}[t]
+                    \centering
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \begin{center}
+                            \color{white}
+                            \textbf{Caso d'uso di estensione:} Ricerca Opera
+                        \end{center} \\
+                        \hline
+                        \textbf{ID:} 2 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} 
+                            
+                        \textbf{Segmento 1:} L'utente filtra la lista di opere tramite parola chiave ricercata nel nome.\\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Cliente \\
+                            Biglietteria \\
+                            Amministratore
+                        \end{minipage}
+                        \vspace{1pt} \\
+                        \hline
+                        \textbf{Attori secondari:}
+
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}[noitemsep]
+                                \item L'utente ha inserito una chiave di ricerca.
+                                \item L'utente ha premuto il pulsante di ricerca.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi del segmento 1:}
+                        \begin{enumerate}
+                            \item Le opere che non contengono la parola chiave vengono eliminate dalla lista risultante.
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}[noitemsep]
+                                \item La lista risultante è filtrata.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+
+        \subsection{Biglietteria}
+            \subsubsection{Diagramma}
+                \includegraphics[width=\textwidth]{imgs/use_case/biglietteria}
+
+        \subsection{Amministratore}
+            \subsubsection{Diagramma}
+                \includegraphics[width=\textwidth]{imgs/use_case/amministratore}
+
+    \section{Matrice di mapping}
+        \includegraphics{imgs/matrice/matrice}
 
 \end{document}
