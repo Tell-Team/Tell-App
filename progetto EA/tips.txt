@@ -1,2 +1,0 @@
-rimuovi namespace davanti ai nomi delle classi :: layout > options > properties > diagram > UNCHECK show namespace
-salvare diagramma come immagine :: publish > save > save to file
