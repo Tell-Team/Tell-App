@@ -8,35 +8,22 @@
 \usepackage{graphicx} % Inserimento immagini
 
 % Use case descriptions imports & settings
-\usepackage{amsfonts}
-\usepackage{amsmath}
-\usepackage{amsthm}
-\usepackage{cancel}
-\usepackage[utf8]{inputenc}
-\usepackage{mathtools}
-\usepackage{comment}
-\usepackage{amssymb}
-\usepackage{pifont}
-\usepackage{subfig}
 \usepackage[dvipsnames, table]{xcolor} % Per colorare celle delle tabelle
-\usepackage{hyphenat}
 \usepackage{tabularx}
-\usepackage{tikz}
-\usetikzlibrary{positioning}
-\usepackage{varwidth}
 \usepackage{enumitem}
-\setlist[enumerate]{label*=\arabic*., topsep=0pt} % Imposta gli indici di tutti i livelli di enumerazione come numeri arabi (invece del default che passa alle lettere)
+\setlist[enumerate]{label*=\arabic*., topsep=0pt, itemsep=0pt, parsep=0pt, partopsep=0pt} % Imposta gli indici di tutti i livelli di enumerazione come numeri arabi (invece del default che passa alle lettere) e rimuove il padding
+\usepackage{float} % Fornisce la posizione 'H' per le tabelle, che le posiziona direttamente dove specificato nel codice latex e non in cima alla pagina o altri comportamenti 'float' non desiderati
 
 % Macros
 \newcommand{\mycount}[1]{\stepcounter{#1}\arabic{#1}}
 
 \title{Tell: Gestore teatrale}
-\date{2025-06-06}
+\date{2025-06-20}
 \author
 {
-    Giuseppe Mariotti\\
-    Riccardo Ripa\\
-    Rodrigo Rengifo\\
+    Giuseppe Mariotti \\
+    Riccardo Ripa \\
+    Rodrigo Rengifo \\
     Mattia Praolini
 }
 
@@ -120,23 +107,20 @@
                 \includegraphics[width=\textwidth]{imgs/use_case/cliente}
 
             \subsubsection{Descrizioni}
-                % UC: Lista opere
-                \begin{table}[t]
-                    \centering
+                % UC: Lista Opere
+                \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
-                        \begin{center}
-                            \color{white}
-                            \textbf{Caso d'uso:} Lista Opere
-                        \end{center} \\
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Lista Opere} \\
                         \hline
                         \textbf{ID:} 1 \\
                         \hline
                         \cellcolor{gray!20}
-                        \textbf{Breve descrizione:} 
-                            
-                        L'utente ottiene la lista di opere memorizzate nel sistema.\\
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        L'utente ottiene la lista di opere memorizzate nel sistema. \\
                         \hline
                         \textbf{Attori primari:} \\
                         \begin{minipage}{\linewidth}
@@ -144,17 +128,16 @@
                             Biglietteria \\
                             Amministratore
                         \end{minipage}
-                        \vspace{1pt} \\
+                        \vspace{0pt} \\  % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
                         \hline
-                        \textbf{Attori secondari:}
-
+                        \textbf{Attori secondari:} \\
                         Nessuno. \\
                         \hline
                         \cellcolor{gray!20}
                         \textbf{Precondizioni:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item L'utente è posizionato nella sezione informazioni.
                             \end{enumerate}
                         \end{minipage} \\
@@ -167,7 +150,7 @@
                                 \item \textbf{For} ogni opera nel sistema
                                 \begin{enumerate}
                                     \item[] \textbf{punto di estensione:} filtro ricerca
-                                    \item \textbf{include} (Visualizza Opera)
+                                    \item \textbf{include}(Visualizza Opera)
                                 \end{enumerate}
                             \end{enumerate}
                             \item \textbf{Else}
@@ -180,35 +163,31 @@
                         \textbf{Postcondizioni:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
-                                \item Viene presentata la lista delle opere memorizzate.
+                            \begin{enumerate}
+                                \item Viene visualizzata a schermo la lista delle opere memorizzate.
                             \end{enumerate}
                         \end{minipage} \\
                         \hline
-                        \textbf{Sequenze degli eventi alternative:}
-                        
+                        \textbf{Sequenza degli eventi alternativa:} \\
                         Nessuna. \\
                         \hline
                     \end{tabular}
                 \end{table}
 
-                % UC EXT: Ricerca opera
-                \begin{table}[t]
-                    \centering
+                % UC EXT: Ricerca Opera
+                \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
-                        \begin{center}
-                            \color{white}
-                            \textbf{Caso d'uso di estensione:} Ricerca Opera
-                        \end{center} \\
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Ricerca Opera} \\
                         \hline
                         \textbf{ID:} 2 \\
                         \hline
                         \cellcolor{gray!20}
-                        \textbf{Breve descrizione:} 
-                            
-                        \textbf{Segmento 1:} L'utente filtra la lista di opere tramite parola chiave ricercata nel nome.\\
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        \textbf{Segmento 1:} L'utente filtra la lista di opere tramite parola chiave ricercata nel nome. \\
                         \hline
                         \textbf{Attori primari:} \\
                         \begin{minipage}{\linewidth}
@@ -216,49 +195,173 @@
                             Biglietteria \\
                             Amministratore
                         \end{minipage}
-                        \vspace{1pt} \\
+                        \vspace{0pt} \\  % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
                         \hline
-                        \textbf{Attori secondari:}
-
+                        \textbf{Attori secondari:} \\
                         Nessuno. \\
                         \hline
                         \cellcolor{gray!20}
-                        \textbf{Precondizioni del segmento 1:} \\
+                        \textbf{Precondizioni:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item L'utente ha inserito una chiave di ricerca.
                                 \item L'utente ha premuto il pulsante di ricerca.
                             \end{enumerate}
                         \end{minipage} \\
                         \hline
-                        \textbf{Sequenza degli eventi del segmento 1:}
+                        \textbf{Sequenza degli eventi principale:}
                         \begin{enumerate}
                             \item Le opere che non contengono la parola chiave vengono eliminate dalla lista risultante.
                         \end{enumerate} \\
                         \hline
                         \cellcolor{gray!20}
-                        \textbf{Postcondizioni del segmento 1:} \\
+                        \textbf{Postcondizioni:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item La lista risultante è filtrata.
                             \end{enumerate}
                         \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+
+                % UC: Visualizza Opera
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Visualizza Opera} \\
+                        \hline
+                        \textbf{ID:} 3 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        L'utente ottiene le informazioni anagrafiche riguardo una singola opera. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Cliente \\
+                            Biglietteria \\
+                            Amministratore
+                        \end{minipage}
+                        \vspace{0pt} \\  % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente è posizionato nella sezione informazioni.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Il caso d'uso inizia quando l'utente richiede le informazioni di un'opera.
+                            \item Il sistema cerca le informazioni anagrafiche nella memoria in base all'identificativo dell'opera.
+                            \item Il sistema mostra le informazioni a schermo.
+                            \item \textbf{include}(Lista Regie)
+                            \item[] \textbf{punto di estensione:} modifica
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item Sono visualizzate a schermo le informazioni anagrafiche dell'opera.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+
+                % UC: Lista Regie
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Lista Regie} \\
+                        \hline
+                        \textbf{ID:} 4 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        L'utente ottiene la lista di regie relative all'opera che sta visualizzando. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Cliente \\
+                            Biglietteria \\
+                            Amministratore
+                        \end{minipage}
+                        \vspace{0pt} \\  % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente sta visualizzando una singola opera.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Il caso d'uso inizia quando l'utente visualizza una singola opera.
+                            \item \textbf{If} per l'opera è memorizzata almeno una regia
+                            \begin{enumerate}
+                                \item \textbf{For} ogni regia dell'opera
+                                \begin{enumerate}
+                                    \item Il sistema mostra le informazioni della regia a schermo.
+                                \end{enumerate}
+                            \end{enumerate}
+                            \item \textbf{Else}
+                            \begin{enumerate}
+                                \item Il sistema informa l'utente che non vi sono regie memorizzate.
+                            \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item E' visualizzata a schermo la lista delle regie associate all'opera.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
                         \hline
                     \end{tabular}
                 \end{table}
 
                 % Caso d'uso: CreaPrenotazione
-                \begin{table}[t]
-                    \centering
+                \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \begin{center}
-                            \textbf{Caso d'uso:} CreaPrenotazione
-                        \end{center} \\
+                        \centerline{\textbf{Caso d'uso:} CreaPrenotazione} \\
                         \hline
                         \textbf{ID:} -POR DEFINIR- \\
                         \hline
@@ -269,7 +372,7 @@
                         \hline
                         \textbf{Attori primari:} \\
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item Amministratore;
                                 \item Biglietteria;
                                 \item Cliente.
@@ -285,7 +388,7 @@
                         \textbf{Precondizioni:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item L'utente visualizza l'elenco degli eventi. % NON NE SONO CONVINTO.
                             \end{enumerate}
                         \end{minipage} \\
@@ -316,7 +419,7 @@
                         \textbf{Postcondizioni:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item L'utente crea una prenotazione; % Anche se ridondante, è meglio di mettere "Nessuna.".
                                 \item Se l'utente è Cliente, è inviato alla categoria "Prenotazioni".
                             \end{enumerate}
@@ -331,15 +434,12 @@
                 \end{table}
 
                 % Caso d'uso: VisualizzaPrenotazione
-                \begin{table}[t]
-                    \centering
+                \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \begin{center}
-                            \textbf{Caso d'uso:} VisualizzaPrenotazione
-                        \end{center} \\
+                        \centerline{\textbf{Caso d'uso:} VisualizzaPrenotazione} \\
                         \hline
                         \textbf{ID:} -POR DEFINIR- \\
                         \hline
@@ -350,7 +450,7 @@
                         \hline
                         \textbf{Attori primari:} \\
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item Amministratore;
                                 \item Biglietteria;
                                 \item Cliente.
@@ -366,7 +466,7 @@
                         \textbf{Precondizioni:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item L'utente si trova nella categoria "Prenotazioni";
                                 \item L'elenco delle prenotazioni, sia esso filtrato o meno, non è vuoto.
                             \end{enumerate}
@@ -392,7 +492,7 @@
                         \textbf{Postcondizioni:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item L'utente visualizza una prenotazione;
                                 \item Il sistema mostra tre pulsanti relativi alla prenotazione;
                                 \item Se l'utente è Cliente, i tre pulsanti sono funzionali.
@@ -408,15 +508,12 @@
                 \end{table}
 
                 % Caso d'uso dell'estensione: ModificaPrenotazione
-                \begin{table}[t]
-                    \centering
+                \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \begin{center}
-                            \textbf{Caso d'uso dell'estensione:} ModificaPrenotazione
-                        \end{center} \\
+                        \centerline{\textbf{Caso d'uso dell'estensione:} ModificaPrenotazione} \\
                         \hline
                         \textbf{ID:} -POR DEFINIR- \\
                         \hline
@@ -427,7 +524,7 @@
                         \hline
                         \textbf{Attori principali:} \\
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item Amministratore;
                                 \item Biglietteria;
                                 \item Cliente. % EL CLIENTE PUEDE MODIFICAR LA PRENOTAZIONE
@@ -443,7 +540,7 @@
                         \textbf{Precondizioni del segmento 1:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item L'utente visualizza l'elenco delle prenotazioni;
                                 \item L'utente preme "Modifica".
                             \end{enumerate}
@@ -471,7 +568,7 @@
                         \textbf{Postcondizioni del segmento 1:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item L'utente effettua la modifica di una prenotazione.
                             \end{enumerate}
                         \end{minipage} \\
@@ -480,15 +577,12 @@
                 \end{table}
 
                 % Caso d'uso dell'estensione: EliminaPrenotazione
-                \begin{table}[t]
-                    \centering
+                \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \begin{center}
-                            \textbf{Caso d'uso dell'estensione:} EliminaPrenotazione
-                        \end{center} \\
+                        \centerline{\textbf{Caso d'uso dell'estensione:} EliminaPrenotazione} \\
                         \hline
                         \textbf{ID:} -POR DEFINIR- \\
                         \hline
@@ -499,7 +593,7 @@
                         \hline
                         \textbf{Attori principali:} \\
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item Amministratore;
                                 \item Biglietteria;
                                 \item Cliente.
@@ -515,7 +609,7 @@
                         \textbf{Precondizioni del segmento 1:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item L'utente visualizza l'elenco delle prenotazioni;
                                 \item L'utente preme "Elimina".
                             \end{enumerate}
@@ -538,7 +632,7 @@
                         \textbf{Postcondizioni del segmento 1:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item L'utente effettua l'eliminazione di una prenotazione.
                             \end{enumerate}
                         \end{minipage} \\
@@ -548,15 +642,12 @@
 
                 %% ESTE CASO DE USO ES PARA EL CLIENTE Y VA VINCULADO A VisualizzaPrenotazione
                 % Caso d'uso: GeneraRicevuta
-                \begin{table}[t]
-                    \centering
+                \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \begin{center}
-                            \textbf{Caso d'uso:} GeneraRicevuta
-                        \end{center} \\
+                        \centerline{\textbf{Caso d'uso:} GeneraRicevuta} \\
                         \hline
                         \textbf{ID:} -POR DEFINIR- \\
                         \hline
@@ -567,7 +658,7 @@
                         \hline
                         \textbf{Attori primari:} \\
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item Amministratore;
                                 \item Biglietteria;
                                 \item Cliente.
@@ -621,15 +712,12 @@
             
             \subsubsection{Descrizioni}
                 % Caso d'uso: ListaPrenotazione
-                \begin{table}[t]
-                    \centering
+                \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \begin{center}
-                            \textbf{Caso d'uso:} ListaPrenotazione
-                        \end{center} \\
+                        \centerline{\textbf{Caso d'uso:} ListaPrenotazione} \\
                         \hline
                         \textbf{ID:} -POR DEFINIR- \\
                         \hline
@@ -640,7 +728,7 @@
                         \hline
                         \textbf{Attori primari:} \\
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item Amministratore;
                                 \item Biglietteria.
                             \end{enumerate}
@@ -655,7 +743,7 @@
                         \textbf{Precondizioni:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item L'utente è stato autenticato come amministratore o personale di biglietteria;
                                 \item L'utente si trova nella categoria "Prenotazioni". % Utilizo "categoria" per non confonderla con "sezione".
                             \end{enumerate}
@@ -671,11 +759,11 @@
                                 \begin{enumerate}
                                     \item \textit{include}(VisualizzaPrenotazione)
                                 \end{enumerate}
-                                \begin{itemize}[noitemsep]
+                                \begin{itemize}
                                     \item[] \hspace*{-\tabcolsep*3} \textit{extension point}: filtrareElenco
                                 \end{itemize}
                                 \item \textit{For} ogni prenotazione nell'elenco
-                                \begin{itemize}[noitemsep]
+                                \begin{itemize}
                                     \item[] \textit{extension point}: modificaEvento
                                 \end{itemize}
                             \end{enumerate}
@@ -689,7 +777,7 @@
                         \textbf{Postcondizioni:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item L'utente visualizza l'elenco delle prenotazioni salvati nel sistema.
                                 \item L'utente ha l'opzione di agire sulle prenotazioni, modificandole, eliminandole o segnandole come pagate.
                             \end{enumerate}  
@@ -704,15 +792,12 @@
                 \end{table}
 
                 % Caso d'uso dell'estensione: RicercaPrenotazione
-                \begin{table}[t]
-                    \centering
+                \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \begin{center}
-                            \textbf{Caso d'uso d'estensione:} RicercaPrenotazione
-                        \end{center} \\
+                        \centerline{\textbf{Caso d'uso d'estensione:} RicercaPrenotazione} \\
                         \hline
                         \textbf{ID:} -POR DEFINIR- \\
                         \hline
@@ -723,7 +808,7 @@
                         \hline
                         \textbf{Attori primari:} \\
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item Amministratore;
                                 \item Biglietteria.
                             \end{enumerate}
@@ -770,15 +855,12 @@
                 \end{table}
 
                 % Caso d'uso dell'estensione: SegnaPagaPrenotazione
-                \begin{table}[t]
-                    \centering
+                \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \begin{center}
-                            \textbf{Caso d'uso dell'estensione:} SegnaPagaPrenotazione
-                        \end{center} \\
+                        \centerline{\textbf{Caso d'uso dell'estensione:} SegnaPagaPrenotazione} \\
                         \hline
                         \textbf{ID:} -POR DEFINIR- \\
                         \hline
@@ -789,7 +871,7 @@
                         \hline
                         \textbf{Attori principali:} \\
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item Amministratore;
                                 \item Biglietteria.
                             \end{enumerate}
@@ -804,7 +886,7 @@
                         \textbf{Precondizioni del segmento 1:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item L'utente visualizza l'elenco delle prenotazioni;
                                 \item L'utente preme "Segnare".
                             \end{enumerate}
@@ -827,7 +909,7 @@
                         \textbf{Postcondizioni del segmento 1:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}[noitemsep]
+                            \begin{enumerate}
                                 \item L'utente effettua l'assegnamento di una prenotazione come \emph{pagata}.
                             \end{enumerate}
                         \end{minipage} \\
@@ -838,6 +920,8 @@
         \subsection{Amministratore}
             \subsubsection{Diagramma}
                 \includegraphics[width=\textwidth]{imgs/use_case/amministratore}
+
+            \subsubsection{Descrizioni}
 
     \section{Matrice di mapping}
         \includegraphics{imgs/matrice/matrice}
