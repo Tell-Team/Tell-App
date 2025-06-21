@@ -386,13 +386,13 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente visualizza l'elenco degli eventi. % NON NE SONO CONVINTO.
+                                \item L'utente visualizza l'elenco degli eventi. %// Non ne sono convinto.
                             \end{enumerate}
                         \end{minipage} \\
                         \hline
                         \textbf{Sequenza degli eventi principale:}
                         \begin{enumerate}
-                            \item Il caso d'uso inizia quando l'utente preme il pulsante \emph{Creare prenotazione}.
+                            \item Il caso d'uso inizia quando l'utente preme il pulsante \emph{Crea prenotazione}.
                             \item Il sistema mostra una interfaccia per inserire i dati relativi alla prenotazione.
                             \item L'utente inserisce i dati relativi alla prenotazione.
                             \item L'utente preme il pulsante \emph{Salva dati}.
@@ -460,7 +460,7 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente si trova nella categoria "Prenotazioni".
+                                \item L'utente si trova nella categoria "Prenotazioni". % Utilizo "categoria" per non confonderla con "sezione".
                                 \item L'elenco delle prenotazioni, sia esso filtrato o meno, non è vuoto.
                             \end{enumerate}
                         \end{minipage}
@@ -476,7 +476,7 @@
                                 \item Il sistema mostra il pulsante \emph{Segnare}.
                             \end{enumerate}
                             \item[] \textbf{punto di estensione:} modificaPrenotazione
-                            % Per praticità, Genera Ricevuta dovrebbe essere un caso incluso Visualizza Prenotazione.
+                            %// Per praticità, Genera Ricevuta dovrebbe essere un caso incluso Visualizza Prenotazione.
                         \end{enumerate} \\
                         \hline
                         \cellcolor{gray!20}
@@ -485,7 +485,7 @@
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
                                 \item L'utente visualizza le informazioni di una prenotazione.
-                                \item Il sistema permette all'utente di modificare, eliminare o generare una ricevuta della prenotazione. % Molto dettagliato :/
+                                \item Il sistema permette all'utente di modificare, eliminare o generare una ricevuta della prenotazione.  Molto dettagliato :/
                                 \item Se l'utente è Amministratore o Biglietteria, il sistema permette di segnarla come \emph{pagata}.
                             \end{enumerate}
                         \end{minipage}
@@ -536,7 +536,7 @@
                         \hline
                         \textbf{Sequenza degli eventi del segmento 1:}
                         \begin{enumerate}
-                            \item Il sistema mostra la interfaccia di creazione di prenotazione, ma con un dati saltavi della prenotazione già creata selezionati. % Da confirmare coi ragazzi.
+                            \item Il sistema mostra la interfaccia di creazione di prenotazione, ma con i dati saltavi della prenotazione già creata selezionati. %// Da confirmare coi ragazzi.
                             \item L'utente modifica i dati relativi alla prenotazione.
                             \item L'utente preme il pulsante \emph{Salva dati}.
                             \item \textbf{If} i dati sono validi
@@ -654,7 +654,7 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente visualizza l'elenco delle prenotazioni. % Da confrontare col diagramma dei casi d'uso dei Clienti.
+                                \item L'utente visualizza l'elenco delle prenotazioni. %// Da confrontare col diagramma dei casi d'uso dei Clienti.
                             \end{enumerate}
                         \end{minipage} \\
                         \hline
@@ -691,7 +691,7 @@
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \centerline{\textbf{Caso d'uso:} ListaPrenotazione} \\
+                        \centerline{\textbf{Caso d'uso:} Lista Prenotazione} \\
                         \hline
                         \textbf{ID:} 23 \\
                         \hline
@@ -716,7 +716,7 @@
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
                                 \item L'utente è stato autenticato come Amministratore o Biglietteria.
-                                \item L'utente si trova nella categoria "Prenotazioni". % Utilizo "categoria" per non confonderla con "sezione".
+                                \item L'utente si trova nella categoria "Prenotazioni".
                             \end{enumerate}
                         \end{minipage}
                         \vspace{0pt} \\
@@ -728,12 +728,12 @@
                             \begin{enumerate}
                                 \item \textbf{For} ogni prenotazione nel sistema
                                 \begin{enumerate}
-                                    \item[] \textbf{punto di estensione:} filtrareElenco
                                     \item \textbf{include}(Visualizza Prenotazione)
                                 \end{enumerate}
-                                \item \textbf{For} ogni prenotazione nell'elenco
+                                \item \item[] \textbf{punto di estensione:} filtrareElenco
+                                \item \textbf{For} ogni prenotazione nell'elenco visualizzato
                                 \begin{enumerate}
-                                    \item[] \textbf{punto di estensione:} modificaPrenotazione
+                                    \item[] \textbf{punto di estensione:} modificaPrenotazione %// Da confirmare coi ragazzi
                                 \end{enumerate}
                             \end{enumerate}
                             \item \textbf{Else}
@@ -764,7 +764,7 @@
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \centerline{\textbf{Caso d'uso d'estensione:} RicercaPrenotazione} \\
+                        \centerline{\textbf{Caso d'uso d'estensione:} Ricerca Prenotazione} \\
                         \hline
                         \textbf{ID:} 24 \\
                         \hline
@@ -778,7 +778,7 @@
                             Biglietteria \\
                             Amministratore
                         \end{minipage}
-                        \vspace{-5pt} \\
+                        \vspace{0pt} \\
                         \hline
                         \textbf{Attori secondari:} \\
                         Nessuno. \\
