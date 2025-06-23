@@ -485,7 +485,7 @@
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
                                 \item L'utente visualizza le informazioni di una prenotazione.
-                                \item Il sistema permette all'utente di modificare, eliminare o generare una ricevuta della prenotazione.  Molto dettagliato :/
+                                \item Il sistema permette all'utente di modificare, eliminare o generare una ricevuta della prenotazione.  % Molto dettagliato :/
                                 \item Se l'utente è Amministratore o Biglietteria, il sistema permette di segnarla come \emph{pagata}.
                             \end{enumerate}
                         \end{minipage}
@@ -885,6 +885,74 @@
                 \includegraphics[width=\textwidth]{imgs/use_case/amministratore}
 
             \subsubsection{Descrizioni}
+                % UC: Crea Opera
+                \begin{table}[H]
+                    \centering
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Crea Opera} \\
+                        \hline
+                        \textbf{ID:} 26 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        L'utente crea una istanza di un'opera svolta nel teatro. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Amministratore
+                        \end{minipage}
+                        \vspace{-10pt} \\
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente è stato autenticato come Amministratore
+                                \item L'utente si trova nella categoria "Opere".
+                            \end{enumerate}
+                        \end{minipage}
+                        \vspace{-5pt} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Questo caso d'uso inizia quando l'utente preme il pulsante \emph{Crea opera}.
+                            \item Il sistema mostra una interfaccia per inserire dati e impostazioni relativi all'opera. % e.g. Disponibilità
+                            \item L'utente inserisce le informazioni anagrafiche relative all'opera.
+                            \item \textbf{If} i dati inseriti sono validi
+                            \begin{enumerate}
+                                \item Il sistema salva i dati e le impostazioni.
+                                \item Il caso d'uso finisce.
+                            \end{enumerate}
+                            \item \textbf{Else}
+                            \begin{enumerate}
+                                \item Il sistema informa l'utente che i dati inseriti sono invalidi.
+                                \item L'utente torna al passo 3.
+                            \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente crea un'opera.
+                            \end{enumerate}
+                        \end{minipage}
+                        \vspace{-10pt} \\
+                        \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
+                        \hline
+                    \end{tabular}
+                \end{table}
 
     \section{Matrice di mapping}
         \includegraphics{imgs/matrice/matrice}
