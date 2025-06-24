@@ -355,33 +355,30 @@
                     \end{tabular}
                 \end{table}
 
-                % Caso d'uso: CreaPrenotazione
+                % UC: Crea Prenotazione
                 \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \centerline{\textbf{Caso d'uso:} CreaPrenotazione} \\
+                        \centerline{\textbf{Caso d'uso:} Crea Prenotazione} \\
                         \hline
-                        \textbf{ID:} -POR DEFINIR- \\
+                        \textbf{ID:} 12 \\
                         \hline
                         \cellcolor{gray!20}
-                        \textbf{Breve descrizione:} 
-                            
-                        Questo caso d'uso consente all'utente prenotare posti di eventi svolti nel teatro. \\
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        L'utente prenota posti di un evento svolto nel teatro. \\
                         \hline
                         \textbf{Attori primari:} \\
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}
-                                \item Amministratore;
-                                \item Biglietteria;
-                                \item Cliente.
-                            \end{enumerate}
+                            Cliente \\
+                            Biglietteria \\
+                            Amministratore
                         \end{minipage}
-                        \vspace{0pt} \\  % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+                        \vspace{0pt} \\
                         \hline
-                        \textbf{Attori secondari:}
-                        
+                        \textbf{Attori secondari:} \\                        
                         Nessuno. \\
                         \hline
                         \cellcolor{gray!20}
@@ -389,29 +386,29 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente visualizza l'elenco degli eventi. % NON NE SONO CONVINTO.
+                                \item L'utente visualizza l'elenco degli eventi. %// Non ne sono convinto.
                             \end{enumerate}
                         \end{minipage} \\
                         \hline
                         \textbf{Sequenza degli eventi principale:}
                         \begin{enumerate}
-                            \item Il caso d'uso inizia quando l'utente preme "Creare prenotazione";
-                            \item Il sistema mostra una interfaccia per inserire i dati relativi alla prenotazione;
-                            \item L'utente inserisce i dati relativi alla prenotazione; 
-                            \item L'utente preme "Salva";
-                            \item \textit{If} i dati inseriti sono validi
+                            \item Il caso d'uso inizia quando l'utente preme il pulsante \emph{Crea prenotazione}.
+                            \item Il sistema mostra una interfaccia per inserire i dati relativi alla prenotazione.
+                            \item L'utente inserisce i dati relativi alla prenotazione.
+                            \item L'utente preme il pulsante \emph{Salva dati}.
+                            \item \textbf{If} i dati inseriti sono validi
                             \begin{enumerate}
-                                \item Il sistema salva i dati;
-                                \item \textit{If} l'utente è Cliente
+                                \item Il sistema salva i dati.
+                                \item \textbf{If} l'utente è Cliente
                                 \begin{enumerate}
-                                    \item L'utente è inviato alla categoria "Prenotazioni";
+                                    \item L'utente è inviato alla categoria "Prenotazioni".
                                 \end{enumerate}
                                 \item Il caso d'uso finisce.
                             \end{enumerate}
-                            \item \textit{Else}
+                            \item \textbf{Else}
                             \begin{enumerate}
-                                \item Il sistema mostra un messaggio d'errore;
-                                \item L'utente torna al passo 3;
+                                \item Il sistema informa che i dati inseriti sono invalidi.
+                                \item L'utente torna al passo 3.
                             \end{enumerate}
                         \end{enumerate} \\
                         \hline
@@ -420,46 +417,42 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente crea una prenotazione; % Anche se ridondante, è meglio di mettere "Nessuna.".
+                                \item L'utente crea una prenotazione.
                                 \item Se l'utente è Cliente, è inviato alla categoria "Prenotazioni".
                             \end{enumerate}
                         \end{minipage}
                         \vspace{-5pt} \\
                         \hline
-                        \textbf{Sequenza degli eventi alternativa:}
-                        
+                        \textbf{Sequenza degli eventi alternativa:} \\
                         Nessuna. \\
                         \hline
                     \end{tabular}
                 \end{table}
 
-                % Caso d'uso: VisualizzaPrenotazione
+                % UC: Visualizza Prenotazione
                 \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \centerline{\textbf{Caso d'uso:} VisualizzaPrenotazione} \\
+                        \centerline{\textbf{Caso d'uso:} Visualizza Prenotazione} \\
                         \hline
-                        \textbf{ID:} -POR DEFINIR- \\
+                        \textbf{ID:} 13 \\
                         \hline
                         \cellcolor{gray!20}
-                        \textbf{Breve descrizione:}
-
-                        Questo caso d'uso consente di visualizzare una particolare prenotazione in modo più dettagliato. \\
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        L'utente ottiene l'informazione anagrafica riguardo una singola prenotazione. \\
                         \hline
                         \textbf{Attori primari:} \\
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}
-                                \item Amministratore;
-                                \item Biglietteria;
-                                \item Cliente.
-                            \end{enumerate}
+                            Cliente \\
+                            Biglietteria \\
+                            Amministratore
                         \end{minipage}
                         \vspace{0pt} \\
                         \hline
-                        \textbf{Attori secondari:}
-
+                        \textbf{Attori secondari:} \\
                         Nessuno. \\
                         \hline
                         \cellcolor{gray!20}
@@ -467,7 +460,7 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente si trova nella categoria "Prenotazioni";
+                                \item L'utente si trova nella categoria "Prenotazioni". % Utilizo "categoria" per non confonderla con "sezione".
                                 \item L'elenco delle prenotazioni, sia esso filtrato o meno, non è vuoto.
                             \end{enumerate}
                         \end{minipage}
@@ -475,17 +468,15 @@
                         \hline
                         \textbf{Sequenza degli eventi principale:}
                         \begin{enumerate}
-                            \item \textit{If} l'utente è Cliente
+                            \item Il caso d'uso inizia quando l'utente richiede le informazioni di una prenotazione.
+                            \item Il sistema mostra le informazioni relative alla prenotazione.
+                            \item Il sistema mostra tre pulsanti vincolati alla prenotazione: \emph{Modifica}, \emph{Elimina} e \emph{Genera ricevuta}.
+                            \item \textbf{If} l'utente è Amministratore o Biglietteria
                             \begin{enumerate}
-                                \item Il sistema agisce sulla prenotazione creata dal Cliente;
+                                \item Il sistema mostra il pulsante \emph{Segnare}.
                             \end{enumerate}
-                            \item Il sistema mostra gli attributo relativi alla prenotazione; % Dovrei mettere più dettagli.
-                            \item Il sistema mostra tre pulsanti vincolati alla prenotazione: "Modifica", "Elimina" e "Segnare";
-                            \item \textit{If} l'utente è Cliente
-                            \begin{enumerate}
-                                \item Il sistema mostra il pulsante "Genera ricevuta";
-                                \item[] \hspace*{-\tabcolsep} \textit{extension point}: modificaPrenotazione
-                            \end{enumerate}
+                            \item[] \textbf{punto di estensione:} modificaPrenotazione
+                            %// Per praticità, Genera Ricevuta dovrebbe essere un caso incluso Visualizza Prenotazione.
                         \end{enumerate} \\
                         \hline
                         \cellcolor{gray!20}
@@ -493,47 +484,43 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente visualizza una prenotazione;
-                                \item Il sistema mostra tre pulsanti relativi alla prenotazione;
-                                \item Se l'utente è Cliente, i tre pulsanti sono funzionali.
+                                \item L'utente visualizza le informazioni di una prenotazione.
+                                \item Il sistema permette all'utente di modificare, eliminare o generare una ricevuta della prenotazione.  % Molto dettagliato :/
+                                \item Se l'utente è Amministratore o Biglietteria, il sistema permette di segnarla come \emph{pagata}.
                             \end{enumerate}
                         \end{minipage}
                         \vspace{0pt} \\
                         \hline
-                        \textbf{Sequenza degli eventi alternativa:}
-
+                        \textbf{Sequenza degli eventi alternativa:} \\
                         Nessuna. \\
                         \hline
                     \end{tabular}
                 \end{table}
 
-                % Caso d'uso dell'estensione: ModificaPrenotazione
+                % UC EXT: Modifica Prenotazione
                 \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \centerline{\textbf{Caso d'uso dell'estensione:} ModificaPrenotazione} \\
+                        \centerline{\textbf{Caso d'uso dell'estensione:} Modifica Prenotazione} \\
                         \hline
-                        \textbf{ID:} -POR DEFINIR- \\
+                        \textbf{ID:} 14 \\
                         \hline
                         \cellcolor{gray!20}
-                        \textbf{Breve descrizione:}
-                        
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
                         Segmento 1: L'utente modifica una prenotazione esistente all'interno dell'elenco delle prenotazioni. \\
                         \hline
                         \textbf{Attori principali:} \\
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}
-                                \item Amministratore;
-                                \item Biglietteria;
-                                \item Cliente. % EL CLIENTE PUEDE MODIFICAR LA PRENOTAZIONE
-                            \end{enumerate}
+                            Cliente \\
+                            Biglietteria \\
+                            Amministatore
                         \end{minipage}
                         \vspace{0pt} \\
                         \hline
-                        \textbf{Attori secondari:}
-                        
+                        \textbf{Attori secondari:} \\                        
                         Nessuno. \\
                         \hline
                         \cellcolor{gray!20}
@@ -541,26 +528,26 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente visualizza l'elenco delle prenotazioni;
-                                \item L'utente preme "Modifica".
+                                \item L'utente visualizza l'elenco delle prenotazioni.
+                                \item L'utente ha premuto il pulsante di modifica.
                             \end{enumerate}
                         \end{minipage}
                         \vspace{-5pt} \\
                         \hline
                         \textbf{Sequenza degli eventi del segmento 1:}
                         \begin{enumerate}
-                            \item Il sistema mostra la interfaccia di creazione di prenotazione, ma con un dati saltavi della prenotazione già creata selezionati; % Da confirmare coi ragazzi.
-                            \item L'utente modifica i dati relativi alla prenotazione;
-                            \item L'utente preme "Salva";
-                            \item \textit{If} i dati sono validi
+                            \item Il sistema mostra la interfaccia di creazione di prenotazione, ma con i dati saltavi della prenotazione già creata selezionati. %// Da confirmare coi ragazzi.
+                            \item L'utente modifica i dati relativi alla prenotazione.
+                            \item L'utente preme il pulsante \emph{Salva dati}.
+                            \item \textbf{If} i dati sono validi
                             \begin{enumerate}
-                                \item Il sistema salva i dati;
+                                \item Il sistema salva i dati.
                                 \item Il caso d'uso finisce.
                             \end{enumerate}
-                            \item \textit{Else}
+                            \item \textbf{Else}
                             \begin{enumerate}
-                                \item Il sistema mostra un messaggio di errore;
-                                \item L'utente torna al passo 2;
+                                \item Il sistema informa che i dati inseriti sono invalidi.
+                                \item L'utente torna al passo 2.
                             \end{enumerate}
                         \end{enumerate} \\
                         \hline
@@ -576,33 +563,30 @@
                     \end{tabular}
                 \end{table}
 
-                % Caso d'uso dell'estensione: EliminaPrenotazione
+                % UC EXT: Elimina Prenotazione
                 \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \centerline{\textbf{Caso d'uso dell'estensione:} EliminaPrenotazione} \\
+                        \centerline{\textbf{Caso d'uso dell'estensione:} Elimina Prenotazione} \\
                         \hline
-                        \textbf{ID:} -POR DEFINIR- \\
+                        \textbf{ID:} 15 \\
                         \hline
                         \cellcolor{gray!20}
-                        \textbf{Breve descrizione:}
-                        
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
                         Segmento 1: L'utente elimina una prenotazione esistente all'interno dell'elenco delle prenotazioni. \\
                         \hline
                         \textbf{Attori principali:} \\
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}
-                                \item Amministratore;
-                                \item Biglietteria;
-                                \item Cliente.
-                            \end{enumerate}
+                            Cliente \\
+                            Biglietteria \\
+                            Amministratore
                         \end{minipage}
                         \vspace{0pt} \\
                         \hline
-                        \textbf{Attori secondari:}
-                        
+                        \textbf{Attori secondari:} \\                        
                         Nessuno. \\
                         \hline
                         \cellcolor{gray!20}
@@ -610,21 +594,20 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente visualizza l'elenco delle prenotazioni;
-                                \item L'utente preme "Elimina".
+                                \item L'utente visualizza l'elenco delle prenotazioni.
+                                \item L'utente ha premuto il pulsante di eliminazione.
                             \end{enumerate}
                         \end{minipage}
                         \vspace{-5pt} \\
                         \hline
                         \textbf{Sequenza degli eventi del segmento 1:}
                         \begin{enumerate}
-                            \item Il sistema chiede conferma per eliminare la prenotazione;
-                            \item \textit{If} l'utente preme "Conferma"
+                            \item Il sistema chiede conferma per eliminare la prenotazione.
+                            \item \textbf{If} l'utente preme il pulsante di conferma
                             \begin{enumerate}
-                                \item Il sistema effettua l'eliminazione della prenotazione;
-                                \item Il sistema torna all'elenco delle prenotazioni;
-                                \item Il sistema mostra un messaggio chiarendo che l'eliminazione è stata effettuata;
-                                \item L'utente chiude la finestra del messaggio.
+                                \item Il sistema effettua l'eliminazione della prenotazione.
+                                \item Il sistema torna all'elenco delle prenotazioni.
+                                \item Il sistema informa che l'eliminazione è stata effettuata.
                             \end{enumerate}
                         \end{enumerate} \\
                         \hline
@@ -640,34 +623,30 @@
                     \end{tabular}
                 \end{table}
 
-                %% ESTE CASO DE USO ES PARA EL CLIENTE Y VA VINCULADO A VisualizzaPrenotazione
-                % Caso d'uso: GeneraRicevuta
+                % UC: Genera Ricevuta
                 \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \centerline{\textbf{Caso d'uso:} GeneraRicevuta} \\
+                        \centerline{\textbf{Caso d'uso:} Genera Ricevuta} \\
                         \hline
-                        \textbf{ID:} -POR DEFINIR- \\
+                        \textbf{ID:} 16 \\
                         \hline
                         \cellcolor{gray!20}
-                        \textbf{Breve descrizione:}
-
-                        Questo caso d'uso consente generare la ricevuta di una prenotazione. \\
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        L'utente genera la ricevuta di una prenotazione e la stampa. \\
                         \hline
                         \textbf{Attori primari:} \\
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}
-                                \item Amministratore;
-                                \item Biglietteria;
-                                \item Cliente.
-                            \end{enumerate}
+                            Cliente \\
+                            Biglietteria \\
+                            Amministratore
                         \end{minipage}
                         \vspace{0pt} \\
                         \hline
-                        \textbf{Attori secondari:}
-
+                        \textbf{Attori secondari:} \\
                         Nessuno. \\
                         \hline
                         \cellcolor{gray!20}
@@ -675,15 +654,15 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente visualizza l'elenco delle prenotazioni. % Da confrontare col diagramma dei casi d'uso dei Clienti.
+                                \item L'utente visualizza l'elenco delle prenotazioni. %// Da confrontare col diagramma dei casi d'uso dei Clienti.
                             \end{enumerate}
                         \end{minipage} \\
                         \hline
                         \textbf{Sequenza degli eventi principale:}
                         \begin{enumerate}
-                            \item Il caso d'uso comincia quando l'utente preme "Generare ricevuta";
-                            \item Il sistema genera un documento con tutta l'informazione relativa all'acquisto dei biglietti prenotati;
-                            \item Il sistema stampa la ricevuta.
+                            \item Il caso d'uso inizia quando l'utente preme \emph{Genera ricevuta}.
+                            \item Il sistema genera un documento con tutta l'informazione relativa all'acquisto dei biglietti prenotati.
+                            \item Il sistema stampa il documento.
                         \end{enumerate} \\
                         \hline
                         \cellcolor{gray!20}
@@ -695,48 +674,40 @@
                             \end{enumerate}
                         \end{minipage} \\
                         \hline
-                        \textbf{Sequenza degli eventi alternativa:}
-                        
+                        \textbf{Sequenza degli eventi alternativa:} \\
                         Nessuna. \\
                         \hline
                     \end{tabular}
                 \end{table}
-
-                % Caso d'uso: CreaSpettacolo (._.=)
-
-                % Caso d'uso: CreaOpera (=R)
 
         \subsection{Biglietteria}
             \subsubsection{Diagramma}
                 \includegraphics[width=\textwidth]{imgs/use_case/biglietteria}
             
             \subsubsection{Descrizioni}
-                % Caso d'uso: ListaPrenotazione
+                % UC: Lista Prenotazione
                 \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \centerline{\textbf{Caso d'uso:} ListaPrenotazione} \\
+                        \centerline{\textbf{Caso d'uso:} Lista Prenotazione} \\
                         \hline
-                        \textbf{ID:} -POR DEFINIR- \\
+                        \textbf{ID:} 23 \\
                         \hline
                         \cellcolor{gray!20}
-                        \textbf{Breve descrizione:}
-                        
-                        Questo caso d'uso consente visualizzare l'elenco delle prenotazione salvate nel sistema. \\
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}                        
+                        L'utente visualizza l'elenco delle prenotazione salvate nel sistema. \\
                         \hline
                         \textbf{Attori primari:} \\
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}
-                                \item Amministratore;
-                                \item Biglietteria.
-                            \end{enumerate}
+                            Biglietteria \\
+                            Amministratore
                         \end{minipage}
                         \vspace {-5pt} \\
                         \hline
-                        \textbf{Attori secondari:}
-                        
+                        \textbf{Attori secondari:} \\                        
                         Nessuno. \\
                         \hline
                         \cellcolor{gray!20}
@@ -744,32 +715,30 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente è stato autenticato come amministratore o personale di biglietteria;
-                                \item L'utente si trova nella categoria "Prenotazioni". % Utilizo "categoria" per non confonderla con "sezione".
+                                \item L'utente è stato autenticato come Amministratore o Biglietteria.
+                                \item L'utente si trova nella categoria "Prenotazioni".
                             \end{enumerate}
                         \end{minipage}
                         \vspace{0pt} \\
                         \hline
                         \textbf{Sequenza degli eventi principale:}
                         \begin{enumerate}
-                            \item Questo caso d'uso inizia dopo che l'utente seleziona la categoria "Prenotazioni";
-                            \item \textit{If} c'è almeno una prenotazione salvata nel sistema
+                            \item Questo caso d'uso inizia dopo che l'utente seleziona la categoria "Prenotazioni".
+                            \item \textbf{If} nel sistema è memorizzata almeno una prenotazione
                             \begin{enumerate}
-                                \item \textit{For} ogni prenotazione salvate nel sistema
+                                \item \textbf{For} ogni prenotazione nel sistema
                                 \begin{enumerate}
-                                    \item \textit{include}(VisualizzaPrenotazione)
+                                    \item \textbf{include}(Visualizza Prenotazione)
                                 \end{enumerate}
-                                \begin{itemize}
-                                    \item[] \hspace*{-\tabcolsep*3} \textit{extension point}: filtrareElenco
-                                \end{itemize}
-                                \item \textit{For} ogni prenotazione nell'elenco
-                                \begin{itemize}
-                                    \item[] \textit{extension point}: modificaEvento
-                                \end{itemize}
+                                \item \item[] \textbf{punto di estensione:} filtrareElenco
+                                \item \textbf{For} ogni prenotazione nell'elenco visualizzato
+                                \begin{enumerate}
+                                    \item[] \textbf{punto di estensione:} modificaPrenotazione %// Da confirmare coi ragazzi
+                                \end{enumerate}
                             \end{enumerate}
-                            \item \textit{Else}
+                            \item \textbf{Else}
                             \begin{enumerate}
-                                \item Il sistema indica all'utente che l'elenco delle prenotazioni è vuoto.
+                                \item Il sistema informa l'utente che non vi sono prenotazioni memorizzate.
                             \end{enumerate}
                         \end{enumerate} \\
                         \hline
@@ -778,45 +747,40 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente visualizza l'elenco delle prenotazioni salvati nel sistema.
-                                \item L'utente ha l'opzione di agire sulle prenotazioni, modificandole, eliminandole o segnandole come pagate.
+                                \item L'utente visualizza l'elenco delle prenotazioni salvate nel sistema.
                             \end{enumerate}  
                         \end{minipage}
-                        \vspace{0pt} \\
+                        \vspace{-10pt} \\
                         \hline
-                        \textbf{Sequenza degli eventi alternativa:}
-                        
+                        \textbf{Sequenza degli eventi alternativa:} \\
                         Nessuna. \\
                         \hline
                     \end{tabular}
                 \end{table}
 
-                % Caso d'uso dell'estensione: RicercaPrenotazione
+                % UC EXT: Ricerca Prenotazione
                 \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \centerline{\textbf{Caso d'uso d'estensione:} RicercaPrenotazione} \\
+                        \centerline{\textbf{Caso d'uso d'estensione:} Ricerca Prenotazione} \\
                         \hline
-                        \textbf{ID:} -POR DEFINIR- \\
+                        \textbf{ID:} 24 \\
                         \hline
                         \cellcolor{gray!20}
-                        \textbf{Breve descrizione:}
-
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
                         Segmento 1: Questo caso d'uso consente di filtrare l'elenco delle prenotazioni attraverso una ricerca. \\
                         \hline
                         \textbf{Attori primari:} \\
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}
-                                \item Amministratore;
-                                \item Biglietteria.
-                            \end{enumerate}
+                            Biglietteria \\
+                            Amministratore
                         \end{minipage}
-                        \vspace{-5pt} \\
+                        \vspace{0pt} \\
                         \hline
-                        \textbf{Attori secondari:}
-
+                        \textbf{Attori secondari:} \\
                         Nessuno. \\
                         \hline
                         \cellcolor{gray!20}
@@ -824,21 +788,24 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente visualizza l'elenco delle prenotazioni.
+                                \item L'utente ha inserito i criteri di ricerca.
+                                \item L'utente ha premuto il pulsante di ricerca.
                             \end{enumerate}
                         \end{minipage} \\
                         \hline
                         \textbf{Sequenza degli eventi del segmento 1:}
                         \begin{enumerate}
-                            \item L'utente inserisce i criteri di ricerca;
-                            \item Il sistema ricerca, nell'elenco delle prenotazioni, delle prenotazioni coincidenti;
-                            \item \textit{If} il sistema trova almeno una prenotazione coincidente
+                            \item Il sistema ricerca, nell'elenco delle prenotazioni, delle prenotazioni coincidenti.
+                            \item \textbf{If} il sistema trova almeno una prenotazione coincidente
                             \begin{enumerate}
-                                \item Il sistema mostra le prenotazioni coincidenti;
+                                \item \textbf{For} ogni prenotazione coincidente
+                                \begin{enumerate}
+                                    \item \textbf{include}(Visualizza Prenotazione).
+                                \end{enumerate}
                             \end{enumerate}
-                            \item \textit{Else}
+                            \item \textbf{Else}
                             \begin{enumerate}
-                                \item Il sistema indica che non si ha trovato nessuna prenotazione coincidente.
+                                \item Il sistema informa che non vi sono prenotazioni coincidenti.
                             \end{enumerate}
                         \end{enumerate} \\
                         \hline
@@ -854,32 +821,29 @@
                     \end{tabular}
                 \end{table}
 
-                % Caso d'uso dell'estensione: SegnaPagaPrenotazione
+                % UC EXT: Segna Prenotazione come Pagata
                 \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \centerline{\textbf{Caso d'uso dell'estensione:} SegnaPagaPrenotazione} \\
+                        \centerline{\textbf{Caso d'uso dell'estensione:} Segna Prenotazione come Pagata} \\
                         \hline
-                        \textbf{ID:} -POR DEFINIR- \\
+                        \textbf{ID:} 25 \\
                         \hline
                         \cellcolor{gray!20}
-                        \textbf{Breve descrizione:}
-                        
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
                         Segmento 1: L'utente segna una prenotazione come \emph{pagata}. \\
                         \hline
                         \textbf{Attori principali:} \\
                         \begin{minipage}{\linewidth}
-                            \begin{enumerate}
-                                \item Amministratore;
-                                \item Biglietteria.
-                            \end{enumerate}
+                            Biglietteria \\
+                            Amministratore
                         \end{minipage}
                         \vspace{-5pt} \\
                         \hline
-                        \textbf{Attori secondari:}
-                        
+                        \textbf{Attori secondari:} \\
                         Nessuno. \\
                         \hline
                         \cellcolor{gray!20}
@@ -887,21 +851,20 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente visualizza l'elenco delle prenotazioni;
-                                \item L'utente preme "Segnare".
+                                \item L'utente visualizza l'elenco delle prenotazioni.
+                                \item L'utente ha premuto il pulsante di assegnamento.
                             \end{enumerate}
                         \end{minipage}
                         \vspace{-5pt} \\
                         \hline
                         \textbf{Sequenza degli eventi del segmento 1:}
                         \begin{enumerate}
-                            \item Il sistema chiede conferma per segnare la prenotazione come \emph{pagata};
-                            \item \textit{If} L'utente preme "Conferma"
+                            \item Il sistema chiede conferma per segnare la prenotazione come \emph{pagata}.
+                            \item \textbf{If} L'utente preme il pulsante di conferma
                             \begin{enumerate}
-                                \item Il sistema segna la prenotazione come \emph{pagata};
-                                \item Il sistema torna al elenco delle prenotazioni;
-                                \item Il sistema mostra un messaggio chiarendo che l'assegnamento è stato effettuato;
-                                \item L'utente chiude la finestra del messaggio.
+                                \item Il sistema segna la prenotazione come \emph{pagata}.
+                                \item Il sistema torna all'elenco delle prenotazioni.
+                                \item Il sistema informa che l'assegnamento è stato effettuato.
                             \end{enumerate}
                         \end{enumerate} \\
                         \hline
@@ -922,6 +885,74 @@
                 \includegraphics[width=\textwidth]{imgs/use_case/amministratore}
 
             \subsubsection{Descrizioni}
+                % UC: Crea Opera
+                \begin{table}[H]
+                    \centering
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Crea Opera} \\
+                        \hline
+                        \textbf{ID:} 26 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        L'utente crea una istanza di un'opera svolta nel teatro. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Amministratore
+                        \end{minipage}
+                        \vspace{-10pt} \\
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente è stato autenticato come Amministratore
+                                \item L'utente si trova nella categoria "Opere".
+                            \end{enumerate}
+                        \end{minipage}
+                        \vspace{-5pt} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Questo caso d'uso inizia quando l'utente preme il pulsante \emph{Crea opera}.
+                            \item Il sistema mostra una interfaccia per inserire dati e impostazioni relativi all'opera. % e.g. Disponibilità
+                            \item L'utente inserisce le informazioni anagrafiche relative all'opera.
+                            \item \textbf{If} i dati inseriti sono validi
+                            \begin{enumerate}
+                                \item Il sistema salva i dati e le impostazioni.
+                                \item Il caso d'uso finisce.
+                            \end{enumerate}
+                            \item \textbf{Else}
+                            \begin{enumerate}
+                                \item Il sistema informa l'utente che i dati inseriti sono invalidi.
+                                \item L'utente torna al passo 3.
+                            \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente crea un'opera.
+                            \end{enumerate}
+                        \end{minipage}
+                        \vspace{-10pt} \\
+                        \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
+                        \hline
+                    \end{tabular}
+                \end{table}
 
     \section{Matrice di mapping}
         \includegraphics{imgs/matrice/matrice}
