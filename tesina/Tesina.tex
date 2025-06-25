@@ -396,10 +396,6 @@
                             \item \textbf{If} i dati inseriti sono validi
                             \begin{enumerate}
                                 \item Il sistema salva i dati.
-                                \item \textbf{If} l'utente è Cliente
-                                \begin{enumerate}
-                                    \item L'utente è inviato alla categoria "Prenotazioni".
-                                \end{enumerate}
                                 \item Il caso d'uso finisce.
                             \end{enumerate}
                             \item \textbf{Else}
@@ -415,7 +411,6 @@
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
                                 \item L'utente crea una prenotazione.
-                                \item Se l'utente è Cliente, è inviato alla categoria "Prenotazioni".
                             \end{enumerate}
                         \end{minipage}
                         \vspace{-5pt} \\
@@ -470,7 +465,7 @@
                             \item Il sistema mostra tre pulsanti vincolati alla prenotazione: \emph{Modifica}, \emph{Elimina} e \emph{Genera ricevuta}.
                             \item \textbf{If} l'utente è Amministratore o Biglietteria
                             \begin{enumerate}
-                                \item Il sistema mostra il pulsante \emph{Segnare}.
+                                \item Il sistema mostra il pulsante \emph{Segna come pagata}.
                             \end{enumerate}
                             \item[] \textbf{punto di estensione:} modificaPrenotazione
                             %// Per praticità, Genera Ricevuta dovrebbe essere un caso incluso Visualizza Prenotazione.
@@ -500,7 +495,7 @@
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \centerline{\textbf{Caso d'uso dell'estensione:} Modifica Prenotazione} \\
+                        \centerline{\textbf{Caso d'uso di estensione:} Modifica Prenotazione} \\
                         \hline
                         \textbf{ID:} 14 \\
                         \hline
@@ -566,7 +561,7 @@
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \centerline{\textbf{Caso d'uso dell'estensione:} Elimina Prenotazione} \\
+                        \centerline{\textbf{Caso d'uso di estensione:} Elimina Prenotazione} \\
                         \hline
                         \textbf{ID:} 15 \\
                         \hline
@@ -682,13 +677,13 @@
                 \includegraphics[width=\textwidth]{imgs/use_case/biglietteria}
             
             \subsubsection{Descrizioni}
-                % UC: Lista Prenotazione
+                % UC: Lista Prenotazioni
                 \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \centerline{\textbf{Caso d'uso:} Lista Prenotazione} \\
+                        \centerline{\textbf{Caso d'uso:} Lista Prenotazioni} \\
                         \hline
                         \textbf{ID:} 23 \\
                         \hline
@@ -727,7 +722,7 @@
                                 \begin{enumerate}
                                     \item \textbf{include}(Visualizza Prenotazione)
                                 \end{enumerate}
-                                \item \item[] \textbf{punto di estensione:} filtrareElenco
+                                \item[] \textbf{punto di estensione:} filtrareElenco
                                 \item \textbf{For} ogni prenotazione nell'elenco visualizzato
                                 \begin{enumerate}
                                     \item[] \textbf{punto di estensione:} modificaPrenotazione %// Da confirmare coi ragazzi
@@ -761,7 +756,7 @@
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \centerline{\textbf{Caso d'uso d'estensione:} Ricerca Prenotazione} \\
+                        \centerline{\textbf{Caso d'uso di estensione:} Ricerca Prenotazione} \\
                         \hline
                         \textbf{ID:} 24 \\
                         \hline
@@ -824,7 +819,7 @@
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \centerline{\textbf{Caso d'uso dell'estensione:} Segna Prenotazione come Pagata} \\
+                        \centerline{\textbf{Caso d'uso di estensione:} Segna Prenotazione come Pagata} \\
                         \hline
                         \textbf{ID:} 25 \\
                         \hline
