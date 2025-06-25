@@ -180,7 +180,7 @@
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \centerline{\textbf{Caso d'uso:} Ricerca Opera} \\
+                        \centerline{\textbf{Caso d'uso di estensione:} Ricerca Opera} \\
                         \hline
                         \textbf{ID:} 2 \\
                         \hline
@@ -201,7 +201,7 @@
                         Nessuno. \\
                         \hline
                         \cellcolor{gray!20}
-                        \textbf{Precondizioni:} \\
+                        \textbf{Precondizioni del segmento 1:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
@@ -210,22 +210,19 @@
                             \end{enumerate}
                         \end{minipage} \\
                         \hline
-                        \textbf{Sequenza degli eventi principale:}
+                        \textbf{Sequenza degli eventi principale del segmento 1:}
                         \begin{enumerate}
                             \item Le opere che non contengono la parola chiave vengono eliminate dalla lista risultante.
                         \end{enumerate} \\
                         \hline
                         \cellcolor{gray!20}
-                        \textbf{Postcondizioni:} \\
+                        \textbf{Postcondizioni del segmento 1:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
                                 \item La lista risultante è filtrata.
                             \end{enumerate}
                         \end{minipage} \\
-                        \hline
-                        \textbf{Sequenza degli eventi alternativa:} \\
-                        Nessuna. \\
                         \hline
                     \end{tabular}
                 \end{table}
@@ -268,7 +265,7 @@
                         \textbf{Sequenza degli eventi principale:}
                         \begin{enumerate}
                             \item Il caso d'uso inizia quando l'utente richiede le informazioni di un'opera.
-                            \item Il sistema cerca le informazioni anagrafiche nella memoria in base all'identificativo dell'opera.
+                            \item Il sistema cerca le informazioni anagrafiche nella memoria.
                             \item Il sistema mostra le informazioni a schermo.
                             \item \textbf{include}(Lista Regie)
                             \item[] \textbf{punto di estensione:} modifica
@@ -882,7 +879,7 @@
 
         \subsection{Amministratore}
             \subsubsection{Diagramma}
-                \includegraphics[width=\textwidth]{imgs/use_case/amministratore}
+                \includegraphics[height=\textheight]{imgs/use_case/amministratore}
 
             \subsubsection{Descrizioni}
                 % UC: Crea Opera
@@ -954,7 +951,345 @@
                     \end{tabular}
                 \end{table}
 
+                % UC EXT: Modifica Opera
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso di estensione:} Modifica Opera} \\
+                        \hline
+                        \textbf{ID:} 27 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        \textbf{Segmento 1:} L'utente modifica le informazioni anagrafiche di un'opera. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Amministratore
+                        \end{minipage}
+                        \vspace{-10pt} \\  % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente e' autenticato con account amministratore.
+                                \item L'utente ha selezionato un'opera.
+                                \item L'utente ha premuto il pulsante di modifica.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale del segmento 1:}
+                        \begin{enumerate}
+                            \item Il sistema consente all'utente di modificare le informazioni anagrafiche dell'opera. \label{start_mod_opera}
+                            \item \textbf{include}(Crea Regia)
+                            \item \textbf{include}(Modifica Regia)
+                            \item \textbf{include}(Elimina Regia)
+                            \item Il sistema richiede all'utente di confermare l'intenzione di apportare le modifiche.
+                            \item \textbf{If} l'utente conferma
+                                \begin{enumerate}
+                                    \item Il sistema controlla la validità dei valori inseriti.
+                                    \item \textbf{If} i valori sono validi 
+                                        \begin{enumerate}
+                                            \item Il sistema memorizza permanentemente le modifiche apportate.
+                                        \end{enumerate}
+                                    \item \textbf{Else}
+                                        \begin{enumerate}
+                                            \item Il sistema informa l'utente dell'errore.
+                                            \item Il caso d'uso ricomincia da \ref{start_mod_opera}
+                                        \end{enumerate}
+                                \end{enumerate}
+                            \item \textbf{Else}
+                                \begin{enumerate}
+                                    \item Il sistema ignora i cambiamenti apportati.
+                                \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+
+                % UC EXT: Elimina Opera
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso di estensione:} Elimina Opera} \\
+                        \hline
+                        \textbf{ID:} 28 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        \textbf{Segmento 1:} L'utente elimina un'opera dalla lista di opere memorizzate. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Amministratore
+                        \end{minipage}
+                        \vspace{-10pt} \\  % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente e' autenticato con account amministratore.
+                                \item L'utente ha selezionato un'opera.
+                                \item L'utente ha premuto il pulsante di eliminazione.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale del segmento 1:}
+                        \begin{enumerate}
+                            \item Il sistema richiede all'utente di confermare l'intenzione di eliminare l'opera.
+                            \item \textbf{If} l'utente conferma
+                                \begin{enumerate}
+                                    \item Il sistema elimina permanentemente l'opera dalla lista di opere memorizzate.
+                                \end{enumerate}
+                            \item \textbf{Else}
+                                \begin{enumerate}
+                                    \item Il sistema ignora la richiesta di eliminazione.
+                                \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+
+                % UC: Crea Regia
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Crea Regia} \\
+                        \hline
+                        \textbf{ID:} 29 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        L'utente crea una nuova regia per un'opera. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Amministratore
+                        \end{minipage}
+                        \vspace{-10pt} \\  % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente ha premuto il pulsante di aggiunta di una nuova regia.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Il caso d'uso inizia quando l'utente preme il pulsante di aggiunta di una nuova regia.
+                            \item Il sistema richiede all'utente le informazioni della regia. \label{beginning}
+                            \item \textbf{If} l'utente conferma
+                                \begin{enumerate}
+                                    \item Il sistema controlla la validità dei valori inseriti.
+                                    \item \textbf{If} i valori sono validi 
+                                        \begin{enumerate}
+                                            \item Il sistema memorizza permanentemente la nuova regia.
+                                        \end{enumerate}
+                                    \item \textbf{Else}
+                                        \begin{enumerate}
+                                            \item Il sistema informa l'utente dell'errore.
+                                            \item Il caso d'uso ricomincia da \ref{beginning}
+                                        \end{enumerate}
+                                \end{enumerate}
+                            \item \textbf{Else}
+                                \begin{enumerate}
+                                    \item Il sistema non aggiunge la nuova regia.
+                                \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item La nuova regia è memorizzata e immediatamente visibile a tutti gli utenti.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+
+                % UC: Modifica Regia
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Modifica Regia} \\
+                        \hline
+                        \textbf{ID:} 30 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        L'utente modifica le informazioni di una regia. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Amministratore
+                        \end{minipage}
+                        \vspace{-10pt} \\  % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente ha premuto il pulsante di modifica di una regia.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Il caso d'uso inizia quando l'utente preme il pulsante di modifica di una regia.
+                            \item Il sistema consente all'utente di modificare le informazioni della regia. \label{start_mod_regia}
+                            \item Il sistema richiede all'utente di confermare l'intenzione di apportare le modifiche.
+                            \item \textbf{If} l'utente conferma
+                                \begin{enumerate}
+                                    \item Il sistema controlla la validità dei valori inseriti.
+                                    \item \textbf{If} i valori sono validi 
+                                        \begin{enumerate}
+                                            \item Il sistema memorizza permanentemente le modifiche apportate.
+                                        \end{enumerate}
+                                    \item \textbf{Else}
+                                        \begin{enumerate}
+                                            \item Il sistema informa l'utente dell'errore.
+                                            \item Il caso d'uso ricomincia da \ref{start_mod_regia}
+                                        \end{enumerate}
+                                \end{enumerate}
+                            \item \textbf{Else}
+                                \begin{enumerate}
+                                    \item Il sistema ignora i cambiamenti apportati.
+                                \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+
+                % UC: Elimina Regia
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Elimina Regia} \\
+                        \hline
+                        \textbf{ID:} 31 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        L'utente ha premuto il pulsante di eliminazione di una regia. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Amministratore
+                        \end{minipage}
+                        \vspace{-10pt} \\  % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente ha premuto il pulsante di modifica di una regia.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Il caso d'uso inizia quando l'utente preme il pulsante di eliminazione di una regia
+                            \item Il sistema richiede all'utente di confermare l'intenzione di eliminare la regia.
+                            \item \textbf{If} l'utente conferma
+                                \begin{enumerate}
+                                    \item Il sistema elimina permanentemente la regia dalla lista.
+                                \end{enumerate}
+                            \item \textbf{Else}
+                                \begin{enumerate}
+                                    \item Il sistema ignora la richiesta di eliminazione.
+                                \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+
     \section{Matrice di mapping}
-        \includegraphics{imgs/matrice/matrice}
+        \includegraphics[height=\textheight]{imgs/matrice/matrice}
 
 \end{document}
