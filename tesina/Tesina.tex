@@ -352,6 +352,203 @@
                     \end{tabular}
                 \end{table}
 
+                % UC: Lista Sezioni
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Lista Sezioni} \\ 
+                        \hline
+                        \textbf{ID:} 9 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        Messa a schermo delle sezioni. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Cliente \\
+                            Biglietteria \\
+                            Amministratore 
+                        \end{minipage}
+                        \vspace{0pt} \\  % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                            	\item L'utente si trova nella categoria "Sezioni \& Posti"
+                                \item L'utente sta visualizzando l'elenco delle sezioni.
+                            \end{enumerate}
+                        \end{minipage} 
+                        \vspace{0pt} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Il caso d'uso inizia quando l'utente seleziona \textit{Sezioni}.
+                            \item \textbf{include}(Visualizza Sezione)
+                            \item \textbf{If} esistono sezioni
+                            \begin{enumerate}
+                                \item Il Sistema mostra all'utente tutte le Sezioni presenti una dopo l'altra.
+                            \end{enumerate}
+                            \item \textbf{Else}
+                            \begin{enumerate}
+                                \item Il Sistema comunica che la lista delle Sezioni è vuota.
+                                \item Il Sistema mostra un elenco vuoto.
+                            \end{enumerate}				
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item Il Sistema ha elencato le Sezioni presenti.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+                
+                % UC: Visualizza Sezione
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Visualizza Sezione} \\
+                        \hline
+                        \textbf{ID:} 10 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        Visualizzazione con dettagli di una sezione. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Amministratore \\
+                            Biglietteria \\
+                            Cliente
+                        \end{minipage}
+                        \vspace{0pt} \\ 
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente sta ha richiesto la lista delle sezioni.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Il caso d'uso inizia quando l'utente visualizza una Sezione.
+                            \item \textbf{include}(Lista Posti)
+                            \item Il Sistema mostra all'utente i dati della Sezione.
+                            \item Il Sistema mostra il pulsante \textit{Lista Posti}.
+                            \item \textbf{If} l'utente è autenticato come Amministratore
+                            \begin{enumerate}
+                                \item Il Sistema mostra, accanto al primo pulsante, altre due opzioni: \textit{Modifica Sezione} e \textit{Elimina Sezione}.
+                                \item[] \textbf{punto di estensione}: modificaSezione, eliminaSezione
+                            \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item Il Sistema ha mostrato i dati della Sezione.
+                                \item Il Sistema dà l'opzione di visualizzare i posti relativi alla Sezione.
+                                \item Se l'utente è Amministratore, il Sistema permette di modificare o eliminare la sezione.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+                
+                % UC: Lista Posti
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Lista Posti} \\
+                        \hline
+                        \textbf{ID:} 11 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        Messa a schermo dei posti. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Amministratore \\
+                            Biglietteria \\ 
+                            Cliente
+                        \end{minipage}
+                        \vspace{0pt} \\ 
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item È stato caricato in memoria un database valido. 
+                            \end{enumerate}
+                        \end{minipage} 
+                        \vspace{-10pt} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Il caso d'uso inizia quando l'utente seleziona \textit{Posti} all'interno di una Sezione.
+                            \item \textbf{If} la Sezione contiene Posti
+                            \begin{enumerate}
+                                \item Il Sistema mostra all'utente tutti i Posti presenti della Sezione sotto forma di elenco.
+                            \end{enumerate}
+                            \item \textbf{Else}
+                            \begin{enumerate}
+                                \item Il Sistema comunica che la lista dei Posti della Sezione è vuota.
+                                \item Il Sistema mostra un elenco vuoto.
+                            \end{enumerate}				
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item Il Sistema ha elencato i Posti della Sezione selezionata.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+                
                 % UC: Crea Prenotazione
                 \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
@@ -1285,6 +1482,415 @@
                     \end{tabular}
                 \end{table}
 
+                % UC: Crea Sezione 
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Crea Sezione} \\
+                        \hline
+                        \textbf{ID:} 32 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        Creazione di un settore di posti. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Amministratore
+                        \end{minipage}
+                        \vspace{-10pt} \\ 
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente è autenticato come Amministratore.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Il caso d'uso inizia quando l'utente seleziona \textit{Crea una Sezione}.
+                            \item Il Sistema chiede all'utente, tramite un interfaccia, come che nome dare alla nuova Sezione e i dati da assegnargli.
+                            \item \textbf{If} l'utente conferma i dati
+                            \begin{enumerate}
+                                \item Il Sistema valida il nome e i dati inseriti.
+                                \item \textbf{If} nome e dati sono validi
+                                \begin{enumerate}
+                                    \item Il Sistema aggiunge la nuova Sezione alla Lista delle Sezioni.
+                                \end{enumerate}
+                                \item \textbf{Else}
+                                \begin{enumerate}
+                                    \item Il Sistema restituisce un messaggio di errore.
+                                    \item L'utente torna al passo 2.
+                                \end{enumerate}
+                            \end{enumerate}
+                            \item \textbf{Else if} l'utente annulla
+                            \begin{enumerate}
+                                \item Il Sistema annulla l'operazione.
+                            \end{enumerate} 
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item La nuova sezione è stata aggiunta alla Lista delle Sezioni.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+                
+                % UC EXT: Modifica Sezione
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso di estensione:} Modifica Sezione} \\
+                        \hline
+                        \textbf{ID:} 33 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        Segmento 1: Modifica di una Sezione. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Amministratore
+                        \end{minipage}
+                        \vspace{-10pt} \\ 
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni del Segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente è autenticato come Amministratore.
+                                \item L'utente ha selezionato una Sezione.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi del Segmento 1:}
+                        \begin{enumerate}
+                            \item Il caso d'uso inizia quando l'utente seleziona \textit{Modifica Sezione} all'interno di una Sezione.
+                            \item \textbf{include}(Crea Posto)
+                            \item \textbf{include}(Modifica Posto)
+                            \item \textbf{include}(Elimina Posto)
+                            \item Il Sistema, tramite un interfaccia, chiede all'utente le modifiche da apportare alla Sezione o ai Posti ad essa appartenenti.
+                            \item \textbf{If} l'utente conferma
+                            \begin{enumerate}
+                                \item \textbf{If} le modifiche sono valide
+                                \begin{enumerate}
+                                    \item Il Sistema modifica la Sezione selezionata.
+                                    \item Il Sistema informa che la modifica è avvenuta con successo.
+                                \end{enumerate}
+                                \item \textbf{Else}
+                                \begin{enumerate}
+                                    \item Il Sistema mostra un messaggio di errore.
+                                    \item L'utente torna al passo 5.
+                                \end{enumerate}
+                            \end{enumerate}
+                            \item \textbf{Else if} l'utente annulla
+                            \begin{enumerate}
+                                \item Il Sistema annulla l'operazione.
+                            \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni del Segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item Il Sistema ha modificato la Sezione selezionata.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+                
+                % UC EXT: Elimina Sezione
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso di estensione:} Elimina Sezione} \\
+                        \hline
+                        \textbf{ID:} 34 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        Segmento 1: Eliminazione di una Sezione. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Amministratore
+                        \end{minipage}
+                        \vspace{-10pt} \\ 
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni del Segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente è autenticato come Amministratore.
+                                \item L'utente ha selezionato una Sezione.
+                            \end{enumerate}
+                        \end{minipage} 
+                        \vspace{-5pt} \\
+                        \hline
+                        \textbf{Sequenza degli eventi del Segmento 1:}
+                        \begin{enumerate}
+                            \item Il caso d'uso inizia quando l'utente seleziona \textit{Elimina Sezione} all'interno di una Sezione.
+                            \item Il Sistema chiede conferma all'utente.
+                            \item \textbf{If} l'utente conferma
+                            \begin{enumerate}
+                                \item Il Sistema elimina la Sezione selezionata.
+                                \item Il Sistema informa che l'eliminazione è avvenuta con successo.
+                            \end{enumerate}
+                            \item \textbf{Else if} l'utente annulla
+                            \begin{enumerate}
+                                \item Il Sistema annulla l'operazione.
+                            \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni del Segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item Il Sistema ha eliminato la Sezione selezionata.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+                
+                % UC: Crea Posto
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Crea Posto} \\
+                        \hline
+                        \textbf{ID:} 35 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        Creazione di un posto in una Sezione. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Amministratore
+                        \end{minipage}
+                        \vspace{-10pt} \\ 
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente è autenticato come Amministratore.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Il caso d'uso inizia quando l'utente seleziona \textit{Nuovo Posto} all'interno di una Sezione.
+                            \item Il Sistema, tramite un interfaccia, chiede all'utente gli attributi da assegnare al Posto.
+                            \item Il Sistema chiede conferma all'utente
+                            \item  \textbf{If} l'utente conferma
+                            \begin{enumerate}
+                                \item Il sistema valida i dati inseriti.
+                                \begin{enumerate}
+                                    \item Il Sistema aggiunge un nuovo Posto alla Lista dei Posti.
+                                \end{enumerate}
+                                \item \textbf{Else}
+                                \begin{enumerate}
+                                    \item Il Sistema restituisce un messaggio di errore.
+                                \end{enumerate}
+                            \end{enumerate}
+                            \item \textbf{Else if} l'utente annulla
+                            \begin{enumerate}
+                                \item Il Sistema annulla l'operazione.
+                            \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item Il nuovo Posto è stato aggiunto alla Lista dei Posti.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+                
+                % UC: Modifica Posto
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Modifica Posto} \\
+                        \hline
+                        \textbf{ID:} 36 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        Modifica di un Posto. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Amministratore \\ 
+                        \end{minipage}
+                        \vspace{-15pt} \\ 
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente è autenticato come Amministratore.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Il caso d'uso inizia quando l'utente seleziona \textit{Modifica Posto} all'interno di un Posto.
+                            \item Il Sistema chiede le modifiche da apportare al Posto.
+                            \item Il Sistema chiede conferma all'utente.
+                            \item \textbf{If} l'utente conferma
+                            \begin{enumerate}
+                                \item Il Sistema verifica i dati inseriti.
+                                \item \textbf{If} i dati sono validi
+                                \begin{enumerate}
+                                    \item Il Sistema modifica il Posto selezionato.
+                                \end{enumerate}
+                                \item \textbf{Else}
+                                \begin{enumerate}
+                                    \item Il Sistema restituisce un messaggio di errore.
+                                \end{enumerate}
+                                \item \textbf{Else if} L'utente annulla
+                                \begin{enumerate}
+                                    \item Il Sistema annulla l'operazione.
+                                \end{enumerate}
+                            \end{enumerate}
+                            
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item Il Sistema ha modificato la Sezione selezionata.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+                
+                % UC: Elimina Posto
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Elimina Posto} \\
+                        \hline
+                        \textbf{ID:} 37 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        Eliminazione di un Posto. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Amministratore
+                        \end{minipage}
+                        \vspace{-10pt} \\ 
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente è autenticato come Amministratore.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Il caso d'uso inizia quando l'utente seleziona \textit{Elimina Posto} all'interno di una Posto.
+                            \item Il Sistema chiede conferma all'utente.
+                            \item \textbf{If} l'utente conferma
+                            \begin{enumerate}
+                                \item Il Sistema elimina il Posto selezionato.
+                            \end{enumerate}
+                            \item \textbf{Else if} l'utente annulla
+                            \begin{enumerate}
+                                \item Il Sistema annulla l'operazione.
+                            \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item Il Sistema ha eliminato il Posto selezionato.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+                
     \section{Matrice di mapping}
         \includegraphics[height=\textheight]{imgs/matrice/matrice}
 
