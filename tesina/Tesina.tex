@@ -580,16 +580,17 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente visualizza l'elenco degli eventi. %// Non ne sono convinto.
+                                \item L'utente visualizza l'elenco degli eventi.
                             \end{enumerate}
                         \end{minipage} \\
                         \hline
                         \textbf{Sequenza degli eventi principale:}
                         \begin{enumerate}
                             \item Il caso d'uso inizia quando l'utente preme il pulsante \emph{Crea prenotazione}.
-                            \item Il Sistema mostra una interfaccia per inserire i dati relativi alla prenotazione. %// Oppure Il Sistema, tramite un'interfaccia, permette di inserire i dati relativi alla prenotazione.
+                            \item Il Sistema, tramite un'interfaccia, permette di inserire i dati relativi alla prenotazione.
                             \item L'utente inserisce i dati relativi alla prenotazione.
-                            \item L'utente preme il pulsante \emph{Salva dati}.
+                            %// \item L'utente preme il pulsante \emph{Salva dati}.
+                            \item L'utente salva i dati.
                             \item \textbf{If} i dati inseriti sono validi
                             \begin{enumerate}
                                 \item Il Sistema salva i dati.
@@ -674,7 +675,7 @@
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
                                 \item L'utente visualizza le informazioni di una prenotazione.
-                                \item Il Sistema permette all'utente di modificare, eliminare o generare una ricevuta della prenotazione.  %// Molto dettagliato :/
+                                \item Il Sistema permette all'utente di modificare, eliminare o generare una ricevuta della prenotazione.
                                 \item Se l'utente è Amministratore o Biglietteria, il Sistema permette di segnarla come \emph{pagata}.
                             \end{enumerate}
                         \end{minipage}
@@ -725,9 +726,10 @@
                         \hline
                         \textbf{Sequenza degli eventi del segmento 1:}
                         \begin{enumerate}
-                            \item Il Sistema mostra la interfaccia di creazione di prenotazione, ma con i dati saltavi della prenotazione già creata selezionati. %// Da confirmare coi ragazzi.
+                            \item Il Sistema mostra la interfaccia di creazione di prenotazione, ma con i dati saltavi della prenotazione già creata selezionati.
                             \item L'utente modifica i dati relativi alla prenotazione.
-                            \item L'utente preme il pulsante \emph{Salva dati}.
+                            %// \item L'utente preme il pulsante \emph{Salva dati}.
+                            \item L'utente salva i dati.
                             \item \textbf{If} i dati sono validi
                             \begin{enumerate}
                                 \item Il Sistema salva i dati.
@@ -791,13 +793,13 @@
                         \hline
                         \textbf{Sequenza degli eventi del segmento 1:}
                         \begin{enumerate}
-                            \item Il Sistema chiede conferma per eliminare la prenotazione.
-                            \item \textbf{If} l'utente preme il pulsante di conferma
-                            \begin{enumerate}
-                                \item Il Sistema effettua l'eliminazione della prenotazione.
-                                \item Il Sistema torna all'elenco delle prenotazioni.
-                                \item Il Sistema informa che l'eliminazione è stata effettuata.
-                            \end{enumerate}
+                        %// Qui non dobbiamo espiegare come funziona, ma che cosa fa dal punto di vista dell'usuario.
+                            %// \item Il Sistema chiede conferma per eliminare la prenotazione.
+                            %// \item \textbf{If} l'utente preme il pulsante di conferma
+                            \item L'utente conferma l'eliminazione della prenotazione.
+                            \item Il Sistema effettua l'eliminazione.
+                            %// \item Il Sistema torna all'elenco delle prenotazioni.
+                            %// \item Il Sistema informa che l'eliminazione è stata effettuata.
                         \end{enumerate} \\
                         \hline
                         \cellcolor{gray!20}
@@ -843,7 +845,7 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente visualizza l'elenco delle prenotazioni. %// Da confrontare col diagramma dei casi d'uso dei Clienti.
+                                \item L'utente visualizza l'elenco delle prenotazioni.
                             \end{enumerate}
                         \end{minipage} \\
                         \hline
@@ -912,7 +914,7 @@
                         \hline
                         \textbf{Sequenza degli eventi principale:}
                         \begin{enumerate}
-                            \item Questo caso d'uso inizia dopo che l'utente seleziona la categoria "Prenotazioni".
+                            \item Il caso d'uso inizia dopo che l'utente seleziona la categoria "Prenotazioni".
                             \item \textbf{If} nel Sistema è memorizzata almeno una prenotazione
                             \begin{enumerate}
                                 \item \textbf{For} ogni prenotazione nel Sistema
@@ -928,7 +930,6 @@
                             \item \textbf{Else}
                             \begin{enumerate}
                                 \item Il Sistema informa l'utente che non vi sono prenotazioni memorizzate.
-                                %// \item Il Sistema mostra una lista vuota.
                             \end{enumerate}
                         \end{enumerate} \\
                         \hline
@@ -937,7 +938,7 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente visualizza l'elenco delle prenotazioni salvate nel Sistema. %// Oppure Il sistema ha elencato le Prenotazioni salvate.
+                                \item L'utente visualizza l'elenco delle prenotazioni salvate nel Sistema. %// Oppure Il Sistema ha elencato le Prenotazioni salvate.
                             \end{enumerate}  
                         \end{minipage}
                         \vspace{-10pt} \\
@@ -1049,13 +1050,11 @@
                         \hline
                         \textbf{Sequenza degli eventi del segmento 1:}
                         \begin{enumerate}
-                            \item Il Sistema chiede conferma per segnare la prenotazione come \emph{pagata}.
-                            \item \textbf{If} L'utente preme il pulsante di conferma
-                            \begin{enumerate}
-                                \item Il Sistema segna la prenotazione come \emph{pagata}.
-                                \item Il Sistema torna all'elenco delle prenotazioni.
-                                \item Il Sistema informa che l'assegnamento è stato effettuato.
-                            \end{enumerate}
+                            %// \item Il Sistema chiede conferma per segnare la prenotazione come \emph{pagata}.
+                            \item L'utente conferma l'assegnamento della prenotazione come \emph{pagata}.
+                            \item Il Sistema segna la prenotazione come \emph{pagata}.
+                            %// \item Il Sistema torna all'elenco delle prenotazioni.
+                            %// \item Il Sistema informa che l'assegnamento è stato effettuato.
                         \end{enumerate} \\
                         \hline
                         \cellcolor{gray!20}
@@ -1095,7 +1094,7 @@
                         \begin{minipage}{\linewidth}
                             Amministratore
                         \end{minipage}
-                        \vspace{-10pt} \\ % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+                        \vspace{-10pt} \\
                         \hline
                         \textbf{Attori secondari:} \\
                         Nessuno. \\
@@ -1113,7 +1112,7 @@
                         \hline
                         \textbf{Sequenza degli eventi principale:}
                         \begin{enumerate}
-                            \item Questo caso d'uso inizia quando l'utente preme il pulsante \emph{Crea opera}.
+                            \item Il caso d'uso inizia quando l'utente preme il pulsante \emph{Crea opera}.
                             \item Il sistema mostra una interfaccia per inserire dati e impostazioni relativi all'opera. % e.g. Disponibilità
                             \item L'utente inserisce le informazioni anagrafiche relative all'opera.
                             \item \textbf{If} i dati inseriti sono validi
