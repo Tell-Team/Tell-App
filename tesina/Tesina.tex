@@ -352,6 +352,258 @@
                     \end{tabular}
                 \end{table}
 
+                % UC: Lista Spettacoli
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Lista Spettacoli} \\
+                        \hline
+                        \textbf{ID:} 5 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        L'utente visualizzare l'elenco degli spettacoli disponibili presso il teatro. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Cliente \\
+                            Biglietteria \\
+                            Amministratore \\
+                        \end{minipage}
+                        \vspace{-10pt} \\ 
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente è posizionato nella sezione informazione.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Il caso d'uso inizia quando l'utente richiede di visualizzare la lista completa degli spettacoli.
+                            \item \textbf{If} c'è almeno uno spettacolo memorizzato nel Sistema
+                            \begin{enumerate}
+                                \item \textbf{For} ogni spettacolo nel Sistema
+                                \begin{enumerate}
+                                    \item Il sistema mostra un'anteprima dello spettacolo con informazioni basiche (es. titolo, data, genere). % Disponibilità?
+                                \end{enumerate}
+                                \item[] \textbf{punto di estensione:} filtrareElenco
+                                \item \textbf{For} ogni spettacolo nell'elenco visualizzato
+                                \begin{enumerate}
+                                    \item[] \textbf{include}(Visualizza Spettacolo)
+                                \end{enumerate}
+                            \end{enumerate}
+                            \item \textbf{Else}
+                            \begin{enumerate}
+                                \item Il Sistema informa l'utente che non vi sono spettacoli memorizzati.
+                            \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item Viene visualizzata a schermo la lista degli spettacoli memorizzati.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+
+                % UC EXT: Ricerca Spettacolo
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso di estensione:} Ricerca Spettacolo} \\
+                        \hline
+                        \textbf{ID:} 6 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        \textbf{Segmento 1:} L'utente filtra la lista di spettacoli applicando eventuali filtri (es. titolo, data, genere). \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Cliente \\
+                            Biglietteria \\
+                            Amministratore \\
+                        \end{minipage}
+                        \vspace{-10pt} \\ 
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente ha inserito i criteri di ricerca.
+                                \item L'utente ha premuto il pulsante di ricerca.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale del segmento 1:}
+                        \begin{enumerate}
+                            \item Il Sistema ricerca, nell'elenco di spettacoli, degli spettacoli coincidenti.
+                            \item \textbf{If} il Sistema trova almeno uno spettacolo coincidente
+                            \begin{enumerate}
+                                \item \textbf{For} ogni spettacolo coincidente
+                                \begin{enumerate}
+                                    \item Il sistema mostra un'anteprima dello spettacolo con informazioni basiche.
+                                \end{enumerate}
+                            \end{enumerate}
+                            \item \textbf{Else}
+                            \begin{enumerate}
+                                \item Il Sistema informa l'utente che non vi sono spettacoli coincidenti.
+                            \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente visualizza l'elenco filtrato.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+
+                % UC EXT: Visualizza Spettacolo
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso di estensione:} Visualizza Spettacolo} \\
+                        \hline
+                        \textbf{ID:} 7 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        \textbf{Segmento 1:} L'utente visualizza i dettagli di uno spettacolo selezionato dalla lista. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Cliente \\
+                            Biglietteria \\
+                            Amministratore \\
+                        \end{minipage}
+                        \vspace{-10pt} \\ 
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente visualizza la lista degli spettacoli.
+                                \item L'utente ha selezionato uno spettacolo della lista.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale del segmento 1:}
+                        \begin{enumerate}
+                            \item Il Sistema mostra i dettagli dello spettacolo: titolo, descrizione, durata, ecc.
+                            \item \textbf{include}(Lista Eventi)
+                            \item \textbf{If} l'utente è stato autenticato come Amministratore
+                            \begin{enumerate}
+                                \item[] \textbf{punto di estensione:} modificaSpettacolo
+                            \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item Sono visualizzate a schermo le informazioni anagrafiche dello spettacolo.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+
+                % UC: Lista Eventi
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Lista Eventi} \\
+                        \hline
+                        \textbf{ID:} 8 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        L'utente visualizza l'elenco di tutti gli eventi programmati per uno spettacolo. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Cliente \\
+                            Biglietteria \\
+                            Amministratore \\
+                        \end{minipage}
+                        \vspace{-10pt} \\ 
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente visualizza i dettagli di uno spettacolo.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Il caso d'uso inizia dopo che l'utente visualizza i dettagli di uno spettacolo.
+                            \item \textbf{For} ogni eventi vincolato allo spettacolo
+                            \begin{enumerate}
+                                \item Il Sistema mostra informazioni rilevanti dell'evento (es. data, ora, sala).
+                            \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item E' visualizzata a schermo la lista degli eventi associati allo spettacolo.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+
                 % UC: Lista Sezioni
                 \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
@@ -700,7 +952,7 @@
                         \cellcolor{gray!20}
                         \textbf{Breve descrizione:} \\
                         \cellcolor{gray!20}
-                        Segmento 1: L'utente modifica una prenotazione esistente all'interno dell'elenco delle prenotazioni. \\
+                        \textbf{Segmento 1:} L'utente modifica una prenotazione esistente all'interno dell'elenco delle prenotazioni. \\
                         \hline
                         \textbf{Attori principali:} \\
                         \begin{minipage}{\linewidth}
@@ -767,7 +1019,7 @@
                         \cellcolor{gray!20}
                         \textbf{Breve descrizione:} \\
                         \cellcolor{gray!20}
-                        Segmento 1: L'utente elimina una prenotazione esistente all'interno dell'elenco delle prenotazioni. \\
+                        \textbf{Segmento 1:} L'utente elimina una prenotazione esistente all'interno dell'elenco delle prenotazioni. \\
                         \hline
                         \textbf{Attori principali:} \\
                         \begin{minipage}{\linewidth}
@@ -876,6 +1128,294 @@
                 \includegraphics[width=\textwidth]{imgs/use_case/biglietteria}
             
             \subsubsection{Descrizioni}
+                % UC EXT: Modifica Spettacolo
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso di estensione:} Modifica Spettacolo} \\
+                        \hline
+                        \textbf{ID:} 18 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        \textbf{Segmento 1:} L'utente modifica le informazioni relative a uno spettacolo. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Biglietteria \\
+                            Amministratore \\
+                        \end{minipage}
+                        \vspace{-10pt} \\ 
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente visualizza i dettagli di uno spettacolo.
+                                \item L'utente ha premuto il pulsante di modifica.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale del segmento 1:}
+                        \begin{enumerate}
+                            \item Il Sistema presenta un modulo precompilato con i dati dello spettacolo.
+                            \item L'utente modifica i dati desiderati dello spettacolo.
+                            \item[] \textbf{punto di estensione:} creaEvento
+                            \item[] \textbf{punto di estensione:} modificaEvento
+                            \item L'utente salva i dati.
+                            \item \textbf{If} i sati sono validi
+                            \begin{enumerate}
+                                \item Il Sistema salva i dati.
+                                \item Il caso d'uso finisce.
+                            \end{enumerate}
+                            \item \textbf{Else}
+                            \begin{enumerate}
+                                \item Il Sistema informa che i dati inseriti sono invalidi.
+                                \item L'utente torna al passo 2.
+                            \end{enumerate}
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente effettua la modifica di uno spettacolo.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+
+                % UC EXT: Elimina Spettacolo
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso di estensione:} Elimina Spettacolo} \\
+                        \hline
+                        \textbf{ID:} 19 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        \textbf{Segmento 1:} L'utente elimina uno spettacolo dal Sistema. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Biglietteria \\
+                            Amministratore \\
+                        \end{minipage}
+                        \vspace{-10pt} \\
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente visualizza i dettagli di uno spettacolo.
+                                \item L'utente ha premuto il pulsante di elimina.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale del segmento 1:}
+                        \begin{enumerate}
+                            \item Il Sistema richiede conferma dell'operazione.
+                            \item L'utente conferma l'eliminazione.
+                            \item \textbf{For} ogni evento dello spettacolo
+                            \begin{enumerate}
+                                \item \textbf{include}(Elimina Evento)
+                            \end{enumerate}
+                            \item Il Sistema elimina lo spettacolo.
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente effettua l'elimina di uno spettacolo (e i suoi eventi).
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+
+                % UC EXT: Crea Evento
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso di estensione:} Crea Evento} \\
+                        \hline
+                        \textbf{ID:} 20 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        \textbf{Segmento 1:} L'utente crea un nuovo evento associato a uno spettacolo esistente. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Biglietteria \\
+                            Amministratore \\
+                        \end{minipage}
+                        \vspace{-10pt} \\ 
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item Lo spettacolo a cui associare l'evento è già presente nel Sistema.
+                                \item L'utente seleziona l'opzione per aggiungere un nuovo evento.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale del segmento 1:}
+                        \begin{enumerate}
+                            \item Il Sistema mostra un modulo per l'inserimento dei dati dell'evento (data, ora, sala, disponibilità posti).
+                            \item L'utente compila i campi richiesti.
+                            \item L'utente conferma la creazione.
+                            \item Il Sistema verifica i dati e registra il nuovo evento.
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item Il nuovo evento risulta associato allo spettacolo selezionato.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+
+                % UC EXT: Modifica Evento
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso di estensione:} Modifica Evento} \\
+                        \hline
+                        \textbf{ID:} 21 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        \textbf{Segmento 1:} L'utente modifica i dettagli di un evento programmato. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Biglietteria \\
+                            Amministratore \\
+                        \end{minipage}
+                        \vspace{-10pt} \\ 
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'evento da modificare è presente nel Sistema.
+                                \item L'utente ha premuto il pulsante di modifica relativo all'evento.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale del segmento 1:}
+                        \begin{enumerate}
+                            \item Il Sistema mostra un modulo precompilato con i dati correnti dell'evento.
+                            \item L'utente aggiorna le informazioni desiderate. % Data, ora, sala, disponibilità posti
+                            \item L'utente conferma la modifica.
+                            \item Il Sistema verifica i dati e salva le modifiche.
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'evento risulta aggiornato nel Sistema.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+
+                % UC EXT: Elimina Evento
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso di estensione:} Elimina Evento} \\
+                        \hline
+                        \textbf{ID:} 22 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        \textbf{Segmento 1:} L'utente elimina un evento associato a uno spettacolo. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Biglietteria \\
+                            Amministratore \\
+                        \end{minipage}
+                        \vspace{-10pt} \\ 
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'evento da eliminare è già stato creato e visibile nel Sistema.
+                                \item L'utente preme il pulsante di elimina relativo all'evento.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Il Sistema mostra un messaggio di conferma
+                            \item L'utente conferma l'eliminazione dell'evento.
+                            \item Il Sistema effettua l'eliminazione.
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni del segmento 1:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente effettua l'eliminazione di un evento.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+                
                 % UC: Lista Prenotazioni
                 \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
@@ -962,7 +1502,7 @@
                         \cellcolor{gray!20}
                         \textbf{Breve descrizione:} \\
                         \cellcolor{gray!20}
-                        Segmento 1: Questo caso d'uso consente di filtrare l'elenco delle prenotazioni attraverso una ricerca. \\
+                        \textbf{Segmento 1:} Questo caso d'uso consente di filtrare l'elenco delle prenotazioni attraverso una ricerca. \\
                         \hline
                         \textbf{Attori primari:} \\
                         \begin{minipage}{\linewidth}
@@ -1025,7 +1565,7 @@
                         \cellcolor{gray!20}
                         \textbf{Breve descrizione:} \\
                         \cellcolor{gray!20}
-                        Segmento 1: L'utente segna una prenotazione come \emph{pagata}. \\
+                        \textbf{Segmento 1:} L'utente segna una prenotazione come \emph{pagata}. \\
                         \hline
                         \textbf{Attori principali:} \\
                         \begin{minipage}{\linewidth}
@@ -1565,7 +2105,7 @@
                         \cellcolor{gray!20}
                         \textbf{Breve descrizione:} \\
                         \cellcolor{gray!20}
-                        Segmento 1: Modifica di una Sezione. \\
+                        \textbf{Segmento 1:} Modifica di una Sezione. \\
                         \hline
                         \textbf{Attori primari:} \\
                         \begin{minipage}{\linewidth}
@@ -1637,7 +2177,7 @@
                         \cellcolor{gray!20}
                         \textbf{Breve descrizione:} \\
                         \cellcolor{gray!20}
-                        Segmento 1: Eliminazione di una Sezione. \\
+                        \textbf{Segmento 1:} Eliminazione di una Sezione. \\
                         \hline
                         \textbf{Attori primari:} \\
                         \begin{minipage}{\linewidth}
