@@ -838,21 +838,11 @@
                         \hline
                         \textbf{Sequenza degli eventi principale:}
                         \begin{enumerate}
-                            \item Il caso d'uso inizia quando l'utente preme il pulsante \emph{Crea prenotazione}.
+                            \item Il caso d'uso inizia quando l'utente preme il pulsante di creazione.
                             \item Il Sistema, tramite un'interfaccia, permette di inserire i dati relativi alla prenotazione.
                             \item L'utente inserisce i dati relativi alla prenotazione.
-                            %// \item L'utente preme il pulsante \emph{Salva dati}.
                             \item L'utente salva i dati.
-                            \item \textbf{If} i dati inseriti sono validi
-                            \begin{enumerate}
-                                \item Il Sistema salva i dati.
-                                \item Il caso d'uso finisce.
-                            \end{enumerate}
-                            \item \textbf{Else}
-                            \begin{enumerate}
-                                \item Il Sistema informa che i dati inseriti sono invalidi.
-                                \item L'utente torna al passo 3.
-                            \end{enumerate}
+                            \item Il Sistema verifica i dati e li salva in memoria.
                         \end{enumerate} \\
                         \hline
                         \cellcolor{gray!20}
@@ -980,18 +970,8 @@
                         \begin{enumerate}
                             \item Il Sistema mostra la interfaccia di creazione di prenotazione, ma con i dati saltavi della prenotazione già creata selezionati.
                             \item L'utente modifica i dati relativi alla prenotazione.
-                            %// \item L'utente preme il pulsante \emph{Salva dati}.
                             \item L'utente salva i dati.
-                            \item \textbf{If} i dati sono validi
-                            \begin{enumerate}
-                                \item Il Sistema salva i dati.
-                                \item Il caso d'uso finisce.
-                            \end{enumerate}
-                            \item \textbf{Else}
-                            \begin{enumerate}
-                                \item Il Sistema informa che i dati inseriti sono invalidi.
-                                \item L'utente torna al passo 2.
-                            \end{enumerate}
+                            \item Il Sistema verifica i dati e li salva in memoria.
                         \end{enumerate} \\
                         \hline
                         \cellcolor{gray!20}
@@ -1045,13 +1025,9 @@
                         \hline
                         \textbf{Sequenza degli eventi del segmento 1:}
                         \begin{enumerate}
-                        %// Qui non dobbiamo espiegare come funziona, ma che cosa fa dal punto di vista dell'usuario.
-                            %// \item Il Sistema chiede conferma per eliminare la prenotazione.
-                            %// \item \textbf{If} l'utente preme il pulsante di conferma
+                            \item Il Sistema chiede conferma per eliminare la prenotazione.
                             \item L'utente conferma l'eliminazione della prenotazione.
                             \item Il Sistema effettua l'eliminazione.
-                            %// \item Il Sistema torna all'elenco delle prenotazioni.
-                            %// \item Il Sistema informa che l'eliminazione è stata effettuata.
                         \end{enumerate} \\
                         \hline
                         \cellcolor{gray!20}
@@ -1128,6 +1104,65 @@
                 \includegraphics[width=\textwidth]{imgs/use_case/biglietteria}
             
             \subsubsection{Descrizioni}
+                % UC: Crea Spettacolo
+                \begin{table}[H]
+                    \begin{tabular}{|p{\linewidth}|}
+                        \hline
+                        \cellcolor{gray!100}
+                        \color{white}
+                        \centerline{\textbf{Caso d'uso:} Crea Spettacolo} \\
+                        \hline
+                        \textbf{ID:} 17 \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Breve descrizione:} \\
+                        \cellcolor{gray!20}
+                        L'utente crea l'istanza di uno spettacolo svolto nel teatro. \\
+                        \hline
+                        \textbf{Attori primari:} \\
+                        \begin{minipage}{\linewidth}
+                            Biglietteria \\
+                            Amministratore \\
+                        \end{minipage}
+                        \vspace{-10pt} \\ 
+                        \hline
+                        \textbf{Attori secondari:} \\
+                        Nessuno. \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Precondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente è stato autenticato come Amministratore o Biglietteria.
+                                \item L'utente si trova nella categoria ”Spettacolo”.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi principale:}
+                        \begin{enumerate}
+                            \item Il caso d'uso inizia quando l'utente preme il pulsante di creazione.
+                            \item Il Sistema mostra una interfaccia per inserire dati e impostazioni relativi allo spettacolo.
+                            \item L'utente inserisce i dati anagrafici dello spettacolo.
+                            \item L'utente conferma la creazione.
+                            \item Il Sistema verifica i dati e li salva in memoria.
+                        \end{enumerate} \\
+                        \hline
+                        \cellcolor{gray!20}
+                        \textbf{Postcondizioni:} \\
+                        \cellcolor{gray!20}
+                        \begin{minipage}{\linewidth}
+                            \begin{enumerate}
+                                \item L'utente crea uno spettacolo.
+                            \end{enumerate}
+                        \end{minipage} \\
+                        \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
+                        \hline
+                    \end{tabular}
+                \end{table}
+                
                 % UC EXT: Modifica Spettacolo
                 \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
@@ -1169,17 +1204,8 @@
                             \item L'utente modifica i dati desiderati dello spettacolo.
                             \item[] \textbf{punto di estensione:} creaEvento
                             \item[] \textbf{punto di estensione:} modificaEvento
-                            \item L'utente salva i dati.
-                            \item \textbf{If} i sati sono validi
-                            \begin{enumerate}
-                                \item Il Sistema salva i dati.
-                                \item Il caso d'uso finisce.
-                            \end{enumerate}
-                            \item \textbf{Else}
-                            \begin{enumerate}
-                                \item Il Sistema informa che i dati inseriti sono invalidi.
-                                \item L'utente torna al passo 2.
-                            \end{enumerate}
+                            \item L'utente conferma la modifica dello spettacolo.
+                            \item Il Sistema verifica i dati e li salva in memoria.
                         \end{enumerate} \\
                         \hline
                         \cellcolor{gray!20}
@@ -1590,11 +1616,9 @@
                         \hline
                         \textbf{Sequenza degli eventi del segmento 1:}
                         \begin{enumerate}
-                            %// \item Il Sistema chiede conferma per segnare la prenotazione come \emph{pagata}.
+                            \item Il Sistema chiede conferma per segnare la prenotazione come \emph{pagata}.
                             \item L'utente conferma l'assegnamento della prenotazione come \emph{pagata}.
                             \item Il Sistema segna la prenotazione come \emph{pagata}.
-                            %// \item Il Sistema torna all'elenco delle prenotazioni.
-                            %// \item Il Sistema informa che l'assegnamento è stato effettuato.
                         \end{enumerate} \\
                         \hline
                         \cellcolor{gray!20}
@@ -1628,7 +1652,7 @@
                         \cellcolor{gray!20}
                         \textbf{Breve descrizione:} \\
                         \cellcolor{gray!20}
-                        L'utente crea una istanza di un'opera svolta nel teatro. \\
+                        L'utente crea l'istanza di un'opera svolta nel teatro. \\
                         \hline
                         \textbf{Attori primari:} \\
                         \begin{minipage}{\linewidth}
@@ -1652,19 +1676,12 @@
                         \hline
                         \textbf{Sequenza degli eventi principale:}
                         \begin{enumerate}
-                            \item Il caso d'uso inizia quando l'utente preme il pulsante \emph{Crea opera}.
+                            \item Il caso d'uso inizia quando l'utente preme il pulsante  di creazione.
                             \item Il sistema mostra una interfaccia per inserire dati e impostazioni relativi all'opera. % e.g. Disponibilità
                             \item L'utente inserisce le informazioni anagrafiche relative all'opera.
-                            \item \textbf{If} i dati inseriti sono validi
-                            \begin{enumerate}
-                                \item Il sistema salva i dati e le impostazioni.
-                                \item Il caso d'uso finisce.
-                            \end{enumerate}
-                            \item \textbf{Else}
-                            \begin{enumerate}
-                                \item Il sistema informa l'utente che i dati inseriti sono invalidi.
-                                \item L'utente torna al passo 3.
-                            \end{enumerate}
+                            % Il Else Verifica 
+                            \item L'utente conferma la creazione.
+                            \item Il sistema verifica i dati e li salva in memoria.
                         \end{enumerate} \\
                         \hline
                         \cellcolor{gray!20}
