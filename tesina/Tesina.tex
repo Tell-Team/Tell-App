@@ -521,9 +521,9 @@
                         \hline
                         \textbf{Sequenza degli eventi principale:}
                         \begin{enumerate}
-                            \item Il Sistema mostra i dettagli dello spettacolo: titolo, descrizione, durata, ecc.
+                            \item Il Sistema mostra tutti i dettagli dello spettacolo: titolo, descrizione, durata, ecc.
                             \item \textbf{include}(Lista Eventi)
-                            \item \textbf{If} l'utente è stato autenticato come Amministratore
+                            \item \textbf{If} l'utente è autenticato come Amministratore
                             \begin{enumerate}
                                 \item[] \textbf{punto di estensione:} modificaSpettacolo
                             \end{enumerate}
@@ -602,7 +602,7 @@
                         \hline
                     \end{tabular}
                 \end{table}
-
+                
                 % UC: Lista Sezioni
                 \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
@@ -891,7 +891,7 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente si trova nella categoria "Prenotazioni". % Utilizo "categoria" per non confonderla con "sezione".
+                                \item L'utente visualizza la lista delle prenotazioni.
                                 \item L'elenco delle prenotazioni, sia esso filtrato o meno, non è vuoto.
                             \end{enumerate}
                         \end{minipage}
@@ -901,13 +901,12 @@
                         \begin{enumerate}
                             \item Il caso d'uso inizia quando l'utente richiede le informazioni di una prenotazione.
                             \item Il Sistema mostra le informazioni relative alla prenotazione.
-                            \item Il Sistema mostra tre pulsanti vincolati alla prenotazione: \emph{Modifica}, \emph{Elimina} e \emph{Genera ricevuta}.
+                            \item Il Sistema mostra tre pulsanti per modificare, eliminare o generare la ricevuta della prenotazione.
                             \item \textbf{If} l'utente è Amministratore o Biglietteria
                             \begin{enumerate}
-                                \item Il Sistema mostra il pulsante \emph{Segna come pagata}.
+                                \item Il Sistema mostra un pulsante per segnare la prenotazione come \emph{pagata}.
                             \end{enumerate}
                             \item[] \textbf{punto di estensione:} modificaPrenotazione
-                            %// Per praticità, Genera Ricevuta dovrebbe essere un caso incluso Visualizza Prenotazione.
                         \end{enumerate} \\
                         \hline
                         \cellcolor{gray!20}
@@ -1072,13 +1071,13 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente visualizza l'elenco delle prenotazioni.
+                                \item L'utente visualizza una prenotazione. %/""
                             \end{enumerate}
                         \end{minipage} \\
                         \hline
                         \textbf{Sequenza degli eventi principale:}
                         \begin{enumerate}
-                            \item Il caso d'uso inizia quando l'utente preme \emph{Genera ricevuta}.
+                            \item Il caso d'uso inizia quando l'utente preme \emph{Genera ricevuta}. %/""
                             \item Il Sistema genera un documento con tutta l'informazione relativa all'acquisto dei biglietti prenotati.
                             \item Il Sistema stampa il documento.
                         \end{enumerate} \\
@@ -1134,7 +1133,7 @@
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
                                 \item L'utente è stato autenticato come Amministratore o Biglietteria.
-                                \item L'utente si trova nella categoria ”Spettacolo”.
+                                \item L'utente si trova nella categoria ”Spettacolo”. %/""
                             \end{enumerate}
                         \end{minipage} \\
                         \hline
@@ -1307,7 +1306,7 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item Lo spettacolo a cui associare l'evento è già presente nel Sistema.
+                                \item Lo spettacolo a cui associare l'evento è già presente nel Sistema. %/""
                                 \item L'utente seleziona l'opzione per aggiungere un nuovo evento.
                             \end{enumerate}
                         \end{minipage} \\
@@ -1362,7 +1361,7 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'evento da modificare è presente nel Sistema.
+                                \item L'evento da modificare è presente nel Sistema. %/""
                                 \item L'utente ha premuto il pulsante di modifica relativo all'evento.
                             \end{enumerate}
                         \end{minipage} \\
@@ -1417,7 +1416,7 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'evento da eliminare è già stato creato e visibile nel Sistema.
+                                \item L'evento da eliminare è già stato creato e visibile nel Sistema. %/""
                                 \item L'utente preme il pulsante di elimina relativo all'evento.
                             \end{enumerate}
                         \end{minipage} \\
@@ -1472,25 +1471,20 @@
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
                                 \item L'utente è stato autenticato come Amministratore o Biglietteria.
-                                \item L'utente si trova nella categoria "Prenotazioni".
                             \end{enumerate}
                         \end{minipage}
-                        \vspace{0pt} \\
+                        \vspace{-10pt} \\
                         \hline
                         \textbf{Sequenza degli eventi principale:}
                         \begin{enumerate}
-                            \item Il caso d'uso inizia dopo che l'utente seleziona la categoria "Prenotazioni".
-                            \item \textbf{If} nel Sistema è memorizzata almeno una prenotazione
+                            \item Il caso d'uso inizia quando l'utente richiede di visualizzare la lista completa delle prenotazione.
+                            \item \textbf{If} c'è almeno una prenotazione memorizzata nel Sistema 
                             \begin{enumerate}
                                 \item \textbf{For} ogni prenotazione nel Sistema
                                 \begin{enumerate}
-                                    \item \textbf{include}(Visualizza Prenotazione)
+                                    \item Il Sistema mostra un'anteprima della prenotazione con informazioni basiche.
                                 \end{enumerate}
                                 \item[] \textbf{punto di estensione:} filtrareElenco
-                                \item \textbf{For} ogni prenotazione nell'elenco visualizzato
-                                \begin{enumerate}
-                                    \item[] \textbf{punto di estensione:} modificaPrenotazione
-                                \end{enumerate}
                             \end{enumerate}
                             \item \textbf{Else}
                             \begin{enumerate}
@@ -1503,7 +1497,7 @@
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
-                                \item L'utente visualizza l'elenco delle prenotazioni salvate nel Sistema. %// Oppure Il Sistema ha elencato le Prenotazioni salvate.
+                                \item L'utente visualizza l'elenco delle prenotazioni salvate nel Sistema.
                             \end{enumerate}  
                         \end{minipage}
                         \vspace{-10pt} \\
@@ -1527,7 +1521,7 @@
                         \cellcolor{gray!20}
                         \textbf{Breve descrizione:} \\
                         \cellcolor{gray!20}
-                        \textbf{Segmento 1:} Questo caso d'uso consente di filtrare l'elenco delle prenotazioni attraverso una ricerca. \\
+                        \textbf{Segmento 1:} L'utente filtra la lista delle prenotazioni applicando eventuali filtri. \\
                         \hline
                         \textbf{Attori primari:} \\
                         \begin{minipage}{\linewidth}
@@ -1556,7 +1550,7 @@
                             \begin{enumerate}
                                 \item \textbf{For} ogni prenotazione coincidente
                                 \begin{enumerate}
-                                    \item \textbf{include}(Visualizza Prenotazione).
+                                    \item Il Sistema mostra un'anteprima della prenotazione con informazioni basiche.
                                 \end{enumerate}
                             \end{enumerate}
                             \item \textbf{Else}
@@ -1608,14 +1602,14 @@
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
                                 \item L'utente visualizza l'elenco delle prenotazioni.
-                                \item L'utente ha premuto il pulsante di assegnamento.
+                                \item L'utente ha premuto il pulsante di assegnamento (come \emph{pagata}).
                             \end{enumerate}
                         \end{minipage}
                         \vspace{-5pt} \\
                         \hline
                         \textbf{Sequenza degli eventi del segmento 1:}
                         \begin{enumerate}
-                            \item Il Sistema chiede conferma per segnare la prenotazione come \emph{pagata}.
+                            \item Il Sistema chiede conferma all'utente.
                             \item L'utente conferma l'assegnamento della prenotazione come \emph{pagata}.
                             \item Il Sistema segna la prenotazione come \emph{pagata}.
                         \end{enumerate} \\
