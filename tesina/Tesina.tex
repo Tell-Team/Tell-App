@@ -397,10 +397,6 @@
                                     \item Il sistema mostra un'anteprima dello spettacolo con informazioni basiche (es. titolo, data, genere). % Disponibilità?
                                 \end{enumerate}
                                 \item[] \textbf{punto di estensione:} filtrareElenco
-                                \item \textbf{For} ogni spettacolo nell'elenco visualizzato
-                                \begin{enumerate}
-                                    \item[] \textbf{punto di estensione:} visualizzaSpettacolo
-                                \end{enumerate}
                             \end{enumerate}
                             \item \textbf{Else}
                             \begin{enumerate}
@@ -487,20 +483,20 @@
                     \end{tabular}
                 \end{table}
 
-                % UC EXT: Visualizza Spettacolo
+                % UC: Visualizza Spettacolo
                 \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
                         \hline
                         \cellcolor{gray!100}
                         \color{white}
-                        \centerline{\textbf{Caso d'uso di estensione:} Visualizza Spettacolo} \\
+                        \centerline{\textbf{Caso d'uso:} Visualizza Spettacolo} \\
                         \hline
                         \textbf{ID:} 7 \\
                         \hline
                         \cellcolor{gray!20}
                         \textbf{Breve descrizione:} \\
                         \cellcolor{gray!20}
-                        \textbf{Segmento 1:} L'utente visualizza i dettagli di uno spettacolo selezionato dalla lista. \\
+                        L'utente visualizza i dettagli di uno spettacolo selezionato dalla lista. \\
                         \hline
                         \textbf{Attori primari:} \\
                         \begin{minipage}{\linewidth}
@@ -514,7 +510,7 @@
                         Nessuno. \\
                         \hline
                         \cellcolor{gray!20}
-                        \textbf{Precondizioni del segmento 1:} \\
+                        \textbf{Precondizioni:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
@@ -523,7 +519,7 @@
                             \end{enumerate}
                         \end{minipage} \\
                         \hline
-                        \textbf{Sequenza degli eventi principale del segmento 1:}
+                        \textbf{Sequenza degli eventi principale:}
                         \begin{enumerate}
                             \item Il Sistema mostra i dettagli dello spettacolo: titolo, descrizione, durata, ecc.
                             \item \textbf{include}(Lista Eventi)
@@ -534,7 +530,7 @@
                         \end{enumerate} \\
                         \hline
                         \cellcolor{gray!20}
-                        \textbf{Postcondizioni del segmento 1:} \\
+                        \textbf{Postcondizioni:} \\
                         \cellcolor{gray!20}
                         \begin{minipage}{\linewidth}
                             \begin{enumerate}
@@ -542,9 +538,12 @@
                             \end{enumerate}
                         \end{minipage} \\
                         \hline
+                        \textbf{Sequenza degli eventi alternativa:} \\
+                        Nessuna. \\
+                        \hline
                     \end{tabular}
                 \end{table}
-
+                
                 % UC: Lista Eventi
                 \begin{table}[H]
                     \begin{tabular}{|p{\linewidth}|}
