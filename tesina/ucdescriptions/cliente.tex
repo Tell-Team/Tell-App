@@ -1,0 +1,989 @@
+% UC: Lista Opere
+\begin{table}[H]
+    \begin{tabular}{|p{\linewidth}|}
+        \hline
+        \cellcolor{gray!100}
+        \color{white}
+        \centerline{\textbf{Caso d'uso:} Lista Opere} \\
+        \hline
+        \textbf{ID:} 1 \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Breve descrizione:} \\
+        \cellcolor{gray!20}
+        L'utente ottiene la lista di opere memorizzate nel sistema. \\
+        \hline
+        \textbf{Attori primari:} \\
+        \begin{minipage}{\linewidth}
+            Cliente \\
+            Biglietteria \\
+            Amministratore
+        \end{minipage}
+        \vspace{0pt} \\  % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+        \hline
+        \textbf{Attori secondari:} \\
+        Nessuno. \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Precondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente è posizionato nella sezione informazioni.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi principale:}
+        \begin{enumerate}
+            \item Il caso d'uso inizia quando l'utente entra nella sezione informazioni.
+            \item \textbf{If} nel sistema è memorizzata almeno un'opera
+            \begin{enumerate}
+                \item \textbf{For} ogni opera nel sistema
+                \begin{enumerate}
+                    \item[] \textbf{punto di estensione:} filtro ricerca
+                    \item Vengono visualizzate le informazioni essenziali dell'opera.
+                \end{enumerate}
+            \end{enumerate}
+            \item \textbf{Else}
+            \begin{enumerate}
+                \item Il sistema informa l'utente che non vi sono opere memorizzate.
+            \end{enumerate}
+        \end{enumerate} \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Postcondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item Viene visualizzata a schermo la lista delle opere memorizzate.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi alternativa:} \\
+        Nessuna. \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% UC EXT: Ricerca Opera
+\begin{table}[H]
+    \begin{tabular}{|p{\linewidth}|}
+        \hline
+        \cellcolor{gray!100}
+        \color{white}
+        \centerline{\textbf{Caso d'uso di estensione:} Ricerca Opera} \\
+        \hline
+        \textbf{ID:} 2 \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Breve descrizione:} \\
+        \cellcolor{gray!20}
+        \textbf{Segmento 1:} L'utente filtra la lista di opere tramite parola chiave ricercata nel nome. \\
+        \hline
+        \textbf{Attori primari:} \\
+        \begin{minipage}{\linewidth}
+            Cliente \\
+            Biglietteria \\
+            Amministratore
+        \end{minipage}
+        \vspace{0pt} \\  % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+        \hline
+        \textbf{Attori secondari:} \\
+        Nessuno. \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Precondizioni del segmento 1:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente ha inserito una chiave di ricerca.
+                \item L'utente ha premuto il pulsante di ricerca.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi principale del segmento 1:}
+        \begin{enumerate}
+            \item Le opere che non contengono la parola chiave vengono eliminate dalla lista risultante.
+        \end{enumerate} \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Postcondizioni del segmento 1:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item La lista risultante è filtrata.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% UC: Visualizza Opera
+\begin{table}[H]
+    \begin{tabular}{|p{\linewidth}|}
+        \hline
+        \cellcolor{gray!100}
+        \color{white}
+        \centerline{\textbf{Caso d'uso:} Visualizza Opera} \\
+        \hline
+        \textbf{ID:} 3 \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Breve descrizione:} \\
+        \cellcolor{gray!20}
+        L'utente ottiene le informazioni anagrafiche riguardo una singola opera. \\
+        \hline
+        \textbf{Attori primari:} \\
+        \begin{minipage}{\linewidth}
+            Cliente \\
+            Biglietteria \\
+            Amministratore
+        \end{minipage}
+        \vspace{0pt} \\ % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+        \hline
+        \textbf{Attori secondari:} \\
+        Nessuno. \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Precondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente è posizionato nella sezione informazioni.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi principale:}
+        \begin{enumerate}
+            \item Il caso d'uso inizia quando l'utente richiede le informazioni di un'opera.
+            \item Il sistema cerca le informazioni anagrafiche nella memoria.
+            \item Il sistema mostra le informazioni a schermo.
+            \item \textbf{include}(Lista Regie)
+            \item[] \textbf{punto di estensione:} modifica
+        \end{enumerate} \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Postcondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item Sono visualizzate a schermo le informazioni anagrafiche dell'opera.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi alternativa:} \\
+        Nessuna. \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% UC: Lista Regie
+\begin{table}[H]
+    \begin{tabular}{|p{\linewidth}|}
+        \hline
+        \cellcolor{gray!100}
+        \color{white}
+        \centerline{\textbf{Caso d'uso:} Lista Regie} \\
+        \hline
+        \textbf{ID:} 4 \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Breve descrizione:} \\
+        \cellcolor{gray!20}
+        L'utente ottiene la lista di regie relative all'opera che sta visualizzando. \\
+        \hline
+        \textbf{Attori primari:} \\
+        \begin{minipage}{\linewidth}
+            Cliente \\
+            Biglietteria \\
+            Amministratore
+        \end{minipage}
+        \vspace{0pt} \\ % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+        \hline
+        \textbf{Attori secondari:} \\
+        Nessuno. \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Precondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente sta visualizzando una singola opera.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi principale:}
+        \begin{enumerate}
+            \item Il caso d'uso inizia quando l'utente visualizza una singola opera.
+            \item \textbf{If} per l'opera è memorizzata almeno una regia
+            \begin{enumerate}
+                \item \textbf{For} ogni regia dell'opera
+                \begin{enumerate}
+                    \item Il sistema mostra le informazioni della regia a schermo.
+                \end{enumerate}
+            \end{enumerate}
+            \item \textbf{Else}
+            \begin{enumerate}
+                \item Il sistema informa l'utente che non vi sono regie memorizzate.
+            \end{enumerate}
+        \end{enumerate} \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Postcondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item E' visualizzata a schermo la lista delle regie associate all'opera.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi alternativa:} \\
+        Nessuna. \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% UC: Lista Spettacoli
+\begin{table}[H]
+    \begin{tabular}{|p{\linewidth}|}
+        \hline
+        \cellcolor{gray!100}
+        \color{white}
+        \centerline{\textbf{Caso d'uso:} Lista Spettacoli} \\
+        \hline
+        \textbf{ID:} 5 \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Breve descrizione:} \\
+        \cellcolor{gray!20}
+        L'utente visualizzare l'elenco degli spettacoli disponibili presso il teatro. \\
+        \hline
+        \textbf{Attori primari:} \\
+        \begin{minipage}{\linewidth}
+            Cliente \\
+            Biglietteria \\
+            Amministratore \\
+        \end{minipage}
+        \vspace{-10pt} \\ 
+        \hline
+        \textbf{Attori secondari:} \\
+        Nessuno. \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Precondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente è posizionato nella sezione informazione.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi principale:}
+        \begin{enumerate}
+            \item Il caso d'uso inizia quando l'utente richiede di visualizzare la lista completa degli spettacoli.
+            \item \textbf{If} c'è almeno uno spettacolo memorizzato nel Sistema
+            \begin{enumerate}
+                \item \textbf{For} ogni spettacolo nel Sistema
+                \begin{enumerate}
+                    \item Il sistema mostra un'anteprima dello spettacolo con informazioni basiche (es. titolo, data, genere). % Disponibilità?
+                \end{enumerate}
+                \item[] \textbf{punto di estensione:} filtrareElenco
+            \end{enumerate}
+            \item \textbf{Else}
+            \begin{enumerate}
+                \item Il Sistema informa l'utente che non vi sono spettacoli memorizzati.
+            \end{enumerate}
+        \end{enumerate} \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Postcondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item Viene visualizzata a schermo la lista degli spettacoli memorizzati.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi alternativa:} \\
+        Nessuna. \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% UC EXT: Ricerca Spettacolo
+\begin{table}[H]
+    \begin{tabular}{|p{\linewidth}|}
+        \hline
+        \cellcolor{gray!100}
+        \color{white}
+        \centerline{\textbf{Caso d'uso di estensione:} Ricerca Spettacolo} \\
+        \hline
+        \textbf{ID:} 6 \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Breve descrizione:} \\
+        \cellcolor{gray!20}
+        \textbf{Segmento 1:} L'utente filtra la lista di spettacoli applicando eventuali filtri (es. titolo, data, genere). \\
+        \hline
+        \textbf{Attori primari:} \\
+        \begin{minipage}{\linewidth}
+            Cliente \\
+            Biglietteria \\
+            Amministratore \\
+        \end{minipage}
+        \vspace{-10pt} \\ 
+        \hline
+        \textbf{Attori secondari:} \\
+        Nessuno. \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Precondizioni del segmento 1:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente ha inserito i criteri di ricerca.
+                \item L'utente ha premuto il pulsante di ricerca.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi principale del segmento 1:}
+        \begin{enumerate}
+            \item Il Sistema ricerca, nell'elenco di spettacoli, degli spettacoli coincidenti.
+            \item \textbf{If} il Sistema trova almeno uno spettacolo coincidente
+            \begin{enumerate}
+                \item \textbf{For} ogni spettacolo coincidente
+                \begin{enumerate}
+                    \item Il sistema mostra un'anteprima dello spettacolo con informazioni basiche.
+                \end{enumerate}
+            \end{enumerate}
+            \item \textbf{Else}
+            \begin{enumerate}
+                \item Il Sistema informa l'utente che non vi sono spettacoli coincidenti.
+            \end{enumerate}
+        \end{enumerate} \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Postcondizioni del segmento 1:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente visualizza l'elenco filtrato.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% UC: Visualizza Spettacolo
+\begin{table}[H]
+    \begin{tabular}{|p{\linewidth}|}
+        \hline
+        \cellcolor{gray!100}
+        \color{white}
+        \centerline{\textbf{Caso d'uso:} Visualizza Spettacolo} \\
+        \hline
+        \textbf{ID:} 7 \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Breve descrizione:} \\
+        \cellcolor{gray!20}
+        L'utente visualizza i dettagli di uno spettacolo selezionato dalla lista. \\
+        \hline
+        \textbf{Attori primari:} \\
+        \begin{minipage}{\linewidth}
+            Cliente \\
+            Biglietteria \\
+            Amministratore \\
+        \end{minipage}
+        \vspace{-10pt} \\ 
+        \hline
+        \textbf{Attori secondari:} \\
+        Nessuno. \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Precondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente visualizza la lista degli spettacoli.
+                \item L'utente ha selezionato uno spettacolo della lista.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi principale:}
+        \begin{enumerate}
+            \item Il Sistema mostra tutti i dettagli dello spettacolo: titolo, descrizione, durata, ecc.
+            \item \textbf{include}(Lista Eventi)
+            \item \textbf{If} l'utente è autenticato come Amministratore
+            \begin{enumerate}
+                \item[] \textbf{punto di estensione:} modificaSpettacolo
+            \end{enumerate}
+        \end{enumerate} \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Postcondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item Sono visualizzate a schermo le informazioni anagrafiche dello spettacolo.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi alternativa:} \\
+        Nessuna. \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% UC: Lista Eventi
+\begin{table}[H]
+    \begin{tabular}{|p{\linewidth}|}
+        \hline
+        \cellcolor{gray!100}
+        \color{white}
+        \centerline{\textbf{Caso d'uso:} Lista Eventi} \\
+        \hline
+        \textbf{ID:} 8 \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Breve descrizione:} \\
+        \cellcolor{gray!20}
+        L'utente visualizza l'elenco di tutti gli eventi programmati per uno spettacolo. \\
+        \hline
+        \textbf{Attori primari:} \\
+        \begin{minipage}{\linewidth}
+            Cliente \\
+            Biglietteria \\
+            Amministratore \\
+        \end{minipage}
+        \vspace{-10pt} \\ 
+        \hline
+        \textbf{Attori secondari:} \\
+        Nessuno. \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Precondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente visualizza i dettagli di uno spettacolo.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi principale:}
+        \begin{enumerate}
+            \item Il caso d'uso inizia dopo che l'utente visualizza i dettagli di uno spettacolo.
+            \item \textbf{For} ogni eventi vincolato allo spettacolo
+            \begin{enumerate}
+                \item Il Sistema mostra informazioni rilevanti dell'evento (es. data, ora, sala).
+            \end{enumerate}
+        \end{enumerate} \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Postcondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item E' visualizzata a schermo la lista degli eventi associati allo spettacolo.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi alternativa:} \\
+        Nessuna. \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% UC: Lista Sezioni
+\begin{table}[H]
+    \begin{tabular}{|p{\linewidth}|}
+        \hline
+        \cellcolor{gray!100}
+        \color{white}
+        \centerline{\textbf{Caso d'uso:} Lista Sezioni} \\ 
+        \hline
+        \textbf{ID:} 9 \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Breve descrizione:} \\
+        \cellcolor{gray!20}
+        Messa a schermo delle sezioni. \\
+        \hline
+        \textbf{Attori primari:} \\
+        \begin{minipage}{\linewidth}
+            Cliente \\
+            Biglietteria \\
+            Amministratore 
+        \end{minipage}
+        \vspace{0pt} \\  % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+        \hline
+        \textbf{Attori secondari:} \\
+        Nessuno. \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Precondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+            	\item L'utente si trova nella categoria "Sezioni \& Posti"
+                \item L'utente sta visualizzando l'elenco delle sezioni.
+            \end{enumerate}
+        \end{minipage} 
+        \vspace{0pt} \\
+        \hline
+        \textbf{Sequenza degli eventi principale:}
+        \begin{enumerate}
+            \item Il caso d'uso inizia quando l'utente seleziona \textit{Sezioni}.
+            \item \textbf{include}(Visualizza Sezione)
+            \item \textbf{If} esistono sezioni
+            \begin{enumerate}
+                \item Il Sistema mostra all'utente tutte le Sezioni presenti una dopo l'altra.
+            \end{enumerate}
+            \item \textbf{Else}
+            \begin{enumerate}
+                \item Il Sistema comunica che la lista delle Sezioni è vuota.
+                \item Il Sistema mostra un elenco vuoto.
+            \end{enumerate}				
+        \end{enumerate} \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Postcondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item Il Sistema ha elencato le Sezioni presenti.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi alternativa:} \\
+        Nessuna. \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% UC: Visualizza Sezione
+\begin{table}[H]
+    \begin{tabular}{|p{\linewidth}|}
+        \hline
+        \cellcolor{gray!100}
+        \color{white}
+        \centerline{\textbf{Caso d'uso:} Visualizza Sezione} \\
+        \hline
+        \textbf{ID:} 10 \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Breve descrizione:} \\
+        \cellcolor{gray!20}
+        Visualizzazione con dettagli di una sezione. \\
+        \hline
+        \textbf{Attori primari:} \\
+        \begin{minipage}{\linewidth}
+            Amministratore \\
+            Biglietteria \\
+            Cliente
+        \end{minipage}
+        \vspace{0pt} \\ 
+        \hline
+        \textbf{Attori secondari:} \\
+        Nessuno. \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Precondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente sta ha richiesto la lista delle sezioni.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi principale:}
+        \begin{enumerate}
+            \item Il caso d'uso inizia quando l'utente visualizza una Sezione.
+            \item \textbf{include}(Lista Posti)
+            \item Il Sistema mostra all'utente i dati della Sezione.
+            \item Il Sistema mostra il pulsante \textit{Lista Posti}.
+            \item \textbf{If} l'utente è autenticato come Amministratore
+            \begin{enumerate}
+                \item Il Sistema mostra, accanto al primo pulsante, altre due opzioni: \textit{Modifica Sezione} e \textit{Elimina Sezione}.
+                \item[] \textbf{punto di estensione}: modificaSezione, eliminaSezione
+            \end{enumerate}
+        \end{enumerate} \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Postcondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item Il Sistema ha mostrato i dati della Sezione.
+                \item Il Sistema dà l'opzione di visualizzare i posti relativi alla Sezione.
+                \item Se l'utente è Amministratore, il Sistema permette di modificare o eliminare la sezione.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi alternativa:} \\
+        Nessuna. \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% UC: Lista Posti
+\begin{table}[H]
+    \begin{tabular}{|p{\linewidth}|}
+        \hline
+        \cellcolor{gray!100}
+        \color{white}
+        \centerline{\textbf{Caso d'uso:} Lista Posti} \\
+        \hline
+        \textbf{ID:} 11 \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Breve descrizione:} \\
+        \cellcolor{gray!20}
+        Messa a schermo dei posti. \\
+        \hline
+        \textbf{Attori primari:} \\
+        \begin{minipage}{\linewidth}
+            Amministratore \\
+            Biglietteria \\ 
+            Cliente
+        \end{minipage}
+        \vspace{0pt} \\ 
+        \hline
+        \textbf{Attori secondari:} \\
+        Nessuno. \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Precondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item È stato caricato in memoria un database valido. 
+            \end{enumerate}
+        \end{minipage} 
+        \vspace{-10pt} \\
+        \hline
+        \textbf{Sequenza degli eventi principale:}
+        \begin{enumerate}
+            \item Il caso d'uso inizia quando l'utente seleziona \textit{Posti} all'interno di una Sezione.
+            \item \textbf{If} la Sezione contiene Posti
+            \begin{enumerate}
+                \item Il Sistema mostra all'utente tutti i Posti presenti della Sezione sotto forma di elenco.
+            \end{enumerate}
+            \item \textbf{Else}
+            \begin{enumerate}
+                \item Il Sistema comunica che la lista dei Posti della Sezione è vuota.
+                \item Il Sistema mostra un elenco vuoto.
+            \end{enumerate}				
+        \end{enumerate} \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Postcondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item Il Sistema ha elencato i Posti della Sezione selezionata.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi alternativa:} \\
+        Nessuna. \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% UC: Crea Prenotazione
+\begin{table}[H]
+    \begin{tabular}{|p{\linewidth}|}
+        \hline
+        \cellcolor{gray!100}
+        \color{white}
+        \centerline{\textbf{Caso d'uso:} Crea Prenotazione} \\
+        \hline
+        \textbf{ID:} 12 \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Breve descrizione:} \\
+        \cellcolor{gray!20}
+        L'utente prenota posti di un evento svolto nel teatro. \\
+        \hline
+        \textbf{Attori primari:} \\
+        \begin{minipage}{\linewidth}
+            Cliente \\
+            Biglietteria \\
+            Amministratore
+        \end{minipage}
+        \vspace{0pt} \\
+        \hline
+        \textbf{Attori secondari:} \\                        
+        Nessuno. \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Precondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente visualizza l'elenco degli eventi.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi principale:}
+        \begin{enumerate}
+            \item Il caso d'uso inizia quando l'utente preme il pulsante di creazione.
+            \item Il Sistema, tramite un'interfaccia, permette di inserire i dati relativi alla prenotazione.
+            \item L'utente inserisce i dati relativi alla prenotazione.
+            \item L'utente salva i dati.
+            \item Il Sistema verifica i dati e li salva in memoria.
+        \end{enumerate} \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Postcondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente crea una prenotazione.
+            \end{enumerate}
+        \end{minipage}
+        \vspace{-10pt} \\
+        \hline
+        \textbf{Sequenza degli eventi alternativa:} \\
+        Nessuna. \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% UC: Visualizza Prenotazione
+\begin{table}[H]
+    \begin{tabular}{|p{\linewidth}|}
+        \hline
+        \cellcolor{gray!100}
+        \color{white}
+        \centerline{\textbf{Caso d'uso:} Visualizza Prenotazione} \\
+        \hline
+        \textbf{ID:} 13 \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Breve descrizione:} \\
+        \cellcolor{gray!20}
+        L'utente ottiene l'informazione anagrafica riguardo una singola prenotazione. \\
+        \hline
+        \textbf{Attori primari:} \\
+        \begin{minipage}{\linewidth}
+            Cliente \\
+            Biglietteria \\
+            Amministratore
+        \end{minipage}
+        \vspace{0pt} \\
+        \hline
+        \textbf{Attori secondari:} \\
+        Nessuno. \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Precondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente visualizza la lista delle prenotazioni.
+                \item L'elenco delle prenotazioni, sia esso filtrato o meno, non è vuoto.
+            \end{enumerate}
+        \end{minipage}
+        \vspace{-5pt} \\
+        \hline
+        \textbf{Sequenza degli eventi principale:}
+        \begin{enumerate}
+            \item Il caso d'uso inizia quando l'utente richiede le informazioni di una prenotazione.
+            \item Il Sistema mostra le informazioni relative alla prenotazione.
+            \item Il Sistema mostra tre pulsanti per modificare, eliminare o generare la ricevuta della prenotazione.
+            \item \textbf{If} l'utente è Amministratore o Biglietteria
+            \begin{enumerate}
+                \item Il Sistema mostra un pulsante per segnare la prenotazione come \emph{pagata}.
+            \end{enumerate}
+            \item[] \textbf{punto di estensione:} modificaPrenotazione
+        \end{enumerate} \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Postcondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente visualizza le informazioni di una prenotazione.
+                \item Il Sistema permette all'utente di modificare, eliminare o generare una ricevuta della prenotazione.
+                \item Se l'utente è Amministratore o Biglietteria, il Sistema permette di segnarla come \emph{pagata}.
+            \end{enumerate}
+        \end{minipage}
+        \vspace{0pt} \\
+        \hline
+        \textbf{Sequenza degli eventi alternativa:} \\
+        Nessuna. \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% UC EXT: Modifica Prenotazione
+\begin{table}[H]
+    \begin{tabular}{|p{\linewidth}|}
+        \hline
+        \cellcolor{gray!100}
+        \color{white}
+        \centerline{\textbf{Caso d'uso di estensione:} Modifica Prenotazione} \\
+        \hline
+        \textbf{ID:} 14 \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Breve descrizione:} \\
+        \cellcolor{gray!20}
+        \textbf{Segmento 1:} L'utente modifica una prenotazione esistente all'interno dell'elenco delle prenotazioni. \\
+        \hline
+        \textbf{Attori principali:} \\
+        \begin{minipage}{\linewidth}
+            Cliente \\
+            Biglietteria \\
+            Amministatore
+        \end{minipage}
+        \vspace{0pt} \\
+        \hline
+        \textbf{Attori secondari:} \\                        
+        Nessuno. \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Precondizioni del segmento 1:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente visualizza l'elenco delle prenotazioni.
+                \item L'utente ha premuto il pulsante di modifica.
+            \end{enumerate}
+        \end{minipage}
+        \vspace{-5pt} \\
+        \hline
+        \textbf{Sequenza degli eventi del segmento 1:}
+        \begin{enumerate}
+            \item Il Sistema mostra la interfaccia di creazione di prenotazione, ma con i dati saltavi della prenotazione già creata selezionati.
+            \item L'utente modifica i dati relativi alla prenotazione.
+            \item L'utente salva i dati.
+            \item Il Sistema verifica i dati e li salva in memoria.
+        \end{enumerate} \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Postcondizioni del segmento 1:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente effettua la modifica di una prenotazione.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% UC EXT: Elimina Prenotazione
+\begin{table}[H]
+    \begin{tabular}{|p{\linewidth}|}
+        \hline
+        \cellcolor{gray!100}
+        \color{white}
+        \centerline{\textbf{Caso d'uso di estensione:} Elimina Prenotazione} \\
+        \hline
+        \textbf{ID:} 15 \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Breve descrizione:} \\
+        \cellcolor{gray!20}
+        \textbf{Segmento 1:} L'utente elimina una prenotazione esistente all'interno dell'elenco delle prenotazioni. \\
+        \hline
+        \textbf{Attori principali:} \\
+        \begin{minipage}{\linewidth}
+            Cliente \\
+            Biglietteria \\
+            Amministratore
+        \end{minipage}
+        \vspace{0pt} \\
+        \hline
+        \textbf{Attori secondari:} \\                        
+        Nessuno. \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Precondizioni del segmento 1:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente visualizza l'elenco delle prenotazioni.
+                \item L'utente ha premuto il pulsante di eliminazione.
+            \end{enumerate}
+        \end{minipage}
+        \vspace{-5pt} \\
+        \hline
+        \textbf{Sequenza degli eventi del segmento 1:}
+        \begin{enumerate}
+            \item Il Sistema chiede conferma per eliminare la prenotazione.
+            \item L'utente conferma l'eliminazione della prenotazione.
+            \item Il Sistema effettua l'eliminazione.
+        \end{enumerate} \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Postcondizioni del segmento 1:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente effettua l'eliminazione di una prenotazione.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% UC: Genera Ricevuta
+\begin{table}[H]
+    \begin{tabular}{|p{\linewidth}|}
+        \hline
+        \cellcolor{gray!100}
+        \color{white}
+        \centerline{\textbf{Caso d'uso:} Genera Ricevuta} \\
+        \hline
+        \textbf{ID:} 16 \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Breve descrizione:} \\
+        \cellcolor{gray!20}
+        L'utente genera la ricevuta di una prenotazione e la stampa. \\
+        \hline
+        \textbf{Attori primari:} \\
+        \begin{minipage}{\linewidth}
+            Cliente \\
+            Biglietteria \\
+            Amministratore
+        \end{minipage}
+        \vspace{0pt} \\
+        \hline
+        \textbf{Attori secondari:} \\
+        Nessuno. \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Precondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente visualizza una prenotazione. %/""
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi principale:}
+        \begin{enumerate}
+            \item Il caso d'uso inizia quando l'utente preme \emph{Genera ricevuta}. %/""
+            \item Il Sistema genera un documento con tutta l'informazione relativa all'acquisto dei biglietti prenotati.
+            \item Il Sistema stampa il documento.
+        \end{enumerate} \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Postcondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item La ricevuta è stata stampata.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi alternativa:} \\
+        Nessuna. \\
+        \hline
+    \end{tabular}
+\end{table}
