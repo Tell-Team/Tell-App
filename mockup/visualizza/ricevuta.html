@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="../styles.css">
+    </head>
+    <body>
+        <h2>Ricevuta</h2>
+        <div class="thinner">
+            <p><strong>Spettacolo:</strong> Zelmira</p>
+            <p><strong>Data:</strong> Sabato 16 Agosto</p>
+            <p><strong>Settore:</strong> Tribuna A</p>
+            <p><strong>Posti:</strong> 14, 15</p>
+            <br>
+            <span><strong>Emissione:</strong></span>
+            <span id="time"></span>
+        </div>
+        <div>
+            <button onclick="alert('Ricevuta stampata!')">Stampa</button>
+            <button onclick="window.location.href = './spettacoli.html';">Fine</button>
+        </div>
+
+
+    </body>
+    <script>
+        var today = new Date();
+        document.getElementById('time').innerHTML=today;
+    </script>
+</html>
