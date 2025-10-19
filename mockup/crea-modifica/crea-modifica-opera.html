@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <script src="../enter-to-skip.js" defer></script>
+
+    <title>Aggiungi opera</title>
+
+    <link rel="stylesheet" href="../body-creazione.css" />
+  </head>
+
+  <body>
+    <h1>Nuova opera:</h1>
+    <form id="formulario-opera">
+      <!-- NOME -->
+      <div class="singola-riga">
+        <label for="form-nome">Nome:</label>
+        <input type="text" id="form-nome" placeholder="Inserire nome" />
+        <p id="input-error-nome" style="color: red"></p>
+        <br />
+      </div>
+
+      <!-- TRAMA -->
+      <label for="form-trama">Trama:</label>
+      <textarea
+        id="form-trama"
+        rows="4"
+        cols="50"
+        placeholder="Inserire trama"
+        style="font-family: Times"
+      ></textarea
+      ><br />
+
+      <!-- GENERE -->
+      <label for="form-genere">Genere:</label>
+      <select
+        type="text"
+        id="form-genere"
+        name="genere"
+        placeholder="Inserire genere"
+      >
+        <!-- Generi statici utilizati como reference -->
+        <option>Comedia</option>
+        <option>Drama</option>
+        <option>Musicale</option></select
+      ><br />
+
+      <!-- COMPOSITORE -->
+      <div class="singola-riga">
+        <label for="form-compositore">Compositore:</label>
+        <input
+          type="text"
+          id="form-compositore"
+          placeholder="Inserire compositore"
+        />
+        <p id="input-error-compositore" style="color: red"></p>
+        <br />
+      </div>
+
+      <!-- LIBRETTISTA -->
+      <div class="singola-riga">
+        <label for="form-librettista">Librettista:</label>
+        <input
+          type="text"
+          id="form-librettista"
+          placeholder="Inserire librettista"
+        />
+        <p id="input-error-librettista" style="color: red"></p>
+        <br />
+      </div>
+
+      <!-- PRIMA RAPPRESENTAZIONE -->
+      <label for="form-rappre">Prima rappresentazione:</label>
+      <input type="date" id="form-rappre" placeholder="Inserire data" /><br />
+
+      <!-- NUMERO DI ATTI -->
+      <div class="singola-riga">
+        <label for="form-atti">Numero di atti:</label>
+        <input
+          type="number"
+          id="form-atti"
+          placeholder="Inserire numero"
+          min="1"
+          step="1"
+        />
+        <p id="input-error-atti" style="color: red"></p>
+        <br />
+      </div>
+
+      <!-- TEATRO DI PRIMA RAPPRESENTAZIONE -->
+      <label for="form-teatro">Teatro prima rappresentazione:</label>
+      <input type="text" id="form-teatro" placeholder="Inserire teatro" /><br />
+
+      <!-- REGIA -->
+      <div class="singola-riga">
+        <label for="form-regia">Regia:</label>
+        <input type="text" id="form-regista" placeholder="Inserire regista" />
+        <input
+          type="number"
+          id="form-anno-produzione"
+          placeholder="Inserire anno"
+        />
+        <p id="input-error-regia" style="color: red"></p>
+        <br />
+      </div>
+
+      <div id="lista-regia"></div>
+      <button
+        type="button"
+        onclick="window.location.href = './crea-modifica-regia.html';"
+      >
+        + Nuova Regia</button
+      ><br /><br />
+
+      <!-- Pulsanti di Salvare e Cancella creazione dell'opera -->
+      <button type="submit">Salva</button>
+      <button
+        type="button"
+        onclick="localStorage.removeItem('opera-da-modificare'); window.location.href = '../visualizza/info.html';"
+      >
+        Cancella</button
+      ><br />
+    </form>
+
+    <p id="successo" style="color: green"></p>
+
+    <!-- Display delle regie salvate -->
+    <script>
+      let regie = JSON.parse(localStorage.getItem("regie")) || [];
+
+      const listaDiv = document.getElementById("lista-regia");
+
+      function renderRegie() {
+        listaDiv.innerHTML = "";
+
+        regie.forEach((regia, index) => {
+          const container = document.createElement("div");
+          container.style.marginBottom = "8px";
+
+          const span = document.createElement("span");
+          span.textContent = `${regia.regista} (${regia.anno})`;
+
+          const btnModifica = document.createElement("button");
+          btnModifica.type = "button";
+          btnModifica.textContent = "Modifica";
+          btnModifica.style.marginLeft = "10px";
+          btnModifica.onclick = function () {
+            modificaRegia(index);
+          };
+
+          const btnElimina = document.createElement("button");
+          btnElimina.type = "button";
+          btnElimina.textContent = "Elimina";
+          btnElimina.style.marginLeft = "5px";
+          btnElimina.onclick = function () {
+            eliminaRegia(index);
+          };
+
+          container.appendChild(span);
+          container.appendChild(btnModifica);
+          container.appendChild(btnElimina);
+
+          listaDiv.appendChild(container);
+        });
+      }
+
+      const nuovaRegia = JSON.parse(localStorage.getItem("nuova-regia"));
+
+      if (nuovaRegia) {
+        regie.push(nuovaRegia);
+        localStorage.setItem("regie", JSON.stringify(regie));
+        localStorage.removeItem("nuova-regia");
+      }
+
+      renderRegie();
+    </script>
+
+    <!-- Verifica correttezza dei dati dell'opera -->
+    <script>
+      function verificaInputRegia() {
+        const inputRegista = document
+          .getElementById("form-regista")
+          .value.trim();
+        const inputAnno = parseInt(
+          document.getElementById("form-anno-produzione").value.trim(),
+          10
+        );
+
+        const match = regie.find(
+          (regia) => regia.regista === inputRegista && regia.anno === inputAnno
+        );
+
+        const messaggio = document.getElementById("input-error-regia");
+        if (match) {
+          messaggio.textContent = "";
+          return match;
+        } else {
+          messaggio.textContent = "Regia non valida.";
+          return "__error__";
+        }
+      }
+
+      document
+        .getElementById("formulario-opera")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          let errorCount = 0;
+
+          const nome = document.getElementById("form-nome").value.trim();
+          const trama = document.getElementById("form-trama").value.trim();
+          const genere = document.getElementById("form-genere").value.trim(); // Deve essere corretto se non vengono utilizzati Generi statici.
+          const compositore = document
+            .getElementById("form-compositore")
+            .value.trim();
+          const librettista = document
+            .getElementById("form-librettista")
+            .value.trim();
+          const data = document.getElementById("form-rappre").value.trim();
+          const attiValue = document.getElementById("form-atti").value.trim();
+          const atti = parseInt(attiValue, 10);
+          const teatro = document.getElementById("form-teatro").value.trim();
+
+          if (nome === "") {
+            document.getElementById("input-error-nome").textContent =
+              "Nome non valido.";
+            errorCount++;
+          } else document.getElementById("input-error-nome").textContent = "";
+
+          if (compositore === "") {
+            document.getElementById("input-error-compositore").textContent =
+              "Compositore non valido.";
+            errorCount++;
+          } else document.getElementById("input-error-compositore").textContent = "";
+
+          if (librettista === "") {
+            document.getElementById("input-error-librettista").textContent =
+              "Librettista non valido.";
+            errorCount++;
+          } else document.getElementById("input-error-librettista").textContent = "";
+
+          if (atti <= 0 || attiValue == "" || isNaN(atti)) {
+            document.getElementById("input-error-atti").textContent =
+              "Numero di atti non valido.";
+            errorCount++;
+          } else document.getElementById("input-error-atti").textContent = "";
+
+          const regia = verificaInputRegia();
+          if (regia === "__error__") return;
+
+          if (errorCount > 0) return;
+
+          // Verifica se e' una modifica o una creazione
+          const modifica = JSON.parse(
+            localStorage.getItem("opera-da-modificare")
+          );
+          let opere = JSON.parse(localStorage.getItem("opere")) || [];
+
+          if (modifica) {
+            opere[modifica.index] = {
+              nome,
+              trama,
+              genere,
+              compositore,
+              librettista,
+              data,
+              atti,
+              teatro,
+              regia,
+            };
+            localStorage.removeItem("opera-da-modificare");
+          } else {
+            const nuovaOpera = {
+              nome,
+              trama,
+              genere,
+              compositore,
+              librettista,
+              data,
+              atti,
+              teatro,
+              regia,
+            };
+            opere.push(nuovaOpera);
+          }
+
+          localStorage.setItem("opere", JSON.stringify(opere));
+
+          document.getElementById("successo").textContent =
+            "Opera salvata con successo!";
+          setTimeout(() => {
+            window.location.href = "../visualizza/info.html";
+          }, 1000);
+        });
+    </script>
+
+    <!-- Modifica regia -->
+    <script>
+      function modificaRegia(index) {
+        const regia = regie[index];
+
+        localStorage.setItem(
+          "regia-da-modificare",
+          JSON.stringify({ index, ...regia })
+        );
+
+        window.location.href = "crea-modifica-regia.html";
+      }
+    </script>
+
+    <!-- Elimina regia -->
+    <script>
+      function eliminaRegia(index) {
+        const conferma = window.confirm(
+          `Sei sicuro di voler eliminare la regia "${regie[index].regista} (${regie[index].anno})"?`
+        );
+
+        if (!conferma) return;
+
+        regie.splice(index, 1);
+
+        localStorage.setItem("regie", JSON.stringify(regie));
+
+        renderRegie();
+      }
+    </script>
+
+    <!-- Verifica se si crea o modifica l'opera -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const modifica = JSON.parse(
+          localStorage.getItem("opera-da-modificare")
+        );
+
+        if (modifica) {
+          document.getElementById("form-nome").value = modifica.nome;
+          document.getElementById("form-trama").value = modifica.trama;
+          document.getElementById("form-genere").value = modifica.genere;
+          document.getElementById("form-compositore").value =
+            modifica.compositore;
+          document.getElementById("form-librettista").value =
+            modifica.librettista;
+          document.getElementById("form-rappre").value = modifica.data;
+          document.getElementById("form-atti").value = modifica.atti;
+          document.getElementById("form-teatro").value = modifica.teatro;
+          document.getElementById("form-regista").value =
+            modifica.regia.regista;
+          document.getElementById("form-anno-produzione").value =
+            modifica.regia.anno;
+
+          document.querySelector("h1").textContent = "Modifica opera:";
+        }
+      });
+    </script>
+  </body>
+</html>

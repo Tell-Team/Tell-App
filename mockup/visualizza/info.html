@@ -1,30 +1,163 @@
 <html>
-    <head>
-        <link rel="stylesheet" href="../styles.css">
-    </head>
-    <body>
-        <button onclick="window.location.href = './login.html';">Logout</button>
+  <head>
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../istanze-elencate.css" />
+  </head>
+  <body>
+    <button onclick="window.location.href = './login.html';">Logout</button>
 
-        <br><br>
+    <br /><br />
 
-        <button onclick="window.location.href = './spettacoli.html';">Eventi</button>
-        <span>Info</span>
-        <button onclick="window.location.href = './account.html';" class="adminOnly">Account</button>
+    <button onclick="window.location.href = './spettacoli.html';">
+      Eventi
+    </button>
+    <span>Info</span>
+    <button
+      onclick="window.location.href = './account.html';"
+      class="adminOnly"
+    >
+      Account
+    </button>
 
-        <h2>Opere</h2>
-        <div style="border: 1px solid black;">
-            <h3>Zelmira</h3>
-            <div>Libretto di Andrea Leone Tottola</div>
-            <div>Musica di Gioachino Rossini</div>
-            <button onclick="window.location.href = './info_opera.html';">Maggiori info</button>
-        </div>
-        
-        <h2>Teatri</h2>
-        <div style="border: 1px solid black;">
-            <h3>Vitrifrigo Arena</h3>
-            <div>Inaugurato nel 1996</div>
-            <div>Via R. Ripa, 1</div>
-            <button onclick="window.location.href = './info_teatro.html';">Maggiori info</button>
-        </div>
-    </body>
+    <div class="singola-riga">
+      <h2>Opere</h2>
+      <button
+        type="button"
+        onclick="window.location.href = '../crea-modifica/crea-modifica-opera.html'"
+      >
+        + Nueva Opera
+      </button>
+    </div>
+
+    <div id="lista-opera"></div>
+
+    <br />
+    <h2>Teatri</h2>
+    <div style="border: 1px solid black">
+      <h3>Vitrifrigo Arena</h3>
+      <div>Inaugurato nel 1996</div>
+      <div>Via R. Ripa, 1</div>
+      <button onclick="window.location.href = './info_teatro.html';">
+        Maggiori info
+      </button>
+    </div>
+
+    <!-- Display delle opere salvate -->
+    <script>
+      let opere = JSON.parse(localStorage.getItem("opere")) || [];
+
+      // Una opera sample per lo screenshot //
+      if (!opere || opere.length === 0) {
+        opere = [
+          {
+            nome: "Zelmira",
+            trama:
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+            genere: "Comedia",
+            compositore: "Gioachino Rossini",
+            librettista: "Andrea Leone Tottola",
+            data: "1822-02-16",
+            atti: 2,
+            teatro: "Teatro San Carlo, Napoli",
+            regia: {
+              regista: "Mario Rossi",
+              anno: 2000,
+            },
+          },
+        ];
+        localStorage.setItem("opere", JSON.stringify(opere));
+      }
+      // Una opera sample per lo screenshot //
+
+      const listaDivOpera = document.getElementById("lista-opera");
+
+      function renderOpera() {
+        listaDivOpera.innerHTML = "";
+
+        opere.forEach((opera, index) => {
+          const container = document.createElement("div");
+          container.classList.add("istanza");
+
+          const h3 = document.createElement("h3");
+          h3.textContent = `${opera.nome}`;
+          const p = document.createElement("p");
+          p.innerHTML = `Libretto di ${opera.librettista}<br>Musica di ${opera.compositore}`;
+
+          const btnMaggioriInfo = document.createElement("button");
+          btnMaggioriInfo.type = "button";
+          btnMaggioriInfo.textContent = "Maggiori info";
+          btnMaggioriInfo.style.marginLeft = "10px";
+          btnMaggioriInfo.onclick = function () {
+            maggioriInfoOpera(index);
+          };
+
+          const btnModifica = document.createElement("button");
+          btnModifica.type = "button";
+          btnModifica.textContent = "Modifica";
+          btnModifica.style.marginLeft = "5px";
+          btnModifica.onclick = function () {
+            modificaOpera(index);
+          };
+
+          container.appendChild(h3);
+          container.appendChild(p);
+          container.appendChild(btnMaggioriInfo);
+          container.appendChild(btnModifica);
+
+          listaDivOpera.appendChild(container);
+        });
+      }
+
+      const nuovaOpera = JSON.parse(localStorage.getItem("nuova-opera"));
+
+      if (nuovaOpera) {
+        opere.push(nuovaOpera);
+        localStorage.setItem("opere", JSON.stringify(opere));
+        localStorage.removeItem("nuova-opera");
+      }
+
+      // Aggiungo anche una regia sample //
+      let regie = JSON.parse(localStorage.getItem("regie"));
+      if (!regie || regie.length === 0) {
+        regie = [
+          {
+            regista: "Mario Rossi",
+            anno: 2000,
+          },
+        ];
+        localStorage.setItem("regie", JSON.stringify(regie));
+      }
+      // Aggiungo anche una regia sample //
+
+      renderOpera();
+    </script>
+
+    <!-- Modifica opera -->
+    <script>
+      function modificaOpera(index) {
+        const opera = opere[index];
+
+        localStorage.setItem(
+          "opera-da-modificare",
+          JSON.stringify({ index, ...opera })
+        );
+
+        window.location.href = "../crea-modifica/crea-modifica-opera.html";
+      }
+    </script>
+
+    <!-- Visualizza opera in dettaglio -->
+    <script>
+      function maggioriInfoOpera(index) {
+        const opera = opere[index];
+
+        localStorage.setItem(
+          "opera-da-visualizzare",
+          JSON.stringify({ index, ...opera })
+        );
+
+        window.location.href = "./info-opera.html";
+      }
+    </script>
+  </body>
 </html>
