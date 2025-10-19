@@ -42,18 +42,35 @@
       </button>
     </div>
 
+    <br />
+    <div class="singola-riga">
+      <h2>Generi</h2>
+      <button
+        type="button"
+        onclick="window.location.href = '../crea-modifica/crea-modifica-genere.html'"
+      >
+        + Nuevo Genere
+      </button>
+    </div>
+
+    <div id="lista-genere"></div>
+
     <!-- Display delle opere salvate -->
     <script>
       let opere = JSON.parse(localStorage.getItem("opere")) || [];
 
-      // Una opera sample per lo screenshot //
+      // // // Opera sample // // //
       if (!opere || opere.length === 0) {
         opere = [
           {
             nome: "Zelmira",
             trama:
               "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-            genere: "Comedia",
+            genere: {
+              nome: "Opera seria",
+              descrizione:
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+            },
             compositore: "Gioachino Rossini",
             librettista: "Andrea Leone Tottola",
             data: "1822-02-16",
@@ -67,7 +84,7 @@
         ];
         localStorage.setItem("opere", JSON.stringify(opere));
       }
-      // Una opera sample per lo screenshot //
+      // // // Opera sample // // //
 
       const listaDivOpera = document.getElementById("lista-opera");
 
@@ -116,7 +133,7 @@
         localStorage.removeItem("nuova-opera");
       }
 
-      // Aggiungo anche una regia sample //
+      // // // Regia sample // // //
       let regie = JSON.parse(localStorage.getItem("regie"));
       if (!regie || regie.length === 0) {
         regie = [
@@ -127,7 +144,7 @@
         ];
         localStorage.setItem("regie", JSON.stringify(regie));
       }
-      // Aggiungo anche una regia sample //
+      // // // Regia sample // // //
 
       renderOpera();
     </script>
@@ -157,6 +174,78 @@
         );
 
         window.location.href = "./info-opera.html";
+      }
+    </script>
+
+    <!-- Display delle generi salvate -->
+    <script>
+      let generi = JSON.parse(localStorage.getItem("generi")) || [];
+
+      // // // Genere sample // // //
+      if (!generi || generi.length === 0) {
+        generi = [
+          {
+            nome: "Opera seria",
+            descrizione:
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+          },
+        ];
+        localStorage.setItem("generi", JSON.stringify(generi));
+      }
+      // // // Genere sample // // //
+
+      const listaDivGenere = document.getElementById("lista-genere");
+
+      function renderGenere() {
+        listaDivGenere.innerHTML = "";
+
+        generi.forEach((genere, index) => {
+          const container = document.createElement("div");
+          container.classList.add("istanza");
+
+          const h3 = document.createElement("h3");
+          h3.textContent = `${genere.nome}`;
+          const p = document.createElement("p");
+          p.innerHTML = `${genere.descrizione}`;
+
+          const btnModifica = document.createElement("button");
+          btnModifica.type = "button";
+          btnModifica.textContent = "Modifica";
+          btnModifica.style.marginLeft = "5px";
+          btnModifica.onclick = function () {
+            modificaGenere(index);
+          };
+
+          container.appendChild(h3);
+          container.appendChild(p);
+          container.appendChild(btnModifica);
+
+          listaDivGenere.appendChild(container);
+        });
+      }
+
+      const nuovoGenere = JSON.parse(localStorage.getItem("nuovo-genere"));
+
+      if (nuovoGenere) {
+        generi.push(nuovoGenere);
+        localStorage.setItem("generi", JSON.stringify(generi));
+        localStorage.removeItem("nuovo-genere");
+      }
+
+      renderGenere();
+    </script>
+
+    <!-- Modifica genere -->
+    <script>
+      function modificaGenere(index) {
+        const genere = generi[index];
+
+        localStorage.setItem(
+          "genere-da-modificare",
+          JSON.stringify({ index, ...genere })
+        );
+
+        window.location.href = "../crea-modifica/crea-modifica-genere.html";
       }
     </script>
   </body>

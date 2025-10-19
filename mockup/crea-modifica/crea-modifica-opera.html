@@ -31,18 +31,19 @@
       ><br />
 
       <!-- GENERE -->
-      <label for="form-genere">Genere:</label>
-      <select
-        type="text"
-        id="form-genere"
-        name="genere"
-        placeholder="Inserire genere"
-      >
-        <!-- Generi statici utilizati como reference -->
-        <option>Comedia</option>
-        <option>Drama</option>
-        <option>Musicale</option></select
-      ><br />
+      <div class="singola-riga">
+        <label for="form-genere">Genere:</label>
+        <select
+          type="text"
+          id="form-genere"
+          name="genere"
+          placeholder="Inserire genere"
+        >
+          <option value="__vuoto__">. . .</option>
+        </select>
+        <p id="input-error-genere" style="color: red"></p>
+        <br />
+      </div>
 
       <!-- COMPOSITORE -->
       <div class="singola-riga">
@@ -123,6 +124,31 @@
 
     <p id="successo" style="color: green"></p>
 
+    <!-- Display dei generi salvati -->
+    <script>
+      let generi = JSON.parse(localStorage.getItem("generi")) || [];
+
+      const opzioniGenere = document.getElementById("form-genere");
+
+      function caricaGeneri() {
+        opzioniGenere.innerHTML = '<option value="__vuoto__">. . .</option>';
+
+        generi.forEach((genere, index) => {
+          const opzione = document.createElement("option");
+
+          const nomeGenere = genere.nome;
+          opzione.value = `${nomeGenere.trim()}|${genere.descrizione.trim()}`; ///////////////////////
+          opzione.text = nomeGenere;
+
+          opzioniGenere.appendChild(opzione);
+        });
+
+        opzioniGenere.value = "__vuoto__";
+      }
+
+      caricaGeneri();
+    </script>
+
     <!-- Display delle regie salvate -->
     <script>
       let regie = JSON.parse(localStorage.getItem("regie")) || [];
@@ -176,6 +202,25 @@
 
     <!-- Verifica correttezza dei dati dell'opera -->
     <script>
+      function verificaInputGenere() {
+        const inputGenere = document.getElementById("form-genere").value.trim();
+
+        const match = generi.find(
+          (genere) =>
+            genere.nome === inputGenere.split("|")[0] &&
+            genere.descrizione === inputGenere.split("|")[1]
+        ); ///////////////////
+
+        const messaggio = document.getElementById("input-error-genere");
+        if (match) {
+          messaggio.textContent = "";
+          return match;
+        } else {
+          messaggio.textContent = "Genere non valida.";
+          return "__error__";
+        }
+      }
+
       function verificaInputRegia() {
         const inputRegista = document
           .getElementById("form-regista")
@@ -208,7 +253,6 @@
 
           const nome = document.getElementById("form-nome").value.trim();
           const trama = document.getElementById("form-trama").value.trim();
-          const genere = document.getElementById("form-genere").value.trim(); // Deve essere corretto se non vengono utilizzati Generi statici.
           const compositore = document
             .getElementById("form-compositore")
             .value.trim();
@@ -225,6 +269,9 @@
               "Nome non valido.";
             errorCount++;
           } else document.getElementById("input-error-nome").textContent = "";
+
+          const genere = verificaInputGenere();
+          if (genere === "__error__") errorCount++;
 
           if (compositore === "") {
             document.getElementById("input-error-compositore").textContent =
@@ -334,7 +381,9 @@
         if (modifica) {
           document.getElementById("form-nome").value = modifica.nome;
           document.getElementById("form-trama").value = modifica.trama;
-          document.getElementById("form-genere").value = modifica.genere;
+          document.getElementById(
+            "form-genere"
+          ).value = `${modifica.genere.nome}|${modifica.genere.descrizione}`; //////////////////
           document.getElementById("form-compositore").value =
             modifica.compositore;
           document.getElementById("form-librettista").value =
