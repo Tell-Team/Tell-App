@@ -1,8 +1,0 @@
-
-/*by Ric*/
-button.adminOnly  { background-color: red;   color: white; }
-button.ticketOnly { background-color: green; color: white; }
-span.h3-like      { margin-bottom: 20px; font-size: 1.2em; font-weight: bold; }
-.thinner p       { margin: 0; }
-
-/*aggiungete gli stili necessari qui per mantenere l'html più pulito, soprattutto se uno stile si ripete più volte*/ 

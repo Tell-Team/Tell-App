@@ -11,3 +11,17 @@
   align-items: center;
   gap: 10px;
 }
+
+/* Aumenta 3px allo spazio tra le linee */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.container-fit {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}

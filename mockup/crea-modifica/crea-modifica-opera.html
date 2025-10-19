@@ -137,7 +137,7 @@
           const opzione = document.createElement("option");
 
           const nomeGenere = genere.nome;
-          opzione.value = `${nomeGenere.trim()}|${genere.descrizione.trim()}`; ///////////////////////
+          opzione.value = `${nomeGenere.trim()}|${genere.descrizione.trim()}`;
           opzione.text = nomeGenere;
 
           opzioniGenere.appendChild(opzione);
@@ -383,7 +383,7 @@
           document.getElementById("form-trama").value = modifica.trama;
           document.getElementById(
             "form-genere"
-          ).value = `${modifica.genere.nome}|${modifica.genere.descrizione}`; //////////////////
+          ).value = `${modifica.genere.nome}|${modifica.genere.descrizione}`;
           document.getElementById("form-compositore").value =
             modifica.compositore;
           document.getElementById("form-librettista").value =

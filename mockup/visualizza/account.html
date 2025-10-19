@@ -1,53 +1,57 @@
 <html>
-    <head>
-        <link rel="stylesheet" href="../styles.css">
-    </head>
-    <body>
-        <button onclick="window.location.href = './login.html';">Logout</button>
+  <head>
+    <link rel="stylesheet" href="../style-secondo-ruolo.css" />
+    <link rel="stylesheet" href="../istanze-elencate.css" />
+  </head>
+  <body>
+    <button onclick="window.location.href = './login.html';">Logout</button>
 
-        <br><br>
+    <br /><br />
 
-        <button onclick="window.location.href = './spettacoli.html';">Eventi</button>
-        <button onclick="window.location.href = './info.html';">Info</button>
-        <span>Accounts</span>
+    <div class="singola-riga">
+      <button onclick="window.location.href = './spettacoli.html';">
+        Eventi
+      </button>
+      <button onclick="window.location.href = './info.html';">Info</button>
+      <span>Accounts</span>
+    </div>
 
-        <h2>Account</h2>
-        <div style="border: 1px solid black;">
-            <div class="h3-like">
-                <span>Amministratori</span> 
-                <button class="adminOnly">+</button>
-            </div>
-            <div> 
-                <span>Admin A</span>
-                <button class="adminOnly">Modifica</button>
-                <button class="adminOnly">Rimuovi</button>
-            </div>
-            <div>
-                <span>Admin B</span>
-                <button class="adminOnly">Modifica</button>
-                <button class="adminOnly">Rimuovi</button>
-            </div>
-            <br>
-        </div>
-        
-        <br>
+    <h2>Account</h2>
 
-        <div style="border: 1px solid black;">
-            <div class="h3-like">
-                <span style="font-size: 1.17em; font-weight: bold;">Biglietterie</span> 
-                <button class="adminOnly">+</button>
-            </div>
-            <div> 
-                <span>Biglietteria A</span>
-                <button class="adminOnly">Modifica</button>
-                <button class="adminOnly">Rimuovi</button>
-            </div>
-            <div>
-                <span>Biglietteria B</span>
-                <button class="adminOnly">Modifica</button>
-                <button class="adminOnly">Rimuovi</button>
-            </div>
-            <br>
-        </div>
-    </body>
+    <div class="istanza container">
+      <div class="singola-riga">
+        <h3>Amministratori</h3>
+        <button class="adminOnly">+</button>
+      </div>
+      <div class="singola-riga">
+        <span>Admin A</span>
+        <button class="adminOnly">Modifica</button>
+        <button class="adminOnly">Rimuovi</button>
+      </div>
+      <div class="singola-riga">
+        <span>Admin B</span>
+        <button class="adminOnly">Modifica</button>
+        <button class="adminOnly">Rimuovi</button>
+      </div>
+      <br />
+    </div>
+
+    <div class="istanza container">
+      <div class="singola-riga">
+        <h3>Biglietterie</h3>
+        <button class="adminOnly">+</button>
+      </div>
+      <div class="singola-riga">
+        <span>Biglietteria A</span>
+        <button class="adminOnly">Modifica</button>
+        <button class="adminOnly">Rimuovi</button>
+      </div>
+      <div class="singola-riga">
+        <span>Biglietteria B</span>
+        <button class="adminOnly">Modifica</button>
+        <button class="adminOnly">Rimuovi</button>
+      </div>
+      <br />
+    </div>
+  </body>
 </html>
