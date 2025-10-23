@@ -13,21 +13,27 @@
     <form id="formulario-genere">
       <!-- NOME -->
       <div class="singola-riga">
-        <label for="form-nome">Nome:</label>
-        <input type="text" id="form-nome" placeholder="Inserire nome" />
+        <label for="form-nome">Nome *:</label>
+        <input
+          type="text"
+          id="form-nome"
+          placeholder="Inserire nome"
+          required
+        />
         <p id="input-error-nome" style="color: red"></p>
         <br />
       </div>
 
       <!-- DESCRIZIONE -->
       <div class="singola-riga">
-        <label for="form-descrizione">Descrizione:</label>
+        <label for="form-descrizione">Descrizione *:</label>
         <textarea
           id="form-descrizione"
           rows="4"
           cols="50"
           placeholder="Inserire descrizione"
           style="font-family: Times"
+          required
         ></textarea>
         <p id="input-error-descrizione" style="color: red"></p>
         <br />
@@ -112,6 +118,7 @@
             modifica.descrizione;
 
           document.querySelector("h1").textContent = "Modifica genere:";
+          document.title = "Modifica genere";
         }
       });
     </script>

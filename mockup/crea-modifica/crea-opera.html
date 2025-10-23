@@ -13,7 +13,7 @@
     <form id="formulario-opera">
       <!-- NOME -->
       <div class="singola-riga">
-        <label for="form-nome">Nome:</label>
+        <label for="form-nome">Nome *:</label>
         <input type="text" id="form-nome" placeholder="Inserire nome" />
         <p id="input-error-nome" style="color: red"></p>
         <br />
@@ -32,7 +32,7 @@
 
       <!-- GENERE -->
       <div class="singola-riga">
-        <label for="form-genere">Genere:</label>
+        <label for="form-genere">Genere *:</label>
         <select
           type="text"
           id="form-genere"
@@ -47,7 +47,7 @@
 
       <!-- COMPOSITORE -->
       <div class="singola-riga">
-        <label for="form-compositore">Compositore:</label>
+        <label for="form-compositore">Compositore *:</label>
         <input
           type="text"
           id="form-compositore"
@@ -59,7 +59,7 @@
 
       <!-- LIBRETTISTA -->
       <div class="singola-riga">
-        <label for="form-librettista">Librettista:</label>
+        <label for="form-librettista">Librettista *:</label>
         <input
           type="text"
           id="form-librettista"
@@ -75,7 +75,7 @@
 
       <!-- NUMERO DI ATTI -->
       <div class="singola-riga">
-        <label for="form-atti">Numero di atti:</label>
+        <label for="form-atti">Numero di atti *:</label>
         <input
           type="number"
           id="form-atti"
@@ -92,7 +92,12 @@
       <input type="text" id="form-teatro" placeholder="Inserire teatro" /><br />
 
       <!-- REGIA -->
-      <div class="singola-riga">
+      <h3 style="margin: 3px">Lista Regie</h3>
+      <p style="color: gray">
+        **Nota:** Le singole repliche (Regie) possono essere aggiunte solo dopo
+        aver salvato l'Opera.
+      </p>
+      <!-- <div class="singola-riga">
         <label for="form-regia">Regia:</label>
         <input type="text" id="form-regista" placeholder="Inserire regista" />
         <input
@@ -102,15 +107,15 @@
         />
         <p id="input-error-regia" style="color: red"></p>
         <br />
-      </div>
+      </div> -->
 
-      <div id="lista-regia"></div>
+      <!-- <div id="lista-regia"></div>
       <button
         type="button"
         onclick="window.location.href = './crea-modifica-regia.html';"
       >
         + Nuova Regia</button
-      ><br /><br />
+      ><br /><br /> -->
 
       <!-- Pulsanti di Salvare e Cancella creazione dell'opera -->
       <button type="submit">Salva</button>
@@ -209,7 +214,7 @@
           (genere) =>
             genere.nome === inputGenere.split("|")[0] &&
             genere.descrizione === inputGenere.split("|")[1]
-        ); ///////////////////
+        );
 
         const messaggio = document.getElementById("input-error-genere");
         if (match) {
@@ -221,28 +226,28 @@
         }
       }
 
-      function verificaInputRegia() {
-        const inputRegista = document
-          .getElementById("form-regista")
-          .value.trim();
-        const inputAnno = parseInt(
-          document.getElementById("form-anno-produzione").value.trim(),
-          10
-        );
+      // function verificaInputRegia() {
+      //   const inputRegista = document
+      //     .getElementById("form-regista")
+      //     .value.trim();
+      //   const inputAnno = parseInt(
+      //     document.getElementById("form-anno-produzione").value.trim(),
+      //     10
+      //   );
 
-        const match = regie.find(
-          (regia) => regia.regista === inputRegista && regia.anno === inputAnno
-        );
+      //   const match = regie.find(
+      //     (regia) => regia.regista === inputRegista && regia.anno === inputAnno
+      //   );
 
-        const messaggio = document.getElementById("input-error-regia");
-        if (match) {
-          messaggio.textContent = "";
-          return match;
-        } else {
-          messaggio.textContent = "Regia non valida.";
-          return "__error__";
-        }
-      }
+      //   const messaggio = document.getElementById("input-error-regia");
+      //   if (match) {
+      //     messaggio.textContent = "";
+      //     return match;
+      //   } else {
+      //     messaggio.textContent = "Regia non valida.";
+      //     return "__error__";
+      //   }
+      // }
 
       document
         .getElementById("formulario-opera")
@@ -291,8 +296,9 @@
             errorCount++;
           } else document.getElementById("input-error-atti").textContent = "";
 
-          const regia = verificaInputRegia();
-          if (regia === "__error__") return;
+          // const regia = verificaInputRegia();
+          // if (regia === "__error__") return;
+          const regia = {};
 
           if (errorCount > 0) return;
 
@@ -341,7 +347,7 @@
     </script>
 
     <!-- Modifica regia -->
-    <script>
+    <!-- <script>
       function modificaRegia(index) {
         const regia = regie[index];
 
@@ -352,10 +358,10 @@
 
         window.location.href = "crea-modifica-regia.html";
       }
-    </script>
+    </script> -->
 
     <!-- Elimina regia -->
-    <script>
+    <!-- <script>
       function eliminaRegia(index) {
         const conferma = window.confirm(
           `Sei sicuro di voler eliminare la regia "${regie[index].regista} (${regie[index].anno})"?`
@@ -369,10 +375,10 @@
 
         renderRegie();
       }
-    </script>
+    </script> -->
 
     <!-- Verifica se si crea o modifica l'opera -->
-    <script>
+    <!-- <script>
       document.addEventListener("DOMContentLoaded", () => {
         const modifica = JSON.parse(
           localStorage.getItem("opera-da-modificare")
@@ -399,6 +405,6 @@
           document.querySelector("h1").textContent = "Modifica opera:";
         }
       });
-    </script>
+    </script> -->
   </body>
 </html>

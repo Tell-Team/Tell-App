@@ -37,7 +37,7 @@
       <button type="submit">Salva</button>
       <button
         type="button"
-        onclick="localStorage.removeItem('regia-da-modificare'); window.location.href = './crea-modifica-opera.html';"
+        onclick="localStorage.removeItem('regia-da-modificare'); window.location.href = './modifica-opera.html';"
       >
         Cancella</button
       ><br />
@@ -94,7 +94,7 @@
             "Regia salvata con successo!";
 
           setTimeout(() => {
-            window.location.href = "./crea-modifica-opera.html";
+            window.location.href = "./modifica-opera.html";
           }, 1000);
         });
     </script>
@@ -111,6 +111,7 @@
           document.getElementById("form-anno-produzione").value = modifica.anno;
 
           document.querySelector("h1").textContent = "Modifica regia:";
+          document.title = "Modifica regia";
         }
       });
     </script>

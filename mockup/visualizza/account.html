@@ -13,7 +13,7 @@
         Eventi
       </button>
       <button onclick="window.location.href = './info.html';">Info</button>
-      <span>Accounts</span>
+      <span style="color: gray">Account</span>
     </div>
 
     <h2>Account</h2>
@@ -21,11 +21,21 @@
     <div class="istanza container">
       <div class="singola-riga">
         <h3>Amministratori</h3>
-        <button class="adminOnly">+</button>
+        <button
+          class="adminOnly"
+          onclick="window.location.href = '../crea-modifica/crea-account.html'"
+        >
+          +
+        </button>
       </div>
       <div class="singola-riga">
         <span>Admin A</span>
-        <button class="adminOnly">Modifica</button>
+        <button
+          class="adminOnly"
+          onclick="window.location.href = '../crea-modifica/modifica-account.html'"
+        >
+          Modifica
+        </button>
         <button class="adminOnly">Rimuovi</button>
       </div>
       <div class="singola-riga">

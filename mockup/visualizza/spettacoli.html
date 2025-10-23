@@ -9,13 +9,13 @@
     <br /><br />
 
     <div class="singola-riga">
-      <span>Eventi</span>
+      <span style="color: gray">Spettacoli</span>
       <button onclick="window.location.href = './info.html';">Info</button>
       <button
         class="adminOnly"
         onclick="window.location.href = './account.html';"
       >
-        Accounts
+        Account
       </button>
     </div>
 
@@ -23,21 +23,30 @@
 
     <button
       class="ticketOnly"
-      onclick="window.location.href = '../crea-modifica/crea_evento.html';"
+      onclick="window.location.href = '../crea-modifica/crea-spettacolo.html';"
     >
-      + Nuovo Evento
+      + Nuovo Spettacolo
     </button>
     <br /><br />
 
     <div class="istanza">
       <h3>Zelmira</h3>
       <p>Diretto da Giacomo Sagripanti <br />Regia di Calixto Bieito</p>
-      <button
-        style="margin-left: 10px"
-        onclick="window.location.href = './acquista.html';"
-      >
-        Scegli posti
-      </button>
+      <div class="singola-riga">
+        <button
+          style="margin-left: 10px"
+          onclick="window.location.href = './acquista.html';"
+        >
+          Scegli posti
+        </button>
+        <button
+          class="ticketOnly"
+          style="margin-left: 5px"
+          onclick="window.location.href = '../crea-modifica/modifica-spettacolo.html'"
+        >
+          Modifica
+        </button>
+      </div>
     </div>
   </body>
 </html>
