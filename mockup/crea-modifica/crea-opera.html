@@ -93,10 +93,30 @@
 
       <!-- REGIA -->
       <h3 style="margin: 3px">Lista Regie</h3>
-      <p style="color: gray">
-        **Nota:** Le singole repliche (Regie) possono essere aggiunte solo dopo
-        aver salvato l'Opera.
-      </p>
+      <div></div>
+      <button
+        type="button"
+        onclick="window.location.href = './crea-modifica-regia.html';"
+      >
+        + Nuova Regia</button
+      ><br /><br />
+      <div class="singola-riga">
+        <label for="form-regia">Regia scelta *:</label>
+        <input
+          type="text"
+          id="form-regista"
+          placeholder="Inserire regista"
+          required
+        />
+        <input
+          type="number"
+          id="form-anno-produzione"
+          placeholder="Inserire anno"
+          required
+        />
+        <p id="input-error-regia" style="color: red"></p>
+        <br />
+      </div>
       <!-- <div class="singola-riga">
         <label for="form-regia">Regia:</label>
         <input type="text" id="form-regista" placeholder="Inserire regista" />
