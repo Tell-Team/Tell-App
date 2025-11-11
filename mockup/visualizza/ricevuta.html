@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="../istanze-elencate.css" />
+  </head>
+  <body>
+    <h2>Ricevuta</h2>
+    <div class="istanza">
+      <p>
+        <strong>Spettacolo:</strong> Zelmira
+        <br /><strong>Data:</strong> Sabato 16 Agosto
+        <br /><strong>Settore:</strong> Tribuna A
+        <br /><strong>Posti:</strong> 14, 15
+      </p>
+      <div class="singola-riga">
+        <p><strong>Emissione:</strong></p>
+        <p id="time"></p>
+      </div>
+    </div>
+    <div>
+      <button onclick="alert('Ricevuta stampata!')">Stampa</button>
+      <button onclick="window.location.href = './spettacoli.html';">
+        Fine
+      </button>
+    </div>
+  </body>
+
+  <script>
+    var today = new Date();
+    document.getElementById("time").innerHTML = today;
+  </script>
+</html>

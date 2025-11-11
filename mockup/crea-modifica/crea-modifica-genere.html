@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <script src="../enter-to-skip.js" defer></script>
+
+    <title>Aggiungi genere</title>
+
+    <link rel="stylesheet" href="../body-creazione.css" />
+  </head>
+
+  <body>
+    <h1>Nuovo genere:</h1>
+    <form id="formulario-genere">
+      <!-- NOME -->
+      <div class="singola-riga">
+        <label for="form-nome">Nome *:</label>
+        <input
+          type="text"
+          id="form-nome"
+          placeholder="Inserire nome"
+          required
+        />
+        <p id="input-error-nome" style="color: red"></p>
+        <br />
+      </div>
+
+      <!-- DESCRIZIONE -->
+      <div class="singola-riga">
+        <label for="form-descrizione">Descrizione *:</label>
+        <textarea
+          id="form-descrizione"
+          rows="4"
+          cols="50"
+          placeholder="Inserire descrizione"
+          style="font-family: Times"
+          required
+        ></textarea>
+        <p id="input-error-descrizione" style="color: red"></p>
+        <br />
+      </div>
+
+      <br />
+      <!-- Pulsanti di Salvare e Cancella la creazione dei generi -->
+      <button type="submit">Salva</button>
+      <button
+        type="button"
+        onclick="localStorage.removeItem('genere-da-modificare'); window.location.href = '../visualizza/info.html';"
+      >
+        Cancella</button
+      ><br />
+    </form>
+
+    <p id="successo" style="color: green"></p>
+
+    <!-- Verifica correttezza dei dati del generi -->
+    <script>
+      document
+        .getElementById("formulario-genere")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          let errorCount = 0;
+
+          const nome = document.getElementById("form-nome").value.trim();
+          const descrizione = document
+            .getElementById("form-descrizione")
+            .value.trim();
+
+          if (nome === "") {
+            document.getElementById("input-error-nome").textContent =
+              "Il campo Nome non può essere vuoto.";
+            errorCount++;
+          } else document.getElementById("input-error-nome").textContent = "";
+
+          if (descrizione === "") {
+            document.getElementById("input-error-descrizione").textContent =
+              "Il campo Descrizione non può essere vuoto.";
+            errorCount++;
+          } else document.getElementById("input-error-descrizione").textContent = "";
+
+          if (errorCount > 0) return;
+
+          // Verifica se e' una modifica o una creazione
+          const modifica = JSON.parse(
+            localStorage.getItem("genere-da-modificare")
+          );
+          let generi = JSON.parse(localStorage.getItem("generi")) || [];
+
+          if (modifica) {
+            generi[modifica.index] = { nome, descrizione };
+            localStorage.removeItem("genere-da-modificare");
+          } else {
+            const nuovoGenere = { nome, descrizione };
+            generi.push(nuovoGenere);
+          }
+
+          localStorage.setItem("generi", JSON.stringify(generi));
+
+          document.getElementById("successo").textContent =
+            "Genere salvato con successo!";
+
+          setTimeout(() => {
+            window.location.href = "../visualizza/info.html";
+          }, 1000);
+        });
+    </script>
+
+    <!-- Verifica se si crea o modifica la genere -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const modifica = JSON.parse(
+          localStorage.getItem("genere-da-modificare")
+        );
+
+        if (modifica) {
+          document.getElementById("form-nome").value = modifica.nome;
+          document.getElementById("form-descrizione").value =
+            modifica.descrizione;
+
+          document.querySelector("h1").textContent = "Modifica genere:";
+          document.title = "Modifica genere";
+        }
+      });
+    </script>
+  </body>
+</html>

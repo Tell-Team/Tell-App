@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <script src="../enter-to-skip.js" defer></script>
+
+    <title>Aggiungi regia</title>
+
+    <link rel="stylesheet" href="../body-creazione.css" />
+  </head>
+
+  <body>
+    <h1>Nuova regia:</h1>
+    <form id="formulario-regia">
+      <!-- REGISTA -->
+      <div class="singola-riga">
+        <label for="form-regista">Regista:</label>
+        <input type="text" id="form-regista" placeholder="Inserire regista" />
+        <p id="input-error-regista" style="color: red"></p>
+        <br />
+      </div>
+
+      <!-- ANNO DI PRODUZIONE -->
+      <div class="singola-riga">
+        <label for="form-anno-produzione">Anno di produzione:</label>
+        <input
+          type="number"
+          id="form-anno-produzione"
+          placeholder="Inserire anno"
+          min="1"
+          step="1"
+        />
+        <p id="input-error-anno" style="color: red"></p>
+        <br />
+      </div>
+
+      <!-- Pulsanti di Salvare e Cancella la creazione delle regie -->
+      <button type="submit">Salva</button>
+      <button
+        type="button"
+        onclick="localStorage.removeItem('regia-da-modificare'); window.location.href = './modifica-opera.html';"
+      >
+        Cancella</button
+      ><br />
+    </form>
+
+    <p id="successo" style="color: green"></p>
+
+    <!-- Verifica correttezza dei dati della regia -->
+    <script>
+      document
+        .getElementById("formulario-regia")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          let errorCount = 0;
+
+          const regista = document.getElementById("form-regista").value.trim();
+          const annoValue = document
+            .getElementById("form-anno-produzione")
+            .value.trim();
+          const anno = parseInt(annoValue, 10);
+
+          if (regista === "") {
+            document.getElementById("input-error-regista").textContent =
+              "Il campo Regista non può essere vuoto.";
+            errorCount++;
+          } else document.getElementById("input-error-regista").textContent = "";
+
+          if (annoValue === "" || isNaN(anno) || anno <= 0) {
+            document.getElementById("input-error-anno").textContent =
+              "Il campo Anno di produzione non può essere vuoto.";
+            errorCount++;
+          } else document.getElementById("input-error-anno").textContent = "";
+
+          if (errorCount > 0) return;
+
+          // Verifica se e' una modifica o una creazione
+          const modifica = JSON.parse(
+            localStorage.getItem("regia-da-modificare")
+          );
+          let regie = JSON.parse(localStorage.getItem("regie")) || [];
+
+          if (modifica) {
+            regie[modifica.index] = { regista, anno };
+            localStorage.removeItem("regia-da-modificare");
+          } else {
+            const nuovaRegia = { regista, anno };
+            regie.push(nuovaRegia);
+          }
+
+          localStorage.setItem("regie", JSON.stringify(regie));
+
+          document.getElementById("successo").textContent =
+            "Regia salvata con successo!";
+
+          setTimeout(() => {
+            window.location.href = "./modifica-opera.html";
+          }, 1000);
+        });
+    </script>
+
+    <!-- Verifica se si crea o modifica la regia -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const modifica = JSON.parse(
+          localStorage.getItem("regia-da-modificare")
+        );
+
+        if (modifica) {
+          document.getElementById("form-regista").value = modifica.regista;
+          document.getElementById("form-anno-produzione").value = modifica.anno;
+
+          document.querySelector("h1").textContent = "Modifica regia:";
+          document.title = "Modifica regia";
+        }
+      });
+    </script>
+  </body>
+</html>
