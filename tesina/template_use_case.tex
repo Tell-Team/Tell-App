@@ -1,0 +1,65 @@
+\begin{table}[H]
+    \begin{tabular}{|p{\linewidth}|}
+        \hline
+        \cellcolor{gray!100}
+        \color{white}
+        \centerline{\textbf{Caso d'uso:} Lista Opere} \\
+        \hline
+        \textbf{ID:} 1 \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Breve descrizione:} \\
+        \cellcolor{gray!20}
+        L'utente ottiene la lista di opere memorizzate nel sistema. \\
+        \hline
+        \textbf{Attori primari:} \\
+        \begin{minipage}{\linewidth}
+            Cliente \\
+            Biglietteria \\
+            Amministratore
+        \end{minipage}
+        \vspace{0pt} \\  % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+        \hline
+        \textbf{Attori secondari:} \\
+        Nessuno. \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Precondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item L'utente è posizionato nella sezione informazioni.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi principale:}
+        \begin{enumerate}
+            \item Il caso d'uso inizia quando l'utente entra nella sezione informazioni.
+            \item \textbf{If} nel sistema è memorizzata almeno un'opera
+            \begin{enumerate}
+                \item \textbf{For} ogni opera nel sistema
+                \begin{enumerate}
+                    \item[] \textbf{punto di estensione:} filtro ricerca
+                    \item \textbf{include}(Visualizza Opera)
+                \end{enumerate}
+            \end{enumerate}
+            \item \textbf{Else}
+            \begin{enumerate}
+                \item Il sistema informa l'utente che non vi sono opere memorizzate.
+            \end{enumerate}
+        \end{enumerate} \\
+        \hline
+        \cellcolor{gray!20}
+        \textbf{Postcondizioni:} \\
+        \cellcolor{gray!20}
+        \begin{minipage}{\linewidth}
+            \begin{enumerate}
+                \item Viene visualizzata a schermo la lista delle opere memorizzate.
+            \end{enumerate}
+        \end{minipage} \\
+        \hline
+        \textbf{Sequenza degli eventi alternativa:} \\
+        Nessuna. \\
+        \hline
+    \end{tabular}
+\end{table}

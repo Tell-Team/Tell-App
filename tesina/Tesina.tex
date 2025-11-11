@@ -5,17 +5,25 @@
 \usepackage{array} % Fornisce per le tabelle il tipo di colonna "m", che consente di impostare una larghezza fissa
 \usepackage{tabularray} % Fornisce per le tabelle i tipi di colonna che permettono l'allineamento verticale
 \usepackage{booktabs} % Fornisce decoratori per le tabelle
+\usepackage{graphicx} % Inserimento immagini
+
+% Use case descriptions imports & settings
+\usepackage[dvipsnames, table]{xcolor} % Per colorare celle delle tabelle
+\usepackage{tabularx}
+\usepackage{enumitem}
+\setlist[enumerate]{label*=\arabic*., topsep=0pt, itemsep=0pt, parsep=0pt, partopsep=0pt} % Imposta gli indici di tutti i livelli di enumerazione come numeri arabi (invece del default che passa alle lettere) e rimuove il padding
+\usepackage{float} % Fornisce la posizione 'H' per le tabelle, che le posiziona direttamente dove specificato nel codice latex e non in cima alla pagina o altri comportamenti 'float' non desiderati
 
 % Macros
 \newcommand{\mycount}[1]{\stepcounter{#1}\arabic{#1}}
 
 \title{Tell: Gestore teatrale}
-\date{2025-06-06}
+\date{2025-06-20}
 \author
 {
-    Giuseppe Mariotti\\
-    Riccardo Ripa\\
-    Rodrigo Rengifo\\
+    Giuseppe Mariotti \\
+    Riccardo Ripa \\
+    Rodrigo Rengifo \\
     Mattia Praolini
 }
 
@@ -30,18 +38,7 @@
     \newpage
 
     \section{Glossario dei termini}
-        % \begin{table}[h]
-        %     \centering
-        %     \caption{Sample Table}
-        %     \begin{tabular}{cc}
-        %         Header 1 & Header 2 \\
-        %         \hline
-        %         Value 1  & Value 2  \\
-        %         Value 3  & Value 4
-        %     \end{tabular}
-        % \end{table}
-
-        \begin{tblr}{h{2cm}h{2cm}m{10cm}}
+        \begin{tblr}{h{3cm}h{2cm}m{10cm}}
             \hline
             \textbf{Termine} & \textbf{Sinonimi} & \textbf{Definizione} \\
             \hline
@@ -58,6 +55,9 @@
     \newpage
 
     \section{Requisiti progettuali}
+        \subsection{Diagramma}
+            \includegraphics{imgs/requisiti/requisiti}
+
         \subsection{Requisiti Funzionali}
             \newcounter{rf}
 
@@ -76,7 +76,6 @@
                 \\
                 \textbf{RF\mycount{rf}: Conferma prenotazione} \\
                 Il sistema dovrà consentire al cliente di confermare la prenotazione, e produrre la ricevuta contenente l'identificativo della prenotazione per il pagamento alla cassa. \\
-                \\
 
             \subsubsection{Area Biglietteria}
                 \textbf{RF\mycount{rf}: Gestisci spettacoli} \\
@@ -84,7 +83,6 @@
                 \\
                 \textbf{RF\mycount{rf}: Gestisci lista prenotazioni} \\
                 Il sistema dovrà consentire alla biglietteria di visualizzare e modificare tutte le prenotazioni effettuate nel teatro e di contrassegnare le prenotazioni che sono state pagate in cassa. \\
-                \\
 
             \subsubsection{Area Amministratore}
                 \textbf{RF\mycount{rf}: Gestisci opere} \\
@@ -92,12 +90,40 @@
                 \\
                 \textbf{RF\mycount{rf}: Gestisci struttura posti} \\
                 Il sistema dovrà consentire all'amministratore di modificare la struttura posti del teatro. \\
-                \\
 
         \subsection{Requisiti Non Funzionali}
             \newcounter{rnf}
 
             \textbf{RNF\mycount{rnf}: Python3} \\
             Il sistema dovrà essere implementato in linguaggio Python3. \\
+
+    \section{Casi d'uso}
+        \subsection{Attori}
+            \subsubsection{Diagramma}
+                \includegraphics{imgs/use_case/attori}
+
+        \subsection{Cliente}
+            \subsubsection{Diagramma}
+                \includegraphics[width=\textwidth]{imgs/use_case/cliente}
+
+            \subsubsection{Descrizioni}
+                \input{ucdescriptions/cliente.tex}
+
+        \subsection{Biglietteria}
+            \subsubsection{Diagramma}
+                \includegraphics[width=\textwidth]{imgs/use_case/biglietteria}
+            
+            \subsubsection{Descrizioni}
+                \input{ucdescriptions/biglietteria.tex}
+
+        \subsection{Amministratore}
+            \subsubsection{Diagramma}
+                \includegraphics[height=\textheight]{imgs/use_case/amministratore}
+
+            \subsubsection{Descrizioni}
+                \input{ucdescriptions/amministratore.tex}
+                
+    \section{Matrice di mapping}
+        \includegraphics[height=\textheight]{imgs/matrice/matrice}
 
 \end{document}
