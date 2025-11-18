@@ -66,3 +66,19 @@ class Opera:
 
         self.__trama = trama
         return True
+
+    """### TESTEO ###"""
+
+    @property
+    def nome(self):
+        return self.__nome
+
+    @property
+    def librettisa(self):
+        return self.__librettista
+
+    @property
+    def trama(self):
+        return self.__trama
+
+    """### TESTEO ###"""

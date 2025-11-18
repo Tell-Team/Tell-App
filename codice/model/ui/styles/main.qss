@@ -1,0 +1,108 @@
+/* Labels */
+QLabel#Header1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    color: #222;
+}
+
+QLabel#Header2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    color: #222;
+}
+
+QLabel#SubHeader {
+    font-size: 14px;
+    color: #444;
+    margin-top: 4px;
+    padding: 0;
+}
+
+QLabel#Paragraph {
+    font-size: 14px;
+    color: #222;
+    margin-top: 4px;
+    padding: 0;
+}
+
+/* Pulsanti */
+QPushButton#SmallButton {
+    background-color: #fff;
+    color: black;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+QPushButton#SmallButton:hover {
+    background-color: #d1d1d1;
+}
+
+QPushButton#SmallButton:pressed {
+    background-color: #9a9a9a;
+}
+
+QPushButton#SmallButton:disabled {
+    background-color: #ccc;
+    color: #777;
+}
+
+QPushButton#BlueButton {
+    background-color: #2b7cff;
+    color: white;
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-size: 14px;
+}
+
+QPushButton#BlueButton:hover {
+    background-color: #1d63d3;
+}
+
+QPushButton#BlueButton:pressed {
+    background-color: #154c9c;
+}
+
+/* Istanze visualizzate */
+QWidget#Container {
+    border: 1px solid #111;
+    border-radius: 15px;
+    background-color: #f3f3f3;
+    padding: 10px;
+}
+
+/*
+    DEBO CORREGIR COLORES. SE VE DEMASIADO GENÉRICO Y NO SE DISTINGUEN LOS BOTONES DEL FONDO
+
+    razón azules a grises: 255/286.792
+    colores escala grises: 255->209->155(154)
+*/
+
+/* Scroolbar */
+QScrollArea {
+    background-color: none;
+    border: 1px solid #b0b0b0;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+QScrollBar:vertical {
+    border: 2px solid #c0c0c0;
+    background-color: #e0e0e0;
+    width: 12px;
+    border-radius: 6px;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #818181;
+    border-radius: 3px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+    background: none;
+}
