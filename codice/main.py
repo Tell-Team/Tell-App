@@ -1,11 +1,11 @@
 from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
 
-from navigation import NavigationController
-from ui.styles.styles_loader import load_stylesheet
+from view.navigation import NavigationController
+from view.styles.styles_loader import load_stylesheet
 
-from ui.info import InfoPage
-from ui.login import LogInPage
-from ui.nuova_opera import FormularioOpera
+from view.info import InfoPage
+from view.login import LogInPage
+from view.nuova_opera import FormularioOpera
 
 
 class MainWindow(QMainWindow):
@@ -13,7 +13,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         # CONFIG FINESTRA
-        self.setWindowTitle("Tell-project")
+        self.setWindowTitle("Tell")
         self.setMinimumSize(800, 600)
 
         self.nav = NavigationController(self)
@@ -38,7 +38,7 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication([])
-    app.setStyleSheet(load_stylesheet("ui/styles/main.qss"))
+    app.setStyleSheet(load_stylesheet("view/styles/main.qss"))
 
     window = MainWindow()
     window.show()

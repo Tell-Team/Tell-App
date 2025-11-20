@@ -7,14 +7,14 @@ from PyQt6.QtWidgets import (
     QScrollArea,
 )
 
-from navigation import NavigationController
+from view.navigation import NavigationController
 
 from PyQt6.QtCore import Qt
 from functools import partial
 
-from classi.opera import Opera  ### TESTING ###
-from classi.genere import Genere  ### TESTING ###
-from ui.nuova_opera import FormularioOpera
+from model.pianificazione.opera import Opera  ### TESTING ###
+from model.pianificazione.genere import Genere  ### TESTING ###
+from view.nuova_opera import FormularioOpera
 from datetime import date  ### TESTING ###
 
 
@@ -29,7 +29,9 @@ class InfoPage(QWidget):
             "Andrea Leone Tottola",
             2,
             date(1822, 2, 6),
+            "Teatro Rossini",
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+            0,
         )
         opera_test2 = Opera(
             "Opera_sample",
@@ -37,7 +39,9 @@ class InfoPage(QWidget):
             "librettista_sample",
             1,
             date(1999, 1, 1),
+            "teatro_sample",
             "trama_sample",
+            1,
         )
         lista_opere: list[Opera] = [opera_test1, opera_test2]
 
@@ -118,7 +122,7 @@ class InfoPage(QWidget):
             nome.setObjectName("Header2")
             layout_box.addWidget(nome)
 
-            librettista = QLabel(f"<b>Librettista:</b> {opera.librettisa}")
+            librettista = QLabel(f"<b>Librettista:</b> {opera.librettista}")
             librettista.setObjectName("Paragraph")
             layout_box.addWidget(librettista)
 

@@ -10,8 +10,10 @@ class Opera:
         compositore: str,
         librettista: str,
         numero_atti: int,
-        prima_rappresentazione: date,
+        data_prima_rappresentazione: date,
+        teatro_prima_rappresentazione: str,
         trama: str,
+        id_genere: int,
     ):
         """Throws: ValueError"""
         self.__id = Opera.__next_id
@@ -25,9 +27,12 @@ class Opera:
             raise ValueError
         if not self.set_numero_atti(numero_atti):
             raise ValueError
-        self.set_prima_rappresentazione(prima_rappresentazione)
+        self.set_data_prima_rappresentazione(data_prima_rappresentazione)
+        if not self.set_teatro_prima_rappresentazione(teatro_prima_rappresentazione):
+            raise ValueError
         if not self.set_trama(trama):
             raise ValueError
+        self.set_id_genere(id_genere)
 
     def set_nome(self, nome: str) -> bool:
         if nome == "":
@@ -57,8 +62,17 @@ class Opera:
         self.__numero_atti = numero_atti
         return True
 
-    def set_prima_rappresentazione(self, prima_rappresentazione: date):
-        self.__prima_rappresentazione = prima_rappresentazione
+    def set_data_prima_rappresentazione(self, data_prima_rappresentazione: date):
+        self.__data_prima_rappresentazione = data_prima_rappresentazione
+
+    def set_teatro_prima_rappresentazione(
+        self, teatro_prima_rappresentazione: str
+    ) -> bool:
+        if teatro_prima_rappresentazione == "":
+            return False
+
+        self.__teatro_prima_rappresentazione = teatro_prima_rappresentazione
+        return True
 
     def set_trama(self, trama: str) -> bool:
         if trama == "":
@@ -67,18 +81,41 @@ class Opera:
         self.__trama = trama
         return True
 
-    """### TESTEO ###"""
+    def set_id_genere(self, id_genere: int):
+        self.__id_genere = id_genere
+
+    @property
+    def id(self):
+        return self.__id
 
     @property
     def nome(self):
         return self.__nome
 
     @property
-    def librettisa(self):
+    def compositore(self):
+        return self.__compositore
+
+    @property
+    def librettista(self):
         return self.__librettista
+
+    @property
+    def numero_atti(self):
+        return self.__numero_atti
+
+    @property
+    def data_prima_rappresentazione(self):
+        return self.__data_prima_rappresentazione
+
+    @property
+    def teatro_prima_rappresentazione(self):
+        return self.__teatro_prima_rappresentazione
 
     @property
     def trama(self):
         return self.__trama
 
-    """### TESTEO ###"""
+    @property
+    def id_genere(self):
+        return self.__id_genere

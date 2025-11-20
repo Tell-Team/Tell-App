@@ -2,9 +2,9 @@ from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout
 from PyQt6.QtCore import Qt
 from functools import partial
 
-from navigation import NavigationController
+from view.navigation import NavigationController
 
-from ui.info import InfoPage
+from view.info import InfoPage
 
 
 class LogInPage(QWidget):

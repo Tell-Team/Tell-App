@@ -12,7 +12,7 @@ from PyQt6.QtWidgets import (
     QPushButton,
 )
 
-from navigation import NavigationController
+from view.navigation import NavigationController
 
 from PyQt6.QtCore import Qt
 
