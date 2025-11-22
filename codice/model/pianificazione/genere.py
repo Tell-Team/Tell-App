@@ -29,14 +29,11 @@ class Genere:
         self.__descrizione = descrizione
         return True
 
-    @property
-    def id(self):
+    def get_id(self):
         return self.__id
 
-    @property
-    def nome(self):
+    def get_nome(self):
         return self.__nome
 
-    @property
-    def descrizione(self):
+    def get_descrizione(self):
         return self.__descrizione

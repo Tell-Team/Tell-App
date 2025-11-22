@@ -84,38 +84,29 @@ class Opera:
     def set_id_genere(self, id_genere: int):
         self.__id_genere = id_genere
 
-    @property
-    def id(self):
+    def get_id(self):
         return self.__id
 
-    @property
-    def nome(self):
+    def get_nome(self):
         return self.__nome
 
-    @property
-    def compositore(self):
+    def get_compositore(self):
         return self.__compositore
 
-    @property
-    def librettista(self):
+    def get_librettista(self):
         return self.__librettista
 
-    @property
-    def numero_atti(self):
+    def get_numero_atti(self):
         return self.__numero_atti
 
-    @property
-    def data_prima_rappresentazione(self):
+    def get_data_prima_rappresentazione(self):
         return self.__data_prima_rappresentazione
 
-    @property
-    def teatro_prima_rappresentazione(self):
+    def get_teatro_prima_rappresentazione(self):
         return self.__teatro_prima_rappresentazione
 
-    @property
-    def trama(self):
+    def get_trama(self):
         return self.__trama
 
-    @property
-    def id_genere(self):
+    def get_id_genere(self):
         return self.__id_genere

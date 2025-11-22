@@ -27,11 +27,12 @@ class MainWindow(QMainWindow):
         self.nav.add_page(LogInPage, login)
         self.nav.add_page(InfoPage, info)
         self.nav.add_page(FormularioOpera, nuova_opera)
+        # <-- Qui ci devono essere SpettacoliPage e AccountPage --!>
 
         # Layout principale
         central = QWidget()
         layout = QVBoxLayout()
-        layout.addWidget(self.nav.stack)
+        layout.addWidget(self.nav.get_stack())
         central.setLayout(layout)
         self.setCentralWidget(central)
 

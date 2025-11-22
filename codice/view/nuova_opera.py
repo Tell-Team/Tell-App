@@ -11,10 +11,9 @@ from PyQt6.QtWidgets import (
     QSpinBox,
     QPushButton,
 )
+from PyQt6.QtCore import Qt
 
 from view.navigation import NavigationController
-
-from PyQt6.QtCore import Qt
 
 
 class FormularioOpera(QWidget):

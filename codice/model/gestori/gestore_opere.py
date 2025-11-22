@@ -1,5 +1,5 @@
-from pianificazione.opera import Opera
-from gestori.gestore_generi import GestoreGeneri
+from model.pianificazione.opera import Opera
+from model.gestori.gestore_generi import GestoreGeneri
 
 
 class GestoreOpere:
@@ -10,11 +10,14 @@ class GestoreOpere:
 
     def aggiungi_opera(self, opera: Opera) -> bool:
         for o in self.__lista_opere:
-            if o.id == opera.id:
+            if o.get_id() == opera.get_id():
                 return False
 
-        if not self.__gestore_generi.ha_genere(opera.id_genere):
+        if not self.__gestore_generi.ha_genere(opera.get_id_genere()):
             return False
 
         self.__lista_opere.append(opera)
         return True
+
+    def get_lista_opere(self) -> list[Opera]:
+        return self.__lista_opere

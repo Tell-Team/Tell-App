@@ -13,8 +13,7 @@ class NavigationController:
         self._pages[page_class] = widget
         self._stack.addWidget(widget)
 
-    @property
-    def stack(self):
+    def get_stack(self):
         return self._stack
 
     def go_to(self, page_class: type[QWidget]):
