@@ -68,10 +68,15 @@ class FormularioOpera(QWidget):
 
         btn_cancella = QPushButton("Cancella")
         btn_cancella.setObjectName("SmallButton")
-        btn_cancella.clicked.connect(nav.go_back)  # type:ignore
+        btn_cancella.clicked.connect(  # type:ignore
+            nav.go_back
+        )
 
         btn_conferma = QPushButton("Conferma")
         btn_conferma.setObjectName("SmallButton")
+        btn_conferma.clicked.connect(  # type:ignore
+            nav.go_back  # DA CORRIGERE
+        )
 
         layout_pulsanti.addWidget(btn_cancella)
         layout_pulsanti.addWidget(btn_conferma)
@@ -84,3 +89,6 @@ class FormularioOpera(QWidget):
         main_layout.addStretch()
 
         self.setLayout(main_layout)
+
+
+# DA CORRIGERE: Style ancora non applicato

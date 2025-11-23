@@ -8,13 +8,13 @@ class NavigationController:
         self._history: list[QWidget] = []  # Pile di widget per andar dietro
         self._pages: dict[type[QWidget], QWidget] = {}
 
+    def get_stack(self):
+        return self._stack
+
     def add_page(self, page_class: type[QWidget], widget: QWidget):
         """Registra una pagina usando la classe come keyword."""
         self._pages[page_class] = widget
         self._stack.addWidget(widget)
-
-    def get_stack(self):
-        return self._stack
 
     def go_to(self, page_class: type[QWidget]):
         """Visualizza la pagina dalla classe."""
@@ -34,3 +34,9 @@ class NavigationController:
             return
         last_widget = self._history.pop()
         self._stack.setCurrentWidget(last_widget)
+
+
+# DEBO::
+# 1. CREAR UN MÉTODO PARA MODIFICAR EL  __history AL MOVERSE
+# ENTRE SECCIONES (y no generar una cadenísima po papi) o
+# 2. MODIFICA go_to() PARA TENER CASOS ESPECIAL PARA LAS SECCIONES

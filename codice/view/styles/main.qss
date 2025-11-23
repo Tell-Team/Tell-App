@@ -15,6 +15,14 @@ QLabel#Header2 {
     color: #222;
 }
 
+QLabel#Header3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    color: #222;
+}
+
 QLabel#SubHeader {
     font-size: 14px;
     color: #444;
