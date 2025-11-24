@@ -25,18 +25,20 @@ class LogInPage(QWidget):
         # ## Pulsanti
         btn_cliente = QPushButton("Cliente")
         btn_cliente.setObjectName("BlueButton")
-        btn_cliente.clicked.connect(partial(nav.go_to, InfoPage))  # type:ignore
+        btn_cliente.clicked.connect(  # type:ignore
+            partial(nav.go_to, InfoPage, True)
+        )
 
         btn_biglietteria = QPushButton("Biglietteria")
         btn_biglietteria.setObjectName("BlueButton")
         btn_biglietteria.clicked.connect(  # type:ignore
-            partial(nav.go_to, InfoPage)
+            partial(nav.go_to, InfoPage, True)
         )  # DA CORRIGERE: utente ancora non implementati
 
         btn_admin = QPushButton("Amministratore")
         btn_admin.setObjectName("BlueButton")
         btn_admin.clicked.connect(  # type:ignore
-            partial(nav.go_to, InfoPage)
+            partial(nav.go_to, InfoPage, True)
         )  # DA CORRIGERE: Ruoli utente ancora non implementati
 
         pulsanti_utente = QWidget()

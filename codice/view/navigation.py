@@ -16,17 +16,21 @@ class NavigationController:
         self._pages[page_class] = widget
         self._stack.addWidget(widget)
 
-    def go_to(self, page_class: type[QWidget]):
+    def go_to(self, page_class: type["QWidget"], save_history: bool = True):
         """Visualizza la pagina dalla classe."""
         widget = self._pages.get(page_class)
         if widget is None:
             raise ValueError(f"Non e' stata trovata la pagina: {page_class}")
 
         current = self._stack.currentWidget()
-        if current:
+        if current and save_history:
             self._history.append(current)
 
         self._stack.setCurrentWidget(widget)
+
+    def section_go_to(self, page_class: type["QWidget"]):
+        """Visualizza una pagina di sezione (Spettacoli, Info, Account) senza salvare la pagina corrente nella cronologia."""
+        self.go_to(page_class, save_history=False)
 
     def go_back(self):
         """Visualizza la pagina precedente."""

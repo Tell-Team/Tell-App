@@ -37,7 +37,7 @@ class InfoPage(QWidget):
         from view.spettacoli_page import SpettacoliPage
 
         btn_sezione_spettacoli.clicked.connect(  # type:ignore
-            partial(nav.go_to, SpettacoliPage)
+            partial(nav.section_go_to, SpettacoliPage)
         )
         # ## Pulsante: Sezioni Info
         btn_sezione_info = QPushButton("Info")
@@ -45,12 +45,14 @@ class InfoPage(QWidget):
         btn_sezione_info.setEnabled(False)
 
         # ## Pulsante: Sezione Account
-        btn_sezione_account = QPushButton("Account")  # Sezione esclusiva dell'admin
+        btn_sezione_account = QPushButton(
+            "Account"
+        )  # DA CORRIGERE: Sezione esclusiva dell'admin
         btn_sezione_account.setObjectName("SmallButton")
         from view.account_page import AccountPage
 
         btn_sezione_account.clicked.connect(  # type:ignore
-            partial(nav.go_to, AccountPage)
+            partial(nav.section_go_to, AccountPage)
         )
 
         # ## Layout: Sezioni App
@@ -84,8 +86,6 @@ class InfoPage(QWidget):
         btn_nuova_opera.clicked.connect(  # type:ignore
             partial(OperaController.crea_opera, gestore_opere)
         )
-        # <-- Implementare una funzione OperaController.crea_opera(gestore: GestoreOpere) --!>
-
         # ## Layout: Header Opere
         layout_header_opere = QHBoxLayout()
         layout_header_opere.addWidget(header_opere)
@@ -109,16 +109,14 @@ class InfoPage(QWidget):
             btn_visualizza = QPushButton("Maggior info")
             btn_visualizza.setObjectName("SmallButton")
             btn_visualizza.clicked.connect(  # type:ignore
-                partial(OperaController.visualizza_opera, opera.get_id())
+                partial(OperaController.visualizza_opera, opera)
             )
-            # <-- Implementare una funzione OperaController.visualizza_opera(id: int) --!>
 
             btn_modifica = QPushButton("Modifica")
             btn_modifica.setObjectName("SmallButton")
             btn_modifica.clicked.connect(  # type:ignore
-                partial(OperaController.modifica_opera, opera.get_id())
+                partial(OperaController.modifica_opera, gestore_opere, opera.get_id())
             )
-            # <-- Implementare una funzione OperaController.modifica_opera(id: int) --!>
 
             pulsanti = QWidget()
             temp_layout_btn = QHBoxLayout(pulsanti)
@@ -160,7 +158,6 @@ class InfoPage(QWidget):
         btn_nuovo_genere.clicked.connect(  # type:ignore
             partial(GenereController.crea_genere, gestore_generi)
         )
-        # <-- Implementare una funzione GenereController.crea_genere(gestore: GestoreGenere) --!>
 
         # ## Layout: Header Generi
         layout_header_generi = QHBoxLayout()
@@ -183,9 +180,10 @@ class InfoPage(QWidget):
             btn_modifica = QPushButton("Modifica")
             btn_modifica.setObjectName("SmallButton")
             btn_modifica.clicked.connect(  # type:ignore
-                partial(GenereController.modifica_genere, genere.get_id())
+                partial(
+                    GenereController.modifica_genere, gestore_generi, genere.get_id()
+                )
             )
-            # <-- Implementare una funzione GenereController.modifica_genere(id: int) --!>
 
             pulsanti = QWidget()
             temp_layout_btn = QHBoxLayout(pulsanti)
@@ -267,3 +265,13 @@ class InfoPage(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(container_top)
         main_layout.addWidget(scroll_area)
+
+
+# Funzioni implementate dal controller e dal gestore:
+#   OperaController.crea_opera(gestore: GestoreOpere) @line_87
+#   GestoreOpere.get_lista_opere() @line_97
+#   OperaController.visualizza_opera(opera: Opera) @line_112
+#   OperaController.modifica_opera(gestore: GestoreOpere, id_opera: int) @line_118
+#   GenereController.crea_genere(gestore: GestoreGenere) @line_159
+#   GestoreGeneri.get_lista_generi() @line_170
+#   GenereController.modifica_genere(gestore: GestoreGeneri, id_genere: int) @line_183

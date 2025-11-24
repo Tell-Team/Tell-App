@@ -20,9 +20,9 @@ class AccountPage(QWidget):
         # ## Pulsante: Logout
         btn_logout = QPushButton("Logout")
         btn_logout.setObjectName("SmallButton")
-        btn_logout.clicked.connect( # type:ignore
+        btn_logout.clicked.connect(  # type:ignore
             nav.go_back
-        ) 
+        )
 
         # ## Layout: Logout
         widget_logout = QWidget()
@@ -35,20 +35,24 @@ class AccountPage(QWidget):
         btn_sezione_spettacoli = QPushButton("Spettacoli")
         btn_sezione_spettacoli.setObjectName("SmallButton")
         from view.spettacoli_page import SpettacoliPage
-        btn_sezione_spettacoli.clicked.connect( # type:ignore
-            partial(nav.go_to, SpettacoliPage)
-        ) 
+
+        btn_sezione_spettacoli.clicked.connect(  # type:ignore
+            partial(nav.section_go_to, SpettacoliPage)
+        )
 
         # ## Pulsante: Sezioni Info
         btn_sezione_info = QPushButton("Info")
         btn_sezione_info.setObjectName("SmallButton")
         from view.info_page import InfoPage
-        btn_sezione_info.clicked.connect(#type:ignore
-            partial(nav.go_to, InfoPage)
+
+        btn_sezione_info.clicked.connect(  # type:ignore
+            partial(nav.section_go_to, InfoPage)
         )
 
         # ## Pulsante: Sezione Account
-        btn_sezione_account = QPushButton("Account")  # DA CORRIGERE: Sezione esclusiva dell'admin
+        btn_sezione_account = QPushButton(
+            "Account"
+        )  # DA CORRIGERE: Sezione esclusiva dell'admin
         btn_sezione_account.setObjectName("SmallButton")
         btn_sezione_account.setEnabled(False)
 
@@ -95,10 +99,13 @@ class AccountPage(QWidget):
         # ### Pulsante: Nuovo Admin
         btn_nuovo_admin = QPushButton("Nuovo amministratore")
         btn_nuovo_admin.setObjectName("SmallButton")
-        btn_nuovo_admin.clicked.connect( #type:ignore
-            partial(AccountController.crea_account, gestore_account, temp=Account("","",Ruolo.AMMINISTRATORE))
+        btn_nuovo_admin.clicked.connect(  # type:ignore
+            partial(
+                AccountController.crea_account,
+                gestore_account,
+                Ruolo.AMMINISTRATORE,
+            )
         )
-        # <-- AccountController.crea_account(gestore: GestoreAccount, account:Account) --!>
 
         # ### Layout: Header Admin
         layout_header_admin = QHBoxLayout()
@@ -109,8 +116,11 @@ class AccountPage(QWidget):
         # ## ADMIN DISPLAY
         lista_admin = QWidget()
         layout_lista_admin = QVBoxLayout(lista_admin)
-        for admin in [a for a in gestore_account.get_lista_account() if a.get_ruolo() = Ruolo.AMMINISTRATORE]:
-            # <-- GestoreAccount.get_lista_account(self) -> list[Account] --!>
+        for admin in (
+            a
+            for a in gestore_account.get_lista_account()
+            if a.get_ruolo() == Ruolo.AMMINISTRATORE
+        ):
             # ### Labels
             username = QLabel(f"{admin.get_username()}")
             username.setObjectName("Header3")
@@ -119,17 +129,19 @@ class AccountPage(QWidget):
             # ### Pulsanti
             btn_modifica = QPushButton("Modifica")
             btn_modifica.setObjectName("SmallButton")
-            btn_modifica.clicked.connect( #type:ignore
-                partial(gestore_account.modifica_account, admin, temp=Account())
+            btn_modifica.clicked.connect(  # type:ignore
+                partial(
+                    AccountController.modifica_account, gestore_account, admin.get_id()
+                )
             )
-            # <-- GestoreAccount.modifica_account(account:Account, temp:Account) --!>
 
             btn_elimina = QPushButton("Rimuovi")
             btn_elimina.setObjectName("SmallButton")
-            btn_elimina.clicked.connect( #type:ignore
-                partial(gestore_account.elimina_account, admin.get_id(), admin)
+            btn_elimina.clicked.connect(  # type:ignore
+                partial(
+                    AccountController.elimina_account, gestore_account, admin.get_id()
+                )
             )
-            # <-- GestoreAccount.elimina_account(id: int, account:Account) --!>
 
             pulsanti = QWidget()
             temp_layout_btn = QHBoxLayout(pulsanti)
@@ -164,10 +176,13 @@ class AccountPage(QWidget):
         # ### Pulsante: Nuova Biglietteria
         btn_nuovo_biglietteria = QPushButton("Nuova Biglietteria")
         btn_nuovo_biglietteria.setObjectName("SmallButton")
-        btn_nuovo_biglietteria.clicked.connect( # type:ignore
-            partial(AccountController.crea_account, gestore_account, temp=Account("","",Ruolo.BIGLIETTERIA))
+        btn_nuovo_biglietteria.clicked.connect(  # type:ignore
+            partial(
+                AccountController.crea_account,
+                gestore_account,
+                Ruolo.BIGLIETTERIA,
+            )
         )
-        # <-- AccountController.crea_account(gestore: GestoreAccount, account:Account) --!>
 
         # ### Layout: Header Biglietteria
         layout_header_biglietteria = QHBoxLayout()
@@ -178,7 +193,11 @@ class AccountPage(QWidget):
         # ## BIGLIETTERIE DISPLAY
         lista_biglietterie = QWidget()
         layout_lista_biglietterie = QVBoxLayout(lista_biglietterie)
-        for biglietteria in [b for b in gestore_account.get_lista_account() if b.get_ruolo() == Ruolo.BIGLIETTERIA]:
+        for biglietteria in (
+            b
+            for b in gestore_account.get_lista_account()
+            if b.get_ruolo() == Ruolo.BIGLIETTERIA
+        ):
             # ### Labels
             username = QLabel(f"{biglietteria.get_username()}")
             username.setObjectName("Header3")
@@ -187,19 +206,23 @@ class AccountPage(QWidget):
             # ### Pulsanti
             btn_modifica = QPushButton("Modifica")
             btn_modifica.setObjectName("SmallButton")
-            btn_modifica.clicked.connect( # type:ignore
-                partial(gestore_account.modifica_account, biglietteria, temp=Account())
+            btn_modifica.clicked.connect(  # type:ignore
+                partial(
+                    AccountController.modifica_account,
+                    gestore_account,
+                    biglietteria.get_id(),
+                )
             )
-            # <-- GestoreAccount.modifica_account(account:Account, temp:Account) --!>
 
             btn_elimina = QPushButton("Rimuovi")
             btn_elimina.setObjectName("SmallButton")
-            btn_elimina.clicked.connect( #type:ignore
+            btn_elimina.clicked.connect(  # type:ignore
                 partial(
-                    gestore_account.elimina_account, biglietteria.get_id(), biglietteria
+                    AccountController.elimina_account,
+                    gestore_account,
+                    biglietteria.get_id(),
                 )
             )
-            # <-- GestoreAccount.elimina_account(id: int, account:Account)--!>
 
             pulsanti = QWidget()
             temp_layout_btn = QHBoxLayout(pulsanti)
@@ -257,3 +280,13 @@ class AccountPage(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(container_top)
         main_layout.addWidget(scroll_area)
+
+
+# Funzioni implementate dal controller e dal gestore:
+#   AccountController.crea_account(gestore: GestoreAccount, ruolo:Ruolo) @line_104 @line_181
+#   GestoreAccount.get_lista_account() @line_121 @line_198
+#   AccountController.modifica_account(gestore: GestoreAccount, id_account: int) @line_133 @line_211
+#   AccountController.elimina_account(gestore: GestoreAccount, id_account: int) @line_142 @line_221
+
+# NOTA: modifica_account() ed elimina_account() potrebbero usare il ruolo come parametro
+#       per distinguere il modo di uso degli account admin e degli account biglietteria.
