@@ -15,6 +15,25 @@ class Genere:
         if not self.set_descrizione(descrizione):
             raise ValueError
 
+    # Getters
+    def get_id(self) -> int:
+        return self.__id
+
+    def get_nome(self) -> str:
+        return self.__nome
+
+    def get_descrizione(self) -> str:
+        return self.__descrizione
+
+    # Setters
+    @staticmethod
+    def set_next_id(next_id: int) -> bool:
+        if next_id < 0:
+            return False
+
+        Genere.__next_id = next_id
+        return True
+
     def set_nome(self, nome: str) -> bool:
         if nome == "":
             return False
@@ -28,12 +47,3 @@ class Genere:
 
         self.__descrizione = descrizione
         return True
-
-    def get_id(self):
-        return self.__id
-
-    def get_nome(self):
-        return self.__nome
-
-    def get_descrizione(self):
-        return self.__descrizione

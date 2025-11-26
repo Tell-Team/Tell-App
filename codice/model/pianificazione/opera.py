@@ -34,6 +34,43 @@ class Opera:
             raise ValueError
         self.set_id_genere(id_genere)
 
+    # Getters
+    def get_id(self) -> int:
+        return self.__id
+
+    def get_nome(self) -> str:
+        return self.__nome
+
+    def get_compositore(self) -> str:
+        return self.__compositore
+
+    def get_librettista(self) -> str:
+        return self.__librettista
+
+    def get_numero_atti(self) -> int:
+        return self.__numero_atti
+
+    def get_data_prima_rappresentazione(self) -> date:
+        return self.__data_prima_rappresentazione
+
+    def get_teatro_prima_rappresentazione(self) -> str:
+        return self.__teatro_prima_rappresentazione
+
+    def get_trama(self) -> str:
+        return self.__trama
+
+    def get_id_genere(self) -> int:
+        return self.__id_genere
+
+    # Setters
+    @staticmethod
+    def set_next_id(next_id: int) -> bool:
+        if next_id < 0:
+            return False
+
+        Opera.__next_id = next_id
+        return True
+
     def set_nome(self, nome: str) -> bool:
         if nome == "":
             return False
@@ -83,30 +120,3 @@ class Opera:
 
     def set_id_genere(self, id_genere: int):
         self.__id_genere = id_genere
-
-    def get_id(self):
-        return self.__id
-
-    def get_nome(self):
-        return self.__nome
-
-    def get_compositore(self):
-        return self.__compositore
-
-    def get_librettista(self):
-        return self.__librettista
-
-    def get_numero_atti(self):
-        return self.__numero_atti
-
-    def get_data_prima_rappresentazione(self):
-        return self.__data_prima_rappresentazione
-
-    def get_teatro_prima_rappresentazione(self):
-        return self.__teatro_prima_rappresentazione
-
-    def get_trama(self):
-        return self.__trama
-
-    def get_id_genere(self):
-        return self.__id_genere
