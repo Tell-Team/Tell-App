@@ -9,11 +9,12 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from functools import partial
 
-from view.navigation import NavigationController
+from model.model import Model
+from controller.navigation import NavigationController
 
 
 class AccountPage(QWidget):
-    def __init__(self, nav: NavigationController):
+    def __init__(self, model: Model, nav: NavigationController):
         super().__init__()
 
         # # LOGOUT
@@ -34,19 +35,15 @@ class AccountPage(QWidget):
         # ## Pulsante: Sezione Spettacoli
         btn_sezione_spettacoli = QPushButton("Spettacoli")
         btn_sezione_spettacoli.setObjectName("SmallButton")
-        from view.spettacoli_page import SpettacoliPage
-
         btn_sezione_spettacoli.clicked.connect(  # type:ignore
-            partial(nav.section_go_to, SpettacoliPage)
+            partial(nav.section_go_to, "spettacoli")
         )
 
         # ## Pulsante: Sezioni Info
         btn_sezione_info = QPushButton("Info")
         btn_sezione_info.setObjectName("SmallButton")
-        from view.info_page import InfoPage
-
         btn_sezione_info.clicked.connect(  # type:ignore
-            partial(nav.section_go_to, InfoPage)
+            partial(nav.section_go_to, "info")
         )
 
         # ## Pulsante: Sezione Account
@@ -81,11 +78,6 @@ class AccountPage(QWidget):
         header_account.setObjectName("Header1")
         header_account.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        # ## Layout: Header Account
-        layout_header_account = QHBoxLayout()
-        layout_header_account.addWidget(header_account)
-        layout_header_account.addStretch()
-
         #
         #
         #
@@ -118,7 +110,7 @@ class AccountPage(QWidget):
         layout_lista_admin = QVBoxLayout(lista_admin)
         for admin in (
             a
-            for a in gestore_account.get_lista_account()
+            for a in model.get_lista_account()
             if a.get_ruolo() == Ruolo.AMMINISTRATORE
         ):
             # ### Labels
@@ -194,9 +186,7 @@ class AccountPage(QWidget):
         lista_biglietterie = QWidget()
         layout_lista_biglietterie = QVBoxLayout(lista_biglietterie)
         for biglietteria in (
-            b
-            for b in gestore_account.get_lista_account()
-            if b.get_ruolo() == Ruolo.BIGLIETTERIA
+            b for b in model.get_lista_account() if b.get_ruolo() == Ruolo.BIGLIETTERIA
         ):
             # ### Labels
             username = QLabel(f"{biglietteria.get_username()}")
@@ -248,24 +238,14 @@ class AccountPage(QWidget):
         #
         #
 
-        # # LAYOUT ACCOUNT : Header Account + LAYOUT ADMIN + LAYOUT BIGLIETTERIA
-        container_account = QWidget()
-        layout_account = QVBoxLayout(container_account)
-        layout_account.addLayout(layout_header_account)
-        layout_account.addLayout(layout_admin)
-        layout_account.addLayout(layout_biglietterie)
-        layout_account.addStretch()
-
-        #
-        #
-        #
-
         # # FUNZIONE DI SCROLL
         # ## Scroll Layout
         scroll_widget = QWidget()
         scroll_layout = QVBoxLayout(scroll_widget)
 
-        scroll_layout.addWidget(container_account)
+        scroll_layout.addWidget(header_account)
+        scroll_layout.addWidget(container_admin)
+        scroll_layout.addWidget(container_biglietterie)
 
         # ## Scroll Area
         scroll_area = QScrollArea()

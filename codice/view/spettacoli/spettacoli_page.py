@@ -9,11 +9,12 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from functools import partial
 
-from view.navigation import NavigationController
+from model.model import Model
+from controller.navigation import NavigationController
 
 
 class SpettacoliPage(QWidget):
-    def __init__(self, nav: NavigationController):
+    def __init__(self, model: Model, nav: NavigationController):
         super().__init__()
 
         # # LOGOUT
@@ -39,10 +40,8 @@ class SpettacoliPage(QWidget):
         # ## Pulsante: Sezioni Info
         btn_sezione_info = QPushButton("Info")
         btn_sezione_info.setObjectName("SmallButton")
-        from view.info_page import InfoPage
-
         btn_sezione_info.clicked.connect(  # type:ignore
-            partial(nav.section_go_to, InfoPage)
+            partial(nav.section_go_to, "info")
         )
 
         # ## Pulsante: Sezione Account
@@ -50,10 +49,8 @@ class SpettacoliPage(QWidget):
             "Account"
         )  # DA CORRIGERE: Sezione esclusiva dell'admin
         btn_sezione_account.setObjectName("SmallButton")
-        from view.account_page import AccountPage
-
         btn_sezione_account.clicked.connect(  # type:ignore
-            partial(nav.section_go_to, AccountPage)
+            partial(nav.section_go_to, "account")
         )
 
         # ## Layout: Sezioni App
@@ -85,7 +82,7 @@ class SpettacoliPage(QWidget):
         btn_nuovo_spettacolo = QPushButton("Nuovo spettacoli")
         btn_nuovo_spettacolo.setObjectName("SmallButton")
         btn_nuovo_spettacolo.clicked.connect(  # type:ignore
-            partial(SpettacoloController.crea_spettacolo, gestore_spettacoli)
+            partial(SpettacoliController.crea_spettacolo, gestore_spettacoli)
         )
 
         # ## Layout: Header Spettacoli
@@ -114,7 +111,7 @@ class SpettacoliPage(QWidget):
             btn_scegli_posti.setObjectName("SmallButton")
             btn_scegli_posti.clicked.connect(  # type:ignore
                 partial(
-                    SpettacoloController.scegli_posti,
+                    SpettacoliController.scegli_posti,
                     gestore_spettacoli,
                     spettacolo.get_id(),
                 )
@@ -124,7 +121,7 @@ class SpettacoliPage(QWidget):
             btn_modifica.setObjectName("SmallButton")
             btn_modifica.clicked.connect(  # type:ignore
                 partial(
-                    ControllerSpettacoli.modifica_spettacolo,
+                    SpettacoliController.modifica_spettacolo,
                     gestore_spettacoli,
                     spettacolo.get_id(),
                 )
@@ -181,9 +178,9 @@ class SpettacoliPage(QWidget):
 
 
 # Funzioni implementate dal controller e dal gestore:
-#   SpettacoloController.crea_spettacolo(gestore: GestoreSpettacoli) @line_88
+#   SpettacoliController.crea_spettacolo(gestore: GestoreSpettacoli) @line_88
 #   GestoreSpettacoli.get_lista_spettacoli() @line_99
 #   GestoreOpera.get_opera(id_opera: int) @line_104
 #   GestoreRegie.get_regia(id_regia: int) @line_108
-#   SpettacoloController.scegli_posti(gestore: GestoreSpettacoli, id_spettacolo: int) @line_117
-#   GestoreSpettacoli.modifica_spettacolo(gestore: GestoreSpettacoli, id_spettacolo: int) @line_127
+#   SpettacoliController.scegli_posti(gestore: GestoreSpettacoli, id_spettacolo: int) @line_117
+#   SpettacoliController.modifica_spettacolo(gestore: GestoreSpettacoli, id_spettacolo: int) @line_127

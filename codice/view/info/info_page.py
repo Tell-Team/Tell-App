@@ -9,12 +9,26 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from functools import partial
 
-from view.navigation import NavigationController
+from controller.info_controller import InfoController, Model
+from controller.navigation import NavigationController
 
 
 class InfoPage(QWidget):
-    def __init__(self, nav: NavigationController):
+    """
+    Pagina principale della sezione Info dell'applicazione. Contiene l'interfaccia utente per
+    interaggire con le istanze di `Opera`, `Regia` e `Genere` e una sezione in fondo con le
+    informazioni del teatro.
+
+    """
+
+    def __init__(self, model: Model, nav: NavigationController):
         super().__init__()
+
+        # - In teoria, `nav` non si deve usare direttamente nelle pagine. Come risolvo sto?
+
+        info_controller = InfoController(
+            model, nav
+        )  # - Dovrebbe essere self.info_controller?
 
         # # LOGOUT
         # ## Pulsante: Logout
@@ -34,10 +48,8 @@ class InfoPage(QWidget):
         # ## Pulsante: Sezione Spettacoli
         btn_sezione_spettacoli = QPushButton("Spettacoli")
         btn_sezione_spettacoli.setObjectName("SmallButton")
-        from view.spettacoli_page import SpettacoliPage
-
         btn_sezione_spettacoli.clicked.connect(  # type:ignore
-            partial(nav.section_go_to, SpettacoliPage)
+            partial(nav.section_go_to, "spettacoli")
         )
         # ## Pulsante: Sezioni Info
         btn_sezione_info = QPushButton("Info")
@@ -47,12 +59,10 @@ class InfoPage(QWidget):
         # ## Pulsante: Sezione Account
         btn_sezione_account = QPushButton(
             "Account"
-        )  # DA CORRIGERE: Sezione esclusiva dell'admin
+        )  # - Questa sezione deve essere esclusiva dell'admin
         btn_sezione_account.setObjectName("SmallButton")
-        from view.account_page import AccountPage
-
         btn_sezione_account.clicked.connect(  # type:ignore
-            partial(nav.section_go_to, AccountPage)
+            partial(nav.section_go_to, "account")
         )
 
         # ## Layout: Sezioni App
@@ -84,7 +94,7 @@ class InfoPage(QWidget):
         btn_nuova_opera = QPushButton("Nuova opera")
         btn_nuova_opera.setObjectName("SmallButton")
         btn_nuova_opera.clicked.connect(  # type:ignore
-            partial(OperaController.crea_opera, gestore_opere)
+            info_controller.nuova_opera
         )
         # ## Layout: Header Opere
         layout_header_opere = QHBoxLayout()
@@ -94,7 +104,7 @@ class InfoPage(QWidget):
 
         # # OPERE DISPLAY
         layout_lista_opere = QVBoxLayout()
-        for opera in gestore_opere.get_lista_opere():
+        for opera in info_controller.get_lista_opere():
             # ## Labels
             nome = QLabel(f"{opera.get_nome()}")
             nome.setObjectName("Header2")
@@ -109,13 +119,13 @@ class InfoPage(QWidget):
             btn_visualizza = QPushButton("Maggior info")
             btn_visualizza.setObjectName("SmallButton")
             btn_visualizza.clicked.connect(  # type:ignore
-                partial(OperaController.visualizza_opera, opera)
+                partial(info_controller.visualizza_opera, opera.get_id())
             )
 
             btn_modifica = QPushButton("Modifica")
             btn_modifica.setObjectName("SmallButton")
             btn_modifica.clicked.connect(  # type:ignore
-                partial(OperaController.modifica_opera, gestore_opere, opera.get_id())
+                partial(info_controller.modifica_opera, opera.get_id())
             )
 
             pulsanti = QWidget()
@@ -156,7 +166,7 @@ class InfoPage(QWidget):
         btn_nuovo_genere = QPushButton("Nuovo genere")
         btn_nuovo_genere.setObjectName("SmallButton")
         btn_nuovo_genere.clicked.connect(  # type:ignore
-            partial(GenereController.crea_genere, gestore_generi)
+            info_controller.nuovo_genere
         )
 
         # ## Layout: Header Generi
@@ -167,7 +177,7 @@ class InfoPage(QWidget):
 
         # # GENERI DISPLAY
         layout_lista_generi = QVBoxLayout()
-        for genere in gestore_generi.get_lista_generi():
+        for genere in info_controller.get_lista_generi():
             # ## Labels
             nome = QLabel(f"{genere.get_nome()}")
             nome.setObjectName("Header2")
@@ -180,9 +190,7 @@ class InfoPage(QWidget):
             btn_modifica = QPushButton("Modifica")
             btn_modifica.setObjectName("SmallButton")
             btn_modifica.clicked.connect(  # type:ignore
-                partial(
-                    GenereController.modifica_genere, gestore_generi, genere.get_id()
-                )
+                partial(info_controller.modifica_genere, genere.get_id())
             )
 
             pulsanti = QWidget()
@@ -267,11 +275,30 @@ class InfoPage(QWidget):
         main_layout.addWidget(scroll_area)
 
 
-# Funzioni implementate dal controller e dal gestore:
-#   OperaController.crea_opera(gestore: GestoreOpere) @line_87
-#   GestoreOpere.get_lista_opere() @line_97
-#   OperaController.visualizza_opera(opera: Opera) @line_112
-#   OperaController.modifica_opera(gestore: GestoreOpere, id_opera: int) @line_118
-#   GenereController.crea_genere(gestore: GestoreGenere) @line_159
-#   GestoreGeneri.get_lista_generi() @line_170
-#   GenereController.modifica_genere(gestore: GestoreGeneri, id_genere: int) @line_183
+# - Funzioni implementate dal controller e dal gestore:
+#   InfoController.nuova_opera() @line_86
+#       Carica la pagina FormularioNuovaOpera, dove l'utente può cancellare l'operazione
+#       tornando dietro utilizando .cancella_opera(is_new=True) o confermare la creazione, chiamando
+#       altro metodo .salva_opera(), che verifica la correttezza dei dati, crea l'istanza di Opera e
+#       la salva nella lista di opere. (Anche riscrive i campi di input per prossime chiamate sia
+#       dopo cancellare che dopo salvare)
+
+#   InfoController.visualizza_opera(id_opera: int) @line_113
+#       Utilizando il NavigationCotroller, il controller assegna i valori necessari dell'opera
+#       relativa all'id in VisualizzaOpera (visualizza_opera.py).
+
+#   InfoController.modifica_opera(id_opera: int) @line_118
+#       Carica la pagina FormularioModificaOpera, con i dati dell'opera `id_opera` nei campo di
+#       input. Il pulsante Conferma chiama la stessa funzione .salva_opera(is_new=False), ma con
+#       altra opzione che permette di modificare i dati dell'opera esistente e creare regie
+#       (necessarie per salvare la modifica), mentre che il pulsante Cancella elimina le regie se
+#       non salvate e torna dietro con .cancella_opera(is_new=False) (non è necessario riscrivere
+#       i campi di inpu perché sarano riscritti con la prossima chiamata).
+
+#   InfoController.nuovo_genere() @line_159
+#       Fa essenzialmente lo stesso che .nuova_opera(), ma con la pagina FormularioNuovoGenere.
+
+#   InfoController.modifica_genere(id_genere: int) @line_183
+#       Come .nuovo_genere(), questa è altra versione di .modifica_opera(). Il piccolo dettaglio è
+#       che non è necessario un .cancella_genere(is_new=False) perché non vengono aggiunti nuovi
+#       campi dopo la sua creazione (come sì occorre con le opere e gli spettacoli)
