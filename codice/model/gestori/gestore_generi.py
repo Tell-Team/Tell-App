@@ -1,4 +1,5 @@
 from pianificazione.genere import Genere
+from exceptions import IdOccupatoException, IdInesistenteException
 from typing import Optional
 
 
@@ -30,40 +31,36 @@ class GestoreGeneri:
 
         return None
 
-    def get_lista_generi(self) -> list[Genere]:
+    def get_generi(self) -> list[Genere]:
         return self.__lista_generi
 
-    # Validazione
-    def __genere_valido(self, genere: Genere) -> bool:
+    # Modificatori
+    def aggiungi_genere(self, genere: Genere):
+        """Throws: IdOccupatoException"""
         for g in self.__lista_generi:
             if g.get_id() == genere.get_id():
-                return False
-
-        return True
-
-    # Modificatori
-    def aggiungi_genere(self, genere: Genere) -> bool:
-        if not self.__genere_valido(genere):
-            return False
+                raise IdOccupatoException(
+                    f"E' già presente un genere con id {g.get_id()}."
+                )
 
         self.__lista_generi.append(genere)
-        return True
 
-    def elimina_genere(self, id_: int) -> bool:
+    def elimina_genere(self, id_: int):
+        """Throws: IdInesistenteException"""
         for i, g in enumerate(self.__lista_generi):
             if g.get_id() == id_:
                 self.__lista_generi.pop(i)
-                return True
+                return
 
-        return False
+        raise IdInesistenteException(f"Non è presente nessun genere con id {id_}.")
 
-    def modifica_genere(self, genere_modificato: Genere) -> bool:
+    def modifica_genere(self, genere_modificato: Genere):
+        """Throws: IdInesistenteException"""
         for i, g in enumerate(self.__lista_generi):
             if g.get_id() == genere_modificato.get_id():
-                if not self.__genere_valido(genere_modificato):
-                    return False
-
                 self.__lista_generi[i] = genere_modificato
-                return True
+                return
 
-        return False
+        raise IdInesistenteException(
+            f"Non è presente nessun genere con id {genere_modificato.get_id()}."
+        )

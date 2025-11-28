@@ -1,5 +1,0 @@
-    def set_{}(self, {}: str) -> bool:
-        if {} == "": return False
-
-        self.__{} = {}
-        return True

@@ -1,28 +1,38 @@
 from gestori.gestore_generi import GestoreGeneri
 from gestori.gestore_opere import GestoreOpere
+from gestori.gestore_spettacoli import GestoreSpettacoli
 from pianificazione.genere import Genere
 from pianificazione.opera import Opera
+from pianificazione.spettacolo import Spettacolo
+from pianificazione.regia import Regia
+from exceptions import (
+    IdInesistenteException,
+    OggettoInUsoException,
+)
 from pickle import load, dump
 
 
 class Model:
     def __init__(self):
         try:
-            self.carica_tutto()
-
-            # Rimessa in pari degli ID
+            self.carica_generi()
             Genere.set_next_id(self.__gestore_generi.get_max_id() + 1)
-            Opera.set_next_id(self.__gestore_opere.get_max_id() + 1)
-
         except FileNotFoundError:
             self.__gestore_generi = GestoreGeneri()
+
+        try:
+            self.carica_opere()
+            Opera.set_next_id(self.__gestore_opere.get_max_id() + 1)
+        except FileNotFoundError:
             self.__gestore_opere = GestoreOpere()
 
-    # Caricamenti
-    def carica_tutto(self):
-        self.carica_generi()
-        self.carica_opere()
+        try:
+            self.carica_spettacoli()
+            Spettacolo.set_next_id(self.__gestore_spettacoli.get_max_id() + 1)
+        except FileNotFoundError:
+            self.__gestore_spettacoli = GestoreSpettacoli()
 
+    # Caricamenti
     def carica_generi(self):
         with open("db/generi.pkl", "rb") as f:
             self.__gestore_generi: GestoreGeneri = load(f)
@@ -31,10 +41,15 @@ class Model:
         with open("db/opere.pkl", "rb") as f:
             self.__gestore_opere: GestoreOpere = load(f)
 
+    def carica_spettacoli(self):
+        with open("db/spettacoli.pkl", "rb") as f:
+            self.__gestore_spettacoli: GestoreSpettacoli = load(f)
+
     # Salvataggi
     def salva_tutto(self):
         self.salva_generi()
         self.salva_opere()
+        self.salva_spettacoli()
 
     def salva_generi(self):
         with open("db/generi.pkl", "wb") as f:
@@ -44,50 +59,91 @@ class Model:
         with open("db/opere.pkl", "wb") as f:
             dump(self.__gestore_opere, f)
 
-    # Getters
-    def get_lista_generi(self) -> list[Genere]:
-        return self.__gestore_generi.get_lista_generi()
+    def salva_spettacoli(self):
+        with open("db/spettacoli.pkl", "wb") as f:
+            dump(self.__gestore_spettacoli, f)
 
-    def get_lista_opere(self) -> list[Opera]:
-        return self.__gestore_opere.get_lista_opere()
+    # Getters
+    def get_generi(self) -> list[Genere]:
+        return self.__gestore_generi.get_generi()
+
+    def get_opere(self) -> list[Opera]:
+        return self.__gestore_opere.get_opere()
+
+    def get_opere_by_nome(self, nome: str) -> list[Opera]:
+        return self.__gestore_opere.get_opere_by_nome(nome)
+
+    def get_spettacoli(self) -> list[Spettacolo]:
+        return self.__gestore_spettacoli.get_spettacoli()
+
+    def get_spettacoli_by_titolo(self, titolo: str) -> list[Spettacolo]:
+        return self.__gestore_spettacoli.get_spettacoli_by_titolo(titolo)
+
+    def get_regie_by_opera(self, id_: int) -> list[Regia]:
+        return self.__gestore_spettacoli.get_regie_by_opera(id_)
 
     # Validazione
-    def __genere_valido(self, genere: Genere) -> bool:
-        return True
-
-    def __opera_valida(self, opera: Opera) -> bool:
+    def __valida_opera(self, opera: Opera):
+        """Throws: IdInesistenteException"""
         if not self.__gestore_generi.ha_genere(opera.get_id_genere()):
-            return False
+            raise IdInesistenteException(
+                f"Non è presente nessun genere con id {opera.get_id_genere()}."
+            )
 
-        return True
+    def __valida_regia(self, regia: Regia):
+        """Throws: IdInesistenteException"""
+        if not self.__gestore_opere.ha_opera(regia.get_id_opera()):
+            raise IdInesistenteException(
+                f"Non è presente nessun'opera con id {regia.get_id_opera()}."
+            )
 
     # Modificatori
-    def aggiungi_genere(self, genere: Genere) -> bool:
-        if not self.__genere_valido(genere):
-            return False
+    def aggiungi_genere(self, genere: Genere):
+        """Throws: IdOccupatoException"""
+        self.__gestore_generi.aggiungi_genere(genere)
 
-        return self.__gestore_generi.aggiungi_genere(genere)
-
-    def elimina_genere(self, id_: int) -> bool:
+    def elimina_genere(self, id_: int):
+        """Throws: OggettoInUsoException, IdInesistenteException"""
         if self.__gestore_opere.genere_in_uso(id_):
-            return False
+            raise OggettoInUsoException("Il genere è ancora legato ad una o più opere.")
 
-        return self.__gestore_generi.elimina_genere(id_)
+        self.__gestore_generi.elimina_genere(id_)
 
-    def modifica_genere(self, genere_modificato: Genere) -> bool:
-        if not self.__genere_valido(genere_modificato):
-            return False
+    def modifica_genere(self, genere_modificato: Genere):
+        """Throws: IdInesistenteException"""
+        self.__gestore_generi.modifica_genere(genere_modificato)
 
-        return self.__gestore_generi.modifica_genere(genere_modificato)
+    def aggiungi_opera(self, opera: Opera):
+        """Throws: IdInesistenteException, IdOccupatoException"""
+        self.__valida_opera(opera)
 
-    def aggiungi_opera(self, opera: Opera) -> bool:
-        if not self.__opera_valida(opera):
-            return False
+        self.__gestore_opere.aggiungi_opera(opera)
 
-        return self.__gestore_opere.aggiungi_opera(opera)
+    def elimina_opera(self, id_: int):
+        """Throws: OggettoInUsoException, IdInesistenteException"""
+        if self.__gestore_spettacoli.opera_in_uso(id_):
+            raise OggettoInUsoException(
+                "L'opera è ancora è ancora legata ad una o più regie."
+            )
 
-    def modifica_opera(self, opera_modificata: Opera) -> bool:
-        if not self.__opera_valida(opera_modificata):
-            return False
+        self.__gestore_opere.elimina_opera(id_)
 
-        return self.__gestore_opere.modifica_opera(opera_modificata)
+    def modifica_opera(self, opera_modificata: Opera):
+        """Throws: IdInesistenteException"""
+        self.__valida_opera(opera_modificata)
+
+        self.__gestore_opere.modifica_opera(opera_modificata)
+
+    def aggiungi_spettacolo(self, spettacolo: Spettacolo):
+        """Throws: IdInesistenteException, IdOccupatoException"""
+        if type(spettacolo) is Regia:
+            self.__valida_regia(spettacolo)
+
+        self.__gestore_spettacoli.aggiungi_spettacolo(spettacolo)
+
+    def modifica_spettacolo(self, spettacolo_modificato: Spettacolo):
+        """Throws: IdInesistenteException"""
+        if type(spettacolo_modificato) is Regia:
+            self.__valida_regia(spettacolo_modificato)
+
+        self.__gestore_spettacoli.modifica_spettacolo(spettacolo_modificato)

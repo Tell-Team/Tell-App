@@ -1,3 +1,6 @@
+from exceptions import DatoIncongruenteException
+
+
 class Genere:
     __next_id = 0
 
@@ -6,14 +9,12 @@ class Genere:
         nome: str,
         descrizione: str,
     ):
-        """Throws: ValueError"""
+        """Throws: DatoIncongruenteException"""
         self.__id = Genere.__next_id
         Genere.__next_id += 1
 
-        if not self.set_nome(nome):
-            raise ValueError
-        if not self.set_descrizione(descrizione):
-            raise ValueError
+        self.set_nome(nome)
+        self.set_descrizione(descrizione)
 
     # Getters
     def get_id(self) -> int:
@@ -27,23 +28,25 @@ class Genere:
 
     # Setters
     @staticmethod
-    def set_next_id(next_id: int) -> bool:
+    def set_next_id(next_id: int):
+        """Throws: DatoIncongruenteException"""
         if next_id < 0:
-            return False
+            raise DatoIncongruenteException("Il next_id non può essere minore di 0.")
 
         Genere.__next_id = next_id
-        return True
 
-    def set_nome(self, nome: str) -> bool:
-        if nome == "":
-            return False
+    def set_nome(self, nome: str):
+        """Throws: DatoIncongruenteException"""
+        nome_stripped = nome.strip()
+        if nome_stripped == "":
+            raise DatoIncongruenteException("Il nome non può essere vuoto.")
 
-        self.__nome = nome
-        return True
+        self.__nome = nome_stripped
 
-    def set_descrizione(self, descrizione: str) -> bool:
-        if descrizione == "":
-            return False
+    def set_descrizione(self, descrizione: str):
+        """Throws: DatoIncongruenteException"""
+        descrizione_stripped = descrizione.strip()
+        if descrizione_stripped == "":
+            raise DatoIncongruenteException("La descrizione non può essere vuota.")
 
-        self.__descrizione = descrizione
-        return True
+        self.__descrizione = descrizione_stripped

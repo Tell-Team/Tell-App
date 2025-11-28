@@ -1,3 +1,4 @@
+from exceptions import DatoIncongruenteException
 from datetime import date
 
 
@@ -15,23 +16,17 @@ class Opera:
         trama: str,
         id_genere: int,
     ):
-        """Throws: ValueError"""
+        """Throws: DatoIncongruenteException"""
         self.__id = Opera.__next_id
         Opera.__next_id += 1
 
-        if not self.set_nome(nome):
-            raise ValueError
-        if not self.set_compositore(compositore):
-            raise ValueError
-        if not self.set_librettista(librettista):
-            raise ValueError
-        if not self.set_numero_atti(numero_atti):
-            raise ValueError
+        self.set_nome(nome)
+        self.set_compositore(compositore)
+        self.set_librettista(librettista)
+        self.set_numero_atti(numero_atti)
         self.set_data_prima_rappresentazione(data_prima_rappresentazione)
-        if not self.set_teatro_prima_rappresentazione(teatro_prima_rappresentazione):
-            raise ValueError
-        if not self.set_trama(trama):
-            raise ValueError
+        self.set_teatro_prima_rappresentazione(teatro_prima_rappresentazione)
+        self.set_trama(trama)
         self.set_id_genere(id_genere)
 
     # Getters
@@ -64,37 +59,47 @@ class Opera:
 
     # Setters
     @staticmethod
-    def set_next_id(next_id: int) -> bool:
+    def set_next_id(next_id: int):
+        """Throws: DatoIncongruenteException"""
         if next_id < 0:
-            return False
+            raise DatoIncongruenteException("Il next_id non può essere minore di 0.")
 
         Opera.__next_id = next_id
         return True
 
-    def set_nome(self, nome: str) -> bool:
-        if nome == "":
-            return False
+    def set_nome(self, nome: str):
+        """Throws: DatoIncongruenteException"""
+        nome_stripped = nome.strip()
+        if nome_stripped == "":
+            raise DatoIncongruenteException("Il nome non può essere vuoto.")
 
-        self.__nome = nome
+        self.__nome = nome_stripped
         return True
 
-    def set_compositore(self, compositore: str) -> bool:
-        if compositore == "":
-            return False
+    def set_compositore(self, compositore: str):
+        """Throws: DatoIncongruenteException"""
+        compositore_stripped = compositore.strip()
+        if compositore_stripped == "":
+            raise DatoIncongruenteException("Il compositore non può essere vuoto.")
 
-        self.__compositore = compositore
+        self.__compositore = compositore_stripped
         return True
 
-    def set_librettista(self, librettista: str) -> bool:
-        if librettista == "":
-            return False
+    def set_librettista(self, librettista: str):
+        """Throws: DatoIncongruenteException"""
+        librettista_stripped = librettista.strip()
+        if librettista_stripped == "":
+            raise DatoIncongruenteException("Il librettista non può essere vuoto.")
 
-        self.__librettista = librettista
+        self.__librettista = librettista_stripped
         return True
 
-    def set_numero_atti(self, numero_atti: int) -> bool:
+    def set_numero_atti(self, numero_atti: int):
+        """Throws: DatoIncongruenteException"""
         if numero_atti <= 0:
-            return False
+            raise DatoIncongruenteException(
+                "Il numero atti non può essere minore di 1."
+            )
 
         self.__numero_atti = numero_atti
         return True
@@ -102,21 +107,29 @@ class Opera:
     def set_data_prima_rappresentazione(self, data_prima_rappresentazione: date):
         self.__data_prima_rappresentazione = data_prima_rappresentazione
 
-    def set_teatro_prima_rappresentazione(
-        self, teatro_prima_rappresentazione: str
-    ) -> bool:
-        if teatro_prima_rappresentazione == "":
-            return False
+    def set_teatro_prima_rappresentazione(self, teatro_prima_rappresentazione: str):
+        """Throws: DatoIncongruenteException"""
+        teatro_prima_rappresentazione_stripped = teatro_prima_rappresentazione.strip()
+        if teatro_prima_rappresentazione_stripped == "":
+            raise DatoIncongruenteException(
+                "Il teatro prima rappresentazione non può essere vuoto."
+            )
 
-        self.__teatro_prima_rappresentazione = teatro_prima_rappresentazione
+        self.__teatro_prima_rappresentazione = teatro_prima_rappresentazione_stripped
         return True
 
-    def set_trama(self, trama: str) -> bool:
-        if trama == "":
-            return False
+    def set_trama(self, trama: str):
+        """Throws: DatoIncongruenteException"""
+        trama_stripped = trama.strip()
+        if trama_stripped == "":
+            raise DatoIncongruenteException("La trama non può essere vuota.")
 
-        self.__trama = trama
+        self.__trama = trama_stripped
         return True
 
     def set_id_genere(self, id_genere: int):
+        """Throws: DatoIncongruenteException"""
+        if id_genere < 0:
+            raise DatoIncongruenteException("L'id genere non può essere minore di 0.")
+
         self.__id_genere = id_genere

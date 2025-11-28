@@ -1,4 +1,5 @@
 from pianificazione.opera import Opera
+from exceptions import IdOccupatoException, IdInesistenteException
 from typing import Optional
 
 
@@ -10,6 +11,13 @@ class GestoreOpere:
     def genere_in_uso(self, id_: int) -> bool:
         for o in self.__lista_opere:
             if o.get_id_genere() == id_:
+                return True
+
+        return False
+
+    def ha_opera(self, id_: int) -> bool:
+        for o in self.__lista_opere:
+            if o.get_id() == id_:
                 return True
 
         return False
@@ -30,25 +38,39 @@ class GestoreOpere:
 
         return None
 
-    def get_lista_opere(self) -> list[Opera]:
+    def get_opere(self) -> list[Opera]:
         return self.__lista_opere
 
+    def get_opere_by_nome(self, nome: str) -> list[Opera]:
+        return list(filter(lambda o: nome in o.get_nome(), self.__lista_opere))
+
     # Modificatori
-    def aggiungi_opera(self, opera: Opera) -> bool:
+    def aggiungi_opera(self, opera: Opera):
+        """Throws: IdOccupatoException"""
         for o in self.__lista_opere:
             if o.get_id() == opera.get_id():
-                return False
+                raise IdOccupatoException(
+                    f"E' già presente un'opera con id {o.get_id()}."
+                )
 
         self.__lista_opere.append(opera)
-        return True
+
+    def elimina_opera(self, id_: int):
+        """Throws: IdInesistenteException"""
+        for i, o in enumerate(self.__lista_opere):
+            if o.get_id() == id_:
+                self.__lista_opere.pop(i)
+                return
+
+        raise IdInesistenteException(f"Non è presente nessun'opera con id {id_}.")
 
     def modifica_opera(self, opera_modificata: Opera):
+        """Throws: IdInesistenteException"""
         for i, o in enumerate(self.__lista_opere):
             if o.get_id() == opera_modificata.get_id():
-                self.__lista_opere.pop(i)
-                if not self.aggiungi_opera(opera_modificata):
-                    self.__lista_opere.append(o)
-                    return False
-                return True
+                self.__lista_opere[i] = opera_modificata
+                return
 
-        return False
+        raise IdInesistenteException(
+            f"Non è presente nessuna opera con id {opera_modificata.get_id()}."
+        )
