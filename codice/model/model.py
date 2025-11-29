@@ -15,51 +15,46 @@ from pickle import load, dump
 class Model:
     def __init__(self):
         try:
-            self.carica_generi()
+            self.__carica_generi()
             Genere.set_next_id(self.__gestore_generi.get_max_id() + 1)
         except FileNotFoundError:
             self.__gestore_generi = GestoreGeneri()
 
         try:
-            self.carica_opere()
+            self.__carica_opere()
             Opera.set_next_id(self.__gestore_opere.get_max_id() + 1)
         except FileNotFoundError:
             self.__gestore_opere = GestoreOpere()
 
         try:
-            self.carica_spettacoli()
+            self.__carica_spettacoli()
             Spettacolo.set_next_id(self.__gestore_spettacoli.get_max_id() + 1)
         except FileNotFoundError:
             self.__gestore_spettacoli = GestoreSpettacoli()
 
     # Caricamenti
-    def carica_generi(self):
+    def __carica_generi(self):
         with open("db/generi.pkl", "rb") as f:
             self.__gestore_generi: GestoreGeneri = load(f)
 
-    def carica_opere(self):
+    def __carica_opere(self):
         with open("db/opere.pkl", "rb") as f:
             self.__gestore_opere: GestoreOpere = load(f)
 
-    def carica_spettacoli(self):
+    def __carica_spettacoli(self):
         with open("db/spettacoli.pkl", "rb") as f:
             self.__gestore_spettacoli: GestoreSpettacoli = load(f)
 
     # Salvataggi
-    def salva_tutto(self):
-        self.salva_generi()
-        self.salva_opere()
-        self.salva_spettacoli()
-
-    def salva_generi(self):
+    def __salva_generi(self):
         with open("db/generi.pkl", "wb") as f:
             dump(self.__gestore_generi, f)
 
-    def salva_opere(self):
+    def __salva_opere(self):
         with open("db/opere.pkl", "wb") as f:
             dump(self.__gestore_opere, f)
 
-    def salva_spettacoli(self):
+    def __salva_spettacoli(self):
         with open("db/spettacoli.pkl", "wb") as f:
             dump(self.__gestore_spettacoli, f)
 
@@ -101,6 +96,7 @@ class Model:
     def aggiungi_genere(self, genere: Genere):
         """Throws: IdOccupatoException"""
         self.__gestore_generi.aggiungi_genere(genere)
+        self.__salva_generi()
 
     def elimina_genere(self, id_: int):
         """Throws: OggettoInUsoException, IdInesistenteException"""
@@ -108,16 +104,19 @@ class Model:
             raise OggettoInUsoException("Il genere è ancora legato ad una o più opere.")
 
         self.__gestore_generi.elimina_genere(id_)
+        self.__salva_generi()
 
     def modifica_genere(self, genere_modificato: Genere):
         """Throws: IdInesistenteException"""
         self.__gestore_generi.modifica_genere(genere_modificato)
+        self.__salva_generi()
 
     def aggiungi_opera(self, opera: Opera):
         """Throws: IdInesistenteException, IdOccupatoException"""
         self.__valida_opera(opera)
 
         self.__gestore_opere.aggiungi_opera(opera)
+        self.__salva_opere()
 
     def elimina_opera(self, id_: int):
         """Throws: OggettoInUsoException, IdInesistenteException"""
@@ -127,12 +126,14 @@ class Model:
             )
 
         self.__gestore_opere.elimina_opera(id_)
+        self.__salva_opere()
 
     def modifica_opera(self, opera_modificata: Opera):
         """Throws: IdInesistenteException"""
         self.__valida_opera(opera_modificata)
 
         self.__gestore_opere.modifica_opera(opera_modificata)
+        self.__salva_opere()
 
     def aggiungi_spettacolo(self, spettacolo: Spettacolo):
         """Throws: IdInesistenteException, IdOccupatoException"""
@@ -140,6 +141,7 @@ class Model:
             self.__valida_regia(spettacolo)
 
         self.__gestore_spettacoli.aggiungi_spettacolo(spettacolo)
+        self.__salva_spettacoli()
 
     def modifica_spettacolo(self, spettacolo_modificato: Spettacolo):
         """Throws: IdInesistenteException"""
@@ -147,3 +149,4 @@ class Model:
             self.__valida_regia(spettacolo_modificato)
 
         self.__gestore_spettacoli.modifica_spettacolo(spettacolo_modificato)
+        self.__salva_spettacoli()
