@@ -1,6 +1,6 @@
-from pianificazione.spettacolo import Spettacolo
-from pianificazione.regia import Regia
-from exceptions import IdOccupatoException, IdInesistenteException
+from model.pianificazione.spettacolo import Spettacolo
+from model.pianificazione.regia import Regia
+from model.exceptions import IdOccupatoException, IdInesistenteException
 from typing import Optional
 
 
@@ -44,13 +44,6 @@ class GestoreSpettacoli:
             if type(s) is Regia and s.get_id_opera() == id_:
                 regie.append(s)
         return regie
-
-    # def get_regia(self, id_: int) -> Optional[Regia]:
-    #     for s in self.__lista_spettacoli:
-    #         if type(s) is Regia and s.get_id() == id_:
-    #             return s
-
-    #     return None
 
     # Modificatori
     def aggiungi_spettacolo(self, spettacolo: Spettacolo):

@@ -1,5 +1,5 @@
-from spettacolo import Spettacolo
-from exceptions import DatoIncongruenteException
+from model.pianificazione.spettacolo import Spettacolo
+from model.exceptions import DatoIncongruenteException
 
 
 class Regia(Spettacolo):

@@ -1,5 +1,5 @@
-from pianificazione.genere import Genere
-from exceptions import IdOccupatoException, IdInesistenteException
+from model.pianificazione.genere import Genere
+from model.exceptions import IdOccupatoException, IdInesistenteException
 from typing import Optional
 
 

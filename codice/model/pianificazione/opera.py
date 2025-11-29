@@ -1,4 +1,4 @@
-from exceptions import DatoIncongruenteException
+from model.exceptions import DatoIncongruenteException
 from datetime import date
 
 

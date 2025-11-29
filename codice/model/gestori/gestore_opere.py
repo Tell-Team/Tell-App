@@ -1,5 +1,5 @@
-from pianificazione.opera import Opera
-from exceptions import IdOccupatoException, IdInesistenteException
+from model.pianificazione.opera import Opera
+from model.exceptions import IdOccupatoException, IdInesistenteException
 from typing import Optional
 
 

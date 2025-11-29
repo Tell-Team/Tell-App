@@ -1,11 +1,11 @@
-from gestori.gestore_generi import GestoreGeneri
-from gestori.gestore_opere import GestoreOpere
-from gestori.gestore_spettacoli import GestoreSpettacoli
-from pianificazione.genere import Genere
-from pianificazione.opera import Opera
-from pianificazione.spettacolo import Spettacolo
-from pianificazione.regia import Regia
-from exceptions import (
+from model.gestori.gestore_generi import GestoreGeneri
+from model.gestori.gestore_opere import GestoreOpere
+from model.gestori.gestore_spettacoli import GestoreSpettacoli
+from model.pianificazione.genere import Genere
+from model.pianificazione.opera import Opera
+from model.pianificazione.spettacolo import Spettacolo
+from model.pianificazione.regia import Regia
+from model.exceptions import (
     IdInesistenteException,
     OggettoInUsoException,
 )
