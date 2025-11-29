@@ -8,16 +8,20 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 
-from model.model import Model
-from controller.navigation import NavigationController
+from controller.info_controller import InfoController
 
 from datetime import date
 
 
 class VisualizzaOpera(QWidget):
-    def __init__(self, model: Model, nav: NavigationController):
+    def __init__(self, info_controller: InfoController):
         super().__init__()
 
+        self.info_controller = info_controller
+
+        self._build_ui()
+
+    def _build_ui(self):
         # # Labels
         self.nome: str = ""
         label_nome = QLabel(f"{self.nome}")
@@ -75,7 +79,7 @@ class VisualizzaOpera(QWidget):
         btn_torna_dietro = QPushButton("Torna dietro")
         btn_torna_dietro.setObjectName("SmallButton")
         btn_torna_dietro.clicked.connect(  # type:ignore
-            info_controller.get_nav().go_back
+            self.info_controller.get_nav().go_back
         )
 
         #

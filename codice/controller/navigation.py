@@ -25,7 +25,6 @@ class NavigationController:
 
     def go_to(self, page_name: str, save_history: bool = True):
         """Visualizza una pagina registrata in `__pages`."""
-        # ¿CÓMO ASIGNO LA DATA OBTENIDA POR ID A LAS PÁGINA QUE DEPENDE DE UNA INSTANCIA?
         widget = self._pages.get(page_name)
         if widget is None:
             raise ValueError(f"Non e' stata trovata la pagina: {page_name}")

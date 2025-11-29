@@ -1,75 +1,85 @@
 from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
 
-from model.model import Model
-from controller.navigation import NavigationController
+from controller.context import AppContext
+
 from view.styles.styles_loader import load_stylesheet
 
 from view.login_page import LogInPage
 from view.info.info_page import InfoPage
-from view.account.account_page import AccountPage
-from view.spettacoli.spettacoli_page import SpettacoliPage
+
+# from view.account.account_page import AccountPage <- INCOMPLETO
+# from view.spettacoli.spettacoli_page import SpettacoliPage <- INCOMPLETO
 
 
-# Con `# -` ho segnato le annotazione sopra dettagli a modificare
+# Con `# -` ho segnato le annotazione sui dettagli a modificare
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # # Carica model
-        self.model = Model()
+        # # Set Controller principale (model, nav e controller inclusi)
+        self.context = AppContext(self)
+
+        # # Set Controllers
+        self.info_controller = self.context.info_controller
 
         # # CONFIG FINESTRA
         self.setWindowTitle("Tell")
         self.setMinimumSize(800, 600)
 
-        self.nav = NavigationController(self)
-
         # # Pagine disponibili
-        self.login = LogInPage(self.model, self.nav)
-        self.info = InfoPage(self.model, self.nav)
+        self.login = LogInPage(
+            self.context
+        )  # - Magari posso usare un controller nuovo o semplicemente model e nav come parametri
+        self.info = InfoPage(self.info_controller)
         from view.info.modifica_opera import (
-            FormularioModificaOpera,
-            FormularioNuovaOpera,
+            FormModificaOpera,
+            FormNuovaOpera,
         )
         from view.info.visualizza_opera import VisualizzaOpera
 
-        self.nuova_opera = FormularioNuovaOpera(self.model, self.nav)
-        self.modifica_opera = FormularioModificaOpera(self.model, self.nav)
-        self.visualizza_opera = VisualizzaOpera(self.model, self.nav)
+        self.nuova_opera = FormNuovaOpera(self.info_controller)
+        self.modifica_opera = FormModificaOpera(self.info_controller)
+        self.visualizza_opera = VisualizzaOpera(self.info_controller)
         from view.info.modifica_regia import (
-            FormularioModificaRegia,
-            FormularioNuovaRegia,
+            FormModificaRegia,
+            FormNuovaRegia,
         )
 
-        self.nuova_regia = FormularioNuovaRegia(self.model, self.nav)
-        self.modifica_regia = FormularioModificaRegia(self.model, self.nav)
+        self.nuova_regia = FormNuovaRegia(self.info_controller)
+        self.modifica_regia = FormModificaRegia(self.info_controller)
         from view.info.modifica_genere import (
-            FormularioModificaGenere,
-            FormularioNuovoGenere,
+            FormModificaGenere,
+            FormNuovoGenere,
         )
 
-        self.nuovo_genere = FormularioNuovoGenere(self.model, self.nav)
-        self.modifica_genere = FormularioModificaGenere(self.model, self.nav)
-        self.account = AccountPage(self.model, self.nav)
-        self.spettacoli = SpettacoliPage(self.model, self.nav)
+        self.nuovo_genere = FormNuovoGenere(self.info_controller)
+        self.modifica_genere = FormModificaGenere(self.info_controller)
 
+        # self.account = AccountPage(self.context) <- Non sono acora finiti
+        # self.spettacoli = SpettacoliPage(self.context) <- alt: (self.model, self.nav)
+
+        """ 
+        Per testare le singole pagine, basta registrare la pagina desiderata
+        in self.context.nav prima di tutte le altre. (login è la prima pagina
+        registrata, quindi diventa la prima pagina visualizzata.)
+        """
         # # Registrazione delle pagine
-        self.nav.add_page("login", self.login)
-        self.nav.add_page("info", self.info)
-        self.nav.add_page("nuova_opera", self.nuova_opera)
-        self.nav.add_page("modifica_opera", self.modifica_opera)
-        self.nav.add_page("visualizza_opera", self.visualizza_opera)
-        self.nav.add_page("nuova_regia", self.nuova_regia)
-        self.nav.add_page("modifica_regia", self.modifica_regia)
-        self.nav.add_page("nuovo_genere", self.nuovo_genere)
-        self.nav.add_page("modifica_genere", self.modifica_genere)
-        self.nav.add_page("account", self.account)
-        self.nav.add_page("spettacoli", self.spettacoli)
+        self.context.nav.add_page("login", self.login)
+        self.context.nav.add_page("info", self.info)
+        self.context.nav.add_page("nuova_opera", self.nuova_opera)
+        self.context.nav.add_page("modifica_opera", self.modifica_opera)
+        self.context.nav.add_page("visualizza_opera", self.visualizza_opera)
+        self.context.nav.add_page("nuova_regia", self.nuova_regia)
+        self.context.nav.add_page("modifica_regia", self.modifica_regia)
+        self.context.nav.add_page("nuovo_genere", self.nuovo_genere)
+        self.context.nav.add_page("modifica_genere", self.modifica_genere)
+        # self.context.nav.add_page("account", self.account)
+        # self.context.nav.add_page("spettacoli", self.spettacoli)
 
         # # Layout principale
         central = QWidget()
         layout = QVBoxLayout(central)
-        layout.addWidget(self.nav.get_stack())
+        layout.addWidget(self.context.nav.get_stack())
         self.setCentralWidget(central)
 
 
@@ -80,7 +90,3 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show()
     app.exec()
-
-
-# no se quiso ejercutar el programa no sé por qué coño
-# ESTUDIAR POSIBLES EXCEPCIONES

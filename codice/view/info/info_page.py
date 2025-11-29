@@ -9,8 +9,8 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from functools import partial
 
-from controller.info_controller import InfoController, Model
-from controller.navigation import NavigationController
+
+from controller.info_controller import InfoController
 
 
 class InfoPage(QWidget):
@@ -21,21 +21,20 @@ class InfoPage(QWidget):
 
     """
 
-    def __init__(self, model: Model, nav: NavigationController):
+    def __init__(self, info_controller: InfoController):
         super().__init__()
 
-        # - In teoria, `nav` non si deve usare direttamente nelle pagine. Come risolvo sto?
+        self.info_controller = info_controller
 
-        info_controller = InfoController(
-            model, nav
-        )  # - Dovrebbe essere self.info_controller?
+        self._build_ui()
 
+    def _build_ui(self):
         # # LOGOUT
         # ## Pulsante: Logout
         btn_logout = QPushButton("Logout")
         btn_logout.setObjectName("SmallButton")
         btn_logout.clicked.connect(  # type:ignore
-            nav.go_back
+            self.info_controller.get_nav().go_back
         )
 
         # ## Layout: Logout
@@ -49,7 +48,7 @@ class InfoPage(QWidget):
         btn_sezione_spettacoli = QPushButton("Spettacoli")
         btn_sezione_spettacoli.setObjectName("SmallButton")
         btn_sezione_spettacoli.clicked.connect(  # type:ignore
-            partial(nav.section_go_to, "spettacoli")
+            partial(self.info_controller.get_nav().section_go_to, "spettacoli")
         )
         # ## Pulsante: Sezioni Info
         btn_sezione_info = QPushButton("Info")
@@ -62,7 +61,7 @@ class InfoPage(QWidget):
         )  # - Questa sezione deve essere esclusiva dell'admin
         btn_sezione_account.setObjectName("SmallButton")
         btn_sezione_account.clicked.connect(  # type:ignore
-            partial(nav.section_go_to, "account")
+            partial(self.info_controller.get_nav().section_go_to, "account")
         )
 
         # ## Layout: Sezioni App
@@ -94,7 +93,9 @@ class InfoPage(QWidget):
         btn_nuova_opera = QPushButton("Nuova opera")
         btn_nuova_opera.setObjectName("SmallButton")
         btn_nuova_opera.clicked.connect(  # type:ignore
-            info_controller.nuova_opera
+            lambda: print(
+                "self.info_controller.nuova_opera"
+            )  # - self.info_controller.nuova_opera
         )
         # ## Layout: Header Opere
         layout_header_opere = QHBoxLayout()
@@ -104,47 +105,7 @@ class InfoPage(QWidget):
 
         # # OPERE DISPLAY
         layout_lista_opere = QVBoxLayout()
-        for opera in info_controller.get_lista_opere():
-            # ## Labels
-            nome = QLabel(f"{opera.get_nome()}")
-            nome.setObjectName("Header2")
-
-            librettista = QLabel(f"Libretto di {opera.get_librettista()}")
-            librettista.setObjectName("Paragraph")
-
-            compositore = QLabel(f"Musica di {opera.get_compositore()}")
-            compositore.setObjectName("Paragraph")
-
-            # ## Pulsanti
-            btn_visualizza = QPushButton("Maggior info")
-            btn_visualizza.setObjectName("SmallButton")
-            btn_visualizza.clicked.connect(  # type:ignore
-                partial(info_controller.visualizza_opera, opera.get_id())
-            )
-
-            btn_modifica = QPushButton("Modifica")
-            btn_modifica.setObjectName("SmallButton")
-            btn_modifica.clicked.connect(  # type:ignore
-                partial(info_controller.modifica_opera, opera.get_id())
-            )
-
-            pulsanti = QWidget()
-            temp_layout_btn = QHBoxLayout(pulsanti)
-            temp_layout_btn.addWidget(btn_visualizza)
-            temp_layout_btn.addWidget(btn_modifica)
-            temp_layout_btn.addStretch()
-
-            # ## Layout
-            current_opera = QWidget()
-            current_opera.setObjectName("Container")
-            layout_cur_opera = QVBoxLayout(current_opera)
-
-            layout_cur_opera.addWidget(nome)
-            layout_cur_opera.addWidget(librettista)
-            layout_cur_opera.addWidget(compositore)
-            layout_cur_opera.addWidget(pulsanti)
-
-            layout_lista_opere.addWidget(current_opera)
+        self.display_opere_widget(layout_lista_opere)
 
         # # LAYOUT OPERE : Header Opere + OPERE DISPLAY
         container_opere = QWidget()
@@ -166,7 +127,9 @@ class InfoPage(QWidget):
         btn_nuovo_genere = QPushButton("Nuovo genere")
         btn_nuovo_genere.setObjectName("SmallButton")
         btn_nuovo_genere.clicked.connect(  # type:ignore
-            info_controller.nuovo_genere
+            lambda: print(
+                "self.info_controller.nuovo_genere"
+            )  # - self.info_controller.nuovo_genere
         )
 
         # ## Layout: Header Generi
@@ -177,37 +140,7 @@ class InfoPage(QWidget):
 
         # # GENERI DISPLAY
         layout_lista_generi = QVBoxLayout()
-        for genere in info_controller.get_lista_generi():
-            # ## Labels
-            nome = QLabel(f"{genere.get_nome()}")
-            nome.setObjectName("Header2")
-
-            descrizione = QLabel(f"{genere.get_descrizione()}")
-            descrizione.setObjectName("Paragraph")
-            descrizione.setWordWrap(True)
-
-            # Pulsanti
-            btn_modifica = QPushButton("Modifica")
-            btn_modifica.setObjectName("SmallButton")
-            btn_modifica.clicked.connect(  # type:ignore
-                partial(info_controller.modifica_genere, genere.get_id())
-            )
-
-            pulsanti = QWidget()
-            temp_layout_btn = QHBoxLayout(pulsanti)
-            temp_layout_btn.addWidget(btn_modifica)
-            temp_layout_btn.addStretch()
-
-            # ## Layout
-            current_genere = QWidget()
-            current_genere.setObjectName("Container")
-            layout_cur_genere = QVBoxLayout(current_genere)
-
-            layout_cur_genere.addWidget(nome)
-            layout_cur_genere.addWidget(descrizione)
-            layout_cur_genere.addWidget(pulsanti)
-
-            layout_lista_generi.addWidget(current_genere)
+        self.display_generi_widget(layout_lista_generi)
 
         # # LAYOUT GENERI : Header Generi + GENERI DISPLAY
         container_generi = QWidget()
@@ -274,20 +207,102 @@ class InfoPage(QWidget):
         main_layout.addWidget(container_top)
         main_layout.addWidget(scroll_area)
 
+    def display_opere_widget(self, layout: QVBoxLayout):
+        for opera in self.info_controller.get_opere():
+            # ## Labels
+            nome = QLabel(f"{opera.get_nome()}")
+            nome.setObjectName("Header2")
+
+            librettista = QLabel(f"Libretto di {opera.get_librettista()}")
+            librettista.setObjectName("Paragraph")
+
+            compositore = QLabel(f"Musica di {opera.get_compositore()}")
+            compositore.setObjectName("Paragraph")
+
+            # ## Pulsanti
+            btn_visualizza = QPushButton("Maggior info")
+            btn_visualizza.setObjectName("SmallButton")
+            btn_visualizza.clicked.connect(  # type:ignore
+                lambda: print(
+                    "partial(self.info_controller.visualizza_opera, opera.get_id())"
+                )  # - partial(self.info_controller.visualizza_opera, opera.get_id())
+            )
+
+            btn_modifica = QPushButton("Modifica")
+            btn_modifica.setObjectName("SmallButton")
+            btn_modifica.clicked.connect(  # type:ignore
+                lambda: print(
+                    "partial(self.info_controller.modifica_opera, opera.get_id())"
+                )  # - partial(self.self.info_controller.modifica_opera, opera.get_id())
+            )
+
+            pulsanti = QWidget()
+            temp_layout_btn = QHBoxLayout(pulsanti)
+            temp_layout_btn.addWidget(btn_visualizza)
+            temp_layout_btn.addWidget(btn_modifica)
+            temp_layout_btn.addStretch()
+
+            # ## Layout
+            current_opera = QWidget()
+            current_opera.setObjectName("Container")
+            layout_cur_opera = QVBoxLayout(current_opera)
+
+            layout_cur_opera.addWidget(nome)
+            layout_cur_opera.addWidget(librettista)
+            layout_cur_opera.addWidget(compositore)
+            layout_cur_opera.addWidget(pulsanti)
+
+            layout.addWidget(current_opera)
+
+    def display_generi_widget(self, layout: QVBoxLayout):
+        for genere in self.info_controller.get_generi():
+            # ## Labels
+            nome = QLabel(f"{genere.get_nome()}")
+            nome.setObjectName("Header2")
+
+            descrizione = QLabel(f"{genere.get_descrizione()}")
+            descrizione.setObjectName("Paragraph")
+            descrizione.setWordWrap(True)
+
+            # Pulsanti
+            btn_modifica = QPushButton("Modifica")
+            btn_modifica.setObjectName("SmallButton")
+            btn_modifica.clicked.connect(  # type:ignore
+                lambda: print(
+                    "partial(self.info_controller.modifica_genere, genere.get_id())"
+                )  # - partial(self.info_controller.modifica_genere, genere.get_id())
+            )
+
+            pulsanti = QWidget()
+            temp_layout_btn = QHBoxLayout(pulsanti)
+            temp_layout_btn.addWidget(btn_modifica)
+            temp_layout_btn.addStretch()
+
+            # ## Layout
+            current_genere = QWidget()
+            current_genere.setObjectName("Container")
+            layout_cur_genere = QVBoxLayout(current_genere)
+
+            layout_cur_genere.addWidget(nome)
+            layout_cur_genere.addWidget(descrizione)
+            layout_cur_genere.addWidget(pulsanti)
+
+            layout.addWidget(current_genere)
+
 
 # - Funzioni implementate dal controller e dal gestore:
-#   InfoController.nuova_opera() @line_86
+#   InfoController.nuova_opera()
 #       Carica la pagina FormularioNuovaOpera, dove l'utente può cancellare l'operazione
 #       tornando dietro utilizando .cancella_opera(is_new=True) o confermare la creazione, chiamando
 #       altro metodo .salva_opera(), che verifica la correttezza dei dati, crea l'istanza di Opera e
 #       la salva nella lista di opere. (Anche riscrive i campi di input per prossime chiamate sia
 #       dopo cancellare che dopo salvare)
 
-#   InfoController.visualizza_opera(id_opera: int) @line_113
+#   InfoController.visualizza_opera(id_opera: int)
 #       Utilizando il NavigationCotroller, il controller assegna i valori necessari dell'opera
 #       relativa all'id in VisualizzaOpera (visualizza_opera.py).
 
-#   InfoController.modifica_opera(id_opera: int) @line_118
+#   InfoController.modifica_opera(id_opera: int)
 #       Carica la pagina FormularioModificaOpera, con i dati dell'opera `id_opera` nei campo di
 #       input. Il pulsante Conferma chiama la stessa funzione .salva_opera(is_new=False), ma con
 #       altra opzione che permette di modificare i dati dell'opera esistente e creare regie
@@ -295,10 +310,10 @@ class InfoPage(QWidget):
 #       non salvate e torna dietro con .cancella_opera(is_new=False) (non è necessario riscrivere
 #       i campi di inpu perché sarano riscritti con la prossima chiamata).
 
-#   InfoController.nuovo_genere() @line_159
+#   InfoController.nuovo_genere()
 #       Fa essenzialmente lo stesso che .nuova_opera(), ma con la pagina FormularioNuovoGenere.
 
-#   InfoController.modifica_genere(id_genere: int) @line_183
+#   InfoController.modifica_genere(id_genere: int)
 #       Come .nuovo_genere(), questa è altra versione di .modifica_opera(). Il piccolo dettaglio è
 #       che non è necessario un .cancella_genere(is_new=False) perché non vengono aggiunti nuovi
 #       campi dopo la sua creazione (come sì occorre con le opere e gli spettacoli)

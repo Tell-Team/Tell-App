@@ -13,21 +13,24 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 
-from model.model import Model
-from controller.navigation import NavigationController
+from controller.info_controller import InfoController
 
 
-class FormularioNuovaOpera(QWidget):
+class FormNuovaOpera(QWidget):
     """
     Interfaccia utente di creazione di `Opera`. Contiene campi di input per inserire tutti gli
     attributo respettivi. Comunque non permette di crea istanze di `Regia` ammeno che non venga
     prima creata un'opera e questa venga modificata.
     """
 
-    def __init__(self, model: Model, nav: NavigationController):
+    def __init__(self, info_controller: InfoController):
         super().__init__()
 
-        # - Non ho messo un riferimento al info_controller
+        self.info_controller = info_controller
+
+        self._build_ui()
+
+    def _build_ui(self):
         # - Lo style non è ancora applicato
 
         # # Header
@@ -48,6 +51,9 @@ class FormularioNuovaOpera(QWidget):
         label_genere = QLabel('Genere<span style="color:red">*</span> :')
         label_genere.setObjectName("SubHeader")
         self.input_genere = QComboBox()
+        for g in self.info_controller.get_generi():
+            nome = g.get_nome()
+            self.input_genere.addItem(nome)
 
         label_compositore = QLabel('Compositore<span style="color:red">*</span> :')
         label_compositore.setObjectName("SubHeader")
@@ -99,13 +105,15 @@ class FormularioNuovaOpera(QWidget):
         self.btn_cancella = QPushButton("Cancella")
         self.btn_cancella.setObjectName("SmallButton")
         self.btn_cancella.clicked.connect(  # type:ignore
-            info_controller.cancella_opera
+            lambda: print(
+                "info_controller.cancella_opera"
+            )  # info_controller.cancella_opera
         )
 
         self.btn_conferma = QPushButton("Conferma")
         self.btn_conferma.setObjectName("SmallButton")
         self.btn_conferma.clicked.connect(  # type:ignore
-            info_controller.salva_opera
+            lambda: print("info_controller.salva_opera")  # info_controller.salva_opera
         )
 
         self.pulsanti = QWidget()

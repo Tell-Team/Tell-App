@@ -7,18 +7,22 @@ from PyQt6.QtWidgets import (
     QLineEdit,
     QTextEdit,
     QPushButton,
+    QSizePolicy,
 )
 from PyQt6.QtCore import Qt
 
-from model.model import Model
-from controller.navigation import NavigationController
+from controller.info_controller import InfoController
 
 
-class FormularioNuovoGenere(QWidget):
-    def __init__(self, model: Model, nav: NavigationController):
+class FormNuovoGenere(QWidget):
+    def __init__(self, info_controller: InfoController):
         super().__init__()
 
-        # - Non ho messo un riferimento al info_controller
+        self.info_controller = info_controller
+
+        self._build_ui()
+
+    def _build_ui(self):
         # - Lo style non è ancora applicato
 
         # # Header
@@ -35,6 +39,9 @@ class FormularioNuovoGenere(QWidget):
         label_descrizione.setObjectName("SubHeader")
         self.input_descrizione = QTextEdit()
         self.input_descrizione.setFixedHeight(80)
+        self.input_descrizione.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
+        )
 
         form_content = QWidget()
         form_layout = QFormLayout(form_content)
@@ -46,13 +53,17 @@ class FormularioNuovoGenere(QWidget):
         self.btn_cancella = QPushButton("Cancella")
         self.btn_cancella.setObjectName("SmallButton")
         self.btn_cancella.clicked.connect(  # type:ignore
-            info_controller.cancella_genere
+            lambda: print(
+                "info_controller.cancella_genere"
+            )  # info_controller.cancella_genere
         )
 
         self.btn_conferma = QPushButton("Conferma")
         self.btn_conferma.setObjectName("SmallButton")
         self.btn_conferma.clicked.connect(  # type:ignore
-            info_controller.salva_genere
+            lambda: print(
+                "info_controller.salva_genere"
+            )  # info_controller.salva_genere
         )
 
         self.pulsanti = QWidget()

@@ -10,15 +10,18 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 
-from model.model import Model
-from controller.navigation import NavigationController
+from controller.info_controller import InfoController
 
 
-class FormularioNuovaRegia(QWidget):
-    def __init__(self, model: Model, nav: NavigationController):
+class FormNuovaRegia(QWidget):
+    def __init__(self, info_controller: InfoController):
         super().__init__()
 
-        # - Non ho messo un riferimento al info_controller
+        self.info_controller = info_controller
+
+        self._build_ui()
+
+    def _build_ui(self):
         # - Lo style non è ancora applicato
 
         # # Header
@@ -47,13 +50,15 @@ class FormularioNuovaRegia(QWidget):
         self.btn_cancella = QPushButton("Cancella")
         self.btn_cancella.setObjectName("SmallButton")
         self.btn_cancella.clicked.connect(  # type:ignore
-            nav.go_back  # - info_controller.cancella_creazione_regia
+            lambda: print(
+                "info_controller.cancella_regia"
+            )  # info_controller.cancella_regia
         )
 
         self.btn_conferma = QPushButton("Conferma")
         self.btn_conferma.setObjectName("SmallButton")
         self.btn_conferma.clicked.connect(  # type:ignore
-            nav.go_back  # - DA CORRIGERE: Un trigger per verificare dati e salvare regia
+            lambda: print("info_controller.salva_regia")  # info_controller.salva_regia
         )
 
         self.pulsanti = QWidget()

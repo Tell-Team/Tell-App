@@ -9,20 +9,24 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from functools import partial
 
-from model.model import Model
-from controller.navigation import NavigationController
+from controller.spettacoli_controller import SpettacoliController
 
 
 class SpettacoliPage(QWidget):
-    def __init__(self, model: Model, nav: NavigationController):
+    def __init__(self, spettacoli_controller: SpettacoliController):
         super().__init__()
 
+        self.spettacoli_controller = spettacoli_controller
+
+        self._build_ui()
+
+    def _build_ui(self):
         # # LOGOUT
         # ## Pulsante: Logout
         btn_logout = QPushButton("Logout")
         btn_logout.setObjectName("SmallButton")
         btn_logout.clicked.connect(  # type:ignore
-            nav.go_back
+            self.spettacoli_controller.get_nav().go_back
         )
 
         # ## Layout: Logout
@@ -41,16 +45,16 @@ class SpettacoliPage(QWidget):
         btn_sezione_info = QPushButton("Info")
         btn_sezione_info.setObjectName("SmallButton")
         btn_sezione_info.clicked.connect(  # type:ignore
-            partial(nav.section_go_to, "info")
+            partial(self.spettacoli_controller.get_nav().section_go_to, "info")
         )
 
         # ## Pulsante: Sezione Account
         btn_sezione_account = QPushButton(
             "Account"
-        )  # DA CORRIGERE: Sezione esclusiva dell'admin
+        )  # - DA CORRIGERE: Sezione esclusiva dell'admin
         btn_sezione_account.setObjectName("SmallButton")
         btn_sezione_account.clicked.connect(  # type:ignore
-            partial(nav.section_go_to, "account")
+            partial(self.spettacoli_controller.get_nav().section_go_to, "account")
         )
 
         # ## Layout: Sezioni App
@@ -78,11 +82,13 @@ class SpettacoliPage(QWidget):
         header_spettacoli.setObjectName("Header1")
         header_spettacoli.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        # ## Pulsante: Nuovo spettacoli
-        btn_nuovo_spettacolo = QPushButton("Nuovo spettacoli")
+        # ## Pulsante: Nuovo spettacolo
+        btn_nuovo_spettacolo = QPushButton("Nuovo spettacolo")
         btn_nuovo_spettacolo.setObjectName("SmallButton")
         btn_nuovo_spettacolo.clicked.connect(  # type:ignore
-            partial(SpettacoliController.crea_spettacolo, gestore_spettacoli)
+            lambda: print(
+                "self.spettacoli_controller.nuovo_spettacolo"
+            )  # - self.spettacoli_controller.nuovo_spettacolo
         )
 
         # ## Layout: Header Spettacoli
@@ -93,7 +99,7 @@ class SpettacoliPage(QWidget):
 
         # # SPETTACOLI DISPLAY
         layout_lista_spettacoli = QVBoxLayout()
-        for spettacolo in gestore_spettacoli.get_lista_spettacoli():
+        for spettacolo in self.spettacoli_controller.get_spettacoli():
             # ## Labels
             titolo = QLabel(f"{spettacolo.get_titolo()}")
             titolo.setObjectName("Header2")
@@ -111,7 +117,7 @@ class SpettacoliPage(QWidget):
             btn_scegli_posti.setObjectName("SmallButton")
             btn_scegli_posti.clicked.connect(  # type:ignore
                 partial(
-                    SpettacoliController.scegli_posti,
+                    self.spettacoli_controller.scegli_posti,
                     gestore_spettacoli,
                     spettacolo.get_id(),
                 )
