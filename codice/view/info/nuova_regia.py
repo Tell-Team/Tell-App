@@ -19,6 +19,8 @@ class FormNuovaRegia(QWidget):
 
         self.info_controller = info_controller
 
+        self.cur_id_opera: int = -1
+
         self._build_ui()
 
     def _build_ui(self):
@@ -50,15 +52,15 @@ class FormNuovaRegia(QWidget):
         self.btn_cancella = QPushButton("Cancella")
         self.btn_cancella.setObjectName("SmallButton")
         self.btn_cancella.clicked.connect(  # type:ignore
-            lambda: print(
-                "info_controller.cancella_regia"
-            )  # info_controller.cancella_regia
+            self.info_controller.cancella_regia
         )
 
         self.btn_conferma = QPushButton("Conferma")
         self.btn_conferma.setObjectName("SmallButton")
         self.btn_conferma.clicked.connect(  # type:ignore
-            lambda: print("info_controller.salva_regia")  # info_controller.salva_regia
+            lambda: print(
+                "partial(self.info_controller.salva_regia, self.cur_id_opera)"
+            )  # - partial(self.info_controller.salva_regia, self.cur_id_opera)
         )
 
         self.pulsanti = QWidget()

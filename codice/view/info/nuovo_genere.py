@@ -53,17 +53,15 @@ class FormNuovoGenere(QWidget):
         self.btn_cancella = QPushButton("Cancella")
         self.btn_cancella.setObjectName("SmallButton")
         self.btn_cancella.clicked.connect(  # type:ignore
-            lambda: print(
-                "info_controller.cancella_genere"
-            )  # info_controller.cancella_genere
+            self.info_controller.cancella_genere
         )
 
         self.btn_conferma = QPushButton("Conferma")
         self.btn_conferma.setObjectName("SmallButton")
         self.btn_conferma.clicked.connect(  # type:ignore
             lambda: print(
-                "info_controller.salva_genere"
-            )  # info_controller.salva_genere
+                "self.info_controller.salva_genere"
+            )  # - self.info_controller.salva_genere
         )
 
         self.pulsanti = QWidget()

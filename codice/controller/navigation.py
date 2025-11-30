@@ -18,6 +18,9 @@ class NavigationController:
     def get_stack(self) -> QStackedWidget:
         return self._stack
 
+    def get_pages(self) -> dict[str, QWidget]:
+        return self._pages
+
     def add_page(self, page_name: str, widget: QWidget):
         """Registra una pagina nel dict `__pages` della classe con una `str` come keyword."""
         self._pages[page_name] = widget

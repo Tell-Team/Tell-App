@@ -1,6 +1,7 @@
 from model.gestori.gestore_generi import GestoreGeneri
 from model.gestori.gestore_opere import GestoreOpere
 from model.gestori.gestore_spettacoli import GestoreSpettacoli
+from model.gestori.gestore_regie_test import GestoreRegie  ### TESTING ###
 from model.pianificazione.genere import Genere
 from model.pianificazione.opera import Opera
 from model.pianificazione.spettacolo import Spettacolo
@@ -26,6 +27,13 @@ class Model:
         except FileNotFoundError:
             self.__gestore_opere = GestoreOpere()
 
+        ### TESTING ###
+        try:
+            self.__carica_regie()
+            Opera.set_next_id(self.__gestore_regie.get_max_id() + 1)
+        except FileNotFoundError:
+            self.__gestore_regie = GestoreRegie()
+
         try:
             self.__carica_spettacoli()
             Spettacolo.set_next_id(self.__gestore_spettacoli.get_max_id() + 1)
@@ -40,6 +48,11 @@ class Model:
     def __carica_opere(self):
         with open("db/opere.pkl", "rb") as f:
             self.__gestore_opere: GestoreOpere = load(f)
+
+    ### TESTING ###
+    def __carica_regie(self):
+        with open("db/regie.pkl", "rb") as f:
+            self.__gestore_regie: GestoreRegie = load(f)
 
     def __carica_spettacoli(self):
         with open("db/spettacoli.pkl", "rb") as f:
@@ -73,6 +86,10 @@ class Model:
 
     def get_spettacoli_by_titolo(self, titolo: str) -> list[Spettacolo]:
         return self.__gestore_spettacoli.get_spettacoli_by_titolo(titolo)
+
+    ### TESTING ###
+    def get_regie(self) -> list[Regia]:
+        return self.__gestore_regie.get_regie()
 
     def get_regie_by_opera(self, id_: int) -> list[Regia]:
         return self.__gestore_spettacoli.get_regie_by_opera(id_)

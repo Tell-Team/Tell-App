@@ -5,16 +5,18 @@ from PyQt6.QtWidgets import (
     QTableWidget,
     QTableWidgetItem,
     QHeaderView,
+    QLabel,
+    QCheckBox,
 )
-from functools import partial  # - Necessario nel codice reale
+from functools import partial
 
 from controller.info_controller import InfoController
 
 from view.info.nuova_opera import FormNuovaOpera
 
+from model.pianificazione.regia import Regia
 
-# - I pulsanti di Cancella e Conferma devo riscrivere il dati della pagina per prossime chiamate.
-#   Questo include self.cur_id_opera
+
 class FormModificaOpera(FormNuovaOpera):
     """
     Sottoclasse di `FormularioNuovaOpera` che modifica la struttura della pagina e permette
@@ -47,16 +49,14 @@ class FormModificaOpera(FormNuovaOpera):
 
         # ## Modifica il pulsanti Cancella
         self.btn_cancella.clicked.connect(  # type:ignore
-            lambda: print(
-                "info_controller.cancella_opera(is_new=False)"
-            )  # - info_controller.cancella_opera(is_new=False)
+            partial(self.info_controller.cancella_opera, is_new=False)
         )
 
         # ## Modifica il pulsanti Conferma
         self.btn_conferma.clicked.connect(  # type:ignore
             lambda: print(
-                "info_controller.salva_opera(is_new=False)"
-            )  # - info_controller.salva_opera(is_new=False)
+                "self.info_controller.salva_opera(is_new=False)"
+            )  # - self.info_controller.salva_opera(is_new=False)
         )
 
         # ## Rimuovi le regie dell layout (temporaneamente)
@@ -69,17 +69,15 @@ class FormModificaOpera(FormNuovaOpera):
         btn_nuova_regia = QPushButton("Nuova regia")
         btn_nuova_regia.setObjectName("SmallButton")
         btn_nuova_regia.clicked.connect(  # type:ignore
-            lambda: print(
-                "info_controller.nuova_regia"
-            )  # - info_controller.nuova_regia
-            # - In teoria, ogni opera ha una sua lista regie.
+            partial(self.info_controller.nuova_regia, self.cur_id_opera)
+            # - Ogni regia ha un id_opera
         )
 
         # ## Tabella delle regie
         self.tabella_regie = QTableWidget()
         self.tabella_regie.setColumnCount(4)
         self.tabella_regie.setHorizontalHeaderLabels(  # type:ignore
-            ["Indice", "Regista", "Anno di produzione", " "]
+            [" ", "Regista", "Anno di produzione", " "]
         )
 
         tabella_header = self.tabella_regie.horizontalHeader()
@@ -87,7 +85,23 @@ class FormModificaOpera(FormNuovaOpera):
             QHeaderView.ResizeMode.Stretch
         )
 
+        self.temp_cur_regie: list[Regia] = self.info_controller.get_regie_by_opera(
+            self.cur_id_opera
+        ).copy()
+
+        # ### Lista regie non salvate
+        self.temp_regie_nuove: list[Regia] = []
+
+        # ### Lista regie eliminate
+        self.temp_regie_eliminate: list[Regia] = []
+
+        # ### Lista regie modificate
+        self.temp_regie_modificate: list[tuple[int, str, int]] = []
+
         self.carica_tabella_regie()
+
+        self.input_regia = QLabel("Nessuna")
+        self.form_layout.addRow("Regia scelta:", self.input_regia)
 
         # ## LAYOUT LISTA REGIE
         header_lista_regia = QWidget()
@@ -103,15 +117,23 @@ class FormModificaOpera(FormNuovaOpera):
         self.main_layout.addStretch()
 
     def carica_tabella_regie(self):
-        self.tabella_regie.setRowCount(
-            len(self.info_controller.get_regie_by_opera(self.cur_id_opera))
-        )
-        i = 0
+        self.tabella_regie.clearContents()
 
-        for riga, regia in enumerate(
-            self.info_controller.get_regie_by_opera(self.cur_id_opera)
-        ):
-            self.tabella_regie.setItem(riga, 0, QTableWidgetItem(str(i + 1)))
+        self.tabella_regie.setRowCount(
+            len(self.temp_cur_regie)
+            + len(self.temp_regie_nuove)
+            # si pienso utilizar una lista de regie temporal, entoces debo cambiar
+            # self.info_controller.get_regie_by_opera(self.cur_id_opera) por algo como
+            # self.temp_lista_regie, y esta debe ser una copia de la anterior, pero no
+            # una referencia que la modifique
+        )
+
+        for riga, regia in enumerate(self.temp_cur_regie + self.temp_regie_nuove):
+            checkbox = QCheckBox()
+            checkbox.stateChanged.connect(  # type:ignore
+                lambda r=riga: self.checkbox_modificato(r)
+            )
+            self.tabella_regie.setCellWidget(riga, 0, checkbox)
             self.tabella_regie.setItem(riga, 1, QTableWidgetItem(regia.get_regista()))
             self.tabella_regie.setItem(
                 riga, 2, QTableWidgetItem(regia.get_anno_produzione())
@@ -121,9 +143,11 @@ class FormModificaOpera(FormNuovaOpera):
             btn_modifica_regia = QPushButton("Modifica")
             btn_modifica_regia.setObjectName("SmallButton")
             btn_modifica_regia.clicked.connect(  # type:ignore
-                lambda: print(
-                    "partial(self.info_controller.modifica_regia, regia.get_id())"
-                )  # partial(self.info_controller.modifica_regia, regia.get_id())
+                partial(
+                    self.info_controller.modifica_regia,
+                    regia.get_id(),
+                    self.cur_id_opera,
+                )
             )
 
             btn_elimina_regia = QPushButton("Elimina")
@@ -142,3 +166,14 @@ class FormModificaOpera(FormNuovaOpera):
 
             # Insertar botón en la celda
             self.tabella_regie.setCellWidget(riga, 3, pulsanti_regia)
+
+    def checkbox_modificato(self, r: int):
+        checkbox = self.tabella_regie.cellWidget(r, 0)
+        assert isinstance(checkbox, QCheckBox)
+        regista, anno = (
+            self.tabella_regie.item(r, 1).text(),  # type:ignore
+            self.tabella_regie.item(r, 2).text(),  # type:ignore
+        )
+
+        if checkbox.isChecked():
+            self.input_regia.setText(f"{regista} ({anno})")

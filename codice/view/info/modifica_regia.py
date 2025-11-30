@@ -24,6 +24,6 @@ class FormModificaRegia(FormNuovaRegia):
         # ## Modifica il pulsanti Conferma
         self.btn_conferma.clicked.connect(  # type:ignore
             lambda: print(
-                "info_controller.salva_regia(is_new=False)"
-            )  # info_controller.salva_regia(is_new=False)
+                "self.info_controller.salva_regia(is_new=False)"
+            )  # - self.info_controller.salva_regia(is_new=False)
         )

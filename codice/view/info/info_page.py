@@ -9,7 +9,6 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from functools import partial
 
-
 from controller.info_controller import InfoController
 
 
@@ -93,9 +92,7 @@ class InfoPage(QWidget):
         btn_nuova_opera = QPushButton("Nuova opera")
         btn_nuova_opera.setObjectName("SmallButton")
         btn_nuova_opera.clicked.connect(  # type:ignore
-            lambda: print(
-                "self.info_controller.nuova_opera"
-            )  # - self.info_controller.nuova_opera
+            self.info_controller.nuova_opera
         )
         # ## Layout: Header Opere
         layout_header_opere = QHBoxLayout()
@@ -127,9 +124,7 @@ class InfoPage(QWidget):
         btn_nuovo_genere = QPushButton("Nuovo genere")
         btn_nuovo_genere.setObjectName("SmallButton")
         btn_nuovo_genere.clicked.connect(  # type:ignore
-            lambda: print(
-                "self.info_controller.nuovo_genere"
-            )  # - self.info_controller.nuovo_genere
+            self.info_controller.nuovo_genere
         )
 
         # ## Layout: Header Generi
@@ -224,16 +219,16 @@ class InfoPage(QWidget):
             btn_visualizza.setObjectName("SmallButton")
             btn_visualizza.clicked.connect(  # type:ignore
                 lambda: print(
-                    "partial(self.info_controller.visualizza_opera, opera.get_id())"
-                )  # - partial(self.info_controller.visualizza_opera, opera.get_id())
+                    partial(self.info_controller.visualizza_opera, opera.get_id())
+                )
             )
 
             btn_modifica = QPushButton("Modifica")
             btn_modifica.setObjectName("SmallButton")
             btn_modifica.clicked.connect(  # type:ignore
                 lambda: print(
-                    "partial(self.info_controller.modifica_opera, opera.get_id())"
-                )  # - partial(self.self.info_controller.modifica_opera, opera.get_id())
+                    partial(self.info_controller.modifica_opera, opera.get_id())
+                )
             )
 
             pulsanti = QWidget()
@@ -269,8 +264,8 @@ class InfoPage(QWidget):
             btn_modifica.setObjectName("SmallButton")
             btn_modifica.clicked.connect(  # type:ignore
                 lambda: print(
-                    "partial(self.info_controller.modifica_genere, genere.get_id())"
-                )  # - partial(self.info_controller.modifica_genere, genere.get_id())
+                    partial(self.info_controller.modifica_genere, genere.get_id())
+                )
             )
 
             pulsanti = QWidget()
@@ -288,32 +283,3 @@ class InfoPage(QWidget):
             layout_cur_genere.addWidget(pulsanti)
 
             layout.addWidget(current_genere)
-
-
-# - Funzioni implementate dal controller e dal gestore:
-#   InfoController.nuova_opera()
-#       Carica la pagina FormularioNuovaOpera, dove l'utente può cancellare l'operazione
-#       tornando dietro utilizando .cancella_opera(is_new=True) o confermare la creazione, chiamando
-#       altro metodo .salva_opera(), che verifica la correttezza dei dati, crea l'istanza di Opera e
-#       la salva nella lista di opere. (Anche riscrive i campi di input per prossime chiamate sia
-#       dopo cancellare che dopo salvare)
-
-#   InfoController.visualizza_opera(id_opera: int)
-#       Utilizando il NavigationCotroller, il controller assegna i valori necessari dell'opera
-#       relativa all'id in VisualizzaOpera (visualizza_opera.py).
-
-#   InfoController.modifica_opera(id_opera: int)
-#       Carica la pagina FormularioModificaOpera, con i dati dell'opera `id_opera` nei campo di
-#       input. Il pulsante Conferma chiama la stessa funzione .salva_opera(is_new=False), ma con
-#       altra opzione che permette di modificare i dati dell'opera esistente e creare regie
-#       (necessarie per salvare la modifica), mentre che il pulsante Cancella elimina le regie se
-#       non salvate e torna dietro con .cancella_opera(is_new=False) (non è necessario riscrivere
-#       i campi di inpu perché sarano riscritti con la prossima chiamata).
-
-#   InfoController.nuovo_genere()
-#       Fa essenzialmente lo stesso che .nuova_opera(), ma con la pagina FormularioNuovoGenere.
-
-#   InfoController.modifica_genere(id_genere: int)
-#       Come .nuovo_genere(), questa è altra versione di .modifica_opera(). Il piccolo dettaglio è
-#       che non è necessario un .cancella_genere(is_new=False) perché non vengono aggiunti nuovi
-#       campi dopo la sua creazione (come sì occorre con le opere e gli spettacoli)

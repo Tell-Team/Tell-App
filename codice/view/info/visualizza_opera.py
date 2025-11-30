@@ -10,8 +10,6 @@ from PyQt6.QtCore import Qt
 
 from controller.info_controller import InfoController
 
-from datetime import date
-
 
 class VisualizzaOpera(QWidget):
     def __init__(self, info_controller: InfoController):
@@ -23,52 +21,44 @@ class VisualizzaOpera(QWidget):
 
     def _build_ui(self):
         # # Labels
-        self.nome: str = ""
-        label_nome = QLabel(f"{self.nome}")
-        label_nome.setObjectName("Header1")
-        label_nome.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        self.label_nome = QLabel("-NOME-")
+        self.label_nome.setObjectName("Header1")
+        self.label_nome.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        self.librettista: str = ""
-        label_librettista = QLabel(f"Libretto di {self.librettista}")
-        label_librettista.setWordWrap(True)
-        label_librettista.setObjectName("Paragraph")
+        self.label_librettista = QLabel("Libretto di -LIBRETTISTA-")
+        self.label_librettista.setWordWrap(True)
+        self.label_librettista.setObjectName("Paragraph")
 
-        self.compositore: str = ""
-        label_compositore = QLabel(f"Musica composta da {self.compositore}.")
-        label_compositore.setWordWrap(True)
-        label_compositore.setObjectName("Paragraph")
+        self.label_compositore = QLabel("Musica composta da -COMPOSITORE-.")
+        self.label_compositore.setWordWrap(True)
+        self.label_compositore.setObjectName("Paragraph")
 
-        self.genere: str = ""
-        label_genere = QLabel(f"Genere: {self.genere}")
-        label_genere.setObjectName("Paragraph")
+        self.label_genere = QLabel(f"Genere: -GENERE-")
+        self.label_genere.setObjectName("Paragraph")
 
-        self.atti: int = 0
-        label_atti = QLabel(f"Numero di atti: {self.atti}")
-        label_atti.setObjectName("Paragraph")
+        self.label_atti = QLabel(f"Numero di atti: -ATTI-")
+        self.label_atti.setObjectName("Paragraph")
 
-        self.data: date = date(1999, 1, 1)
-        self.teatro: str = ""
-        label_prima_rappresentazione = QLabel(
-            f"È stata rappresentata per prima volta il {self.data.strftime("%d/%m/%Y")} nel teatro {self.teatro}"
+        self.label_prima_rappresentazione = QLabel(
+            f"È stata rappresentata per prima volta il -DATA- nel teatro -TEATRO-"
         )
-        label_prima_rappresentazione.setWordWrap(True)
-        label_prima_rappresentazione.setObjectName("Paragraph")
+        self.label_prima_rappresentazione.setWordWrap(True)
+        self.label_prima_rappresentazione.setObjectName("Paragraph")
 
-        self.trama: str = ""
-        label_trama = QLabel(f"{self.trama}")
-        label_trama.setWordWrap(True)
-        label_trama.setObjectName("Paragraph")
+        self.label_trama = QLabel("-TRAMA-")
+        self.label_trama.setWordWrap(True)
+        self.label_trama.setObjectName("Paragraph")
 
         content = QWidget()
         layout_content = QVBoxLayout(content)
 
-        layout_content.addWidget(label_nome)
-        layout_content.addWidget(label_librettista)
-        layout_content.addWidget(label_compositore)
-        layout_content.addWidget(label_genere)
-        layout_content.addWidget(label_atti)
-        layout_content.addWidget(label_prima_rappresentazione)
-        layout_content.addWidget(label_trama)
+        layout_content.addWidget(self.label_nome)
+        layout_content.addWidget(self.label_librettista)
+        layout_content.addWidget(self.label_compositore)
+        layout_content.addWidget(self.label_genere)
+        layout_content.addWidget(self.label_atti)
+        layout_content.addWidget(self.label_prima_rappresentazione)
+        layout_content.addWidget(self.label_trama)
         layout_content.addStretch()
 
         #

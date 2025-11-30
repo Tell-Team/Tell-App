@@ -12,6 +12,7 @@ from PyQt6.QtWidgets import (
     QPushButton,
 )
 from PyQt6.QtCore import Qt
+from functools import partial
 
 from controller.info_controller import InfoController
 
@@ -51,9 +52,11 @@ class FormNuovaOpera(QWidget):
         label_genere = QLabel('Genere<span style="color:red">*</span> :')
         label_genere.setObjectName("SubHeader")
         self.input_genere = QComboBox()
+        self.input_genere.insertItem(0, "")
         for g in self.info_controller.get_generi():
             nome = g.get_nome()
             self.input_genere.addItem(nome)
+        self.input_genere.setCurrentIndex(0)
 
         label_compositore = QLabel('Compositore<span style="color:red">*</span> :')
         label_compositore.setObjectName("SubHeader")
@@ -63,31 +66,31 @@ class FormNuovaOpera(QWidget):
         label_librettista.setObjectName("SubHeader")
         self.input_librettista = QLineEdit()
 
-        label_data = QLabel("Prima rappresentazione :")
-        label_data.setObjectName("SubHeader")
-        self.input_data = QDateEdit()
-
         label_atti = QLabel('Numeri di atti<span style="color:red">*</span> :')
         label_atti.setObjectName("SubHeader")
         self.input_atti = QSpinBox()
         self.input_atti.setRange(0, 10)
         self.input_atti.setValue(0)
 
+        label_data = QLabel("Prima rappresentazione :")
+        label_data.setObjectName("SubHeader")
+        self.input_data = QDateEdit()
+
         label_teatro = QLabel("Teatro prima rappresentazione :")
         label_teatro.setObjectName("SubHeader")
         self.input_teatro = QLineEdit()
 
         form_content = QWidget()
-        form_layout = QFormLayout(form_content)
-        form_layout.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
-        form_layout.addRow(label_nome, self.input_nome)
-        form_layout.addRow(label_trama, self.input_trama)
-        form_layout.addRow(label_genere, self.input_genere)
-        form_layout.addRow(label_compositore, self.input_compositore)
-        form_layout.addRow(label_librettista, self.input_librettista)
-        form_layout.addRow(label_data, self.input_data)
-        form_layout.addRow(label_atti, self.input_atti)
-        form_layout.addRow(label_teatro, self.input_teatro)
+        self.form_layout = QFormLayout(form_content)
+        self.form_layout.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+        self.form_layout.addRow(label_nome, self.input_nome)
+        self.form_layout.addRow(label_trama, self.input_trama)
+        self.form_layout.addRow(label_genere, self.input_genere)
+        self.form_layout.addRow(label_compositore, self.input_compositore)
+        self.form_layout.addRow(label_librettista, self.input_librettista)
+        self.form_layout.addRow(label_atti, self.input_atti)
+        self.form_layout.addRow(label_data, self.input_data)
+        self.form_layout.addRow(label_teatro, self.input_teatro)
 
         # # Lista regie
         self.label_lista_regie = QLabel("Lista regie")
@@ -105,15 +108,15 @@ class FormNuovaOpera(QWidget):
         self.btn_cancella = QPushButton("Cancella")
         self.btn_cancella.setObjectName("SmallButton")
         self.btn_cancella.clicked.connect(  # type:ignore
-            lambda: print(
-                "info_controller.cancella_opera"
-            )  # info_controller.cancella_opera
+            partial(self.info_controller.cancella_opera, is_new=True)
         )
 
         self.btn_conferma = QPushButton("Conferma")
         self.btn_conferma.setObjectName("SmallButton")
         self.btn_conferma.clicked.connect(  # type:ignore
-            lambda: print("info_controller.salva_opera")  # info_controller.salva_opera
+            lambda: print(
+                "self.info_controller.salva_opera"
+            )  # - self.info_controller.salva_opera
         )
 
         self.pulsanti = QWidget()
