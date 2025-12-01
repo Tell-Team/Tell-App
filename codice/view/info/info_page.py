@@ -2,12 +2,14 @@ from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
     QPushButton,
+    QLayout,
     QVBoxLayout,
     QHBoxLayout,
     QScrollArea,
 )
 from PyQt6.QtCore import Qt
 from functools import partial
+from typing import Optional
 
 from controller.info_controller import InfoController
 
@@ -101,14 +103,14 @@ class InfoPage(QWidget):
         layout_header_opere.addStretch()
 
         # # OPERE DISPLAY
-        layout_lista_opere = QVBoxLayout()
-        self.display_opere_widget(layout_lista_opere)
+        self.layout_lista_opere = QVBoxLayout()
+        self.display_opere_widget(self.layout_lista_opere)
 
         # # LAYOUT OPERE : Header Opere + OPERE DISPLAY
         container_opere = QWidget()
         layout_opere = QVBoxLayout(container_opere)
         layout_opere.addLayout(layout_header_opere)
-        layout_opere.addLayout(layout_lista_opere)
+        layout_opere.addLayout(self.layout_lista_opere)
 
         #
         #
@@ -134,14 +136,15 @@ class InfoPage(QWidget):
         layout_header_generi.addStretch()
 
         # # GENERI DISPLAY
-        layout_lista_generi = QVBoxLayout()
-        self.display_generi_widget(layout_lista_generi)
+        # - Come implemento un scroll? Conviene?
+        self.layout_lista_generi = QVBoxLayout()
+        self.display_generi_widget(self.layout_lista_generi)
 
         # # LAYOUT GENERI : Header Generi + GENERI DISPLAY
         container_generi = QWidget()
         layout_generi = QVBoxLayout(container_generi)
         layout_generi.addLayout(layout_header_generi)
-        layout_generi.addLayout(layout_lista_generi)
+        layout_generi.addLayout(self.layout_lista_generi)
 
         #
         #
@@ -202,6 +205,11 @@ class InfoPage(QWidget):
         main_layout.addWidget(container_top)
         main_layout.addWidget(scroll_area)
 
+    #
+    #
+    #
+
+    # Metodi per aggiornare la pagina ogni volta che venga visualizzata
     def display_opere_widget(self, layout: QVBoxLayout):
         for opera in self.info_controller.get_opere():
             # ## Labels
@@ -263,9 +271,7 @@ class InfoPage(QWidget):
             btn_modifica = QPushButton("Modifica")
             btn_modifica.setObjectName("SmallButton")
             btn_modifica.clicked.connect(  # type:ignore
-                lambda: print(
-                    partial(self.info_controller.modifica_genere, genere.get_id())
-                )
+                partial(self.info_controller.modifica_genere, genere.get_id())
             )
 
             pulsanti = QWidget()
@@ -283,3 +289,24 @@ class InfoPage(QWidget):
             layout_cur_genere.addWidget(pulsanti)
 
             layout.addWidget(current_genere)
+
+    def refresh_page(self):
+        self.clear_layout(self.layout_lista_opere)
+        self.display_opere_widget(self.layout_lista_opere)
+
+        self.clear_layout(self.layout_lista_generi)
+        self.display_generi_widget(self.layout_lista_generi)
+
+    def clear_layout(self, layout: Optional[QLayout]):
+        if layout:
+            while layout.count():
+                item = layout.takeAt(0)
+                assert item is not None
+                widget = item.widget()
+
+                if widget:
+                    widget.setParent(None)
+                else:
+                    child_layout = item.layout()
+                    if child_layout:
+                        self.clear_layout(child_layout)

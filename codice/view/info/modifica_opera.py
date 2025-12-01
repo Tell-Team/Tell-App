@@ -12,9 +12,9 @@ from functools import partial
 
 from controller.info_controller import InfoController
 
-from view.info.nuova_opera import FormNuovaOpera
-
 from model.pianificazione.regia import Regia
+
+from view.info.nuova_opera import FormNuovaOpera
 
 
 class FormModificaOpera(FormNuovaOpera):
@@ -28,13 +28,10 @@ class FormModificaOpera(FormNuovaOpera):
     def __init__(self, info_controller: InfoController):
         super().__init__(info_controller)
 
-        self._build_ui()
-
         # I campi di input sono atributi di FormNuovaOpera
 
     def _build_ui(self):
         super()._build_ui()
-
         # # Inziare pagina come ModificaOpera
 
         # Il valore di cur_id_opera è assegnato quando si chiama .modifica_opera(id_opera)
@@ -48,11 +45,13 @@ class FormModificaOpera(FormNuovaOpera):
         self.header.setText("Modifica opera")
 
         # ## Modifica il pulsanti Cancella
+        self.btn_cancella.clicked.disconnect()  # type:ignore
         self.btn_cancella.clicked.connect(  # type:ignore
             partial(self.info_controller.cancella_opera, is_new=False)
         )
 
         # ## Modifica il pulsanti Conferma
+        self.btn_conferma.clicked.disconnect()  # type:ignore
         self.btn_conferma.clicked.connect(  # type:ignore
             lambda: print(
                 "self.info_controller.salva_opera(is_new=False)"

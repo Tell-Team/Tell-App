@@ -1,3 +1,5 @@
+from functools import partial
+
 from controller.info_controller import InfoController
 
 from view.info.nuovo_genere import FormNuovoGenere
@@ -6,8 +8,6 @@ from view.info.nuovo_genere import FormNuovoGenere
 class FormModificaGenere(FormNuovoGenere):
     def __init__(self, info_controller: InfoController):
         super().__init__(info_controller)
-
-        self._build_ui()
 
         # I campi di input sono atributi di FormNuovoGenere
 
@@ -22,8 +22,7 @@ class FormModificaGenere(FormNuovoGenere):
         self.header.setText("Modifica genere")
 
         # ## Modifica il pulsanti Conferma
+        self.btn_conferma.clicked.disconnect()  # type:ignore
         self.btn_conferma.clicked.connect(  # type:ignore
-            lambda: print(
-                "info_controller.salva_genere(is_new=False)"
-            )  # - info_controller.salva_genere(is_new=False)
+            partial(self.info_controller.salva_genere, is_new=False)
         )

@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import (
     QSizePolicy,
 )
 from PyQt6.QtCore import Qt
+from functools import partial
 
 from controller.info_controller import InfoController
 
@@ -49,6 +50,13 @@ class FormNuovoGenere(QWidget):
         form_layout.addRow(label_nome, self.input_nome)
         form_layout.addRow(label_descrizione, self.input_descrizione)
 
+        # # Label error
+        self.label_error = QLabel("")
+        self.label_error.setObjectName("SubHeader")
+        self.label_error.setStyleSheet(
+            self.label_error.styleSheet() + "#SubHeader { color:red; }"
+        )
+
         # # Pulsanti
         self.btn_cancella = QPushButton("Cancella")
         self.btn_cancella.setObjectName("SmallButton")
@@ -59,9 +67,7 @@ class FormNuovoGenere(QWidget):
         self.btn_conferma = QPushButton("Conferma")
         self.btn_conferma.setObjectName("SmallButton")
         self.btn_conferma.clicked.connect(  # type:ignore
-            lambda: print(
-                "self.info_controller.salva_genere"
-            )  # - self.info_controller.salva_genere
+            partial(self.info_controller.salva_genere, is_new=True)
         )
 
         self.pulsanti = QWidget()
@@ -74,5 +80,6 @@ class FormNuovoGenere(QWidget):
         self.main_layout = QVBoxLayout(self)
         self.main_layout.addWidget(self.header)
         self.main_layout.addWidget(form_content)
+        self.main_layout.addWidget(self.label_error)
         self.main_layout.addWidget(self.pulsanti)
         self.main_layout.addStretch()

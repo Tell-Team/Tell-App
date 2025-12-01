@@ -1,12 +1,12 @@
 from PyQt6.QtCore import QDate
+from typing import Optional
 
 from controller.context import AppContext, NavigationController
 
 from model.pianificazione.opera import Opera
 from model.pianificazione.genere import Genere
 from model.pianificazione.regia import Regia  ### TESTING ###
-
-from model.exceptions import IdInesistenteException
+from model.exceptions import IdInesistenteException, DatoIncongruenteException
 
 
 class InfoController:
@@ -17,15 +17,17 @@ class InfoController:
     def get_nav(self) -> NavigationController:
         return self.__nav
 
+    def get_opera(self, id_: int) -> Optional[Opera]:
+        return self.__model.get_opera(id_)
+
     def get_opere(self) -> list[Opera]:
         return self.__model.get_opere()
 
+    def get_genere(self, id_: int) -> Optional[Genere]:
+        return self.__model.get_genere(id_)
+
     def get_generi(self) -> list[Genere]:
         return self.__model.get_generi()
-
-    ### TESTING ###
-    def get_regie(self) -> list[Regia]:
-        return self.__model.get_regie()
 
     ### TESTING ###
     def get_regie_by_opera(self, id_: int) -> list[Regia]:
@@ -36,7 +38,7 @@ class InfoController:
         Assegna i dati necessari dell'opera, relativa all'`id_`, nella pagina `VisualizzaOpera`.
         """
         # # Get opera da modificare
-        cur_opera = next((o for o in self.get_opere() if o.get_id() == id_), None)
+        cur_opera = self.get_opera(id_)
         if not cur_opera:
             raise IdInesistenteException("ID Opera non trovata nella lista opere.")
 
@@ -44,7 +46,10 @@ class InfoController:
         from view.info.visualizza_opera import VisualizzaOpera
 
         cur_page = self.__nav.get_pages().get("visualizza_opera")
-        assert isinstance(cur_page, VisualizzaOpera)
+        if not isinstance(cur_page, VisualizzaOpera):
+            raise TypeError(
+                f"cur_page deve essere VisualizzaOpera, trovata {type(cur_page)}"
+            )
 
         # # Setup pagina
         cur_page.label_nome.setText(f"{cur_opera.get_nome()}")
@@ -53,10 +58,12 @@ class InfoController:
             f"Musica composta da {cur_opera.get_compositore()}"
         )
 
-        cur_genere = next(
-            (g for g in self.get_generi() if g.get_id() == cur_opera.get_id_genere()),
-            None,
-        )
+        cur_genere = self.get_genere(cur_opera.get_id_genere())
+        # - Alternativa se non c'è get_genere() nel InfoController
+        # cur_genere = next(
+        #     (g for g in self.get_generi() if g.get_id() == cur_opera.get_id_genere()),
+        #     None,
+        # )
         if not cur_genere:
             raise IdInesistenteException("ID Genere non trovata nella lista generi.")
 
@@ -82,7 +89,10 @@ class InfoController:
         from view.info.nuova_opera import FormNuovaOpera
 
         cur_page = self.__nav.get_pages().get("nuova_opera")
-        assert isinstance(cur_page, FormNuovaOpera)
+        if not isinstance(cur_page, FormNuovaOpera):
+            raise TypeError(
+                f"cur_page deve essere FormNuovaOpera, trovata {type(cur_page)}"
+            )
 
         # # Setup default values
         cur_page.input_nome.setText("")
@@ -107,14 +117,17 @@ class InfoController:
         e poi tornando dietro senza far cambi nell'opera.
         """
         # Get opera da modificare
-        cur_opera = next((o for o in self.get_opere() if o.get_id() == id_), None)
+        cur_opera = self.get_opera(id_)
         if not cur_opera:
             raise IdInesistenteException("ID Opera non trovata nella lista opere.")
 
         from view.info.modifica_opera import FormModificaOpera
 
         cur_page = self.__nav.get_pages().get("modifica_opera")
-        assert isinstance(cur_page, FormModificaOpera)
+        if not isinstance(cur_page, FormModificaOpera):
+            raise TypeError(
+                f"cur_page deve essere FormModificaOpera, trovata {type(cur_page)}"
+            )
 
         cur_page.cur_id_opera = id_
 
@@ -180,10 +193,56 @@ class InfoController:
         self.__nav.go_back()
 
     def salva_opera(self, is_new: bool = True):
-        if not is_new:
-            ...
-            # El modo is_new=False debe incluir un bloque de código para reemplazar, remover y agregar
-            # las nuevas regie de la opera.
+        ...
+        # if not is_new:
+        #     # from view.info.modifica_opera import FormModificaOpera
+
+        #     # cur_page = self.__nav.get_pages().get("modifica_opera")
+        #     # assert isinstance(cur_page, FormModificaOpera)
+
+        #     # cur_id_opera = cur_page.cur_id_opera
+        #     # opera = self.get_opera(cur_id_opera)
+
+        #     # self.__model.modifica_opera(opera)
+
+        #     # El modo is_new=False debe incluir un bloque de código para reemplazar, remover y agregar
+        #     # las nuevas regie de la opera.
+        # else:
+        #     from view.info.nuova_opera import FormNuovaOpera
+
+        #     cur_page = self.__nav.get_pages().get("nuova_opera")
+        #     assert isinstance(cur_page, FormNuovaOpera)
+
+        #     nome = cur_page.input_nome.text()
+        #     compositore = cur_page.input_compositore.text()
+        #     librettista = cur_page.input_librettista.text()
+        #     numero_atti = cur_page.input_atti.value()
+        #     data = cur_page.input_data.date().toPyDate()
+        #     teatro = cur_page.input_teatro.text()
+        #     trama = cur_page.input_trama.toPlainText()
+        #     nome_genere = cur_page.input_genere
+        #     id_genere: int = -1
+        #     for g in self.get_generi():
+        #         if g.get_nome() == nome_genere:
+        #             id_genere = g.get_id()
+
+        #     try:
+        #         nuova_opera = Opera(
+        #             nome,
+        #             compositore,
+        #             librettista,
+        #             numero_atti,
+        #             data,
+        #             teatro,
+        #             trama,
+        #             id_genere,
+        #         )
+        #     except DatoIncongruenteException:
+        #         cur_page.label_error.setText("Valori non validi")
+        #     else:
+        #         self.__model.aggiungi_opera(nuova_opera)
+
+        #         self.__nav.go_back()
 
         # bloque de código para guardar el resto de atributos de la opera
         # Debo también guarda la ID con un bloque if is_new: ... ???
@@ -200,11 +259,15 @@ class InfoController:
         from view.info.nuovo_genere import FormNuovoGenere
 
         cur_page = self.__nav.get_pages().get("nuovo_genere")
-        assert isinstance(cur_page, FormNuovoGenere)
+        if not isinstance(cur_page, FormNuovoGenere):
+            raise TypeError(
+                f"cur_page deve essere FormNuovoGenere, trovata {type(cur_page)}"
+            )
 
         # Setup default values
         cur_page.input_nome.setText("")
         cur_page.input_descrizione.setText("")
+        cur_page.label_error.setText("")
 
         # Apri la pagina FormNuovoGenere
         self.__nav.go_to("nuovo_genere", save_history=True)
@@ -218,7 +281,7 @@ class InfoController:
         `cancella_genere()`, tornando dietro senza far cambi nel genere.
         """
         # Get genere da modificare
-        cur_genere = next((g for g in self.get_generi() if g.get_id() == id_), None)
+        cur_genere = self.get_genere(id_)
         if not cur_genere:
             raise IdInesistenteException("ID Genere non trovata nella lista generi.")
 
@@ -226,10 +289,13 @@ class InfoController:
         from view.info.modifica_genere import FormModificaGenere
 
         cur_page = self.__nav.get_pages().get("modifica_genere")
-        assert isinstance(cur_page, FormModificaGenere)
+        if not isinstance(cur_page, FormModificaGenere):
+            raise TypeError(
+                f"cur_page deve essere FormModificaGenere, trovata {type(cur_page)}"
+            )
 
         # ID utilizato quando si Conferma la modifica
-        cur_page.cur_id_genere = id_
+        cur_page.cur_id_genere = cur_genere.get_id()
 
         # Setup values
         cur_page.input_nome.setText(cur_genere.get_nome())
@@ -246,13 +312,65 @@ class InfoController:
         """
         self.__nav.go_back()
 
+    def salva_genere(self, is_new: bool):
+        CAMPI_NECESSARI = "È necessario compilare i campi segnati con *."
+
+        if is_new:
+            from view.info.nuovo_genere import FormNuovoGenere
+
+            cur_page = self.__nav.get_pages().get("nuovo_genere")
+            if not isinstance(cur_page, FormNuovoGenere):
+                raise TypeError(
+                    f"cur_page deve essere FormNuovoGenere, trovata {type(cur_page)}"
+                )
+
+            nome = cur_page.input_nome.text()
+            descrizione = cur_page.input_descrizione.toPlainText()
+
+            try:
+                new_genere = Genere(nome, descrizione)
+            except DatoIncongruenteException:
+                cur_page.label_error.setText(CAMPI_NECESSARI)
+            else:
+                cur_page.label_error.setText("")
+
+                self.__model.aggiungi_genere(new_genere)
+
+                self.__nav.go_back()
+        elif not is_new:
+            from view.info.modifica_genere import FormModificaGenere
+
+            cur_page = self.__nav.get_pages().get("modifica_genere")
+            if not isinstance(cur_page, FormModificaGenere):
+                raise TypeError(
+                    f"cur_page deve essere FormModificaGenere, trovata {type(cur_page)}"
+                )
+
+            id_ = cur_page.cur_id_genere
+
+            nome = cur_page.input_nome.text()
+            descrizione = cur_page.input_descrizione.toPlainText()
+            dati: tuple[str, str] = (nome, descrizione)
+
+            try:
+                self.__model.modifica_genere(id_, dati)
+            except DatoIncongruenteException:
+                cur_page.label_error.setText(CAMPI_NECESSARI)
+            else:
+                cur_page.label_error.setText("")
+
+                self.__nav.go_back()
+
     ### TESTING ###
     def nuova_regia(self, id_opera: int):
         # Get pagina salvata nel NavigationController
         from view.info.nuova_regia import FormNuovaRegia
 
         cur_page = self.__nav.get_pages().get("nuova_regia")
-        assert isinstance(cur_page, FormNuovaRegia)
+        if not isinstance(cur_page, FormNuovaRegia):
+            raise TypeError(
+                f"cur_page deve essere FormNuovaRegia, trovata {type(cur_page)}"
+            )
 
         # Setup default values
         cur_page.cur_id_opera = id_opera
@@ -275,7 +393,10 @@ class InfoController:
         from view.info.modifica_regia import FormModificaRegia
 
         cur_page = self.__nav.get_pages().get("modifica_regia")
-        assert isinstance(cur_page, FormModificaRegia)
+        if not isinstance(cur_page, FormModificaRegia):
+            raise TypeError(
+                f"cur_page deve essere FormModificaRegia, trovata {type(cur_page)}"
+            )
 
         # ID utilizato quando si Conferma la modifica
         cur_page.cur_id_regia = id_
@@ -285,7 +406,7 @@ class InfoController:
         cur_page.input_anno.setValue(cur_regia.get_anno_produzione())
 
         # # Apri la pagina FormModificaGenere
-        self.__nav.go_to("modifica_genere", save_history=True)
+        self.__nav.go_to("modifica_regia", save_history=True)
 
     ### TESTING ###
     def cancella_regia(self):

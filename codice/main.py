@@ -2,10 +2,9 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
 
 from controller.context import AppContext
 
-from view.styles.styles_loader import load_stylesheet
-
 from view.login_page import LogInPage
 from view.info.info_page import InfoPage
+from view.styles.styles_loader import load_stylesheet
 
 # from view.account.account_page import AccountPage <- INCOMPLETO
 # from view.spettacoli.spettacoli_page import SpettacoliPage <- INCOMPLETO

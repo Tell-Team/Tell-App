@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QMainWindow
 
 from controller.navigation import NavigationController
+
 from model.model import Model
 
 

@@ -7,8 +7,6 @@ class FormModificaRegia(FormNuovaRegia):
     def __init__(self, info_controller: InfoController):
         super().__init__(info_controller)
 
-        self._build_ui()
-
         # I campi di input sono atributi di FormNuovaRegia
 
     def _build_ui(self):
@@ -22,6 +20,7 @@ class FormModificaRegia(FormNuovaRegia):
         self.header.setText("Modifica regia")
 
         # ## Modifica il pulsanti Conferma
+        self.btn_conferma.clicked.disconnect()  # type:ignore
         self.btn_conferma.clicked.connect(  # type:ignore
             lambda: print(
                 "self.info_controller.salva_regia(is_new=False)"

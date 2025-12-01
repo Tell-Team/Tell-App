@@ -4,9 +4,11 @@ from PyQt6.QtWidgets import QStackedWidget, QMainWindow, QWidget
 class NavigationController:
     """
     Permette all'utente di navegare nelle pagine e sezioni della applicazione, utilizando una lista
-    `__history` per indicare a che pagina andare dietro con `go_back` e due funzioni diverse per
-    indicare se la pagina corrente vendrà salvata nella detta lista (`go_to`) o meno (`section_go_to`)
-    dopo di andar a un'altra.
+    `__history` per indicare a che pagina andare dietro con `go_back()` e due funzioni diverse per
+    indicare se la pagina corrente vendrà salvata nella detta lista (`go_to()`) o meno
+    (`section_go_to()`) dopo di andar a un'altra. I metodi `go_back()` e `go_to()` permettono di
+    aggiornare le pagine delle classi, sempre che queste abbiano una funzione `refresh_page()`
+    definita.
     """
 
     def __init__(self, main_window: QMainWindow):
@@ -36,6 +38,9 @@ class NavigationController:
         if current and save_history:
             self._history.append(current)
 
+        if hasattr(widget, "refresh_page"):
+            widget.refresh_page()  # type:ignore
+
         self._stack.setCurrentWidget(widget)
 
     def section_go_to(self, page_name: str):
@@ -48,4 +53,8 @@ class NavigationController:
         if not self._history:
             return
         last_widget = self._history.pop()
+
+        if hasattr(last_widget, "refresh_page"):
+            last_widget.refresh_page()  # type:ignore
+
         self._stack.setCurrentWidget(last_widget)
