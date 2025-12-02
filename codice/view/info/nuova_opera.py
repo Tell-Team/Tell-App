@@ -1,135 +1,98 @@
 from PyQt6.QtWidgets import (
-    QWidget,
     QLabel,
-    QFormLayout,
-    QVBoxLayout,
-    QHBoxLayout,
     QLineEdit,
     QTextEdit,
     QComboBox,
     QDateEdit,
     QSpinBox,
-    QPushButton,
 )
-from PyQt6.QtCore import Qt
-from functools import partial
+from PyQt6.QtCore import pyqtSignal
 
-from controller.info_controller import InfoController
+from view.abstractView.creaAbstract import CreaAbstractView
 
 
-class FormNuovaOpera(QWidget):
+class NuovaOperaView(CreaAbstractView):
     """
     Interfaccia utente di creazione di `Opera`. Contiene campi di input per inserire tutti gli
-    attributo respettivi. Comunque non permette di crea istanze di `Regia` ammeno che non venga
-    prima creata un'opera e questa venga modificata.
+    attributo respettivi.
     """
 
-    def __init__(self, info_controller: InfoController):
-        super().__init__()
+    request_lista_generi_nomi = pyqtSignal()
 
-        self.info_controller = info_controller
+    def __init__(self):
+        super().__init__()
 
         self._build_ui()
 
     def _build_ui(self):
         # - Lo style non è ancora applicato
 
-        # # Header
-        self.header = QLabel("Nuova opera")
-        self.header.setObjectName("Header1")
-        self.header.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        # Header
+        self.header.setText("Nuova opera")
 
-        # # Input rows
+        # Form
+        self._setup_form()
+
+        # Layout
+        self.main_layout.addWidget(self.header)
+        self.main_layout.addWidget(self.form_content)
+        self.main_layout.addWidget(self.input_error)
+        self.main_layout.addWidget(self.pulsanti)
+        self.main_layout.addStretch()
+
+    def _setup_form(self):
         label_nome = QLabel('Nome<span style="color:red">*</span> :')
         label_nome.setObjectName("SubHeader")
-        self.input_nome = QLineEdit()
+        self.nome = QLineEdit()
 
         label_trama = QLabel("Trama :")
         label_trama.setObjectName("SubHeader")
-        self.input_trama = QTextEdit()
-        self.input_trama.setFixedHeight(80)
+        self.trama = QTextEdit()
+        self.trama.setFixedHeight(80)
 
         label_genere = QLabel('Genere<span style="color:red">*</span> :')
         label_genere.setObjectName("SubHeader")
-        self.input_genere = QComboBox()
-        self.input_genere.insertItem(0, "")
-        for g in self.info_controller.get_generi():
-            nome = g.get_nome()
-            self.input_genere.addItem(nome)
-        self.input_genere.setCurrentIndex(0)
+        self.genere = QComboBox()
+
+        self.request_lista_generi_nomi.emit()
 
         label_compositore = QLabel('Compositore<span style="color:red">*</span> :')
         label_compositore.setObjectName("SubHeader")
-        self.input_compositore = QLineEdit()
+        self.compositore = QLineEdit()
 
         label_librettista = QLabel('Librettista<span style="color:red">*</span> :')
         label_librettista.setObjectName("SubHeader")
-        self.input_librettista = QLineEdit()
+        self.librettista = QLineEdit()
 
         label_atti = QLabel('Numeri di atti<span style="color:red">*</span> :')
         label_atti.setObjectName("SubHeader")
-        self.input_atti = QSpinBox()
-        self.input_atti.setRange(0, 10)
-        self.input_atti.setValue(0)
+        self.atti = QSpinBox()
+        self.atti.setRange(0, 10)
+        self.atti.setValue(0)
 
         label_data = QLabel("Prima rappresentazione :")
         label_data.setObjectName("SubHeader")
-        self.input_data = QDateEdit()
+        self.data = QDateEdit()
 
         label_teatro = QLabel("Teatro prima rappresentazione :")
         label_teatro.setObjectName("SubHeader")
-        self.input_teatro = QLineEdit()
+        self.teatro = QLineEdit()
 
-        form_content = QWidget()
-        self.form_layout = QFormLayout(form_content)
-        self.form_layout.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
-        self.form_layout.addRow(label_nome, self.input_nome)
-        self.form_layout.addRow(label_trama, self.input_trama)
-        self.form_layout.addRow(label_genere, self.input_genere)
-        self.form_layout.addRow(label_compositore, self.input_compositore)
-        self.form_layout.addRow(label_librettista, self.input_librettista)
-        self.form_layout.addRow(label_atti, self.input_atti)
-        self.form_layout.addRow(label_data, self.input_data)
-        self.form_layout.addRow(label_teatro, self.input_teatro)
+        self.add_row(label_nome, self.nome)
+        self.add_row(label_trama, self.trama)
+        self.add_row(label_genere, self.genere)
+        self.add_row(label_compositore, self.compositore)
+        self.add_row(label_librettista, self.librettista)
+        self.add_row(label_atti, self.atti)
+        self.add_row(label_data, self.data)
+        self.add_row(label_teatro, self.teatro)
 
-        # # Lista regie
-        self.label_lista_regie = QLabel("Lista regie")
-        self.label_lista_regie.setObjectName("Header2")
-        self.label_lista_regie.setAlignment(Qt.AlignmentFlag.AlignLeft)
-
-        self.nota_regie = QLabel(
-            "**Nota:** Le singole repliche (Regie) possono essere aggiunte solo dopo aver salvato l'opera."
-        )
-        self.nota_regie.setObjectName("SubHeader")
-        self.nota_regie.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        self.nota_regie.setWordWrap(True)
-
-        # # Pulsanti
-        self.btn_cancella = QPushButton("Cancella")
-        self.btn_cancella.setObjectName("SmallButton")
-        self.btn_cancella.clicked.connect(  # type:ignore
-            partial(self.info_controller.cancella_opera, is_new=True)
-        )
-
-        self.btn_conferma = QPushButton("Conferma")
-        self.btn_conferma.setObjectName("SmallButton")
-        self.btn_conferma.clicked.connect(  # type:ignore
-            lambda: print(
-                "self.info_controller.salva_opera"
-            )  # - self.info_controller.salva_opera
-        )
-
-        self.pulsanti = QWidget()
-        layout_pulsanti = QHBoxLayout(self.pulsanti)
-        layout_pulsanti.addWidget(self.btn_cancella)
-        layout_pulsanti.addWidget(self.btn_conferma)
-        layout_pulsanti.addStretch()
-
-        # # Layout
-        self.main_layout = QVBoxLayout(self)
-        self.main_layout.addWidget(self.header)
-        self.main_layout.addWidget(form_content)
-        self.main_layout.addWidget(self.label_lista_regie)
-        self.main_layout.addWidget(self.nota_regie)
-        self.main_layout.addWidget(self.pulsanti)
-        self.main_layout.addStretch()
+    def set_genere_combobox(self, names: list[str]):
+        """Chiamata dal `InfoController` per riempire il `QComboBox` dei generi."""
+        self.genere.clear()
+        # Qui potrei utilizzare .addItem e .addItems, ma lancia un'errore di Pylance che non
+        # mi interesa gestire.
+        self.genere.insertItem(0, "")
+        for i, n in enumerate(names):
+            i += 1
+            self.genere.insertItem(i, n)

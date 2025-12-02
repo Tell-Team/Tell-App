@@ -9,12 +9,11 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from functools import partial
 
-from model.model import Model
-from controller.navigation import NavigationController
+from view.abstractView.sectionAbstract import AbstractSectionView
 
 
-class AccountPage(QWidget):
-    def __init__(self, model: Model, nav: NavigationController):
+class AccountSectionView(AbstractSectionView):
+    def __init__(self):
         super().__init__()
 
         # # LOGOUT

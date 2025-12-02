@@ -23,6 +23,11 @@ class NavigationController:
     def get_pages(self) -> dict[str, QWidget]:
         return self._pages
 
+    def get_page(self, page_name: str):
+        for key in self._pages:
+            if key == page_name:
+                return self._pages.get(key)
+
     def add_page(self, page_name: str, widget: QWidget):
         """Registra una pagina nel dict `__pages` della classe con una `str` come keyword."""
         self._pages[page_name] = widget

@@ -9,14 +9,12 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from functools import partial
 
-from controller.spettacoli_controller import SpettacoliController
+from view.abstractView.sectionAbstract import AbstractSectionView
 
 
-class SpettacoliPage(QWidget):
-    def __init__(self, spettacoli_controller: SpettacoliController):
+class SpettacoliSectionView(AbstractSectionView):
+    def __init__(self):
         super().__init__()
-
-        self.spettacoli_controller = spettacoli_controller
 
         self._build_ui()
 

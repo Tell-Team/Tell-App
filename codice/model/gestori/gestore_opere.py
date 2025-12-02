@@ -1,4 +1,4 @@
-from model.pianificazione.opera import Opera
+from model.pianificazione.opera import Opera, date
 from model.exceptions import IdOccupatoException, IdInesistenteException
 from typing import Optional
 
@@ -64,13 +64,20 @@ class GestoreOpere:
 
         raise IdInesistenteException(f"Non è presente nessun'opera con id {id_}.")
 
-    def modifica_opera(self, opera_modificata: Opera):
+    def modifica_opera(
+        self, id_: int, nuovi_dati: tuple[str, str, str, int, date, str, str, int]
+    ):
         """Throws: IdInesistenteException"""
-        for i, o in enumerate(self.__lista_opere):
-            if o.get_id() == opera_modificata.get_id():
-                self.__lista_opere[i] = opera_modificata
+        for o in self.__lista_opere:
+            if o.get_id() == id_:
+                o.set_nome(nuovi_dati[0])
+                o.set_compositore(nuovi_dati[1])
+                o.set_librettista(nuovi_dati[2])
+                o.set_numero_atti(nuovi_dati[3])
+                o.set_data_prima_rappresentazione(nuovi_dati[4])
+                o.set_teatro_prima_rappresentazione(nuovi_dati[5])
+                o.set_trama(nuovi_dati[6])
+                o.set_id_genere(nuovi_dati[7])
                 return
 
-        raise IdInesistenteException(
-            f"Non è presente nessuna opera con id {opera_modificata.get_id()}."
-        )
+        raise IdInesistenteException(f"Non è presente nessuna opera con id {id_}.")
