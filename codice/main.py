@@ -1,11 +1,8 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout
 
 from controller.context import AppContext
 
 from view.styles.styles_loader import load_stylesheet
-
-# from view.account.account_section import AccountSectionView <- INCOMPLETO
-# from view.spettacoli.spettacoli_section import SpettacoliSectionView <- INCOMPLETO
 
 
 # Con `# -` ho segnato le annotazione sui dettagli a modificare

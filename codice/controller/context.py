@@ -12,26 +12,22 @@ class AppContext:
         self.model = Model()
 
         # Crea le pagine dell'app
-
         from view.login_page import LoginPage
 
         self.login_page = LoginPage()
 
         from view.info.info_section import InfoSectionView
+        from view.info.visualizza_opera import OperaView
 
         self.info_section = InfoSectionView()
+        self.visualizza_opera_view = OperaView()
 
-        from view.info.visualizza_opera import OperaView
         from view.info.modifica_opera import NuovaOperaView, ModificaOperaView
 
-        self.visualizza_opera_view = OperaView()
         self.nuova_opera_view = NuovaOperaView()
         self.modifica_opera_view = ModificaOperaView()
 
-        from view.info.modifica_genere import (
-            NuovoGenereView,
-            ModificaGenereView,
-        )
+        from view.info.modifica_genere import NuovoGenereView, ModificaGenereView
 
         self.nuovo_genere_view = NuovoGenereView()
         self.modifica_genere_view = ModificaGenereView()
@@ -47,10 +43,18 @@ class AppContext:
             self.model,
             self.info_section,
             self.visualizza_opera_view,
-            self.nuova_opera_view,
-            self.modifica_opera_view,
-            self.nuovo_genere_view,
-            self.modifica_genere_view,
+        )
+
+        from controller.CU_opera_controller import CUOperaController
+
+        self.cu_opera_controller = CUOperaController(
+            self.model, self.nuova_opera_view, self.modifica_opera_view
+        )
+
+        from controller.CU_genere_controller import CUGenereController
+
+        self.cu_genere_controller = CUGenereController(
+            self.model, self.nuovo_genere_view, self.modifica_genere_view
         )
 
         # Assegnamento dei pyqtSignal() nei Controller
@@ -67,6 +71,22 @@ class AppContext:
         )
 
         self.info_controller.navigation_get_page.connect(  # type:ignore
+            self.on_nav_request_get_page
+        )
+
+        self.cu_opera_controller.navigation_go_back.connect(  # type:ignore
+            self.nav.go_back
+        )
+
+        self.cu_opera_controller.navigation_get_page.connect(  # type:ignore
+            self.on_nav_request_get_page
+        )
+
+        self.cu_genere_controller.navigation_go_back.connect(  # type:ignore
+            self.nav.go_back
+        )
+
+        self.cu_genere_controller.navigation_get_page.connect(  # type:ignore
             self.on_nav_request_get_page
         )
 

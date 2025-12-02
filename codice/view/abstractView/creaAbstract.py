@@ -1,10 +1,10 @@
 from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
+    QPushButton,
     QFormLayout,
     QVBoxLayout,
     QHBoxLayout,
-    QPushButton,
 )
 from PyQt6.QtCore import Qt
 

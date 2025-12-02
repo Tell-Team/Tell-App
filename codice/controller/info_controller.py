@@ -9,14 +9,11 @@ from model.pianificazione.genere import Genere
 from model.pianificazione.regia import Regia  # Per VisualizzaOpera
 from model.exceptions import (
     IdInesistenteException,
-    DatoIncongruenteException,
     OggettoInUsoException,
 )
 
 from view.info.info_section import InfoSectionView
 from view.info.visualizza_opera import OperaView
-from view.info.modifica_opera import ModificaOperaView, NuovaOperaView
-from view.info.modifica_genere import ModificaGenereView, NuovoGenereView
 
 
 class InfoController(QObject):
@@ -29,19 +26,11 @@ class InfoController(QObject):
         model: Model,
         info_s: InfoSectionView,
         opera_v: OperaView,
-        n_opera_v: NuovaOperaView,
-        m_opera_v: ModificaOperaView,
-        n_genere_v: NuovoGenereView,
-        m_genere_v: ModificaGenereView,
     ):
         super().__init__()
         self.__model = model
         self.__info_section = info_s
         self.__visualizza_opera_view = opera_v
-        self.__nuova_opera_view = n_opera_v
-        self.__modifica_opera_view = m_opera_v
-        self.__nuovo_genere_view = n_genere_v
-        self.__modifica_genere_view = m_genere_v
         self._connect_signals()
 
     def _connect_signals(self):
@@ -74,27 +63,6 @@ class InfoController(QObject):
         self.__info_section.btn_nuova_opera.clicked.connect(  # type:ignore
             self.nuova_opera
         )
-        self.__nuova_opera_view.request_lista_generi_nomi.connect(  # type:ignore
-            self.carica_genere_opzioni
-        )
-
-        # Cancella creazione Opera
-        self.__nuova_opera_view.btn_cancella.clicked.connect(  # type:ignore
-            self.cancella_opera
-        )
-        # Conferma creazione Opera
-        self.__nuova_opera_view.btn_conferma.clicked.connect(  # type:ignore
-            partial(self.salva_opera, is_new=True)
-        )
-
-        # Cancella modifica Opera
-        self.__modifica_opera_view.btn_cancella.clicked.connect(  # type:ignore
-            self.cancella_opera
-        )
-        # Conferma modifica Opera
-        self.__modifica_opera_view.btn_conferma.clicked.connect(  # type:ignore
-            partial(self.salva_opera, is_new=False)
-        )
 
         # Visualizza Opera
         self.__visualizza_opera_view.btn_torna_dietro.clicked.connect(  # type:ignore
@@ -105,24 +73,6 @@ class InfoController(QObject):
         # Crea un Genere
         self.__info_section.btn_nuovo_genere.clicked.connect(  # type:ignore
             self.nuovo_genere
-        )
-
-        # Cancella creazione Genere
-        self.__nuovo_genere_view.btn_cancella.clicked.connect(  # type:ignore
-            self.cancella_genere
-        )
-        # Conferma creazione Genere
-        self.__nuovo_genere_view.btn_conferma.clicked.connect(  # type:ignore
-            partial(self.salva_genere, is_new=True)
-        )
-
-        # Cancella modifica Genere
-        self.__modifica_genere_view.btn_cancella.clicked.connect(  # type:ignore
-            self.cancella_genere
-        )
-        # Conferma modifica Genere
-        self.__modifica_genere_view.btn_conferma.clicked.connect(  # type:ignore
-            partial(self.salva_genere, is_new=False)
         )
 
     def get_opera(self, id_: int) -> Optional[Opera]:
@@ -430,11 +380,6 @@ class InfoController(QObject):
         # Apri pagina NuovaOperaView
         self.navigation_go_to.emit("nuova_opera", True)
 
-    def carica_genere_opzioni(self):
-        generi = self.__model.get_generi()
-        nomi = [g.get_nome() for g in generi]
-        self.__nuova_opera_view.set_genere_combobox(nomi)
-
     def modifica_opera(self, id_: int):
         """
         Carica la pagina `ModificaOperaView`, con i dati dell'opera relativa all'`id_` inseriti
@@ -489,109 +434,6 @@ class InfoController(QObject):
 
         # Apri la pagina ModificaOperaView
         self.navigation_go_to.emit("modifica_opera", True)
-
-    def cancella_opera(self):
-        """
-        Chiama il metodo `go_back()` del `NavigationController`. Non ha bisogno di riscrivere
-        i campi di input perché le funzioni `crea_genere()` e `modifica_genere()` si caricano di
-        farlo.
-        """
-        self.navigation_go_back.emit()
-
-    def salva_opera(self, is_new: bool = True):
-        # - Serve modificare i construttore di Opera per fare la trama, la data di prima
-        #   rappresentazione e il teatro di prima rappresentazione parametri opzionali.
-        #   Oppure possono essere segnati como necessari in NuovaOperaView con *.
-        CAMPI_NECESSARI = "È necessario compilare i campi segnati con *."
-
-        if is_new:
-            from view.info.nuova_opera import NuovaOperaView
-
-            cur_page_dict: dict[str, QWidget | None] = {"value": None}
-            self.navigation_get_page.emit("nuova_opera", cur_page_dict)
-            cur_page = cur_page_dict.get("value")
-
-            if not isinstance(cur_page, NuovaOperaView):
-                raise TypeError(
-                    f"cur_page deve essere NuovaOperaView, trovata {type(cur_page)}"
-                )
-
-            nome = cur_page.nome.text()
-            trama = cur_page.trama.toPlainText()
-
-            nome_genere = cur_page.genere.currentText()
-            id_genere = -1
-            for g in self.__model.get_generi():
-                if g.get_nome() == nome_genere:
-                    id_genere = g.get_id()
-
-            compositore = cur_page.compositore.text()
-            librettista = cur_page.librettista.text()
-            atti = cur_page.atti.value()
-            data = cur_page.data.date().toPyDate()
-            teatro = cur_page.teatro.text()
-
-            try:
-                new_opera = Opera(
-                    nome, compositore, librettista, atti, data, teatro, trama, id_genere
-                )
-            except DatoIncongruenteException:
-                cur_page.input_error.setText(CAMPI_NECESSARI)
-            else:
-                cur_page.input_error.setText("")
-
-                self.__model.aggiungi_opera(new_opera)
-
-                self.navigation_go_back.emit()
-        elif not is_new:
-            from view.info.modifica_opera import ModificaOperaView
-
-            cur_page_dict: dict[str, QWidget | None] = {"value": None}
-            self.navigation_get_page.emit("modifica_opera", cur_page_dict)
-            cur_page = cur_page_dict.get("value")
-
-            if not isinstance(cur_page, ModificaOperaView):
-                raise TypeError(
-                    f"cur_page deve essere ModificaOperaView, trovata {type(cur_page)}"
-                )
-
-            id_ = cur_page.cur_id_opera
-
-            nome = cur_page.nome.text()
-            trama = cur_page.trama.toPlainText()
-
-            nome_genere = cur_page.genere.currentText()
-            id_genere = -1
-            for g in self.__model.get_generi():
-                if g.get_nome() == nome_genere:
-                    id_genere = g.get_id()
-
-            compositore = cur_page.compositore.text()
-            librettista = cur_page.librettista.text()
-            atti = cur_page.atti.value()
-            data = cur_page.data.date().toPyDate()
-            teatro = cur_page.teatro.text()
-            from datetime import date
-
-            dati: tuple[str, str, str, int, date, str, str, int] = (
-                nome,
-                compositore,
-                librettista,
-                atti,
-                data,
-                teatro,
-                trama,
-                id_genere,
-            )
-
-            try:
-                self.__model.modifica_opera(id_, dati)
-            except DatoIncongruenteException:
-                cur_page.input_error.setText(CAMPI_NECESSARI)
-            else:
-                cur_page.input_error.setText("")
-
-                self.navigation_go_back.emit()
 
     #
     #
@@ -667,66 +509,3 @@ class InfoController(QObject):
             return False
         else:
             return True
-
-    def cancella_genere(self):
-        """
-        Chiama il metodo `go_back()` del `NavigationController`. Non ha bisogno di riscrivere
-        i campi di input perché le funzioni `crea_genere()` e `modifica_genere()` si caricano di
-        farlo.
-        """
-        self.navigation_go_back.emit()
-
-    def salva_genere(self, is_new: bool):
-        CAMPI_NECESSARI = "È necessario compilare i campi segnati con *."
-
-        if is_new:
-            from view.info.nuovo_genere import NuovoGenereView
-
-            cur_page_dict: dict[str, QWidget | None] = {"value": None}
-            self.navigation_get_page.emit("nuovo_genere", cur_page_dict)
-            cur_page = cur_page_dict.get("value")
-
-            if not isinstance(cur_page, NuovoGenereView):
-                raise TypeError(
-                    f"cur_page deve essere NuovoGenereView, trovata {type(cur_page)}"
-                )
-
-            nome = cur_page.nome.text()
-            descrizione = cur_page.descrizione.toPlainText()
-
-            try:
-                new_genere = Genere(nome, descrizione)
-            except DatoIncongruenteException:
-                cur_page.input_error.setText(CAMPI_NECESSARI)
-            else:
-                cur_page.input_error.setText("")
-
-                self.__model.aggiungi_genere(new_genere)
-
-                self.navigation_go_back.emit()
-        elif not is_new:
-            from view.info.modifica_genere import ModificaGenereView
-
-            cur_page_dict: dict[str, QWidget | None] = {"value": None}
-            self.navigation_get_page.emit("modifica_genere", cur_page_dict)
-            cur_page = cur_page_dict.get("value")
-
-            if not isinstance(cur_page, ModificaGenereView):
-                raise TypeError(
-                    f"cur_page deve essere ModificaGenereView, trovata {type(cur_page)}"
-                )
-
-            id_ = cur_page.cur_id_genere
-
-            nome = cur_page.nome.text()
-            descrizione = cur_page.descrizione.toPlainText()
-            dati: tuple[str, str] = (nome, descrizione)
-
-            try:
-                self.__model.modifica_genere(id_, dati)
-            except DatoIncongruenteException:
-                cur_page.input_error.setText(CAMPI_NECESSARI)
-            else:
-                cur_page.input_error.setText("")
-
-                self.navigation_go_back.emit()
