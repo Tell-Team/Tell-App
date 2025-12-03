@@ -2,7 +2,7 @@ from model.gestori.gestore_generi import GestoreGeneri
 from model.gestori.gestore_opere import GestoreOpere
 from model.gestori.gestore_spettacoli import GestoreSpettacoli
 from model.pianificazione.genere import Genere
-from model.pianificazione.opera import Opera, date
+from model.pianificazione.opera import Opera
 from model.pianificazione.spettacolo import Spettacolo
 from model.pianificazione.regia import Regia
 from model.exceptions import (
@@ -113,9 +113,9 @@ class Model:
         self.__gestore_generi.elimina_genere(id_)
         self.__salva_generi()
 
-    def modifica_genere(self, id_: int, nuovi_dati: tuple[str, str]):
+    def modifica_genere(self, genere_modificato: Genere):
         """Throws: IdInesistenteException"""
-        self.__gestore_generi.modifica_genere(id_, nuovi_dati)
+        self.__gestore_generi.modifica_genere(genere_modificato)
         self.__salva_generi()
 
     def aggiungi_opera(self, opera: Opera):
@@ -135,11 +135,11 @@ class Model:
         self.__gestore_opere.elimina_opera(id_)
         self.__salva_opere()
 
-    def modifica_opera(
-        self, id_: int, nuovi_dati: tuple[str, str, str, int, date, str, str, int]
-    ):
+    def modifica_opera(self, opera_modificata: Opera):
         """Throws: IdInesistenteException"""
-        self.__gestore_opere.modifica_opera(id_, nuovi_dati)
+        self.__valida_opera(opera_modificata)
+
+        self.__gestore_opere.modifica_opera(opera_modificata)
         self.__salva_opere()
 
     def aggiungi_spettacolo(self, spettacolo: Spettacolo):

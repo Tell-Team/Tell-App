@@ -1,6 +1,7 @@
 from model.pianificazione.genere import Genere
 from model.exceptions import IdOccupatoException, IdInesistenteException
 from typing import Optional
+import copy
 
 
 class GestoreGeneri:
@@ -27,7 +28,7 @@ class GestoreGeneri:
     def get_genere(self, id_: int) -> Optional[Genere]:
         for g in self.__lista_generi:
             if g.get_id() == id_:
-                return g
+                return copy.copy(g)
 
         return None
 
@@ -54,12 +55,13 @@ class GestoreGeneri:
 
         raise IdInesistenteException(f"Non è presente nessun genere con id {id_}.")
 
-    def modifica_genere(self, id_: int, nuovi_dati: tuple[str, str]):
+    def modifica_genere(self, genere_modificato: Genere):
         """Throws: IdInesistenteException"""
-        for g in self.__lista_generi:
-            if g.get_id() == id_:
-                g.set_nome(nuovi_dati[0])
-                g.set_descrizione(nuovi_dati[1])
+        for i, g in enumerate(self.__lista_generi):
+            if g.get_id() == genere_modificato.get_id():
+                self.__lista_generi[i] = genere_modificato
                 return
 
-        raise IdInesistenteException(f"Non è presente nessun genere con id {id_}.")
+        raise IdInesistenteException(
+            f"Non è presente nessun genere con id {genere_modificato.get_id()}."
+        )

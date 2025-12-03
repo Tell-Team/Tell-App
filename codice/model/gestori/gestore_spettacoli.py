@@ -2,6 +2,7 @@ from model.pianificazione.spettacolo import Spettacolo
 from model.pianificazione.regia import Regia
 from model.exceptions import IdOccupatoException, IdInesistenteException
 from typing import Optional
+import copy
 
 
 class GestoreSpettacoli:
@@ -28,7 +29,7 @@ class GestoreSpettacoli:
     def get_spettacolo(self, id_: int) -> Optional[Spettacolo]:
         for s in self.__lista_spettacoli:
             if s.get_id() == id_:
-                return s
+                return copy.copy(s)
 
         return None
 
