@@ -70,6 +70,10 @@ class AppContext:
             self.on_nav_request_go_to
         )
 
+        self.info_controller.navigation_section_go_to.connect(  # type:ignore
+            self.on_nav_request_section_go_to
+        )
+
         self.info_controller.navigation_get_page.connect(  # type:ignore
             self.on_nav_request_get_page
         )
@@ -92,6 +96,9 @@ class AppContext:
 
     def on_nav_request_go_to(self, page_name: str, save_history: bool):
         self.nav.go_to(page_name, save_history)
+
+    def on_nav_request_section_go_to(self, page_name: str):
+        self.nav.section_go_to
 
     def on_nav_request_get_page(
         self, page_name: str, container: dict[str, QWidget | None]

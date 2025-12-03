@@ -19,6 +19,7 @@ from view.info.visualizza_opera import OperaView
 class InfoController(QObject):
     navigation_go_back = pyqtSignal()
     navigation_go_to = pyqtSignal(str, bool)
+    navigation_section_go_to = pyqtSignal(str)
     navigation_get_page = pyqtSignal(str, dict)
 
     def __init__(
@@ -40,13 +41,13 @@ class InfoController(QObject):
         )
 
         self.__info_section.btn_sezione_spettacoli.clicked.connect(  # type:ignore
-            lambda: self.navigation_go_to.emit("spettacoli_section")
+            lambda: self.navigation_section_go_to.emit("spettacoli_section")
         )
 
         self.__info_section.btn_sezione_info.setEnabled(False)
 
         self.__info_section.btn_sezione_account.clicked.connect(  # type:ignore
-            lambda: self.navigation_go_to.emit("account_section")
+            lambda: self.navigation_section_go_to.emit("account_section")
             # - Account ancora non implemetati
         )
 
