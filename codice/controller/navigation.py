@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QStackedWidget, QMainWindow, QWidget
 
 class NavigationController:
     """
-    Permette all'utente di navegare nelle pagine e sezioni della applicazione, utilizando una lista
+    Permette all'utente di navegare nelle pagine e sezioni della applicazione, utilizzando una lista
     `__history` per indicare a che pagina andare dietro con `go_back()` e due funzioni diverse per
     indicare se la pagina corrente vendrà salvata nella detta lista (`go_to()`) o meno
     (`section_go_to()`) dopo di andar a un'altra. I metodi `go_back()` e `go_to()` permettono di

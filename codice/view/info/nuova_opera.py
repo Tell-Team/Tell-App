@@ -91,7 +91,7 @@ class NuovaOperaView(CreaAbstractView):
         """Chiamata dal `InfoController` per riempire il `QComboBox` dei generi."""
         self.genere.clear()
         # Qui potrei utilizzare .addItem e .addItems, ma lancia un'errore di Pylance che non
-        # mi interesa gestire.
+        #   mi interesa gestire.
         self.genere.insertItem(0, "")
         for i, n in enumerate(names):
             i += 1

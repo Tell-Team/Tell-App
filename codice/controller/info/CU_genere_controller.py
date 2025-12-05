@@ -4,9 +4,11 @@ from functools import partial
 
 from model.model import Model
 from model.pianificazione.genere import Genere
-from model.exceptions import DatoIncongruenteException
+from model.exceptions import DatoIncongruenteException, IdInesistenteException
 
 from view.info.modifica_genere import ModificaGenereView, NuovoGenereView
+
+import copy
 
 
 class CUGenereController(QObject):
@@ -97,17 +99,25 @@ class CUGenereController(QObject):
                     f"cur_page deve essere ModificaGenereView, trovata {type(cur_page)}"
                 )
 
-            id_ = cur_page.cur_id_genere
+            copia_genere = copy.deepcopy(
+                self.__model.get_genere(cur_page.cur_id_genere)
+            )
+            if not isinstance(copia_genere, Genere):
+                raise IdInesistenteException(
+                    f"Non e' presente nessun genere con id {cur_page.cur_id_genere}."
+                )
 
             nome = cur_page.nome.text()
             descrizione = cur_page.descrizione.toPlainText()
-            dati: tuple[str, str] = (nome, descrizione)
 
             try:
-                self.__model.modifica_genere(id_, dati)
+                copia_genere.set_nome(nome)
+                copia_genere.set_descrizione(descrizione)
             except DatoIncongruenteException:
                 cur_page.input_error.setText(CAMPI_NECESSARI)
             else:
                 cur_page.input_error.setText("")
+
+                self.__model.modifica_genere(copia_genere)
 
                 self.navigation_go_back.emit()

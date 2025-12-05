@@ -12,7 +12,7 @@ from typing import Optional
 from view.abstractView.sectionAbstract import AbstractSectionView
 
 
-# - Se l'app, in teoria, vendrà usara in un schermo tattile dai cliente, sarà comoda scambiare
+# - Se l'app, in teoria, vendrà usata in un schermo tattile dai cliente, sarà comoda scambiare
 #   alcuni .clicked per .pressed
 
 
@@ -46,6 +46,11 @@ class InfoSectionView(AbstractSectionView):
         layout_header_opere.addStretch()
 
         self.layout_lista_opere = QVBoxLayout()
+
+        self.label_lista_opere_vuota = QLabel("Non vi sono opere disponibili.")
+        self.label_lista_opere_vuota.setObjectName("SubHeader")
+        self.label_lista_opere_vuota.hide()
+
         self.request_display_opere.emit(self.layout_lista_opere)
 
         container_opere = QWidget()
@@ -71,6 +76,11 @@ class InfoSectionView(AbstractSectionView):
         layout_header_generi.addStretch()
 
         self.layout_lista_generi = QVBoxLayout()
+
+        self.label_lista_generi_vuota = QLabel("Non vi sono generi disponibili.")
+        self.label_lista_generi_vuota.setObjectName("SubHeader")
+        self.label_lista_generi_vuota.hide()
+
         self.request_display_generi.emit(self.layout_lista_generi)
 
         container_generi = QWidget()
@@ -118,9 +128,13 @@ class InfoSectionView(AbstractSectionView):
 
     def refresh_page(self):
         self.clear_layout(self.layout_lista_opere)
+        self.layout_lista_opere.addWidget(self.label_lista_opere_vuota)
+        self.label_lista_opere_vuota.hide()
         self.request_display_opere.emit(self.layout_lista_opere)
 
         self.clear_layout(self.layout_lista_generi)
+        self.layout_lista_generi.addWidget(self.label_lista_generi_vuota)
+        self.label_lista_generi_vuota.hide()
         self.request_display_generi.emit(self.layout_lista_generi)
 
     def clear_layout(self, layout: Optional[QLayout]):
@@ -132,7 +146,8 @@ class InfoSectionView(AbstractSectionView):
 
                 if widget:
                     widget.setParent(None)
-                else:
-                    child_layout = item.layout()
-                    if child_layout:
-                        self.clear_layout(child_layout)
+                    continue
+
+                child_layout = item.layout()
+                if child_layout:
+                    self.clear_layout(child_layout)

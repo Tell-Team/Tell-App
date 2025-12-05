@@ -14,7 +14,7 @@ class SpettacoliController:
     def get_spettacoli(self) -> list[Spettacolo]:
         return self.__model.get_spettacoli()
 
-    # - QUESTI METODI GLI AVEVO CREATO NEL info_controller.py E IN TEORIA DEBO RIFERIRSI AGLI
+    # - QUESTI METODI GLI AVEVO CREATO NEL info_controller.py E IN TEORIA DEvOno RIFERIRSI AGLI
     #   SPETTACOLI. QUINDI DEVONO ESSER MODIFICATI.
     # - Funziona con la struttura di NuovaRegiaView e deve essere aggiorna se quella classe
     #   è modificata. Comunque, è abbastanza coeso nel suo funzionamento.
@@ -45,7 +45,7 @@ class SpettacoliController:
             (r for r in self.get_regie_by_opera(id_opera) if r.get_id() == id_), None
         )
         if not cur_regia:
-            raise IdInesistenteException("ID Regia non trovata nella lista regie.")
+            raise IdInesistenteException(f"Non è presente nessuna regia con id {id_}.")
 
         # Get pagina salvata nel NavigationController
         from view.info.modifica_regia import ModificaRegiaView

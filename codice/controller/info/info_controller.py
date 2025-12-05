@@ -6,7 +6,7 @@ from functools import partial
 from model.model import Model
 from model.pianificazione.opera import Opera
 from model.pianificazione.genere import Genere
-from model.pianificazione.regia import Regia  # Per VisualizzaOpera
+from model.pianificazione.regia import Regia  # Necessario per VisualizzaOpera.
 from model.exceptions import (
     IdInesistenteException,
     OggettoInUsoException,
@@ -96,6 +96,12 @@ class InfoController(QObject):
     #
 
     def display_opere(self, layout: QVBoxLayout):
+        lista_vuota_error = layout.itemAt(0).widget()  # type:QLabel # type:ignore
+
+        if not self.get_opere():
+            lista_vuota_error.show()
+            return
+
         for opera in self.get_opere():
             # Labels
             nome = QLabel(f"{opera.get_nome()}")
@@ -139,6 +145,12 @@ class InfoController(QObject):
             layout.addWidget(cur_opera)
 
     def display_generi(self, layout: QVBoxLayout):
+        lista_vuota_error = layout.itemAt(0).widget()  # type:QLabel # type:ignore
+
+        if not self.get_generi():
+            lista_vuota_error.show()
+            return
+
         for genere in self.get_generi():
             id_ = genere.get_id()
 
@@ -166,6 +178,15 @@ class InfoController(QObject):
             temp_layout_btn.addWidget(btn_elimina)
             temp_layout_btn.addStretch()
 
+            # Errore: Genere in uso
+            label_error = QLabel("Errore: Questo genere è in uso.")
+            label_error.setObjectName("SubHeader")
+            label_error.setStyleSheet(
+                label_error.styleSheet() + "#SubHeader { color:red; }"
+            )
+            label_error.hide()
+            temp_layout_btn.addWidget(label_error)
+
             # Pannello di eliminazione
             domanda = QLabel("Sicuro di eliminare?")
 
@@ -182,15 +203,6 @@ class InfoController(QObject):
             layout_conferma.addWidget(btn_no)
             conferma_elimina.hide()
 
-            # Errore: Genere in uso
-            label_error = QLabel("Errore: Questo genere è in uso.")
-            label_error.setObjectName("SubHeader")
-            label_error.setStyleSheet(
-                label_error.styleSheet() + "#SubHeader { color:red; }"
-            )
-
-            label_error.hide()
-
             # Layout
             current_genere = QWidget()
             current_genere.setObjectName("Container")
@@ -200,7 +212,6 @@ class InfoController(QObject):
             layout_cur_genere.addWidget(descrizione)
             layout_cur_genere.addWidget(pulsanti)
             layout_cur_genere.addWidget(conferma_elimina)
-            layout_cur_genere.addWidget(label_error)
 
             layout.addWidget(current_genere)
 
@@ -214,16 +225,11 @@ class InfoController(QObject):
             def on_no(
                 pulsanti_widget: QWidget = pulsanti,
                 conferma_elimina_widget: QWidget = conferma_elimina,
+                label_error_widget: QLabel = label_error,
             ):
                 conferma_elimina_widget.hide()
                 pulsanti_widget.show()
-
-            def hide_error(
-                pulsanti_widget: QWidget = pulsanti,
-                label_error_widget: QLabel = label_error,
-            ):
                 label_error_widget.hide()
-                pulsanti_widget.show()
 
             def on_si(
                 id_genere: int = id_,
@@ -231,26 +237,24 @@ class InfoController(QObject):
                 conferma_elimina_widget: QWidget = conferma_elimina,
                 label_error_widget: QLabel = label_error,
             ):
-                eliminato = self.elimina_genere(id_genere)
-                if not eliminato:
+                if not self.elimina_genere(id_genere):
+                    # Se non si può eliminare, mostra un messaggio d'errore che viene nascosto
+                    #   dopo qualunque chiamata di refresh_page() oppure se si tenta di eliminare
+                    #   una seconda volta ma cancellando col pulsante No.
                     conferma_elimina_widget.hide()
+                    pulsanti_widget.show()
                     label_error_widget.show()
-                    from PyQt6.QtCore import QTimer
-
-                    QTimer.singleShot(  # type:ignore
-                        1500, partial(hide_error, pulsanti_widget, label_error_widget)
-                    )
                 else:
                     self.__info_section.refresh_page()
 
             btn_elimina.clicked.connect(  # type:ignore
                 partial(on_elimina, pulsanti, conferma_elimina)
             )
+            btn_no.clicked.connect(  # type:ignore
+                partial(on_no, pulsanti, conferma_elimina, label_error)
+            )
             btn_si.clicked.connect(  # type:ignore
                 partial(on_si, id_, pulsanti, conferma_elimina, label_error)
-            )
-            btn_no.clicked.connect(  # type:ignore
-                partial(on_no, pulsanti, conferma_elimina)
             )
 
     def visualizza_opera(self, id_: int):
@@ -258,12 +262,12 @@ class InfoController(QObject):
         Assegna i dati necessari dell'opera, relativa all'`id_`, nella pagina `OperaView`.
         """
 
-        LISTA_VUOTA = "Al momento, questa opera non ha regie."
+        LISTA_VUOTA = "Al momento, non vi sono regie per questa opera."
 
         # Get opera da visualizzare
         cur_opera = self.get_opera(id_)
         if not cur_opera:
-            raise IdInesistenteException("ID Opera non trovata nella lista opere.")
+            raise IdInesistenteException(f"Non e' presente nessun'opera con id {id_}.")
 
         # Get pagina salvata nel NavigationController
         from view.info.visualizza_opera import OperaView
@@ -288,7 +292,9 @@ class InfoController(QObject):
 
         cur_genere = self.get_genere(cur_opera.get_id_genere())
         if not cur_genere:
-            raise IdInesistenteException("ID Genere non trovata nella lista generi.")
+            raise IdInesistenteException(
+                f"Non e' presente nessun genere con id {cur_opera.get_id_genere()}."
+            )
 
         cur_page.label_genere.setText(f"Genere: {cur_genere.get_nome()}")
 
@@ -301,9 +307,9 @@ class InfoController(QObject):
         lista_regie = self.get_regie_by_opera(cur_opera.get_id())
         if not lista_regie:
             cur_page.lista_vuota_error.setText(LISTA_VUOTA)
-        else:
-            for r in lista_regie:
-                self.display_regia(r, cur_page.layout_regie)
+
+        for r in lista_regie:
+            self.display_regia(r, cur_page.layout_regie)
 
         # Apri la pagina OperaView
         self.navigation_go_to.emit("visualizza_opera", True)
@@ -339,12 +345,14 @@ class InfoController(QObject):
 
                 if widget:
                     widget.setParent(None)
-                # Non c'è un else per eliminare sottolayouts perché non è necessario
+                # Non c'è un else per eliminare sottolayouts perché non è necessario.
+                # - Se quella lista regie permette di modificare o eliminare le regie, allora
+                #   sì dovrei aggiungere un modo di eliminare layouts
 
     def nuova_opera(self):
         """
         Carica la pagina `NuovaOperaView`, dove l'utente può cancellare l'operazione tornando dietro
-        utilizando il pulsante Cancella, chiamando `cancella_opera()` o confermare la creazione
+        utilizzando il pulsante Cancella, chiamando `cancella_opera()` o confermare la creazione
         pulsando Conferma, chiamando altro metodo `salva_opera()`, che verifica la correttezza dei
         dati, crea l'istanza di `Opera` e la salva nella lista di opere. I campi di input vengono
         riscritti prima di visualizzare la pagina.
@@ -392,7 +400,7 @@ class InfoController(QObject):
         # Get opera da modificare
         cur_opera = self.get_opera(id_)
         if not cur_opera:
-            raise IdInesistenteException("ID Opera non trovata nella lista opere.")
+            raise IdInesistenteException(f"Non e' presente nessun'opera con id {id_}.")
 
         # Get pagina salvata nel NavigationController
         from view.info.modifica_opera import ModificaOperaView
@@ -406,7 +414,7 @@ class InfoController(QObject):
                 f"cur_page deve essere ModificaOperaView, trovata {type(cur_page)}"
             )
 
-        # ID utilizato quando si Conferma la modifica
+        # ID utilizzato quando si Conferma la modifica
         cur_page.cur_id_opera = id_
 
         # Setup values
@@ -420,7 +428,9 @@ class InfoController(QObject):
 
         cur_genere = self.get_genere(cur_opera.get_id_genere())
         if not cur_genere:
-            raise IdInesistenteException("ID Genere non trovata nella lista generi.")
+            raise IdInesistenteException(
+                f"Non e' presente nessun genere con id {cur_opera.get_id_genere()}."
+            )
 
         index = cur_page.genere.findText(cur_genere.get_nome())
 
@@ -443,7 +453,7 @@ class InfoController(QObject):
     def nuovo_genere(self):
         """
         Carica la pagina `NuovoGenereView`, dove l'utente può cancellare l'operazione tornando
-        dietro utilizando `cancella_genere()` o confermare la creazione, chiamando altro metodo
+        dietro utilizzando `cancella_genere()` o confermare la creazione, chiamando altro metodo
         `salva_genere()`, che verifica la correttezza dei dati, crea l'istanza di `Genere` e la
         salva nella lista di generi. I campi di input vengono riscritti prima di visualizzare la
         pagina.
@@ -479,7 +489,7 @@ class InfoController(QObject):
         # Get genere da modificare
         cur_genere = self.get_genere(id_)
         if not cur_genere:
-            raise IdInesistenteException("ID Genere non trovata nella lista generi.")
+            raise IdInesistenteException(f"Non e' presente nessun genere con id {id_}.")
 
         # Get pagina salvata nel NavigationController
         from view.info.modifica_genere import ModificaGenereView
@@ -493,7 +503,7 @@ class InfoController(QObject):
                 f"cur_page deve essere ModificaGenereView, trovata {type(cur_page)}"
             )
 
-        # ID utilizato quando si Conferma la modifica
+        # ID utilizzato quando si Conferma la modifica
         cur_page.cur_id_genere = cur_genere.get_id()
 
         # Setup values
@@ -508,5 +518,5 @@ class InfoController(QObject):
             self.__model.elimina_genere(id_)
         except OggettoInUsoException:
             return False
-        else:
-            return True
+
+        return True

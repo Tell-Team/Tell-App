@@ -45,7 +45,7 @@ class AbstractSectionView(QWidget):
         layout_sezioni.addWidget(self.btn_sezione_account)
         layout_sezioni.addStretch()
 
-        #  Top layout
+        # Top layout
         container_top = QWidget()
         layout_top = QVBoxLayout(container_top)
         layout_top.addWidget(widget_logout)
@@ -76,7 +76,8 @@ class AbstractSectionView(QWidget):
 
                 if widget:
                     widget.setParent(None)
-                else:
-                    child_layout = item.layout()
-                    if child_layout:
-                        self.clear_layout(child_layout)
+                    return
+
+                child_layout = item.layout()
+                if child_layout:
+                    self.clear_layout(child_layout)

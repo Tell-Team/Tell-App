@@ -24,6 +24,9 @@ class MainWindowView(QMainWindow):
         """
         # Registrazione delle pagine
         self.context.nav.add_page("login_page", self.context.login_page)
+        self.context.nav.add_page(
+            "authentication_page", self.context.authentication_page
+        )
         self.context.nav.add_page("info_section", self.context.info_section)
         self.context.nav.add_page("nuova_opera", self.context.nuova_opera_view)
         self.context.nav.add_page("modifica_opera", self.context.modifica_opera_view)

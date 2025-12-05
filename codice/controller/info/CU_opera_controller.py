@@ -4,9 +4,11 @@ from functools import partial
 
 from model.model import Model
 from model.pianificazione.opera import Opera
-from model.exceptions import DatoIncongruenteException
+from model.exceptions import DatoIncongruenteException, IdInesistenteException
 
 from view.info.modifica_opera import ModificaOperaView, NuovaOperaView
+
+import copy
 
 
 class CUOperaController(QObject):
@@ -124,7 +126,11 @@ class CUOperaController(QObject):
                     f"cur_page deve essere ModificaOperaView, trovata {type(cur_page)}"
                 )
 
-            id_ = cur_page.cur_id_opera
+            copia_opera = copy.deepcopy(self.__model.get_opera(cur_page.cur_id_opera))
+            if not isinstance(copia_opera, Opera):
+                raise IdInesistenteException(
+                    f"Non e' presente nessun'opera con id {cur_page.cur_id_opera}."
+                )
 
             nome = cur_page.nome.text()
             trama = cur_page.trama.toPlainText()
@@ -140,24 +146,21 @@ class CUOperaController(QObject):
             atti = cur_page.atti.value()
             data = cur_page.data.date().toPyDate()
             teatro = cur_page.teatro.text()
-            from datetime import date
-
-            dati: tuple[str, str, str, int, date, str, str, int] = (
-                nome,
-                compositore,
-                librettista,
-                atti,
-                data,
-                teatro,
-                trama,
-                id_genere,
-            )
 
             try:
-                self.__model.modifica_opera(id_, dati)
+                copia_opera.set_nome(nome)
+                copia_opera.set_compositore(compositore)
+                copia_opera.set_librettista(librettista)
+                copia_opera.set_numero_atti(atti)
+                copia_opera.set_data_prima_rappresentazione(data)
+                copia_opera.set_teatro_prima_rappresentazione(teatro)
+                copia_opera.set_trama(trama)
+                copia_opera.set_id_genere(id_genere)
             except DatoIncongruenteException:
                 cur_page.input_error.setText(CAMPI_NECESSARI)
             else:
                 cur_page.input_error.setText("")
+
+                self.__model.modifica_opera(copia_opera)
 
                 self.navigation_go_back.emit()

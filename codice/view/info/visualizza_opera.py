@@ -75,7 +75,7 @@ class OperaView(QWidget):
         #
 
         # Pulsante: Torna dietro
-        self.btn_torna_dietro = QPushButton("Torna dietro")
+        self.btn_torna_dietro = QPushButton("Indietro")
         self.btn_torna_dietro.setObjectName("SmallButton")
 
         self.pulsanti = QWidget()

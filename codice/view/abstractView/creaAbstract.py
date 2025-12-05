@@ -46,8 +46,7 @@ class CreaAbstractView(QWidget):
         # Main layout Setup
         self.main_layout = QVBoxLayout(self)
 
-    def _setup_form(self):
-        pass
+    def _setup_form(self): ...
 
     def _clear_form_layout(self, form_layout: QFormLayout):
         # Non elimina i QWidget. Serve per ricaricare il QFormLayout.
