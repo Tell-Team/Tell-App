@@ -4,11 +4,11 @@ from functools import partial
 
 from model.model import Model
 from model.pianificazione.opera import Opera
-from model.exceptions import DatoIncongruenteException, IdInesistenteException
+from model.exceptions import DatoIncongruenteException
 
 from view.info.modifica_opera import ModificaOperaView, NuovaOperaView
 
-import copy
+from model.exceptions import IdInesistenteException, IdOccupatoException
 
 
 class CUOperaController(QObject):
@@ -90,11 +90,13 @@ class CUOperaController(QObject):
             nome = cur_page.nome.text()
             trama = cur_page.trama.toPlainText()
 
+            # -- WHAT DOES THIS MEAN???
             nome_genere = cur_page.genere.currentText()
             id_genere = -1
             for g in self.__model.get_generi():
                 if g.get_nome() == nome_genere:
                     id_genere = g.get_id()
+            # -- END
 
             compositore = cur_page.compositore.text()
             librettista = cur_page.librettista.text()
@@ -103,7 +105,7 @@ class CUOperaController(QObject):
             teatro = cur_page.teatro.text()
 
             try:
-                new_opera = Opera(
+                nuova_opera = Opera(
                     nome, compositore, librettista, atti, data, teatro, trama, id_genere
                 )
             except DatoIncongruenteException:
@@ -111,9 +113,19 @@ class CUOperaController(QObject):
             else:
                 cur_page.input_error.setText("")
 
-                self.__model.aggiungi_opera(new_opera)
+                try:
+                    self.__model.aggiungi_opera(nuova_opera)
+                except IdInesistenteException:
+                    # L'OPERA E' COLLEGATA AD UN GENERE CHE NON ESISTE
+                    # Nel caso, mostrare popup di errore all'utente
+                    pass
+                except IdOccupatoException:
+                    # ESISTE GIA' UN'OPERA CON QUELL'ID
+                    # Nel caso, mostrare popup di errore all'utente
+                    pass
+                else:
+                    self.navigation_go_back.emit()
 
-                self.navigation_go_back.emit()
         elif not is_new:
             from view.info.modifica_opera import ModificaOperaView
 
@@ -126,11 +138,7 @@ class CUOperaController(QObject):
                     f"cur_page deve essere ModificaOperaView, trovata {type(cur_page)}"
                 )
 
-            copia_opera = copy.deepcopy(self.__model.get_opera(cur_page.cur_id_opera))
-            if not isinstance(copia_opera, Opera):
-                raise IdInesistenteException(
-                    f"Non e' presente nessun'opera con id {cur_page.cur_id_opera}."
-                )
+            id_ = cur_page.cur_id_opera
 
             nome = cur_page.nome.text()
             trama = cur_page.trama.toPlainText()
@@ -146,21 +154,24 @@ class CUOperaController(QObject):
             atti = cur_page.atti.value()
             data = cur_page.data.date().toPyDate()
             teatro = cur_page.teatro.text()
+            from datetime import date
+
+            dati: tuple[str, str, str, int, date, str, str, int] = (
+                nome,
+                compositore,
+                librettista,
+                atti,
+                data,
+                teatro,
+                trama,
+                id_genere,
+            )
 
             try:
-                copia_opera.set_nome(nome)
-                copia_opera.set_compositore(compositore)
-                copia_opera.set_librettista(librettista)
-                copia_opera.set_numero_atti(atti)
-                copia_opera.set_data_prima_rappresentazione(data)
-                copia_opera.set_teatro_prima_rappresentazione(teatro)
-                copia_opera.set_trama(trama)
-                copia_opera.set_id_genere(id_genere)
+                self.__model.modifica_opera(id_, dati)
             except DatoIncongruenteException:
                 cur_page.input_error.setText(CAMPI_NECESSARI)
             else:
                 cur_page.input_error.setText("")
-
-                self.__model.modifica_opera(copia_opera)
 
                 self.navigation_go_back.emit()
