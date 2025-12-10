@@ -3,6 +3,14 @@ from PyQt6.QtCore import Qt
 
 
 class LoginPage(QWidget):
+    """
+    GUI iniziale dell'app.
+
+    Permette di scegliere il tipo d'account con cui si utilizzerà l'app:
+    - Se scelto Cliente, semplicemente viene inviato alla sezione Info;
+    - Se scelto Biglietteria o Amministratore, chiede un'autenticazione.
+    """
+
     def __init__(self):
         super().__init__()
 

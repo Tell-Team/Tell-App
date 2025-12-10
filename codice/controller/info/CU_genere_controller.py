@@ -4,7 +4,11 @@ from functools import partial
 
 from model.model import Model
 from model.pianificazione.genere import Genere
-from model.exceptions import DatoIncongruenteException, IdInesistenteException
+from model.exceptions import (
+    DatoIncongruenteException,
+    IdInesistenteException,
+    IdOccupatoException,
+)
 
 from view.info.modifica_genere import ModificaGenereView, NuovoGenereView
 
@@ -52,11 +56,6 @@ class CUGenereController(QObject):
     #
 
     def cancella_genere(self):
-        """
-        Chiama il metodo `go_back()` del `NavigationController`. Non ha bisogno di riscrivere
-        i campi di input perché le funzioni `crea_genere()` e `modifica_genere()` si caricano di
-        farlo.
-        """
         self.navigation_go_back.emit()
 
     def salva_genere(self, is_new: bool):
@@ -71,22 +70,27 @@ class CUGenereController(QObject):
 
             if not isinstance(cur_page, NuovoGenereView):
                 raise TypeError(
-                    f"cur_page deve essere NuovoGenereView, trovata {type(cur_page)}"
+                    f"cur_page deve essere NuovoGenereView. Type trovato: {type(cur_page)}"
                 )
 
             nome = cur_page.nome.text()
             descrizione = cur_page.descrizione.toPlainText()
 
             try:
-                new_genere = Genere(nome, descrizione)
+                nuovo_genere = Genere(nome, descrizione)
             except DatoIncongruenteException:
                 cur_page.input_error.setText(CAMPI_NECESSARI)
             else:
                 cur_page.input_error.setText("")
 
-                self.__model.aggiungi_genere(new_genere)
-
-                self.navigation_go_back.emit()
+                try:
+                    self.__model.aggiungi_genere(nuovo_genere)
+                except IdOccupatoException:
+                    # ESISTE GIA' UN GENERE CON QUELL'ID
+                    # - Nel caso, mostrare popup di errore all'utente
+                    pass
+                else:
+                    self.navigation_go_back.emit()
         elif not is_new:
             from view.info.modifica_genere import ModificaGenereView
 
@@ -96,7 +100,7 @@ class CUGenereController(QObject):
 
             if not isinstance(cur_page, ModificaGenereView):
                 raise TypeError(
-                    f"cur_page deve essere ModificaGenereView, trovata {type(cur_page)}"
+                    f"cur_page deve essere ModificaGenereView. Type trovato: {type(cur_page)}"
                 )
 
             copia_genere = copy.deepcopy(
@@ -118,6 +122,11 @@ class CUGenereController(QObject):
             else:
                 cur_page.input_error.setText("")
 
-                self.__model.modifica_genere(copia_genere)
-
-                self.navigation_go_back.emit()
+                try:
+                    self.__model.modifica_genere(copia_genere)
+                except IdInesistenteException:
+                    # NON ESISTE UN GENERE CON QUELL'ID
+                    # - Nel caso, mostrare popup di errore all'utente
+                    pass
+                else:
+                    self.navigation_go_back.emit()

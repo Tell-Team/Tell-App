@@ -4,11 +4,15 @@ from functools import partial
 
 from model.model import Model
 from model.pianificazione.opera import Opera
-from model.exceptions import DatoIncongruenteException
+from model.exceptions import (
+    DatoIncongruenteException,
+    IdInesistenteException,
+    IdOccupatoException,
+)
 
 from view.info.modifica_opera import ModificaOperaView, NuovaOperaView
 
-from model.exceptions import IdInesistenteException, IdOccupatoException
+import copy
 
 
 class CUOperaController(QObject):
@@ -62,11 +66,6 @@ class CUOperaController(QObject):
         self.__nuova_opera_view.set_genere_combobox(nomi)
 
     def cancella_opera(self):
-        """
-        Chiama il metodo `go_back()` del `NavigationController`. Non ha bisogno di riscrivere
-        i campi di input perché le funzioni `crea_genere()` e `modifica_genere()` si caricano di
-        farlo.
-        """
         self.navigation_go_back.emit()
 
     def salva_opera(self, is_new: bool = True):
@@ -84,7 +83,7 @@ class CUOperaController(QObject):
 
             if not isinstance(cur_page, NuovaOperaView):
                 raise TypeError(
-                    f"cur_page deve essere NuovaOperaView, trovata {type(cur_page)}"
+                    f"cur_page deve essere NuovaOperaView. Type trovato: {type(cur_page)}"
                 )
 
             nome = cur_page.nome.text()
@@ -117,15 +116,14 @@ class CUOperaController(QObject):
                     self.__model.aggiungi_opera(nuova_opera)
                 except IdInesistenteException:
                     # L'OPERA E' COLLEGATA AD UN GENERE CHE NON ESISTE
-                    # Nel caso, mostrare popup di errore all'utente
+                    # - Nel caso, mostrare popup di errore all'utente
                     pass
                 except IdOccupatoException:
                     # ESISTE GIA' UN'OPERA CON QUELL'ID
-                    # Nel caso, mostrare popup di errore all'utente
+                    # - Nel caso, mostrare popup di errore all'utente
                     pass
                 else:
                     self.navigation_go_back.emit()
-
         elif not is_new:
             from view.info.modifica_opera import ModificaOperaView
 
@@ -135,10 +133,14 @@ class CUOperaController(QObject):
 
             if not isinstance(cur_page, ModificaOperaView):
                 raise TypeError(
-                    f"cur_page deve essere ModificaOperaView, trovata {type(cur_page)}"
+                    f"cur_page deve essere ModificaOperaView. Type trovato: {type(cur_page)}"
                 )
 
-            id_ = cur_page.cur_id_opera
+            copia_opera = copy.deepcopy(self.__model.get_opera(cur_page.cur_id_opera))
+            if not isinstance(copia_opera, Opera):
+                raise IdInesistenteException(
+                    f"Non e' presente nessun opera con id {cur_page.cur_id_opera}."
+                )
 
             nome = cur_page.nome.text()
             trama = cur_page.trama.toPlainText()
@@ -154,24 +156,26 @@ class CUOperaController(QObject):
             atti = cur_page.atti.value()
             data = cur_page.data.date().toPyDate()
             teatro = cur_page.teatro.text()
-            from datetime import date
-
-            dati: tuple[str, str, str, int, date, str, str, int] = (
-                nome,
-                compositore,
-                librettista,
-                atti,
-                data,
-                teatro,
-                trama,
-                id_genere,
-            )
 
             try:
-                self.__model.modifica_opera(id_, dati)
+                copia_opera.set_nome(nome)
+                copia_opera.set_compositore(compositore)
+                copia_opera.set_librettista(librettista)
+                copia_opera.set_numero_atti(atti)
+                copia_opera.set_data_prima_rappresentazione(data)
+                copia_opera.set_teatro_prima_rappresentazione(teatro)
+                copia_opera.set_trama(trama)
+                copia_opera.set_id_genere(id_genere)
             except DatoIncongruenteException:
                 cur_page.input_error.setText(CAMPI_NECESSARI)
             else:
                 cur_page.input_error.setText("")
 
-                self.navigation_go_back.emit()
+                try:
+                    self.__model.modifica_opera(copia_opera)
+                except IdInesistenteException:
+                    # NON ESISTE UN'OPERA CON QUELL'ID
+                    # - Nel caso, mostrare popup di errore all'utente
+                    pass
+                else:
+                    self.navigation_go_back.emit()

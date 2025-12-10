@@ -19,7 +19,6 @@ class SpettacoliController:
     # - Funziona con la struttura di NuovaRegiaView e deve essere aggiorna se quella classe
     #   è modificata. Comunque, è abbastanza coeso nel suo funzionamento.
     def nuova_regia(self, id_opera: int):
-        # Get pagina salvata nel NavigationController
         from view.info.nuova_regia import NuovaRegiaView
 
         cur_page: Optional[QWidget] = QWidget()
@@ -27,7 +26,7 @@ class SpettacoliController:
 
         if not isinstance(cur_page, NuovaRegiaView):
             raise TypeError(
-                f"cur_page deve essere NuovaRegiaView, trovata {type(cur_page)}"
+                f"cur_page deve essere NuovaRegiaView. Type trovato: {type(cur_page)}"
             )
 
         # Setup default values
@@ -47,7 +46,6 @@ class SpettacoliController:
         if not cur_regia:
             raise IdInesistenteException(f"Non è presente nessuna regia con id {id_}.")
 
-        # Get pagina salvata nel NavigationController
         from view.info.modifica_regia import ModificaRegiaView
 
         cur_page: Optional[QWidget] = QWidget()
@@ -55,7 +53,7 @@ class SpettacoliController:
 
         if not isinstance(cur_page, ModificaRegiaView):
             raise TypeError(
-                f"cur_page deve essere ModificaRegiaView, trovata {type(cur_page)}"
+                f"cur_page deve essere ModificaRegiaView. Type trovato: {type(cur_page)}"
             )
 
         # ID utilizato quando si Conferma la modifica

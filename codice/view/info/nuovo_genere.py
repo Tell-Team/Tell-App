@@ -9,6 +9,12 @@ from view.abstractView.creaAbstract import CreaAbstractView
 
 
 class NuovoGenereView(CreaAbstractView):
+    """
+    GUI di creazione di `Genere`.
+
+    Contiene campi di input per inserire tutti gli attributi respettivi.
+    """
+
     def __init__(self):
         super().__init__()
 

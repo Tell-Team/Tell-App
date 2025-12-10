@@ -10,6 +10,12 @@ from PyQt6.QtCore import Qt
 
 
 class AuthenticationPage(QWidget):
+    """
+    GUI di autenticazione degli account `Biglietteria` e `Amministratore`.
+
+    Permette di inserire un nome utente ed una password.
+    """
+
     def __init__(self):
         super().__init__()
 
@@ -60,7 +66,7 @@ class AuthenticationPage(QWidget):
 
         self.btn_login = QPushButton("LOGIN")
         self.btn_login.setObjectName("BlueButton")
-        # - Questo pulsante non è ancora collegato
+        # - Questo pulsante non è ancora collegato nel Controller
 
         #
         #

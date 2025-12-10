@@ -10,6 +10,10 @@ from PyQt6.QtCore import Qt
 
 
 class CreaAbstractView(QWidget):
+    """
+    Classe pseudo-astratta che facilita la creazione delle pagine di crea e modifica dell'app.
+    """
+
     def __init__(self):
         super().__init__()
 
@@ -49,9 +53,18 @@ class CreaAbstractView(QWidget):
     def _setup_form(self): ...
 
     def _clear_form_layout(self, form_layout: QFormLayout):
-        # Non elimina i QWidget. Serve per ricaricare il QFormLayout.
+        """
+        Rimuove tutte le righe di un `QFormLayout` senza eliminare i widget. Serve per
+        ricaricare un form.
+        """
+        # - Non è stato ancora implementato, ma potrebbe essere utile.
+
         while form_layout.rowCount() > 0:
             form_layout.removeRow(0)
 
     def add_row(self, label_text: QLabel, widget: QWidget):
+        """
+        Metodo per tener il codice pulito ed aggiungere una riga al `QFormLayout`
+        della pagina per cui viene chiamato.
+        """
         self.form_layout.addRow(label_text, widget)

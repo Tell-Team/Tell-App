@@ -13,8 +13,9 @@ from view.abstractView.creaAbstract import CreaAbstractView
 
 class NuovaOperaView(CreaAbstractView):
     """
-    Interfaccia utente di creazione di `Opera`. Contiene campi di input per inserire tutti gli
-    attributo respettivi.
+    GUI di creazione di `Opera`.
+
+    Contiene campi di input per inserire tutti gli attributi respettivi.
     """
 
     request_lista_generi_nomi = pyqtSignal()
@@ -88,10 +89,9 @@ class NuovaOperaView(CreaAbstractView):
         self.add_row(label_teatro, self.teatro)
 
     def set_genere_combobox(self, names: list[str]):
-        """Chiamata dal `InfoController` per riempire il `QComboBox` dei generi."""
+        """Metodo chiamato dall'`InfoController` per riempire il `QComboBox` dei generi."""
         self.genere.clear()
-        # Qui potrei utilizzare .addItem e .addItems, ma lancia un'errore di Pylance che non
-        #   mi interesa gestire.
+
         self.genere.insertItem(0, "")
         for i, n in enumerate(names):
             i += 1

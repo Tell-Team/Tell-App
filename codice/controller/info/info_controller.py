@@ -7,10 +7,7 @@ from model.model import Model
 from model.pianificazione.opera import Opera
 from model.pianificazione.genere import Genere
 from model.pianificazione.regia import Regia  # Necessario per VisualizzaOpera.
-from model.exceptions import (
-    IdInesistenteException,
-    OggettoInUsoException,
-)
+from model.exceptions import IdInesistenteException, OggettoInUsoException
 
 from view.info.info_section import InfoSectionView
 from view.info.visualizza_opera import OperaView
@@ -66,7 +63,7 @@ class InfoController(QObject):
         )
 
         # Visualizza Opera
-        self.__visualizza_opera_view.btn_torna_dietro.clicked.connect(  # type:ignore
+        self.__visualizza_opera_view.btn_indietro.clicked.connect(  # type:ignore
             lambda: self.navigation_go_back.emit()
         )
 
@@ -96,6 +93,11 @@ class InfoController(QObject):
     #
 
     def display_opere(self, layout: QVBoxLayout):
+        """
+        Visualizza a schermo alcune informazioni anagrafiche delle opere salvate ed
+        assegna a ciascuna pulsanti per visualizzarle in dettaglio o modificarle.
+        """
+
         lista_vuota_error = layout.itemAt(0).widget()  # type:QLabel # type:ignore
 
         if not self.get_opere():
@@ -145,6 +147,11 @@ class InfoController(QObject):
             layout.addWidget(cur_opera)
 
     def display_generi(self, layout: QVBoxLayout):
+        """
+        Visualizza a schermo le informazioni anagrafiche dei generi salvati ed
+        assegna a ciascuno pulsanti per modificarli o eliminarli.
+        """
+
         lista_vuota_error = layout.itemAt(0).widget()  # type:QLabel # type:ignore
 
         if not self.get_generi():
@@ -262,12 +269,12 @@ class InfoController(QObject):
         Assegna i dati necessari dell'opera, relativa all'`id_`, nella pagina `OperaView`.
         """
 
-        LISTA_VUOTA = "Al momento, non vi sono regie per questa opera."
+        LISTA_REGIE_VUOTA = "Al momento, non vi sono regie per questa opera."
 
         # Get opera da visualizzare
         cur_opera = self.get_opera(id_)
         if not cur_opera:
-            raise IdInesistenteException(f"Non e' presente nessun'opera con id {id_}.")
+            raise IdInesistenteException(f"Non e' presente nessun opera con id {id_}.")
 
         # Get pagina salvata nel NavigationController
         from view.info.visualizza_opera import OperaView
@@ -277,7 +284,9 @@ class InfoController(QObject):
         cur_page = cur_page_dict.get("value")
 
         if not isinstance(cur_page, OperaView):
-            raise TypeError(f"cur_page deve essere OperaView, trovata {type(cur_page)}")
+            raise TypeError(
+                f"cur_page deve essere OperaView. Type trovato: {type(cur_page)}"
+            )
 
         # Setup pagina
         self.clear_layout_regie(cur_page.layout_regie)
@@ -306,7 +315,7 @@ class InfoController(QObject):
 
         lista_regie = self.get_regie_by_opera(cur_opera.get_id())
         if not lista_regie:
-            cur_page.lista_vuota_error.setText(LISTA_VUOTA)
+            cur_page.lista_vuota_error.setText(LISTA_REGIE_VUOTA)
 
         for r in lista_regie:
             self.display_regia(r, cur_page.layout_regie)
@@ -315,6 +324,7 @@ class InfoController(QObject):
         self.navigation_go_to.emit("visualizza_opera", True)
 
     def display_regia(self, r: Regia, layout: QVBoxLayout):
+        """Visualizza a schermo alcune informazioni anagrafiche della regia."""
         temp_regia = QWidget()
         temp_regia.setObjectName("Container")
         temp_layout = QVBoxLayout(temp_regia)
@@ -351,12 +361,14 @@ class InfoController(QObject):
 
     def nuova_opera(self):
         """
-        Carica la pagina `NuovaOperaView`, dove l'utente può cancellare l'operazione tornando dietro
-        utilizzando il pulsante Cancella, chiamando `cancella_opera()` o confermare la creazione
-        pulsando Conferma, chiamando altro metodo `salva_opera()`, che verifica la correttezza dei
-        dati, crea l'istanza di `Opera` e la salva nella lista di opere. I campi di input vengono
-        riscritti prima di visualizzare la pagina.
+        Carica la pagina `NuovaOperaView`, dove l'utente può inserire i dati necessari per
+        creare un'opera.
+
+        Il pulsante Conferma chiama il metodo `salva_opera` di `CUOperaController` per creare
+        un'istanza con i dati inseriti, mentre che il pulsante Cancella chiama `cancella_opera`,
+        tornando dietro senza salvare niente.
         """
+
         # Get pagina salvata nel NavigationController
         from view.info.nuova_opera import NuovaOperaView
 
@@ -366,7 +378,7 @@ class InfoController(QObject):
 
         if not isinstance(cur_page, NuovaOperaView):
             raise TypeError(
-                f"cur_page deve essere NuovaOperaView, trovata {type(cur_page)}"
+                f"cur_page deve essere NuovaOperaView. Type trovato: {type(cur_page)}"
             )
 
         # Setup default values
@@ -391,16 +403,19 @@ class InfoController(QObject):
 
     def modifica_opera(self, id_: int):
         """
-        Carica la pagina `ModificaOperaView`, con i dati dell'opera relativa all'`id_` inseriti
-        nei campo di input. Il pulsante Conferma chiama la stessa funzione `salva_opera(is_new=False)`,
-        ma usando altra opzione che permette di modificare i dati dell'opera esistente grazie ad
-        un'attributo `cur_id_opera` della classe, mentre che il pulsante Cancella
-        chiama `cancella_opera()`, tornando dietro senza far nessun cambio nell'istanza.
+        Carica la pagina `ModificaOperaView`, con i dati dell'opera relativo all'`id_` inseriti
+        nei campo di input.
+
+        Il pulsante Conferma chiama il metodo `salva_opera` di `CUOperaController`, usando
+        un'opzione che permette di modificare i dati dell'opera esistente e salvarli grazie ad
+        un'attributo `cur_id_opera` della pagina, mentre che il pulsante Cancella chiama
+        `cancella_opera`, tornando dietro senza far cambi nell'opera.
         """
+
         # Get opera da modificare
         cur_opera = self.get_opera(id_)
         if not cur_opera:
-            raise IdInesistenteException(f"Non e' presente nessun'opera con id {id_}.")
+            raise IdInesistenteException(f"Non e' presente  opera con id {id_}.")
 
         # Get pagina salvata nel NavigationController
         from view.info.modifica_opera import ModificaOperaView
@@ -411,7 +426,7 @@ class InfoController(QObject):
 
         if not isinstance(cur_page, ModificaOperaView):
             raise TypeError(
-                f"cur_page deve essere ModificaOperaView, trovata {type(cur_page)}"
+                f"cur_page deve essere ModificaOperaView. Type trovato: {type(cur_page)}"
             )
 
         # ID utilizzato quando si Conferma la modifica
@@ -433,8 +448,7 @@ class InfoController(QObject):
             )
 
         index = cur_page.genere.findText(cur_genere.get_nome())
-
-        if index != -1:
+        if index >= 0:
             cur_page.genere.setCurrentIndex(index)
 
         cur_page.compositore.setText(cur_opera.get_compositore())
@@ -452,12 +466,14 @@ class InfoController(QObject):
 
     def nuovo_genere(self):
         """
-        Carica la pagina `NuovoGenereView`, dove l'utente può cancellare l'operazione tornando
-        dietro utilizzando `cancella_genere()` o confermare la creazione, chiamando altro metodo
-        `salva_genere()`, che verifica la correttezza dei dati, crea l'istanza di `Genere` e la
-        salva nella lista di generi. I campi di input vengono riscritti prima di visualizzare la
-        pagina.
+        Carica la pagina `NuovoGenereView`, dove l'utente può inserire i dati necessari per
+        creare un genere.
+
+        Il pulsante Conferma chiama il metodo `salva_genere` di `CUGenereController` per creare
+        un'istanza con i dati inseriti, mentre che il pulsante Cancella chiama `cancella_genere`,
+        tornando dietro senza salvare niente.
         """
+
         # Get pagina salvata nel NavigationController
         from view.info.nuovo_genere import NuovoGenereView
 
@@ -467,7 +483,7 @@ class InfoController(QObject):
 
         if not isinstance(cur_page, NuovoGenereView):
             raise TypeError(
-                f"cur_page deve essere NuovoGenereView, trovata {type(cur_page)}"
+                f"cur_page deve essere NuovoGenereView. Type trovato: {type(cur_page)}"
             )
 
         # Setup default values
@@ -481,11 +497,14 @@ class InfoController(QObject):
     def modifica_genere(self, id_: int):
         """
         Carica la pagina `ModificaGenereView`, con i dati del genere relativo all'`id_` inseriti
-        nei campo di input. Il pulsante Conferma chiama la stessa funzione `salva_genere(is_new=False)`,
-        usando un'opzione che permette di modificare i dati del genere esistente e salvarli grazie ad
-        una attributo `cur_id_genere` della clase, mentre che il pulsante Cancella chiama
-        `cancella_genere()`, tornando dietro senza far cambi nel genere.
+        nei campo di input.
+
+        Il pulsante Conferma chiama il metodo `salva_genere` di `CUGenereController`, usando
+        un'opzione che permette di modificare i dati del genere esistente e salvarli grazie ad
+        un'attributo `cur_id_genere` della pagina, mentre che il pulsante Cancella chiama
+        `cancella_genere`, tornando dietro senza far cambi nel genere.
         """
+
         # Get genere da modificare
         cur_genere = self.get_genere(id_)
         if not cur_genere:
@@ -500,7 +519,7 @@ class InfoController(QObject):
 
         if not isinstance(cur_page, ModificaGenereView):
             raise TypeError(
-                f"cur_page deve essere ModificaGenereView, trovata {type(cur_page)}"
+                f"cur_page deve essere ModificaGenereView. Type trovato: {type(cur_page)}"
             )
 
         # ID utilizzato quando si Conferma la modifica
@@ -514,9 +533,15 @@ class InfoController(QObject):
         self.navigation_go_to.emit("modifica_genere", True)
 
     def elimina_genere(self, id_: int) -> bool:
+        """Tenta di eliminare un genere, sempre che questo non sia un uso."""
+
         try:
             self.__model.elimina_genere(id_)
         except OggettoInUsoException:
             return False
+        except IdInesistenteException:
+            # NON ESISTE UN GENERE CON QUELL'ID
+            # - Nel caso, mostrare popup di errore all'utente
+            pass
 
         return True

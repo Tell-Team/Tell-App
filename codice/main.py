@@ -35,8 +35,8 @@ class MainWindowView(QMainWindow):
         )
         self.context.nav.add_page("nuovo_genere", self.context.nuovo_genere_view)
         self.context.nav.add_page("modifica_genere", self.context.modifica_genere_view)
-        # self.context.nav.add_page("account_section", self.context.account_section)
-        # self.context.nav.add_page("spettacoli_section", self.context.spettacoli_section)
+        # - self.context.nav.add_page("account_section", self.context.account_section)
+        # - self.context.nav.add_page("spettacoli_section", self.context.spettacoli_section)
 
         # Layout
         central = QWidget()

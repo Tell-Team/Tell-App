@@ -11,7 +11,7 @@ class AppContext:
         self.nav = NavigationController(main_window)
         self.model = Model()
 
-        # Crea le pagine dell'app
+        # Pagine Login
         from view.login.login_page import LoginPage
 
         self.login_page = LoginPage()
@@ -20,6 +20,7 @@ class AppContext:
 
         self.authentication_page = AuthenticationPage()
 
+        # Pagine Info
         from view.info.info_section import InfoSectionView
         from view.info.visualizza_opera import OperaView
 
@@ -36,13 +37,14 @@ class AppContext:
         self.nuovo_genere_view = NuovoGenereView()
         self.modifica_genere_view = ModificaGenereView()
 
-        # Carica i Controller di Login e le sezioni dell'app
+        # Controller Login
         from controller.login.login_controller import LoginController
 
         self.login_controller = LoginController(
             self.model, self.login_page, self.authentication_page
         )
 
+        # Controller Info
         from controller.info.info_controller import InfoController
 
         self.info_controller = InfoController(

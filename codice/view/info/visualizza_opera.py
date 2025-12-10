@@ -10,6 +10,13 @@ from PyQt6.QtCore import Qt
 
 
 class OperaView(QWidget):
+    """
+    GUI di visualizzazione di `Opera`.
+
+    Contiene le informazioni anagrafiche dell'opera ed una lista con tutte
+    le regie vinculate ad essa.
+    """
+
     def __init__(self):
         super().__init__()
 
@@ -48,13 +55,13 @@ class OperaView(QWidget):
         self.label_lista_regie = QLabel("Lista regie")
         self.label_lista_regie.setObjectName("Header2")
 
-        self.lista_vuota_error = QLabel("")
-        self.lista_vuota_error.setObjectName("SubHeader")
-
         self.regie = QWidget()
         self.layout_regie = QVBoxLayout(self.regie)
         self.layout_regie.addWidget(self.label_lista_regie)
         self.layout_regie.addStretch()
+
+        self.lista_vuota_error = QLabel("")
+        self.lista_vuota_error.setObjectName("SubHeader")
 
         content = QWidget()
         layout_content = QVBoxLayout(content)
@@ -75,12 +82,12 @@ class OperaView(QWidget):
         #
 
         # Pulsante: Torna dietro
-        self.btn_torna_dietro = QPushButton("Indietro")
-        self.btn_torna_dietro.setObjectName("SmallButton")
+        self.btn_indietro = QPushButton("Indietro")
+        self.btn_indietro.setObjectName("SmallButton")
 
         self.pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.pulsanti)
-        layout_pulsanti.addWidget(self.btn_torna_dietro)
+        layout_pulsanti.addWidget(self.btn_indietro)
         layout_pulsanti.addStretch()
 
         #

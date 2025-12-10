@@ -11,9 +11,8 @@ from typing import Optional
 
 class AbstractSectionView(QWidget):
     """
-    Pagina principale della sezione Info dell'applicazione. Contiene l'interfaccia utente per
-    interaggire con le istanze di `Opera`, `Regia` e `Genere` e una sezione in fondo con le
-    informazioni del teatro.
+    Classe pseudo-astratta che facilita la creazione delle pagine di sezione dell'app: Spettacoli,
+    Info ed Account.
     """
 
     def __init__(self):
@@ -68,6 +67,10 @@ class AbstractSectionView(QWidget):
     def refresh_page(self): ...
 
     def clear_layout(self, layout: Optional[QLayout]):
+        """
+        Pulisce un layout, eliminando i riferimenti ai widget contenuti. In caso
+        ci sia un layout contenuto, questo viene anche pulito.
+        """
         if layout:
             while layout.count():
                 item = layout.takeAt(0)
@@ -76,7 +79,7 @@ class AbstractSectionView(QWidget):
 
                 if widget:
                     widget.setParent(None)
-                    return
+                    continue
 
                 child_layout = item.layout()
                 if child_layout:

@@ -2,12 +2,10 @@ from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
     QPushButton,
-    QLayout,
     QVBoxLayout,
     QHBoxLayout,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
-from typing import Optional
 
 from view.abstractView.sectionAbstract import AbstractSectionView
 
@@ -18,9 +16,10 @@ from view.abstractView.sectionAbstract import AbstractSectionView
 
 class InfoSectionView(AbstractSectionView):
     """
-    Pagina principale della sezione Info dell'applicazione. Contiene l'interfaccia utente per
-    interaggire con le istanze di `Opera` e `Genere` e una sezione in fondo con le informazioni
-    del teatro.
+    GUI della sezione Info dell'app.
+
+    Permette di interaggire con le istanze di `Opera` e `Genere`, e visualizzare una
+    sezione in fondo con le informazioni del teatro.
     """
 
     request_display_opere = pyqtSignal(QVBoxLayout)
@@ -136,18 +135,3 @@ class InfoSectionView(AbstractSectionView):
         self.layout_lista_generi.addWidget(self.label_lista_generi_vuota)
         self.label_lista_generi_vuota.hide()
         self.request_display_generi.emit(self.layout_lista_generi)
-
-    def clear_layout(self, layout: Optional[QLayout]):
-        if layout:
-            while layout.count():
-                item = layout.takeAt(0)
-                assert item is not None
-                widget = item.widget()
-
-                if widget:
-                    widget.setParent(None)
-                    continue
-
-                child_layout = item.layout()
-                if child_layout:
-                    self.clear_layout(child_layout)
