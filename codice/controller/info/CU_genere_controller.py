@@ -103,9 +103,7 @@ class CUGenereController(QObject):
                     f"cur_page deve essere ModificaGenereView. Type trovato: {type(cur_page)}"
                 )
 
-            copia_genere = copy.deepcopy(
-                self.__model.get_genere(cur_page.cur_id_genere)
-            )
+            copia_genere = copy.copy(self.__model.get_genere(cur_page.cur_id_genere))
             if not isinstance(copia_genere, Genere):
                 raise IdInesistenteException(
                     f"Non e' presente nessun genere con id {cur_page.cur_id_genere}."

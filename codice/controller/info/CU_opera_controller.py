@@ -136,7 +136,7 @@ class CUOperaController(QObject):
                     f"cur_page deve essere ModificaOperaView. Type trovato: {type(cur_page)}"
                 )
 
-            copia_opera = copy.deepcopy(self.__model.get_opera(cur_page.cur_id_opera))
+            copia_opera = copy.copy(self.__model.get_opera(cur_page.cur_id_opera))
             if not isinstance(copia_opera, Opera):
                 raise IdInesistenteException(
                     f"Non e' presente nessun opera con id {cur_page.cur_id_opera}."
