@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import (
     QPushButton,
     QVBoxLayout,
     QHBoxLayout,
+    QLineEdit,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 
@@ -39,10 +40,15 @@ class InfoSectionView(AbstractSectionView):
         self.btn_nuova_opera = QPushButton("Nuova opera")
         self.btn_nuova_opera.setObjectName("SmallButton")
 
+        self.ricerca_bar = QLineEdit()
+        self.ricerca_bar.setPlaceholderText("Inserire nome...")
+        # - Dovrebbe includere un pulsante per iniziare la ricerca
+        # - Manca request_ricerca_opera = pyqtSignal(str) per farla funzionale
+
         layout_header_opere = QHBoxLayout()
         layout_header_opere.addWidget(header_opere)
         layout_header_opere.addWidget(self.btn_nuova_opera)
-        layout_header_opere.addStretch()
+        layout_header_opere.addWidget(self.ricerca_bar)
 
         self.layout_lista_opere = QVBoxLayout()
 
@@ -124,6 +130,7 @@ class InfoSectionView(AbstractSectionView):
         self.scroll_layout.addWidget(container_opere)
         self.scroll_layout.addWidget(container_generi)
         self.scroll_layout.addWidget(container_teatro)
+        self.scroll_layout.addStretch()
 
     def refresh_page(self):
         self.clear_layout(self.layout_lista_opere)

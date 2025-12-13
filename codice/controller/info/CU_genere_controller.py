@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import pyqtSignal, QObject
+from typing import Optional
 from functools import partial
 
 from model.model import Model
@@ -11,8 +12,6 @@ from model.exceptions import (
 )
 
 from view.info.modifica_genere import ModificaGenereView, NuovoGenereView
-
-import copy
 
 
 class CUGenereController(QObject):
@@ -51,6 +50,15 @@ class CUGenereController(QObject):
             partial(self.salva_genere, is_new=False)
         )
 
+    def get_genere(self, id_: int) -> Optional[Genere]:
+        return self.__model.get_genere(id_)
+
+    def aggiungi_genere(self, genere: Genere):
+        self.__model.aggiungi_genere(genere)
+
+    def modifica_genere(self, genere_modificato: Genere):
+        self.__model.modifica_genere(genere_modificato)
+
     #
     #
     #
@@ -59,7 +67,7 @@ class CUGenereController(QObject):
         self.navigation_go_back.emit()
 
     def salva_genere(self, is_new: bool):
-        CAMPI_NECESSARI = "È necessario compilare i campi segnati con *."
+        CAMPI_NECESSARI = "È necessario compilare tutti i campi."
 
         if is_new:
             from view.info.nuovo_genere import NuovoGenereView
@@ -80,11 +88,12 @@ class CUGenereController(QObject):
                 nuovo_genere = Genere(nome, descrizione)
             except DatoIncongruenteException:
                 cur_page.input_error.setText(CAMPI_NECESSARI)
+                self.set_pagina_focus(cur_page)  # - TEST
             else:
                 cur_page.input_error.setText("")
 
                 try:
-                    self.__model.aggiungi_genere(nuovo_genere)
+                    self.aggiungi_genere(nuovo_genere)
                 except IdOccupatoException:
                     # ESISTE GIA' UN GENERE CON QUELL'ID
                     # - Nel caso, mostrare popup di errore all'utente
@@ -103,7 +112,7 @@ class CUGenereController(QObject):
                     f"cur_page deve essere ModificaGenereView. Type trovato: {type(cur_page)}"
                 )
 
-            copia_genere = copy.copy(self.__model.get_genere(cur_page.cur_id_genere))
+            copia_genere = self.get_genere(cur_page.cur_id_genere)
             if not isinstance(copia_genere, Genere):
                 raise IdInesistenteException(
                     f"Non e' presente nessun genere con id {cur_page.cur_id_genere}."
@@ -117,14 +126,21 @@ class CUGenereController(QObject):
                 copia_genere.set_descrizione(descrizione)
             except DatoIncongruenteException:
                 cur_page.input_error.setText(CAMPI_NECESSARI)
+                self.set_pagina_focus(cur_page)  # - TEST
             else:
                 cur_page.input_error.setText("")
 
                 try:
-                    self.__model.modifica_genere(copia_genere)
+                    self.modifica_genere(copia_genere)
                 except IdInesistenteException:
                     # NON ESISTE UN GENERE CON QUELL'ID
                     # - Nel caso, mostrare popup di errore all'utente
                     pass
                 else:
                     self.navigation_go_back.emit()
+
+    def set_pagina_focus(self, pagina: NuovoGenereView):  # - TEST
+        pagina.focusNextChild()
+        if not pagina.nome.text().strip():
+            return
+        pagina.focusNextChild()

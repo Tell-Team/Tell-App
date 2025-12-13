@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import pyqtSignal, QObject
+from typing import Optional
 from functools import partial
 
 from model.model import Model
@@ -11,8 +12,6 @@ from model.exceptions import (
 )
 
 from view.info.modifica_opera import ModificaOperaView, NuovaOperaView
-
-import copy
 
 
 class CUOperaController(QObject):
@@ -56,12 +55,25 @@ class CUOperaController(QObject):
             partial(self.salva_opera, is_new=False)
         )
 
+    def get_opera(self, id_: int) -> Optional[Opera]:
+        return self.__model.get_opera(id_)
+
+    def aggiungi_opera(self, opera: Opera):
+        self.__model.aggiungi_opera(opera)
+
+    def modifica_opera(self, opera_modificata: Opera):
+        self.__model.modifica_opera(opera_modificata)
+
+    def get_generi(self):
+        # - Da modificare (Il controller non dovrebbe accedere alla lista)
+        return self.__model.get_generi()
+
     #
     #
     #
 
     def carica_genere_opzioni(self):
-        generi = self.__model.get_generi()
+        generi = self.get_generi()
         nomi = [g.get_nome() for g in generi]
         self.__nuova_opera_view.set_genere_combobox(nomi)
 
@@ -72,7 +84,7 @@ class CUOperaController(QObject):
         # - Serve modificare i construttore di Opera per fare la trama, la data di prima
         #   rappresentazione e il teatro di prima rappresentazione parametri opzionali.
         #   Oppure possono essere segnati como necessari in NuovaOperaView con *.
-        CAMPI_NECESSARI = "È necessario compilare i campi segnati con *."
+        CAMPI_NECESSARI = "È necessario compilare tutti i campi."
 
         if is_new:
             from view.info.nuova_opera import NuovaOperaView
@@ -92,7 +104,7 @@ class CUOperaController(QObject):
             # -- WHAT DOES THIS MEAN???
             nome_genere = cur_page.genere.currentText()
             id_genere = -1
-            for g in self.__model.get_generi():
+            for g in self.get_generi():
                 if g.get_nome() == nome_genere:
                     id_genere = g.get_id()
             # -- END
@@ -109,11 +121,12 @@ class CUOperaController(QObject):
                 )
             except DatoIncongruenteException:
                 cur_page.input_error.setText(CAMPI_NECESSARI)
+                self.set_pagina_focus(cur_page)  # - TEST
             else:
                 cur_page.input_error.setText("")
 
                 try:
-                    self.__model.aggiungi_opera(nuova_opera)
+                    self.aggiungi_opera(nuova_opera)
                 except IdInesistenteException:
                     # L'OPERA E' COLLEGATA AD UN GENERE CHE NON ESISTE
                     # - Nel caso, mostrare popup di errore all'utente
@@ -136,7 +149,7 @@ class CUOperaController(QObject):
                     f"cur_page deve essere ModificaOperaView. Type trovato: {type(cur_page)}"
                 )
 
-            copia_opera = copy.copy(self.__model.get_opera(cur_page.cur_id_opera))
+            copia_opera = self.get_opera(cur_page.cur_id_opera)
             if not isinstance(copia_opera, Opera):
                 raise IdInesistenteException(
                     f"Non e' presente nessun opera con id {cur_page.cur_id_opera}."
@@ -147,7 +160,7 @@ class CUOperaController(QObject):
 
             nome_genere = cur_page.genere.currentText()
             id_genere = -1
-            for g in self.__model.get_generi():
+            for g in self.get_generi():
                 if g.get_nome() == nome_genere:
                     id_genere = g.get_id()
 
@@ -168,14 +181,39 @@ class CUOperaController(QObject):
                 copia_opera.set_id_genere(id_genere)
             except DatoIncongruenteException:
                 cur_page.input_error.setText(CAMPI_NECESSARI)
+                self.set_pagina_focus(cur_page)  # - TEST
             else:
                 cur_page.input_error.setText("")
 
                 try:
-                    self.__model.modifica_opera(copia_opera)
+                    self.modifica_opera(copia_opera)
                 except IdInesistenteException:
                     # NON ESISTE UN'OPERA CON QUELL'ID
                     # - Nel caso, mostrare popup di errore all'utente
                     pass
                 else:
                     self.navigation_go_back.emit()
+
+    def set_pagina_focus(self, pagina: NuovaOperaView):  # - TEST
+        pagina.focusNextChild()
+        if not pagina.nome.text().strip():
+            return
+        pagina.focusNextChild()
+        if not pagina.trama.toPlainText().strip():
+            return
+        pagina.focusNextChild()
+        if pagina.genere.currentIndex() == 0:
+            return
+        pagina.focusNextChild()
+        if not pagina.compositore.text().strip():
+            return
+        pagina.focusNextChild()
+        if not pagina.librettista.text().strip():
+            return
+        pagina.focusNextChild()
+        if not pagina.atti.value():
+            return
+        pagina.focusNextChild()
+        if not pagina.data:
+            return
+        pagina.focusNextChild()

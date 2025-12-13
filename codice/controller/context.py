@@ -11,6 +11,10 @@ class AppContext:
         self.nav = NavigationController(main_window)
         self.model = Model()
 
+        #
+        #
+        #
+
         # Pagine Login
         from view.login.login_page import LoginPage
 
@@ -36,6 +40,15 @@ class AppContext:
 
         self.nuovo_genere_view = NuovoGenereView()
         self.modifica_genere_view = ModificaGenereView()
+
+        # Pagine Account
+        from view.account.account_section import AccountSectionView
+
+        self.account_section = AccountSectionView()
+
+        #
+        #
+        #
 
         # Controller Login
         from controller.login.login_controller import LoginController
@@ -64,6 +77,10 @@ class AppContext:
         self.cu_genere_controller = CUGenereController(
             self.model, self.nuovo_genere_view, self.modifica_genere_view
         )
+
+        #
+        #
+        #
 
         # Assegnamento dei pyqtSignal() nei Controller
         self.login_controller.navigation_go_back.connect(  # type:ignore
@@ -110,7 +127,7 @@ class AppContext:
         self.nav.go_to(page_name, save_history)
 
     def on_nav_request_section_go_to(self, page_name: str):
-        self.nav.section_go_to
+        self.nav.section_go_to(page_name)
 
     def on_nav_request_get_page(
         self, page_name: str, container: dict[str, QWidget | None]

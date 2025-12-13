@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
 )
 from PyQt6.QtCore import Qt
+from typing import Optional
 
 
 class CreaAbstractView(QWidget):
@@ -62,7 +63,7 @@ class CreaAbstractView(QWidget):
         while form_layout.rowCount() > 0:
             form_layout.removeRow(0)
 
-    def add_row(self, label_text: QLabel, widget: QWidget):
+    def add_row(self, label_text: Optional[QWidget], widget: Optional[QWidget]):
         """
         Metodo per tener il codice pulito ed aggiungere una riga al `QFormLayout`
         della pagina per cui viene chiamato.

@@ -112,3 +112,143 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
     height: 0px;
     background: none;
 }
+
+/* Campi d'input */
+
+/* QLineEdit, QTextEdit */
+QLineEdit, QTextEdit {
+    border: 1px solid #b0b0b0;
+    border-radius: 6px;
+    padding: 5px;
+    background-color: white;
+    color: #222;
+    font-size: 14px;
+}
+
+QLineEdit:hover, QTextEdit:hover {
+    border: 1px solid #818181;
+}
+
+QLineEdit:focus, QTextEdit:focus {
+    border: 1px solid #2b7cff;
+}
+
+QLineEdit:disabled, QTextEdit:disabled {
+    background-color: #ccc;
+    color: #777;
+}
+
+/* ComboBox */
+QComboBox {
+    border: 1px solid #b0b0b0;
+    border-radius: 6px;
+    padding: 5px;
+    background-color: white;
+    color: #222;
+    font-size: 14px;
+}
+
+QComboBox:hover {
+    border: 1px solid #818181;
+}
+
+QComboBox:focus {
+    border: 1px solid #2b7cff;
+}
+
+QComboBox:disabled {
+    background-color: #ccc;
+    color: #777;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left-width: 1px;
+    border-left-color: #b0b0b0;
+    border-left-style: solid;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+QComboBox::down-arrow {
+    image: url(down_arrow.png); /* Placeholder */
+    width: 10px;
+    height: 10px;
+}
+
+QComboBox::drop-down:hover {
+    background-color: #d1d1d1;
+}
+
+QComboBox::drop-down:pressed {
+    background-color: #9a9a9a;
+}
+
+QComboBox QAbstractItemView {
+    border: 1px solid #b0b0b0;
+    selection-background-color: #2b7cff;
+    selection-color: white;
+}
+
+/* QSpinBox, QDateEdit */
+QSpinBox, QDateEdit {
+    border: 1px solid #b0b0b0;
+    border-radius: 6px;
+    padding: 5px;
+    background-color: white;
+    color: #222;
+    font-size: 14px;
+}
+QSpinBox:hover, QDateEdit:hover {
+    border: 1px solid #818181;
+}
+QSpinBox:focus, QDateEdit:focus {
+    border: 1px solid #2b7cff;
+}
+QSpinBox:disabled, QDateEdit:disabled {
+    background-color: #ccc;
+    color: #777;
+}
+
+QSpinBox::up-button, QDateEdit::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: right top;
+    width: 20px;
+    border-left: 1px solid #b0b0b0;
+    border-bottom: 1px solid #b0b0b0;
+    border-top-right-radius: 6px;
+    padding: 0;
+}
+
+QSpinBox::down-button, QDateEdit::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: right bottom;
+    width: 20px;
+    border-left: 1px solid #b0b0b0;
+    border-bottom-right-radius: 6px;
+    padding: 0;
+}
+
+QSpinBox::up-button:hover, QDateEdit::up-button:hover,
+QSpinBox::down-button:hover, QDateEdit::down-button:hover {
+    background-color: #d1d1d1;
+}
+
+QSpinBox::up-button:pressed, QDateEdit::up-button:pressed,
+QSpinBox::down-button:pressed, QDateEdit::down-button:pressed {
+    background-color: #9a9a9a;
+}
+
+QSpinBox::up-arrow, QDateEdit::up-arrow {
+    image: url(up_arrow.png); /* Placeholder */
+    width: 10px;
+    height: 10px;
+}
+
+QSpinBox::down-arrow, QDateEdit::down-arrow {
+    image: url(down_arrow.png); /* Placeholder */
+    width: 10px;
+    height: 10px;
+}

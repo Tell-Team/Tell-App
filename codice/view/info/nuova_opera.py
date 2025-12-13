@@ -26,8 +26,6 @@ class NuovaOperaView(CreaAbstractView):
         self._build_ui()
 
     def _build_ui(self):
-        # - Lo style non è ancora applicato
-
         # Header
         self.header.setText("Nuova opera")
 
@@ -42,30 +40,34 @@ class NuovaOperaView(CreaAbstractView):
         self.main_layout.addStretch()
 
     def _setup_form(self):
-        label_nome = QLabel('Nome<span style="color:red">*</span> :')
+        label_nome = QLabel("Nome :")
         label_nome.setObjectName("SubHeader")
         self.nome = QLineEdit()
+        self.nome.setPlaceholderText("Inserire nome")
 
         label_trama = QLabel("Trama :")
         label_trama.setObjectName("SubHeader")
         self.trama = QTextEdit()
+        self.trama.setPlaceholderText("Inserire trama")
         self.trama.setFixedHeight(80)
 
-        label_genere = QLabel('Genere<span style="color:red">*</span> :')
+        label_genere = QLabel("Genere :")
         label_genere.setObjectName("SubHeader")
         self.genere = QComboBox()
 
         self.request_lista_generi_nomi.emit()
 
-        label_compositore = QLabel('Compositore<span style="color:red">*</span> :')
+        label_compositore = QLabel("Compositore :")
         label_compositore.setObjectName("SubHeader")
         self.compositore = QLineEdit()
+        self.compositore.setPlaceholderText("Inserire compositore")
 
-        label_librettista = QLabel('Librettista<span style="color:red">*</span> :')
+        label_librettista = QLabel("Librettista :")
         label_librettista.setObjectName("SubHeader")
         self.librettista = QLineEdit()
+        self.librettista.setPlaceholderText("Inserire librettista")
 
-        label_atti = QLabel('Numeri di atti<span style="color:red">*</span> :')
+        label_atti = QLabel("Numeri di atti :")
         label_atti.setObjectName("SubHeader")
         self.atti = QSpinBox()
         self.atti.setRange(0, 10)
@@ -78,6 +80,7 @@ class NuovaOperaView(CreaAbstractView):
         label_teatro = QLabel("Teatro prima rappresentazione :")
         label_teatro.setObjectName("SubHeader")
         self.teatro = QLineEdit()
+        self.teatro.setPlaceholderText("Inserire nome del teatro")
 
         self.add_row(label_nome, self.nome)
         self.add_row(label_trama, self.trama)
@@ -92,7 +95,9 @@ class NuovaOperaView(CreaAbstractView):
         """Metodo chiamato dall'`InfoController` per riempire il `QComboBox` dei generi."""
         self.genere.clear()
 
-        self.genere.insertItem(0, "")
+        self.genere.insertItem(0, "Scegliere genere...")
+        # - self.genere.setItemData(0, Qt.GlobalColor.gray, Qt.ItemDataRole.BackgroundRole)
+        # - Come faccio per avere la opzione 0 di colore grigio
         for i, n in enumerate(names):
             i += 1
             self.genere.insertItem(i, n)

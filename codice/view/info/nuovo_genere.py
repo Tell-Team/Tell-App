@@ -21,8 +21,6 @@ class NuovoGenereView(CreaAbstractView):
         self._build_ui()
 
     def _build_ui(self):
-        # - Lo style non è ancora applicato
-
         # Header
         self.header.setText("Nuovo genere")
 
@@ -37,13 +35,15 @@ class NuovoGenereView(CreaAbstractView):
         self.main_layout.addStretch()
 
     def _setup_form(self):
-        label_nome = QLabel('Nome<span style="color:red">*</span> :')
+        label_nome = QLabel("Nome :")
         label_nome.setObjectName("SubHeader")
         self.nome = QLineEdit()
+        self.nome.setPlaceholderText("Inserire nome")
 
-        label_descrizione = QLabel('Descrizione<span style="color:red">*</span> :')
+        label_descrizione = QLabel("Descrizione :")
         label_descrizione.setObjectName("SubHeader")
         self.descrizione = QTextEdit()
+        self.descrizione.setPlaceholderText("Inserire descrizione")
         self.descrizione.setFixedHeight(80)
         self.descrizione.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed

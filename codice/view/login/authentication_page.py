@@ -32,14 +32,14 @@ class AuthenticationPage(QWidget):
         self.label_username.setObjectName("Paragraph")
         self.label_username.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        self.username = QLineEdit("")
+        self.username = QLineEdit()
         self.username.setPlaceholderText("Username")
 
         self.label_password = QLabel("Password")
         self.label_password.setObjectName("Paragraph")
         self.label_password.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        self.password = QLineEdit("")
+        self.password = QLineEdit()
         self.password.setPlaceholderText("Password")
         self.password.setEchoMode(QLineEdit.EchoMode.Password)
 
