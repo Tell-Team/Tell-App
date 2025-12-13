@@ -15,7 +15,7 @@ class NuovaOperaView(CreaAbstractView):
     """
     GUI di creazione di `Opera`.
 
-    Contiene campi di input per inserire tutti gli attributi respettivi.
+    Contiene campi d'input per inserire tutti gli attributi respettivi.
     """
 
     request_lista_generi_nomi = pyqtSignal()

@@ -42,6 +42,7 @@ class InfoSectionView(AbstractSectionView):
 
         self.ricerca_bar = QLineEdit()
         self.ricerca_bar.setPlaceholderText("Inserire nome...")
+        self.ricerca_bar.setClearButtonEnabled(True)
         # - Dovrebbe includere un pulsante per iniziare la ricerca
         # - Manca request_ricerca_opera = pyqtSignal(str) per farla funzionale
 

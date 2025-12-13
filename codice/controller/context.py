@@ -42,7 +42,7 @@ class AppContext:
         self.modifica_genere_view = ModificaGenereView()
 
         # Pagine Account
-        from view.account.account_section import AccountSectionView
+        from view.account.account_section_rod import AccountSectionView
 
         self.account_section = AccountSectionView()
 

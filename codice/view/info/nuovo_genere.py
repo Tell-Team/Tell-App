@@ -12,7 +12,7 @@ class NuovoGenereView(CreaAbstractView):
     """
     GUI di creazione di `Genere`.
 
-    Contiene campi di input per inserire tutti gli attributi respettivi.
+    Contiene campi d'input per inserire tutti gli attributi respettivi.
     """
 
     def __init__(self):

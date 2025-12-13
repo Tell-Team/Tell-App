@@ -1,4 +1,4 @@
-from view.spettacoli.nuova_regia import NuovaRegiaView
+from view.spettacoli.nuova_regia_test import NuovaRegiaView
 
 
 # - QUIZÁ DEBA QUITAR LA OPCIÓN PARA ELEGIR EL TIPO DE Spettacolo DEL QFormLayout. ASÍ

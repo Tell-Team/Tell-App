@@ -33,11 +33,11 @@ class NuovaRegiaView(CreaAbstractView):
         self.main_layout.addStretch()
 
     def _setup_form(self):
-        label_regista = QLabel('Regista<span style="color:red">*</span> :')
+        label_regista = QLabel("Regista :")
         label_regista.setObjectName("SubHeader")
         self.regista = QLineEdit()
 
-        label_anno = QLabel('Anno di produzione<span style="color:red">*</span> :')
+        label_anno = QLabel("Anno di produzione :")
         label_anno.setObjectName("SubHeader")
         self.anno = QSpinBox()
         self.anno.setRange(0, 2099)
