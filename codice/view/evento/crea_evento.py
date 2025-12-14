@@ -27,7 +27,7 @@ class CreaEventoView(QWidget):
         """
         Inizializza la view per la creazione di un nuovo evento.
 
-        :param parent: widget genitore opzionale.
+        :param parent: widget genitore. (?)
         :raises: nessuna eccezione prevista direttamente da questo costruttore.
         """
         super().__init__(parent)
@@ -220,7 +220,7 @@ class CreaEventoView(QWidget):
             return False
         
         # Data e ora sono quasi sempre validi se usiamo QDateEdit/QTimeEdit,
-        # ma controlliamo per completezza la selezione Sala e Stato
+        # ma controllare per completezza la selezione Sala e Stato
         if not self.__stato_pubblicazione_select.currentData():
             self.__mostra_errore("Valore mancante", "Il campo 'Stato Pubblicazione' è obbligatorio.")
             return False

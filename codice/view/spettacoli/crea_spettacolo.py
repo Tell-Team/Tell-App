@@ -1,180 +1,148 @@
-from typing import Dict
+from typing import Dict, Any, Optional
+from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import (
-    QWidget, QLabel, QLineEdit, QComboBox, QPushButton,
-    QVBoxLayout, QHBoxLayout, QGroupBox, QTableWidget, QTableWidgetItem, QHeaderView
+    QWidget, QLabel, QLineEdit, QTextEdit, QPushButton,
+    QFormLayout, QHBoxLayout, QVBoxLayout, QMessageBox, QSpinBox
 )
-from PyQt6.QtCore import Qt, pyqtSignal
-
 
 class CreaSpettacoloView(QWidget):
     """
-    View per la creazione di un nuovo spettacolo.
-    Contiene campi per titolo, opera e regia associata, tipo evento e lista repliche.
+    View per la creazione di un nuovo Spettacolo.
+
+    Gestisce l'input dei dati base (titolo, descrizione, durata) e
+    la validazione prima dell'emissione del segnale di creazione.
 
     Segnali:
-    - spettacolo_salvato(dict): emesso quando l'utente clicca 'Salva Spettacolo'
-    - annullato(): emesso quando l'utente clicca 'Annulla'
+    - spettacolo_creato(dict): emesso quando l'utente salva con dati validi.
+    - annullato(): emesso quando l'utente annulla l'operazione.
     """
 
-    spettacolo_salvato = pyqtSignal(object)  # dict dei dati inseriti
+    spettacolo_creato = pyqtSignal(object)
     annullato = pyqtSignal()
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, parent: Optional[QWidget] = None) -> None:
+        """
+        Inizializza la view.
+
+        :param parent: widget genitore.(?)
+        :raises: nessuna eccezione prevista.
+        """
+        super().__init__(parent)
         self.__setup_ui()
 
-    # ------------------------------------------------------------------
     def __setup_ui(self) -> None:
-        """Imposta la UI della schermata di creazione spettacolo."""
+        """
+        Costruisce l'interfaccia grafica.
+        """
+        self.setWindowTitle("Nuovo Spettacolo")
+        self.setMinimumWidth(400)
 
-        # Titolo principale
-        self.label_titolo: QLabel = QLabel("Aggiungi Nuovo Spettacolo (Programmazione)")
-        self.label_titolo.setStyleSheet("font-size: 20px; font-weight: bold;")
+        # Widget Input (Privati)
+        self.__input_titolo: QLineEdit = QLineEdit()
+        self.__input_descrizione: QTextEdit = QTextEdit()
+        self.__input_durata: QSpinBox = QSpinBox()
+        self.__input_durata.setRange(1, 300)
+        self.__input_durata.setSuffix(" min")
 
-        # -------------------------------
-        # Dati Base e Contenuto
-        # -------------------------------
-        box_dati: QGroupBox = QGroupBox("Dati Base e Contenuto")
-        layout_dati: QVBoxLayout = QVBoxLayout()
+        # Bottoni
+        self.__btn_salva: QPushButton = QPushButton("Salva")
+        self.__btn_salva.setStyleSheet("background-color: #28a745; color: white; font-weight: bold;")
+        self.__btn_annulla: QPushButton = QPushButton("Annulla")
+        self.__btn_annulla.setStyleSheet("background-color: #6c757d; color: white;")
 
-        self.input_titolo: QLineEdit = QLineEdit()
-        self.input_titolo.setPlaceholderText("Es. La Traviata - Stagione 2025")
+        # Layout Form
+        form_layout = QFormLayout()
+        form_layout.addRow("Titolo *:", self.__input_titolo)
+        form_layout.addRow("Descrizione:", self.__input_descrizione)
+        form_layout.addRow("Durata (minuti) *:", self.__input_durata)
 
-        self.select_opera: QComboBox = QComboBox()
-        self.select_opera.addItem("Seleziona l'Opera")
-        self.select_opera.addItem("La Traviata")
+        # Layout Bottoni
+        btn_layout = QHBoxLayout()
+        btn_layout.addStretch()
+        btn_layout.addWidget(self.__btn_annulla)
+        btn_layout.addWidget(self.__btn_salva)
 
-        self.select_regia: QComboBox = QComboBox()
-        self.select_regia.addItem("Seleziona la Regia")
-        self.select_regia.addItem("Produzione Corrente 2024")
+        # Layout Principale
+        main_layout = QVBoxLayout(self)
+        main_layout.addWidget(QLabel("<h2>Crea Nuovo Spettacolo</h2>"))
+        main_layout.addLayout(form_layout)
+        main_layout.addLayout(btn_layout)
 
-        layout_dati.addWidget(QLabel("Titolo Spettacolo *"))
-        layout_dati.addWidget(self.input_titolo)
+        # Connessioni
+        self.__btn_salva.clicked.connect(self.__on_salva_clicked)
+        self.__btn_annulla.clicked.connect(self.__on_annulla_clicked)
 
-        # Layout in due colonne per opera e regia
-        layout_dual: QHBoxLayout = QHBoxLayout()
-        layout_dual.addWidget(self.select_opera)
-        layout_dual.addWidget(self.select_regia)
-        layout_dati.addLayout(layout_dual)
+    # ------------------------- METODI PUBBLICI -------------------------
 
-        box_dati.setLayout(layout_dati)
+    def get_dati_form(self) -> Dict[str, Any]:
+        """
+        Restituisce i dati inseriti nel form.
 
-        # -------------------------------
-        # Politiche di Prezzo Generali
-        # -------------------------------
-        box_prezzo: QGroupBox = QGroupBox("Politiche di Prezzo Generali")
-        layout_prezzo: QVBoxLayout = QVBoxLayout()
-
-        layout_prezzo.addWidget(QLabel("Questi criteri definiranno il prezzo base del biglietto (tipologia posto + tipologia evento)."))
-
-        self.select_tipo_evento: QComboBox = QComboBox()
-        self.select_tipo_evento.addItems(["Standard", "Prima/Gala", "Recita Ridotta"])
-
-        layout_prezzo.addWidget(QLabel("Tipo Evento (Per Logica Prezzo Base) *"))
-        layout_prezzo.addWidget(self.select_tipo_evento)
-
-        box_prezzo.setLayout(layout_prezzo)
-
-        # -------------------------------
-        # Lista Eventi (Repliche)
-        # -------------------------------
-        box_eventi: QGroupBox = QGroupBox("Lista Eventi (Repliche)")
-        layout_eventi: QVBoxLayout = QVBoxLayout()
-
-        self.tabella_eventi: QTableWidget = QTableWidget(1, 4)
-        self.tabella_eventi.setHorizontalHeaderLabels(["Data e Ora", "Sala", "Stato", "Azioni"])
-        self.tabella_eventi.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-        self.tabella_eventi.setItem(0, 0, QTableWidgetItem("Nessun evento associato. Salva lo spettacolo per aggiungerne uno."))
-        self.tabella_eventi.setSpan(0, 0, 1, 4)
-        self.tabella_eventi.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
-
-        layout_eventi.addWidget(self.tabella_eventi)
-        box_eventi.setLayout(layout_eventi)
-
-        # -------------------------------
-        # Pulsanti di azione
-        # -------------------------------
-        layout_bottoni: QHBoxLayout = QHBoxLayout()
-        layout_bottoni.setAlignment(Qt.AlignmentFlag.AlignRight)
-
-        self.btn_annulla: QPushButton = QPushButton("Annulla")
-        self.btn_annulla.setStyleSheet("background-color: #6c757d; color: white;")
-
-        self.btn_salva: QPushButton = QPushButton("Salva Spettacolo")
-        self.btn_salva.setStyleSheet("background-color: #28a745; color: white;")
-
-        layout_bottoni.addWidget(self.btn_annulla)
-        layout_bottoni.addWidget(self.btn_salva)
-
-        # -------------------------------
-        # Layout principale
-        # -------------------------------
-        layout_principale: QVBoxLayout = QVBoxLayout()
-        layout_principale.addWidget(self.label_titolo)
-        layout_principale.addSpacing(10)
-        layout_principale.addWidget(box_dati)
-        layout_principale.addWidget(box_prezzo)
-        layout_principale.addWidget(box_eventi)
-        layout_principale.addLayout(layout_bottoni)
-
-        self.setLayout(layout_principale)
-        self.setMinimumWidth(700)
-        self.setWindowTitle("Crea Nuovo Spettacolo")
-
-        # Connessioni bottoni
-        self.btn_salva.clicked.connect(self.__on_salva_clicked)
-        self.btn_annulla.clicked.connect(self.__on_annulla_clicked)
-
-    # ------------------------------------------------------------------
-    def get_dati_form(self) -> Dict[str, str]:
-        """Restituisce i valori correnti del form come dict."""
+        :return: Dizionario con chiavi 'titolo', 'descrizione', 'durata'.
+        :raises: nessuna eccezione prevista.
+        """
         return {
-            "titolo": self.input_titolo.text().strip(),
-            "opera": self.select_opera.currentText(),
-            "regia": self.select_regia.currentText(),
-            "tipo_evento": self.select_tipo_evento.currentText(),
+            "titolo": self.__input_titolo.text().strip(),
+            "descrizione": self.__input_descrizione.toPlainText().strip(),
+            "durata": self.__input_durata.value()
         }
 
     def reset_form(self) -> None:
-        """Azzera tutti i campi del form."""
-        self.input_titolo.clear()
-        self.select_opera.setCurrentIndex(0)
-        self.select_regia.setCurrentIndex(0)
-        self.select_tipo_evento.setCurrentIndex(0)
+        """
+        Pulisce i campi del form.
 
-    # ------------------------------------------------------------------
+        :raises: nessuna eccezione prevista.
+        """
+        self.__input_titolo.clear()
+        self.__input_descrizione.clear()
+        self.__input_durata.setValue(60)
+
+    # ------------------------- VALIDAZIONE E CALLBACKS -------------------------
+
+    def __valida_dati(self) -> bool:
+        """
+        Controlla che i campi obbligatori siano compilati.
+
+        :return: True se i dati sono validi, False altrimenti.
+        :raises: nessuna eccezione prevista.
+        """
+        titolo = self.__input_titolo.text().strip()
+        if not titolo:
+            self.__mostra_errore("Errore Validazione", "Il campo 'Titolo' è obbligatorio.")
+            return False
+        
+        # Esempio di validazione aggiuntiva(?)
+        if self.__input_durata.value() <= 0:
+            self.__mostra_errore("Errore Validazione", "La durata deve essere maggiore di 0.")
+            return False
+
+        return True
+
     def __on_salva_clicked(self) -> None:
-        dati = self.get_dati_form()
-        if not dati["titolo"] or dati["opera"] == "Seleziona l'Opera" or dati["regia"] == "Seleziona la Regia":
-            return  # qui eventualmente mostrare un messaggio di errore
-        self.spettacolo_salvato.emit(dati)
+        """
+        Gestisce il click sul tasto Salva.
+        Valida i dati ed emette il segnale se tutto è corretto.
+        
+        :raises: nessuna eccezione prevista.
+        """
+        if self.__valida_dati():
+            self.spettacolo_creato.emit(self.get_dati_form())
 
     def __on_annulla_clicked(self) -> None:
+        """
+        Gestisce il click sul tasto Annulla.
+        
+        :raises: nessuna eccezione prevista.
+        """
         self.reset_form()
         self.annullato.emit()
 
+    def __mostra_errore(self, titolo: str, messaggio: str) -> None:
+        """
+        Mostra una popup di errore.
 
-if __name__ == "__main__":
-    import sys
-    from PyQt6.QtWidgets import QApplication, QMessageBox
-    from typing import Dict
-
-    app = QApplication(sys.argv)
-    finestra = CreaSpettacoloView()  
-
-    # Callback chiamata quando il segnale viene emesso
-    def on_salvato(dati: Dict[str, str]) -> None:
-        """Mostra un messaggio di conferma con i dati dello spettacolo."""
-        QMessageBox.information(finestra, "Spettacolo Salvato", str(dati))
-
-    # Connessione del segnale corretto
-    finestra.spettacolo_salvato.connect(on_salvato)
-
-    # Callback per annullamento
-    def on_annullato() -> None:
-        QMessageBox.information(finestra, "Annullato", "Operazione annullata")
-
-    finestra.annullato.connect(on_annullato)
-
-    finestra.show()
-    sys.exit(app.exec())
+        :param titolo: Titolo della finestra.
+        :param messaggio: Testo dell'errore.
+        :raises: nessuna eccezione prevista.
+        """
+        QMessageBox.warning(self, titolo, messaggio)

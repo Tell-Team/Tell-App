@@ -29,7 +29,7 @@ class CreaProfiloView(QWidget):
     def __init__(self, parent: QWidget | None = None) -> None:
         """Inizializza la view.
 
-        :param parent: widget genitore opzionale
+        :param parent: widget genitore.(?)
         :raises: nessuna eccezione prevista direttamente da questo costruttore
         """
         super().__init__(parent)
@@ -121,7 +121,7 @@ class CreaProfiloView(QWidget):
             self.account_creato.emit(dati)
 
         except Exception as exc:  # pragma: no cover - gestito a livello UI
-            # In produzione potresti loggare l'eccezione
+            # In produzione potrebbe loggare l'eccezione(?)
             self.__mostra_errore("Errore interno", f"Si è verificato un errore: {exc}")
 
     def __on_annulla_clicked(self) -> None:

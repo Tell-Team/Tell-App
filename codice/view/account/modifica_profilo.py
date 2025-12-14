@@ -1,193 +1,163 @@
-from typing import Dict
+from typing import Dict, Any, Optional
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import (
-    QWidget, QLabel, QLineEdit, QComboBox,
-    QPushButton, QFormLayout, QHBoxLayout, QVBoxLayout, QMessageBox
+    QWidget, QLabel, QLineEdit, QPushButton,
+    QFormLayout, QHBoxLayout, QVBoxLayout, QMessageBox
 )
-
 
 class ModificaProfiloView(QWidget):
     """
-    View per la modifica di un profilo utente.
-    Contiene campi anagrafici, credenziali e ruolo, con bottoni per
-    eliminazione account, annullamento e salvataggio modifiche.
+    View per la modifica del profilo utente (Amministratore, Biglietteria e Cliente).
+
+    Permette di modificare nome, email e password attuale/nuova.
 
     Segnali:
-    - account_modificato(dict): emesso quando l'utente clicca 'Salva Modifiche' con dati validi
-    - annullato(): emesso quando l'utente clicca 'Annulla'
-    - account_eliminato(str): emesso quando l'utente clicca 'Elimina Account' con username
+    - profilo_modificato(dict): emesso quando si salvano i nuovi dati.
+    - annullato(): emesso quando l'utente annulla l'operazione.
     """
 
-    account_modificato = pyqtSignal(object)
+    profilo_modificato = pyqtSignal(object)
     annullato = pyqtSignal()
-    account_eliminato = pyqtSignal(str)
 
-    def __init__(self, parent: QWidget | None = None) -> None:
+    def __init__(self, parent: Optional[QWidget] = None) -> None:
+        """
+        Inizializza la view del profilo.
+
+        :param parent: widget genitore.(?)
+        :raises: nessuna eccezione prevista.
+        """
         super().__init__(parent)
         self.__setup_ui()
 
     def __setup_ui(self) -> None:
-        """Costruisce la UI della schermata di modifica profilo."""
+        """
+        Costruisce l'interfaccia grafica.
+        """
+        self.setWindowTitle("Modifica Profilo")
+        self.setMinimumWidth(400)
 
-        # Titolo
-        self.__titolo = QLabel("Modifica Account: [Nome Cognome Utente]")
-        self.__titolo.setStyleSheet("font-size: 18pt; font-weight: bold;")
+        self.__titolo: QLabel = QLabel("<h2>Il Mio Profilo</h2>")
 
-        # Campi anagrafica
-        self.__nome_input = QLineEdit()
-        self.__nome_input.setPlaceholderText("Nome")
-        self.__cognome_input = QLineEdit()
-        self.__cognome_input.setPlaceholderText("Cognome")
+        # Campi Input (Privati)
+        self.__input_nome: QLineEdit = QLineEdit()
+        self.__input_email: QLineEdit = QLineEdit()
+        
+        self.__input_old_password: QLineEdit = QLineEdit()
+        self.__input_old_password.setEchoMode(QLineEdit.EchoMode.Password)
+        self.__input_old_password.setPlaceholderText("Richiesta per confermare modifiche")
 
-        # Campi accesso e ruolo
-        self.__username_input = QLineEdit()
-        self.__username_input.setPlaceholderText("Username")
-        self.__password_input = QLineEdit()
-        self.__password_input.setEchoMode(QLineEdit.EchoMode.Password)
-        self.__password_input.setPlaceholderText("Lascia vuoto per non modificare la password")
-
-        self.__ruolo_select = QComboBox()
-        self.__ruolo_select.addItem("Seleziona un Ruolo", "")
-        self.__ruolo_select.addItem("Amministratore", "amministratore")
-        self.__ruolo_select.addItem("Biglietteria", "biglietteria")
-        self.__ruolo_select.addItem("Cliente", "cliente")
+        self.__input_new_password: QLineEdit = QLineEdit()
+        self.__input_new_password.setEchoMode(QLineEdit.EchoMode.Password)
+        self.__input_new_password.setPlaceholderText("Lascia vuoto per non cambiare")
 
         # Bottoni
-        self.__btn_elimina = QPushButton("Elimina Account")
-        self.__btn_elimina.setStyleSheet("background-color: #dc3545; color: white;")
-        self.__btn_annulla = QPushButton("Annulla")
+        self.__btn_salva: QPushButton = QPushButton("Salva Modifiche")
+        self.__btn_salva.setStyleSheet("background-color: #007bff; color: white; font-weight: bold;")
+        
+        self.__btn_annulla: QPushButton = QPushButton("Annulla")
         self.__btn_annulla.setStyleSheet("background-color: #6c757d; color: white;")
-        self.__btn_salva = QPushButton("Salva Modifiche")
-        self.__btn_salva.setStyleSheet("background-color: #007bff; color: white;")
-        self.__btn_salva.setDefault(True)
 
-        # Layout form
+        # Layout
         form_layout = QFormLayout()
-        form_layout.addRow(QLabel(""), self.__titolo)
-        form_layout.addRow("Nome *", self.__nome_input)
-        form_layout.addRow("Cognome *", self.__cognome_input)
-        form_layout.addRow("Username *", self.__username_input)
-        form_layout.addRow("Nuova Password", self.__password_input)
-        form_layout.addRow("Ruolo *", self.__ruolo_select)
+        form_layout.addRow("Nome Utente:", self.__input_nome)
+        form_layout.addRow("Email:", self.__input_email)
+        form_layout.addRow(QLabel("<hr>"))
+        form_layout.addRow("Nuova Password:", self.__input_new_password)
+        form_layout.addRow("Password Attuale *:", self.__input_old_password)
 
-        # Layout bottoni
         btn_layout = QHBoxLayout()
-        btn_layout.addStretch(1)
-        btn_layout.addWidget(self.__btn_elimina)
+        btn_layout.addStretch()
         btn_layout.addWidget(self.__btn_annulla)
         btn_layout.addWidget(self.__btn_salva)
 
-        # Layout principale
-        main_layout = QVBoxLayout()
+        main_layout = QVBoxLayout(self)
+        main_layout.addWidget(self.__titolo)
         main_layout.addLayout(form_layout)
         main_layout.addLayout(btn_layout)
 
-        self.setLayout(main_layout)
-        self.setMinimumWidth(550)
-        self.setWindowTitle("Modifica Profilo Utente")
-
-        # Connessioni bottoni
+        # Connessioni
         self.__btn_salva.clicked.connect(self.__on_salva_clicked)
         self.__btn_annulla.clicked.connect(self.__on_annulla_clicked)
-        self.__btn_elimina.clicked.connect(self.__on_elimina_clicked)
 
     # ------------------------- METODI PUBBLICI -------------------------
-    def set_titolo(self, nome: str, cognome: str) -> None:
-        """Aggiorna il titolo con nome e cognome dell'utente."""
-        self.__titolo.setText(f"Modifica Account: {nome} {cognome}")
 
-    def get_dati_form(self) -> Dict[str, str]:
-        """Restituisce i valori correnti del form come dict."""
+    def set_dati_form(self, dati: Dict[str, Any]) -> None:
+        """
+        Popola i campi con i dati attuali dell'utente.
+
+        :param dati: Dizionario con chiavi 'nome', 'email'.
+        :raises: nessuna eccezione prevista.
+        """
+        self.__input_nome.setText(dati.get("nome", ""))
+        self.__input_email.setText(dati.get("email", ""))
+        self.__input_old_password.clear()
+        self.__input_new_password.clear()
+
+    def get_dati_form(self) -> Dict[str, Any]:
+        """
+        Restituisce i dati inseriti nel form.
+
+        :return: Dict con nome, email, old_password, new_password.
+        :raises: nessuna eccezione prevista.
+        """
         return {
-            "nome": self.__nome_input.text().strip(),
-            "cognome": self.__cognome_input.text().strip(),
-            "username": self.__username_input.text().strip(),
-            "password": self.__password_input.text().strip(),
-            "ruolo": str(self.__ruolo_select.currentData()),
+            "nome": self.__input_nome.text().strip(),
+            "email": self.__input_email.text().strip(),
+            "old_password": self.__input_old_password.text(),
+            "new_password": self.__input_new_password.text()
         }
 
-    def set_dati_form(self, dati: Dict[str, str]) -> None:
-        """Popola i campi della form con i dati esistenti."""
-        self.__nome_input.setText(dati.get("nome", ""))
-        self.__cognome_input.setText(dati.get("cognome", ""))
-        self.__username_input.setText(dati.get("username", ""))
-        self.__password_input.clear()
-        ruolo_val = dati.get("ruolo", "")
-        index = self.__ruolo_select.findData(ruolo_val)
-        if index >= 0:
-            self.__ruolo_select.setCurrentIndex(index)
-        else:
-            self.__ruolo_select.setCurrentIndex(0)
-
     def reset_form(self) -> None:
-        """Azzera tutti i campi del form."""
-        self.__nome_input.clear()
-        self.__cognome_input.clear()
-        self.__username_input.clear()
-        self.__password_input.clear()
-        self.__ruolo_select.setCurrentIndex(0)
+        """
+        Pulisce i campi password.
+        
+        :raises: nessuna eccezione prevista.
+        """
+        self.__input_old_password.clear()
+        self.__input_new_password.clear()
 
-    # ------------------------- METODI PRIVATI -------------------------
-    def __mostra_errore(self, titolo: str, testo: str) -> None:
-        QMessageBox.critical(self, titolo, testo)
+    # ------------------------- VALIDAZIONE E CALLBACKS -------------------------
 
     def __valida_dati(self) -> bool:
-        """Controlla campi obbligatori: nome, cognome, username e ruolo."""
-        if not self.__nome_input.text().strip():
-            self.__mostra_errore("Valore mancante", "Il campo 'Nome' è obbligatorio.")
+        """
+        Verifica i campi obbligatori.
+
+        :return: True se validi, False altrimenti.
+        :raises: nessuna eccezione prevista.
+        """
+        if not self.__input_nome.text().strip():
+            self.__mostra_errore("Errore", "Il nome non può essere vuoto.")
             return False
-        if not self.__cognome_input.text().strip():
-            self.__mostra_errore("Valore mancante", "Il campo 'Cognome' è obbligatorio.")
+        if not self.__input_email.text().strip():
+            self.__mostra_errore("Errore", "L'email non può essere vuota.")
             return False
-        if not self.__username_input.text().strip():
-            self.__mostra_errore("Valore mancante", "Il campo 'Username' è obbligatorio.")
-            return False
-        if not self.__ruolo_select.currentData():
-            self.__mostra_errore("Ruolo non selezionato", "Seleziona un ruolo per l'account.")
+        if not self.__input_old_password.text():
+            self.__mostra_errore("Errore", "Inserisci la password attuale per confermare.")
             return False
         return True
 
     def __on_salva_clicked(self) -> None:
-        if not self.__valida_dati():
-            return
-        dati = self.get_dati_form()
-        self.account_modificato.emit(dati)
+        """
+        Gestisce il salvataggio.
+        
+        :raises: nessuna eccezione prevista.
+        """
+        if self.__valida_dati():
+            self.profilo_modificato.emit(self.get_dati_form())
 
     def __on_annulla_clicked(self) -> None:
+        """
+        Gestisce l'annullamento.
+        
+        :raises: nessuna eccezione prevista.
+        """
         self.reset_form()
         self.annullato.emit()
 
-    def __on_elimina_clicked(self) -> None:
-        username = self.__username_input.text().strip()
-        if username:
-            self.account_eliminato.emit(username)
-        else:
-            self.__mostra_errore("Errore", "Impossibile eliminare un account senza username.")
-
-
-if __name__ == "__main__":
-    import sys
-    from PyQt6.QtWidgets import QApplication, QMessageBox
-    from typing import Any
-
-    app = QApplication(sys.argv)
-    finestra = ModificaProfiloView()
-
-    # Callback per segnale account_modificato
-    def on_modificato(dati: Any) -> None:
-        QMessageBox.information(finestra, "Modificato", str(dati))
-
-    # Callback per segnale annullato
-    def on_annullato() -> None:
-        QMessageBox.information(finestra, "Annullato", "Operazione annullata")
-
-    # Callback per segnale account_eliminato
-    def on_eliminato(username: str) -> None:
-        QMessageBox.information(finestra, "Eliminato", f"Account eliminato: {username}")
-
-    finestra.account_modificato.connect(on_modificato)
-    finestra.annullato.connect(on_annullato)
-    finestra.account_eliminato.connect(on_eliminato)
-
-    finestra.show()
-    sys.exit(app.exec())
+    def __mostra_errore(self, titolo: str, messaggio: str) -> None:
+        """
+        Mostra popup errore.
+        
+        :raises: nessuna eccezione prevista.
+        """
+        QMessageBox.warning(self, titolo, messaggio)

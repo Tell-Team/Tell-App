@@ -90,7 +90,7 @@ class ModificaEventoView(QWidget):
         """
         self.__data_input.setDate(QDate.fromString(dati.get("data"), Qt.DateFormat.ISODate))
         self.__ora_input.setTime(QTime.fromString(dati.get("ora"), Qt.DateFormat.ISODate))
-        # Qui aggiungeresti logica per settare combobox e checkbox
+        #Aggiungere logica per settare combobox e checkbox(?)
 
     def get_dati_form(self) -> Dict[str, Any]:
         """
@@ -99,7 +99,7 @@ class ModificaEventoView(QWidget):
         """
         return {
             "data": self.__data_input.date().toString(Qt.DateFormat.ISODate),
-            # Altri campi...
+            # Altri campi da aggiungere(?)
         }
 
     def __on_salva(self) -> None:

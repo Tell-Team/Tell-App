@@ -1,8 +1,17 @@
 from typing import Dict, List, Any, Optional
 from PyQt6.QtCore import pyqtSignal, QMargins, Qt
 from PyQt6.QtWidgets import (
-    QWidget, QLabel, QLineEdit, QPushButton, QFormLayout, QHBoxLayout,
-    QVBoxLayout, QMessageBox, QGridLayout, QScrollArea, QSizePolicy
+    QWidget,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QFormLayout,
+    QHBoxLayout,
+    QVBoxLayout,
+    QMessageBox, 
+    QGridLayout, 
+    QScrollArea, 
+    QSizePolicy
 )
 
 # Definizione di un tipo per rappresentare il dettaglio di un ruolo
@@ -28,7 +37,7 @@ class CreaRegiaView(QWidget):
         """
         Inizializza la view per la creazione di una nuova regia.
 
-        :param parent: widget genitore opzionale.
+        :param parent: widget genitore.(?)
         :raises: nessuna eccezione prevista direttamente da questo costruttore.
         """
         super().__init__(parent)
@@ -65,7 +74,7 @@ class CreaRegiaView(QWidget):
 
         # 3. Dettagli Artistici e Tecnici Flessibili (QGridLayout in QScrollArea)
 
-        # Layout per i dettagli (Griglia dove aggiungeremo le righe)
+        # Layout per i dettagli (Griglia dove si aggiungono le righe)
         self.__dettagli_grid_layout: QGridLayout = QGridLayout()
         self.__dettagli_grid_layout.setSpacing(5)
         # Intestazioni della tabella
@@ -87,7 +96,7 @@ class CreaRegiaView(QWidget):
         self.__btn_aggiungi_ruolo.setStyleSheet("background-color: #17a2b8; color: white;")
         self.__btn_aggiungi_ruolo.clicked.connect(self.__aggiungi_riga_dettaglio)
 
-        # Aggiungi una riga iniziale come da mockup
+        # Aggiunge una riga iniziale (mockup)
         self.__aggiungi_riga_dettaglio()
 
 
@@ -223,15 +232,15 @@ class CreaRegiaView(QWidget):
         :raises: nessuna eccezione prevista.
         """
         try:
-            # 1. Rimuovi i widget dalla UI
+            # 1. Rimuove i widget dalla UI
             riga_da_rimuovere["ruolo"].deleteLater()
             riga_da_rimuovere["nominativo"].deleteLater()
             riga_da_rimuovere["bottone"].deleteLater()
 
-            # 2. Rimuovi il dizionario dalla lista di tracciamento
+            # 2. Rimuove il dizionario dalla lista di tracciamento
             self.__campi_dettagli.remove(riga_da_rimuovere)
 
-            # 3. Ridisponi i widget rimanenti per eliminare lo spazio vuoto
+            # 3. Ridispone i widget rimanenti per eliminare lo spazio vuoto
             self.__aggiorna_layout_dettagli()
 
         except ValueError: # pragma: no cover
@@ -260,7 +269,7 @@ class CreaRegiaView(QWidget):
             self.__dettagli_grid_layout.addWidget(riga["ruolo"], nuova_riga, 0)
             self.__dettagli_grid_layout.addWidget(riga["nominativo"], nuova_riga, 1)
             self.__dettagli_grid_layout.addWidget(riga["bottone"], nuova_riga, 2)
-            # Potrebbe essere necessario aggiornare riga_indice in riga (anche se non strettamente necessario per la logica)
+            # Potrebbe essere necessario aggiornare riga_indice in riga (anche se non strettamente necessario per la logica)(?)
             riga["riga_indice"] = nuova_riga
 
 
@@ -319,7 +328,7 @@ class CreaRegiaView(QWidget):
             return False
 
         # Validazione Dettagli Flessibili:
-        # Assicura che, se una riga è parzialmente compilata, l'utente sia avvisato
+        # Va ad assicurarsi che se una riga è parzialmente compilata l'utente sia avvisato
         dettagli = self.__get_dettagli_form()
         for i, dettaglio in enumerate(dettagli):
             if (dettaglio["ruolo"] and not dettaglio["nominativo"]):

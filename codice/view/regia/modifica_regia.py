@@ -1,8 +1,15 @@
 from typing import Dict, List, Optional, Any
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import (
-    QWidget, QVBoxLayout, QLabel, QLineEdit, QTextEdit, 
-    QPushButton, QHBoxLayout, QScrollArea, QFrame, QMessageBox
+    QWidget,
+    QVBoxLayout,
+    QLabel, 
+    QLineEdit, 
+    QTextEdit, 
+    QPushButton, 
+    QHBoxLayout, QScrollArea, 
+    QFrame, 
+    QMessageBox
 )
 
 class ModificaRegiaView(QWidget):
@@ -120,7 +127,7 @@ class ModificaRegiaView(QWidget):
         }
         self.__righe_dettaglio.append(riga_obj)
         
-        # Inserisci prima dello stretch
+        # Inserire prima dello stretch
         self.__layout_dettagli.insertWidget(self.__layout_dettagli.count() - 1, frame)
         
         btn_remove.clicked.connect(lambda: self.__rimuovi_riga(riga_obj))
@@ -147,7 +154,7 @@ class ModificaRegiaView(QWidget):
         titolo = dati.get("titolo_spettacolo", "Sconosciuto")
         self.__titolo_label.setText(f"Modifica Regia: {titolo}")
 
-        # Pulisci righe esistenti
+        # Pulire righe esistenti
         for riga in self.__righe_dettaglio:
             riga["widget"].deleteLater()
         self.__righe_dettaglio.clear()
@@ -179,7 +186,7 @@ class ModificaRegiaView(QWidget):
         
         :raises: nessuna eccezione prevista.
         """
-        # Qui potresti aggiungere __valida_dati se necessario
+        # Aggiungere __valida_dati se necessario(?)
         self.regia_modificata.emit(self.get_dati_form())
 
     def __on_elimina_clicked(self) -> None:
