@@ -9,17 +9,15 @@ from view.abstractView.creaAbstract import CreaAbstractView
 #   ruolo di qualunque account.
 class NuovoAccountView(CreaAbstractView):
     """
-    GUI di creazione di `Opera`.
-
-    Contiene campi d'input per inserire le informazione anagrafiche dell'utente e del account.
+    View per la creazione di un nuovo account utente.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-        self._build_ui()
+        self._setup_ui()
 
-    def _build_ui(self):
+    def _setup_ui(self) -> None:
         # Header
         self.header.setText("Nuovo account")
 
@@ -33,7 +31,7 @@ class NuovoAccountView(CreaAbstractView):
         self.main_layout.addWidget(self.pulsanti)
         self.main_layout.addStretch()
 
-    def _setup_form(self):
+    def _setup_form(self) -> None:
         label_anagrafica_header = QLabel("Anagrafica")
         label_anagrafica_header.setObjectName("Header2")
 
@@ -73,11 +71,11 @@ class NuovoAccountView(CreaAbstractView):
         self.ruolo.setEnabled(False)
         # - END
 
-        self.add_row(label_anagrafica_header, None)
-        self.add_row(label_nome, self.nome)
-        self.add_row(label_cognome, self.cognome)
-        self.add_row(linea, None)
-        self.add_row(label_account_header, None)
-        self.add_row(label_username, self.username)
-        self.add_row(label_password, self.password)
-        self.add_row(label_ruolo, self.ruolo)
+        self.form_layout.addRow(label_anagrafica_header, None)
+        self.form_layout.addRow(label_nome, self.nome)
+        self.form_layout.addRow(label_cognome, self.cognome)
+        self.form_layout.addRow(linea, None)
+        self.form_layout.addRow(label_account_header, None)
+        self.form_layout.addRow(label_username, self.username)
+        self.form_layout.addRow(label_password, self.password)
+        self.form_layout.addRow(label_ruolo, self.ruolo)

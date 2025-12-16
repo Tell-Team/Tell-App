@@ -1,21 +1,17 @@
 from PyQt6.QtWidgets import QStackedWidget, QMainWindow, QWidget
+from typing import Optional
 
 
 class NavigationController:
     """
-    Permette all'utente di navigare le pagine e sezioni dell'applicazione, utilizzando due metodi
-    diversi per indicare se la pagina corrente vendrà salvata nella list `__history` (`go_to`) o no
-    (`section_go_to`) dopo di andar a un'altra e un metodo `go_back` per andare dietro usando la
-    detta list.
-
-    Dopo di andar ad un'altra pagina, questa viene aggiornata se ha un metodo `refresh_page` definito.
+    Permette all'utente di navigare le pagine e sezioni dell'applicazione.
     """
 
-    def __init__(self, main_window: QMainWindow):
+    def __init__(self, main_window: QMainWindow) -> None:
         self._main_window = main_window
         self._stack = QStackedWidget()
-        self._history: list[QWidget] = []  # Pile di widget per andar dietro
-        self._pages: dict[str, QWidget] = {}
+        self._history: list[QWidget] = []  # Pile di widget per tornare dietro
+        self._pages: dict[str, QWidget] = {}  # Registro delle pagine
 
     def get_stack(self) -> QStackedWidget:
         return self._stack
@@ -23,18 +19,25 @@ class NavigationController:
     def get_pages(self) -> dict[str, QWidget]:
         return self._pages
 
-    def get_page(self, page_name: str):
+    def get_page(self, page_name: str) -> Optional[QWidget]:
         for key in self._pages:
             if key == page_name:
                 return self._pages.get(key)
 
-    def add_page(self, page_name: str, widget: QWidget):
-        """Registra una pagina nel dict `__pages` della classe con una `str` come keyword."""
+    def add_page(self, page_name: str, widget: QWidget) -> None:
+        """Registra una pagina nel controller.
+
+        :param page_name: key usata per salvare la pagina nel dict
+        :param widget: pagina da salvare nel dict"""
         self._pages[page_name] = widget
         self._stack.addWidget(widget)
 
-    def go_to(self, page_name: str, save_history: bool = True):
-        """Visualizza una pagina registrata in `__pages`."""
+    def go_to(self, page_name: str, save_history: bool = True) -> None:
+        """Visualizza una pagina registrata nel controller.
+
+        :param page_name: key usata per trovare la pagina
+        :param save_history: verifica se la pagina sarà salvata nell'history del controller o no
+        """
         widget = self._pages.get(page_name)
         if widget is None:
             raise ValueError(f"Non e' stata trovata la pagina: {page_name}")
@@ -43,18 +46,21 @@ class NavigationController:
         if current and save_history:
             self._history.append(current)
 
+        # Dopo di andar ad un'altra pagina, questa viene aggiornata se ha il metodo
+        #   `refresh_page` definito.
         if hasattr(widget, "refresh_page"):
             widget.refresh_page()  # type:ignore
 
         self._stack.setCurrentWidget(widget)
 
-    def section_go_to(self, page_name: str):
-        """Visualizza una pagina di sezione (Spettacoli, Info, Account), senza salvare la pagina
-        corrente nella list `__history`."""
+    def section_go_to(self, page_name: str) -> None:
+        """Visualizza una pagina senza salvare la pagina corrente nell'history del controller.
+
+        :param page_name: key usata per trovare la pagina"""
         self.go_to(page_name, save_history=False)
 
-    def go_back(self):
-        """Visualizza la pagina precedente, registrata nella list `__history`."""
+    def go_back(self) -> None:
+        """Visualizza la pagina precedente, registrata nel'history del controller."""
         if not self._history:
             return
         last_widget = self._history.pop()

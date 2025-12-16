@@ -7,11 +7,11 @@ class ModificaGenereView(NuovoGenereView):
     un'attributo `cur_id_genere` per indicare l'id del genere da modificare.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-    def _build_ui(self):
-        super()._build_ui()
+    def _setup_ui(self) -> None:
+        super()._setup_ui()
 
         # Il valore è assegnato quando si chiama InfoController.modifica_genere(id_genere)
         self.cur_id_genere: int = -1

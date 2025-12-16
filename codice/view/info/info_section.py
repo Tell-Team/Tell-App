@@ -10,28 +10,28 @@ from PyQt6.QtCore import Qt, pyqtSignal
 
 from view.abstractView.sectionAbstract import AbstractSectionView
 
-
-# - Se l'app, in teoria, vendrà usata in un schermo tattile dai cliente, sarà comoda scambiare
+# - Se l'app, in teoria, vendrà usata in un schermo tattile dai cliente, sarà comodo scambiare
 #   alcuni .clicked per .pressed
 
 
 class InfoSectionView(AbstractSectionView):
     """
-    GUI della sezione Info dell'app.
+    View della sezione Info dell'app.
 
-    Permette di interaggire con le istanze di `Opera` e `Genere`, e visualizzare una
-    sezione in fondo con le informazioni del teatro.
+    Segnali:
+    - request_display_opere(QVBoxLayout): emesso per caricare la lista delle opere nella sezione Info;
+    - request_display_generi(QVBoxLayout): emesso per caricare la lista dei generi nella sezione Info.
     """
 
     request_display_opere = pyqtSignal(QVBoxLayout)
     request_display_generi = pyqtSignal(QVBoxLayout)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-        self._build_ui()
+        self._setup_ui()
 
-    def _build_ui(self):
+    def _setup_ui(self) -> None:
         # Opere
         header_opere = QLabel("Opere")
         header_opere.setObjectName("Header1")
@@ -64,10 +64,6 @@ class InfoSectionView(AbstractSectionView):
         layout_opere.addLayout(layout_header_opere)
         layout_opere.addLayout(self.layout_lista_opere)
 
-        #
-        #
-        #
-
         # Generi
         header_generi = QLabel("Generi")
         header_generi.setObjectName("Header1")
@@ -94,10 +90,6 @@ class InfoSectionView(AbstractSectionView):
         layout_generi.addLayout(layout_header_generi)
         layout_generi.addLayout(self.layout_lista_generi)
 
-        #
-        #
-        #
-
         # Teatro
         header_teatro = QLabel("Teatro")
         header_teatro.setObjectName("Header1")
@@ -123,17 +115,13 @@ class InfoSectionView(AbstractSectionView):
         layout_teatro.addWidget(header_teatro)
         layout_teatro.addWidget(info_teatro)
 
-        #
-        #
-        #
-
         # Scroll layout
         self.scroll_layout.addWidget(container_opere)
         self.scroll_layout.addWidget(container_generi)
         self.scroll_layout.addWidget(container_teatro)
         self.scroll_layout.addStretch()
 
-    def refresh_page(self):
+    def refresh_page(self) -> None:
         self.clear_layout(self.layout_lista_opere)
         self.layout_lista_opere.addWidget(self.label_lista_opere_vuota)
         self.label_lista_opere_vuota.hide()

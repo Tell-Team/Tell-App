@@ -9,20 +9,20 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 
 
-class OperaView(QWidget):
+class VisualizzaOperaView(QWidget):
     """
-    GUI di visualizzazione di `Opera`.
+    View per visualizzare le singole opere in dettaglio.
 
     Contiene le informazioni anagrafiche dell'opera ed una lista con tutte
     le regie vinculate ad essa.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-        self._build_ui()
+        self._setup_ui()
 
-    def _build_ui(self):
+    def _setup_ui(self) -> None:
         # Labels
         self.label_nome = QLabel("NOME")
         self.label_nome.setObjectName("Header1")
@@ -65,7 +65,6 @@ class OperaView(QWidget):
 
         content = QWidget()
         layout_content = QVBoxLayout(content)
-
         layout_content.addWidget(self.label_nome)
         layout_content.addWidget(self.label_librettista)
         layout_content.addWidget(self.label_compositore)
@@ -77,11 +76,7 @@ class OperaView(QWidget):
         layout_content.addWidget(self.lista_vuota_error)
         layout_content.addStretch()
 
-        #
-        #
-        #
-
-        # Pulsante: Torna dietro
+        # Pulsante: Indientro
         self.btn_indietro = QPushButton("Indietro")
         self.btn_indietro.setObjectName("SmallButton")
 
@@ -90,23 +85,10 @@ class OperaView(QWidget):
         layout_pulsanti.addWidget(self.btn_indietro)
         layout_pulsanti.addStretch()
 
-        #
-        #
-        #
-
         # Funzione di scroll
-        scroll_widget = QWidget()
-        scroll_layout = QVBoxLayout(scroll_widget)
-
-        scroll_layout.addWidget(content)
-
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
-        scroll_area.setWidget(scroll_widget)
-
-        #
-        #
-        #
+        scroll_area.setWidget(content)
 
         # Layout
         main_layout = QVBoxLayout(self)

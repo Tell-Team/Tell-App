@@ -7,7 +7,6 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
 )
 from PyQt6.QtCore import Qt
-from typing import Optional
 
 
 class CreaAbstractView(QWidget):
@@ -15,20 +14,20 @@ class CreaAbstractView(QWidget):
     Classe pseudo-astratta che facilita la creazione delle pagine di crea e modifica dell'app.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-        # Header Setup
+        # Setup Header
         self.header = QLabel("")
         self.header.setObjectName("Header1")
         self.header.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        # QFormLayout Setup
+        # Setup QFormLayout
         self.form_content = QWidget()
         self.form_layout = QFormLayout(self.form_content)
         self.form_layout.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
 
-        # Pulsanti Setup
+        # Setup Pulsanti
         self.btn_cancella = QPushButton("Cancella")
         self.btn_cancella.setObjectName("SmallButton")
 
@@ -48,24 +47,19 @@ class CreaAbstractView(QWidget):
             self.input_error.styleSheet() + "#SubHeader { color:red; }"
         )
 
-        # Main layout Setup
+        # Setup main layout
         self.main_layout = QVBoxLayout(self)
 
-    def _setup_form(self): ...
+    def _setup_form(self) -> None:
+        """Metodo privato utilizzato per costruire e disporre i widget della form."""
+        ...
 
-    def _clear_form_layout(self, form_layout: QFormLayout):
+    def _clear_form_layout(self, form_layout: QFormLayout) -> None:
         """
         Rimuove tutte le righe di un `QFormLayout` senza eliminare i widget. Serve per
         ricaricare un form.
         """
-        # - Non è stato ancora implementato, ma potrebbe essere utile.
+        # - Non è stato ancora implementato, ma potrebbe essere utile per future pagine.
 
         while form_layout.rowCount() > 0:
             form_layout.removeRow(0)
-
-    def add_row(self, label_text: Optional[QWidget], widget: Optional[QWidget]):
-        """
-        Metodo per tener il codice pulito ed aggiungere una riga al `QFormLayout`
-        della pagina per cui viene chiamato.
-        """
-        self.form_layout.addRow(label_text, widget)

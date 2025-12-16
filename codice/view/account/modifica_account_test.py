@@ -8,11 +8,11 @@ class ModificaAccountView(NuovoAccountView):
     indicare l'id dell'account da modificare.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-    def _build_ui(self):
-        super()._build_ui()
+    def _setup_ui(self) -> None:
+        super()._setup_ui()
 
         # Il valore è assegnato quando si chiama AccountController.modifica_account(id_account)
         self.cur_id_account: int = -1

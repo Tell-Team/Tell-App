@@ -4,19 +4,19 @@ from PyQt6.QtCore import Qt
 
 class LoginPage(QWidget):
     """
-    GUI iniziale dell'app.
+    View della prima pagina dell'app.
 
     Permette di scegliere il tipo d'account con cui si utilizzerà l'app:
-    - Se scelto Cliente, semplicemente viene inviato alla sezione Info;
+    - Se scelto Cliente, l'utente semplicemente viene inviato alla sezione Info;
     - Se scelto Biglietteria o Amministratore, chiede un'autenticazione.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-        self._build_ui()
+        self._setup_ui()
 
-    def _build_ui(self):
+    def _setup_ui(self) -> None:
         # Header
         self.header = QLabel("Login")
         self.header.setObjectName("Header1")
@@ -26,10 +26,6 @@ class LoginPage(QWidget):
         self.subheader = QLabel("Scegliere il tipo di account:")
         self.subheader.setObjectName("Paragraph")
         self.subheader.setAlignment(Qt.AlignmentFlag.AlignLeft)
-
-        #
-        #
-        #
 
         # Pulsanti
         self.btn_cliente = QPushButton("Cliente")
@@ -46,10 +42,6 @@ class LoginPage(QWidget):
         layout_pulsanti_utente.addWidget(self.btn_cliente)
         layout_pulsanti_utente.addWidget(self.btn_biglietteria)
         layout_pulsanti_utente.addWidget(self.btn_amministratore)
-
-        #
-        #
-        #
 
         # Layout
         main_layout = QVBoxLayout(self)

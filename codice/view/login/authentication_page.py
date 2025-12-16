@@ -11,17 +11,17 @@ from PyQt6.QtCore import Qt
 
 class AuthenticationPage(QWidget):
     """
-    GUI di autenticazione degli account `Biglietteria` e `Amministratore`.
+    View per la autenticazione degli account `Biglietteria` e `Amministratore`.
 
     Permette di inserire un nome utente ed una password.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-        self._build_ui()
+        self._setup_ui()
 
-    def _build_ui(self):
+    def _setup_ui(self) -> None:
         # Header
         self.header = QLabel("Login")
         self.header.setObjectName("Header1")
@@ -51,10 +51,6 @@ class AuthenticationPage(QWidget):
         self.content_layout.addWidget(self.password)
         self.content_layout.addStretch()
 
-        #
-        #
-        #
-
         # Pulsanti
         self.btn_indietro = QPushButton("Indietro")
         self.btn_indietro.setObjectName("SmallButton")
@@ -68,10 +64,6 @@ class AuthenticationPage(QWidget):
         self.btn_login.setObjectName("BlueButton")
         # - Questo pulsante non è ancora collegato nel Controller
 
-        #
-        #
-        #
-
         # Layout
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(20, 20, 20, 20)
@@ -83,6 +75,6 @@ class AuthenticationPage(QWidget):
         main_layout.addWidget(self.btn_login)
         main_layout.addStretch()
 
-    def refresh_page(self):
+    def refresh_page(self) -> None:
         self.username.setText("")
         self.password.setText("")

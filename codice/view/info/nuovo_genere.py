@@ -10,19 +10,17 @@ from view.abstractView.creaAbstract import CreaAbstractView
 
 class NuovoGenereView(CreaAbstractView):
     """
-    GUI di creazione di `Genere`.
-
-    Contiene campi d'input per inserire tutti gli attributi respettivi.
+    View per la creazione di un nuovo genere.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-        self._build_ui()
+        self._setup_ui()
 
-    def _build_ui(self):
+    def _setup_ui(self) -> None:
         # Header
-        self.header.setText("Nuovo genere")
+        self.header.setText("Aggiungi Nuovo genere")
 
         # Form
         self._setup_form()
@@ -34,7 +32,7 @@ class NuovoGenereView(CreaAbstractView):
         self.main_layout.addWidget(self.pulsanti)
         self.main_layout.addStretch()
 
-    def _setup_form(self):
+    def _setup_form(self) -> None:
         label_nome = QLabel("Nome :")
         label_nome.setObjectName("SubHeader")
         self.nome = QLineEdit()
@@ -49,5 +47,5 @@ class NuovoGenereView(CreaAbstractView):
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
         )
 
-        self.add_row(label_nome, self.nome)
-        self.add_row(label_descrizione, self.descrizione)
+        self.form_layout.addRow(label_nome, self.nome)
+        self.form_layout.addRow(label_descrizione, self.descrizione)

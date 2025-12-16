@@ -252,3 +252,7 @@ QSpinBox::down-arrow, QDateEdit::down-arrow {
     width: 10px;
     height: 10px;
 }
+
+QMessageBox {
+    /* Da definere */
+}

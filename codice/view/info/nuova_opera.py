@@ -5,29 +5,29 @@ from PyQt6.QtWidgets import (
     QComboBox,
     QDateEdit,
     QSpinBox,
+    # QHBoxLayout,
 )
-from PyQt6.QtCore import pyqtSignal
+
+# from PyQt6.QtCore import Qt
 
 from view.abstractView.creaAbstract import CreaAbstractView
+
+from model.pianificazione.genere import Genere
 
 
 class NuovaOperaView(CreaAbstractView):
     """
-    GUI di creazione di `Opera`.
-
-    Contiene campi d'input per inserire tutti gli attributi respettivi.
+    View per la creazione di una nuova opera.
     """
 
-    request_lista_generi_nomi = pyqtSignal()
-
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-        self._build_ui()
+        self._setup_ui()
 
-    def _build_ui(self):
+    def _setup_ui(self) -> None:
         # Header
-        self.header.setText("Nuova opera")
+        self.header.setText("Aggiungi Nuova opera")
 
         # Form
         self._setup_form()
@@ -39,7 +39,7 @@ class NuovaOperaView(CreaAbstractView):
         self.main_layout.addWidget(self.pulsanti)
         self.main_layout.addStretch()
 
-    def _setup_form(self):
+    def _setup_form(self) -> None:
         label_nome = QLabel("Nome :")
         label_nome.setObjectName("SubHeader")
         self.nome = QLineEdit()
@@ -54,8 +54,6 @@ class NuovaOperaView(CreaAbstractView):
         label_genere = QLabel("Genere :")
         label_genere.setObjectName("SubHeader")
         self.genere = QComboBox()
-
-        self.request_lista_generi_nomi.emit()
 
         label_compositore = QLabel("Compositore :")
         label_compositore.setObjectName("SubHeader")
@@ -76,28 +74,37 @@ class NuovaOperaView(CreaAbstractView):
         label_data = QLabel("Prima rappresentazione :")
         label_data.setObjectName("SubHeader")
         self.data = QDateEdit()
+        # self.data = QDateEdit(calendarPopup=True)
+        # self.data.setDisplayFormat("dd/MM/yyyy")
+
+        # atti_data_layout = QHBoxLayout()
+        # atti_data_layout.addWidget(label_atti)
+        # atti_data_layout.addWidget(self.atti)
+        # atti_data_layout.addWidget(label_data)
+        # atti_data_layout.addWidget(self.data)
 
         label_teatro = QLabel("Teatro prima rappresentazione :")
         label_teatro.setObjectName("SubHeader")
         self.teatro = QLineEdit()
         self.teatro.setPlaceholderText("Inserire nome del teatro")
 
-        self.add_row(label_nome, self.nome)
-        self.add_row(label_trama, self.trama)
-        self.add_row(label_genere, self.genere)
-        self.add_row(label_compositore, self.compositore)
-        self.add_row(label_librettista, self.librettista)
-        self.add_row(label_atti, self.atti)
-        self.add_row(label_data, self.data)
-        self.add_row(label_teatro, self.teatro)
+        self.form_layout.addRow(label_nome, self.nome)
+        self.form_layout.addRow(label_trama, self.trama)
+        self.form_layout.addRow(label_genere, self.genere)
+        self.form_layout.addRow(label_compositore, self.compositore)
+        self.form_layout.addRow(label_librettista, self.librettista)
+        # self.form_layout.addRow(atti_data_layout)
+        self.form_layout.addRow(label_atti, self.atti)
+        self.form_layout.addRow(label_data, self.data)
+        self.form_layout.addRow(label_teatro, self.teatro)
 
-    def set_genere_combobox(self, names: list[str]):
-        """Metodo chiamato dall'`InfoController` per riempire il `QComboBox` dei generi."""
+    # - Ci dovrebbe essere nel controller o vabbene nella view?
+    def setup_genere_combobox(self, generi: list[Genere]) -> None:
+        """Riempisce il `QComboBox` dei generi."""
         self.genere.clear()
 
-        self.genere.insertItem(0, "Scegliere genere...")
-        # - self.genere.setItemData(0, Qt.GlobalColor.gray, Qt.ItemDataRole.BackgroundRole)
-        # - Come faccio per avere la opzione 0 di colore grigio
-        for i, n in enumerate(names):
+        self.genere.insertItem(0, "Scegliere genere...", "")
+        # - Come faccio per avere l'opzione 0 di colore grigio?
+        for i, g in enumerate(generi):
             i += 1
-            self.genere.insertItem(i, n)
+            self.genere.insertItem(i, g.get_nome(), g.get_id())

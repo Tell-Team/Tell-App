@@ -7,8 +7,8 @@ class ModificaRegiaView(NuovaRegiaView):
     def __init__(self):
         super().__init__()
 
-    def _build_ui(self):
-        super()._build_ui()
+    def _setup_ui(self):
+        super()._setup_ui()
 
         # Il valore è assegnato quando si chiama .modifica_regia(id_regia)
         self.cur_id_regia: int = -1

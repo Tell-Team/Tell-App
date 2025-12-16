@@ -7,21 +7,16 @@ from view.styles.styles_loader import load_stylesheet
 
 # Con `# -` ho segnato le annotazione sui dettagli a modificare
 class MainWindowView(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-        # Set Controller principale (model, nav e controller inclusi)
+        # Setup Controller principale
         self.context = AppContext(self)
 
-        # Config. finestra
+        # Setup finestra
         self.setWindowTitle("Tell")
         self.setMinimumSize(800, 600)
 
-        """ 
-        Per testare le singole pagine, basta registrare la pagina desiderata
-        in self.context.nav prima di tutte le altre. (login_page è la prima pagina
-        registrata, quindi diventa la prima pagina visualizzata.)
-        """
         # Registrazione delle pagine
         self.context.nav.add_page("login_page", self.context.login_page)
         self.context.nav.add_page(
@@ -47,6 +42,7 @@ class MainWindowView(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication([])
+    # app.setStyle("Fusion")
     app.setStyleSheet(load_stylesheet("view/styles/main.qss"))
 
     window = MainWindowView()

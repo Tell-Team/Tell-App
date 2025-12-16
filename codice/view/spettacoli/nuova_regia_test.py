@@ -15,9 +15,9 @@ class NuovaRegiaView(CreaAbstractView):
 
         self.cur_id_opera: int = -1
 
-        self._build_ui()
+        self._setup_ui()
 
-    def _build_ui(self):
+    def _setup_ui(self):
         # - Lo style non è ancora applicato
 
         # Header
@@ -43,5 +43,5 @@ class NuovaRegiaView(CreaAbstractView):
         self.anno.setRange(0, 2099)
         self.anno.setValue(0)
 
-        self.add_row(label_regista, self.regista)
-        self.add_row(label_anno, self.anno)
+        self.form_layout.addRow(label_regista, self.regista)
+        self.form_layout.addRow(label_anno, self.anno)

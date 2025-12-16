@@ -15,7 +15,7 @@ class AbstractSectionView(QWidget):
     Info ed Account.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         # Logout
@@ -64,12 +64,16 @@ class AbstractSectionView(QWidget):
         self.main_layout.addWidget(container_top)
         self.main_layout.addWidget(scroll_area)
 
-    def refresh_page(self): ...
+    def refresh_page(self) -> None:
+        """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
+        ...
 
-    def clear_layout(self, layout: Optional[QLayout]):
+    def clear_layout(self, layout: Optional[QLayout]) -> None:
         """
         Pulisce un layout, eliminando i riferimenti ai widget contenuti. In caso
         ci sia un layout contenuto, questo viene anche pulito.
+
+        :param layout: layout da pulire
         """
         if layout:
             while layout.count():

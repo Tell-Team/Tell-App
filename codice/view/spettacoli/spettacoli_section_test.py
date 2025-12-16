@@ -16,9 +16,9 @@ class SpettacoliSectionView(AbstractSectionView):
     def __init__(self):
         super().__init__()
 
-        self._build_ui()
+        self._setup_ui()
 
-    def _build_ui(self):
+    def _setup_ui(self):
         # # LOGOUT
         # ## Pulsante: Logout
         btn_logout = QPushButton("Logout")
