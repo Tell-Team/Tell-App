@@ -103,7 +103,7 @@ class NuovaOperaView(CreaAbstractView):
         """Riempisce il `QComboBox` dei generi."""
         self.genere.clear()
 
-        self.genere.insertItem(0, "Scegliere genere...", "")
+        self.genere.insertItem(0, "Scegliere genere...", -1)
         # - Come faccio per avere l'opzione 0 di colore grigio?
         for i, g in enumerate(generi):
             i += 1
