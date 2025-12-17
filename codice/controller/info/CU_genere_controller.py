@@ -79,16 +79,7 @@ class CUGenereController(QObject):
 
         if is_new:
             # Ottieni la pagina NuovoGenereView
-            from view.info.nuovo_genere import NuovoGenereView
-
-            cur_page_dict: dict[str, Optional[QWidget]] = {"value": None}
-            self.navigation_get_page.emit("nuovo_genere", cur_page_dict)
-            cur_page = cur_page_dict.get("value")
-
-            if not isinstance(cur_page, NuovoGenereView):
-                raise TypeError(
-                    f"cur_page deve essere NuovoGenereView. Type trovato: {type(cur_page)}"
-                )
+            cur_page = self.__nuovo_genere_view
 
             # Ottieni l'input inserito
             nome = cur_page.nome.text()
@@ -120,23 +111,19 @@ class CUGenereController(QObject):
                     self.navigation_go_back.emit()
         elif not is_new:
             # Ottieni la pagina ModificaGenereView
-            from view.info.modifica_genere import ModificaGenereView
-
-            cur_page_dict: dict[str, Optional[QWidget]] = {"value": None}
-            self.navigation_get_page.emit("modifica_genere", cur_page_dict)
-            cur_page = cur_page_dict.get("value")
-
-            if not isinstance(cur_page, ModificaGenereView):
-                raise TypeError(
-                    f"cur_page deve essere ModificaGenereView. Type trovato: {type(cur_page)}"
-                )
+            cur_page = self.__modifica_genere_view
 
             # Crea una copia del genere originale
-            copia_genere = self.get_genere(cur_page.cur_id_genere)
+            copia_genere: Optional[Genere] = self.get_genere(cur_page.cur_id_genere)
             if not isinstance(copia_genere, Genere):
-                raise IdInesistenteException(
-                    f"Non e' presente nessun genere con id {cur_page.cur_id_genere}."
+                # Non esiste genere con l'id salvata nella pagina
+                self.__mostra_errore(
+                    cur_page,
+                    "Errore nel salvataggio",
+                    f"Non è presente nessun genere con id {cur_page.cur_id_genere}. "
+                    + "Impossibile effettuare le modifiche.",
                 )
+                return
 
             # Ottieni l'input inserito
             nome = cur_page.nome.text()
@@ -168,7 +155,7 @@ class CUGenereController(QObject):
                 else:
                     self.navigation_go_back.emit()
 
-    # ------------------------- CALLBACKS -------------------------
+    # ------------------------- METODI PRIVATI -------------------------
 
     def __mostra_errore(self, widget: QWidget, titolo: str, testo: str) -> None:
         """Mostra un messaggio di errore all'utente.

@@ -273,21 +273,12 @@ class InfoController(QObject):
             self.__mostra_errore(
                 self.__info_section,
                 "Opera inesistente",
-                f"Non e' presente nessun opera con id {id_}.",
+                f"Non è presente nessun'opera con id {id_}.",
             )
             return
 
         # Ottieni la pagina VisualizzaOperaView
-        from view.info.visualizza_opera import VisualizzaOperaView
-
-        cur_page_dict: dict[str, Optional[QWidget]] = {"value": None}
-        self.navigation_get_page.emit("visualizza_opera", cur_page_dict)
-        cur_page = cur_page_dict.get("value")
-
-        if not isinstance(cur_page, VisualizzaOperaView):
-            raise TypeError(
-                f"cur_page deve essere VisualizzaOperaView. Type trovato: {type(cur_page)}"
-            )
+        cur_page = self.__visualizza_opera_view
 
         # Setup pagina
         self.clear_layout_regie(cur_page.layout_regie)
@@ -305,7 +296,7 @@ class InfoController(QObject):
             self.__mostra_errore(
                 self.__info_section,
                 "Genere inesistente",
-                f"Non e' presente nessun genere con id {cur_opera.get_id_genere()}.",
+                f"Non è presente nessun genere con id {cur_opera.get_id_genere()}.",
             )
             return
 
@@ -383,12 +374,16 @@ class InfoController(QObject):
 
         cur_page_dict: dict[str, Optional[QWidget]] = {"value": None}
         self.navigation_get_page.emit("nuova_opera", cur_page_dict)
-        cur_page = cur_page_dict.get("value")
+        cur_page: Optional[QWidget] = cur_page_dict.get("value")
 
         if not isinstance(cur_page, NuovaOperaView):
-            raise TypeError(
-                f"cur_page deve essere NuovaOperaView. Type trovato: {type(cur_page)}"
+            self.__mostra_errore(
+                self.__info_section,
+                "Pagina non trovata",
+                "Si è verificato un errore: Non è stato trovata la pagina 'nuova_opera'. "
+                + f"Type trovato: {type(cur_page)}",
             )
+            return
 
         # Setup pagina
         cur_page.nome.setText("")
@@ -421,7 +416,7 @@ class InfoController(QObject):
             self.__mostra_errore(
                 self.__info_section,
                 "Opera inesistente",
-                f"Non e' presente nessun opera con id {id_}.",
+                f"Non è presente nessun'opera con id {id_}.",
             )
             return
 
@@ -430,12 +425,16 @@ class InfoController(QObject):
 
         cur_page_dict: dict[str, Optional[QWidget]] = {"value": None}
         self.navigation_get_page.emit("modifica_opera", cur_page_dict)
-        cur_page = cur_page_dict.get("value")
+        cur_page: Optional[QWidget] = cur_page_dict.get("value")
 
         if not isinstance(cur_page, ModificaOperaView):
-            raise TypeError(
-                f"cur_page deve essere ModificaOperaView. Type trovato: {type(cur_page)}"
+            self.__mostra_errore(
+                self.__info_section,
+                "Pagina non trovata",
+                "Si è verificato un errore: Non è stato trovata la pagina 'modifica_opera'. "
+                + f"Type trovato: {type(cur_page)}",
             )
+            return
 
         # Salva l'id dell'opera da modificare nella pagina
         cur_page.cur_id_opera = id_
@@ -470,12 +469,16 @@ class InfoController(QObject):
 
         cur_page_dict: dict[str, Optional[QWidget]] = {"value": None}
         self.navigation_get_page.emit("nuovo_genere", cur_page_dict)
-        cur_page = cur_page_dict.get("value")
+        cur_page: Optional[QWidget] = cur_page_dict.get("value")
 
         if not isinstance(cur_page, NuovoGenereView):
-            raise TypeError(
-                f"cur_page deve essere NuovoGenereView. Type trovato: {type(cur_page)}"
+            self.__mostra_errore(
+                self.__info_section,
+                "Pagina non trovata",
+                "Si è verificato un errore: Non è stato trovata la pagina 'nuovo_genere'. "
+                + f"Type trovato: {type(cur_page)}",
             )
+            return
 
         # Setup pagina
         cur_page.nome.setText("")
@@ -499,7 +502,7 @@ class InfoController(QObject):
             self.__mostra_errore(
                 self.__info_section,
                 "Genere inesistente",
-                f"Non e' presente nessun genere con id {id_}.",
+                f"Non è presente nessun genere con id {id_}.",
             )
             return
 
@@ -508,12 +511,16 @@ class InfoController(QObject):
 
         cur_page_dict: dict[str, Optional[QWidget]] = {"value": None}
         self.navigation_get_page.emit("modifica_genere", cur_page_dict)
-        cur_page = cur_page_dict.get("value")
+        cur_page: Optional[QWidget] = cur_page_dict.get("value")
 
         if not isinstance(cur_page, ModificaGenereView):
-            raise TypeError(
-                f"cur_page deve essere ModificaGenereView. Type trovato: {type(cur_page)}"
+            self.__mostra_errore(
+                self.__info_section,
+                "Pagina non trovata",
+                "Si è verificato un errore: Non è stato trovata la pagina 'modifica_genere'. "
+                + f"Type trovato: {type(cur_page)}",
             )
+            return
 
         # Salva l'id del genere da modificare nella pagina
         cur_page.cur_id_genere = cur_genere.get_id()
@@ -525,7 +532,7 @@ class InfoController(QObject):
         # Apri la pagina
         self.navigation_go_to.emit("modifica_genere", True)
 
-    # ------------------------- CALLBACKS -------------------------
+    # ------------------------- METODI PRIVATI -------------------------
 
     def __mostra_errore(self, widget: QWidget, titolo: str, testo: str) -> None:
         """Mostra un messaggio di errore all'utente.

@@ -20,9 +20,19 @@ class NavigationController:
         return self._pages
 
     def get_page(self, page_name: str) -> Optional[QWidget]:
+        """Ritorna una pagina registrata.
+
+        :param page_name: key usata per cercare la pagina nel dict"""
         for key in self._pages:
             if key == page_name:
                 return self._pages.get(key)
+
+    def get_cur_centra_page(self) -> Optional[QWidget]:
+        """Ritorna la pagina visualizzata dall'utente.
+
+        Usato dall'`AppContext` per sapere dove mostrare il messaggio d'errore generato
+        da `go_to`."""
+        return self._main_window.centralWidget()
 
     def add_page(self, page_name: str, widget: QWidget) -> None:
         """Registra una pagina nel controller.
@@ -37,10 +47,13 @@ class NavigationController:
 
         :param page_name: key usata per trovare la pagina
         :param save_history: verifica se la pagina sarà salvata nell'history del controller o no
+
+        :raise ValueError: la pagina cercata non è stata trovata
         """
         widget = self._pages.get(page_name)
         if widget is None:
-            raise ValueError(f"Non e' stata trovata la pagina: {page_name}")
+            raise ValueError(f"Non è stata trovata la pagina '{page_name}'.")
+        # - Magari un'altra eccezione. Una custom??
 
         current = self._stack.currentWidget()
         if current and save_history:

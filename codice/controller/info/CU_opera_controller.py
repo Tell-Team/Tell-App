@@ -82,16 +82,7 @@ class CUOperaController(QObject):
 
         if is_new:
             # Ottieni la pagina NuovaOperaView
-            from view.info.nuova_opera import NuovaOperaView
-
-            cur_page_dict: dict[str, Optional[QWidget]] = {"value": None}
-            self.navigation_get_page.emit("nuova_opera", cur_page_dict)
-            cur_page = cur_page_dict.get("value")
-
-            if not isinstance(cur_page, NuovaOperaView):
-                raise TypeError(
-                    f"cur_page deve essere NuovaOperaView. Type trovato: {type(cur_page)}"
-                )
+            cur_page = self.__nuova_opera_view
 
             # Ottieni l'input inserito
             nome = cur_page.nome.text()
@@ -106,6 +97,7 @@ class CUOperaController(QObject):
             # Tenta di creare la nuova opera
             try:
                 # - Sarebbe buono corriggere l'ordine dei parametri del costruttore di Opera
+                # - [nome -> trama -> id_genere -> comp. -> libr. -> #atti -> data -> teatro]
                 nuova_opera = Opera(
                     nome, compositore, librettista, atti, data, teatro, trama, id_genere
                 )
@@ -121,6 +113,7 @@ class CUOperaController(QObject):
 
                 try:
                     # - È necessario corriggere l'ordine dei setter del costruttore di Opera
+                    # - [nome -> trama -> id_genere -> comp. -> libr. -> #atti -> data -> teatro]
                     self.aggiungi_opera(nuova_opera)
                 except IdInesistenteException as exc:
                     # L'opera è collegata ad un genere che non esiste
@@ -140,23 +133,19 @@ class CUOperaController(QObject):
                     self.navigation_go_back.emit()
         elif not is_new:
             # Ottieni la pagina ModificaOperaView
-            from view.info.modifica_opera import ModificaOperaView
-
-            cur_page_dict: dict[str, Optional[QWidget]] = {"value": None}
-            self.navigation_get_page.emit("modifica_opera", cur_page_dict)
-            cur_page = cur_page_dict.get("value")
-
-            if not isinstance(cur_page, ModificaOperaView):
-                raise TypeError(
-                    f"cur_page deve essere ModificaOperaView. Type trovato: {type(cur_page)}"
-                )
+            cur_page = self.__modifica_opera_view
 
             # Crea una copia dell'opera originale
-            copia_opera = self.get_opera(cur_page.cur_id_opera)
+            copia_opera: Optional[Opera] = self.get_opera(cur_page.cur_id_opera)
             if not isinstance(copia_opera, Opera):
-                raise IdInesistenteException(
-                    f"Non e' presente nessun opera con id {cur_page.cur_id_opera}."
+                # Non esiste opera con l'id salvata nella pagina
+                self.__mostra_errore(
+                    cur_page,
+                    "Errore nel salvataggio",
+                    f"Non è presente nessun'opera con id {cur_page.cur_id_opera}. "
+                    + "Impossibile effettuare le modifiche.",
                 )
+                return
 
             # Ottieni l'input inserito
             nome = cur_page.nome.text()
@@ -200,7 +189,7 @@ class CUOperaController(QObject):
                 else:
                     self.navigation_go_back.emit()
 
-    # ------------------------- CALLBACKS -------------------------
+    # ------------------------- METODI PRIVATI -------------------------
 
     def __mostra_errore(self, widget: QWidget, titolo: str, testo: str) -> None:
         """Mostra un messaggio di errore all'utente.

@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QMainWindow, QWidget
+from PyQt6.QtWidgets import QMainWindow, QWidget, QMessageBox
 from typing import Optional
 
 from controller.navigation import NavigationController
@@ -115,13 +115,35 @@ class AppContext:
             self.on_nav_request_get_page
         )
 
+    # ------------------------- METODI PUBBLICI -------------------------
+
     def on_nav_request_go_to(self, page_name: str, save_history: bool) -> None:
         self.nav.go_to(page_name, save_history)
 
     def on_nav_request_section_go_to(self, page_name: str) -> None:
-        self.nav.section_go_to(page_name)
+        try:
+            self.nav.section_go_to(page_name)
+        except ValueError as exc:
+            self.__mostra_errore(
+                self.nav.get_cur_centra_page(),  # type:ignore
+                # Questo metodo è chiamato solo quando c'è un centralWidget.
+                #   Quindi non è necessario un assert in caso non ci sia.
+                "Pagina non trovata",
+                f"Si è verificato un errore: {exc}",
+            )
 
     def on_nav_request_get_page(
         self, page_name: str, container: dict[str, Optional[QWidget]]
     ) -> None:
         container["value"] = self.nav.get_page(page_name)
+
+    # ------------------------- METODI PRIVATI -------------------------
+
+    def __mostra_errore(self, widget: QWidget, titolo: str, testo: str) -> None:
+        """Mostra un messaggio di errore all'utente.
+
+        :param widget: parent widget delle finestra di errore
+        :param titolo: titolo della finestra di errore
+        :param testo: testo descrittivo
+        """
+        QMessageBox.critical(widget, titolo, testo)

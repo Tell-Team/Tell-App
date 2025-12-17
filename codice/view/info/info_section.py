@@ -99,7 +99,11 @@ class InfoSectionView(AbstractSectionView):
         teatro_nome.setObjectName("Header2")
 
         teatro_desc = QLabel(
-            "Inaugurato nel 1996\nVia R. Ripa, 1\nLa Vitrifrigo Arena è un'ampio palazzetto che ospita numerosi eventi sportivi e musicali di rilevanza mondiale. In occasione dello Rossini Opera Festival, viene allestita una struttura in legno al suo interno per ricreare l'esperienza acustica di un teatro tradizionale."
+            "Inaugurato nel 1996\nVia R. Ripa, 1\nLa Vitrifrigo Arena è un'ampio "
+            + "palazzetto che ospita numerosi eventi sportivi e musicali di "
+            + "rilevanza mondiale. In occasione dello Rossini Opera Festival, "
+            + "viene allestita una struttura in legno al suo interno per ricreare "
+            + "l'esperienza acustica di un teatro tradizionale."
         )
         teatro_desc.setObjectName("Paragraph")
         teatro_desc.setWordWrap(True)
