@@ -6,15 +6,23 @@ from model.pianificazione.opera import Opera
 from model.pianificazione.spettacolo import Spettacolo
 from model.pianificazione.regia import Regia
 from model.exceptions import (
+    DatoIncongruenteException,
     IdInesistenteException,
     OggettoInUsoException,
 )
 from pickle import load, dump
 from typing import Optional
+import os
 
 
 class Model:
-    def __init__(self):
+    def __init__(self, db_path: Optional[str]):
+        """Throws: DatoIncongruenteException"""
+        if db_path is None:
+            self.set_db_path("./db/")
+        else:
+            self.set_db_path(db_path)
+
         try:
             self.__carica_generi()
             Genere.set_next_id(self.__gestore_generi.get_max_id() + 1)
@@ -33,30 +41,43 @@ class Model:
         except FileNotFoundError:
             self.__gestore_spettacoli = GestoreSpettacoli()
 
+    # DB Path
+    def set_db_path(self, db_path: str):
+        """Throws: DatoIncongruenteException"""
+        if not os.path.exists(db_path):
+            os.makedirs(db_path)
+        else:
+            if not os.path.isdir(db_path):
+                raise DatoIncongruenteException(
+                    "Il percorso specificato per il salvataggio dei dati dell'applicazione non è valido (non è una cartella)."
+                )
+
+        self.__db_path = db_path
+
     # Caricamenti
     def __carica_generi(self):
-        with open("db/generi.pkl", "rb") as f:
+        with open(os.path.join(self.__db_path, "generi.pkl"), "rb") as f:
             self.__gestore_generi: GestoreGeneri = load(f)
 
     def __carica_opere(self):
-        with open("db/opere.pkl", "rb") as f:
+        with open(os.path.join(self.__db_path, "opere.pkl"), "rb") as f:
             self.__gestore_opere: GestoreOpere = load(f)
 
     def __carica_spettacoli(self):
-        with open("db/spettacoli.pkl", "rb") as f:
+        with open(os.path.join(self.__db_path, "spettacoli.pkl"), "rb") as f:
             self.__gestore_spettacoli: GestoreSpettacoli = load(f)
 
     # Salvataggi
     def __salva_generi(self):
-        with open("db/generi.pkl", "wb") as f:
+        with open(os.path.join(self.__db_path, "generi.pkl"), "wb") as f:
             dump(self.__gestore_generi, f)
 
     def __salva_opere(self):
-        with open("db/opere.pkl", "wb") as f:
+        with open(os.path.join(self.__db_path, "opere.pkl"), "wb") as f:
             dump(self.__gestore_opere, f)
 
     def __salva_spettacoli(self):
-        with open("db/spettacoli.pkl", "wb") as f:
+        with open(os.path.join(self.__db_path, "spettacoli.pkl"), "wb") as f:
             dump(self.__gestore_spettacoli, f)
 
     # Getters
@@ -128,9 +149,7 @@ class Model:
     def elimina_opera(self, id_: int):
         """Throws: OggettoInUsoException, IdInesistenteException"""
         if self.__gestore_spettacoli.opera_in_uso(id_):
-            raise OggettoInUsoException(
-                "L'opera è ancora è ancora legata ad una o più regie."
-            )
+            raise OggettoInUsoException("L'opera è ancora legata ad una o più regie.")
 
         self.__gestore_opere.elimina_opera(id_)
         self.__salva_opere()

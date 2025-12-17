@@ -7,10 +7,12 @@ from model.model import Model
 
 
 class AppContext:
-    def __init__(self, main_window: QMainWindow) -> None:
+    def __init__(self, main_window: QMainWindow, db_path: Optional[str]) -> None:
+        """Throws: DatoIncongruenteException"""
+
         # Crea un NavigationController ed un Model unici per tutta l'app
         self.nav = NavigationController(main_window)
-        self.model = Model()
+        self.model = Model(db_path)
 
         # ------------------------- PAGINE DELL'APP -------------------------
 

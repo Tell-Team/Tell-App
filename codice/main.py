@@ -4,14 +4,20 @@ from controller.context import AppContext
 
 from view.styles.styles_loader import load_stylesheet
 
+from model.exceptions import DatoIncongruenteException
+
+from typing import Optional
+import sys
+
 
 # Con `# -` ho segnato le annotazione sui dettagli a modificare
 class MainWindowView(QMainWindow):
-    def __init__(self) -> None:
+    def __init__(self, db_path: Optional[str]) -> None:
+        """Throws: DatoIncongruenteException"""
         super().__init__()
 
         # Setup Controller principale
-        self.context = AppContext(self)
+        self.context = AppContext(self, db_path)
 
         # Setup finestra
         self.setWindowTitle("Tell")
@@ -45,6 +51,23 @@ if __name__ == "__main__":
     # app.setStyle("Fusion")
     app.setStyleSheet(load_stylesheet("view/styles/main.qss"))
 
-    window = MainWindowView()
-    window.show()
-    app.exec()
+    try:
+        window: MainWindowView
+
+        if len(sys.argv) == 2:
+            window = MainWindowView(sys.argv[1])
+        elif len(sys.argv) == 1:
+            window = MainWindowView(None)
+        else:
+            print(
+                f"Wrong number of arguments (expected 0 or 1, got {len(sys.argv)})",
+                file=sys.stderr,
+            )
+            exit(1)
+
+        window.show()
+        app.exec()
+
+    except DatoIncongruenteException as e:
+        print(e, file=sys.stderr)
+        exit(1)
