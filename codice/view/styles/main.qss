@@ -1,27 +1,16 @@
-/* Labels */
-QLabel#Header1 {
-    font-size: 28px;
+/* ------------------------ STYLES ------------------------ */
+
+/* --- Labels --- */
+QLabel#Header1, QLabel#Header2, QLabel#Header3 {
     font-weight: 700;
     margin: 0;
     padding: 0;
     color: #222;
 }
 
-QLabel#Header2 {
-    font-size: 20px;
-    font-weight: 700;
-    margin: 0;
-    padding: 0;
-    color: #222;
-}
-
-QLabel#Header3 {
-    font-size: 16px;
-    font-weight: 700;
-    margin: 0;
-    padding: 0;
-    color: #222;
-}
+QLabel#Header1 { font-size: 28px; }
+QLabel#Header2 { font-size: 20px; }
+QLabel#Header3 { font-size: 16px; }
 
 QLabel#SubHeader {
     font-size: 14px;
@@ -37,7 +26,7 @@ QLabel#Paragraph {
     padding: 0;
 }
 
-/* Pulsanti */
+/* --- Pulsanti --- */
 QPushButton#BlueButton {
     background-color: #2b7cff;
     color: white;
@@ -46,22 +35,8 @@ QPushButton#BlueButton {
     font-size: 14px;
 }
 
-QPushButton#BlueButton:hover {
-    background-color: #1d63d3;
-}
-
-QPushButton#BlueButton:pressed {
-    background-color: #154c9c;
-}
-
-QPushButton#SmallButton:hover {
-    background-color: #d1d1d1;
-}
-
-/*
-    Ratio to pass from blue to gray scale: 255/286.792
-    Gray scale colors: default = 255 -> hover = 209 -> pressed = 155(154)
-*/
+QPushButton#BlueButton:hover { background-color: #1d63d3; }
+QPushButton#BlueButton:pressed { background-color: #154c9c; }
 
 QPushButton#SmallButton {
     background-color: #fff;
@@ -71,16 +46,14 @@ QPushButton#SmallButton {
     font-size: 12px;
 }
 
-QPushButton#SmallButton:pressed {
-    background-color: #9a9a9a;
-}
-
+QPushButton#SmallButton:hover { background-color: #d1d1d1; }
+QPushButton#SmallButton:pressed { background-color: #9a9a9a; }
 QPushButton#SmallButton:disabled {
     background-color: #ccc;
     color: #777;
 }
 
-/* Istanze visualizzate */
+/* --- QWidget speciale --- */
 QWidget#Container {
     border: 1px solid #111;
     border-radius: 15px;
@@ -88,7 +61,129 @@ QWidget#Container {
     padding: 10px;
 }
 
-/* Scroolbar */
+/* --- Campi d'input --- */
+QLineEdit, QTextEdit, QComboBox, QSpinBox, QDateEdit {
+    border: 1px solid #b0b0b0;
+    border-radius: 6px;
+    padding: 5px;
+    background-color: white;
+    color: #222;
+    font-size: 14px;
+}
+
+QLineEdit:hover, QTextEdit:hover, QComboBox:hover, QSpinBox:hover, QDateEdit:hover {
+    border: 1px solid #818181;
+}
+
+QLineEdit:focus, QTextEdit:focus, QComboBox:focus, QSpinBox:focus, QDateEdit:focus {
+    border: 1px solid #2b7cff;
+}
+
+QLineEdit:disabled, QTextEdit:disabled, QComboBox:disabled, QSpinBox:disabled, QDateEdit:disabled {
+    background-color: #ccc;
+    color: #777;
+}
+
+/* --- ComboBox & QDateEdit Dropdown --- */
+QComboBox::drop-down, QDateEdit::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left: 1px solid #b0b0b0;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+QComboBox::drop-down:hover, QDateEdit::drop-down:hover { background-color: #d1d1d1; }
+QComboBox::drop-down:pressed, QDateEdit::drop-down:pressed { background-color: #9a9a9a; }
+
+QComboBox::down-arrow {
+    image: url(down_arrow.png); /* Placeholder */
+    width: 10px;
+    height: 10px;
+}
+
+QComboBox QAbstractItemView {
+    border: 1px solid #b0b0b0;
+    selection-background-color: #2b7cff;
+    selection-color: white;
+}
+
+/* --- QSpinBox & QDateEdit Buttons --- */
+QSpinBox::up-button, QDateEdit::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: right top;
+    width: 20px;
+    border-left: 1px solid #b0b0b0;
+    border-bottom: 1px solid #b0b0b0;
+    border-top-right-radius: 6px;
+    padding: 0;
+}
+
+QSpinBox::down-button, QDateEdit::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: right bottom;
+    width: 20px;
+    border-left: 1px solid #b0b0b0;
+    border-bottom-right-radius: 6px;
+    padding: 0;
+}
+
+QSpinBox::up-button:hover, QSpinBox::down-button:hover,
+QDateEdit::up-button:hover, QDateEdit::down-button:hover { background-color: #d1d1d1; }
+
+QSpinBox::up-button:pressed, QSpinBox::down-button:pressed,
+QDateEdit::up-button:pressed, QDateEdit::down-button:pressed { background-color: #9a9a9a; }
+
+QSpinBox::up-arrow, QDateEdit::up-arrow {
+    image: url(up_arrow.png); /* Placeholder */
+    width: 10px;
+    height: 10px;
+}
+
+QSpinBox::down-arrow {
+    image: url(down_arrow.png); /* Placeholder */
+    width: 10px;
+    height: 10px;
+}
+
+/* --- QDateEdit Calendar Popup --- */
+QDateEdit::down-arrow {
+    image: url(calendar_icon.png); /* Placeholder */
+    width: 12px;
+    height: 12px;
+}
+
+QCalendarWidget { font-size: 14px; }
+
+QCalendarWidget QWidget#qt_calendar_prevmonth,
+QCalendarWidget QWidget#qt_calendar_nextmonth,
+QCalendarWidget QWidget#qt_calendar_monthheader {
+    background-color: #f3f3f3;
+}
+
+QCalendarWidget QToolButton {
+    height: 30px;
+    icon-size: 16px;
+    background-color: transparent;
+    color: #222;
+    border: none;
+    margin: 5px;
+}
+
+QCalendarWidget QToolButton:hover { background-color: #d1d1d1; border-radius: 4px; }
+QCalendarWidget QToolButton:pressed { background-color: #9a9a9a; }
+
+QCalendarWidget QAbstractItemView {
+    border: 1px solid #b0b0b0;
+    selection-background-color: #2b7cff;
+    selection-color: white;
+    outline: 0;
+}
+
+QCalendarWidget QAbstractItemView:disabled { color: #777; }
+
+/* --- Scrollbar --- */
 QScrollArea {
     background-color: none;
     border: 1px solid #b0b0b0;
@@ -113,146 +208,7 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
     background: none;
 }
 
-/* Campi d'input */
-
-/* QLineEdit, QTextEdit */
-QLineEdit, QTextEdit {
-    border: 1px solid #b0b0b0;
-    border-radius: 6px;
-    padding: 5px;
-    background-color: white;
-    color: #222;
-    font-size: 14px;
-}
-
-QLineEdit:hover, QTextEdit:hover {
-    border: 1px solid #818181;
-}
-
-QLineEdit:focus, QTextEdit:focus {
-    border: 1px solid #2b7cff;
-}
-
-QLineEdit:disabled, QTextEdit:disabled {
-    background-color: #ccc;
-    color: #777;
-}
-
-/* ComboBox */
-QComboBox {
-    border: 1px solid #b0b0b0;
-    border-radius: 6px;
-    padding: 5px;
-    background-color: white;
-    color: #222;
-    font-size: 14px;
-}
-
-QComboBox:hover {
-    border: 1px solid #818181;
-}
-
-QComboBox:focus {
-    border: 1px solid #2b7cff;
-}
-
-QComboBox:disabled {
-    background-color: #ccc;
-    color: #777;
-}
-
-QComboBox::drop-down {
-    subcontrol-origin: padding;
-    subcontrol-position: top right;
-    width: 20px;
-    border-left-width: 1px;
-    border-left-color: #b0b0b0;
-    border-left-style: solid;
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
-}
-
-QComboBox::down-arrow {
-    image: url(down_arrow.png); /* Placeholder */
-    width: 10px;
-    height: 10px;
-}
-
-QComboBox::drop-down:hover {
-    background-color: #d1d1d1;
-}
-
-QComboBox::drop-down:pressed {
-    background-color: #9a9a9a;
-}
-
-QComboBox QAbstractItemView {
-    border: 1px solid #b0b0b0;
-    selection-background-color: #2b7cff;
-    selection-color: white;
-}
-
-/* QSpinBox, QDateEdit */
-QSpinBox, QDateEdit {
-    border: 1px solid #b0b0b0;
-    border-radius: 6px;
-    padding: 5px;
-    background-color: white;
-    color: #222;
-    font-size: 14px;
-}
-QSpinBox:hover, QDateEdit:hover {
-    border: 1px solid #818181;
-}
-QSpinBox:focus, QDateEdit:focus {
-    border: 1px solid #2b7cff;
-}
-QSpinBox:disabled, QDateEdit:disabled {
-    background-color: #ccc;
-    color: #777;
-}
-
-QSpinBox::up-button, QDateEdit::up-button {
-    subcontrol-origin: border;
-    subcontrol-position: right top;
-    width: 20px;
-    border-left: 1px solid #b0b0b0;
-    border-bottom: 1px solid #b0b0b0;
-    border-top-right-radius: 6px;
-    padding: 0;
-}
-
-QSpinBox::down-button, QDateEdit::down-button {
-    subcontrol-origin: border;
-    subcontrol-position: right bottom;
-    width: 20px;
-    border-left: 1px solid #b0b0b0;
-    border-bottom-right-radius: 6px;
-    padding: 0;
-}
-
-QSpinBox::up-button:hover, QDateEdit::up-button:hover,
-QSpinBox::down-button:hover, QDateEdit::down-button:hover {
-    background-color: #d1d1d1;
-}
-
-QSpinBox::up-button:pressed, QDateEdit::up-button:pressed,
-QSpinBox::down-button:pressed, QDateEdit::down-button:pressed {
-    background-color: #9a9a9a;
-}
-
-QSpinBox::up-arrow, QDateEdit::up-arrow {
-    image: url(up_arrow.png); /* Placeholder */
-    width: 10px;
-    height: 10px;
-}
-
-QSpinBox::down-arrow, QDateEdit::down-arrow {
-    image: url(down_arrow.png); /* Placeholder */
-    width: 10px;
-    height: 10px;
-}
-
+/* --- QMessageBox --- */
 QMessageBox {
-    /* Da definere */
+    /* # - Da scrivere */
 }

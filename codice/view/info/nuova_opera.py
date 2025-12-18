@@ -8,8 +8,6 @@ from PyQt6.QtWidgets import (
     # QHBoxLayout,
 )
 
-# from PyQt6.QtCore import Qt
-
 from view.abstractView.creaAbstract import CreaAbstractView
 
 from model.pianificazione.genere import Genere
@@ -74,8 +72,8 @@ class NuovaOperaView(CreaAbstractView):
         label_data = QLabel("Prima rappresentazione :")
         label_data.setObjectName("SubHeader")
         self.data = QDateEdit()
-        # self.data = QDateEdit(calendarPopup=True)
-        # self.data.setDisplayFormat("dd/MM/yyyy")
+        self.data.setCalendarPopup(True)
+        self.data.setDisplayFormat("dd/MM/yyyy")
 
         # atti_data_layout = QHBoxLayout()
         # atti_data_layout.addWidget(label_atti)
@@ -93,9 +91,9 @@ class NuovaOperaView(CreaAbstractView):
         self.form_layout.addRow(label_genere, self.genere)
         self.form_layout.addRow(label_compositore, self.compositore)
         self.form_layout.addRow(label_librettista, self.librettista)
-        # self.form_layout.addRow(atti_data_layout)
         self.form_layout.addRow(label_atti, self.atti)
         self.form_layout.addRow(label_data, self.data)
+        # self.form_layout.addRow(atti_data_layout)
         self.form_layout.addRow(label_teatro, self.teatro)
 
     # - Ci dovrebbe essere nel controller o vabbene nella view?
