@@ -92,7 +92,7 @@ class VisualizzaOperaView(QWidget):
 
         # Pulsante: Indientro
         self._btn_indietro = QPushButton("Indietro")
-        self._btn_indietro.setObjectName("SmallButton")
+        self._btn_indietro.setObjectName("WhiteButton")
 
         self.pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.pulsanti)

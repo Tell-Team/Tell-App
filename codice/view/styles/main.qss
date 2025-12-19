@@ -35,10 +35,21 @@ QPushButton#BlueButton {
     font-size: 14px;
 }
 
-QPushButton#BlueButton:hover { background-color: #1d63d3; }
-QPushButton#BlueButton:pressed { background-color: #154c9c; }
+QPushButton#SearchButton {
+    image: url(search_icon.png); /* # - Si deve aggiungere nella view */
+    border: 1px solid #b0b0b0;
+    background-color: #2b7cff;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 7px;
+}
 
-QPushButton#SmallButton {
+QPushButton#BlueButton:hover, QPushButton#SearchButton:hover { background-color: #1d63d3; }
+QPushButton#BlueButton:pressed, QPushButton#SearchButton:pressed { background-color: #154c9c; }
+
+QPushButton#WhiteButton {
     background-color: #fff;
     color: black;
     border-radius: 6px;
@@ -46,9 +57,9 @@ QPushButton#SmallButton {
     font-size: 12px;
 }
 
-QPushButton#SmallButton:hover { background-color: #d1d1d1; }
-QPushButton#SmallButton:pressed { background-color: #9a9a9a; }
-QPushButton#SmallButton:disabled {
+QPushButton#WhiteButton:hover { background-color: #d1d1d1; }
+QPushButton#WhiteButton:pressed { background-color: #9a9a9a; }
+QPushButton#WhiteButton:disabled {
     background-color: #ccc;
     color: #777;
 }
@@ -69,6 +80,13 @@ QLineEdit, QTextEdit, QComboBox, QSpinBox, QDateEdit {
     background-color: white;
     color: #222;
     font-size: 14px;
+}
+
+QLineEdit#SearchBar {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 
 QLineEdit:hover, QTextEdit:hover, QComboBox:hover, QSpinBox:hover, QDateEdit:hover {
@@ -98,7 +116,7 @@ QComboBox::drop-down:hover, QDateEdit::drop-down:hover { background-color: #d1d1
 QComboBox::drop-down:pressed, QDateEdit::drop-down:pressed { background-color: #9a9a9a; }
 
 QComboBox::down-arrow {
-    image: url(down_arrow.png); /* Placeholder */
+    image: url(down_arrow.png); /* # - Si deve aggiungere nella view */
     width: 10px;
     height: 10px;
 }
@@ -136,20 +154,20 @@ QSpinBox::up-button:pressed, QSpinBox::down-button:pressed,
 QDateEdit::up-button:pressed, QDateEdit::down-button:pressed { background-color: #9a9a9a; }
 
 QSpinBox::up-arrow, QDateEdit::up-arrow {
-    image: url(up_arrow.png); /* Placeholder */
+    image: url(up_arrow.png); /* # - Si deve aggiungere nella view */
     width: 10px;
     height: 10px;
 }
 
 QSpinBox::down-arrow {
-    image: url(down_arrow.png); /* Placeholder */
+    image: url(down_arrow.png); /* # - Si deve aggiungere nella view */
     width: 10px;
     height: 10px;
 }
 
 /* --- QDateEdit Calendar Popup --- */
 QDateEdit::down-arrow {
-    image: url(calendar_icon.png); /* Placeholder */
+    image: url(calendar_icon.png); /* # - Si deve aggiungere nella view */
     width: 12px;
     height: 12px;
 }

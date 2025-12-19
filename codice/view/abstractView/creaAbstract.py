@@ -29,10 +29,10 @@ class CreaAbstractView(QWidget):
 
         # Setup Pulsanti
         self._btn_cancella = QPushButton("Cancella")
-        self._btn_cancella.setObjectName("SmallButton")
+        self._btn_cancella.setObjectName("WhiteButton")
 
         self._btn_conferma = QPushButton("Conferma")
-        self._btn_conferma.setObjectName("SmallButton")
+        self._btn_conferma.setObjectName("WhiteButton")
 
         self.pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.pulsanti)

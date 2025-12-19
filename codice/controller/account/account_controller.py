@@ -22,7 +22,7 @@ class AccountController:
 
 #     # ### Pulsanti
 #     btn_modifica = QPushButton("Modifica")
-#     btn_modifica.setObjectName("SmallButton")
+#     btn_modifica.setObjectName("WhiteButton")
 #     btn_modifica.clicked.connect(  # type:ignore
 #         partial(
 #             AccountController.modifica_account, gestore_account, admin.get_id()
@@ -30,7 +30,7 @@ class AccountController:
 #     )
 
 #     btn_elimina = QPushButton("Rimuovi")
-#     btn_elimina.setObjectName("SmallButton")
+#     btn_elimina.setObjectName("WhiteButton")
 #     btn_elimina.clicked.connect(  # type:ignore
 #         partial(
 #             AccountController.elimina_account, gestore_account, admin.get_id()
@@ -64,7 +64,7 @@ class AccountController:
 
 #     # ### Pulsanti
 #     btn_modifica = QPushButton("Modifica")
-#     btn_modifica.setObjectName("SmallButton")
+#     btn_modifica.setObjectName("WhiteButton")
 #     btn_modifica.clicked.connect(  # type:ignore
 #         partial(
 #             AccountController.modifica_account,
@@ -74,7 +74,7 @@ class AccountController:
 #     )
 
 #     btn_elimina = QPushButton("Rimuovi")
-#     btn_elimina.setObjectName("SmallButton")
+#     btn_elimina.setObjectName("WhiteButton")
 #     btn_elimina.clicked.connect(  # type:ignore
 #         partial(
 #             AccountController.elimina_account,

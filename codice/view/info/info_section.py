@@ -53,18 +53,31 @@ class InfoSectionView(AbstractSectionView):
         header_opere.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self._btn_nuova_opera = QPushButton("Nuova opera")
-        self._btn_nuova_opera.setObjectName("SmallButton")
+        self._btn_nuova_opera.setObjectName("WhiteButton")
+
+        self.filtro_ricerca: str = ""
 
         self.ricerca_bar = QLineEdit()
         self.ricerca_bar.setPlaceholderText("Inserire nome...")
         self.ricerca_bar.setClearButtonEnabled(True)
-        # - Dovrebbe includere un pulsante per iniziare la ricerca
-        # - Manca ricercaOperaRequest = pyqtSignal(str) per farla funzionale
+        self.ricerca_bar.setObjectName("SearchBar")
+
+        self._btn_ricerca = QPushButton()
+        self._btn_ricerca.setObjectName("SearchButton")
+        self._btn_ricerca.setFixedHeight(self.ricerca_bar.sizeHint().height())
+
+        widget_ricerca = QWidget()
+        layout_ricerca = QHBoxLayout(widget_ricerca)
+        layout_ricerca.setSpacing(0)
+        layout_ricerca.setContentsMargins(0, 0, 0, 0)
+        layout_ricerca.addWidget(self.ricerca_bar)
+        layout_ricerca.addWidget(self._btn_ricerca)
 
         layout_header_opere = QHBoxLayout()
         layout_header_opere.addWidget(header_opere)
         layout_header_opere.addWidget(self._btn_nuova_opera)
         layout_header_opere.addWidget(self.ricerca_bar)
+        layout_header_opere.addWidget(widget_ricerca)
 
         self.layout_lista_opere = QVBoxLayout()
 
@@ -83,7 +96,7 @@ class InfoSectionView(AbstractSectionView):
         header_generi.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self._btn_nuovo_genere = QPushButton("Nuovo genere")
-        self._btn_nuovo_genere.setObjectName("SmallButton")
+        self._btn_nuovo_genere.setObjectName("WhiteButton")
 
         layout_header_generi = QHBoxLayout()
         layout_header_generi.addWidget(header_generi)
@@ -155,6 +168,10 @@ class InfoSectionView(AbstractSectionView):
             self.nuovaOperaRequest.emit
         )
 
+        self._btn_ricerca.clicked.connect(  # type:ignore
+            lambda: self.filtra_opere(self.ricerca_bar.text())
+        )
+
         self._btn_nuovo_genere.clicked.connect(  # type:ignore
             self.nuovoGenereRequest.emit
         )
@@ -164,6 +181,11 @@ class InfoSectionView(AbstractSectionView):
         self.displayGeneriRequest.emit(self.layout_lista_generi)
 
     # ------------------------- METODI DI VIEW -------------------------
+
+    def filtra_opere(self, filtro: str) -> None:
+        self.filtro_ricerca = filtro
+
+        self.refresh_page()
 
     def if_lista_vuota(self, layout: QVBoxLayout) -> None:
         """Indica che la lista non ha istanze da visualizzare.

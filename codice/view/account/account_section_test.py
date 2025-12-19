@@ -56,7 +56,7 @@ class AccountSectionView(AbstractSectionView):
         header_admin.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self._btn_nuovo_admin = QPushButton("Nuovo Amministratore")
-        self._btn_nuovo_admin.setObjectName("SmallButton")
+        self._btn_nuovo_admin.setObjectName("WhiteButton")
 
         layout_header_admin = QHBoxLayout()
         layout_header_admin.addWidget(header_admin)
@@ -85,7 +85,7 @@ class AccountSectionView(AbstractSectionView):
         header_biglietteria.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self._btn_nuovo_biglietteria = QPushButton("Nuovo Biglietteria")
-        self._btn_nuovo_biglietteria.setObjectName("SmallButton")
+        self._btn_nuovo_biglietteria.setObjectName("WhiteButton")
 
         layout_header_biglietteria = QHBoxLayout()
         layout_header_biglietteria.addWidget(header_biglietteria)

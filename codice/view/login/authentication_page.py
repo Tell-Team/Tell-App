@@ -64,7 +64,7 @@ class AuthenticationPage(QWidget):
 
         # Pulsanti
         self._btn_indietro = QPushButton("Indietro")
-        self._btn_indietro.setObjectName("SmallButton")
+        self._btn_indietro.setObjectName("WhiteButton")
 
         self.box_btn_indietro = QWidget()
         self.box_layout = QHBoxLayout(self.box_btn_indietro)

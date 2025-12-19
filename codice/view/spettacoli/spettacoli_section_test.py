@@ -22,7 +22,7 @@ class SpettacoliSectionView(AbstractSectionView):
         # # LOGOUT
         # ## Pulsante: Logout
         btn_logout = QPushButton("Logout")
-        btn_logout.setObjectName("SmallButton")
+        btn_logout.setObjectName("WhiteButton")
         btn_logout.clicked.connect(  # type:ignore
             self.spettacoli_controller.get_nav().go_back
         )
@@ -36,12 +36,12 @@ class SpettacoliSectionView(AbstractSectionView):
         # # SEZIONI DELL'APP
         # ## Pulsante: Sezione Spettacoli
         btn_sezione_spettacoli = QPushButton("Spettacoli")
-        btn_sezione_spettacoli.setObjectName("SmallButton")
+        btn_sezione_spettacoli.setObjectName("WhiteButton")
         btn_sezione_spettacoli.setEnabled(False)
 
         # ## Pulsante: Sezioni Info
         btn_sezione_info = QPushButton("Info")
-        btn_sezione_info.setObjectName("SmallButton")
+        btn_sezione_info.setObjectName("WhiteButton")
         btn_sezione_info.clicked.connect(  # type:ignore
             partial(self.spettacoli_controller.get_nav().section_go_to, "info")
         )
@@ -50,7 +50,7 @@ class SpettacoliSectionView(AbstractSectionView):
         btn_sezione_account = QPushButton(
             "Account"
         )  # - DA CORRIGERE: Sezione esclusiva dell'admin
-        btn_sezione_account.setObjectName("SmallButton")
+        btn_sezione_account.setObjectName("WhiteButton")
         btn_sezione_account.clicked.connect(  # type:ignore
             partial(self.spettacoli_controller.get_nav().section_go_to, "account")
         )
@@ -82,7 +82,7 @@ class SpettacoliSectionView(AbstractSectionView):
 
         # ## Pulsante: Nuovo spettacolo
         btn_nuovo_spettacolo = QPushButton("Nuovo spettacolo")
-        btn_nuovo_spettacolo.setObjectName("SmallButton")
+        btn_nuovo_spettacolo.setObjectName("WhiteButton")
         btn_nuovo_spettacolo.clicked.connect(  # type:ignore
             lambda: print(
                 "self.spettacoli_controller.nuovo_spettacolo"
@@ -112,7 +112,7 @@ class SpettacoliSectionView(AbstractSectionView):
 
             # ## Pulsanti
             btn_scegli_posti = QPushButton("Scegli posti")
-            btn_scegli_posti.setObjectName("SmallButton")
+            btn_scegli_posti.setObjectName("WhiteButton")
             btn_scegli_posti.clicked.connect(  # type:ignore
                 partial(
                     self.spettacoli_controller.scegli_posti,
@@ -122,7 +122,7 @@ class SpettacoliSectionView(AbstractSectionView):
             )
 
             btn_modifica = QPushButton("Modifica")
-            btn_modifica.setObjectName("SmallButton")
+            btn_modifica.setObjectName("WhiteButton")
             btn_modifica.clicked.connect(  # type:ignore
                 partial(
                     SpettacoliController.modifica_spettacolo,

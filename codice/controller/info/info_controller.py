@@ -102,6 +102,9 @@ class InfoController(QObject):
     def get_opere(self) -> list[Opera]:
         return self.__model.get_opere()
 
+    def get_opere_by_nome(self, nome: str) -> list[Opera]:
+        return self.__model.get_opere_by_nome(nome)
+
     def elimina_opera(self, id_: int) -> None:
         return self.__model.elimina_opera(id_)
 
@@ -124,11 +127,22 @@ class InfoController(QObject):
 
         :param layout: layout dove saranno caricate tutte le opere
         """
-        if not self.get_opere():
+        # Verifica se c'è un filtro di ricerca
+        lista_opere: list[Opera] = []
+        filtro = self.__info_section.filtro_ricerca
+
+        if filtro == "":
+            lista_opere = self.get_opere()
+        else:
+            lista_opere = self.get_opere_by_nome(filtro)
+
+        # Verifica che la lista non sia vuota
+        if not lista_opere:
             self.__info_section.if_lista_vuota(layout)
             return
 
-        for opera in self.get_opere():
+        # Mostra tutte le opere della lista a schermo
+        for opera in lista_opere:
             cur_opera = OperaDisplay(opera)
 
             # Setup della pagina di visualizzazione delle opere
@@ -173,10 +187,12 @@ class InfoController(QObject):
 
         :param layout: layout dove saranno caricate tutti i generi
         """
+        # Verifica che la lista non sia vuota
         if not self.get_generi():
             self.__info_section.if_lista_vuota(layout)
             return
 
+        # Mostra tutti i generi salvati a schermo
         for genere in self.get_generi():
             cur_genere = GenereDisplay(genere)
 

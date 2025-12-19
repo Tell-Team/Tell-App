@@ -41,10 +41,10 @@ class GenereDisplay(QWidget):
 
         # Pulsanti Modifica-Elimina
         self._btn_modifica = QPushButton("Modifica")
-        self._btn_modifica.setObjectName("SmallButton")
+        self._btn_modifica.setObjectName("WhiteButton")
 
         self._btn_elimina = QPushButton("Elimina")
-        self._btn_elimina.setObjectName("SmallButton")
+        self._btn_elimina.setObjectName("WhiteButton")
 
         self.pulsanti = QWidget()
         layout_btn = QHBoxLayout(self.pulsanti)
@@ -57,10 +57,10 @@ class GenereDisplay(QWidget):
         domanda.setObjectName("Paragraph")
 
         self._btn_si = QPushButton("Sì")
-        self._btn_si.setObjectName("SmallButton")
+        self._btn_si.setObjectName("WhiteButton")
 
         self._btn_no = QPushButton("No")
-        self._btn_no.setObjectName("SmallButton")
+        self._btn_no.setObjectName("WhiteButton")
 
         self.conferma_elimina = QWidget()
         layout_conferma = QHBoxLayout(self.conferma_elimina)
