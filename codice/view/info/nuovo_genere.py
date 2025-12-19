@@ -5,6 +5,8 @@ from PyQt6.QtWidgets import (
     QSizePolicy,
 )
 from PyQt6.QtCore import pyqtSignal
+from functools import partial
+from typing import override
 
 from view.abstractView.creaAbstract import CreaAbstractView
 
@@ -18,7 +20,7 @@ class NuovoGenereView(CreaAbstractView):
     - salvaRequest(): emesso quando si clicca il pulsante Conferma.
     """
 
-    annullaRequest = pyqtSignal()
+    annullaRequest = pyqtSignal(CreaAbstractView)
     salvaRequest = pyqtSignal()
 
     def __init__(self) -> None:
@@ -43,6 +45,7 @@ class NuovoGenereView(CreaAbstractView):
         self.main_layout.addWidget(self.pulsanti)
         self.main_layout.addStretch()
 
+    @override
     def _setup_form(self) -> None:
         label_nome = QLabel("Nome :")
         label_nome.setObjectName("SubHeader")
@@ -63,7 +66,7 @@ class NuovoGenereView(CreaAbstractView):
 
     def _connect_signals(self) -> None:
         self._btn_cancella.clicked.connect(  # type:ignore
-            self.annullaRequest.emit
+            partial(self.annullaRequest.emit, self)
         )
 
         self._btn_conferma.clicked.connect(  # type:ignore
@@ -71,6 +74,11 @@ class NuovoGenereView(CreaAbstractView):
         )
 
     # ------------------------- METODI DI VIEW -------------------------
+
+    def reset_pagina(self) -> None:
+        """Reset della pagina allo stato default."""
+        self.nome.setText("")
+        self.descrizione.setText("")
 
     def set_pagina_focus(self) -> None:
         """Evidenzia il primo campo con input non valido trovato."""

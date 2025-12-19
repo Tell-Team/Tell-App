@@ -1,5 +1,5 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QMessageBox
-from PyQt6.QtCore import Qt, QDate, pyqtSignal, QObject
+from PyQt6.QtWidgets import QWidget, QVBoxLayout
+from PyQt6.QtCore import pyqtSignal, QObject
 from typing import Optional
 from functools import partial
 
@@ -12,8 +12,13 @@ from model.exceptions import OggettoInUsoException
 from view.info.info_section import InfoSectionView
 from view.info.visualizza_opera import VisualizzaOperaView
 
-from view.info.display_opera import OperaDisplay
-from view.info.display_genere import GenereDisplay
+from view.info.operaDisplay import OperaDisplay
+from view.info.genereDisplay import GenereDisplay
+
+from view.info.operaPageData import OperaPageData
+from view.info.generePageData import GenerePageData
+
+from view.messageView import MessageView
 
 
 class InfoController(QObject):
@@ -40,11 +45,13 @@ class InfoController(QObject):
         model: Model,
         info_s: InfoSectionView,
         opera_v: VisualizzaOperaView,
+        message_v: MessageView,
     ) -> None:
         super().__init__()
         self.__model = model
-        self.__info_section = info_s
-        self.__visualizza_opera_view = opera_v
+        self.__info_section = info_s  # Sezione Info
+        self.__visualizza_opera_view = opera_v  # Pagina Visualizza Opera
+        self.__message_view = message_v  # View dedicata ai popup
 
         self._connect_signals()
 
@@ -120,11 +127,8 @@ class InfoController(QObject):
 
         :param layout: layout dove saranno caricate tutte le opere
         """
-        # Si spera che il layout contenga un label con un messaggio di errore.
-        lista_vuota_error = layout.itemAt(0).widget()  # type: QLabel #type:ignore
-
         if not self.get_opere():
-            lista_vuota_error.show()
+            self.__info_section.lista_vuota(layout)
             return
 
         for opera in self.get_opere():
@@ -153,7 +157,7 @@ class InfoController(QObject):
                     self.elimina_opera(id_)
                 except OggettoInUsoException as exc:
                     cur_opera.annulla_elimina()
-                    self.__mostra_errore(
+                    self.__message_view.mostra_errore(
                         self.__info_section,
                         "Opera in uso",
                         f"Si è verificato un errore: {exc}",
@@ -172,11 +176,8 @@ class InfoController(QObject):
 
         :param layout: layout dove saranno caricate tutti i generi
         """
-        # Si spera che il layout contenga un label con un messaggio di errore.
-        lista_vuota_error = layout.itemAt(0).widget()  # type:QLabel # type:ignore
-
         if not self.get_generi():
-            lista_vuota_error.show()
+            self.__info_section.lista_vuota(layout)
             return
 
         for genere in self.get_generi():
@@ -200,7 +201,7 @@ class InfoController(QObject):
                     self.elimina_genere(id_)
                 except OggettoInUsoException as exc:
                     cur_genere.annulla_elimina()
-                    self.__mostra_errore(
+                    self.__message_view.mostra_errore(
                         self.__info_section,
                         "Genere in uso",
                         f"Si è verificato un errore: {exc}",
@@ -218,12 +219,10 @@ class InfoController(QObject):
 
         :param id_: id dell'opera da visualizzare
         """
-        LISTA_REGIE_VUOTA = "Al momento, non vi sono regie per questa opera."
-
         # Copia dell'opera da visualizzare
         cur_opera = self.get_opera(id_)
         if not cur_opera:
-            self.__mostra_errore(
+            self.__message_view.mostra_errore(
                 self.__info_section,
                 "Opera inesistente",
                 f"Non è presente nessun'opera con id {id_}.",
@@ -233,90 +232,34 @@ class InfoController(QObject):
         # Ottieni la pagina VisualizzaOperaView
         cur_page = self.__visualizza_opera_view
 
-        # Setup pagina
-        self.clear_layout_regie(cur_page.layout_regie)
-        cur_page.layout_regie.addWidget(cur_page.label_lista_regie)
-        cur_page.lista_vuota_error.setText("")
-
-        cur_page.label_nome.setText(f"{cur_opera.get_nome()}")
-        cur_page.label_librettista.setText(f"Libretto di {cur_opera.get_librettista()}")
-        cur_page.label_compositore.setText(
-            f"Musica composta da {cur_opera.get_compositore()}"
-        )
-
+        # Setup pagina con i dati dell'opera
         cur_genere = self.get_genere(cur_opera.get_id_genere())
         if not cur_genere:
-            self.__mostra_errore(
+            self.__message_view.mostra_errore(
                 self.__info_section,
                 "Genere inesistente",
                 f"Non è presente nessun genere con id {cur_opera.get_id_genere()}.",
             )
             return
 
-        cur_page.label_genere.setText(f"Genere: {cur_genere.get_nome()}")
-
-        cur_page.label_atti.setText(f"Numero di atti: {cur_opera.get_numero_atti()}")
-        cur_page.label_prima_rappresentazione.setText(
-            "È stata rappresentata per prima volta il "
-            + f"{cur_opera.get_data_prima_rappresentazione().strftime("%d/%m/%y")} "
-            + f"nel teatro {cur_opera.get_teatro_prima_rappresentazione()}"
+        opera_data = OperaPageData(
+            id=cur_opera.get_id(),
+            nome=cur_opera.get_nome(),
+            trama=cur_opera.get_trama(),
+            id_genere=cur_opera.get_id_genere(),
+            compositore=cur_opera.get_compositore(),
+            librettista=cur_opera.get_librettista(),
+            atti=cur_opera.get_numero_atti(),
+            data_rappresentazione=cur_opera.get_data_prima_rappresentazione(),
+            teatro_rappresentazione=cur_opera.get_teatro_prima_rappresentazione(),
         )
-        cur_page.label_trama.setText(f"{cur_opera.get_trama()}")
 
         lista_regie = self.get_regie_by_opera(cur_opera.get_id())
-        if not lista_regie:
-            cur_page.lista_vuota_error.setText(LISTA_REGIE_VUOTA)
 
-        for r in lista_regie:
-            self.display_regia(r, cur_page.layout_regie)
+        cur_page.set_data(opera_data, cur_genere.get_nome(), lista_regie)
 
         # Apri la pagina
         self.goToPageRequest.emit("visualizza_opera", True)
-
-    def display_regia(self, r: Regia, layout: QVBoxLayout) -> None:
-        """Visualizza a schermo alcune informazioni della regia.
-
-        :param r: regia da mostrare
-        :param layout: layout in cui sarà mostrata la regia"""
-        widget_regia = QWidget()
-        widget_regia.setObjectName("Container")
-        layout_regia = QVBoxLayout(widget_regia)
-
-        titolo = QLabel(f"{r.get_titolo()}")
-        titolo.setObjectName("Header2")
-        titolo.setAlignment(Qt.AlignmentFlag.AlignLeft)
-
-        regista = QLabel(f"Regista: {r.get_regista()}")
-        regista.setObjectName("Paragraph")
-
-        anno = QLabel(f"Anno di produzione: {r.get_anno_produzione()}")
-        anno.setObjectName("Paragraph")
-
-        layout_regia.addWidget(titolo)
-        layout_regia.addWidget(regista)
-        layout_regia.addWidget(anno)
-        layout_regia.addStretch()
-
-        layout.addWidget(widget_regia)
-
-    def clear_layout_regie(self, layout: QVBoxLayout) -> None:
-        """Pulisce il layout delle regie.
-
-        :param layout: layout in cui sono state caricate le regie"""
-        # Siccome il layout solo contiene dei widget, non è necessario rimuovere dei layout.
-        if layout:
-            while layout.count():
-                item = layout.takeAt(0)
-                assert item is not None
-                widget = item.widget()
-
-                if widget:
-                    widget.setParent(None)
-                #     continue
-
-                # child_layout = item.layout()
-                # if child_layout:
-                #     self.clear_layout_regie(child_layout)
 
     def nuova_opera(self) -> None:
         """
@@ -331,7 +274,7 @@ class InfoController(QObject):
         cur_page: Optional[QWidget] = cur_page_dict.get("value")
 
         if not isinstance(cur_page, NuovaOperaView):
-            self.__mostra_errore(
+            self.__message_view.mostra_errore(
                 self.__info_section,
                 "Pagina non trovata",
                 "Si è verificato un errore: Non è stato trovata la pagina 'nuova_opera'. "
@@ -339,19 +282,9 @@ class InfoController(QObject):
             )
             return
 
-        # Setup pagina
-        cur_page.nome.setText("")
-        cur_page.trama.setText("")
-
+        # Setup pagina pulendo i campi
         cur_page.setup_genere_combobox(self.get_generi())
-        cur_page.genere.setCurrentIndex(0)
-
-        cur_page.compositore.setText("")
-        cur_page.librettista.setText("")
-        cur_page.atti.setValue(0)
-        cur_page.data.setDate(QDate.currentDate())
-        cur_page.teatro.setText("")
-        cur_page.input_error.setText("")
+        cur_page.reset_pagina()
 
         # Apri la pagina
         self.goToPageRequest.emit("nuova_opera", True)
@@ -366,7 +299,7 @@ class InfoController(QObject):
         # Copia dell'opera da modificare
         cur_opera = self.get_opera(id_)
         if not cur_opera:
-            self.__mostra_errore(
+            self.__message_view.mostra_errore(
                 self.__info_section,
                 "Opera inesistente",
                 f"Non è presente nessun'opera con id {id_}.",
@@ -381,7 +314,7 @@ class InfoController(QObject):
         cur_page: Optional[QWidget] = cur_page_dict.get("value")
 
         if not isinstance(cur_page, ModificaOperaView):
-            self.__mostra_errore(
+            self.__message_view.mostra_errore(
                 self.__info_section,
                 "Pagina non trovata",
                 "Si è verificato un errore: Non è stato trovata la pagina 'modifica_opera'. "
@@ -389,24 +322,22 @@ class InfoController(QObject):
             )
             return
 
-        # Salva l'id dell'opera da modificare nella pagina
-        cur_page.cur_id_opera = id_
+        # Salva i dati dentro di un container
+        opera_data = OperaPageData(
+            id=cur_opera.get_id(),
+            nome=cur_opera.get_nome(),
+            trama=cur_opera.get_trama(),
+            id_genere=cur_opera.get_id_genere(),
+            compositore=cur_opera.get_compositore(),
+            librettista=cur_opera.get_librettista(),
+            atti=cur_opera.get_numero_atti(),
+            data_rappresentazione=cur_opera.get_data_prima_rappresentazione(),
+            teatro_rappresentazione=cur_opera.get_teatro_prima_rappresentazione(),
+        )
 
-        # Setup pagina
-        cur_page.nome.setText(cur_opera.get_nome())
-        cur_page.trama.setText(cur_opera.get_trama())
-
+        # Setup pagina con i data dell'opera
         cur_page.setup_genere_combobox(self.get_generi())
-        cur_id_genere = cur_opera.get_id_genere()
-        index = cur_page.genere.findData(cur_id_genere)
-        if index >= 0:
-            cur_page.genere.setCurrentIndex(index)
-
-        cur_page.compositore.setText(cur_opera.get_compositore())
-        cur_page.librettista.setText(cur_opera.get_librettista())
-        cur_page.atti.setValue(cur_opera.get_numero_atti())
-        cur_page.data.setDate(cur_opera.get_data_prima_rappresentazione())
-        cur_page.teatro.setText(cur_opera.get_teatro_prima_rappresentazione())
+        cur_page.set_data(opera_data)
 
         # Apri la pagina
         self.goToPageRequest.emit("modifica_opera", True)
@@ -424,7 +355,7 @@ class InfoController(QObject):
         cur_page: Optional[QWidget] = cur_page_dict.get("value")
 
         if not isinstance(cur_page, NuovoGenereView):
-            self.__mostra_errore(
+            self.__message_view.mostra_errore(
                 self.__info_section,
                 "Pagina non trovata",
                 "Si è verificato un errore: Non è stato trovata la pagina 'nuovo_genere'. "
@@ -432,10 +363,8 @@ class InfoController(QObject):
             )
             return
 
-        # Setup pagina
-        cur_page.nome.setText("")
-        cur_page.descrizione.setText("")
-        cur_page.input_error.setText("")
+        # Setup pagina pulendo i campi
+        cur_page.reset_pagina()
 
         # Apri la pagina
         self.goToPageRequest.emit("nuovo_genere", True)
@@ -450,7 +379,7 @@ class InfoController(QObject):
         # Copia del genere da modificare
         cur_genere = self.get_genere(id_)
         if not cur_genere:
-            self.__mostra_errore(
+            self.__message_view.mostra_errore(
                 self.__info_section,
                 "Genere inesistente",
                 f"Non è presente nessun genere con id {id_}.",
@@ -465,7 +394,7 @@ class InfoController(QObject):
         cur_page: Optional[QWidget] = cur_page_dict.get("value")
 
         if not isinstance(cur_page, ModificaGenereView):
-            self.__mostra_errore(
+            self.__message_view.mostra_errore(
                 self.__info_section,
                 "Pagina non trovata",
                 "Si è verificato un errore: Non è stato trovata la pagina 'modifica_genere'. "
@@ -473,23 +402,15 @@ class InfoController(QObject):
             )
             return
 
-        # Salva l'id del genere da modificare nella pagina
-        cur_page.cur_id_genere = cur_genere.get_id()
+        # Salva i dati dentro di un container
+        genere_data = GenerePageData(
+            id=cur_genere.get_id(),
+            nome=cur_genere.get_nome(),
+            descrizione=cur_genere.get_descrizione(),
+        )
 
-        # Setup pagina
-        cur_page.nome.setText(cur_genere.get_nome())
-        cur_page.descrizione.setText(cur_genere.get_descrizione())
+        # Setup pagina con i data del genere
+        cur_page.set_data(genere_data)
 
         # Apri la pagina
         self.goToPageRequest.emit("modifica_genere", True)
-
-    # ------------------------- METODI PRIVATI -------------------------
-
-    def __mostra_errore(self, widget: QWidget, titolo: str, testo: str) -> None:
-        """Mostra un messaggio di errore all'utente.
-
-        :param widget: parent widget delle finestra di errore
-        :param titolo: titolo della finestra di errore
-        :param testo: testo descrittivo
-        """
-        QMessageBox.critical(widget, titolo, testo)

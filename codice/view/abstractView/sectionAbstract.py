@@ -64,6 +64,8 @@ class AbstractSectionView(QWidget):
         self.main_layout.addWidget(container_top)
         self.main_layout.addWidget(scroll_area)
 
+    # ------------------------- METODI DI VIEW -------------------------
+
     def refresh_page(self) -> None:
         """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
         ...

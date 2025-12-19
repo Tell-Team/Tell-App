@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (
     QLineEdit,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
+from typing import override
 
 from view.abstractView.sectionAbstract import AbstractSectionView
 
@@ -164,6 +165,16 @@ class InfoSectionView(AbstractSectionView):
 
     # ------------------------- METODI DI VIEW -------------------------
 
+    def lista_vuota(self, layout: QVBoxLayout) -> None:
+        """Indica che la lista non ha istanze da visualizzare.
+
+        :param layout: layout si è verificato l'assenza di intanze"""
+        # - Devo darli un nome migliore
+        # Il suo funzionamento dipende di come refresh_page aggiunge il label di errore nei layout.
+        lista_vuota_error = layout.itemAt(0).widget()  # type:QLabel # type:ignore
+        lista_vuota_error.show()
+
+    @override
     def refresh_page(self) -> None:
         self.clear_layout(self.layout_lista_opere)
         self.layout_lista_opere.addWidget(self.label_lista_opere_vuota)

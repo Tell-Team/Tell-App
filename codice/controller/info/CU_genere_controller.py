@@ -1,4 +1,3 @@
-from PyQt6.QtWidgets import QWidget, QMessageBox
 from PyQt6.QtCore import pyqtSignal, QObject
 from typing import Optional
 from functools import partial
@@ -12,6 +11,8 @@ from model.exceptions import (
 )
 
 from view.info.modifica_genere import ModificaGenereView, NuovoGenereView
+
+from view.messageView import MessageView
 
 
 class CUGenereController(QObject):
@@ -30,11 +31,13 @@ class CUGenereController(QObject):
         model: Model,
         n_genere_v: NuovoGenereView,
         m_genere_v: ModificaGenereView,
+        messsage_v: MessageView,
     ) -> None:
         super().__init__()
         self.__model = model
-        self.__nuovo_genere_view = n_genere_v
-        self.__modifica_genere_view = m_genere_v
+        self.__nuovo_genere_view = n_genere_v  # Pagina Nuovo Genere
+        self.__modifica_genere_view = m_genere_v  # Pagina Modifica Genere
+        self.__message_view = messsage_v  # View dedicata ai popup
 
         self._connect_signals()
 
@@ -43,7 +46,7 @@ class CUGenereController(QObject):
     def _connect_signals(self) -> None:
         # Cancella creazione Genere
         self.__nuovo_genere_view.annullaRequest.connect(  # type:ignore
-            self.goBackRequest.emit
+            self.cancella_salvataggio
         )
         # Conferma creazione Genere
         self.__nuovo_genere_view.salvaRequest.connect(  # type:ignore
@@ -52,7 +55,7 @@ class CUGenereController(QObject):
 
         # Cancella modifica Genere
         self.__modifica_genere_view.annullaRequest.connect(  # type:ignore
-            self.goBackRequest.emit
+            self.cancella_salvataggio
         )
         # Conferma modifica Genere
         self.__modifica_genere_view.salvaRequest.connect(  # type:ignore
@@ -69,6 +72,13 @@ class CUGenereController(QObject):
 
     def modifica_genere(self, genere_modificato: Genere) -> None:
         self.__model.modifica_genere(genere_modificato)
+
+    def cancella_salvataggio(self, cur_page: NuovoGenereView) -> None:
+        """Annulla l'operazione di creazione o modifica di un genere.
+
+        :param cur_page: pagina dove fare il reset dopo ritornare alla sezione Info"""
+        self.goBackRequest.emit()
+        cur_page.reset_pagina()
 
     def salva_genere(self, is_new: bool) -> None:
         """Salva il genere creato o modificato nel `GestoreGeneri`.
@@ -92,19 +102,19 @@ class CUGenereController(QObject):
                 nuovo_genere = Genere(nome, descrizione)
             except DatoIncongruenteException as exc:
                 # E' stato trovato un campo con input non valido
-                cur_page.input_error.setText(CAMPI_NECESSARI)
+                cur_page.show_input_error(CAMPI_NECESSARI)
                 cur_page.set_pagina_focus()
-                self.__mostra_errore(
+                self.__message_view.mostra_errore(
                     cur_page, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
             else:
-                cur_page.input_error.setText("")
+                cur_page.show_input_error("")
 
                 try:
                     self.aggiungi_genere(nuovo_genere)
                 except IdOccupatoException as exc:
                     # Esiste già un genere con quell'id
-                    self.__mostra_errore(
+                    self.__message_view.mostra_errore(
                         cur_page,
                         "ID Genere occupato",
                         f"Si è verificato un errore: {exc}",
@@ -119,7 +129,7 @@ class CUGenereController(QObject):
             copia_genere: Optional[Genere] = self.get_genere(cur_page.cur_id_genere)
             if not isinstance(copia_genere, Genere):
                 # Non esiste genere con l'id salvata nella pagina
-                self.__mostra_errore(
+                self.__message_view.mostra_errore(
                     cur_page,
                     "Errore nel salvataggio",
                     f"Non è presente nessun genere con id {cur_page.cur_id_genere}. "
@@ -136,19 +146,19 @@ class CUGenereController(QObject):
                 copia_genere.set_nome(nome)
                 copia_genere.set_descrizione(descrizione)
             except DatoIncongruenteException as exc:
-                cur_page.input_error.setText(CAMPI_NECESSARI)
+                cur_page.show_input_error(CAMPI_NECESSARI)
                 cur_page.set_pagina_focus()
-                self.__mostra_errore(
+                self.__message_view.mostra_errore(
                     cur_page, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
             else:
-                cur_page.input_error.setText("")
+                cur_page.show_input_error("")
 
                 try:
                     self.modifica_genere(copia_genere)
                 except IdInesistenteException as exc:
                     # Non esiste un genere con quell'id
-                    self.__mostra_errore(
+                    self.__message_view.mostra_errore(
                         cur_page,
                         "ID Generi insesistente",
                         f"Si è verificato un errore: {exc}",
@@ -156,14 +166,3 @@ class CUGenereController(QObject):
                     pass
                 else:
                     self.goBackRequest.emit()
-
-    # ------------------------- METODI PRIVATI -------------------------
-
-    def __mostra_errore(self, widget: QWidget, titolo: str, testo: str) -> None:
-        """Mostra un messaggio di errore all'utente.
-
-        :param widget: parent widget delle finestra di errore
-        :param titolo: titolo della finestra di errore
-        :param testo: testo descrittivo
-        """
-        QMessageBox.critical(widget, titolo, testo)

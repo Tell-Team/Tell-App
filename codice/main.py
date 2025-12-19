@@ -9,7 +9,7 @@ from model.exceptions import DatoIncongruenteException
 from view.styles.styles_loader import load_stylesheet
 
 
-# Con `# -` ho segnato le annotazione sui dettagli a modificare
+# Con `# - ` ho segnato le annotazioni sui dettagli da modificare o corriggere
 class MainWindowView(QMainWindow):
     def __init__(self, db_path: Optional[str]) -> None:
         """Throws: DatoIncongruenteException"""

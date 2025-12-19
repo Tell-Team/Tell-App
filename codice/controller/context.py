@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QMainWindow, QWidget, QMessageBox
+from PyQt6.QtWidgets import QMainWindow, QWidget
 from typing import Optional
 
 from controller.navigation import NavigationController
@@ -47,6 +47,11 @@ class AppContext:
 
         self.account_section = AccountSectionView()
 
+        # MessageView
+        from view.messageView import MessageView
+
+        self.message_view = MessageView()
+
         # ------------------------- CONTROLLERS DELLA VIEW -------------------------
 
         # Login
@@ -60,21 +65,25 @@ class AppContext:
         from controller.info.info_controller import InfoController
 
         self.info_controller = InfoController(
-            self.model,
-            self.info_section,
-            self.visualizza_opera_view,
+            self.model, self.info_section, self.visualizza_opera_view, self.message_view
         )
 
         from controller.info.CU_opera_controller import CUOperaController
 
         self.cu_opera_controller = CUOperaController(
-            self.model, self.nuova_opera_view, self.modifica_opera_view
+            self.model,
+            self.nuova_opera_view,
+            self.modifica_opera_view,
+            self.message_view,
         )
 
         from controller.info.CU_genere_controller import CUGenereController
 
         self.cu_genere_controller = CUGenereController(
-            self.model, self.nuovo_genere_view, self.modifica_genere_view
+            self.model,
+            self.nuovo_genere_view,
+            self.modifica_genere_view,
+            self.message_view,
         )
 
         # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
@@ -126,7 +135,7 @@ class AppContext:
         try:
             self.nav.go_to(page_name, save_history)
         except ValueError as exc:
-            self.__mostra_errore(
+            self.message_view.mostra_errore(
                 self.nav.get_cur_centra_page(),  # type:ignore
                 # - c'è forma di togliere il #type:ignore?
                 # Questo metodo è chiamato solo quando c'è un centralWidget.
@@ -139,7 +148,7 @@ class AppContext:
         try:
             self.nav.section_go_to(page_name)
         except ValueError as exc:
-            self.__mostra_errore(
+            self.message_view.mostra_errore(
                 self.nav.get_cur_centra_page(),  # type:ignore
                 # - c'è forma di togliere il #type:ignore?
                 # Questo metodo è chiamato solo quando c'è un centralWidget.
@@ -154,12 +163,3 @@ class AppContext:
         container["value"] = self.nav.get_page(page_name)
 
     # ------------------------- METODI PRIVATI -------------------------
-
-    def __mostra_errore(self, widget: QWidget, titolo: str, testo: str) -> None:
-        """Mostra un messaggio di errore all'utente.
-
-        :param widget: parent widget delle finestra di errore
-        :param titolo: titolo della finestra di errore
-        :param testo: testo descrittivo
-        """
-        QMessageBox.critical(widget, titolo, testo)

@@ -1,10 +1,10 @@
-from PyQt6.QtWidgets import QWidget, QMessageBox
 from PyQt6.QtCore import pyqtSignal, QObject
 from typing import Optional
 from functools import partial
 
 from model.model import Model
 from model.pianificazione.opera import Opera
+from model.pianificazione.genere import Genere
 from model.exceptions import (
     DatoIncongruenteException,
     IdInesistenteException,
@@ -12,6 +12,8 @@ from model.exceptions import (
 )
 
 from view.info.modifica_opera import ModificaOperaView, NuovaOperaView
+
+from view.messageView import MessageView
 
 
 class CUOperaController(QObject):
@@ -30,11 +32,13 @@ class CUOperaController(QObject):
         model: Model,
         n_opera_v: NuovaOperaView,
         m_opera_v: ModificaOperaView,
+        message_v: MessageView,
     ) -> None:
         super().__init__()
         self.__model = model
-        self.__nuova_opera_view = n_opera_v
-        self.__modifica_opera_view = m_opera_v
+        self.__nuova_opera_view = n_opera_v  # Pagina Nuova Opera
+        self.__modifica_opera_view = m_opera_v  # Pagina Modifica Opera
+        self.__message_view = message_v  # View dedicata ai popup
 
         self._connect_signals()
 
@@ -43,7 +47,7 @@ class CUOperaController(QObject):
     def _connect_signals(self) -> None:
         # Cancella creazione Opera
         self.__nuova_opera_view.annullaRequest.connect(  # type:ignore
-            self.goBackRequest.emit
+            self.cancella_salvataggio
         )
         # Conferma creazione Opera
         self.__nuova_opera_view.salvaRequest.connect(  # type:ignore
@@ -52,7 +56,7 @@ class CUOperaController(QObject):
 
         # Cancella modifica Opera
         self.__modifica_opera_view.annullaRequest.connect(  # type:ignore
-            self.goBackRequest.emit
+            self.cancella_salvataggio
         )
         # Conferma modifica Opera
         self.__modifica_opera_view.salvaRequest.connect(  # type:ignore
@@ -70,9 +74,16 @@ class CUOperaController(QObject):
     def modifica_opera(self, opera_modificata: Opera) -> None:
         self.__model.modifica_opera(opera_modificata)
 
-    def get_generi(self):
+    def get_generi(self) -> list[Genere]:
         # - Il controller dovrebbe accedere alla lista originale?
         return self.__model.get_generi()
+
+    def cancella_salvataggio(self, cur_page: NuovaOperaView) -> None:
+        """Annulla l'operazione di creazione o modifica di un'opera.
+
+        :param cur_page: pagina dove fare il reset dopo ritornare alla sezione Info"""
+        self.goBackRequest.emit()
+        cur_page.reset_pagina()
 
     def salva_opera(self, is_new: bool = True) -> None:
         """Salva l'opera creata o modificata nel `GestoreOpere`.
@@ -105,28 +116,27 @@ class CUOperaController(QObject):
                 )
             except DatoIncongruenteException as exc:
                 # E' stato trovato un campo con input non valido
-                cur_page.input_error.setText(CAMPI_NECESSARI)
+                cur_page.show_input_error(CAMPI_NECESSARI)
                 cur_page.set_pagina_focus()
-                self.__mostra_errore(
+                self.__message_view.mostra_errore(
                     cur_page, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
             else:
-                cur_page.input_error.setText("")
-
+                cur_page.show_input_error("")
                 try:
                     # - È necessario corriggere l'ordine dei setter del costruttore di Opera
                     # - [nome -> trama -> id_genere -> comp. -> libr. -> #atti -> data -> teatro]
                     self.aggiungi_opera(nuova_opera)
                 except IdInesistenteException as exc:
                     # L'opera è collegata ad un genere che non esiste
-                    self.__mostra_errore(
+                    self.__message_view.mostra_errore(
                         cur_page,
                         "Genere inesistente",
                         f"Si è verificato un errore: {exc}",
                     )
                 except IdOccupatoException as exc:
                     # Esiste già un'opera con quell'id
-                    self.__mostra_errore(
+                    self.__message_view.mostra_errore(
                         cur_page,
                         "ID Opera occupato",
                         f"Si è verificato un errore: {exc}",
@@ -141,7 +151,7 @@ class CUOperaController(QObject):
             copia_opera: Optional[Opera] = self.get_opera(cur_page.cur_id_opera)
             if not isinstance(copia_opera, Opera):
                 # Non esiste opera con l'id salvata nella pagina
-                self.__mostra_errore(
+                self.__message_view.mostra_errore(
                     cur_page,
                     "Errore nel salvataggio",
                     f"Non è presente nessun'opera con id {cur_page.cur_id_opera}. "
@@ -171,33 +181,22 @@ class CUOperaController(QObject):
                 copia_opera.set_teatro_prima_rappresentazione(teatro)
             except DatoIncongruenteException as exc:
                 # E' stato trovato un campo con input non valido
-                cur_page.input_error.setText(CAMPI_NECESSARI)
+                cur_page.show_input_error(CAMPI_NECESSARI)
                 cur_page.set_pagina_focus()
-                self.__mostra_errore(
+                self.__message_view.mostra_errore(
                     cur_page, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
             else:
-                cur_page.input_error.setText("")
+                cur_page.show_input_error("")
 
                 try:
                     self.modifica_opera(copia_opera)
                 except IdInesistenteException as exc:
                     # Non esiste un'opera con quell'id
-                    self.__mostra_errore(
+                    self.__message_view.mostra_errore(
                         cur_page,
                         "ID Opera inesistente",
                         f"Si è verificato un errore: {exc}",
                     )
                 else:
                     self.goBackRequest.emit()
-
-    # ------------------------- METODI PRIVATI -------------------------
-
-    def __mostra_errore(self, widget: QWidget, titolo: str, testo: str) -> None:
-        """Mostra un messaggio di errore all'utente.
-
-        :param widget: parent widget delle finestra di errore
-        :param titolo: titolo della finestra di errore
-        :param testo: testo descrittivo
-        """
-        QMessageBox.critical(widget, titolo, testo)

@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
+from typing import override
 
 from view.abstractView.sectionAbstract import AbstractSectionView
 
@@ -141,6 +142,7 @@ class AccountSectionView(AbstractSectionView):
 
     # ------------------------- METODI DI VIEW -------------------------
 
+    @override
     def refresh_page(self) -> None:
         self.clear_layout(self.layout_lista_admin)
         self.layout_lista_admin.addWidget(self.label_lista_admin_vuota)

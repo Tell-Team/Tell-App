@@ -7,7 +7,9 @@ from PyQt6.QtWidgets import (
     QSpinBox,
     # QHBoxLayout,
 )
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtCore import QDate, pyqtSignal
+from functools import partial
+from typing import override
 
 from view.abstractView.creaAbstract import CreaAbstractView
 
@@ -19,11 +21,11 @@ class NuovaOperaView(CreaAbstractView):
     View per la creazione di una nuova opera.
 
     Segnali:
-    - annullaRequest(): emesso quando si clicca il pulsante Cancella;
+    - annullaRequest(CreaAbstractView): emesso quando si clicca il pulsante Cancella;
     - salvaRequest(): emesso quando si clicca il pulsante Conferma.
     """
 
-    annullaRequest = pyqtSignal()
+    annullaRequest = pyqtSignal(CreaAbstractView)
     salvaRequest = pyqtSignal()
 
     def __init__(self) -> None:
@@ -48,6 +50,7 @@ class NuovaOperaView(CreaAbstractView):
         self.main_layout.addWidget(self.pulsanti)
         self.main_layout.addStretch()
 
+    @override
     def _setup_form(self) -> None:
         label_nome = QLabel("Nome :")
         label_nome.setObjectName("SubHeader")
@@ -109,7 +112,7 @@ class NuovaOperaView(CreaAbstractView):
 
     def _connect_signals(self) -> None:
         self._btn_cancella.clicked.connect(  # type:ignore
-            self.annullaRequest.emit
+            partial(self.annullaRequest.emit, self)
         )
 
         self._btn_conferma.clicked.connect(  # type:ignore
@@ -127,6 +130,18 @@ class NuovaOperaView(CreaAbstractView):
         for i, g in enumerate(generi):
             i += 1
             self.genere.insertItem(i, g.get_nome(), g.get_id())
+
+    def reset_pagina(self) -> None:
+        """Reset della pagina allo stato default."""
+        self.nome.setText("")
+        self.trama.setText("")
+        self.genere.setCurrentIndex(0)
+        self.compositore.setText("")
+        self.librettista.setText("")
+        self.atti.setValue(0)
+        self.data.setDate(QDate.currentDate())
+        self.teatro.setText("")
+        self.input_error.setText("")
 
     def set_pagina_focus(self) -> None:
         """Evidenzia il primo campo con input non valido trovato."""

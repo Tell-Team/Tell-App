@@ -50,6 +50,15 @@ class CreaAbstractView(QWidget):
         # Setup main layout
         self.main_layout = QVBoxLayout(self)
 
+    # ------------------------- METODI DI VIEW -------------------------
+
+    def show_input_error(self, message: str) -> None:
+        """Aggiorna il testo del label input_error.
+
+        :param message: testo inserito nel label"""
+        self.input_error.setText(message)
+        self.input_error.show()  # Si assicura che il label sia visualizzato.
+
     def _setup_form(self) -> None:
         """Metodo privato utilizzato per costruire e disporre i widget della form."""
         ...
