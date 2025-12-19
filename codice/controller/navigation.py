@@ -3,7 +3,7 @@ from typing import Optional
 
 
 class NavigationController:
-    """Permette all'utente di navigare le pagine e sezioni dell'applicazione."""
+    """Permette all'utente di navigare le pagine e sezioni dell'app."""
 
     def __init__(self, main_window: QMainWindow) -> None:
         self._main_window = main_window
@@ -25,12 +25,17 @@ class NavigationController:
             if key == page_name:
                 return self._pages.get(key)
 
-    def get_cur_centra_page(self) -> Optional[QWidget]:
+    def get_cur_central_page(self) -> QWidget:
         """Ritorna la pagina visualizzata dall'utente.
 
         Usato dall'`AppContext` per sapere dove mostrare il messaggio d'errore generato
-        da `go_to`."""
-        return self._main_window.centralWidget()
+        da `go_to`.
+
+        :raise RuntimeError: non c'è un central widget asegnato alla `QMainWindow`"""
+        widget = self._main_window.centralWidget()
+        if widget is None:
+            raise RuntimeError("Non c'è un central widget asegnato.")
+        return widget
 
     def add_page(self, page_name: str, widget: QWidget) -> None:
         """Registra una pagina nel controller.
@@ -46,12 +51,12 @@ class NavigationController:
         :param page_name: key usata per trovare la pagina
         :param save_history: verifica se la pagina sarà salvata nell'history del controller o no
 
-        :raise ValueError: la pagina cercata non è stata trovata
+        :raise KeyError: la pagina cercata non è stata trovata
         """
-        widget = self._pages.get(page_name)
-        if widget is None:
-            raise ValueError(f"Non è stata trovata la pagina '{page_name}'.")
-        # - Magari un'altra eccezione. Una custom??
+        try:
+            widget = self._pages[page_name]
+        except KeyError:
+            raise KeyError(f"Non è stata trovata la pagina '{page_name}'.")
 
         current = self._stack.currentWidget()
         if current and save_history:

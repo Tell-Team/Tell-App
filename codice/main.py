@@ -6,7 +6,7 @@ from controller.context import AppContext
 
 from model.exceptions import DatoIncongruenteException
 
-from view.styles.styles_loader import load_stylesheet
+from view.styles.styleLoader import load_stylesheet
 
 
 # Con `# - ` ho segnato le annotazioni sui dettagli da modificare o corriggere

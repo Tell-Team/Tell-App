@@ -12,7 +12,6 @@ from model.exceptions import (
 )
 
 from view.info.modifica_opera import ModificaOperaView, NuovaOperaView
-
 from view.messageView import MessageView
 
 

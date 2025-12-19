@@ -165,11 +165,11 @@ class InfoSectionView(AbstractSectionView):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def lista_vuota(self, layout: QVBoxLayout) -> None:
+    def if_lista_vuota(self, layout: QVBoxLayout) -> None:
         """Indica che la lista non ha istanze da visualizzare.
 
-        :param layout: layout si è verificato l'assenza di intanze"""
-        # - Devo darli un nome migliore
+        :param layout: layout dove si mostrerà un messaggio indicando l'assenza di intanze
+        """
         # Il suo funzionamento dipende di come refresh_page aggiunge il label di errore nei layout.
         lista_vuota_error = layout.itemAt(0).widget()  # type:QLabel # type:ignore
         lista_vuota_error.show()

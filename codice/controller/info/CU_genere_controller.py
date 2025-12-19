@@ -11,7 +11,6 @@ from model.exceptions import (
 )
 
 from view.info.modifica_genere import ModificaGenereView, NuovoGenereView
-
 from view.messageView import MessageView
 
 

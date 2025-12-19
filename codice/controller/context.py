@@ -134,12 +134,11 @@ class AppContext:
     def _on_request_go_to(self, page_name: str, save_history: bool) -> None:
         try:
             self.nav.go_to(page_name, save_history)
-        except ValueError as exc:
+        except KeyError as exc:
             self.message_view.mostra_errore(
-                self.nav.get_cur_centra_page(),  # type:ignore
-                # - c'è forma di togliere il #type:ignore?
-                # Questo metodo è chiamato solo quando c'è un centralWidget.
-                #   Quindi non è necessario un assert in caso non ci sia.
+                self.nav.get_cur_central_page(),
+                # E' sempre chiamato con un centralWidget definito. Quindi, in teoria,
+                # get_cur_central_page non lancia mai un RuntimeError.
                 "Pagina non trovata",
                 f"Si è verificato un errore: {exc}",
             )
@@ -147,12 +146,11 @@ class AppContext:
     def _on_request_section_go_to(self, page_name: str) -> None:
         try:
             self.nav.section_go_to(page_name)
-        except ValueError as exc:
+        except KeyError as exc:
             self.message_view.mostra_errore(
-                self.nav.get_cur_centra_page(),  # type:ignore
-                # - c'è forma di togliere il #type:ignore?
-                # Questo metodo è chiamato solo quando c'è un centralWidget.
-                #   Quindi non è necessario un assert in caso non ci sia.
+                self.nav.get_cur_central_page(),
+                # E' sempre chiamato con un centralWidget definito. Quindi, in teoria,
+                # get_cur_central_page non lancia mai un RuntimeError.
                 "Pagina non trovata",
                 f"Si è verificato un errore: {exc}",
             )
@@ -161,5 +159,3 @@ class AppContext:
         self, page_name: str, container: dict[str, Optional[QWidget]]
     ) -> None:
         container["value"] = self.nav.get_page(page_name)
-
-    # ------------------------- METODI PRIVATI -------------------------

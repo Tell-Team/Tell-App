@@ -11,13 +11,10 @@ from model.exceptions import OggettoInUsoException
 
 from view.info.info_section import InfoSectionView
 from view.info.visualizza_opera import VisualizzaOperaView
-
 from view.info.operaDisplay import OperaDisplay
 from view.info.genereDisplay import GenereDisplay
-
 from view.info.operaPageData import OperaPageData
 from view.info.generePageData import GenerePageData
-
 from view.messageView import MessageView
 
 
@@ -128,7 +125,7 @@ class InfoController(QObject):
         :param layout: layout dove saranno caricate tutte le opere
         """
         if not self.get_opere():
-            self.__info_section.lista_vuota(layout)
+            self.__info_section.if_lista_vuota(layout)
             return
 
         for opera in self.get_opere():
@@ -177,7 +174,7 @@ class InfoController(QObject):
         :param layout: layout dove saranno caricate tutti i generi
         """
         if not self.get_generi():
-            self.__info_section.lista_vuota(layout)
+            self.__info_section.if_lista_vuota(layout)
             return
 
         for genere in self.get_generi():

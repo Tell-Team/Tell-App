@@ -2,6 +2,7 @@ from PyQt6.QtCore import pyqtSignal, QObject
 from functools import partial
 
 from model.model import Model
+
 from view.login.login_page import LoginPage
 from view.login.authentication_page import AuthenticationPage
 

@@ -77,8 +77,9 @@ class NuovoAccountView(CreaAbstractView):
         label_ruolo.setObjectName("SubHeader")
         self.ruolo = QComboBox()
         # - Hard-coded options
-        self.ruolo.insertItem(0, "Biglietteria")
-        self.ruolo.insertItem(1, "Amministratore")
+        self.ruolo.insertItem(0, "Scegli ruolo")
+        self.ruolo.insertItem(1, "Biglietteria")
+        self.ruolo.insertItem(2, "Amministratore")
         self.ruolo.setEnabled(False)
         # - END
 
