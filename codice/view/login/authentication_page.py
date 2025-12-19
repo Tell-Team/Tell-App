@@ -6,7 +6,8 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
 )
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSignal
+from functools import partial
 
 
 class AuthenticationPage(QWidget):
@@ -14,12 +15,22 @@ class AuthenticationPage(QWidget):
     View per la autenticazione degli account `Biglietteria` e `Amministratore`.
 
     Permette di inserire un nome utente ed una password.
+
+    Segnali:
+    - tornaIndietroRequest(): emesso quando si clicca il pulsante Indietro;
+    - authRequest(str, str): emesso quando si clicca il pulsante Login.
     """
+
+    tornaIndietroRequest = pyqtSignal()
+    authRequest = pyqtSignal(str, str)
 
     def __init__(self) -> None:
         super().__init__()
 
         self._setup_ui()
+        self._connect_signals()
+
+    # ------------------------- SETUP INIT -------------------------
 
     def _setup_ui(self) -> None:
         # Header
@@ -52,16 +63,16 @@ class AuthenticationPage(QWidget):
         self.content_layout.addStretch()
 
         # Pulsanti
-        self.btn_indietro = QPushButton("Indietro")
-        self.btn_indietro.setObjectName("SmallButton")
+        self._btn_indietro = QPushButton("Indietro")
+        self._btn_indietro.setObjectName("SmallButton")
 
         self.box_btn_indietro = QWidget()
         self.box_layout = QHBoxLayout(self.box_btn_indietro)
-        self.box_layout.addWidget(self.btn_indietro)
+        self.box_layout.addWidget(self._btn_indietro)
         self.box_layout.addStretch()
 
-        self.btn_login = QPushButton("LOGIN")
-        self.btn_login.setObjectName("BlueButton")
+        self._btn_login = QPushButton("LOGIN")
+        self._btn_login.setObjectName("BlueButton")
         # - Questo pulsante non è ancora collegato nel Controller
 
         # Layout
@@ -72,8 +83,19 @@ class AuthenticationPage(QWidget):
         main_layout.addWidget(self.box_btn_indietro)
         main_layout.addWidget(self.header)
         main_layout.addWidget(self.content)
-        main_layout.addWidget(self.btn_login)
+        main_layout.addWidget(self._btn_login)
         main_layout.addStretch()
+
+    def _connect_signals(self):
+        self._btn_indietro.clicked.connect(  # type:ignore
+            self.tornaIndietroRequest.emit
+        )
+
+        self._btn_login.clicked.connect(  # type:ignore
+            partial(self.authRequest.emit, self.username.text(), self.password.text())
+        )
+
+    # ------------------------- METODI DI VIEW -------------------------
 
     def refresh_page(self) -> None:
         self.username.setText("")

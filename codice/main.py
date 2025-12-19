@@ -1,13 +1,12 @@
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout
+from typing import Optional
+import sys
 
 from controller.context import AppContext
 
-from view.styles.styles_loader import load_stylesheet
-
 from model.exceptions import DatoIncongruenteException
 
-from typing import Optional
-import sys
+from view.styles.styles_loader import load_stylesheet
 
 
 # Con `# -` ho segnato le annotazione sui dettagli a modificare
@@ -68,6 +67,6 @@ if __name__ == "__main__":
         window.show()
         app.exec()
 
-    except DatoIncongruenteException as e:
-        print(e, file=sys.stderr)
+    except DatoIncongruenteException as exc:
+        print(exc, file=sys.stderr)
         exit(1)

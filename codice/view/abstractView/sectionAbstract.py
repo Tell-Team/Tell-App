@@ -19,29 +19,29 @@ class AbstractSectionView(QWidget):
         super().__init__()
 
         # Logout
-        self.btn_logout = QPushButton("Logout")
-        self.btn_logout.setObjectName("SmallButton")
+        self._btn_logout = QPushButton("Logout")
+        self._btn_logout.setObjectName("SmallButton")
 
         widget_logout = QWidget()
         layout_logout = QHBoxLayout(widget_logout)
-        layout_logout.addWidget(self.btn_logout)
+        layout_logout.addWidget(self._btn_logout)
         layout_logout.addStretch()
 
         # Sezioni dell'app
-        self.btn_sezione_spettacoli = QPushButton("Spettacoli")
-        self.btn_sezione_spettacoli.setObjectName("SmallButton")
+        self._btn_sezione_spettacoli = QPushButton("Spettacoli")
+        self._btn_sezione_spettacoli.setObjectName("SmallButton")
 
-        self.btn_sezione_info = QPushButton("Info")
-        self.btn_sezione_info.setObjectName("SmallButton")
+        self._btn_sezione_info = QPushButton("Info")
+        self._btn_sezione_info.setObjectName("SmallButton")
 
-        self.btn_sezione_account = QPushButton("Account")
-        self.btn_sezione_account.setObjectName("SmallButton")
+        self._btn_sezione_account = QPushButton("Account")
+        self._btn_sezione_account.setObjectName("SmallButton")
 
         sezioni_app = QWidget()
         layout_sezioni = QHBoxLayout(sezioni_app)
-        layout_sezioni.addWidget(self.btn_sezione_spettacoli)
-        layout_sezioni.addWidget(self.btn_sezione_info)
-        layout_sezioni.addWidget(self.btn_sezione_account)
+        layout_sezioni.addWidget(self._btn_sezione_spettacoli)
+        layout_sezioni.addWidget(self._btn_sezione_info)
+        layout_sezioni.addWidget(self._btn_sezione_account)
         layout_sezioni.addStretch()
 
         # Top layout
@@ -67,6 +67,21 @@ class AbstractSectionView(QWidget):
     def refresh_page(self) -> None:
         """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
         ...
+
+    def aggiungi_widget_al_layout(self, widget: QWidget, layout: QVBoxLayout):
+        """Aggiunge un widget creato per il display delle istanze del model.
+
+        :param widget: widget speciale per visualizzare una instanza del model
+        :param layout: layout dove sarà inserito il widget"""
+        # C'era un errore al utilizzare widget.setObjectName("Container") direttamente:
+        #   lo style non veniva asegnato al widget. Quindi ho decisso di aggiungere questo
+        #   dummy widget per farlo funzionare.
+        dummy_widget = QWidget()
+        dummy_widget.setObjectName("Container")
+        l = QVBoxLayout(dummy_widget)
+        l.addWidget(widget)
+
+        layout.addWidget(dummy_widget)
 
     def clear_layout(self, layout: Optional[QLayout]) -> None:
         """

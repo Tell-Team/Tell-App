@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (
     QSpinBox,
     # QHBoxLayout,
 )
+from PyQt6.QtCore import pyqtSignal
 
 from view.abstractView.creaAbstract import CreaAbstractView
 
@@ -16,12 +17,22 @@ from model.pianificazione.genere import Genere
 class NuovaOperaView(CreaAbstractView):
     """
     View per la creazione di una nuova opera.
+
+    Segnali:
+    - annullaRequest(): emesso quando si clicca il pulsante Cancella;
+    - salvaRequest(): emesso quando si clicca il pulsante Conferma.
     """
+
+    annullaRequest = pyqtSignal()
+    salvaRequest = pyqtSignal()
 
     def __init__(self) -> None:
         super().__init__()
 
         self._setup_ui()
+        self._connect_signals()
+
+    # ------------------------- SETUP INIT -------------------------
 
     def _setup_ui(self) -> None:
         # Header
@@ -96,7 +107,17 @@ class NuovaOperaView(CreaAbstractView):
         # self.form_layout.addRow(atti_data_layout)
         self.form_layout.addRow(label_teatro, self.teatro)
 
-    # - Ci dovrebbe essere nel controller o vabbene nella view?
+    def _connect_signals(self) -> None:
+        self._btn_cancella.clicked.connect(  # type:ignore
+            self.annullaRequest.emit
+        )
+
+        self._btn_conferma.clicked.connect(  # type:ignore
+            self.salvaRequest.emit
+        )
+
+    # ------------------------- METODI DI VIEW -------------------------
+
     def setup_genere_combobox(self, generi: list[Genere]) -> None:
         """Riempisce il `QComboBox` dei generi."""
         self.genere.clear()
@@ -106,3 +127,28 @@ class NuovaOperaView(CreaAbstractView):
         for i, g in enumerate(generi):
             i += 1
             self.genere.insertItem(i, g.get_nome(), g.get_id())
+
+    def set_pagina_focus(self) -> None:
+        """Evidenzia il primo campo con input non valido trovato."""
+        self.focusNextChild()
+        if not self.nome.text().strip():
+            return
+        self.focusNextChild()
+        if not self.trama.toPlainText().strip():
+            return
+        self.focusNextChild()
+        if self.genere.currentIndex() == 0:
+            return
+        self.focusNextChild()
+        if not self.compositore.text().strip():
+            return
+        self.focusNextChild()
+        if not self.librettista.text().strip():
+            return
+        self.focusNextChild()
+        if not self.atti.value():
+            return
+        self.focusNextChild()
+        if not self.data:
+            return
+        self.focusNextChild()

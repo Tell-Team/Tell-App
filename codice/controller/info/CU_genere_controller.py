@@ -18,12 +18,12 @@ class CUGenereController(QObject):
     """Gestisce il salvataggio dei generi creati e modificati.
 
     Segnali:
-    - navigation_go_back(): emesso per tornare all'ultima pagina visualizzata
-    - naviagation_get_page(str, dict): emesso per ottenere la pagina da cui si prenderà l'input
+    - goBackRequest(): emesso per tornare all'ultima pagina visualizzata
+    - getNavPageRequest(str, dict): emesso per ottenere la pagina da cui si prenderà l'input
     """
 
-    navigation_go_back = pyqtSignal()
-    navigation_get_page = pyqtSignal(str, dict)
+    goBackRequest = pyqtSignal()
+    getNavPageRequest = pyqtSignal(str, dict)
 
     def __init__(
         self,
@@ -38,22 +38,24 @@ class CUGenereController(QObject):
 
         self._connect_signals()
 
+    # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
+
     def _connect_signals(self) -> None:
         # Cancella creazione Genere
-        self.__nuovo_genere_view.btn_cancella.clicked.connect(  # type:ignore
-            self.navigation_go_back.emit
+        self.__nuovo_genere_view.annullaRequest.connect(  # type:ignore
+            self.goBackRequest.emit
         )
         # Conferma creazione Genere
-        self.__nuovo_genere_view.btn_conferma.clicked.connect(  # type:ignore
+        self.__nuovo_genere_view.salvaRequest.connect(  # type:ignore
             partial(self.salva_genere, is_new=True)
         )
 
         # Cancella modifica Genere
-        self.__modifica_genere_view.btn_cancella.clicked.connect(  # type:ignore
-            self.navigation_go_back.emit
+        self.__modifica_genere_view.annullaRequest.connect(  # type:ignore
+            self.goBackRequest.emit
         )
         # Conferma modifica Genere
-        self.__modifica_genere_view.btn_conferma.clicked.connect(  # type:ignore
+        self.__modifica_genere_view.salvaRequest.connect(  # type:ignore
             partial(self.salva_genere, is_new=False)
         )
 
@@ -91,7 +93,7 @@ class CUGenereController(QObject):
             except DatoIncongruenteException as exc:
                 # E' stato trovato un campo con input non valido
                 cur_page.input_error.setText(CAMPI_NECESSARI)
-                self.__set_pagina_focus(cur_page)
+                cur_page.set_pagina_focus()
                 self.__mostra_errore(
                     cur_page, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
@@ -101,14 +103,14 @@ class CUGenereController(QObject):
                 try:
                     self.aggiungi_genere(nuovo_genere)
                 except IdOccupatoException as exc:
-                    # Ediste già un genere con quell'id
+                    # Esiste già un genere con quell'id
                     self.__mostra_errore(
                         cur_page,
                         "ID Genere occupato",
                         f"Si è verificato un errore: {exc}",
                     )
                 else:
-                    self.navigation_go_back.emit()
+                    self.goBackRequest.emit()
         elif not is_new:
             # Ottieni la pagina ModificaGenereView
             cur_page = self.__modifica_genere_view
@@ -135,7 +137,7 @@ class CUGenereController(QObject):
                 copia_genere.set_descrizione(descrizione)
             except DatoIncongruenteException as exc:
                 cur_page.input_error.setText(CAMPI_NECESSARI)
-                self.__set_pagina_focus(cur_page)
+                cur_page.set_pagina_focus()
                 self.__mostra_errore(
                     cur_page, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
@@ -153,7 +155,7 @@ class CUGenereController(QObject):
                     )
                     pass
                 else:
-                    self.navigation_go_back.emit()
+                    self.goBackRequest.emit()
 
     # ------------------------- METODI PRIVATI -------------------------
 
@@ -165,12 +167,3 @@ class CUGenereController(QObject):
         :param testo: testo descrittivo
         """
         QMessageBox.critical(widget, titolo, testo)
-
-    def __set_pagina_focus(self, pagina: NuovoGenereView) -> None:
-        """Evidenzia il campo con input non valido.
-
-        :param pagina: widget dove si è verificato l'errore d'input"""
-        pagina.focusNextChild()
-        if not pagina.nome.text().strip():
-            return
-        pagina.focusNextChild()

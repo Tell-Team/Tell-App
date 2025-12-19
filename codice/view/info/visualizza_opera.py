@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QScrollArea,
 )
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSignal
 
 
 class VisualizzaOperaView(QWidget):
@@ -15,12 +15,20 @@ class VisualizzaOperaView(QWidget):
 
     Contiene le informazioni anagrafiche dell'opera ed una lista con tutte
     le regie vinculate ad essa.
+
+    Segnali:
+    - tornaIndietroRequest(): emesso quando si clicca il pulsante Indietro.
     """
+
+    tornaIndietroRequest = pyqtSignal()
 
     def __init__(self) -> None:
         super().__init__()
 
         self._setup_ui()
+        self._connect_signals()
+
+    # ------------------------- SETUP INIT -------------------------
 
     def _setup_ui(self) -> None:
         # Labels
@@ -77,12 +85,12 @@ class VisualizzaOperaView(QWidget):
         layout_content.addStretch()
 
         # Pulsante: Indientro
-        self.btn_indietro = QPushButton("Indietro")
-        self.btn_indietro.setObjectName("SmallButton")
+        self._btn_indietro = QPushButton("Indietro")
+        self._btn_indietro.setObjectName("SmallButton")
 
         self.pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.pulsanti)
-        layout_pulsanti.addWidget(self.btn_indietro)
+        layout_pulsanti.addWidget(self._btn_indietro)
         layout_pulsanti.addStretch()
 
         # Funzione di scroll
@@ -94,3 +102,8 @@ class VisualizzaOperaView(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.pulsanti)
         main_layout.addWidget(scroll_area)
+
+    def _connect_signals(self):
+        self._btn_indietro.clicked.connect(  # type:ignore
+            self.tornaIndietroRequest.emit
+        )

@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QLabel, QLineEdit, QComboBox, QFrame
+from PyQt6.QtCore import pyqtSignal
 
 from view.abstractView.creaAbstract import CreaAbstractView
 
@@ -10,12 +11,22 @@ from view.abstractView.creaAbstract import CreaAbstractView
 class NuovoAccountView(CreaAbstractView):
     """
     View per la creazione di un nuovo account utente.
+
+    Segnali:
+    - annullaRequest(): emesso quando si clicca il pulsante Cancella;
+    - salvaRequest(): emesso quando si clicca il pulsante Conferma.
     """
+
+    annullaRequest = pyqtSignal()
+    salvaRequest = pyqtSignal()
 
     def __init__(self) -> None:
         super().__init__()
 
         self._setup_ui()
+        self._connect_signals()
+
+    # ------------------------- SETUP INIT -------------------------
 
     def _setup_ui(self) -> None:
         # Header
@@ -79,3 +90,12 @@ class NuovoAccountView(CreaAbstractView):
         self.form_layout.addRow(label_username, self.username)
         self.form_layout.addRow(label_password, self.password)
         self.form_layout.addRow(label_ruolo, self.ruolo)
+
+    def _connect_signals(self) -> None:
+        self._btn_cancella.clicked.connect(  # type:ignore
+            self.annullaRequest.emit
+        )
+
+        self._btn_conferma.clicked.connect(  # type:ignore
+            self.salvaRequest.emit
+        )

@@ -28,16 +28,16 @@ class CreaAbstractView(QWidget):
         self.form_layout.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
 
         # Setup Pulsanti
-        self.btn_cancella = QPushButton("Cancella")
-        self.btn_cancella.setObjectName("SmallButton")
+        self._btn_cancella = QPushButton("Cancella")
+        self._btn_cancella.setObjectName("SmallButton")
 
-        self.btn_conferma = QPushButton("Conferma")
-        self.btn_conferma.setObjectName("SmallButton")
+        self._btn_conferma = QPushButton("Conferma")
+        self._btn_conferma.setObjectName("SmallButton")
 
         self.pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.pulsanti)
-        layout_pulsanti.addWidget(self.btn_cancella)
-        layout_pulsanti.addWidget(self.btn_conferma)
+        layout_pulsanti.addWidget(self._btn_cancella)
+        layout_pulsanti.addWidget(self._btn_conferma)
         layout_pulsanti.addStretch()
 
         # Label input_error
@@ -60,6 +60,5 @@ class CreaAbstractView(QWidget):
         ricaricare un form.
         """
         # - Non è stato ancora implementato, ma potrebbe essere utile per future pagine.
-
         while form_layout.rowCount() > 0:
             form_layout.removeRow(0)

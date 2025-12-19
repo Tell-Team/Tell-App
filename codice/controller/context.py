@@ -77,64 +77,78 @@ class AppContext:
             self.model, self.nuovo_genere_view, self.modifica_genere_view
         )
 
-        # ------------------------- ASSEGNAMENTO DEI pyqtSignal -------------------------
+        # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
 
         # LoginController
-        self.login_controller.navigation_go_back.connect(  # type:ignore
-            self.nav.go_back
+        self.login_controller.goBackRequest.connect(  # type:ignore
+            self._on_request_go_back
         )
-        self.login_controller.navigation_go_to.connect(  # type:ignore
-            self.on_nav_request_go_to
+        self.login_controller.goToPageRequest.connect(  # type:ignore
+            self._on_request_go_to
         )
 
         # InfoController
-        self.info_controller.navigation_go_back.connect(  # type:ignore
-            self.nav.go_back
+        self.info_controller.goBackRequest.connect(  # type:ignore
+            self._on_request_go_back
         )
-        self.info_controller.navigation_go_to.connect(  # type:ignore
-            self.on_nav_request_go_to
+        self.info_controller.goToPageRequest.connect(  # type:ignore
+            self._on_request_go_to
         )
-        self.info_controller.navigation_section_go_to.connect(  # type:ignore
-            self.on_nav_request_section_go_to
+        self.info_controller.goToSectionRequest.connect(  # type:ignore
+            self._on_request_section_go_to
         )
-        self.info_controller.navigation_get_page.connect(  # type:ignore
-            self.on_nav_request_get_page
+        self.info_controller.getNavPageRequest.connect(  # type:ignore
+            self._on_request_get_page
         )
 
         # CUOperaController
-        self.cu_opera_controller.navigation_go_back.connect(  # type:ignore
-            self.nav.go_back
+        self.cu_opera_controller.goBackRequest.connect(  # type:ignore
+            self._on_request_go_back
         )
-        self.cu_opera_controller.navigation_get_page.connect(  # type:ignore
-            self.on_nav_request_get_page
+        self.cu_opera_controller.getNavPageRequest.connect(  # type:ignore
+            self._on_request_get_page
         )
 
         # CUGenereController
-        self.cu_genere_controller.navigation_go_back.connect(  # type:ignore
-            self.nav.go_back
+        self.cu_genere_controller.goBackRequest.connect(  # type:ignore
+            self._on_request_go_back
         )
-        self.cu_genere_controller.navigation_get_page.connect(  # type:ignore
-            self.on_nav_request_get_page
+        self.cu_genere_controller.getNavPageRequest.connect(  # type:ignore
+            self._on_request_get_page
         )
 
-    # ------------------------- METODI PUBBLICI -------------------------
+    # ------------------------- METODI DI NAVIGAZIONE -------------------------
 
-    def on_nav_request_go_to(self, page_name: str, save_history: bool) -> None:
-        self.nav.go_to(page_name, save_history)
+    def _on_request_go_back(self) -> None:
+        self.nav.go_back()
 
-    def on_nav_request_section_go_to(self, page_name: str) -> None:
+    def _on_request_go_to(self, page_name: str, save_history: bool) -> None:
         try:
-            self.nav.section_go_to(page_name)
+            self.nav.go_to(page_name, save_history)
         except ValueError as exc:
             self.__mostra_errore(
                 self.nav.get_cur_centra_page(),  # type:ignore
+                # - c'è forma di togliere il #type:ignore?
                 # Questo metodo è chiamato solo quando c'è un centralWidget.
                 #   Quindi non è necessario un assert in caso non ci sia.
                 "Pagina non trovata",
                 f"Si è verificato un errore: {exc}",
             )
 
-    def on_nav_request_get_page(
+    def _on_request_section_go_to(self, page_name: str) -> None:
+        try:
+            self.nav.section_go_to(page_name)
+        except ValueError as exc:
+            self.__mostra_errore(
+                self.nav.get_cur_centra_page(),  # type:ignore
+                # - c'è forma di togliere il #type:ignore?
+                # Questo metodo è chiamato solo quando c'è un centralWidget.
+                #   Quindi non è necessario un assert in caso non ci sia.
+                "Pagina non trovata",
+                f"Si è verificato un errore: {exc}",
+            )
+
+    def _on_request_get_page(
         self, page_name: str, container: dict[str, Optional[QWidget]]
     ) -> None:
         container["value"] = self.nav.get_page(page_name)

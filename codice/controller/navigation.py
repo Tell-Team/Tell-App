@@ -3,9 +3,7 @@ from typing import Optional
 
 
 class NavigationController:
-    """
-    Permette all'utente di navigare le pagine e sezioni dell'applicazione.
-    """
+    """Permette all'utente di navigare le pagine e sezioni dell'applicazione."""
 
     def __init__(self, main_window: QMainWindow) -> None:
         self._main_window = main_window

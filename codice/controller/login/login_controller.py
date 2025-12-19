@@ -1,4 +1,5 @@
 from PyQt6.QtCore import pyqtSignal, QObject
+from functools import partial
 
 from model.model import Model
 from view.login.login_page import LoginPage
@@ -6,8 +7,8 @@ from view.login.authentication_page import AuthenticationPage
 
 
 class LoginController(QObject):
-    navigation_go_back = pyqtSignal()  # - Da implementare
-    navigation_go_to = pyqtSignal(str, bool)
+    goBackRequest = pyqtSignal()  # - Da implementare
+    goToPageRequest = pyqtSignal(str, bool)
 
     def __init__(
         self, model: Model, login_v: LoginPage, auth_v: AuthenticationPage
@@ -16,23 +17,30 @@ class LoginController(QObject):
         self.__model = model
         self.__login_page = login_v
         self.__authentication_page = auth_v
+
         self._connect_signals()
 
+    # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
+
     def _connect_signals(self) -> None:
-        self.__login_page.btn_cliente.clicked.connect(  # type:ignore
-            lambda: self.navigation_go_to.emit("info_section", True)
+        self.__login_page.loginAsCliente.connect(  # type:ignore
+            partial(self.goToPageRequest.emit, "info_section", True)
         )
 
         # - Il ruolo dell'utente non è ancora implementato
-        self.__login_page.btn_biglietteria.clicked.connect(  # type:ignore
-            lambda: self.navigation_go_to.emit("authentication_page", True)
+        self.__login_page.loginAsBiglietteria.connect(  # type:ignore
+            partial(self.goToPageRequest.emit, "authentication_page", True)
         )
 
         # - Il ruolo dell'utente non è ancora implementato
-        self.__login_page.btn_amministratore.clicked.connect(  # type:ignore
-            lambda: self.navigation_go_to.emit("authentication_page", True)
+        self.__login_page.loginAsAdmin.connect(  # type:ignore
+            partial(self.goToPageRequest.emit, "authentication_page", True)
         )
 
-        self.__authentication_page.btn_indietro.clicked.connect(  # type:ignore
-            self.navigation_go_back.emit
+        self.__authentication_page.tornaIndietroRequest.connect(  # type:ignore
+            self.goBackRequest.emit
         )
+
+        # self.__authentication_page.authRequest.connect(  # type:ignore
+        #     # - Ancora non esiste metodo per effettuare il login
+        # )

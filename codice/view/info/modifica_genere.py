@@ -10,6 +10,8 @@ class ModificaGenereView(NuovoGenereView):
     def __init__(self) -> None:
         super().__init__()
 
+    # ------------------------- SETUP INIT -------------------------
+
     def _setup_ui(self) -> None:
         super()._setup_ui()
 

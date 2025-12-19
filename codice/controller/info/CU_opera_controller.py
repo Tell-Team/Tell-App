@@ -18,12 +18,12 @@ class CUOperaController(QObject):
     """Gestisce il salvataggio delle opere create e modificate.
 
     Segnali:
-    - navigation_go_back(): emesso per tornare all'ultima pagina visualizzata;
-    - naviagation_get_page(str, dict): emesso per ottenere la pagina da cui si prenderà l'input.
+    - goBackRequest(): emesso per tornare all'ultima pagina visualizzata;
+    - getNavPageRequest(str, dict): emesso per ottenere la pagina da cui si prenderà l'input.
     """
 
-    navigation_go_back = pyqtSignal()
-    navigation_get_page = pyqtSignal(str, dict)
+    goBackRequest = pyqtSignal()
+    getNavPageRequest = pyqtSignal(str, dict)
 
     def __init__(
         self,
@@ -38,22 +38,24 @@ class CUOperaController(QObject):
 
         self._connect_signals()
 
+    # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
+
     def _connect_signals(self) -> None:
         # Cancella creazione Opera
-        self.__nuova_opera_view.btn_cancella.clicked.connect(  # type:ignore
-            self.navigation_go_back.emit
+        self.__nuova_opera_view.annullaRequest.connect(  # type:ignore
+            self.goBackRequest.emit
         )
         # Conferma creazione Opera
-        self.__nuova_opera_view.btn_conferma.clicked.connect(  # type:ignore
+        self.__nuova_opera_view.salvaRequest.connect(  # type:ignore
             partial(self.salva_opera, is_new=True)
         )
 
         # Cancella modifica Opera
-        self.__modifica_opera_view.btn_cancella.clicked.connect(  # type:ignore
-            self.navigation_go_back.emit
+        self.__modifica_opera_view.annullaRequest.connect(  # type:ignore
+            self.goBackRequest.emit
         )
         # Conferma modifica Opera
-        self.__modifica_opera_view.btn_conferma.clicked.connect(  # type:ignore
+        self.__modifica_opera_view.salvaRequest.connect(  # type:ignore
             partial(self.salva_opera, is_new=False)
         )
 
@@ -104,7 +106,7 @@ class CUOperaController(QObject):
             except DatoIncongruenteException as exc:
                 # E' stato trovato un campo con input non valido
                 cur_page.input_error.setText(CAMPI_NECESSARI)
-                self.__set_pagina_focus(cur_page)
+                cur_page.set_pagina_focus()
                 self.__mostra_errore(
                     cur_page, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
@@ -130,7 +132,7 @@ class CUOperaController(QObject):
                         f"Si è verificato un errore: {exc}",
                     )
                 else:
-                    self.navigation_go_back.emit()
+                    self.goBackRequest.emit()
         elif not is_new:
             # Ottieni la pagina ModificaOperaView
             cur_page = self.__modifica_opera_view
@@ -170,7 +172,7 @@ class CUOperaController(QObject):
             except DatoIncongruenteException as exc:
                 # E' stato trovato un campo con input non valido
                 cur_page.input_error.setText(CAMPI_NECESSARI)
-                self.__set_pagina_focus(cur_page)
+                cur_page.set_pagina_focus()
                 self.__mostra_errore(
                     cur_page, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
@@ -187,7 +189,7 @@ class CUOperaController(QObject):
                         f"Si è verificato un errore: {exc}",
                     )
                 else:
-                    self.navigation_go_back.emit()
+                    self.goBackRequest.emit()
 
     # ------------------------- METODI PRIVATI -------------------------
 
@@ -199,31 +201,3 @@ class CUOperaController(QObject):
         :param testo: testo descrittivo
         """
         QMessageBox.critical(widget, titolo, testo)
-
-    # - Potrei migliorare questo metodo
-    def __set_pagina_focus(self, pagina: NuovaOperaView) -> None:
-        """Evidenzia il campo con input non valido.
-
-        :param pagina: widget dove si è verificato l'errore d'input"""
-        pagina.focusNextChild()
-        if not pagina.nome.text().strip():
-            return
-        pagina.focusNextChild()
-        if not pagina.trama.toPlainText().strip():
-            return
-        pagina.focusNextChild()
-        if pagina.genere.currentIndex() == 0:
-            return
-        pagina.focusNextChild()
-        if not pagina.compositore.text().strip():
-            return
-        pagina.focusNextChild()
-        if not pagina.librettista.text().strip():
-            return
-        pagina.focusNextChild()
-        if not pagina.atti.value():
-            return
-        pagina.focusNextChild()
-        if not pagina.data:
-            return
-        pagina.focusNextChild()
