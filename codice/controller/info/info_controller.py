@@ -17,9 +17,9 @@ from view.info.widgets.regiaDisplay import RegiaDisplay
 from view.info.utils.operaPageData import OperaPageData
 from view.info.utils.generePageData import GenerePageData
 from view.info.utils.regiaPageData import RegiaPageData
+from view.messageView import MessageView
 
 # Regia, RegiaDisplay e RegiaPageData sono necessari per VisualizzaOpera.
-from view.messageView import MessageView
 
 
 class InfoController(QObject):

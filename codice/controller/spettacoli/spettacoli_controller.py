@@ -1,27 +1,5 @@
-# from PyQt6.QtWidgets import QWidget
-from PyQt6.QtCore import pyqtSignal
-
-# from typing import Optional
-
-from controller.context import AppContext, NavigationController
-
-from model.pianificazione.spettacolo import Spettacolo
-
-
 class SpettacoliController:
-    goBackRequest = pyqtSignal()
-    goToPageRequest = pyqtSignal(str, bool)
-    getNavPageRequest = pyqtSignal(str, dict)
-
-    def __init__(self, app_context: AppContext):
-        self.__model = app_context.model
-        self.__nav = app_context.nav
-
-    def get_nav(self) -> NavigationController:
-        return self.__nav
-
-    def get_spettacoli(self) -> list[Spettacolo]:
-        return self.__model.get_spettacoli()
+    pass
 
     # # - QUESTI METODI GLI AVEVO CREATO NEL info_controller.py E IN TEORIA DEvOno RIFERIRSI AGLI
     # #   SPETTACOLI. QUINDI DEVONO ESSER MODIFICATI.

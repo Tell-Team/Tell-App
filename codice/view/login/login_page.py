@@ -24,51 +24,50 @@ class LoginPage(QWidget):
     # ------------------------- SETUP INIT -------------------------
 
     def _setup_ui(self) -> None:
-        # Header
-        self.header = QLabel("Login")
-        self.header.setObjectName("Header1")
-        self.header.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        # Content
+        header = QLabel("Login")
+        header.setObjectName("Header1")
+        header.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        # Subheader
-        self.subheader = QLabel("Scegliere il tipo di account:")
-        self.subheader.setObjectName("Paragraph")
-        self.subheader.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        subheader = QLabel("Scegliere il tipo di account:")
+        subheader.setObjectName("Paragraph")
+        subheader.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         # Pulsanti
-        self._btn_cliente = QPushButton("Cliente")
-        self._btn_cliente.setObjectName("BlueButton")
+        self.__btn_cliente = QPushButton("Cliente")
+        self.__btn_cliente.setObjectName("BlueButton")
 
-        self._btn_biglietteria = QPushButton("Biglietteria")
-        self._btn_biglietteria.setObjectName("BlueButton")
+        self.__btn_biglietteria = QPushButton("Biglietteria")
+        self.__btn_biglietteria.setObjectName("BlueButton")
 
-        self._btn_admin = QPushButton("Amministratore")
-        self._btn_admin.setObjectName("BlueButton")
+        self.__btn_admin = QPushButton("Amministratore")
+        self.__btn_admin.setObjectName("BlueButton")
 
         self.pulsanti_utente = QWidget()
         layout_pulsanti_utente = QVBoxLayout(self.pulsanti_utente)
-        layout_pulsanti_utente.addWidget(self._btn_cliente)
-        layout_pulsanti_utente.addWidget(self._btn_biglietteria)
-        layout_pulsanti_utente.addWidget(self._btn_admin)
+        layout_pulsanti_utente.addWidget(self.__btn_cliente)
+        layout_pulsanti_utente.addWidget(self.__btn_biglietteria)
+        layout_pulsanti_utente.addWidget(self.__btn_admin)
 
         # Layout
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(20, 20, 20, 20)
         main_layout.setSpacing(10)
 
-        main_layout.addWidget(self.header)
-        main_layout.addWidget(self.subheader)
+        main_layout.addWidget(header)
+        main_layout.addWidget(subheader)
         main_layout.addWidget(self.pulsanti_utente)
         main_layout.addStretch()
 
     def _connect_signals(self) -> None:
-        self._btn_cliente.clicked.connect(  # type:ignore
+        self.__btn_cliente.clicked.connect(  # type:ignore
             self.loginAsCliente.emit
         )
 
-        self._btn_biglietteria.clicked.connect(  # type:ignore
+        self.__btn_biglietteria.clicked.connect(  # type:ignore
             self.loginAsBiglietteria.emit
         )
 
-        self._btn_admin.clicked.connect(  # type:ignore
+        self.__btn_admin.clicked.connect(  # type:ignore
             self.loginAsAdmin.emit
         )

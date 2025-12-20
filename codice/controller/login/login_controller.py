@@ -26,6 +26,7 @@ class LoginController(QObject):
     def _connect_signals(self) -> None:
         self.__login_page.loginAsCliente.connect(  # type:ignore
             partial(self.goToPageRequest.emit, "info_section", True)
+            # - Dovrebbe essere "spettacoli_section"
         )
 
         # - Il ruolo dell'utente non è ancora implementato
@@ -56,3 +57,4 @@ class LoginController(QObject):
     def login_attempt(self, username: str, password: str) -> None:
         ...  # - Da definere
         self.goToPageRequest.emit("info_section", True)
+        # - Dovrebbe essere "spettacoli_section"

@@ -36,33 +36,33 @@ class RegiaDisplay(QWidget):
         anno.setObjectName("Paragraph")
 
         # Pulsanti
-        self._btn_modifica = QPushButton("Modifica")
-        self._btn_modifica.setObjectName("WhiteButton")
+        self.__btn_modifica = QPushButton("Modifica")
+        self.__btn_modifica.setObjectName("WhiteButton")
 
-        self._btn_elimina = QPushButton("Elimina")
-        self._btn_elimina.setObjectName("WhiteButton")
+        self.__btn_elimina = QPushButton("Elimina")
+        self.__btn_elimina.setObjectName("WhiteButton")
 
         self.pulsanti = QWidget()
-        layout_btn = QHBoxLayout(self.pulsanti)
-        layout_btn.addWidget(self._btn_modifica)
-        layout_btn.addWidget(self._btn_elimina)
-        layout_btn.addStretch()
+        layout_pulsanti = QHBoxLayout(self.pulsanti)
+        layout_pulsanti.addWidget(self.__btn_modifica)
+        layout_pulsanti.addWidget(self.__btn_elimina)
+        layout_pulsanti.addStretch()
 
         # Pannello di eliminazione
         domanda = QLabel("Sicuro di eliminare?")
         domanda.setObjectName("Paragraph")
 
-        self._btn_si = QPushButton("Sì")
-        self._btn_si.setObjectName("WhiteButton")
+        self.__btn_si = QPushButton("Sì")
+        self.__btn_si.setObjectName("WhiteButton")
 
-        self._btn_no = QPushButton("No")
-        self._btn_no.setObjectName("WhiteButton")
+        self.__btn_no = QPushButton("No")
+        self.__btn_no.setObjectName("WhiteButton")
 
         self.conferma_elimina = QWidget()
         layout_conferma = QHBoxLayout(self.conferma_elimina)
         layout_conferma.addWidget(domanda)
-        layout_conferma.addWidget(self._btn_si)
-        layout_conferma.addWidget(self._btn_no)
+        layout_conferma.addWidget(self.__btn_si)
+        layout_conferma.addWidget(self.__btn_no)
         self.conferma_elimina.hide()
 
         # Layout
@@ -76,19 +76,19 @@ class RegiaDisplay(QWidget):
     def _connect_signals(self, r: Regia) -> None:
         self._id = r.get_id()
 
-        self._btn_modifica.clicked.connect(  # type:ignore
+        self.__btn_modifica.clicked.connect(  # type:ignore
             partial(self.modificaRequest.emit, self._id)
         )
 
-        self._btn_elimina.clicked.connect(  # type:ignore
+        self.__btn_elimina.clicked.connect(  # type:ignore
             self._on_elimina
         )
 
-        self._btn_si.clicked.connect(  # type:ignore
+        self.__btn_si.clicked.connect(  # type:ignore
             partial(self.eliminaConfermata.emit, self._id)
         )
 
-        self._btn_no.clicked.connect(  # type:ignore
+        self.__btn_no.clicked.connect(  # type:ignore
             self.annulla_elimina
         )
 

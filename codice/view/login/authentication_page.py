@@ -31,64 +31,61 @@ class AuthenticationPage(QWidget):
     # ------------------------- SETUP INIT -------------------------
 
     def _setup_ui(self) -> None:
-        # Header
-        self.header = QLabel("Login")
-        self.header.setObjectName("Header1")
-        self.header.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # Top widget
+        self.__btn_indietro = QPushButton("Indietro")
+        self.__btn_indietro.setObjectName("WhiteButton")
+
+        pagina_header = QWidget()
+        layout_header = QHBoxLayout(pagina_header)
+        layout_header.addWidget(self.__btn_indietro)
+        layout_header.addStretch()
 
         # Content
-        self.label_username = QLabel("Username")
-        self.label_username.setObjectName("Paragraph")
-        self.label_username.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        label_header = QLabel("Login")
+        label_header.setObjectName("Header1")
+        label_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+        label_username = QLabel("Username")
+        label_username.setObjectName("Paragraph")
+        label_username.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.username = QLineEdit()
         self.username.setPlaceholderText("Username")
 
-        self.label_password = QLabel("Password")
-        self.label_password.setObjectName("Paragraph")
-        self.label_password.setAlignment(Qt.AlignmentFlag.AlignLeft)
-
+        label_password = QLabel("Password")
+        label_password.setObjectName("Paragraph")
+        label_password.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.password = QLineEdit()
         self.password.setPlaceholderText("Password")
         self.password.setEchoMode(QLineEdit.EchoMode.Password)
 
-        self.content = QWidget()
-        self.content_layout = QVBoxLayout(self.content)
-        self.content_layout.addWidget(self.label_username)
-        self.content_layout.addWidget(self.username)
-        self.content_layout.addWidget(self.label_password)
-        self.content_layout.addWidget(self.password)
-        self.content_layout.addStretch()
+        self.__btn_login = QPushButton("LOGIN")
+        self.__btn_login.setObjectName("BlueButton")
 
-        # Pulsanti
-        self._btn_indietro = QPushButton("Indietro")
-        self._btn_indietro.setObjectName("WhiteButton")
-
-        self.box_btn_indietro = QWidget()
-        self.box_layout = QHBoxLayout(self.box_btn_indietro)
-        self.box_layout.addWidget(self._btn_indietro)
-        self.box_layout.addStretch()
-
-        self._btn_login = QPushButton("LOGIN")
-        self._btn_login.setObjectName("BlueButton")
+        pagina_content = QWidget()
+        layout_content = QVBoxLayout(pagina_content)
+        layout_content.addWidget(label_header)
+        layout_content.addWidget(label_username)
+        layout_content.addWidget(self.username)
+        layout_content.addWidget(label_password)
+        layout_content.addWidget(self.password)
+        layout_content.addStretch()
+        layout_content.addWidget(self.__btn_login)
 
         # Layout
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(20, 20, 20, 20)
         main_layout.setSpacing(10)
 
-        main_layout.addWidget(self.box_btn_indietro)
-        main_layout.addWidget(self.header)
-        main_layout.addWidget(self.content)
-        main_layout.addWidget(self._btn_login)
+        main_layout.addWidget(pagina_header)
+        main_layout.addWidget(pagina_content)
         main_layout.addStretch()
 
     def _connect_signals(self):
-        self._btn_indietro.clicked.connect(  # type:ignore
+        self.__btn_indietro.clicked.connect(  # type:ignore
             self.annullaRequest.emit
         )
 
-        self._btn_login.clicked.connect(  # type:ignore
+        self.__btn_login.clicked.connect(  # type:ignore
             lambda: self.authRequest.emit(self.username.text(), self.password.text())
         )
 

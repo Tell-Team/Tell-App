@@ -108,7 +108,11 @@ class AppContext:
         # - Se cambia di path, devo muovere questo blocco alla sezione corrispondente
 
         # Account
-        # - Controllers ancora non implementati
+        from controller.account.account_controller import AccountController
+
+        self.account_controller = AccountController(
+            self.model, self.account_section, self.message_view
+        )
 
         # Spettacoli
         # - Controllers ancora non implementati
@@ -161,6 +165,20 @@ class AppContext:
             self._on_request_go_back
         )
         self.cu_regia_controller.getNavPageRequest.connect(  # type:ignore
+            self._on_request_get_page
+        )
+
+        # AccountController
+        self.account_controller.logoutRequest.connect(  # type:ignore
+            self._on_request_logout
+        )
+        self.account_controller.goToPageRequest.connect(  # type:ignore
+            self._on_request_go_to
+        )
+        self.account_controller.goToSectionRequest.connect(  # type:ignore
+            self._on_request_section_go_to
+        )
+        self.account_controller.getNavPageRequest.connect(  # type:ignore
             self._on_request_get_page
         )
 

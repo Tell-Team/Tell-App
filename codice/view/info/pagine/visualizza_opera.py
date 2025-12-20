@@ -42,6 +42,15 @@ class VisualizzaOperaView(QWidget):
     def _setup_ui(self) -> None:
         self.id_cur_opera: int = -1
 
+        # Top widget
+        self.__btn_indietro = QPushButton("Indietro")
+        self.__btn_indietro.setObjectName("WhiteButton")
+
+        self.pagina_header = QWidget()
+        layout_header = QHBoxLayout(self.pagina_header)
+        layout_header.addWidget(self.__btn_indietro)
+        layout_header.addStretch()
+
         # Labels
         self.label_nome = QLabel("NOME")
         self.label_nome.setObjectName("Header1")
@@ -75,14 +84,13 @@ class VisualizzaOperaView(QWidget):
         label_lista_regie = QLabel("Lista regie")
         label_lista_regie.setObjectName("Header2")
 
-        self._btn_nuova_regia = QPushButton("Nuova regia")
-        self._btn_nuova_regia.setObjectName("WhiteButton")
+        self.__btn_nuova_regia = QPushButton("Nuova regia")
+        self.__btn_nuova_regia.setObjectName("WhiteButton")
 
         widget_header_regie = QWidget()
         self.layout_header_regie = QHBoxLayout(widget_header_regie)
         self.layout_header_regie.addWidget(label_lista_regie)
-        self.layout_header_regie.addWidget(self._btn_nuova_regia)
-        # - AGGIUNGERE: SearchBar da implementare
+        self.layout_header_regie.addWidget(self.__btn_nuova_regia)
         self.layout_header_regie.addStretch()
 
         self.lista_regie: list[Regia] = []
@@ -100,8 +108,8 @@ class VisualizzaOperaView(QWidget):
         self.layout_regie.addWidget(widget_lista_regie)
         # end-Lista Regie
 
-        content = QWidget()
-        layout_content = QVBoxLayout(content)
+        pagina_content = QWidget()
+        layout_content = QVBoxLayout(pagina_content)
         layout_content.addWidget(self.label_nome)
         layout_content.addWidget(self.label_librettista)
         layout_content.addWidget(self.label_compositore)
@@ -112,31 +120,22 @@ class VisualizzaOperaView(QWidget):
         layout_content.addWidget(self.regie)
         layout_content.addStretch()
 
-        # Pulsante: Indientro
-        self._btn_indietro = QPushButton("Indietro")
-        self._btn_indietro.setObjectName("WhiteButton")
-
-        self.pulsanti = QWidget()
-        layout_pulsanti = QHBoxLayout(self.pulsanti)
-        layout_pulsanti.addWidget(self._btn_indietro)
-        layout_pulsanti.addStretch()
-
         # Funzione di scroll
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
-        scroll_area.setWidget(content)
+        scroll_area.setWidget(pagina_content)
 
         # Layout
         main_layout = QVBoxLayout(self)
-        main_layout.addWidget(self.pulsanti)
+        main_layout.addWidget(self.pagina_header)
         main_layout.addWidget(scroll_area)
 
     def _connect_signals(self):
-        self._btn_indietro.clicked.connect(  # type:ignore
+        self.__btn_indietro.clicked.connect(  # type:ignore
             self.tornaIndietroRequest.emit
         )
 
-        self._btn_nuova_regia.clicked.connect(  # type:ignore
+        self.__btn_nuova_regia.clicked.connect(  # type:ignore
             self.nuovaRegiaRequest.emit
         )
 
@@ -152,13 +151,16 @@ class VisualizzaOperaView(QWidget):
         :param lista_regie: lista delle regie vincolate all'opera"""
         LISTA_REGIE_VUOTA = "Al momento, non vi sono regie per questa opera."
 
+        # Reset layout lista regie
         self.svuota_layout(self.layout_lista_regie)
         self.layout_lista_regie.addWidget(self.label_lista_regie_vuota)
         self.label_lista_regie_vuota.setText("")
 
+        # Salva dati dell'opera nella pagina
         self.id_cur_opera = data.id
         self.lista_regie = lista_regie
 
+        # Carica dati dell'opera
         self.label_nome.setText(f"{data.nome}")
         self.label_librettista.setText(f"Libretto di {data.librettista}")
         self.label_compositore.setText(f"Musica composta da {data.compositore}")
@@ -171,6 +173,7 @@ class VisualizzaOperaView(QWidget):
         )
         self.label_trama.setText(f"{data.trama}")
 
+        # Carica lista regie
         if not self.lista_regie:
             self.label_lista_regie_vuota.setText(LISTA_REGIE_VUOTA)
         else:

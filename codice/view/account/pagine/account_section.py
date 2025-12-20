@@ -1,10 +1,4 @@
-from PyQt6.QtWidgets import (
-    QWidget,
-    QLabel,
-    QPushButton,
-    QVBoxLayout,
-    QHBoxLayout,
-)
+from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import override
 
@@ -18,7 +12,7 @@ class AccountSectionView(AbstractSectionView):
     - logoutRequest(): emesso quando si clicca il pulsante Logout;
     - goToSpettacoli(): emesso quando si clicca il pulsante Spettacoli;
     - goToInfo(): emesso quando si clicca il pulsante Info;
-    - nuovaoAdminReques(): emesso quando si clicca il pulsante Nuovo Amministratore;
+    - nuovoAdminReques(): emesso quando si clicca il pulsante Nuovo Amministratore;
     - nuovoBiglietteriaRequest(): emesso quando si clicca il pulsante Nuovo Biglietteria;
     - displayAdminRequest(QVBoxLayout): emesso per caricare la lista di account
     Amministratore nella sezione Account;
@@ -30,7 +24,7 @@ class AccountSectionView(AbstractSectionView):
     goToSpettacoli = pyqtSignal()
     goToInfo = pyqtSignal()
 
-    nuovaoAdminRequest = pyqtSignal()
+    nuovoAdminRequest = pyqtSignal()
     nuovoBiglietteriaRequest = pyqtSignal()
     displayAdminRequest = pyqtSignal(QVBoxLayout)
     displayBiglietteriaRequest = pyqtSignal(QVBoxLayout)
@@ -91,8 +85,8 @@ class AccountSectionView(AbstractSectionView):
         layout_header_biglietteria.addWidget(self._btn_nuovo_biglietteria)
         layout_header_biglietteria.addStretch()
 
-        # Viene usata 'biglietteria' in singolare per le variabili perché è il tipo di account.
-        #   Quindi, un nome proprio.
+        # Viene usato 'biglietteria' in singolare per le variabili perché è il tipo di account.
+        #   Quindi, è un nome proprio.
         self.layout_lista_biglietteria = QVBoxLayout()
 
         self.label_lista_biglietteria_vuota = QLabel(
@@ -128,7 +122,7 @@ class AccountSectionView(AbstractSectionView):
         self._btn_sezione_account.setEnabled(False)
 
         self._btn_nuovo_admin.clicked.connect(  # type:ignore
-            self.nuovaoAdminRequest.emit
+            self.nuovoAdminRequest.emit
         )
 
         self._btn_nuovo_biglietteria.clicked.connect(  # type:ignore
@@ -140,6 +134,15 @@ class AccountSectionView(AbstractSectionView):
         self.displayBiglietteriaRequest.emit(self.layout_lista_biglietteria)
 
     # ------------------------- METODI DI VIEW -------------------------
+
+    def if_lista_vuota(self, layout: QVBoxLayout) -> None:
+        """Indica che la lista non ha istanze da visualizzare.
+
+        :param layout: layout dove si mostrerà un messaggio indicando l'assenza di intanze
+        """
+        # Il suo funzionamento dipende di come aggiorna_pagina aggiunge il label di errore nei layout.
+        lista_vuota_error = layout.itemAt(0).widget()  # type:QLabel # type:ignore
+        lista_vuota_error.show()
 
     @override
     def aggiorna_pagina(self) -> None:
