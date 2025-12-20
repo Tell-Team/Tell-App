@@ -12,21 +12,24 @@ from typing import Optional
 
 from model.pianificazione.regia import Regia
 
-from view.info.operaPageData import OperaPageData
+from view.info.utils.operaPageData import OperaPageData
 
 
 class VisualizzaOperaView(QWidget):
-    """
-    View per visualizzare le singole opere in dettaglio.
+    """View per visualizzare le singole opere in dettaglio.
 
     Contiene le informazioni anagrafiche dell'opera ed una lista con tutte
     le regie vinculate ad essa.
 
     Segnali:
-    - tornaIndietroRequest(): emesso quando si clicca il pulsante Indietro.
+    - tornaIndietroRequest(): emesso quando si clicca il pulsante Indietro;
+    - displayRegieRequest(QVBoxLayout): emesso per mostrare la lista regie a schermo;
+    - nuovaRegiaRequest(): emesso quando si clicca il pulsante Nuova regia.
     """
 
     tornaIndietroRequest = pyqtSignal()
+    displayRegieRequest = pyqtSignal(QVBoxLayout)
+    nuovaRegiaRequest = pyqtSignal()
 
     def __init__(self) -> None:
         super().__init__()
@@ -37,6 +40,8 @@ class VisualizzaOperaView(QWidget):
     # ------------------------- SETUP INIT -------------------------
 
     def _setup_ui(self) -> None:
+        self.id_cur_opera: int = -1
+
         # Labels
         self.label_nome = QLabel("NOME")
         self.label_nome.setObjectName("Header1")
@@ -66,16 +71,34 @@ class VisualizzaOperaView(QWidget):
         self.label_trama.setWordWrap(True)
         self.label_trama.setObjectName("Paragraph")
 
-        self.label_lista_regie = QLabel("Lista regie")
-        self.label_lista_regie.setObjectName("Header2")
+        # Lista Regie
+        label_lista_regie = QLabel("Lista regie")
+        label_lista_regie.setObjectName("Header2")
+
+        self._btn_nuova_regia = QPushButton("Nuova regia")
+        self._btn_nuova_regia.setObjectName("WhiteButton")
+
+        widget_header_regie = QWidget()
+        self.layout_header_regie = QHBoxLayout(widget_header_regie)
+        self.layout_header_regie.addWidget(label_lista_regie)
+        self.layout_header_regie.addWidget(self._btn_nuova_regia)
+        # - AGGIUNGERE: SearchBar da implementare
+        self.layout_header_regie.addStretch()
+
+        self.lista_regie: list[Regia] = []
+
+        self.label_lista_regie_vuota = QLabel("")
+        self.label_lista_regie_vuota.setObjectName("SubHeader")
+
+        widget_lista_regie = QWidget()
+        self.layout_lista_regie = QVBoxLayout(widget_lista_regie)
+        self.layout_lista_regie.addWidget(self.label_lista_regie_vuota)
 
         self.regie = QWidget()
         self.layout_regie = QVBoxLayout(self.regie)
-        self.layout_regie.addWidget(self.label_lista_regie)
-        self.layout_regie.addStretch()
-
-        self.lista_vuota_error = QLabel("")
-        self.lista_vuota_error.setObjectName("SubHeader")
+        self.layout_regie.addWidget(widget_header_regie)
+        self.layout_regie.addWidget(widget_lista_regie)
+        # end-Lista Regie
 
         content = QWidget()
         layout_content = QVBoxLayout(content)
@@ -87,7 +110,6 @@ class VisualizzaOperaView(QWidget):
         layout_content.addWidget(self.label_prima_rappresentazione)
         layout_content.addWidget(self.label_trama)
         layout_content.addWidget(self.regie)
-        layout_content.addWidget(self.lista_vuota_error)
         layout_content.addStretch()
 
         # Pulsante: Indientro
@@ -114,6 +136,10 @@ class VisualizzaOperaView(QWidget):
             self.tornaIndietroRequest.emit
         )
 
+        self._btn_nuova_regia.clicked.connect(  # type:ignore
+            self.nuovaRegiaRequest.emit
+        )
+
     # ------------------------- METODI DI VIEW -------------------------
 
     def set_data(
@@ -126,9 +152,12 @@ class VisualizzaOperaView(QWidget):
         :param lista_regie: lista delle regie vincolate all'opera"""
         LISTA_REGIE_VUOTA = "Al momento, non vi sono regie per questa opera."
 
-        self.clear_layout(self.layout_regie)
-        self.layout_regie.addWidget(self.label_lista_regie)
-        self.lista_vuota_error.setText("")
+        self.svuota_layout(self.layout_lista_regie)
+        self.layout_lista_regie.addWidget(self.label_lista_regie_vuota)
+        self.label_lista_regie_vuota.setText("")
+
+        self.id_cur_opera = data.id
+        self.lista_regie = lista_regie
 
         self.label_nome.setText(f"{data.nome}")
         self.label_librettista.setText(f"Libretto di {data.librettista}")
@@ -142,42 +171,48 @@ class VisualizzaOperaView(QWidget):
         )
         self.label_trama.setText(f"{data.trama}")
 
-        if not lista_regie:
-            self.lista_vuota_error.setText(LISTA_REGIE_VUOTA)
+        if not self.lista_regie:
+            self.label_lista_regie_vuota.setText(LISTA_REGIE_VUOTA)
+        else:
+            self.displayRegieRequest.emit(self.layout_lista_regie)
 
-        for r in lista_regie:
-            self.display_regia(r, self.layout_regie)
+    # - STUDIARE: Come posso fare questi metodi modullari? (Sono usati i varii pagina non
+    #   necessariamente relazionate tra loro)
+    def aggiungi_widget_al_layout(self, widget: QWidget, layout: QVBoxLayout):
+        """Aggiunge un widget creato per il display delle istanze del model.
 
-    def display_regia(self, r: Regia, layout: QVBoxLayout) -> None:
-        """Visualizza a schermo alcune informazioni della regia.
+        :param widget: widget speciale per visualizzare una instanza del model
+        :param layout: layout dove sarà inserito il widget"""
+        # C'era un errore al utilizzare widget.setObjectName("Container") direttamente:
+        #   lo style non veniva asegnato al widget. Quindi ho decisso di aggiungere questo
+        #   dummy widget per farlo funzionare.
+        dummy_widget = QWidget()
+        dummy_widget.setObjectName("Container")
+        l = QVBoxLayout(dummy_widget)
+        l.addWidget(widget)
 
-        :param r: regia da mostrare
-        :param layout: layout in cui sarà mostrata la regia"""
-        # - Creo un regiaDisplay per questo o lo lascio così? Dipenderà di come vogliono
-        #   loro che le regie siano visualizzate.
-        widget_regia = QWidget()
-        widget_regia.setObjectName("Container")
-        layout_regia = QVBoxLayout(widget_regia)
+        layout.addWidget(dummy_widget)
 
-        titolo = QLabel(f"{r.get_titolo()}")
-        titolo.setObjectName("Header2")
-        titolo.setAlignment(Qt.AlignmentFlag.AlignLeft)
+    # - Metodo da fare modullare(?)
+    def if_lista_vuota(self, layout: QVBoxLayout) -> None:
+        """Indica che la lista non ha istanze da visualizzare.
 
-        regista = QLabel(f"Regista: {r.get_regista()}")
-        regista.setObjectName("Paragraph")
+        :param layout: layout dove si mostrerà un messaggio indicando l'assenza di intanze
+        """
+        # Il suo funzionamento dipende di come aggiorna_pagina aggiunge il label di errore nei layout.
+        lista_vuota_error = layout.itemAt(0).widget()  # type:QLabel # type:ignore
+        lista_vuota_error.show()
 
-        anno = QLabel(f"Anno di produzione: {r.get_anno_produzione()}")
-        anno.setObjectName("Paragraph")
+    # - Metodo da fare modullare(?)
+    def aggiorna_pagina(self) -> None:
+        """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
+        self.svuota_layout(self.layout_lista_regie)
+        self.layout_lista_regie.addWidget(self.label_lista_regie_vuota)
+        self.label_lista_regie_vuota.hide()
+        self.displayRegieRequest.emit(self.layout_lista_regie)
 
-        layout_regia.addWidget(titolo)
-        layout_regia.addWidget(regista)
-        layout_regia.addWidget(anno)
-        layout_regia.addStretch()
-
-        layout.addWidget(widget_regia)
-
-    def clear_layout(self, layout: Optional[QLayout]) -> None:
-        """Pulisce un layout, eliminando i riferimenti ai widget contenuti. In caso
+    def svuota_layout(self, layout: Optional[QLayout]) -> None:
+        """Svuota un layout, eliminando i riferimenti ai widget contenuti. In caso
         ci sia un layout contenuto, questo viene anche pulito.
 
         :param layout: layout da pulire"""
@@ -195,4 +230,4 @@ class VisualizzaOperaView(QWidget):
 
                 child_layout = item.layout()
                 if child_layout:
-                    self.clear_layout(child_layout)
+                    self.svuota_layout(child_layout)

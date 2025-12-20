@@ -16,8 +16,7 @@ from view.abstractView.sectionAbstract import AbstractSectionView
 
 
 class InfoSectionView(AbstractSectionView):
-    """
-    View della sezione Info dell'app.
+    """View della sezione Info dell'app.
 
     Segnali:
     - logoutRequest(): emesso quando si clicca il pulsante Logout;
@@ -184,26 +183,25 @@ class InfoSectionView(AbstractSectionView):
 
     def filtra_opere(self, filtro: str) -> None:
         self.filtro_ricerca = filtro
-
-        self.refresh_page()
+        self.aggiorna_pagina()
 
     def if_lista_vuota(self, layout: QVBoxLayout) -> None:
         """Indica che la lista non ha istanze da visualizzare.
 
         :param layout: layout dove si mostrerà un messaggio indicando l'assenza di intanze
         """
-        # Il suo funzionamento dipende di come refresh_page aggiunge il label di errore nei layout.
+        # Il suo funzionamento dipende di come aggiorna_pagina aggiunge il label di errore nei layout.
         lista_vuota_error = layout.itemAt(0).widget()  # type:QLabel # type:ignore
         lista_vuota_error.show()
 
     @override
-    def refresh_page(self) -> None:
-        self.clear_layout(self.layout_lista_opere)
+    def aggiorna_pagina(self) -> None:
+        self.svuota_layout(self.layout_lista_opere)
         self.layout_lista_opere.addWidget(self.label_lista_opere_vuota)
         self.label_lista_opere_vuota.hide()
         self.displayOpereRequest.emit(self.layout_lista_opere)
 
-        self.clear_layout(self.layout_lista_generi)
+        self.svuota_layout(self.layout_lista_generi)
         self.layout_lista_generi.addWidget(self.label_lista_generi_vuota)
         self.label_lista_generi_vuota.hide()
         self.displayGeneriRequest.emit(self.layout_lista_generi)

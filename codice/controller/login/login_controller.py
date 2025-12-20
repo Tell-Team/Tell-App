@@ -38,10 +38,21 @@ class LoginController(QObject):
             partial(self.goToPageRequest.emit, "authentication_page", True)
         )
 
-        self.__authentication_page.tornaIndietroRequest.connect(  # type:ignore
-            self.goBackRequest.emit
+        self.__authentication_page.annullaRequest.connect(  # type:ignore
+            self.annulla_login
         )
 
-        # self.__authentication_page.authRequest.connect(  # type:ignore
-        #     # - Ancora non esiste metodo per effettuare il login
-        # )
+        self.__authentication_page.authRequest.connect(  # type:ignore
+            self.login_attempt
+        )
+
+    # ------------------------- METODI PUBBLICI -------------------------
+
+    def annulla_login(self) -> None:
+        """Annulla il tentativo di login."""
+        self.goBackRequest.emit()
+        self.__authentication_page.reset_pagina()
+
+    def login_attempt(self, username: str, password: str) -> None:
+        ...  # - Da definere
+        self.goToPageRequest.emit("info_section", True)

@@ -11,7 +11,7 @@ from model.exceptions import (
     IdOccupatoException,
 )
 
-from view.info.modifica_opera import ModificaOperaView, NuovaOperaView
+from view.info.pagine.modifica_opera import ModificaOperaView, NuovaOperaView
 from view.messageView import MessageView
 
 
@@ -44,18 +44,18 @@ class CUOperaController(QObject):
     # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
 
     def _connect_signals(self) -> None:
-        # Cancella creazione Opera
+        # Annulla creazione Opera
         self.__nuova_opera_view.annullaRequest.connect(  # type:ignore
-            self.cancella_salvataggio
+            self.annulla_salvataggio
         )
         # Conferma creazione Opera
         self.__nuova_opera_view.salvaRequest.connect(  # type:ignore
             partial(self.salva_opera, is_new=True)
         )
 
-        # Cancella modifica Opera
+        # Annulla modifica Opera
         self.__modifica_opera_view.annullaRequest.connect(  # type:ignore
-            self.cancella_salvataggio
+            self.annulla_salvataggio
         )
         # Conferma modifica Opera
         self.__modifica_opera_view.salvaRequest.connect(  # type:ignore
@@ -74,15 +74,14 @@ class CUOperaController(QObject):
         self.__model.modifica_opera(opera_modificata)
 
     def get_generi(self) -> list[Genere]:
-        # - Il controller dovrebbe accedere alla lista originale?
         return self.__model.get_generi()
 
-    def cancella_salvataggio(self, cur_page: NuovaOperaView) -> None:
+    def annulla_salvataggio(self, cur_pagina: NuovaOperaView) -> None:
         """Annulla l'operazione di creazione o modifica di un'opera.
 
-        :param cur_page: pagina dove fare il reset dopo ritornare alla sezione Info"""
+        :param cur_pagina: pagina dove fare il reset dopo ritornare alla sezione Info"""
         self.goBackRequest.emit()
-        cur_page.reset_pagina()
+        cur_pagina.reset_pagina()
 
     def salva_opera(self, is_new: bool = True) -> None:
         """Salva l'opera creata o modificata nel `GestoreOpere`.
@@ -94,49 +93,45 @@ class CUOperaController(QObject):
 
         if is_new:
             # Ottieni la pagina NuovaOperaView
-            cur_page = self.__nuova_opera_view
+            cur_pagina = self.__nuova_opera_view
 
             # Ottieni l'input inserito
-            nome = cur_page.nome.text()
-            trama = cur_page.trama.toPlainText()
-            id_genere: int = cur_page.genere.currentData()
-            compositore = cur_page.compositore.text()
-            librettista = cur_page.librettista.text()
-            atti = cur_page.atti.value()
-            data = cur_page.data.date().toPyDate()
-            teatro = cur_page.teatro.text()
+            nome = cur_pagina.nome.text()
+            trama = cur_pagina.trama.toPlainText()
+            id_genere: int = cur_pagina.genere.currentData()
+            compositore = cur_pagina.compositore.text()
+            librettista = cur_pagina.librettista.text()
+            atti = cur_pagina.atti.value()
+            data = cur_pagina.data.date().toPyDate()
+            teatro = cur_pagina.teatro.text()
 
             # Tenta di creare la nuova opera
             try:
-                # - Sarebbe buono corriggere l'ordine dei parametri del costruttore di Opera
-                # - [nome -> trama -> id_genere -> comp. -> libr. -> #atti -> data -> teatro]
                 nuova_opera = Opera(
                     nome, compositore, librettista, atti, data, teatro, trama, id_genere
                 )
             except DatoIncongruenteException as exc:
                 # E' stato trovato un campo con input non valido
-                cur_page.show_input_error(CAMPI_NECESSARI)
-                cur_page.set_pagina_focus()
+                cur_pagina.show_input_error(CAMPI_NECESSARI)
+                cur_pagina.set_pagina_focus()
                 self.__message_view.mostra_errore(
-                    cur_page, "Input non valido", f"Si è verificato un errore: {exc}"
+                    cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
             else:
-                cur_page.show_input_error("")
+                cur_pagina.show_input_error("")
                 try:
-                    # - È necessario corriggere l'ordine dei setter del costruttore di Opera
-                    # - [nome -> trama -> id_genere -> comp. -> libr. -> #atti -> data -> teatro]
                     self.aggiungi_opera(nuova_opera)
                 except IdInesistenteException as exc:
                     # L'opera è collegata ad un genere che non esiste
                     self.__message_view.mostra_errore(
-                        cur_page,
+                        cur_pagina,
                         "Genere inesistente",
                         f"Si è verificato un errore: {exc}",
                     )
                 except IdOccupatoException as exc:
                     # Esiste già un'opera con quell'id
                     self.__message_view.mostra_errore(
-                        cur_page,
+                        cur_pagina,
                         "ID Opera occupato",
                         f"Si è verificato un errore: {exc}",
                     )
@@ -144,29 +139,29 @@ class CUOperaController(QObject):
                     self.goBackRequest.emit()
         elif not is_new:
             # Ottieni la pagina ModificaOperaView
-            cur_page = self.__modifica_opera_view
+            cur_pagina = self.__modifica_opera_view
 
             # Crea una copia dell'opera originale
-            copia_opera: Optional[Opera] = self.get_opera(cur_page.cur_id_opera)
+            copia_opera: Optional[Opera] = self.get_opera(cur_pagina.cur_id_opera)
             if not isinstance(copia_opera, Opera):
                 # Non esiste opera con l'id salvata nella pagina
                 self.__message_view.mostra_errore(
-                    cur_page,
+                    cur_pagina,
                     "Errore nel salvataggio",
-                    f"Non è presente nessun'opera con id {cur_page.cur_id_opera}. "
+                    f"Non è presente nessun'opera con id {cur_pagina.cur_id_opera}. "
                     + "Impossibile effettuare le modifiche.",
                 )
                 return
 
             # Ottieni l'input inserito
-            nome = cur_page.nome.text()
-            trama = cur_page.trama.toPlainText()
-            id_genere: int = cur_page.genere.currentData()
-            compositore = cur_page.compositore.text()
-            librettista = cur_page.librettista.text()
-            atti = cur_page.atti.value()
-            data = cur_page.data.date().toPyDate()
-            teatro = cur_page.teatro.text()
+            nome = cur_pagina.nome.text()
+            trama = cur_pagina.trama.toPlainText()
+            id_genere: int = cur_pagina.genere.currentData()
+            compositore = cur_pagina.compositore.text()
+            librettista = cur_pagina.librettista.text()
+            atti = cur_pagina.atti.value()
+            data = cur_pagina.data.date().toPyDate()
+            teatro = cur_pagina.teatro.text()
 
             # Tenta di modificare l'opera
             try:
@@ -180,20 +175,20 @@ class CUOperaController(QObject):
                 copia_opera.set_teatro_prima_rappresentazione(teatro)
             except DatoIncongruenteException as exc:
                 # E' stato trovato un campo con input non valido
-                cur_page.show_input_error(CAMPI_NECESSARI)
-                cur_page.set_pagina_focus()
+                cur_pagina.show_input_error(CAMPI_NECESSARI)
+                cur_pagina.set_pagina_focus()
                 self.__message_view.mostra_errore(
-                    cur_page, "Input non valido", f"Si è verificato un errore: {exc}"
+                    cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
             else:
-                cur_page.show_input_error("")
+                cur_pagina.show_input_error("")
 
                 try:
                     self.modifica_opera(copia_opera)
                 except IdInesistenteException as exc:
                     # Non esiste un'opera con quell'id
                     self.__message_view.mostra_errore(
-                        cur_page,
+                        cur_pagina,
                         "ID Opera inesistente",
                         f"Si è verificato un errore: {exc}",
                     )

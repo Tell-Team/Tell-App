@@ -1,4 +1,4 @@
-from view.account.nuovo_account_test import NuovoAccountView
+from view.account.pagine.nuovo_account import NuovoAccountView
 
 
 class ModificaAccountView(NuovoAccountView):

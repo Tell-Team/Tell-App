@@ -3,8 +3,7 @@ from PyQt6.QtCore import Qt, pyqtSignal
 
 
 class LoginPage(QWidget):
-    """
-    View della prima pagina dell'app.
+    """View della prima pagina dell'app.
 
     Segnali:
     - loginAsCliente(): emesso quando si clicca il pulsante Cliente;

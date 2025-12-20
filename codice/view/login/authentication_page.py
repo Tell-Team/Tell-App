@@ -7,12 +7,10 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
-from functools import partial
 
 
 class AuthenticationPage(QWidget):
-    """
-    View per la autenticazione degli account `Biglietteria` e `Amministratore`.
+    """View per la autenticazione degli account `Biglietteria` e `Amministratore`.
 
     Permette di inserire un nome utente ed una password.
 
@@ -21,7 +19,7 @@ class AuthenticationPage(QWidget):
     - authRequest(str, str): emesso quando si clicca il pulsante Login.
     """
 
-    tornaIndietroRequest = pyqtSignal()
+    annullaRequest = pyqtSignal()
     authRequest = pyqtSignal(str, str)
 
     def __init__(self) -> None:
@@ -73,7 +71,6 @@ class AuthenticationPage(QWidget):
 
         self._btn_login = QPushButton("LOGIN")
         self._btn_login.setObjectName("BlueButton")
-        # - Questo pulsante non è ancora collegato nel Controller
 
         # Layout
         main_layout = QVBoxLayout(self)
@@ -88,15 +85,16 @@ class AuthenticationPage(QWidget):
 
     def _connect_signals(self):
         self._btn_indietro.clicked.connect(  # type:ignore
-            self.tornaIndietroRequest.emit
+            self.annullaRequest.emit
         )
 
         self._btn_login.clicked.connect(  # type:ignore
-            partial(self.authRequest.emit, self.username.text(), self.password.text())
+            lambda: self.authRequest.emit(self.username.text(), self.password.text())
         )
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def refresh_page(self) -> None:
+    def reset_pagina(self) -> None:
+        """Reset della pagina allo stato default."""
         self.username.setText("")
         self.password.setText("")

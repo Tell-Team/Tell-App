@@ -14,10 +14,10 @@ class NavigationController:
     def get_stack(self) -> QStackedWidget:
         return self._stack
 
-    def get_pages(self) -> dict[str, QWidget]:
-        return self._pages
+    # def get_pagine(self) -> dict[str, QWidget]:
+    #     return self._pages
 
-    def get_page(self, page_name: str) -> Optional[QWidget]:
+    def get_pagina(self, page_name: str) -> Optional[QWidget]:
         """Ritorna una pagina registrata.
 
         :param page_name: key usata per cercare la pagina nel dict"""
@@ -37,7 +37,7 @@ class NavigationController:
             raise RuntimeError("Non c'è un central widget asegnato.")
         return widget
 
-    def add_page(self, page_name: str, widget: QWidget) -> None:
+    def registra_pagina(self, page_name: str, widget: QWidget) -> None:
         """Registra una pagina nel controller.
 
         :param page_name: key usata per salvare la pagina nel dict
@@ -63,9 +63,9 @@ class NavigationController:
             self._history.append(current)
 
         # Dopo di andar ad un'altra pagina, questa viene aggiornata se ha il metodo
-        #   `refresh_page` definito.
-        if hasattr(widget, "refresh_page"):
-            widget.refresh_page()  # type:ignore
+        #   `aggiorna_pagina` definito.
+        if hasattr(widget, "aggiorna_pagina"):
+            widget.aggiorna_pagina()  # type:ignore
 
         self._stack.setCurrentWidget(widget)
 
@@ -81,7 +81,11 @@ class NavigationController:
             return
         last_widget = self._history.pop()
 
-        if hasattr(last_widget, "refresh_page"):
-            last_widget.refresh_page()  # type:ignore
+        if hasattr(last_widget, "aggiorna_pagina"):
+            last_widget.aggiorna_pagina()  # type:ignore
 
         self._stack.setCurrentWidget(last_widget)
+
+    def svuota_history(self) -> None:
+        """Svuota la lista history del controller."""
+        self._history.clear()

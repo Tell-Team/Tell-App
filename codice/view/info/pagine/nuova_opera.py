@@ -11,17 +11,16 @@ from PyQt6.QtCore import QDate, pyqtSignal
 from functools import partial
 from typing import override
 
-from view.abstractView.creaAbstract import CreaAbstractView
-
 from model.pianificazione.genere import Genere
+
+from view.abstractView.creaAbstract import CreaAbstractView
 
 
 class NuovaOperaView(CreaAbstractView):
-    """
-    View per la creazione di una nuova opera.
+    """View per la creazione di una nuova opera.
 
     Segnali:
-    - annullaRequest(CreaAbstractView): emesso quando si clicca il pulsante Cancella;
+    - annullaRequest(CreaAbstractView): emesso quando si clicca il pulsante Annulla;
     - salvaRequest(): emesso quando si clicca il pulsante Conferma.
     """
 
@@ -38,7 +37,7 @@ class NuovaOperaView(CreaAbstractView):
 
     def _setup_ui(self) -> None:
         # Header
-        self.header.setText("Aggiungi Nuova opera")
+        self.header.setText("Aggiungi nuova opera")
 
         # Form
         self._setup_form()
@@ -111,7 +110,7 @@ class NuovaOperaView(CreaAbstractView):
         self.form_layout.addRow(label_teatro, self.teatro)
 
     def _connect_signals(self) -> None:
-        self._btn_cancella.clicked.connect(  # type:ignore
+        self._btn_annulla.clicked.connect(  # type:ignore
             partial(self.annullaRequest.emit, self)
         )
 
@@ -126,7 +125,8 @@ class NuovaOperaView(CreaAbstractView):
         self.genere.clear()
 
         self.genere.insertItem(0, "Scegliere genere...", -1)
-        # - Come faccio per avere l'opzione 0 di colore grigio?
+        # Avevo pensato di fare la prima opzione di colore grigio per far carire che non
+        #   è una opzione valida, ma per quello dovrei creare un delegate e non ho voglia.
         for i, g in enumerate(generi):
             i += 1
             self.genere.insertItem(i, g.get_nome(), g.get_id())

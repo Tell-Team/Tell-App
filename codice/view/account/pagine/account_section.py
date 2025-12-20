@@ -12,8 +12,7 @@ from view.abstractView.sectionAbstract import AbstractSectionView
 
 
 class AccountSectionView(AbstractSectionView):
-    """
-    View della sezione Account dell'app.
+    """View della sezione Account dell'app.
 
     Segnali:
     - logoutRequest(): emesso quando si clicca il pulsante Logout;
@@ -143,13 +142,13 @@ class AccountSectionView(AbstractSectionView):
     # ------------------------- METODI DI VIEW -------------------------
 
     @override
-    def refresh_page(self) -> None:
-        self.clear_layout(self.layout_lista_admin)
+    def aggiorna_pagina(self) -> None:
+        self.svuota_layout(self.layout_lista_admin)
         self.layout_lista_admin.addWidget(self.label_lista_admin_vuota)
         self.label_lista_admin_vuota.hide()
         self.displayAdminRequest.emit(self.layout_lista_admin)
 
-        self.clear_layout(self.layout_lista_biglietteria)
+        self.svuota_layout(self.layout_lista_biglietteria)
         self.layout_lista_biglietteria.addWidget(self.label_lista_biglietteria_vuota)
         self.label_lista_biglietteria_vuota.hide()
         self.displayBiglietteriaRequest.emit(self.layout_lista_biglietteria)

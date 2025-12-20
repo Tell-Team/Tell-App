@@ -10,7 +10,7 @@ from model.exceptions import (
     IdOccupatoException,
 )
 
-from view.info.modifica_genere import ModificaGenereView, NuovoGenereView
+from view.info.pagine.modifica_genere import ModificaGenereView, NuovoGenereView
 from view.messageView import MessageView
 
 
@@ -43,18 +43,18 @@ class CUGenereController(QObject):
     # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
 
     def _connect_signals(self) -> None:
-        # Cancella creazione Genere
+        # Annulla creazione Genere
         self.__nuovo_genere_view.annullaRequest.connect(  # type:ignore
-            self.cancella_salvataggio
+            self.annulla_salvataggio
         )
         # Conferma creazione Genere
         self.__nuovo_genere_view.salvaRequest.connect(  # type:ignore
             partial(self.salva_genere, is_new=True)
         )
 
-        # Cancella modifica Genere
+        # Annulla modifica Genere
         self.__modifica_genere_view.annullaRequest.connect(  # type:ignore
-            self.cancella_salvataggio
+            self.annulla_salvataggio
         )
         # Conferma modifica Genere
         self.__modifica_genere_view.salvaRequest.connect(  # type:ignore
@@ -72,12 +72,12 @@ class CUGenereController(QObject):
     def modifica_genere(self, genere_modificato: Genere) -> None:
         self.__model.modifica_genere(genere_modificato)
 
-    def cancella_salvataggio(self, cur_page: NuovoGenereView) -> None:
+    def annulla_salvataggio(self, cur_pagina: NuovoGenereView) -> None:
         """Annulla l'operazione di creazione o modifica di un genere.
 
-        :param cur_page: pagina dove fare il reset dopo ritornare alla sezione Info"""
+        :param cur_pagina: pagina dove fare il reset dopo ritornare alla sezione Info"""
         self.goBackRequest.emit()
-        cur_page.reset_pagina()
+        cur_pagina.reset_pagina()
 
     def salva_genere(self, is_new: bool) -> None:
         """Salva il genere creato o modificato nel `GestoreGeneri`.
@@ -90,31 +90,31 @@ class CUGenereController(QObject):
 
         if is_new:
             # Ottieni la pagina NuovoGenereView
-            cur_page = self.__nuovo_genere_view
+            cur_pagina = self.__nuovo_genere_view
 
             # Ottieni l'input inserito
-            nome = cur_page.nome.text()
-            descrizione = cur_page.descrizione.toPlainText()
+            nome = cur_pagina.nome.text()
+            descrizione = cur_pagina.descrizione.toPlainText()
 
             # Tenta di creare la nuova opera
             try:
                 nuovo_genere = Genere(nome, descrizione)
             except DatoIncongruenteException as exc:
                 # E' stato trovato un campo con input non valido
-                cur_page.show_input_error(CAMPI_NECESSARI)
-                cur_page.set_pagina_focus()
+                cur_pagina.show_input_error(CAMPI_NECESSARI)
+                cur_pagina.set_pagina_focus()
                 self.__message_view.mostra_errore(
-                    cur_page, "Input non valido", f"Si è verificato un errore: {exc}"
+                    cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
             else:
-                cur_page.show_input_error("")
+                cur_pagina.show_input_error("")
 
                 try:
                     self.aggiungi_genere(nuovo_genere)
                 except IdOccupatoException as exc:
                     # Esiste già un genere con quell'id
                     self.__message_view.mostra_errore(
-                        cur_page,
+                        cur_pagina,
                         "ID Genere occupato",
                         f"Si è verificato un errore: {exc}",
                     )
@@ -122,46 +122,45 @@ class CUGenereController(QObject):
                     self.goBackRequest.emit()
         elif not is_new:
             # Ottieni la pagina ModificaGenereView
-            cur_page = self.__modifica_genere_view
+            cur_pagina = self.__modifica_genere_view
 
             # Crea una copia del genere originale
-            copia_genere: Optional[Genere] = self.get_genere(cur_page.cur_id_genere)
+            copia_genere: Optional[Genere] = self.get_genere(cur_pagina.cur_id_genere)
             if not isinstance(copia_genere, Genere):
                 # Non esiste genere con l'id salvata nella pagina
                 self.__message_view.mostra_errore(
-                    cur_page,
+                    cur_pagina,
                     "Errore nel salvataggio",
-                    f"Non è presente nessun genere con id {cur_page.cur_id_genere}. "
+                    f"Non è presente nessun genere con id {cur_pagina.cur_id_genere}. "
                     + "Impossibile effettuare le modifiche.",
                 )
                 return
 
             # Ottieni l'input inserito
-            nome = cur_page.nome.text()
-            descrizione = cur_page.descrizione.toPlainText()
+            nome = cur_pagina.nome.text()
+            descrizione = cur_pagina.descrizione.toPlainText()
 
             # Tenta di modificare il genere
             try:
                 copia_genere.set_nome(nome)
                 copia_genere.set_descrizione(descrizione)
             except DatoIncongruenteException as exc:
-                cur_page.show_input_error(CAMPI_NECESSARI)
-                cur_page.set_pagina_focus()
+                cur_pagina.show_input_error(CAMPI_NECESSARI)
+                cur_pagina.set_pagina_focus()
                 self.__message_view.mostra_errore(
-                    cur_page, "Input non valido", f"Si è verificato un errore: {exc}"
+                    cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
             else:
-                cur_page.show_input_error("")
+                cur_pagina.show_input_error("")
 
                 try:
                     self.modifica_genere(copia_genere)
                 except IdInesistenteException as exc:
                     # Non esiste un genere con quell'id
                     self.__message_view.mostra_errore(
-                        cur_page,
+                        cur_pagina,
                         "ID Generi insesistente",
                         f"Si è verificato un errore: {exc}",
                     )
-                    pass
                 else:
                     self.goBackRequest.emit()

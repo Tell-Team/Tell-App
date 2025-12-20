@@ -26,26 +26,36 @@ class AppContext:
         self.authentication_page = AuthenticationPage()
 
         # Info
-        from view.info.info_section import InfoSectionView
-        from view.info.visualizza_opera import VisualizzaOperaView
+        from view.info.pagine.info_section import InfoSectionView
+        from view.info.pagine.visualizza_opera import VisualizzaOperaView
 
         self.info_section = InfoSectionView()
         self.visualizza_opera_view = VisualizzaOperaView()
 
-        from view.info.modifica_opera import NuovaOperaView, ModificaOperaView
+        from view.info.pagine.modifica_opera import NuovaOperaView, ModificaOperaView
 
         self.nuova_opera_view = NuovaOperaView()
         self.modifica_opera_view = ModificaOperaView()
 
-        from view.info.modifica_genere import NuovoGenereView, ModificaGenereView
+        from view.info.pagine.modifica_genere import NuovoGenereView, ModificaGenereView
 
         self.nuovo_genere_view = NuovoGenereView()
         self.modifica_genere_view = ModificaGenereView()
 
+        # - CORRIGGERE: Questo path non è fisso. Pylance lo risolverà da solo
+        from view.info.pagine.modifica_regia import NuovaRegiaView, ModificaRegiaView
+
+        self.nuova_regia_view = NuovaRegiaView()
+        self.modifica_regia_view = ModificaRegiaView()
+        # - Se cambia di path, devo muovere questo blocco alla sezione corrispondente
+
         # Account
-        from view.account.account_section_test import AccountSectionView
+        from view.account.pagine.account_section import AccountSectionView
 
         self.account_section = AccountSectionView()
+
+        # Spettacoli
+        # - Pagine ancora non implementati
 
         # MessageView
         from view.messageView import MessageView
@@ -86,6 +96,23 @@ class AppContext:
             self.message_view,
         )
 
+        # - CORRIGERE: Il path sarà corretto da Pylance
+        from controller.info.CU_regia_controller import CURegiaController
+
+        self.cu_regia_controller = CURegiaController(
+            self.model,
+            self.nuova_regia_view,
+            self.modifica_regia_view,
+            self.message_view,
+        )
+        # - Se cambia di path, devo muovere questo blocco alla sezione corrispondente
+
+        # Account
+        # - Controllers ancora non implementati
+
+        # Spettacoli
+        # - Controllers ancora non implementati
+
         # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
 
         # LoginController
@@ -97,6 +124,9 @@ class AppContext:
         )
 
         # InfoController
+        self.info_controller.logoutRequest.connect(  # type:ignore
+            self._on_request_logout
+        )
         self.info_controller.goBackRequest.connect(  # type:ignore
             self._on_request_go_back
         )
@@ -126,7 +156,21 @@ class AppContext:
             self._on_request_get_page
         )
 
+        # CURegiaController
+        self.cu_regia_controller.goBackRequest.connect(  # type:ignore
+            self._on_request_go_back
+        )
+        self.cu_regia_controller.getNavPageRequest.connect(  # type:ignore
+            self._on_request_get_page
+        )
+
     # ------------------------- METODI DI NAVIGAZIONE -------------------------
+
+    def _on_request_logout(self) -> None:
+        # - CORRIGERE: Da implementare autenticazione.
+        # - Questo dovrebbe stare in altro controller?
+        self.nav.go_to("login_page", False)
+        self.nav.svuota_history()
 
     def _on_request_go_back(self) -> None:
         self.nav.go_back()
@@ -138,7 +182,7 @@ class AppContext:
             self.message_view.mostra_errore(
                 self.nav.get_cur_central_page(),
                 # E' sempre chiamato con un centralWidget definito. Quindi, in teoria,
-                # get_cur_central_page non lancia mai un RuntimeError.
+                #   get_cur_central_page non lancia mai un RuntimeError.
                 "Pagina non trovata",
                 f"Si è verificato un errore: {exc}",
             )
@@ -150,7 +194,7 @@ class AppContext:
             self.message_view.mostra_errore(
                 self.nav.get_cur_central_page(),
                 # E' sempre chiamato con un centralWidget definito. Quindi, in teoria,
-                # get_cur_central_page non lancia mai un RuntimeError.
+                #   get_cur_central_page non lancia mai un RuntimeError.
                 "Pagina non trovata",
                 f"Si è verificato un errore: {exc}",
             )
@@ -158,4 +202,4 @@ class AppContext:
     def _on_request_get_page(
         self, page_name: str, container: dict[str, Optional[QWidget]]
     ) -> None:
-        container["value"] = self.nav.get_page(page_name)
+        container["value"] = self.nav.get_pagina(page_name)

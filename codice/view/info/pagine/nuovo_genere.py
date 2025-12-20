@@ -1,9 +1,4 @@
-from PyQt6.QtWidgets import (
-    QLabel,
-    QLineEdit,
-    QTextEdit,
-    QSizePolicy,
-)
+from PyQt6.QtWidgets import QLabel, QLineEdit, QTextEdit, QSizePolicy
 from PyQt6.QtCore import pyqtSignal
 from functools import partial
 from typing import override
@@ -12,11 +7,10 @@ from view.abstractView.creaAbstract import CreaAbstractView
 
 
 class NuovoGenereView(CreaAbstractView):
-    """
-    View per la creazione di un nuovo genere.
+    """View per la creazione di un nuovo genere.
 
     Segnali:
-    - annullaRequest(): emesso quando si clicca il pulsante Cancella;
+    - annullaRequest(): emesso quando si clicca il pulsante Annulla;
     - salvaRequest(): emesso quando si clicca il pulsante Conferma.
     """
 
@@ -33,7 +27,7 @@ class NuovoGenereView(CreaAbstractView):
 
     def _setup_ui(self) -> None:
         # Header
-        self.header.setText("Aggiungi Nuovo genere")
+        self.header.setText("Aggiungi nuovo genere")
 
         # Form
         self._setup_form()
@@ -65,7 +59,7 @@ class NuovoGenereView(CreaAbstractView):
         self.form_layout.addRow(label_descrizione, self.descrizione)
 
     def _connect_signals(self) -> None:
-        self._btn_cancella.clicked.connect(  # type:ignore
+        self._btn_annulla.clicked.connect(  # type:ignore
             partial(self.annullaRequest.emit, self)
         )
 

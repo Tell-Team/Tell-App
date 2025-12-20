@@ -1,10 +1,4 @@
-from PyQt6.QtWidgets import (
-    QWidget,
-    QLabel,
-    QPushButton,
-    QVBoxLayout,
-    QHBoxLayout,
-)
+from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal
 from functools import partial
 
@@ -116,6 +110,6 @@ class OperaDisplay(QWidget):
         self.conferma_elimina.show()
 
     def annulla_elimina(self) -> None:
-        """Cancella l'elimina, nascondendo la richiesta di conferma."""
+        """Annulla l'elimina, nascondendo la richiesta di conferma."""
         self.conferma_elimina.hide()
         self.pulsanti.show()

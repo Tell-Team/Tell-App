@@ -1,18 +1,12 @@
-from PyQt6.QtWidgets import (
-    QWidget,
-    QLabel,
-    QPushButton,
-    QVBoxLayout,
-    QHBoxLayout,
-)
+from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal
 from functools import partial
 
-from model.pianificazione.genere import Genere
+from model.pianificazione.regia import Regia
 
 
-class GenereDisplay(QWidget):
-    """View dei singoli generi della Lista Generi.
+class RegiaDisplay(QWidget):
+    """View delle singole regia della Lista Regie dentro della pagina `VisualizzaOperaView`.
 
     Segnali:
     - modificaRequest(int): emesso quando si clicca il pulsante Modifica;
@@ -22,24 +16,26 @@ class GenereDisplay(QWidget):
     modificaRequest = pyqtSignal(int)
     eliminaConfermata = pyqtSignal(int)
 
-    def __init__(self, g: Genere) -> None:
+    def __init__(self, r: Regia) -> None:
         super().__init__()
 
-        self._setup_ui(g)
-        self._connect_signals(g)
+        self._setup_ui(r)
+        self._connect_signals(r)
 
     # ------------------------- SETUP INIT -------------------------
 
-    def _setup_ui(self, g: Genere) -> None:
+    def _setup_ui(self, r: Regia) -> None:
         # Labels
-        nome = QLabel(f"{g.get_nome()}")
-        nome.setObjectName("Header2")
+        titolo = QLabel(f"{r.get_titolo()}")
+        titolo.setObjectName("Header2")
 
-        descrizione = QLabel(f"{g.get_descrizione()}")
-        descrizione.setObjectName("Paragraph")
-        descrizione.setWordWrap(True)
+        regista = QLabel(f"Regista: {r.get_regista()}")
+        regista.setObjectName("Paragraph")
 
-        # Pulsanti Modifica-Elimina
+        anno = QLabel(f"Anno di produzione: {r.get_anno_produzione()}")
+        anno.setObjectName("Paragraph")
+
+        # Pulsanti
         self._btn_modifica = QPushButton("Modifica")
         self._btn_modifica.setObjectName("WhiteButton")
 
@@ -71,13 +67,14 @@ class GenereDisplay(QWidget):
 
         # Layout
         layout = QVBoxLayout(self)
-        layout.addWidget(nome)
-        layout.addWidget(descrizione)
+        layout.addWidget(titolo)
+        layout.addWidget(regista)
+        layout.addWidget(anno)
         layout.addWidget(self.pulsanti)
         layout.addWidget(self.conferma_elimina)
 
-    def _connect_signals(self, g: Genere) -> None:
-        self._id = g.get_id()
+    def _connect_signals(self, r: Regia) -> None:
+        self._id = r.get_id()
 
         self._btn_modifica.clicked.connect(  # type:ignore
             partial(self.modificaRequest.emit, self._id)
@@ -98,11 +95,11 @@ class GenereDisplay(QWidget):
     # ------------------------- METODI DI VIEW -------------------------
 
     def _on_elimina(self) -> None:
-        """Mostra una richiesta di conferma per eliminare il genere."""
+        """Mostra una richiesta di conferma per eliminare la regia."""
         self.pulsanti.hide()
         self.conferma_elimina.show()
 
     def annulla_elimina(self) -> None:
-        """Cancella l'elimina, nascondendo la richiesta di conferma."""
+        """Annulla l'elimina, nascondendo la richiesta di conferma."""
         self.conferma_elimina.hide()
         self.pulsanti.show()

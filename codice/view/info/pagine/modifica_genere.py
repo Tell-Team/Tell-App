@@ -1,15 +1,13 @@
 from typing import override
 
-from view.info.nuovo_genere import NuovoGenereView
+from view.info.pagine.nuovo_genere import NuovoGenereView
 
-from view.info.generePageData import GenerePageData
+from view.info.utils.generePageData import GenerePageData
 
 
 class ModificaGenereView(NuovoGenereView):
-    """
-    Sottoclasse di `NuovoGenereView`. Modifica l'header della pagina ed aggiunge
-    un'attributo `cur_id_genere` per indicare l'id del genere da modificare.
-    """
+    """Sottoclasse di `NuovoGenereView`. Modifica alcuni label della pagina ed aggiunge
+    un'attributo `cur_id_genere` per indicare l'id del genere da modificare."""
 
     def __init__(self) -> None:
         super().__init__()
@@ -23,8 +21,11 @@ class ModificaGenereView(NuovoGenereView):
         # Il valore è assegnato quando si chiama InfoController.modifica_genere(id_genere)
         self.cur_id_genere: int = -1
 
-        # Header
+        # Aggiorna header
         self.header.setText("Modifica genere")
+
+        # Aggiorna btn_conferma
+        self._btn_conferma.setText("Modifica")
 
     # ------------------------- METODI DI VIEW -------------------------
 

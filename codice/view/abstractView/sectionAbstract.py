@@ -10,10 +10,8 @@ from typing import Optional
 
 
 class AbstractSectionView(QWidget):
-    """
-    Classe pseudo-astratta che facilita la creazione delle pagine di sezione dell'app: Spettacoli,
-    Info ed Account.
-    """
+    """Classe pseudo-astratta che facilita la creazione delle pagine di sezione
+    dell'app: Spettacoli, Info ed Account."""
 
     def __init__(self) -> None:
         super().__init__()
@@ -66,10 +64,6 @@ class AbstractSectionView(QWidget):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def refresh_page(self) -> None:
-        """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
-        ...
-
     def aggiungi_widget_al_layout(self, widget: QWidget, layout: QVBoxLayout):
         """Aggiunge un widget creato per il display delle istanze del model.
 
@@ -85,9 +79,12 @@ class AbstractSectionView(QWidget):
 
         layout.addWidget(dummy_widget)
 
-    def clear_layout(self, layout: Optional[QLayout]) -> None:
-        """
-        Pulisce un layout, eliminando i riferimenti ai widget contenuti. In caso
+    def aggiorna_pagina(self) -> None:
+        """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
+        ...
+
+    def svuota_layout(self, layout: Optional[QLayout]) -> None:
+        """Svuota un layout, eliminando i riferimenti ai widget contenuti. In caso
         ci sia un layout contenuto, questo viene anche pulito.
 
         :param layout: layout da pulire
@@ -104,4 +101,4 @@ class AbstractSectionView(QWidget):
 
                 child_layout = item.layout()
                 if child_layout:
-                    self.clear_layout(child_layout)
+                    self.svuota_layout(child_layout)

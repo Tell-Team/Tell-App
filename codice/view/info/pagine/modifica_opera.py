@@ -1,15 +1,13 @@
 from typing import override
 
-from view.info.nuova_opera import NuovaOperaView
+from view.info.pagine.nuova_opera import NuovaOperaView
 
-from view.info.operaPageData import OperaPageData
+from view.info.utils.operaPageData import OperaPageData
 
 
 class ModificaOperaView(NuovaOperaView):
-    """
-    Sottoclasse di `NuovaOperaView`. Modifica l'header della pagina ed aggiunge
-    un'attributo `cur_id_opera` per indicare l'id dell'opera da modificare.
-    """
+    """Sottoclasse di `NuovaOperaView`. Modifica alcuni label della pagina ed aggiunge
+    un'attributo `cur_id_opera` per indicare l'id dell'opera da modificare."""
 
     def __init__(self) -> None:
         super().__init__()
@@ -23,8 +21,11 @@ class ModificaOperaView(NuovaOperaView):
         # Il valore è assegnato quando si chiama InfoController.modifica_opera(id_opera)
         self.cur_id_opera: int = -1
 
-        # Header
+        # Aggiorna header
         self.header.setText("Modifica opera")
+
+        # Aggiorna btn_conferma
+        self._btn_conferma.setText("Modifica")
 
     # ------------------------- METODI DI VIEW -------------------------
 

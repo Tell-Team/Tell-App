@@ -10,9 +10,8 @@ from PyQt6.QtCore import Qt
 
 
 class CreaAbstractView(QWidget):
-    """
-    Classe pseudo-astratta che facilita la creazione delle pagine di crea e modifica dell'app.
-    """
+    """Classe pseudo-astratta che facilita la creazione delle pagine di crea
+    e modifica dell'app."""
 
     def __init__(self) -> None:
         super().__init__()
@@ -28,15 +27,15 @@ class CreaAbstractView(QWidget):
         self.form_layout.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
 
         # Setup Pulsanti
-        self._btn_cancella = QPushButton("Cancella")
-        self._btn_cancella.setObjectName("WhiteButton")
+        self._btn_annulla = QPushButton("Annulla")
+        self._btn_annulla.setObjectName("WhiteButton")
 
-        self._btn_conferma = QPushButton("Conferma")
+        self._btn_conferma = QPushButton("Crea")
         self._btn_conferma.setObjectName("WhiteButton")
 
         self.pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.pulsanti)
-        layout_pulsanti.addWidget(self._btn_cancella)
+        layout_pulsanti.addWidget(self._btn_annulla)
         layout_pulsanti.addWidget(self._btn_conferma)
         layout_pulsanti.addStretch()
 
@@ -44,13 +43,15 @@ class CreaAbstractView(QWidget):
         self.input_error = QLabel("")
         self.input_error.setObjectName("SubHeader")
         self.input_error.setStyleSheet(
-            self.input_error.styleSheet() + "#SubHeader { color:red; }"
+            self.input_error.styleSheet() + "#SubHeader { color:#c3423f; }"
         )
 
         # Setup main layout
         self.main_layout = QVBoxLayout(self)
 
     # ------------------------- METODI DI VIEW -------------------------
+
+    # - Potrei aggiungere reset_pagina come una firma qui per definere nelle sottoclassi
 
     def show_input_error(self, message: str) -> None:
         """Aggiorna il testo del label input_error.
@@ -60,14 +61,12 @@ class CreaAbstractView(QWidget):
         self.input_error.show()  # Si assicura che il label sia visualizzato.
 
     def _setup_form(self) -> None:
-        """Metodo privato utilizzato per costruire e disporre i widget della form."""
+        """Metodo protetto utilizzato per costruire e disporre i widget della form."""
         ...
 
-    def _clear_form_layout(self, form_layout: QFormLayout) -> None:
-        """
-        Rimuove tutte le righe di un `QFormLayout` senza eliminare i widget. Serve per
-        ricaricare un form.
-        """
+    def _svuota_form_layout(self, form_layout: QFormLayout) -> None:
+        """Rimuove tutte le righe di un `QFormLayout` senza eliminare i widget. Serve per
+        ricaricare un form."""
         # - Non è stato ancora implementato, ma potrebbe essere utile per future pagine.
         while form_layout.rowCount() > 0:
             form_layout.removeRow(0)
