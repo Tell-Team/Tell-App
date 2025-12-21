@@ -179,9 +179,9 @@ class VisualizzaOperaView(QWidget):
         else:
             self.displayRegieRequest.emit(self.layout_lista_regie)
 
-    # - STUDIARE: Come posso fare questi metodi modullari? (Sono usati i varii pagina non
+    # - STUDIARE: Come posso fare questi metodi modullari? (Sono usati da varie pagine non
     #   necessariamente relazionate tra loro)
-    def aggiungi_widget_al_layout(self, widget: QWidget, layout: QVBoxLayout):
+    def aggiungi_widget_a_layout(self, widget: QWidget, layout: QVBoxLayout):
         """Aggiunge un widget creato per il display delle istanze del model.
 
         :param widget: widget speciale per visualizzare una instanza del model

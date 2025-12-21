@@ -53,18 +53,18 @@ class AbstractSectionView(QWidget):
         scroll_widget = QWidget()
         self.scroll_layout = QVBoxLayout(scroll_widget)
 
-        scroll_area = QScrollArea()
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setWidget(scroll_widget)
+        self._scroll_area = QScrollArea()
+        self._scroll_area.setWidgetResizable(True)
+        self._scroll_area.setWidget(scroll_widget)
 
         # Main layout Setup
         self.main_layout = QVBoxLayout(self)
         self.main_layout.addWidget(container_top)
-        self.main_layout.addWidget(scroll_area)
+        self.main_layout.addWidget(self._scroll_area)
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def aggiungi_widget_al_layout(self, widget: QWidget, layout: QVBoxLayout):
+    def aggiungi_widget_a_layout(self, widget: QWidget, layout: QVBoxLayout):
         """Aggiunge un widget creato per il display delle istanze del model.
 
         :param widget: widget speciale per visualizzare una instanza del model

@@ -42,7 +42,7 @@ class AppContext:
         self.nuovo_genere_view = NuovoGenereView()
         self.modifica_genere_view = ModificaGenereView()
 
-        # - CORRIGGERE: Questo path non è fisso. Pylance lo risolverà da solo
+        # - CORRIGGERE: Questo path non è fisso. Cmq, Pylance lo risolverà da solo
         from view.info.pagine.modifica_regia import NuovaRegiaView, ModificaRegiaView
 
         self.nuova_regia_view = NuovaRegiaView()
@@ -55,7 +55,9 @@ class AppContext:
         self.account_section = AccountSectionView()
 
         # Spettacoli
-        # - Pagine ancora non implementati
+        from view.spettacoli.pagine.spettacoli_section import SpettacoliSectionView
+
+        self.spettacoli_section = SpettacoliSectionView()
 
         # MessageView
         from view.messageView import MessageView
@@ -115,7 +117,11 @@ class AppContext:
         )
 
         # Spettacoli
-        # - Controllers ancora non implementati
+        from controller.spettacoli.spettacoli_controller import SpettacoliController
+
+        self.spettacoli_controller = SpettacoliController(
+            self.model, self.spettacoli_section, self.message_view
+        )
 
         # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
 
@@ -179,6 +185,20 @@ class AppContext:
             self._on_request_section_go_to
         )
         self.account_controller.getNavPageRequest.connect(  # type:ignore
+            self._on_request_get_page
+        )
+
+        # SpettacoliController
+        self.spettacoli_controller.logoutRequest.connect(  # type:ignore
+            self._on_request_logout
+        )
+        self.spettacoli_controller.goToPageRequest.connect(  # type:ignore
+            self._on_request_go_to
+        )
+        self.spettacoli_controller.goToSectionRequest.connect(  # type:ignore
+            self._on_request_section_go_to
+        )
+        self.spettacoli_controller.getNavPageRequest.connect(  # type:ignore
             self._on_request_get_page
         )
 

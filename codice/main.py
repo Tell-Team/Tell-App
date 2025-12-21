@@ -46,6 +46,9 @@ class MainWindowView(QMainWindow):
         self.context.nav.registra_pagina(
             "account_section", self.context.account_section
         )
+        self.context.nav.registra_pagina(
+            "spettacoli_section", self.context.spettacoli_section
+        )
 
         # Layout
         central = QWidget()

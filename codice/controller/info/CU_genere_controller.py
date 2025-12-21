@@ -102,7 +102,6 @@ class CUGenereController(QObject):
             except DatoIncongruenteException as exc:
                 # E' stato trovato un campo con input non valido
                 cur_pagina.show_input_error(CAMPI_NECESSARI)
-                cur_pagina.set_pagina_focus()
                 self.__message_view.mostra_errore(
                     cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
@@ -146,7 +145,6 @@ class CUGenereController(QObject):
                 copia_genere.set_descrizione(descrizione)
             except DatoIncongruenteException as exc:
                 cur_pagina.show_input_error(CAMPI_NECESSARI)
-                cur_pagina.set_pagina_focus()
                 self.__message_view.mostra_errore(
                     cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
                 )

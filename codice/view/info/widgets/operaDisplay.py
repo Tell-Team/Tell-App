@@ -28,7 +28,7 @@ class OperaDisplay(QWidget):
 
     def _setup_ui(self, o: Opera) -> None:
         # Labels
-        nome = QLabel(f"{o.get_nome()}")
+        nome = QLabel(o.get_nome())
         nome.setObjectName("Header2")
 
         librettista = QLabel(f"Libretto di {o.get_librettista()}")

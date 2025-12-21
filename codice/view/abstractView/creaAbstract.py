@@ -5,6 +5,8 @@ from PyQt6.QtWidgets import (
     QFormLayout,
     QVBoxLayout,
     QHBoxLayout,
+    QScrollArea,
+    QSizePolicy,
 )
 from PyQt6.QtCore import Qt
 
@@ -23,8 +25,20 @@ class CreaAbstractView(QWidget):
 
         # Setup QFormLayout
         self.form_content = QWidget()
+        self.form_content.setSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding
+        )
         self.form_layout = QFormLayout(self.form_content)
         self.form_layout.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+
+        # Funzione di scroll
+        self._scroll_area = QScrollArea()
+        self._scroll_area.setWidgetResizable(True)
+        self._scroll_area.setWidget(self.form_content)
+        self._scroll_area.setWidgetResizable(True)
+        self._scroll_area.setSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding
+        )
 
         # Setup Pulsanti
         self._btn_annulla = QPushButton("Annulla")
@@ -51,7 +65,9 @@ class CreaAbstractView(QWidget):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    # - Potrei aggiungere reset_pagina come una firma qui per definere nelle sottoclassi
+    def reset_pagina(self) -> None:
+        """Reset della pagina allo stato default."""
+        ...
 
     def show_input_error(self, message: str) -> None:
         """Aggiorna il testo del label input_error.

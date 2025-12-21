@@ -44,10 +44,9 @@ class NuovaOperaView(CreaAbstractView):
 
         # Layout
         self.main_layout.addWidget(self.header)
-        self.main_layout.addWidget(self.form_content)
+        self.main_layout.addWidget(self._scroll_area)
         self.main_layout.addWidget(self.input_error)
         self.main_layout.addWidget(self.pulsanti)
-        self.main_layout.addStretch()
 
     @override
     def _setup_form(self) -> None:
@@ -131,8 +130,8 @@ class NuovaOperaView(CreaAbstractView):
             i += 1
             self.genere.insertItem(i, g.get_nome(), g.get_id())
 
+    @override
     def reset_pagina(self) -> None:
-        """Reset della pagina allo stato default."""
         self.nome.setText("")
         self.trama.setText("")
         self.genere.setCurrentIndex(0)
@@ -142,28 +141,3 @@ class NuovaOperaView(CreaAbstractView):
         self.data.setDate(QDate.currentDate())
         self.teatro.setText("")
         self.input_error.setText("")
-
-    def set_pagina_focus(self) -> None:
-        """Evidenzia il primo campo con input non valido trovato."""
-        self.focusNextChild()
-        if not self.nome.text().strip():
-            return
-        self.focusNextChild()
-        if not self.trama.toPlainText().strip():
-            return
-        self.focusNextChild()
-        if self.genere.currentIndex() == 0:
-            return
-        self.focusNextChild()
-        if not self.compositore.text().strip():
-            return
-        self.focusNextChild()
-        if not self.librettista.text().strip():
-            return
-        self.focusNextChild()
-        if not self.atti.value():
-            return
-        self.focusNextChild()
-        if not self.data:
-            return
-        self.focusNextChild()

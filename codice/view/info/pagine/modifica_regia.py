@@ -37,8 +37,8 @@ class ModificaRegiaView(NuovaRegiaView):
 
         self.titolo.setText(data.titolo)
         self.note.setText(data.note)
-        # - CORRIGGERE: Mancano i interpreti
-        # - CORRIGGERE: Mancano i tecnici
+        self.lista_interpreti = data.interpreti
+        self.lista_tecnici = data.tecnici
         self.regista.setText(data.regista)
         self.anno.setValue(data.anno_produzione)
 

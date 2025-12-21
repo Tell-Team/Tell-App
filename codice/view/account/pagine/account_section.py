@@ -155,3 +155,8 @@ class AccountSectionView(AbstractSectionView):
         self.layout_lista_biglietteria.addWidget(self.label_lista_biglietteria_vuota)
         self.label_lista_biglietteria_vuota.hide()
         self.displayBiglietteriaRequest.emit(self.layout_lista_biglietteria)
+
+        vertical_scroll = self._scroll_area.verticalScrollBar()
+        if not vertical_scroll:
+            return
+        vertical_scroll.setValue(0)

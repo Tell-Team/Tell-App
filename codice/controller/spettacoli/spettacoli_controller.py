@@ -1,5 +1,74 @@
-class SpettacoliController:
-    pass
+from PyQt6.QtCore import pyqtSignal, QObject
+from functools import partial
+
+from model.model import Model
+
+from view.spettacoli.pagine.spettacoli_section import SpettacoliSectionView
+from view.messageView import MessageView
+
+
+class SpettacoliController(QObject):
+    """Gestice la sezione Spettacoli (`SpettacoliSectionView`) dell'app.
+
+    Segnali:
+    - logoutRequest(): emesso per eseguire la funzione di logout dall`AppContext`;
+    - goToPageRequest(str, bool): emesso per visualizzare un'altra pagina;
+    - goToSectionRequest(str): emesso per visualizzare un'altra pagina, senza salvarla
+    nell'history del `NavigationController`;
+    - getNavPageRequest(str, dict): emesso per ottenere la pagina che vendrà visualizzata.
+    """
+
+    logoutRequest = pyqtSignal()
+    goToPageRequest = pyqtSignal(str, bool)
+    goToSectionRequest = pyqtSignal(str)
+    getNavPageRequest = pyqtSignal(str, dict)
+
+    def __init__(
+        self,
+        model: Model,
+        spettacoli_s: SpettacoliSectionView,
+        message_v: MessageView,
+    ) -> None:
+        super().__init__()
+        self.__model = model
+        self.__spettacoli_section = spettacoli_s  # Sezione Spettacoli
+        self.__message_view = message_v  # View dedicata ai popup
+
+        self._connect_signals()
+
+    # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
+
+    def _connect_signals(self) -> None:
+        # Logout
+        self.__spettacoli_section.logoutRequest.connect(  # type:ignore
+            self.logoutRequest.emit  # - CORRIGGERE: Account ancora non implementato
+        )
+        # Visualizza Sezione Info
+        self.__spettacoli_section.goToInfo.connect(  # type:ignore
+            partial(self.goToSectionRequest.emit, "info_section")
+        )
+        # Visualizza Sezione Account
+        self.__spettacoli_section.goToAccount.connect(  # type:ignore
+            partial(self.goToSectionRequest.emit, "account_section")
+        )
+
+        # Display della Lista Spettacoli
+        self.__spettacoli_section.displaySpettacoliRequest.connect(  # type:ignore
+            self.display_spettacoli
+        )
+
+        # Setup della pagina di creazione di spettacoli
+        self.__spettacoli_section.nuovoSpettacoloRequest.connect(  # type:ignore
+            self.nuovo_spettacolo
+        )
+
+    # ------------------------- METODI PUBBLICI -------------------------
+
+    def display_spettacoli(self) -> None: ...
+
+    def nuovo_spettacolo(self) -> None: ...
+
+    def modifica_spettacolo(self, id_: int) -> None: ...
 
     # # - QUESTI METODI GLI AVEVO CREATO NEL info_controller.py E IN TEORIA DEvOno RIFERIRSI AGLI
     # #   SPETTACOLI. QUINDI DEVONO ESSER MODIFICATI.

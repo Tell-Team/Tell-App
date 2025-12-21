@@ -26,10 +26,10 @@ class GenereDisplay(QWidget):
 
     def _setup_ui(self, g: Genere) -> None:
         # Labels
-        nome = QLabel(f"{g.get_nome()}")
+        nome = QLabel(g.get_nome())
         nome.setObjectName("Header2")
 
-        descrizione = QLabel(f"{g.get_descrizione()}")
+        descrizione = QLabel(g.get_descrizione())
         descrizione.setObjectName("Paragraph")
         descrizione.setWordWrap(True)
 

@@ -13,6 +13,8 @@ class RegiaDisplay(QWidget):
     - eliminaConfermata(int): emesso quando si clicca il pulsante Sì;
     """
 
+    # In prattica, questo QWidget pottrebe essere nella pagina NuovaRegiaView stessa, ma per
+    #   tener il codice pulito preferisco creare un file dedicato a questa classe.
     modificaRequest = pyqtSignal(int)
     eliminaConfermata = pyqtSignal(int)
 
@@ -24,9 +26,10 @@ class RegiaDisplay(QWidget):
 
     # ------------------------- SETUP INIT -------------------------
 
+    # - Il QWidget potrebbe essere una tabella. Per renderlo distinto dalle opere e generi.
     def _setup_ui(self, r: Regia) -> None:
         # Labels
-        titolo = QLabel(f"{r.get_titolo()}")
+        titolo = QLabel(r.get_titolo())
         titolo.setObjectName("Header2")
 
         regista = QLabel(f"Regista: {r.get_regista()}")

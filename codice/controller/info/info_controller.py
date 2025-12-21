@@ -20,6 +20,8 @@ from view.info.utils.regiaPageData import RegiaPageData
 from view.messageView import MessageView
 
 # Regia, RegiaDisplay e RegiaPageData sono necessari per VisualizzaOpera.
+# - Dovrei creare un visualizza_opera_controller.py per delegare funzioni e rendere
+#   questo controller meno complesso?
 
 
 class InfoController(QObject):
@@ -95,7 +97,7 @@ class InfoController(QObject):
         # Setup della pagina di creazione di regie
         self.__visualizza_opera_view.nuovaRegiaRequest.connect(  # type:ignore
             self.nuova_regia
-        )  # - CORRIGGERE: Questo sarà gestito da questo controller?
+        )
         # Display della Lista Regie
         self.__visualizza_opera_view.displayRegieRequest.connect(  # type:ignore
             self.display_regie
@@ -130,15 +132,18 @@ class InfoController(QObject):
         self.__model.elimina_genere(id_)
 
     def get_regia(self, id_: int) -> Optional[Regia]:
-        return self.__model.get_spettacolo(id_)
-        # - CORRIGGERE: Come mi assicuro che sia Regia?
+        regia = self.__model.get_spettacolo(id_)
+        if not isinstance(regia, Regia):
+            return None
+        return regia
+        # - Questa definizione dovrebbe esser parte del model?
 
     def get_regie_by_opera(self, id_: int) -> list[Regia]:
         return self.__model.get_regie_by_opera(id_)
 
     def elimina_regia(self, id_: int) -> None:
         self.__model.elimina_spettacolo(id_)
-        # - CORRIGGERE: Come mi assicuro che sia Regia?
+        # - Implementare elimina_spettacolo nel model
 
     def display_opere(self, layout: QVBoxLayout) -> None:
         """Visualizza a schermo alcune informazioni delle opere salvate ed assegna a
@@ -175,7 +180,7 @@ class InfoController(QObject):
             )
 
             # Aggiungi cur_opera al layout di ListaOpere
-            self.__info_section.aggiungi_widget_al_layout(cur_opera, layout)
+            self.__info_section.aggiungi_widget_a_layout(cur_opera, layout)
 
             # Funzione di elimina per l'opera
             def on_si(id_: int) -> None:
@@ -220,7 +225,7 @@ class InfoController(QObject):
             )
 
             # Aggiungi cur_genere al layout di ListaOpere
-            self.__info_section.aggiungi_widget_al_layout(cur_genere, layout)
+            self.__info_section.aggiungi_widget_a_layout(cur_genere, layout)
 
             # Funzione di elimina per il genere
             def on_si(id_: int) -> None:
@@ -311,11 +316,10 @@ class InfoController(QObject):
             # Setup della pagina di modifica delle regie
             cur_regia.modificaRequest.connect(  # type:ignore
                 self.modifica_regia
-                # - CORRIGGERE: Questo metodo è di InfoController o SpettacoliController?
             )
 
             # Aggiungi cur_regia al layout di ListaRegie
-            self.__visualizza_opera_view.aggiungi_widget_al_layout(cur_regia, layout)
+            self.__visualizza_opera_view.aggiungi_widget_a_layout(cur_regia, layout)
 
             # Funzione di elimina per la regia
             def on_si(id_: int) -> None:
@@ -339,8 +343,6 @@ class InfoController(QObject):
                 on_si
             )
 
-    # - CORRIGGERE: Trovare un luogo dove aggiungere questo metodo. E in genere,
-    #   tutti quei sul Crea/Modifica delle regie.
     def nuova_regia(self) -> None:
         """Carica la pagina `NuovaRegiaView`, dove l'utente può inserire i dati
         necessari per creare una regia.
@@ -380,7 +382,6 @@ class InfoController(QObject):
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
 
-    # - CORRIGGERE: Questa ha lo stesso problema di nuova_regia.
     def modifica_regia(self, id_: int) -> None:
         """Carica la pagina `ModificaRegiaView`, con i dati della regia indicata
         inseriti nei campo di input.

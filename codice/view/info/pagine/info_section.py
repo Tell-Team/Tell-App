@@ -1,10 +1,12 @@
 from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
+    QLineEdit,
     QPushButton,
     QVBoxLayout,
     QHBoxLayout,
-    QLineEdit,
+    # QApplication,
+    # QStyle,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import override
@@ -62,6 +64,10 @@ class InfoSectionView(AbstractSectionView):
         self.ricerca_bar.setObjectName("SearchBar")
 
         self._btn_ricerca = QPushButton()
+        # icon = QApplication.style().standardIcon(
+        #     QStyle.StandardPixmap.SP_FileDialogContentsView
+        # )
+        # self._btn_ricerca.setIcon(icon)
         self._btn_ricerca.setObjectName("SearchButton")
         self._btn_ricerca.setFixedHeight(self.ricerca_bar.sizeHint().height())
 
@@ -75,7 +81,6 @@ class InfoSectionView(AbstractSectionView):
         layout_header_opere = QHBoxLayout()
         layout_header_opere.addWidget(header_opere)
         layout_header_opere.addWidget(self._btn_nuova_opera)
-        layout_header_opere.addWidget(self.ricerca_bar)
         layout_header_opere.addWidget(widget_ricerca)
 
         self.layout_lista_opere = QVBoxLayout()
@@ -205,3 +210,8 @@ class InfoSectionView(AbstractSectionView):
         self.layout_lista_generi.addWidget(self.label_lista_generi_vuota)
         self.label_lista_generi_vuota.hide()
         self.displayGeneriRequest.emit(self.layout_lista_generi)
+
+        vertical_scroll = self._scroll_area.verticalScrollBar()
+        if not vertical_scroll:
+            return
+        vertical_scroll.setValue(0)

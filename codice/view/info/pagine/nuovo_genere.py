@@ -34,10 +34,9 @@ class NuovoGenereView(CreaAbstractView):
 
         # Layout
         self.main_layout.addWidget(self.header)
-        self.main_layout.addWidget(self.form_content)
+        self.main_layout.addWidget(self._scroll_area)
         self.main_layout.addWidget(self.input_error)
         self.main_layout.addWidget(self.pulsanti)
-        self.main_layout.addStretch()
 
     @override
     def _setup_form(self) -> None:
@@ -69,14 +68,7 @@ class NuovoGenereView(CreaAbstractView):
 
     # ------------------------- METODI DI VIEW -------------------------
 
+    @override
     def reset_pagina(self) -> None:
-        """Reset della pagina allo stato default."""
         self.nome.setText("")
         self.descrizione.setText("")
-
-    def set_pagina_focus(self) -> None:
-        """Evidenzia il primo campo con input non valido trovato."""
-        self.focusNextChild()
-        if not self.nome.text().strip():
-            return
-        self.focusNextChild()
