@@ -37,7 +37,12 @@ class GestoreSpettacoli:
         return self.__lista_spettacoli
 
     def get_spettacoli_by_titolo(self, titolo: str) -> list[Spettacolo]:
-        return list(filter(lambda o: titolo in o.get_titolo(), self.__lista_spettacoli))
+        return list(
+            filter(
+                lambda o: titolo.lower() in o.get_titolo().lower(),
+                self.__lista_spettacoli,
+            )
+        )
 
     def get_regie_by_opera(self, id_: int) -> list[Regia]:
         regie: list[Regia] = []

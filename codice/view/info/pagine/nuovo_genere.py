@@ -41,12 +41,12 @@ class NuovoGenereView(CreaAbstractView):
     @override
     def _setup_form(self) -> None:
         label_nome = QLabel("Nome :")
-        label_nome.setObjectName("SubHeader")
+        label_nome.setObjectName("subheader")
         self.nome = QLineEdit()
         self.nome.setPlaceholderText("Inserire nome")
 
         label_descrizione = QLabel("Descrizione :")
-        label_descrizione.setObjectName("SubHeader")
+        label_descrizione.setObjectName("subheader")
         self.descrizione = QTextEdit()
         self.descrizione.setPlaceholderText("Inserire descrizione")
         self.descrizione.setFixedHeight(80)

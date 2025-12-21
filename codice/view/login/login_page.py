@@ -26,22 +26,22 @@ class LoginPage(QWidget):
     def _setup_ui(self) -> None:
         # Content
         header = QLabel("Login")
-        header.setObjectName("Header1")
+        header.setObjectName("header1")
         header.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         subheader = QLabel("Scegliere il tipo di account:")
-        subheader.setObjectName("Paragraph")
+        subheader.setObjectName("paragraph")
         subheader.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         # Pulsanti
         self.__btn_cliente = QPushButton("Cliente")
-        self.__btn_cliente.setObjectName("BlueButton")
+        self.__btn_cliente.setObjectName("blueButton")
 
         self.__btn_biglietteria = QPushButton("Biglietteria")
-        self.__btn_biglietteria.setObjectName("BlueButton")
+        self.__btn_biglietteria.setObjectName("blueButton")
 
         self.__btn_admin = QPushButton("Amministratore")
-        self.__btn_admin.setObjectName("BlueButton")
+        self.__btn_admin.setObjectName("blueButton")
 
         self.pulsanti_utente = QWidget()
         layout_pulsanti_utente = QVBoxLayout(self.pulsanti_utente)

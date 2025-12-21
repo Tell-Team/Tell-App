@@ -136,7 +136,7 @@ class InfoController(QObject):
         if not isinstance(regia, Regia):
             return None
         return regia
-        # - Questa definizione dovrebbe esser parte del model?
+        # - Questa definizione dovrebbe esser parte del model
 
     def get_regie_by_opera(self, id_: int) -> list[Regia]:
         return self.__model.get_regie_by_opera(id_)

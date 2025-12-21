@@ -27,37 +27,39 @@ class GenereDisplay(QWidget):
     def _setup_ui(self, g: Genere) -> None:
         # Labels
         nome = QLabel(g.get_nome())
-        nome.setObjectName("Header2")
+        nome.setObjectName("header2")
 
         descrizione = QLabel(g.get_descrizione())
-        descrizione.setObjectName("Paragraph")
+        descrizione.setObjectName("paragraph")
         descrizione.setWordWrap(True)
 
         # Pulsanti Modifica-Elimina
         self.__btn_modifica = QPushButton("Modifica")
-        self.__btn_modifica.setObjectName("WhiteButton")
+        self.__btn_modifica.setObjectName("whiteButton")
 
         self.__btn_elimina = QPushButton("Elimina")
-        self.__btn_elimina.setObjectName("WhiteButton")
+        self.__btn_elimina.setObjectName("whiteButton")
 
         self.pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.pulsanti)
+        layout_pulsanti.setContentsMargins(1, 1, 1, 1)
         layout_pulsanti.addWidget(self.__btn_modifica)
         layout_pulsanti.addWidget(self.__btn_elimina)
         layout_pulsanti.addStretch()
 
         # Pannello di eliminazione
         domanda = QLabel("Sicuro di eliminare?")
-        domanda.setObjectName("Paragraph")
+        domanda.setObjectName("paragraph")
 
         self.__btn_si = QPushButton("Sì")
-        self.__btn_si.setObjectName("WhiteButton")
+        self.__btn_si.setObjectName("whiteButton")
 
         self.__btn_no = QPushButton("No")
-        self.__btn_no.setObjectName("WhiteButton")
+        self.__btn_no.setObjectName("whiteButton")
 
         self.conferma_elimina = QWidget()
         layout_conferma = QHBoxLayout(self.conferma_elimina)
+        layout_conferma.setContentsMargins(1, 1, 1, 1)
         layout_conferma.addWidget(domanda)
         layout_conferma.addWidget(self.__btn_si)
         layout_conferma.addWidget(self.__btn_no)
@@ -65,6 +67,7 @@ class GenereDisplay(QWidget):
 
         # Layout
         layout = QVBoxLayout(self)
+        layout.setContentsMargins(1, 1, 1, 1)
         layout.addWidget(nome)
         layout.addWidget(descrizione)
         layout.addWidget(self.pulsanti)

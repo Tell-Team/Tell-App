@@ -1,7 +1,9 @@
 from PyQt6.QtCore import pyqtSignal, QObject
 from functools import partial
+from typing import Optional
 
 from model.model import Model
+from model.pianificazione.spettacolo import Spettacolo
 
 from view.spettacoli.pagine.spettacoli_section import SpettacoliSectionView
 from view.messageView import MessageView
@@ -64,11 +66,26 @@ class SpettacoliController(QObject):
 
     # ------------------------- METODI PUBBLICI -------------------------
 
+    def get_spettacolo(self, id_: int) -> Optional[Spettacolo]:
+        return self.__model.get_spettacolo(id_)
+
+    def get_spettacoli(self) -> list[Spettacolo]:
+        return self.__model.get_spettacoli()
+
+    def get_spettacoli_by_titolo(self, titolo: str) -> list[Spettacolo]:
+        return self.__model.get_spettacoli_by_titolo(titolo)
+
+    def elimina_spettacolo(self, id_: int) -> None:
+        self.__model.elimina_spettacolo(id_)
+        # - Implementare elimina_spettacolo nel model
+
     def display_spettacoli(self) -> None: ...
 
     def nuovo_spettacolo(self) -> None: ...
 
     def modifica_spettacolo(self, id_: int) -> None: ...
+
+    def scegli_posti(self, id_: int) -> None: ...
 
     # # - QUESTI METODI GLI AVEVO CREATO NEL info_controller.py E IN TEORIA DEvOno RIFERIRSI AGLI
     # #   SPETTACOLI. QUINDI DEVONO ESSER MODIFICATI.

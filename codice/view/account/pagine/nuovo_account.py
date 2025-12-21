@@ -46,15 +46,15 @@ class NuovoAccountView(CreaAbstractView):
     @override
     def _setup_form(self) -> None:
         label_anagrafica_header = QLabel("Anagrafica")
-        label_anagrafica_header.setObjectName("Header2")
+        label_anagrafica_header.setObjectName("header2")
 
         label_nome = QLabel("Nome :")
-        label_nome.setObjectName("SubHeader")
+        label_nome.setObjectName("subheader")
         self.nome = QLineEdit()
         self.nome.setPlaceholderText("Inserire nome")
 
         label_cognome = QLabel("Cognome :")
-        label_cognome.setObjectName("SubHeader")
+        label_cognome.setObjectName("subheader")
         self.cognome = QLineEdit()
         self.cognome.setPlaceholderText("Inserire cognome")
 
@@ -62,21 +62,21 @@ class NuovoAccountView(CreaAbstractView):
         linea.setFrameShape(QFrame.Shape.HLine)
 
         label_account_header = QLabel("Accesso e Ruolo")
-        label_account_header.setObjectName("Header2")
+        label_account_header.setObjectName("header2")
 
         label_username = QLabel("Username :")
-        label_username.setObjectName("SubHeader")
+        label_username.setObjectName("subheader")
         self.username = QLineEdit()
         self.username.setPlaceholderText("Inserire username")
 
         label_password = QLabel("Password :")
-        label_password.setObjectName("SubHeader")
+        label_password.setObjectName("subheader")
         self.password = QLineEdit()
         self.password.setPlaceholderText("Inserire password")
         self.password.setEchoMode(QLineEdit.EchoMode.Password)
 
         label_ruolo = QLabel("Ruolo : ")
-        label_ruolo.setObjectName("SubHeader")
+        label_ruolo.setObjectName("subheader")
         self.ruolo = QComboBox()
         # - Hard-coded options
         self.ruolo.insertItem(0, "Scegli ruolo")

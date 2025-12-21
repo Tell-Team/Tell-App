@@ -66,26 +66,28 @@ class NuovaRegiaView(CreaAbstractView):
     @override
     def _setup_form(self) -> None:
         label_titolo = QLabel('Titolo<span style="color:red;">*</span> :')
-        label_titolo.setObjectName("SubHeader")
+        label_titolo.setObjectName("subheader")
         self.titolo = QLineEdit()
         self.titolo.setPlaceholderText("Inserire titolo")
 
         label_note = QLabel('Note<span style="color:red;">*</span> :')
-        label_note.setObjectName("SubHeader")
+        label_note.setObjectName("subheader")
         self.note = QTextEdit()
         self.note.setPlaceholderText("Inserire note")
         self.note.setFixedHeight(80)
 
         # Lista interpreti
         label_interprete = QLabel("Interprete :")
-        label_interprete.setObjectName("SubHeader")
+        label_interprete.setObjectName("subheader")
         self.interprete_nome = QLineEdit()
+        self.interprete_nome.setMaxLength(30)
         self.interprete_nome.setPlaceholderText("Inserire nome")
         self.interprete_ruolo = QLineEdit()
+        self.interprete_ruolo.setMaxLength(30)
         self.interprete_ruolo.setPlaceholderText("Inserire ruolo")
 
         self.__btn_aggiungi_interprete = QPushButton("Aggiungi")
-        self.__btn_aggiungi_interprete.setObjectName("WhiteButton")
+        self.__btn_aggiungi_interprete.setObjectName("whiteButton")
 
         interprete = QWidget()
         layout_interprete = QHBoxLayout(interprete)
@@ -93,29 +95,35 @@ class NuovaRegiaView(CreaAbstractView):
         layout_interprete.addWidget(self.interprete_ruolo)
         layout_interprete.addWidget(self.__btn_aggiungi_interprete)
 
+        label_interprete.setFixedHeight(interprete.sizeHint().height())
+
         self.lista_interpreti: dict[str, str] = {}
 
         self.label_lista_interpreti_error = QLabel("")
-        self.label_lista_interpreti_error.setObjectName("SubHeader")
-        self.label_lista_interpreti_error.setStyleSheet(
-            self.label_lista_interpreti_error.styleSheet()
-            + "#SubHeader { color:#c3423f; }"
-        )
+        self.label_lista_interpreti_error.setObjectName("subheaderRed")
+
+        self.label_lista_interpreti_vuota = QLabel("Non vi sono interpreti registrati.")
+        self.label_lista_interpreti_vuota.setObjectName("subheader")
+        self.label_lista_interpreti_vuota.hide()
 
         widget_lista_interpreti = QWidget()
+        widget_lista_interpreti.setObjectName("listView")
         self.layout_lista_interpreti = QVBoxLayout(widget_lista_interpreti)
-        self.layout_lista_interpreti.setContentsMargins(0, 0, 0, 0)
+        self.layout_lista_interpreti.setContentsMargins(5, 5, 5, 5)
+        self.layout_lista_interpreti.addWidget(self.label_lista_interpreti_vuota)
 
         # Lista tectici
         label_tecnico = QLabel("Tecnico :")
-        label_tecnico.setObjectName("SubHeader")
+        label_tecnico.setObjectName("subheader")
         self.tecnico_nome = QLineEdit()
+        self.tecnico_nome.setMaxLength(30)
         self.tecnico_nome.setPlaceholderText("Inserire nome")
         self.tecnico_posto = QLineEdit()
+        self.tecnico_posto.setMaxLength(30)
         self.tecnico_posto.setPlaceholderText("Inserire posto")
 
         self.__btn_aggiungi_tecnico = QPushButton("Aggiungi")
-        self.__btn_aggiungi_tecnico.setObjectName("WhiteButton")
+        self.__btn_aggiungi_tecnico.setObjectName("whiteButton")
 
         tecnico = QWidget()
         layout_tecnico = QHBoxLayout(tecnico)
@@ -123,32 +131,36 @@ class NuovaRegiaView(CreaAbstractView):
         layout_tecnico.addWidget(self.tecnico_posto)
         layout_tecnico.addWidget(self.__btn_aggiungi_tecnico)
 
+        label_tecnico.setFixedHeight(tecnico.sizeHint().height())
+
         self.lista_tecnici: dict[str, str] = {}
 
         self.label_lista_tecnici_error = QLabel("")
-        self.label_lista_tecnici_error.setObjectName("SubHeader")
-        self.label_lista_tecnici_error.setStyleSheet(
-            self.label_lista_tecnici_error.styleSheet()
-            + "#SubHeader { color:#c3423f; }"
-        )
+        self.label_lista_tecnici_error.setObjectName("subheaderRed")
+
+        self.label_lista_tecnici_vuota = QLabel("Non vi sono tecnici registrati.")
+        self.label_lista_tecnici_vuota.setObjectName("subheader")
+        self.label_lista_tecnici_vuota.hide()
 
         widget_lista_tecnici = QWidget()
+        widget_lista_tecnici.setObjectName("listView")
         self.layout_lista_tecnici = QVBoxLayout(widget_lista_tecnici)
-        self.layout_lista_tecnici.setContentsMargins(0, 0, 0, 0)
+        self.layout_lista_tecnici.setContentsMargins(5, 5, 5, 5)
+        self.layout_lista_tecnici.addWidget(self.label_lista_tecnici_vuota)
 
         label_regista = QLabel('Regista<span style="color:red;">*</span> :')
-        label_regista.setObjectName("SubHeader")
+        label_regista.setObjectName("subheader")
         self.regista = QLineEdit()
         self.regista.setPlaceholderText("Inserire regista")
 
         label_anno = QLabel('Anno di produzione<span style="color:red;">*</span> :')
-        label_anno.setObjectName("SubHeader")
+        label_anno.setObjectName("subheader")
         self.anno = QSpinBox()
         self.anno.setRange(1597, QDate().currentDate().year())
         # - Serve un rango in particolare?
 
         label_opera = QLabel('Opera<span style="color:red;">*</span> :')
-        label_opera.setObjectName("SubHeader")
+        label_opera.setObjectName("subheader")
         self.opera = QComboBox()
         self.opera.setEnabled(False)
         # - Non so se questa pagina sarà esclusiva della sezione Info
@@ -161,6 +173,7 @@ class NuovaRegiaView(CreaAbstractView):
         )
         self.form_layout.addRow(label_tecnico, tecnico)
         self.form_layout.addRow(self.label_lista_tecnici_error, widget_lista_tecnici)
+        self.form_layout.addRow(QLabel('<hr style="background-color:#b0b0b0;">'))
         self.form_layout.addRow(label_regista, self.regista)
         self.form_layout.addRow(label_anno, self.anno)
         self.form_layout.addRow(label_opera, self.opera)
@@ -229,14 +242,18 @@ class NuovaRegiaView(CreaAbstractView):
         """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
         self.interprete_nome.setText("")
         self.interprete_ruolo.setText("")
-        self.svuota_layout(self.layout_lista_interpreti)
         self.label_lista_interpreti_error.setText("")
+        self.svuota_layout(self.layout_lista_interpreti)
+        self.label_lista_interpreti_vuota.hide()
+        self.layout_lista_interpreti.addWidget(self.label_lista_interpreti_vuota)
         self.displayInterpreti.emit(self)
 
         self.tecnico_nome.setText("")
         self.tecnico_posto.setText("")
-        self.svuota_layout(self.layout_lista_tecnici)
         self.label_lista_tecnici_error.setText("")
+        self.svuota_layout(self.layout_lista_tecnici)
+        self.label_lista_tecnici_vuota.hide()
+        self.layout_lista_tecnici.addWidget(self.label_lista_tecnici_vuota)
         self.displayTecnici.emit(self)
 
     def svuota_layout(self, layout: Optional[QLayout]) -> None:

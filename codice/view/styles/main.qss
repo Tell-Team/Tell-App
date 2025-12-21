@@ -1,25 +1,27 @@
 /* ------------------------ STYLES ------------------------ */
 
 /* --- Labels --- */
-QLabel#Header1, QLabel#Header2, QLabel#Header3 {
+QLabel#header1, QLabel#header2, QLabel#header3 {
     font-weight: 700;
     margin: 0;
     padding: 0;
     color: #222;
 }
 
-QLabel#Header1 { font-size: 28px; }
-QLabel#Header2 { font-size: 20px; }
-QLabel#Header3 { font-size: 16px; }
+QLabel#header1 { font-size: 28px; }
+QLabel#header2 { font-size: 20px; }
+QLabel#header3 { font-size: 16px; }
 
-QLabel#SubHeader {
+QLabel#subheader , QLabel#subheaderRed {
     font-size: 14px;
     color: #444;
     margin-top: 4px;
     padding: 0;
 }
 
-QLabel#Paragraph {
+QLabel#subheaderRed { color:#c3423f; }
+
+QLabel#paragraph {
     font-size: 14px;
     color: #222;
     margin-top: 4px;
@@ -27,7 +29,7 @@ QLabel#Paragraph {
 }
 
 /* --- Pulsanti --- */
-QPushButton#BlueButton {
+QPushButton#blueButton {
     background-color: #2b7cff;
     color: white;
     border-radius: 6px;
@@ -35,7 +37,7 @@ QPushButton#BlueButton {
     font-size: 14px;
 }
 
-QPushButton#SearchButton {
+QPushButton#searchButton {
     image: url(search_icon.png); /* # - Si deve aggiungere nella view */
     border: 1px solid #b0b0b0;
     background-color: #2b7cff;
@@ -46,10 +48,10 @@ QPushButton#SearchButton {
     padding: 7px;
 }
 
-QPushButton#BlueButton:hover, QPushButton#SearchButton:hover { background-color: #1d63d3; }
-QPushButton#BlueButton:pressed, QPushButton#SearchButton:pressed { background-color: #154c9c; }
+QPushButton#blueButton:hover, QPushButton#searchButton:hover { background-color: #1d63d3; }
+QPushButton#blueButton:pressed, QPushButton#searchButton:pressed { background-color: #154c9c; }
 
-QPushButton#WhiteButton {
+QPushButton#whiteButton {
     background-color: #fff;
     color: black;
     border-radius: 6px;
@@ -57,19 +59,35 @@ QPushButton#WhiteButton {
     font-size: 12px;
 }
 
-QPushButton#WhiteButton:hover { background-color: #d1d1d1; }
-QPushButton#WhiteButton:pressed { background-color: #9a9a9a; }
-QPushButton#WhiteButton:disabled {
+QPushButton#whiteButton:hover { background-color: #d1d1d1; }
+QPushButton#whiteButton:pressed { background-color: #9a9a9a; }
+QPushButton#whiteButton:disabled {
     background-color: #ccc;
     color: #777;
 }
 
+QPushButton#removeButton {
+    background-color: #dc3545;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+QPushButton#removeButton:hover { background-color: #941239; }
+QPushButton#removeButton:pressed { background-color: #6b202a; }
+
 /* --- QWidget speciale --- */
-QWidget#Container {
+QWidget#objectDetailsView {
     border: 1px solid #111;
     border-radius: 15px;
     background-color: #f3f3f3;
     padding: 10px;
+}
+
+QWidget#listView {
+    border: 1px solid #b0b0b0;
+    border-radius: 5px;
+    background-color: white;
 }
 
 /* --- Campi d'input --- */
@@ -82,7 +100,7 @@ QLineEdit, QTextEdit, QComboBox, QSpinBox, QDateEdit {
     font-size: 14px;
 }
 
-QLineEdit#SearchBar {
+QLineEdit#searchBar {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border-top-right-radius: 0px;
@@ -209,22 +227,22 @@ QScrollArea {
     padding: 5px;
 }
 
-QScrollBar:vertical {
+QScrollBar {
     border: 2px solid #c0c0c0;
     background-color: #e0e0e0;
-    width: 12px;
     border-radius: 6px;
 }
+QScrollBar:vertical { width: 12px; }
+QScrollBar:horizontal { height: 12px; }
 
-QScrollBar::handle:vertical {
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
     background-color: #818181;
     border-radius: 3px;
 }
 
-QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
-    height: 0px;
-    background: none;
-}
+QScrollBar::add-line, QScrollBar::sub-line { background: none; }
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0px; }
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal { width: 0px; }
 
 /* --- QMessageBox --- */
 QMessageBox {

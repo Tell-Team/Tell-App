@@ -20,7 +20,7 @@ class CreaAbstractView(QWidget):
 
         # Setup Header
         self.header = QLabel("")
-        self.header.setObjectName("Header1")
+        self.header.setObjectName("header1")
         self.header.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         # Setup QFormLayout
@@ -42,10 +42,10 @@ class CreaAbstractView(QWidget):
 
         # Setup Pulsanti
         self._btn_annulla = QPushButton("Annulla")
-        self._btn_annulla.setObjectName("WhiteButton")
+        self._btn_annulla.setObjectName("whiteButton")
 
         self._btn_conferma = QPushButton("Crea")
-        self._btn_conferma.setObjectName("WhiteButton")
+        self._btn_conferma.setObjectName("whiteButton")
 
         self.pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.pulsanti)
@@ -55,10 +55,7 @@ class CreaAbstractView(QWidget):
 
         # Label input_error
         self.input_error = QLabel("")
-        self.input_error.setObjectName("SubHeader")
-        self.input_error.setStyleSheet(
-            self.input_error.styleSheet() + "#SubHeader { color:#c3423f; }"
-        )
+        self.input_error.setObjectName("subheaderRed")
 
         # Setup main layout
         self.main_layout = QVBoxLayout(self)

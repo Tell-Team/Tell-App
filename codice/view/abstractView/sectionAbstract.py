@@ -18,7 +18,7 @@ class AbstractSectionView(QWidget):
 
         # Logout
         self._btn_logout = QPushButton("Logout")
-        self._btn_logout.setObjectName("WhiteButton")
+        self._btn_logout.setObjectName("whiteButton")
 
         widget_logout = QWidget()
         layout_logout = QHBoxLayout(widget_logout)
@@ -27,13 +27,13 @@ class AbstractSectionView(QWidget):
 
         # Sezioni dell'app
         self._btn_sezione_spettacoli = QPushButton("Spettacoli")
-        self._btn_sezione_spettacoli.setObjectName("WhiteButton")
+        self._btn_sezione_spettacoli.setObjectName("whiteButton")
 
         self._btn_sezione_info = QPushButton("Info")
-        self._btn_sezione_info.setObjectName("WhiteButton")
+        self._btn_sezione_info.setObjectName("whiteButton")
 
         self._btn_sezione_account = QPushButton("Account")
-        self._btn_sezione_account.setObjectName("WhiteButton")
+        self._btn_sezione_account.setObjectName("whiteButton")
 
         sezioni_app = QWidget()
         layout_sezioni = QHBoxLayout(sezioni_app)
@@ -69,11 +69,11 @@ class AbstractSectionView(QWidget):
 
         :param widget: widget speciale per visualizzare una instanza del model
         :param layout: layout dove sarà inserito il widget"""
-        # C'era un errore al utilizzare widget.setObjectName("Container") direttamente:
+        # C'era un errore al utilizzare widget.setObjectName("objectDetailsView") direttamente:
         #   lo style non veniva asegnato al widget. Quindi ho decisso di aggiungere questo
         #   dummy widget per farlo funzionare.
         dummy_widget = QWidget()
-        dummy_widget.setObjectName("Container")
+        dummy_widget.setObjectName("objectDetailsView")
         l = QVBoxLayout(dummy_widget)
         l.addWidget(widget)
 

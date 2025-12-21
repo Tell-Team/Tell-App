@@ -30,39 +30,41 @@ class RegiaDisplay(QWidget):
     def _setup_ui(self, r: Regia) -> None:
         # Labels
         titolo = QLabel(r.get_titolo())
-        titolo.setObjectName("Header2")
+        titolo.setObjectName("header3")
 
         regista = QLabel(f"Regista: {r.get_regista()}")
-        regista.setObjectName("Paragraph")
+        regista.setObjectName("paragraph")
 
         anno = QLabel(f"Anno di produzione: {r.get_anno_produzione()}")
-        anno.setObjectName("Paragraph")
+        anno.setObjectName("paragraph")
 
         # Pulsanti
         self.__btn_modifica = QPushButton("Modifica")
-        self.__btn_modifica.setObjectName("WhiteButton")
+        self.__btn_modifica.setObjectName("whiteButton")
 
         self.__btn_elimina = QPushButton("Elimina")
-        self.__btn_elimina.setObjectName("WhiteButton")
+        self.__btn_elimina.setObjectName("whiteButton")
 
         self.pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.pulsanti)
+        layout_pulsanti.setContentsMargins(1, 1, 1, 1)
         layout_pulsanti.addWidget(self.__btn_modifica)
         layout_pulsanti.addWidget(self.__btn_elimina)
         layout_pulsanti.addStretch()
 
         # Pannello di eliminazione
         domanda = QLabel("Sicuro di eliminare?")
-        domanda.setObjectName("Paragraph")
+        domanda.setObjectName("paragraph")
 
         self.__btn_si = QPushButton("Sì")
-        self.__btn_si.setObjectName("WhiteButton")
+        self.__btn_si.setObjectName("whiteButton")
 
         self.__btn_no = QPushButton("No")
-        self.__btn_no.setObjectName("WhiteButton")
+        self.__btn_no.setObjectName("whiteButton")
 
         self.conferma_elimina = QWidget()
         layout_conferma = QHBoxLayout(self.conferma_elimina)
+        layout_conferma.setContentsMargins(1, 1, 1, 1)
         layout_conferma.addWidget(domanda)
         layout_conferma.addWidget(self.__btn_si)
         layout_conferma.addWidget(self.__btn_no)
@@ -70,6 +72,7 @@ class RegiaDisplay(QWidget):
 
         # Layout
         layout = QVBoxLayout(self)
+        layout.setContentsMargins(1, 1, 1, 1)
         layout.addWidget(titolo)
         layout.addWidget(regista)
         layout.addWidget(anno)

@@ -11,7 +11,7 @@ from model.exceptions import (
 )
 
 from view.info.pagine.modifica_regia import ModificaRegiaView, NuovaRegiaView
-from view.spettacoli.widgets.personnelDisplay import PersonnelDisplay
+from view.spettacoli.widgets.personaleDisplay import PersonaleDisplay
 from view.messageView import MessageView
 
 
@@ -158,9 +158,14 @@ class CURegiaController(QObject):
         # Ottieni la lista interpreti (dict)
         interpreti = pagina.lista_interpreti
 
+        # Verifica che il dict non sia vuoto
+        if len(interpreti) == 0:
+            pagina.label_lista_interpreti_vuota.show()
+            return
+
         # Mostra tutti gli interpreti salvati a schermo
         for k, v in interpreti.items():
-            cur_interprete = PersonnelDisplay(k, v)
+            cur_interprete = PersonaleDisplay(k, v)
 
             def elimina_interprete(nome: str) -> None:
                 pagina.lista_interpreti.pop(nome)
@@ -183,9 +188,14 @@ class CURegiaController(QObject):
         # Ottieni la lista tecnici (dict)
         tecnici = pagina.lista_tecnici
 
+        # Verifica che il dict non sia vuoto
+        if len(tecnici) == 0:
+            pagina.label_lista_tecnici_vuota.show()
+            return
+
         # Mostra tutti i tecnici salvati a schermo
         for k, v in tecnici.items():
-            cur_tecnico = PersonnelDisplay(k, v)
+            cur_tecnico = PersonaleDisplay(k, v)
 
             def elimina_interprete(nome: str) -> None:
                 pagina.lista_tecnici.pop(nome)

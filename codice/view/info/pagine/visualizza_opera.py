@@ -44,7 +44,7 @@ class VisualizzaOperaView(QWidget):
 
         # Top widget
         self.__btn_indietro = QPushButton("Indietro")
-        self.__btn_indietro.setObjectName("WhiteButton")
+        self.__btn_indietro.setObjectName("whiteButton")
 
         self.pagina_header = QWidget()
         layout_header = QHBoxLayout(self.pagina_header)
@@ -52,43 +52,44 @@ class VisualizzaOperaView(QWidget):
         layout_header.addStretch()
 
         # Labels
-        self.label_nome = QLabel("NOME")
-        self.label_nome.setObjectName("Header1")
+        self.label_nome = QLabel("[Nome Opera]")
+        self.label_nome.setObjectName("header1")
         self.label_nome.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        self.label_librettista = QLabel("Libretto di LIBRETTISTA.")
+        self.label_librettista = QLabel("Libretto di [Librettista Opera].")
         self.label_librettista.setWordWrap(True)
-        self.label_librettista.setObjectName("Paragraph")
+        self.label_librettista.setObjectName("paragraph")
 
-        self.label_compositore = QLabel("Musica composta da COMPOSITORE.")
+        self.label_compositore = QLabel("Musica composta da [Compositore Opera].")
         self.label_compositore.setWordWrap(True)
-        self.label_compositore.setObjectName("Paragraph")
+        self.label_compositore.setObjectName("paragraph")
 
-        self.label_genere = QLabel(f"Genere: GENERE")
-        self.label_genere.setObjectName("Paragraph")
+        self.label_genere = QLabel(f"Genere: [Genere Opera]")
+        self.label_genere.setObjectName("paragraph")
 
-        self.label_atti = QLabel(f"Numero di atti: ATTI")
-        self.label_atti.setObjectName("Paragraph")
+        self.label_atti = QLabel(f"Numero di atti: [Atti Opera]")
+        self.label_atti.setObjectName("paragraph")
 
         self.label_prima_rappresentazione = QLabel(
-            f"È stata rappresentata per prima volta il DATA nel teatro TEATRO."
+            f"È stata rappresentata per prima volta il [Data Opera] nel teatro [Teatro Opera]."
         )
         self.label_prima_rappresentazione.setWordWrap(True)
-        self.label_prima_rappresentazione.setObjectName("Paragraph")
+        self.label_prima_rappresentazione.setObjectName("paragraph")
 
-        self.label_trama = QLabel("TRAMA")
+        self.label_trama = QLabel("[Trama Opera]")
         self.label_trama.setWordWrap(True)
-        self.label_trama.setObjectName("Paragraph")
+        self.label_trama.setObjectName("paragraph")
 
         # Lista Regie
         label_lista_regie = QLabel("Lista regie")
-        label_lista_regie.setObjectName("Header2")
+        label_lista_regie.setObjectName("header2")
 
         self.__btn_nuova_regia = QPushButton("Nuova regia")
-        self.__btn_nuova_regia.setObjectName("WhiteButton")
+        self.__btn_nuova_regia.setObjectName("whiteButton")
 
         widget_header_regie = QWidget()
         self.layout_header_regie = QHBoxLayout(widget_header_regie)
+        self.layout_header_regie.setContentsMargins(0, 0, 0, 0)
         self.layout_header_regie.addWidget(label_lista_regie)
         self.layout_header_regie.addWidget(self.__btn_nuova_regia)
         self.layout_header_regie.addStretch()
@@ -96,7 +97,7 @@ class VisualizzaOperaView(QWidget):
         self.lista_regie: list[Regia] = []
 
         self.label_lista_regie_vuota = QLabel("")
-        self.label_lista_regie_vuota.setObjectName("SubHeader")
+        self.label_lista_regie_vuota.setObjectName("subheader")
 
         widget_lista_regie = QWidget()
         self.layout_lista_regie = QVBoxLayout(widget_lista_regie)
@@ -186,11 +187,11 @@ class VisualizzaOperaView(QWidget):
 
         :param widget: widget speciale per visualizzare una instanza del model
         :param layout: layout dove sarà inserito il widget"""
-        # C'era un errore al utilizzare widget.setObjectName("Container") direttamente:
+        # C'era un errore al utilizzare widget.setObjectName("objectDetailsView") direttamente:
         #   lo style non veniva asegnato al widget. Quindi ho decisso di aggiungere questo
         #   dummy widget per farlo funzionare.
         dummy_widget = QWidget()
-        dummy_widget.setObjectName("Container")
+        dummy_widget.setObjectName("objectDetailsView")
         l = QVBoxLayout(dummy_widget)
         l.addWidget(widget)
 

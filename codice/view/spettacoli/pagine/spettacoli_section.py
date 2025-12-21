@@ -44,25 +44,25 @@ class SpettacoliSectionView(AbstractSectionView):
     def _setup_ui(self):
         # Spettacoli
         header_spettacoli = QLabel("Spettacoli")
-        header_spettacoli.setObjectName("Header1")
+        header_spettacoli.setObjectName("header1")
         header_spettacoli.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self.__btn_nuovo_spettacolo = QPushButton("Nuovo spettacolo")
-        self.__btn_nuovo_spettacolo.setObjectName("WhiteButton")
+        self.__btn_nuovo_spettacolo.setObjectName("whiteButton")
 
         self.filtro_ricerca: str = ""
 
         self.ricerca_bar = QLineEdit()
         self.ricerca_bar.setPlaceholderText("Inserire nome...")
         self.ricerca_bar.setClearButtonEnabled(True)
-        self.ricerca_bar.setObjectName("SearchBar")
+        self.ricerca_bar.setObjectName("searchBar")
 
         self._btn_ricerca = QPushButton()
         # icon = QApplication.style().standardIcon(
         #     QStyle.StandardPixmap.SP_FileDialogContentsView
         # )
         # self._btn_ricerca.setIcon(icon)
-        self._btn_ricerca.setObjectName("SearchButton")
+        self._btn_ricerca.setObjectName("searchButton")
         self._btn_ricerca.setFixedHeight(self.ricerca_bar.sizeHint().height())
 
         widget_ricerca = QWidget()
@@ -80,7 +80,7 @@ class SpettacoliSectionView(AbstractSectionView):
         self.layout_lista_spettacoli = QVBoxLayout()
 
         self.label_lista_spettacoli_vuota = QLabel("Non vi sono spettacoli registrati.")
-        self.label_lista_spettacoli_vuota.setObjectName("SubHeader")
+        self.label_lista_spettacoli_vuota.setObjectName("subheader")
         self.label_lista_spettacoli_vuota.hide()
 
         container_spettacoli = QWidget()

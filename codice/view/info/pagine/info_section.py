@@ -50,25 +50,25 @@ class InfoSectionView(AbstractSectionView):
     def _setup_ui(self) -> None:
         # Opere
         header_opere = QLabel("Opere")
-        header_opere.setObjectName("Header1")
+        header_opere.setObjectName("header1")
         header_opere.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self._btn_nuova_opera = QPushButton("Nuova opera")
-        self._btn_nuova_opera.setObjectName("WhiteButton")
+        self._btn_nuova_opera.setObjectName("whiteButton")
 
         self.filtro_ricerca: str = ""
 
         self.ricerca_bar = QLineEdit()
         self.ricerca_bar.setPlaceholderText("Inserire nome...")
         self.ricerca_bar.setClearButtonEnabled(True)
-        self.ricerca_bar.setObjectName("SearchBar")
+        self.ricerca_bar.setObjectName("searchBar")
 
         self._btn_ricerca = QPushButton()
         # icon = QApplication.style().standardIcon(
         #     QStyle.StandardPixmap.SP_FileDialogContentsView
         # )
         # self._btn_ricerca.setIcon(icon)
-        self._btn_ricerca.setObjectName("SearchButton")
+        self._btn_ricerca.setObjectName("searchButton")
         self._btn_ricerca.setFixedHeight(self.ricerca_bar.sizeHint().height())
 
         widget_ricerca = QWidget()
@@ -86,7 +86,7 @@ class InfoSectionView(AbstractSectionView):
         self.layout_lista_opere = QVBoxLayout()
 
         self.label_lista_opere_vuota = QLabel("Non vi sono opere disponibili.")
-        self.label_lista_opere_vuota.setObjectName("SubHeader")
+        self.label_lista_opere_vuota.setObjectName("subheader")
         self.label_lista_opere_vuota.hide()
 
         container_opere = QWidget()
@@ -96,11 +96,11 @@ class InfoSectionView(AbstractSectionView):
 
         # Generi
         header_generi = QLabel("Generi")
-        header_generi.setObjectName("Header1")
+        header_generi.setObjectName("header1")
         header_generi.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self._btn_nuovo_genere = QPushButton("Nuovo genere")
-        self._btn_nuovo_genere.setObjectName("WhiteButton")
+        self._btn_nuovo_genere.setObjectName("whiteButton")
 
         layout_header_generi = QHBoxLayout()
         layout_header_generi.addWidget(header_generi)
@@ -110,7 +110,7 @@ class InfoSectionView(AbstractSectionView):
         self.layout_lista_generi = QVBoxLayout()
 
         self.label_lista_generi_vuota = QLabel("Non vi sono generi disponibili.")
-        self.label_lista_generi_vuota.setObjectName("SubHeader")
+        self.label_lista_generi_vuota.setObjectName("subheader")
         self.label_lista_generi_vuota.hide()
 
         container_generi = QWidget()
@@ -120,11 +120,11 @@ class InfoSectionView(AbstractSectionView):
 
         # Teatro
         header_teatro = QLabel("Teatro")
-        header_teatro.setObjectName("Header1")
+        header_teatro.setObjectName("header1")
         header_teatro.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         teatro_nome = QLabel("Vitrifrigo Arena")
-        teatro_nome.setObjectName("Header2")
+        teatro_nome.setObjectName("header2")
 
         teatro_desc = QLabel(
             "Inaugurato nel 1996\nVia R. Ripa, 1\nLa Vitrifrigo Arena è un'ampio "
@@ -133,11 +133,11 @@ class InfoSectionView(AbstractSectionView):
             + "viene allestita una struttura in legno al suo interno per ricreare "
             + "l'esperienza acustica di un teatro tradizionale."
         )
-        teatro_desc.setObjectName("Paragraph")
+        teatro_desc.setObjectName("paragraph")
         teatro_desc.setWordWrap(True)
 
         info_teatro = QWidget()
-        info_teatro.setObjectName("Container")
+        info_teatro.setObjectName("objectDetailsView")
         layout_info_teatro = QVBoxLayout(info_teatro)
         layout_info_teatro.addWidget(teatro_nome)
         layout_info_teatro.addWidget(teatro_desc)
