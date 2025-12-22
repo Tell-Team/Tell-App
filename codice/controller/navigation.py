@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QStackedWidget, QMainWindow, QWidget
+from PyQt6.QtWidgets import QMainWindow, QWidget, QStackedWidget
 from typing import Optional
 
 

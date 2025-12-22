@@ -49,38 +49,38 @@ class NuovaOperaView(AbstractCreaView):
 
     @override
     def _setup_form(self) -> None:
-        label_nome = QLabel("Nome :")
+        label_nome = QLabel('Nome<span style="color:red;">*</span> :')
         label_nome.setObjectName("subheader")
         self.nome = QLineEdit()
         self.nome.setPlaceholderText("Inserire nome")
 
-        label_trama = QLabel("Trama :")
+        label_trama = QLabel('Trama<span style="color:red;">*</span> :')
         label_trama.setObjectName("subheader")
         self.trama = QTextEdit()
         self.trama.setPlaceholderText("Inserire trama")
         self.trama.setFixedHeight(80)
 
-        label_genere = QLabel("Genere :")
+        label_genere = QLabel('Genere<span style="color:red;">*</span> :')
         label_genere.setObjectName("subheader")
         self.genere = QComboBox()
 
-        label_compositore = QLabel("Compositore :")
+        label_compositore = QLabel('Compositore<span style="color:red;">*</span> :')
         label_compositore.setObjectName("subheader")
         self.compositore = QLineEdit()
         self.compositore.setPlaceholderText("Inserire compositore")
 
-        label_librettista = QLabel("Librettista :")
+        label_librettista = QLabel('Librettista<span style="color:red;">*</span> :')
         label_librettista.setObjectName("subheader")
         self.librettista = QLineEdit()
         self.librettista.setPlaceholderText("Inserire librettista")
 
-        label_atti = QLabel("Numeri di atti :")
+        label_atti = QLabel('Numeri di atti<span style="color:red;">*</span> :')
         label_atti.setObjectName("subheader")
         self.atti = QSpinBox()
         self.atti.setRange(0, 10)
         self.atti.setValue(0)
 
-        label_data = QLabel("Prima rappresentazione :")
+        label_data = QLabel('Prima rappresentazione<span style="color:red;">*</span> :')
         label_data.setObjectName("subheader")
         self.data = QDateEdit()
         self.data.setCalendarPopup(True)
@@ -92,7 +92,9 @@ class NuovaOperaView(AbstractCreaView):
         # atti_data_layout.addWidget(label_data)
         # atti_data_layout.addWidget(self.data)
 
-        label_teatro = QLabel("Teatro prima rappresentazione :")
+        label_teatro = QLabel(
+            'Teatro prima rappresentazione<span style="color:red;">*</span> :'
+        )
         label_teatro.setObjectName("subheader")
         self.teatro = QLineEdit()
         self.teatro.setPlaceholderText("Inserire nome del teatro")

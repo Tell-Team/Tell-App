@@ -82,10 +82,12 @@ class CURegiaController(AbstractCUController):
 
     def __get_regia(self, id_: int) -> Optional[Regia]:
         regia = self._model.get_spettacolo(id_)
-        if not isinstance(regia, Regia):
+        # Verifica che sia Regia e non nessuna (ipotetica) sottoclasse
+        #   Usare not isinstance(regia, Regia) nel caso contrario.
+        if type(regia) is not Regia:
             return None
         return regia
-        # - Questa definizione dovrebbe esser parte del model?
+        # - Questa definizione dovrebbe esser parte del model
 
     def __aggiungi_regia(self, regia: Regia) -> None:
         self._model.aggiungi_spettacolo(regia)
