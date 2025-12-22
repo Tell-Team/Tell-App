@@ -1,21 +1,16 @@
 from PyQt6.QtWidgets import QLabel, QLineEdit, QTextEdit, QSizePolicy
-from PyQt6.QtCore import pyqtSignal
-from functools import partial
 from typing import override
 
-from view.abstractView.creaAbstract import CreaAbstractView
+from view.abstractView.abstractCreaView import AbstractCreaView
 
 
-class NuovoGenereView(CreaAbstractView):
+class NuovoGenereView(AbstractCreaView):
     """View per la creazione di un nuovo genere.
 
     Segnali:
-    - annullaRequest(): emesso quando si clicca il pulsante Annulla;
-    - salvaRequest(): emesso quando si clicca il pulsante Conferma.
+    - annullaRequest(QWidget): emesso quando si clicca il pulsante Annulla;
+    - salvaRequest(): emesso quando si clicca il pulsante Crea.
     """
-
-    annullaRequest = pyqtSignal(CreaAbstractView)
-    salvaRequest = pyqtSignal()
 
     def __init__(self) -> None:
         super().__init__()
@@ -25,18 +20,21 @@ class NuovoGenereView(CreaAbstractView):
 
     # ------------------------- SETUP INIT -------------------------
 
+    @override
     def _setup_ui(self) -> None:
+        super()._setup_ui()
+
         # Header
-        self.header.setText("Aggiungi nuovo genere")
+        self._header.setText("Aggiungi nuovo genere")
 
         # Form
         self._setup_form()
 
         # Layout
-        self.main_layout.addWidget(self.header)
-        self.main_layout.addWidget(self._scroll_area)
-        self.main_layout.addWidget(self.input_error)
-        self.main_layout.addWidget(self.pulsanti)
+        self._main_layout.addWidget(self._header)
+        self._main_layout.addWidget(self._scroll_area)
+        self._main_layout.addWidget(self._input_error)
+        self._main_layout.addWidget(self._pulsanti)
 
     @override
     def _setup_form(self) -> None:
@@ -54,17 +52,8 @@ class NuovoGenereView(CreaAbstractView):
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
         )
 
-        self.form_layout.addRow(label_nome, self.nome)
-        self.form_layout.addRow(label_descrizione, self.descrizione)
-
-    def _connect_signals(self) -> None:
-        self._btn_annulla.clicked.connect(  # type:ignore
-            partial(self.annullaRequest.emit, self)
-        )
-
-        self._btn_conferma.clicked.connect(  # type:ignore
-            self.salvaRequest.emit
-        )
+        self._form_layout.addRow(label_nome, self.nome)
+        self._form_layout.addRow(label_descrizione, self.descrizione)
 
     # ------------------------- METODI DI VIEW -------------------------
 

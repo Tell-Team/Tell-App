@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayo
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import override
 
-from view.abstractView.sectionAbstract import AbstractSectionView
+from view.abstractView.abstractSectionView import AbstractSectionView
 
 
 class AccountSectionView(AbstractSectionView):
@@ -20,24 +20,17 @@ class AccountSectionView(AbstractSectionView):
     account Biglietteria nella sezione Account.
     """
 
-    logoutRequest = pyqtSignal()
-    goToSpettacoli = pyqtSignal()
-    goToInfo = pyqtSignal()
-
     nuovoAdminRequest = pyqtSignal()
     nuovoBiglietteriaRequest = pyqtSignal()
     displayAdminRequest = pyqtSignal(QVBoxLayout)
     displayBiglietteriaRequest = pyqtSignal(QVBoxLayout)
 
-    def __init__(self) -> None:
-        super().__init__()
-
-        self._setup_ui()
-        self._connect_signals()
-
     # ------------------------- SETUP INIT -------------------------
 
+    @override
     def _setup_ui(self) -> None:
+        super()._setup_ui()
+
         # Account Header
         header_account = QLabel("Account")
         header_account.setObjectName("header1")
@@ -106,18 +99,9 @@ class AccountSectionView(AbstractSectionView):
         self.scroll_layout.addWidget(container_biglietteria)
         self.scroll_layout.addStretch()
 
+    @override
     def _connect_signals(self) -> None:
-        self._btn_logout.clicked.connect(  # type:ignore
-            self.logoutRequest.emit
-        )
-
-        self._btn_sezione_spettacoli.clicked.connect(  # type:ignore
-            self.goToSpettacoli.emit
-        )
-
-        self._btn_sezione_info.clicked.connect(  # type:ignore
-            self.goToInfo.emit
-        )
+        super()._connect_signals()
 
         self._btn_sezione_account.setEnabled(False)
 
@@ -135,23 +119,14 @@ class AccountSectionView(AbstractSectionView):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def if_lista_vuota(self, layout: QVBoxLayout) -> None:
-        """Indica che la lista non ha istanze da visualizzare.
-
-        :param layout: layout dove si mostrerà un messaggio indicando l'assenza di intanze
-        """
-        # Il suo funzionamento dipende di come aggiorna_pagina aggiunge il label di errore nei layout.
-        lista_vuota_error = layout.itemAt(0).widget()  # type:QLabel # type:ignore
-        lista_vuota_error.show()
-
     @override
     def aggiorna_pagina(self) -> None:
-        self.svuota_layout(self.layout_lista_admin)
+        self._svuota_layout(self.layout_lista_admin)
         self.layout_lista_admin.addWidget(self.label_lista_admin_vuota)
         self.label_lista_admin_vuota.hide()
         self.displayAdminRequest.emit(self.layout_lista_admin)
 
-        self.svuota_layout(self.layout_lista_biglietteria)
+        self._svuota_layout(self.layout_lista_biglietteria)
         self.layout_lista_biglietteria.addWidget(self.label_lista_biglietteria_vuota)
         self.label_lista_biglietteria_vuota.hide()
         self.displayBiglietteriaRequest.emit(self.layout_lista_biglietteria)

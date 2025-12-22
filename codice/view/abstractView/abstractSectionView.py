@@ -1,21 +1,41 @@
+from abc import abstractmethod
 from PyQt6.QtWidgets import (
     QWidget,
+    QLabel,
     QPushButton,
     QLayout,
     QVBoxLayout,
     QHBoxLayout,
     QScrollArea,
 )
+from PyQt6.QtCore import pyqtSignal
 from typing import Optional
 
+from view.abstractView.abcQObjectMeta import ABCQObjectMeta
 
-class AbstractSectionView(QWidget):
-    """Classe pseudo-astratta che facilita la creazione delle pagine di sezione
-    dell'app: Spettacoli, Info ed Account."""
+
+class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
+    """Classe astratta che facilita la creazione delle pagine di sezione
+    dell'app: Spettacoli, Info ed Account.
+
+    - logoutRequest(): emesso quando si clicca il pulsante Logout;
+    - goToSpettacoli(): emesso quando si clicca il pulsante Spettacoli;
+    - goToInfo(): emesso quando si clicca il pulsante Info;
+    - goToAccount(): emesso quando si clicca il pulsante Account.
+    """
+
+    logoutRequest = pyqtSignal()
+    goToSpettacoli = pyqtSignal()
+    goToInfo = pyqtSignal()
+    goToAccount = pyqtSignal()
 
     def __init__(self) -> None:
         super().__init__()
 
+        self._setup_ui()
+        self._connect_signals()
+
+    def _setup_ui(self) -> None:
         # Logout
         self._btn_logout = QPushButton("Logout")
         self._btn_logout.setObjectName("whiteButton")
@@ -62,7 +82,38 @@ class AbstractSectionView(QWidget):
         self.main_layout.addWidget(container_top)
         self.main_layout.addWidget(self._scroll_area)
 
+    def _connect_signals(self) -> None:
+        self._btn_logout.clicked.connect(  # type:ignore
+            self.logoutRequest.emit
+        )
+
+        self._btn_sezione_spettacoli.clicked.connect(  # type:ignore
+            self.goToSpettacoli
+        )
+
+        self._btn_sezione_info.clicked.connect(  # type:ignore
+            self.goToInfo.emit
+        )
+
+        self._btn_sezione_account.clicked.connect(  # type:ignore
+            self.goToAccount.emit
+        )
+
     # ------------------------- METODI DI VIEW -------------------------
+
+    @abstractmethod
+    def aggiorna_pagina(self) -> None:
+        """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
+        ...
+
+    def if_lista_vuota(self, layout: QVBoxLayout) -> None:
+        """Indica che la lista non ha istanze da visualizzare.
+
+        :param layout: layout dove si mostrerà un messaggio indicando l'assenza di intanze
+        """
+        # Il suo funzionamento dipende di come aggiorna_pagina aggiunge il label di errore nei layout.
+        error_msg = layout.itemAt(0).widget()  # type:QLabel # type:ignore
+        error_msg.show()
 
     def aggiungi_widget_a_layout(self, widget: QWidget, layout: QVBoxLayout):
         """Aggiunge un widget creato per il display delle istanze del model.
@@ -79,11 +130,7 @@ class AbstractSectionView(QWidget):
 
         layout.addWidget(dummy_widget)
 
-    def aggiorna_pagina(self) -> None:
-        """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
-        ...
-
-    def svuota_layout(self, layout: Optional[QLayout]) -> None:
+    def _svuota_layout(self, layout: Optional[QLayout]) -> None:
         """Svuota un layout, eliminando i riferimenti ai widget contenuti. In caso
         ci sia un layout contenuto, questo viene anche pulito.
 
@@ -101,4 +148,4 @@ class AbstractSectionView(QWidget):
 
                 child_layout = item.layout()
                 if child_layout:
-                    self.svuota_layout(child_layout)
+                    self._svuota_layout(child_layout)

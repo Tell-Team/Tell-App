@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import override
 
-from view.abstractView.sectionAbstract import AbstractSectionView
+from view.abstractView.abstractSectionView import AbstractSectionView
 
 
 class SpettacoliSectionView(AbstractSectionView):
@@ -23,25 +23,17 @@ class SpettacoliSectionView(AbstractSectionView):
     - goToAccount(): emesso quando si clicca il pulsante Account;
     - nuovoSpettacoloRequest(): emesso quando si clicca il pulsante Nuovo spettacolo;
     - displaySpettacoliRequest(QVBoxLayout): emesso per caricare la lista degli spettacoli
-    nella sezione Spettacoli;
+    nella sezione Spettacoli.
     """
-
-    logoutRequest = pyqtSignal()
-    goToInfo = pyqtSignal()
-    goToAccount = pyqtSignal()
 
     nuovoSpettacoloRequest = pyqtSignal()
     displaySpettacoliRequest = pyqtSignal(QVBoxLayout)
 
-    def __init__(self):
-        super().__init__()
-
-        self._setup_ui()
-        self._connect_signals()
-
     # ------------------------- SETUP INIT -------------------------
 
     def _setup_ui(self):
+        super()._setup_ui()
+
         # Spettacoli
         header_spettacoli = QLabel("Spettacoli")
         header_spettacoli.setObjectName("header1")
@@ -92,49 +84,31 @@ class SpettacoliSectionView(AbstractSectionView):
         self.scroll_layout.addWidget(container_spettacoli)
         self.scroll_layout.addStretch()
 
+    @override
     def _connect_signals(self) -> None:
-        self._btn_logout.clicked.connect(  # type:ignore
-            self.logoutRequest.emit
-        )
+        super()._connect_signals()
 
         self._btn_sezione_spettacoli.setEnabled(False)
-
-        self._btn_sezione_info.clicked.connect(  # type:ignore
-            self.goToInfo.emit
-        )
-
-        self._btn_sezione_account.clicked.connect(  # type:ignore
-            self.goToAccount.emit
-        )
 
         self.__btn_nuovo_spettacolo.clicked.connect(  # type:ignore
             self.nuovoSpettacoloRequest.emit
         )
 
         self._btn_ricerca.clicked.connect(  # type:ignore
-            lambda: self.filtra_spettacoli(self.ricerca_bar.text())
+            lambda: self.__filtra_spettacoli(self.ricerca_bar.text())
         )
 
         self.displaySpettacoliRequest.emit(self.layout_lista_spettacoli)
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def filtra_spettacoli(self, filtro: str) -> None:
+    def __filtra_spettacoli(self, filtro: str) -> None:
         self.filtro_ricerca = filtro
         self.aggiorna_pagina()
 
-    def if_lista_vuota(self, layout: QVBoxLayout) -> None:
-        """Indica che la lista non ha istanze da visualizzare.
-
-        :param layout: layout dove si mostrerà un messaggio indicando l'assenza di intanze
-        """
-        # Il suo funzionamento dipende di come aggiorna_pagina aggiunge il label di errore nei layout.
-        lista_vuota_error = layout.itemAt(0).widget()  # type:QLabel # type:ignore
-        lista_vuota_error.show()
-
     @override
     def aggiorna_pagina(self) -> None:
-        self.svuota_layout(self.layout_lista_spettacoli)
+        self._svuota_layout(self.layout_lista_spettacoli)
         self.layout_lista_spettacoli.addWidget(self.label_lista_spettacoli_vuota)
         self.label_lista_spettacoli_vuota.hide()
         self.displaySpettacoliRequest.emit(self.layout_lista_spettacoli)

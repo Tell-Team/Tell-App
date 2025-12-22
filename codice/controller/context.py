@@ -5,6 +5,8 @@ from controller.navigation import NavigationController
 
 from model.model import Model
 
+from view.messageView import MessageView
+
 
 class AppContext:
     def __init__(self, main_window: QMainWindow, db_path: Optional[str]) -> None:
@@ -12,7 +14,7 @@ class AppContext:
 
         # Crea un NavigationController ed un Model unici per tutta l'app
         self.nav = NavigationController(main_window)
-        self.model = Model(db_path)
+        self.__model = Model(db_path)
 
         # ------------------------- PAGINE DELL'APP -------------------------
 
@@ -42,194 +44,200 @@ class AppContext:
         self.nuovo_genere_view = NuovoGenereView()
         self.modifica_genere_view = ModificaGenereView()
 
-        # - CORRIGGERE: Questo path non è fisso. Cmq, Pylance lo risolverà da solo
         from view.info.pagine.modifica_regia import NuovaRegiaView, ModificaRegiaView
 
         self.nuova_regia_view = NuovaRegiaView()
         self.modifica_regia_view = ModificaRegiaView()
-        # - Se cambia di path, devo muovere questo blocco alla sezione corrispondente
 
         # Account
         from view.account.pagine.account_section import AccountSectionView
 
         self.account_section = AccountSectionView()
 
+        # from view.account.pagine.modifica_account import (
+        #     NuovoAccountView,
+        #     ModificaAccountView,
+        # )
+
+        # self.nuovo_account_view = NuovoAccountView()
+        # self.modifica_account_view = ModificaAccountView()
+
         # Spettacoli
         from view.spettacoli.pagine.spettacoli_section import SpettacoliSectionView
 
         self.spettacoli_section = SpettacoliSectionView()
 
-        # MessageView
-        from view.messageView import MessageView
-
-        self.message_view = MessageView()
-
         # ------------------------- CONTROLLERS DELLA VIEW -------------------------
 
-        # Login
+        # LoginController
         from controller.login.login_controller import LoginController
 
         self.login_controller = LoginController(
-            self.model, self.login_page, self.authentication_page
+            self.__model, self.login_page, self.authentication_page
         )
 
-        # Info
+        # InfoController
         from controller.info.info_controller import InfoController
 
-        self.info_controller = InfoController(
-            self.model, self.info_section, self.visualizza_opera_view, self.message_view
-        )
+        self.info_controller = InfoController(self.__model, self.info_section)
 
+        # CUOperaController
         from controller.info.CU_opera_controller import CUOperaController
 
         self.cu_opera_controller = CUOperaController(
-            self.model,
-            self.nuova_opera_view,
-            self.modifica_opera_view,
-            self.message_view,
+            self.__model, self.nuova_opera_view, self.modifica_opera_view
         )
 
+        # CUGenereController
         from controller.info.CU_genere_controller import CUGenereController
 
         self.cu_genere_controller = CUGenereController(
-            self.model,
-            self.nuovo_genere_view,
-            self.modifica_genere_view,
-            self.message_view,
+            self.__model, self.nuovo_genere_view, self.modifica_genere_view
         )
 
-        # - CORRIGERE: Il path sarà corretto da Pylance
+        # VisualizzaOperaController
+        from controller.info.visualizza_opera_controller import (
+            VisualizzaOperaController,
+        )
+
+        self.visualizza_opera_controller = VisualizzaOperaController(
+            self.__model, self.visualizza_opera_view
+        )
+
+        # CURegiaController
         from controller.info.CU_regia_controller import CURegiaController
 
         self.cu_regia_controller = CURegiaController(
-            self.model,
-            self.nuova_regia_view,
-            self.modifica_regia_view,
-            self.message_view,
+            self.__model, self.nuova_regia_view, self.modifica_regia_view
         )
-        # - Se cambia di path, devo muovere questo blocco alla sezione corrispondente
 
-        # Account
+        # AccountController
         from controller.account.account_controller import AccountController
 
-        self.account_controller = AccountController(
-            self.model, self.account_section, self.message_view
-        )
+        self.account_controller = AccountController(self.__model, self.account_section)
 
-        # Spettacoli
+        # SpettacoliController
         from controller.spettacoli.spettacoli_controller import SpettacoliController
 
         self.spettacoli_controller = SpettacoliController(
-            self.model, self.spettacoli_section, self.message_view
+            self.__model, self.spettacoli_section
         )
 
         # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
 
         # LoginController
         self.login_controller.goBackRequest.connect(  # type:ignore
-            self._on_request_go_back
+            self.__on_request_go_back
         )
         self.login_controller.goToPageRequest.connect(  # type:ignore
-            self._on_request_go_to
+            self.__on_request_go_to
         )
 
         # InfoController
         self.info_controller.logoutRequest.connect(  # type:ignore
-            self._on_request_logout
-        )
-        self.info_controller.goBackRequest.connect(  # type:ignore
-            self._on_request_go_back
+            self.__on_request_logout
         )
         self.info_controller.goToPageRequest.connect(  # type:ignore
-            self._on_request_go_to
+            self.__on_request_go_to
         )
         self.info_controller.goToSectionRequest.connect(  # type:ignore
-            self._on_request_section_go_to
+            self.__on_request_section_go_to
         )
         self.info_controller.getNavPageRequest.connect(  # type:ignore
-            self._on_request_get_page
+            self.__on_request_get_page
         )
 
         # CUOperaController
         self.cu_opera_controller.goBackRequest.connect(  # type:ignore
-            self._on_request_go_back
+            self.__on_request_go_back
         )
         self.cu_opera_controller.getNavPageRequest.connect(  # type:ignore
-            self._on_request_get_page
+            self.__on_request_get_page
         )
 
         # CUGenereController
         self.cu_genere_controller.goBackRequest.connect(  # type:ignore
-            self._on_request_go_back
+            self.__on_request_go_back
         )
         self.cu_genere_controller.getNavPageRequest.connect(  # type:ignore
-            self._on_request_get_page
+            self.__on_request_get_page
+        )
+
+        # VisualizzaOperaController
+        self.visualizza_opera_controller.goBackRequest.connect(  # type:ignore
+            self.__on_request_go_back
+        )
+        self.visualizza_opera_controller.goToPageRequest.connect(  # type:ignore
+            self.__on_request_go_to
+        )
+        self.visualizza_opera_controller.getNavPageRequest.connect(  # type:ignore
+            self.__on_request_get_page
         )
 
         # CURegiaController
         self.cu_regia_controller.goBackRequest.connect(  # type:ignore
-            self._on_request_go_back
+            self.__on_request_go_back
         )
         self.cu_regia_controller.getNavPageRequest.connect(  # type:ignore
-            self._on_request_get_page
+            self.__on_request_get_page
         )
 
         # AccountController
         self.account_controller.logoutRequest.connect(  # type:ignore
-            self._on_request_logout
+            self.__on_request_logout
         )
         self.account_controller.goToPageRequest.connect(  # type:ignore
-            self._on_request_go_to
+            self.__on_request_go_to
         )
         self.account_controller.goToSectionRequest.connect(  # type:ignore
-            self._on_request_section_go_to
+            self.__on_request_section_go_to
         )
         self.account_controller.getNavPageRequest.connect(  # type:ignore
-            self._on_request_get_page
+            self.__on_request_get_page
         )
 
         # SpettacoliController
         self.spettacoli_controller.logoutRequest.connect(  # type:ignore
-            self._on_request_logout
+            self.__on_request_logout
         )
         self.spettacoli_controller.goToPageRequest.connect(  # type:ignore
-            self._on_request_go_to
+            self.__on_request_go_to
         )
         self.spettacoli_controller.goToSectionRequest.connect(  # type:ignore
-            self._on_request_section_go_to
+            self.__on_request_section_go_to
         )
         self.spettacoli_controller.getNavPageRequest.connect(  # type:ignore
-            self._on_request_get_page
+            self.__on_request_get_page
         )
 
     # ------------------------- METODI DI NAVIGAZIONE -------------------------
 
-    def _on_request_logout(self) -> None:
+    def __on_request_logout(self) -> None:
         # - CORRIGERE: Da implementare autenticazione.
         # - Questo dovrebbe stare in altro controller?
         self.nav.go_to("login_page", False)
         self.nav.svuota_history()
 
-    def _on_request_go_back(self) -> None:
+    def __on_request_go_back(self) -> None:
         self.nav.go_back()
 
-    def _on_request_go_to(self, page_name: str, save_history: bool) -> None:
+    def __on_request_go_to(self, page_name: str, save_history: bool) -> None:
         try:
             self.nav.go_to(page_name, save_history)
         except KeyError as exc:
-            self.message_view.mostra_errore(
+            MessageView.mostra_errore(
                 self.nav.get_cur_central_page(),
-                # E' sempre chiamato con un centralWidget definito. Quindi, in teoria,
-                #   get_cur_central_page non lancia mai un RuntimeError.
+                # E' sempre chiamato con un centralWidget definito. Quindi, lanciare
+                #   un RuntimeError è segno di un bug.
                 "Pagina non trovata",
                 f"Si è verificato un errore: {exc}",
             )
 
-    def _on_request_section_go_to(self, page_name: str) -> None:
+    def __on_request_section_go_to(self, page_name: str) -> None:
         try:
             self.nav.section_go_to(page_name)
         except KeyError as exc:
-            self.message_view.mostra_errore(
+            MessageView.mostra_errore(
                 self.nav.get_cur_central_page(),
                 # E' sempre chiamato con un centralWidget definito. Quindi, in teoria,
                 #   get_cur_central_page non lancia mai un RuntimeError.
@@ -237,7 +245,7 @@ class AppContext:
                 f"Si è verificato un errore: {exc}",
             )
 
-    def _on_request_get_page(
+    def __on_request_get_page(
         self, page_name: str, container: dict[str, Optional[QWidget]]
     ) -> None:
         container["value"] = self.nav.get_pagina(page_name)

@@ -1,6 +1,6 @@
-from PyQt6.QtCore import pyqtSignal, QObject
-from typing import Optional
-from functools import partial
+from typing import Optional, override
+
+from controller.abstractController.abstractCUController import AbstractCUController
 
 from model.model import Model
 from model.pianificazione.regia import Regia
@@ -15,101 +15,85 @@ from view.spettacoli.widgets.personaleDisplay import PersonaleDisplay
 from view.messageView import MessageView
 
 
-class CURegiaController(QObject):
+class CURegiaController(AbstractCUController):
     """Gestisce il salvataggio delle regie create e modificate.
 
     Segnali:
-    - goBackRequest(): emesso per tornare all'ultima pagina visualizzata
-    - getNavPageRequest(str, dict): emesso per ottenere la pagina da cui si prenderà l'input
+    - goBackRequest(): emesso per tornare alla pagina `VisualizzaOperaView`;
+    - getNavPageRequest(str, dict): emesso per ottenere la pagina da cui si prenderà l'input.
     """
 
-    goBackRequest = pyqtSignal()
-    getNavPageRequest = pyqtSignal(str, dict)
+    _view_nuova: NuovaRegiaView
+    _view_modifica: ModificaRegiaView
 
+    @override
     def __init__(
-        self,
-        model: Model,
-        n_regia_v: NuovaRegiaView,
-        m_regia_v: ModificaRegiaView,
-        messsage_v: MessageView,
+        self, model: Model, n_regia_v: NuovaRegiaView, m_regia_v: ModificaRegiaView
     ) -> None:
-        super().__init__()
-        self.__model = model
-        self.__nuova_regia_view = n_regia_v  # Pagina Nuova Regia
-        self.__modifica_regia_view = m_regia_v  # Pagina Modifica Regia
-        self.__message_view = messsage_v  # View dedicata ai popup
+        if type(n_regia_v) is not NuovaRegiaView:
+            raise TypeError("Atteso NuovaRegiaView per n_regia_v.")
 
-        self._connect_signals()
+        if type(m_regia_v) is not ModificaRegiaView:
+            raise TypeError("Atteso ModificaRegiaView per m_regia_v.")
+
+        super().__init__(model, n_regia_v, m_regia_v)
 
     # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
 
+    @override
     def _connect_signals(self) -> None:
+        super()._connect_signals()
+
         # Aggiungi un interprete alla pagina NuovaRegiaView
-        self.__nuova_regia_view.aggiungiInterprete.connect(  # type:ignore
-            self.aggiungi_interprete
+        self._view_nuova.aggiungiInterprete.connect(  # type:ignore
+            self.__aggiungi_interprete
         )
         # Aggiungi un tecnico alla pagina NuovaRegiaView
-        self.__nuova_regia_view.aggiungiTecnico.connect(  # type:ignore
-            self.aggiungi_tecnico
+        self._view_nuova.aggiungiTecnico.connect(  # type:ignore
+            self.__aggiungi_tecnico
         )
         # Display interpreti nella pagina NuovaRegiaView
-        self.__nuova_regia_view.displayInterpreti.connect(  # type:ignore
-            self.display_interpreti
+        self._view_nuova.displayInterpreti.connect(  # type:ignore
+            self.__display_interpreti
         )
         # # Display tecnici nella pagina NuovaRegiaView
-        self.__nuova_regia_view.displayTecnici.connect(  # type:ignore
-            self.display_tecnici
-        )
-        # Annulla creazione Regia
-        self.__nuova_regia_view.annullaRequest.connect(  # type:ignore
-            self.annulla_salvataggio
-        )
-        # Conferma creazione Regia
-        self.__nuova_regia_view.salvaRequest.connect(  # type:ignore
-            partial(self.salva_regia, is_new=True)
+        self._view_nuova.displayTecnici.connect(  # type:ignore
+            self.__display_tecnici
         )
 
         # Aggiungi un interprete alla pagina NuovaRegiaView
-        self.__modifica_regia_view.aggiungiInterprete.connect(  # type:ignore
-            self.aggiungi_interprete
+        self._view_modifica.aggiungiInterprete.connect(  # type:ignore
+            self.__aggiungi_interprete
         )
         # Aggiungi un tecnico alla pagina NuovaRegiaView
-        self.__modifica_regia_view.aggiungiTecnico.connect(  # type:ignore
-            self.aggiungi_tecnico
+        self._view_modifica.aggiungiTecnico.connect(  # type:ignore
+            self.__aggiungi_tecnico
         )
         # Display interpreti nella pagina ModificaRegiaView
-        self.__modifica_regia_view.displayInterpreti.connect(  # type:ignore
-            self.display_interpreti
+        self._view_modifica.displayInterpreti.connect(  # type:ignore
+            self.__display_interpreti
         )
         # # Display tecnici nella pagina ModificaRegiaView
-        self.__modifica_regia_view.displayTecnici.connect(  # type:ignore
-            self.display_tecnici
-        )
-        # Annulla modifica Regia
-        self.__modifica_regia_view.annullaRequest.connect(  # type:ignore
-            self.annulla_salvataggio
-        )
-        # Conferma modifica Regia
-        self.__modifica_regia_view.salvaRequest.connect(  # type:ignore
-            partial(self.salva_regia, is_new=False)
+        self._view_modifica.displayTecnici.connect(  # type:ignore
+            self.__display_tecnici
         )
 
-    # ------------------------- METODI PUBBLICI -------------------------
+    # ------------------------- METODI DEL CONTROLLER -------------------------
 
-    def get_regia(self, id_: int) -> Optional[Regia]:
-        regia = self.__model.get_spettacolo(id_)
+    def __get_regia(self, id_: int) -> Optional[Regia]:
+        regia = self._model.get_spettacolo(id_)
         if not isinstance(regia, Regia):
             return None
         return regia
         # - Questa definizione dovrebbe esser parte del model?
 
-    def aggiungi_regia(self, regia: Regia) -> None:
-        self.__model.aggiungi_spettacolo(regia)
+    def __aggiungi_regia(self, regia: Regia) -> None:
+        self._model.aggiungi_spettacolo(regia)
 
-    def modifica_regia(self, regia_modificata: Regia) -> None:
-        self.__model.modifica_spettacolo(regia_modificata)
+    def __modifica_regia(self, regia_modificata: Regia) -> None:
+        self._model.modifica_spettacolo(regia_modificata)
 
-    def aggiungi_interprete(
+    def __aggiungi_interprete(
         self, pagina: NuovaRegiaView, nome: str, ruolo: str
     ) -> None:
         """Aggiunge un interprete alla lista_interpreti della pagina.
@@ -130,7 +114,7 @@ class CURegiaController(QObject):
 
         pagina.aggiorna_pagina()
 
-    def aggiungi_tecnico(self, pagina: NuovaRegiaView, nome: str, posto: str) -> None:
+    def __aggiungi_tecnico(self, pagina: NuovaRegiaView, nome: str, posto: str) -> None:
         """Aggiunge un tecnico alla lista_tecnici della pagina.
 
         :param pagina: pagina dove il tecnico sarà aggiunto
@@ -149,7 +133,7 @@ class CURegiaController(QObject):
 
         pagina.aggiorna_pagina()
 
-    def display_interpreti(self, pagina: NuovaRegiaView) -> None:
+    def __display_interpreti(self, pagina: NuovaRegiaView) -> None:
         """Visualizza a schermo le informazioni degli interpreti salvati nella
         lista_interpreti della pagina ed assegna a ciascuno un pulsante di elimina.
 
@@ -179,7 +163,7 @@ class CURegiaController(QObject):
                 cur_interprete, pagina.layout_lista_interpreti
             )
 
-    def display_tecnici(self, pagina: NuovaRegiaView) -> None:
+    def __display_tecnici(self, pagina: NuovaRegiaView) -> None:
         """Visualizza a schermo le informazioni dei tecnici salvati nella
         lista_tecnici della pagina ed assegna a ciascuno un pulsante di elimina.
 
@@ -207,15 +191,8 @@ class CURegiaController(QObject):
 
             pagina.aggiungi_widget_a_layout(cur_tecnico, pagina.layout_lista_tecnici)
 
-    def annulla_salvataggio(self, cur_pagina: NuovaRegiaView) -> None:
-        """Annulla l'operazione di creazione o modifica di una regia.
-
-        :param cur_pagina: pagina dove fare il reset dopo ritornare alla paginaVisualizzaOpera
-        """
-        self.goBackRequest.emit()
-        cur_pagina.reset_pagina()
-
-    def salva_regia(self, is_new: bool) -> None:
+    @override
+    def _inizia_salvataggio(self, is_new: bool) -> None:
         """Salva la regia creata o modificata nel `GestoreSpettacoli`.
 
         :param is_new: verifica se si deve creare una regia o modificare una esistente
@@ -224,7 +201,7 @@ class CURegiaController(QObject):
 
         if is_new:
             # Ottieni la pagina NuovaRegiaView
-            cur_pagina = self.__nuova_regia_view
+            cur_pagina = self._view_nuova
 
             # Ottieni l'input inserito
             titolo = cur_pagina.titolo.text()
@@ -243,17 +220,17 @@ class CURegiaController(QObject):
             except DatoIncongruenteException as exc:
                 # E' stato trovato un campo con input non valido
                 cur_pagina.show_input_error(CAMPI_NECESSARI)
-                self.__message_view.mostra_errore(
+                MessageView.mostra_errore(
                     cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
             else:
                 cur_pagina.show_input_error("")
 
                 try:
-                    self.aggiungi_regia(nuova_regia)
+                    self.__aggiungi_regia(nuova_regia)
                 except IdOccupatoException as exc:
                     # Esiste già una regia con quell'id
-                    self.__message_view.mostra_errore(
+                    MessageView.mostra_errore(
                         cur_pagina,
                         "ID Regia occupata",
                         f"Si è verificato un errore: {exc}",
@@ -262,14 +239,14 @@ class CURegiaController(QObject):
                     self.goBackRequest.emit()
         elif not is_new:
             # Ottieni la pagina ModificaRegiaView
-            cur_pagina = self.__modifica_regia_view
+            cur_pagina = self._view_modifica
 
             # Crea una copia della regia originale
-            copia_regia: Optional[Regia] = self.get_regia(cur_pagina.cur_id_regia)
+            copia_regia: Optional[Regia] = self.__get_regia(cur_pagina.cur_id_regia)
             if not isinstance(copia_regia, Regia):
                 # Non esiste regia con l'id salvata nella pagina
-                self.__message_view.mostra_errore(
-                    cur_pagina,
+                MessageView.mostra_errore(
+                    cur_pagina,  # - Cercare un modo di ottenere il central_widget del nav
                     "Errore nel salvataggio",
                     f"Non è presente nessuna regia con id {cur_pagina.cur_id_regia}. "
                     + "Impossibile effettuare le modifiche.",
@@ -296,17 +273,17 @@ class CURegiaController(QObject):
                 copia_regia.set_id_opera(id_opera)
             except DatoIncongruenteException as exc:
                 cur_pagina.show_input_error(CAMPI_NECESSARI)
-                self.__message_view.mostra_errore(
+                MessageView.mostra_errore(
                     cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
             else:
                 cur_pagina.show_input_error("")
 
                 try:
-                    self.modifica_regia(copia_regia)
+                    self.__modifica_regia(copia_regia)
                 except IdInesistenteException as exc:
                     # Non esiste una regia con quell'id
-                    self.__message_view.mostra_errore(
+                    MessageView.mostra_errore(
                         cur_pagina,
                         "ID Regia insesistente",
                         f"Si è verificato un errore: {exc}",

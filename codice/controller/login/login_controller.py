@@ -15,9 +15,9 @@ class LoginController(QObject):
         self, model: Model, login_v: LoginPage, auth_v: AuthenticationPage
     ) -> None:
         super().__init__()
-        self.__model = model  # - Da implementare
-        self.__login_page = login_v  # Pagina iniziale
-        self.__authentication_page = auth_v  # Pagina di autenticazione
+        self.__model = model
+        self.__login_page = login_v
+        self.__authentication_page = auth_v
 
         self._connect_signals()
 
@@ -46,7 +46,7 @@ class LoginController(QObject):
             self.login_attempt
         )
 
-    # ------------------------- METODI PUBBLICI -------------------------
+    # ------------------------- METODI DEL CONTROLLER -------------------------
 
     def annulla_login(self) -> None:
         """Annulla il tentativo di login."""

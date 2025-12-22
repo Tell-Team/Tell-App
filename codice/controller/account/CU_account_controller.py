@@ -1,5 +1,5 @@
-from PyQt6.QtCore import QObject
+from controller.abstractController.abstractCUController import AbstractCUController
 
 
-class CUAccountController(QObject):
+class CUAccountController(AbstractCUController):
     pass

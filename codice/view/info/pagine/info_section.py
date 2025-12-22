@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import override
 
-from view.abstractView.sectionAbstract import AbstractSectionView
+from view.abstractView.abstractSectionView import AbstractSectionView
 
 # - Se l'app, in teoria, vendrà usata in un schermo tattile dai cliente, sarà comodo scambiare
 #   alcuni .clicked per .pressed
@@ -30,24 +30,17 @@ class InfoSectionView(AbstractSectionView):
     - displayGeneriRequest(QVBoxLayout): emesso per caricare la lista dei generi nella sezione Info.
     """
 
-    logoutRequest = pyqtSignal()
-    goToSpettacoli = pyqtSignal()
-    goToAccount = pyqtSignal()
-
     nuovaOperaRequest = pyqtSignal()
     nuovoGenereRequest = pyqtSignal()
     displayOpereRequest = pyqtSignal(QVBoxLayout)
     displayGeneriRequest = pyqtSignal(QVBoxLayout)
 
-    def __init__(self) -> None:
-        super().__init__()
-
-        self._setup_ui()
-        self._connect_signals()
-
     # ------------------------- SETUP INIT -------------------------
 
+    @override
     def _setup_ui(self) -> None:
+        super()._setup_ui()
+
         # Opere
         header_opere = QLabel("Opere")
         header_opere.setObjectName("header1")
@@ -153,27 +146,18 @@ class InfoSectionView(AbstractSectionView):
         self.scroll_layout.addWidget(container_teatro)
         self.scroll_layout.addStretch()
 
+    @override
     def _connect_signals(self) -> None:
-        self._btn_logout.clicked.connect(  # type:ignore
-            self.logoutRequest.emit
-        )
-
-        self._btn_sezione_spettacoli.clicked.connect(  # type:ignore
-            self.goToSpettacoli.emit
-        )
+        super()._connect_signals()
 
         self._btn_sezione_info.setEnabled(False)
-
-        self._btn_sezione_account.clicked.connect(  # type:ignore
-            self.goToAccount.emit
-        )
 
         self._btn_nuova_opera.clicked.connect(  # type:ignore
             self.nuovaOperaRequest.emit
         )
 
         self._btn_ricerca.clicked.connect(  # type:ignore
-            lambda: self.filtra_opere(self.ricerca_bar.text())
+            lambda: self.__filtra_opere(self.ricerca_bar.text())
         )
 
         self._btn_nuovo_genere.clicked.connect(  # type:ignore
@@ -186,27 +170,18 @@ class InfoSectionView(AbstractSectionView):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def filtra_opere(self, filtro: str) -> None:
+    def __filtra_opere(self, filtro: str) -> None:
         self.filtro_ricerca = filtro
         self.aggiorna_pagina()
 
-    def if_lista_vuota(self, layout: QVBoxLayout) -> None:
-        """Indica che la lista non ha istanze da visualizzare.
-
-        :param layout: layout dove si mostrerà un messaggio indicando l'assenza di intanze
-        """
-        # Il suo funzionamento dipende di come aggiorna_pagina aggiunge il label di errore nei layout.
-        lista_vuota_error = layout.itemAt(0).widget()  # type:QLabel # type:ignore
-        lista_vuota_error.show()
-
     @override
     def aggiorna_pagina(self) -> None:
-        self.svuota_layout(self.layout_lista_opere)
+        self._svuota_layout(self.layout_lista_opere)
         self.layout_lista_opere.addWidget(self.label_lista_opere_vuota)
         self.label_lista_opere_vuota.hide()
         self.displayOpereRequest.emit(self.layout_lista_opere)
 
-        self.svuota_layout(self.layout_lista_generi)
+        self._svuota_layout(self.layout_lista_generi)
         self.layout_lista_generi.addWidget(self.label_lista_generi_vuota)
         self.label_lista_generi_vuota.hide()
         self.displayGeneriRequest.emit(self.layout_lista_generi)

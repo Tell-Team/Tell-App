@@ -1,0 +1,106 @@
+from abc import abstractmethod
+from PyQt6.QtWidgets import (
+    QWidget,
+    QLabel,
+    QPushButton,
+    QFormLayout,
+    QVBoxLayout,
+    QHBoxLayout,
+    QScrollArea,
+    QSizePolicy,
+)
+from PyQt6.QtCore import Qt, pyqtSignal
+from functools import partial
+
+from view.abstractView.abcQObjectMeta import ABCQObjectMeta
+
+
+class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
+    """Classe astratta per la creazione di pagine dell'app dedicate alla creazione
+    e modifica di oggetti del model.
+
+    Segnali:
+    - annullaRequest(QWidget): emesso quando si clicca il pulsante Annulla;
+    - salvaRequest(): emesso quando si clicca il pulsante Crea/Modifica.
+    """
+
+    annullaRequest = pyqtSignal(QWidget)
+    salvaRequest = pyqtSignal()
+
+    def _setup_ui(self) -> None:
+        # Setup Header
+        self._header = QLabel("")
+        self._header.setObjectName("header1")
+        self._header.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+        # Setup QFormLayout
+        self.__form_content = QWidget()
+        self.__form_content.setSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding
+        )
+        self._form_layout = QFormLayout(self.__form_content)
+        self._form_layout.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+
+        # Funzione di scroll
+        self._scroll_area = QScrollArea()
+        self._scroll_area.setWidgetResizable(True)
+        self._scroll_area.setWidget(self.__form_content)
+        self._scroll_area.setWidgetResizable(True)
+        self._scroll_area.setSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding
+        )
+
+        # Setup Pulsanti
+        self._btn_annulla = QPushButton("Annulla")
+        self._btn_annulla.setObjectName("whiteButton")
+
+        self._btn_conferma = QPushButton("Crea")
+        self._btn_conferma.setObjectName("whiteButton")
+
+        self._pulsanti = QWidget()
+        layout_pulsanti = QHBoxLayout(self._pulsanti)
+        layout_pulsanti.addWidget(self._btn_annulla)
+        layout_pulsanti.addWidget(self._btn_conferma)
+        layout_pulsanti.addStretch()
+
+        # Label input_error
+        self._input_error = QLabel("")
+        self._input_error.setObjectName("subheaderRed")
+
+        # Setup main layout
+        self._main_layout = QVBoxLayout(self)
+
+    def _connect_signals(self) -> None:
+        self._btn_annulla.clicked.connect(  # type:ignore
+            partial(self.annullaRequest.emit, self)
+        )
+
+        self._btn_conferma.clicked.connect(  # type:ignore
+            self.salvaRequest.emit
+        )
+
+    # ------------------------- METODI DI VIEW -------------------------
+
+    @abstractmethod
+    def reset_pagina(self) -> None:
+        """Resetta la pagina allo stato default."""
+        ...
+
+    @abstractmethod
+    def _setup_form(self) -> None:
+        """Costruisce e dispone i widget della form."""
+        ...
+
+    def show_input_error(self, message: str) -> None:
+        """Aggiorna il testo del label input_error.
+
+        :param message: testo inserito nel label"""
+        self._input_error.setText(message)
+        self._input_error.show()  # Si assicura che il label sia visualizzato.
+
+    def _svuota_form_layout(self, form_layout: QFormLayout) -> None:
+        """Rimuove tutte le righe di un `QFormLayout` senza eliminare i widget. Serve per
+        ricaricare un form."""
+        # - Non è stato ancora implementato, ma potrebbe essere utile per future pagine.
+        while form_layout.rowCount() > 0:
+            form_layout.removeRow(0)

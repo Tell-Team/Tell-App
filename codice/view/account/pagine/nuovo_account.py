@@ -1,25 +1,20 @@
 from PyQt6.QtWidgets import QLabel, QLineEdit, QComboBox, QFrame
-from PyQt6.QtCore import pyqtSignal
 from typing import override
 
-from view.abstractView.creaAbstract import CreaAbstractView
+from view.abstractView.abstractCreaView import AbstractCreaView
 
 
 # Si usa la stessa pagina per creare sia un account Amministratore che un Biglietteria.
 #   Solo si modifica un QComboBox disabilitato per indicare il ruolo dell'account durante
 #   la creazione. Nel caso di modifica, comunque, è abilitato per permettere aggiornare il
 #   ruolo di qualunque account.
-class NuovoAccountView(CreaAbstractView):
-    """
-    View per la creazione di un nuovo account utente.
+class NuovoAccountView(AbstractCreaView):
+    """View per la creazione di un nuovo account utente.
 
     Segnali:
-    - annullaRequest(): emesso quando si clicca il pulsante Annulla;
-    - salvaRequest(): emesso quando si clicca il pulsante Conferma.
+    - annullaRequest(QWidget): emesso quando si clicca il pulsante Annulla;
+    - salvaRequest(): emesso quando si clicca il pulsante Crea.
     """
-
-    annullaRequest = pyqtSignal()
-    salvaRequest = pyqtSignal()
 
     def __init__(self) -> None:
         super().__init__()
@@ -29,19 +24,22 @@ class NuovoAccountView(CreaAbstractView):
 
     # ------------------------- SETUP INIT -------------------------
 
+    @override
     def _setup_ui(self) -> None:
+        super()._setup_ui()
+
         # Header
-        self.header.setText("Aggiungi nuovo account")
+        self._header.setText("Aggiungi nuovo account")
 
         # Form
         self._setup_form()
 
         # Layout
-        self.main_layout.addWidget(self.header)
-        self.main_layout.addWidget(self.form_content)
-        self.main_layout.addWidget(self.input_error)
-        self.main_layout.addWidget(self.pulsanti)
-        self.main_layout.addStretch()
+        self._main_layout.addWidget(self._header)
+        self._main_layout.addWidget(self._scroll_area)
+        self._main_layout.addWidget(self._input_error)
+        self._main_layout.addWidget(self._pulsanti)
+        self._main_layout.addStretch()
 
     @override
     def _setup_form(self) -> None:
@@ -85,20 +83,18 @@ class NuovoAccountView(CreaAbstractView):
         self.ruolo.setEnabled(False)
         # - END
 
-        self.form_layout.addRow(label_anagrafica_header, None)
-        self.form_layout.addRow(label_nome, self.nome)
-        self.form_layout.addRow(label_cognome, self.cognome)
-        self.form_layout.addRow(linea, None)
-        self.form_layout.addRow(label_account_header, None)
-        self.form_layout.addRow(label_username, self.username)
-        self.form_layout.addRow(label_password, self.password)
-        self.form_layout.addRow(label_ruolo, self.ruolo)
+        self._form_layout.addRow(label_anagrafica_header, None)
+        self._form_layout.addRow(label_nome, self.nome)
+        self._form_layout.addRow(label_cognome, self.cognome)
+        self._form_layout.addRow(linea, None)
+        self._form_layout.addRow(label_account_header, None)
+        self._form_layout.addRow(label_username, self.username)
+        self._form_layout.addRow(label_password, self.password)
+        self._form_layout.addRow(label_ruolo, self.ruolo)
 
-    def _connect_signals(self) -> None:
-        self._btn_annulla.clicked.connect(  # type:ignore
-            self.annullaRequest.emit
-        )
+    # ------------------------- METODI DI VIEW -------------------------
 
-        self._btn_conferma.clicked.connect(  # type:ignore
-            self.salvaRequest.emit
-        )
+    @override
+    def reset_pagina(self) -> None:
+        self.nome.setText("")
+        self.password.setText("")

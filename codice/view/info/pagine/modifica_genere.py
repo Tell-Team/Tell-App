@@ -9,9 +9,6 @@ class ModificaGenereView(NuovoGenereView):
     """Sottoclasse di `NuovoGenereView`. Modifica alcuni label della pagina ed aggiunge
     un'attributo `cur_id_genere` per indicare l'id del genere da modificare."""
 
-    def __init__(self) -> None:
-        super().__init__()
-
     # ------------------------- SETUP INIT -------------------------
 
     @override
@@ -22,7 +19,7 @@ class ModificaGenereView(NuovoGenereView):
         self.cur_id_genere: int = -1
 
         # Aggiorna header
-        self.header.setText("Modifica genere")
+        self._header.setText("Modifica genere")
 
         # Aggiorna btn_conferma
         self._btn_conferma.setText("Modifica")
@@ -40,6 +37,5 @@ class ModificaGenereView(NuovoGenereView):
 
     @override
     def reset_pagina(self) -> None:
-        # Non è realmente necessario, ma serve per pulire la pagina dopo l'uso.
         super().reset_pagina()
         self.cur_id_genere = -1

@@ -9,9 +9,6 @@ class ModificaOperaView(NuovaOperaView):
     """Sottoclasse di `NuovaOperaView`. Modifica alcuni label della pagina ed aggiunge
     un'attributo `cur_id_opera` per indicare l'id dell'opera da modificare."""
 
-    def __init__(self) -> None:
-        super().__init__()
-
     # ------------------------- SETUP INIT -------------------------
 
     @override
@@ -22,7 +19,7 @@ class ModificaOperaView(NuovaOperaView):
         self.cur_id_opera: int = -1
 
         # Aggiorna header
-        self.header.setText("Modifica opera")
+        self._header.setText("Modifica opera")
 
         # Aggiorna btn_conferma
         self._btn_conferma.setText("Modifica")
@@ -51,6 +48,5 @@ class ModificaOperaView(NuovaOperaView):
 
     @override
     def reset_pagina(self) -> None:
-        # Non è realmente necessario, ma serve per pulire la pagina dopo l'uso.
         super().reset_pagina()
         self.cur_id_genere = -1

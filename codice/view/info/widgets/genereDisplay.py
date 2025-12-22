@@ -19,12 +19,12 @@ class GenereDisplay(QWidget):
     def __init__(self, g: Genere) -> None:
         super().__init__()
 
-        self._setup_ui(g)
-        self._connect_signals(g)
+        self.__setup_ui(g)
+        self.__connect_signals(g)
 
     # ------------------------- SETUP INIT -------------------------
 
-    def _setup_ui(self, g: Genere) -> None:
+    def __setup_ui(self, g: Genere) -> None:
         # Labels
         nome = QLabel(g.get_nome())
         nome.setObjectName("header2")
@@ -40,8 +40,8 @@ class GenereDisplay(QWidget):
         self.__btn_elimina = QPushButton("Elimina")
         self.__btn_elimina.setObjectName("whiteButton")
 
-        self.pulsanti = QWidget()
-        layout_pulsanti = QHBoxLayout(self.pulsanti)
+        self.__pulsanti = QWidget()
+        layout_pulsanti = QHBoxLayout(self.__pulsanti)
         layout_pulsanti.setContentsMargins(1, 1, 1, 1)
         layout_pulsanti.addWidget(self.__btn_modifica)
         layout_pulsanti.addWidget(self.__btn_elimina)
@@ -57,35 +57,35 @@ class GenereDisplay(QWidget):
         self.__btn_no = QPushButton("No")
         self.__btn_no.setObjectName("whiteButton")
 
-        self.conferma_elimina = QWidget()
-        layout_conferma = QHBoxLayout(self.conferma_elimina)
+        self.__conferma_elimina = QWidget()
+        layout_conferma = QHBoxLayout(self.__conferma_elimina)
         layout_conferma.setContentsMargins(1, 1, 1, 1)
         layout_conferma.addWidget(domanda)
         layout_conferma.addWidget(self.__btn_si)
         layout_conferma.addWidget(self.__btn_no)
-        self.conferma_elimina.hide()
+        self.__conferma_elimina.hide()
 
         # Layout
         layout = QVBoxLayout(self)
         layout.setContentsMargins(1, 1, 1, 1)
         layout.addWidget(nome)
         layout.addWidget(descrizione)
-        layout.addWidget(self.pulsanti)
-        layout.addWidget(self.conferma_elimina)
+        layout.addWidget(self.__pulsanti)
+        layout.addWidget(self.__conferma_elimina)
 
-    def _connect_signals(self, g: Genere) -> None:
-        self._id = g.get_id()
+    def __connect_signals(self, g: Genere) -> None:
+        self.__id = g.get_id()
 
         self.__btn_modifica.clicked.connect(  # type:ignore
-            partial(self.modificaRequest.emit, self._id)
+            partial(self.modificaRequest.emit, self.__id)
         )
 
         self.__btn_elimina.clicked.connect(  # type:ignore
-            self._on_elimina
+            self.__on_elimina
         )
 
         self.__btn_si.clicked.connect(  # type:ignore
-            partial(self.eliminaConfermata.emit, self._id)
+            partial(self.eliminaConfermata.emit, self.__id)
         )
 
         self.__btn_no.clicked.connect(  # type:ignore
@@ -94,12 +94,12 @@ class GenereDisplay(QWidget):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def _on_elimina(self) -> None:
+    def __on_elimina(self) -> None:
         """Mostra una richiesta di conferma per eliminare il genere."""
-        self.pulsanti.hide()
-        self.conferma_elimina.show()
+        self.__pulsanti.hide()
+        self.__conferma_elimina.show()
 
     def annulla_elimina(self) -> None:
         """Annulla l'elimina, nascondendo la richiesta di conferma."""
-        self.conferma_elimina.hide()
-        self.pulsanti.show()
+        self.__conferma_elimina.hide()
+        self.__pulsanti.show()

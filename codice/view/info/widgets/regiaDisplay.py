@@ -21,13 +21,13 @@ class RegiaDisplay(QWidget):
     def __init__(self, r: Regia) -> None:
         super().__init__()
 
-        self._setup_ui(r)
-        self._connect_signals(r)
+        self.__setup_ui(r)
+        self.__connect_signals(r)
 
     # ------------------------- SETUP INIT -------------------------
 
     # - Il QWidget potrebbe essere una tabella. Per renderlo distinto dalle opere e generi.
-    def _setup_ui(self, r: Regia) -> None:
+    def __setup_ui(self, r: Regia) -> None:
         # Labels
         titolo = QLabel(r.get_titolo())
         titolo.setObjectName("header3")
@@ -45,8 +45,8 @@ class RegiaDisplay(QWidget):
         self.__btn_elimina = QPushButton("Elimina")
         self.__btn_elimina.setObjectName("whiteButton")
 
-        self.pulsanti = QWidget()
-        layout_pulsanti = QHBoxLayout(self.pulsanti)
+        self.__pulsanti = QWidget()
+        layout_pulsanti = QHBoxLayout(self.__pulsanti)
         layout_pulsanti.setContentsMargins(1, 1, 1, 1)
         layout_pulsanti.addWidget(self.__btn_modifica)
         layout_pulsanti.addWidget(self.__btn_elimina)
@@ -62,13 +62,13 @@ class RegiaDisplay(QWidget):
         self.__btn_no = QPushButton("No")
         self.__btn_no.setObjectName("whiteButton")
 
-        self.conferma_elimina = QWidget()
-        layout_conferma = QHBoxLayout(self.conferma_elimina)
+        self.__conferma_elimina = QWidget()
+        layout_conferma = QHBoxLayout(self.__conferma_elimina)
         layout_conferma.setContentsMargins(1, 1, 1, 1)
         layout_conferma.addWidget(domanda)
         layout_conferma.addWidget(self.__btn_si)
         layout_conferma.addWidget(self.__btn_no)
-        self.conferma_elimina.hide()
+        self.__conferma_elimina.hide()
 
         # Layout
         layout = QVBoxLayout(self)
@@ -76,22 +76,22 @@ class RegiaDisplay(QWidget):
         layout.addWidget(titolo)
         layout.addWidget(regista)
         layout.addWidget(anno)
-        layout.addWidget(self.pulsanti)
-        layout.addWidget(self.conferma_elimina)
+        layout.addWidget(self.__pulsanti)
+        layout.addWidget(self.__conferma_elimina)
 
-    def _connect_signals(self, r: Regia) -> None:
-        self._id = r.get_id()
+    def __connect_signals(self, r: Regia) -> None:
+        self.__id = r.get_id()
 
         self.__btn_modifica.clicked.connect(  # type:ignore
-            partial(self.modificaRequest.emit, self._id)
+            partial(self.modificaRequest.emit, self.__id)
         )
 
         self.__btn_elimina.clicked.connect(  # type:ignore
-            self._on_elimina
+            self.__on_elimina
         )
 
         self.__btn_si.clicked.connect(  # type:ignore
-            partial(self.eliminaConfermata.emit, self._id)
+            partial(self.eliminaConfermata.emit, self.__id)
         )
 
         self.__btn_no.clicked.connect(  # type:ignore
@@ -100,12 +100,12 @@ class RegiaDisplay(QWidget):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def _on_elimina(self) -> None:
+    def __on_elimina(self) -> None:
         """Mostra una richiesta di conferma per eliminare la regia."""
-        self.pulsanti.hide()
-        self.conferma_elimina.show()
+        self.__pulsanti.hide()
+        self.__conferma_elimina.show()
 
     def annulla_elimina(self) -> None:
         """Annulla l'elimina, nascondendo la richiesta di conferma."""
-        self.conferma_elimina.hide()
-        self.pulsanti.show()
+        self.__conferma_elimina.hide()
+        self.__pulsanti.show()

@@ -2,16 +2,13 @@ from typing import override
 
 from view.account.pagine.nuovo_account import NuovoAccountView
 
+# - from view.account.utils.accountPageData import AccountPageData
+
 
 class ModificaAccountView(NuovoAccountView):
-    """
-    Sottoclasse di `NuovoAccountView`. Modifica alcuni label della pagina, abilita il
-    QComboBox per scegliere un ruolo ed aggiunge un'attributo `cur_id_account` per
-    indicare l'id dell'account da modificare.
-    """
-
-    def __init__(self) -> None:
-        super().__init__()
+    """Sottoclasse di `NuovoAccountView`. Modifica alcuni label della pagina, abilita
+    il QComboBox per scegliere il ruolo ed aggiunge un'attributo `cur_id_account` per
+    indicare l'id dell'account da modificare."""
 
     # ------------------------- SETUP INIT -------------------------
 
@@ -23,7 +20,7 @@ class ModificaAccountView(NuovoAccountView):
         self.cur_id_account: int = -1
 
         # Aggiorna header
-        self.header.setText("Modifica account")
+        self._header.setText("Modifica account")
 
         # Aggiorna btn_conferma
         self._btn_conferma.setText("Modifica")
@@ -32,3 +29,21 @@ class ModificaAccountView(NuovoAccountView):
 
         # Abilita il QComboBox del ruolo
         self.ruolo.setEnabled(True)
+
+    # ------------------------- METODI DI VIEW -------------------------
+
+    # def set_data(self, data: AccountPageData) -> None:
+    #     """Carica i dati di un'account nella pagina.
+
+    #     :param data: data salvata in una classe immutabile"""
+    #     self.cur_id_account = data.id
+    #
+    #     self.nome.setText(data.nome)
+    #     self.cognome.setText(data.cognome)
+    #     self.username.setText(data.username)
+    #     self.password.setText(data.password) # - Fare il testo di self.password vissibile
+
+    @override
+    def reset_pagina(self) -> None:
+        super().reset_pagina()
+        self.cur_id_account = -1

@@ -21,12 +21,12 @@ class OperaDisplay(QWidget):
     def __init__(self, o: Opera) -> None:
         super().__init__()
 
-        self._setup_ui(o)
-        self._connect_signals(o)
+        self.__setup_ui(o)
+        self.__connect_signals(o)
 
     # ------------------------- SETUP INIT -------------------------
 
-    def _setup_ui(self, o: Opera) -> None:
+    def __setup_ui(self, o: Opera) -> None:
         # Labels
         nome = QLabel(o.get_nome())
         nome.setObjectName("header2")
@@ -47,8 +47,8 @@ class OperaDisplay(QWidget):
         self.__btn_elimina = QPushButton("Elimina")
         self.__btn_elimina.setObjectName("whiteButton")
 
-        self.pulsanti = QWidget()
-        layout_pulsanti = QHBoxLayout(self.pulsanti)
+        self.__pulsanti = QWidget()
+        layout_pulsanti = QHBoxLayout(self.__pulsanti)
         layout_pulsanti.setContentsMargins(1, 1, 1, 1)
         layout_pulsanti.addWidget(self.__btn_visualizza)
         layout_pulsanti.addWidget(self.__btn_modifica)
@@ -65,13 +65,13 @@ class OperaDisplay(QWidget):
         self.__btn_no = QPushButton("No")
         self.__btn_no.setObjectName("whiteButton")
 
-        self.conferma_elimina = QWidget()
-        layout_conferma = QHBoxLayout(self.conferma_elimina)
+        self.__conferma_elimina = QWidget()
+        layout_conferma = QHBoxLayout(self.__conferma_elimina)
         layout_conferma.setContentsMargins(1, 1, 1, 1)
         layout_conferma.addWidget(domanda)
         layout_conferma.addWidget(self.__btn_si)
         layout_conferma.addWidget(self.__btn_no)
-        self.conferma_elimina.hide()
+        self.__conferma_elimina.hide()
 
         # Layout
         layout = QVBoxLayout(self)
@@ -79,26 +79,26 @@ class OperaDisplay(QWidget):
         layout.addWidget(nome)
         layout.addWidget(librettista)
         layout.addWidget(compositore)
-        layout.addWidget(self.pulsanti)
-        layout.addWidget(self.conferma_elimina)
+        layout.addWidget(self.__pulsanti)
+        layout.addWidget(self.__conferma_elimina)
 
-    def _connect_signals(self, o: Opera) -> None:
-        self._id = o.get_id()
+    def __connect_signals(self, o: Opera) -> None:
+        self.__id = o.get_id()
 
         self.__btn_visualizza.clicked.connect(  # type:ignore
-            partial(self.visualizzaRequest.emit, self._id)
+            partial(self.visualizzaRequest.emit, self.__id)
         )
 
         self.__btn_modifica.clicked.connect(  # type:ignore
-            partial(self.modificaRequest.emit, self._id)
+            partial(self.modificaRequest.emit, self.__id)
         )
 
         self.__btn_elimina.clicked.connect(  # type:ignore
-            self._on_elimina
+            self.__on_elimina
         )
 
         self.__btn_si.clicked.connect(  # type:ignore
-            partial(self.eliminaConfermata.emit, self._id)
+            partial(self.eliminaConfermata.emit, self.__id)
         )
 
         self.__btn_no.clicked.connect(  # type:ignore
@@ -107,12 +107,12 @@ class OperaDisplay(QWidget):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def _on_elimina(self) -> None:
+    def __on_elimina(self) -> None:
         """Mostra una richiesta di conferma per eliminare l'opera."""
-        self.pulsanti.hide()
-        self.conferma_elimina.show()
+        self.__pulsanti.hide()
+        self.__conferma_elimina.show()
 
     def annulla_elimina(self) -> None:
         """Annulla l'elimina, nascondendo la richiesta di conferma."""
-        self.conferma_elimina.hide()
-        self.pulsanti.show()
+        self.__conferma_elimina.hide()
+        self.__pulsanti.show()

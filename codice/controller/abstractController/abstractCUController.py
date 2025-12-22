@@ -1,0 +1,72 @@
+from abc import abstractmethod
+from PyQt6.QtCore import pyqtSignal, QObject
+from functools import partial
+
+from model.model import Model
+
+from view.abstractView.abcQObjectMeta import ABCQObjectMeta
+from view.abstractView.abstractCreaView import AbstractCreaView
+
+
+class AbstractCUController(QObject, metaclass=ABCQObjectMeta):
+    """Classe astratta per la creazione di controller per la creazione o modifica
+    di oggetti del model.
+
+    Segnali:
+    - goBackRequest(): emesso per tornare all'ultima pagina visualizzata;
+    - getNavPageRequest(str, dict): emesso per ottenere la pagina da cui si prenderà l'input.
+    """
+
+    goBackRequest = pyqtSignal()
+    getNavPageRequest = pyqtSignal(str, dict)
+
+    def __init__(
+        self, model: Model, nuova: AbstractCreaView, modifica: AbstractCreaView
+    ) -> None:
+        super().__init__()
+
+        self._model = model
+        self._view_nuova = nuova
+        self._view_modifica = modifica
+
+        self._connect_signals()
+
+    # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
+
+    def _connect_signals(self) -> None:
+        # # Annulla creazione
+        self._view_nuova.annullaRequest.connect(  # type:ignore
+            self._annulla_salvataggio
+        )
+        # Conferma creazione
+        self._view_nuova.salvaRequest.connect(  # type:ignore
+            partial(self._inizia_salvataggio, is_new=True)
+        )
+
+        # Annulla modifica Regia
+        self._view_modifica.annullaRequest.connect(  # type:ignore
+            self._annulla_salvataggio
+        )
+        # Conferma modifica Regia
+        self._view_modifica.salvaRequest.connect(  # type:ignore
+            partial(self._inizia_salvataggio, is_new=False)
+        )
+
+    # ------------------------- METODI DEL CONTROLLER -------------------------
+
+    def _annulla_salvataggio(self, cur_pagina: AbstractCreaView) -> None:
+        """Annulla l'operazione di creazione o modifica.
+
+        :param cur_pagina: pagina dove fare il reset dopo ritornare alla pagina dove l'operazione
+        (crea o modifica) è stata chiamata
+        """
+        self.goBackRequest.emit()
+        cur_pagina.reset_pagina()
+
+    @abstractmethod
+    def _inizia_salvataggio(self, is_new: bool) -> None:
+        """Salva l'istanza creata o modificata nel gestore dedicato.
+
+        :param is_new: verifica se si deve creare un'instanza o modificare una esistente
+        """
+        ...

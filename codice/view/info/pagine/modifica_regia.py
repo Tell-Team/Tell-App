@@ -9,9 +9,6 @@ class ModificaRegiaView(NuovaRegiaView):
     """Sottoclasse di `NuovaRegiaView`. Modifica alcuni label della pagina ed aggiunge
     un'attributo `cur_id_regia` per indicare l'id della regia da modificare."""
 
-    def __init__(self) -> None:
-        super().__init__()
-
     # ------------------------- SETUP INIT -------------------------
 
     @override
@@ -22,7 +19,7 @@ class ModificaRegiaView(NuovaRegiaView):
         self.cur_id_regia: int = -1
 
         # Aggiorna header
-        self.header.setText("Modifica regia")
+        self._header.setText("Modifica regia")
 
         # Aggiorna btn_conferma
         self._btn_conferma.setText("Modifica")
@@ -49,6 +46,5 @@ class ModificaRegiaView(NuovaRegiaView):
 
     @override
     def reset_pagina(self) -> None:
-        # Non è realmente necessario, ma serve per pulire la pagina dopo l'uso.
         super().reset_pagina()
         self.cur_id_regia = -1

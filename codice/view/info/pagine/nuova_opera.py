@@ -7,25 +7,21 @@ from PyQt6.QtWidgets import (
     QSpinBox,
     # QHBoxLayout,
 )
-from PyQt6.QtCore import QDate, pyqtSignal
-from functools import partial
+from PyQt6.QtCore import QDate
 from typing import override
 
 from model.pianificazione.genere import Genere
 
-from view.abstractView.creaAbstract import CreaAbstractView
+from view.abstractView.abstractCreaView import AbstractCreaView
 
 
-class NuovaOperaView(CreaAbstractView):
+class NuovaOperaView(AbstractCreaView):
     """View per la creazione di una nuova opera.
 
     Segnali:
-    - annullaRequest(CreaAbstractView): emesso quando si clicca il pulsante Annulla;
-    - salvaRequest(): emesso quando si clicca il pulsante Conferma.
+    - annullaRequest(QWidget): emesso quando si clicca il pulsante Annulla;
+    - salvaRequest(): emesso quando si clicca il pulsante Crea.
     """
-
-    annullaRequest = pyqtSignal(CreaAbstractView)
-    salvaRequest = pyqtSignal()
 
     def __init__(self) -> None:
         super().__init__()
@@ -35,18 +31,21 @@ class NuovaOperaView(CreaAbstractView):
 
     # ------------------------- SETUP INIT -------------------------
 
+    @override
     def _setup_ui(self) -> None:
+        super()._setup_ui()
+
         # Header
-        self.header.setText("Aggiungi nuova opera")
+        self._header.setText("Aggiungi nuova opera")
 
         # Form
         self._setup_form()
 
         # Layout
-        self.main_layout.addWidget(self.header)
-        self.main_layout.addWidget(self._scroll_area)
-        self.main_layout.addWidget(self.input_error)
-        self.main_layout.addWidget(self.pulsanti)
+        self._main_layout.addWidget(self._header)
+        self._main_layout.addWidget(self._scroll_area)
+        self._main_layout.addWidget(self._input_error)
+        self._main_layout.addWidget(self._pulsanti)
 
     @override
     def _setup_form(self) -> None:
@@ -98,24 +97,15 @@ class NuovaOperaView(CreaAbstractView):
         self.teatro = QLineEdit()
         self.teatro.setPlaceholderText("Inserire nome del teatro")
 
-        self.form_layout.addRow(label_nome, self.nome)
-        self.form_layout.addRow(label_trama, self.trama)
-        self.form_layout.addRow(label_genere, self.genere)
-        self.form_layout.addRow(label_compositore, self.compositore)
-        self.form_layout.addRow(label_librettista, self.librettista)
-        self.form_layout.addRow(label_atti, self.atti)
-        self.form_layout.addRow(label_data, self.data)
+        self._form_layout.addRow(label_nome, self.nome)
+        self._form_layout.addRow(label_trama, self.trama)
+        self._form_layout.addRow(label_genere, self.genere)
+        self._form_layout.addRow(label_compositore, self.compositore)
+        self._form_layout.addRow(label_librettista, self.librettista)
+        self._form_layout.addRow(label_atti, self.atti)
+        self._form_layout.addRow(label_data, self.data)
         # self.form_layout.addRow(atti_data_layout)
-        self.form_layout.addRow(label_teatro, self.teatro)
-
-    def _connect_signals(self) -> None:
-        self._btn_annulla.clicked.connect(  # type:ignore
-            partial(self.annullaRequest.emit, self)
-        )
-
-        self._btn_conferma.clicked.connect(  # type:ignore
-            self.salvaRequest.emit
-        )
+        self._form_layout.addRow(label_teatro, self.teatro)
 
     # ------------------------- METODI DI VIEW -------------------------
 
@@ -140,4 +130,4 @@ class NuovaOperaView(CreaAbstractView):
         self.atti.setValue(0)
         self.data.setDate(QDate.currentDate())
         self.teatro.setText("")
-        self.input_error.setText("")
+        self._input_error.setText("")

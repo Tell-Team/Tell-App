@@ -4,7 +4,8 @@ from functools import partial
 from model.model import Model
 
 from view.account.pagine.account_section import AccountSectionView
-from view.messageView import MessageView
+
+# from view.messageView import MessageView
 
 
 class AccountController(QObject):
@@ -27,18 +28,16 @@ class AccountController(QObject):
         self,
         model: Model,
         account_s: AccountSectionView,
-        message_v: MessageView,
     ) -> None:
         super().__init__()
         self.__model = model
-        self.__account_section = account_s  # Sezione Account
-        self.__message_view = message_v  # View dedicata ai popup
+        self.__account_section = account_s
 
-        self._connect_signals()
+        self.__connect_signals()
 
     # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
 
-    def _connect_signals(self) -> None:
+    def __connect_signals(self) -> None:
         # Logout
         self.__account_section.logoutRequest.connect(  # type:ignore
             self.logoutRequest.emit  # - CORRIGGERE: Account ancora non implementato
@@ -54,30 +53,27 @@ class AccountController(QObject):
 
         # Display della Lista Account
         self.__account_section.displayAdminRequest.connect(  # type:ignore
-            partial(self.display_account, "amministratore")  # - Ruolo non implementato
+            partial(self.__display_account, "amministratore")
+            # - Ruolo non implementato
+        )
+        self.__account_section.displayBiglietteriaRequest.connect(  # type:ignore
+            partial(self.__display_account, "biglietteria")  # - Ruolo non implementato
         )
 
         # Setup della pagina di creazione di account
         self.__account_section.nuovoAdminRequest.connect(  # type:ignore
-            partial(self.nuovo_account, "amministratore")  # - Ruolo non implementato
+            partial(self.__nuovo_account, "amministratore")  # - Ruolo non implementato
         )
-
-        # Display della Lista Account
-        self.__account_section.displayBiglietteriaRequest.connect(  # type:ignore
-            partial(self.display_account, "biglietteria")  # - Ruolo non implementato
-        )
-
-        # Setup della pagina di creazione di account
         self.__account_section.nuovoBiglietteriaRequest.connect(  # type:ignore
-            partial(self.nuovo_account, "biglietteria")  # - Ruolo non implementato
+            partial(self.__nuovo_account, "biglietteria")  # - Ruolo non implementato
         )
 
-    # ------------------------- METODI PUBBLICI -------------------------
+    # ------------------------- METODI DEL CONTROLLER -------------------------
 
-    def display_account(self, ruolo: str) -> None:  # - Ruolo non implementato
+    def __display_account(self, ruolo: str) -> None:  # - Ruolo non implementato
         ...
 
-    def nuovo_account(self, ruolo: str) -> None:  # - Ruolo non implementato
+    def __nuovo_account(self, ruolo: str) -> None:  # - Ruolo non implementato
         ...
 
     def modifica_account(self, id_: int) -> None:  # - Account non implementato
