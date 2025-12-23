@@ -13,12 +13,10 @@ class AbstractCUController(QObject, metaclass=ABCQObjectMeta):
     di oggetti del model.
 
     Segnali:
-    - goBackRequest(): emesso per tornare all'ultima pagina visualizzata;
-    - getNavPageRequest(str, dict): emesso per ottenere la pagina da cui si prenderà l'input.
+    - goBackRequest(): emesso per tornare all'ultima pagina visualizzata.
     """
 
     goBackRequest = pyqtSignal()
-    getNavPageRequest = pyqtSignal(str, dict)
 
     def __init__(
         self, model: Model, nuova: AbstractCreaView, modifica: AbstractCreaView
@@ -57,8 +55,8 @@ class AbstractCUController(QObject, metaclass=ABCQObjectMeta):
     def _annulla_salvataggio(self, cur_pagina: AbstractCreaView) -> None:
         """Annulla l'operazione di creazione o modifica.
 
-        :param cur_pagina: pagina dove fare il reset dopo ritornare alla pagina dove l'operazione
-        (crea o modifica) è stata chiamata
+        :param cur_pagina: pagina dove fare il reset dopo ritornare alla pagina dove
+        l'operazione (crea o modifica) è stata iniziata
         """
         self.goBackRequest.emit()
         cur_pagina.reset_pagina()

@@ -13,7 +13,7 @@ from typing import override
 
 from view.abstractView.abstractSectionView import AbstractSectionView
 
-# - Se l'app, in teoria, vendrà usata in un schermo tattile dai cliente, sarà comodo scambiare
+# - Se l'app, in teoria, vendrà usata in un schermo tattile dai clienti, sarà comodo scambiare
 #   alcuni .clicked per .pressed
 
 

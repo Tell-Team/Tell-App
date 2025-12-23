@@ -1,6 +1,8 @@
 from PyQt6.QtCore import pyqtSignal, QObject
 from functools import partial
 
+from controller.navigation import Pagina
+
 from model.model import Model
 
 from view.login.login_page import LoginPage
@@ -8,8 +10,10 @@ from view.login.authentication_page import AuthenticationPage
 
 
 class LoginController(QObject):
+    """# - ancora non so come funzionerà sto controller."""
+
     goBackRequest = pyqtSignal()
-    goToPageRequest = pyqtSignal(str, bool)
+    goToPageRequest = pyqtSignal(Pagina, bool)
 
     def __init__(
         self, model: Model, login_v: LoginPage, auth_v: AuthenticationPage
@@ -25,17 +29,17 @@ class LoginController(QObject):
 
     def _connect_signals(self) -> None:
         self.__login_page.loginAsCliente.connect(  # type:ignore
-            partial(self.goToPageRequest.emit, "spettacoli_section", True)
+            partial(self.goToPageRequest.emit, Pagina.SEZIONE_SPETTACOLI, True)
         )
 
         # - Il ruolo dell'utente non è ancora implementato
         self.__login_page.loginAsBiglietteria.connect(  # type:ignore
-            partial(self.goToPageRequest.emit, "authentication_page", True)
+            partial(self.goToPageRequest.emit, Pagina.PAGINA_AUTENTICAZIONE, True)
         )
 
         # - Il ruolo dell'utente non è ancora implementato
         self.__login_page.loginAsAdmin.connect(  # type:ignore
-            partial(self.goToPageRequest.emit, "authentication_page", True)
+            partial(self.goToPageRequest.emit, Pagina.PAGINA_AUTENTICAZIONE, True)
         )
 
         self.__authentication_page.annullaRequest.connect(  # type:ignore
@@ -55,4 +59,4 @@ class LoginController(QObject):
 
     def login_attempt(self, username: str, password: str) -> None:
         ...  # - Da definere
-        self.goToPageRequest.emit("spettacoli_section", True)
+        self.goToPageRequest.emit(Pagina.SEZIONE_SPETTACOLI, True)

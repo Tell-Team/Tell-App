@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QMainWindow, QWidget, QStackedWidget
 from typing import Optional
 
-from controller.navigation import NavigationController
+from controller.navigation import NavigationController, Pagina
 
 from model.model import Model
 
@@ -78,18 +78,22 @@ class AppContext:
 
         # ------------------------- REGISTRAZIONE DELLE PAGINE -------------------------
 
-        self.__nav.registra_pagina("login_page", self.__login_page)
-        self.__nav.registra_pagina("authentication_page", self.__authentication_page)
-        self.__nav.registra_pagina("spettacoli_section", self.__spettacoli_section)
-        self.__nav.registra_pagina("info_section", self.__info_section)
-        self.__nav.registra_pagina("nuova_opera", self.__nuova_opera_view)
-        self.__nav.registra_pagina("modifica_opera", self.__modifica_opera_view)
-        self.__nav.registra_pagina("visualizza_opera", self.__visualizza_opera_view)
-        self.__nav.registra_pagina("nuova_regia", self.__nuova_regia_view)
-        self.__nav.registra_pagina("modifica_regia", self.__modifica_regia_view)
-        self.__nav.registra_pagina("nuovo_genere", self.__nuovo_genere_view)
-        self.__nav.registra_pagina("modifica_genere", self.__modifica_genere_view)
-        self.__nav.registra_pagina("account_section", self.__account_section)
+        self.__nav.registra_pagina(Pagina.PAGINA_LOGIN, self.__login_page)
+        self.__nav.registra_pagina(
+            Pagina.PAGINA_AUTENTICAZIONE, self.__authentication_page
+        )
+        self.__nav.registra_pagina(Pagina.SEZIONE_SPETTACOLI, self.__spettacoli_section)
+        self.__nav.registra_pagina(Pagina.SEZIONE_INFO, self.__info_section)
+        self.__nav.registra_pagina(Pagina.NUOVA_OPERA, self.__nuova_opera_view)
+        self.__nav.registra_pagina(Pagina.MODIFICA_OPERA, self.__modifica_opera_view)
+        self.__nav.registra_pagina(
+            Pagina.VISUALIZZA_OPERA, self.__visualizza_opera_view
+        )
+        self.__nav.registra_pagina(Pagina.NUOVA_REGIA, self.__nuova_regia_view)
+        self.__nav.registra_pagina(Pagina.MODIFICA_REGIA, self.__modifica_regia_view)
+        self.__nav.registra_pagina(Pagina.NUOVO_GENERE, self.__nuovo_genere_view)
+        self.__nav.registra_pagina(Pagina.MODIFICA_GENERE, self.__modifica_genere_view)
+        self.__nav.registra_pagina(Pagina.SEZIONE_ACCOUNT, self.__account_section)
 
         # ------------------------- CONTROLLERS DELLA VIEW -------------------------
 
@@ -177,16 +181,10 @@ class AppContext:
         self.__cu_opera_controller.goBackRequest.connect(  # type:ignore
             self.__on_request_go_back
         )
-        self.__cu_opera_controller.getNavPageRequest.connect(  # type:ignore
-            self.__on_request_get_page
-        )
 
         # CUGenereController
         self.__cu_genere_controller.goBackRequest.connect(  # type:ignore
             self.__on_request_go_back
-        )
-        self.__cu_genere_controller.getNavPageRequest.connect(  # type:ignore
-            self.__on_request_get_page
         )
 
         # VisualizzaOperaController
@@ -203,9 +201,6 @@ class AppContext:
         # CURegiaController
         self.__cu_regia_controller.goBackRequest.connect(  # type:ignore
             self.__on_request_go_back
-        )
-        self.__cu_regia_controller.getNavPageRequest.connect(  # type:ignore
-            self.__on_request_get_page
         )
 
         # AccountController
@@ -243,7 +238,7 @@ class AppContext:
 
     def __on_request_logout(self) -> None:
         # - CORRIGERE: Da implementare autenticazione.
-        self.__nav.go_to("login_page", False)
+        self.__nav.go_to(Pagina.PAGINA_LOGIN, False)
         # - Come faccio per resettare i filtri di ricerca delle sezioni
         # - TEST
         self.__spettacoli_section.filtro_ricerca = ""
@@ -256,9 +251,9 @@ class AppContext:
     def __on_request_go_back(self) -> None:
         self.__nav.go_back()
 
-    def __on_request_go_to(self, page_name: str, save_history: bool) -> None:
+    def __on_request_go_to(self, nome: Pagina, save_history: bool) -> None:
         try:
-            self.__nav.go_to(page_name, save_history)
+            self.__nav.go_to(nome, save_history)
         except KeyError as exc:
             MessageView.mostra_errore(
                 self.__nav.get_cur_central_page(),
@@ -268,9 +263,9 @@ class AppContext:
                 f"Si è verificato un errore: {exc}",
             )
 
-    def __on_request_section_go_to(self, page_name: str) -> None:
+    def __on_request_section_go_to(self, nome: Pagina) -> None:
         try:
-            self.__nav.section_go_to(page_name)
+            self.__nav.section_go_to(nome)
         except KeyError as exc:
             MessageView.mostra_errore(
                 self.__nav.get_cur_central_page(),
@@ -281,6 +276,6 @@ class AppContext:
             )
 
     def __on_request_get_page(
-        self, page_name: str, container: dict[str, Optional[QWidget]]
+        self, nome: Pagina, container: dict[str, Optional[QWidget]]
     ) -> None:
-        container["value"] = self.__nav.get_pagina(page_name)
+        container["value"] = self.__nav.get_pagina(nome)

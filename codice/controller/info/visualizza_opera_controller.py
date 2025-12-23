@@ -2,6 +2,8 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import pyqtSignal, QObject
 from typing import Optional
 
+from controller.navigation import Pagina
+
 from model.model import Model
 from model.pianificazione.opera import Opera
 from model.pianificazione.regia import Regia
@@ -18,13 +20,13 @@ class VisualizzaOperaController(QObject):
 
     Segnali:
     - goBackRequest(): emesso per tornare alla pagina `InfoSectionView`;
-    - goToPageRequest(str, bool): emesso per visualizzare un'altra pagina;
-    - getNavPageRequest(str, dict): emesso per ottenere la pagina che vendrà visualizzata.
+    - goToPageRequest(Pagina, bool): emesso per visualizzare un'altra pagina;
+    - getNavPageRequest(Pagina, dict): emesso per ottenere la pagina che vendrà visualizzata.
     """
 
     goBackRequest = pyqtSignal()
-    goToPageRequest = pyqtSignal(str, bool)
-    getNavPageRequest = pyqtSignal(str, dict)
+    goToPageRequest = pyqtSignal(Pagina, bool)
+    getNavPageRequest = pyqtSignal(Pagina, dict)
 
     def __init__(self, model: Model, opera_v: VisualizzaOperaView) -> None:
         super().__init__()
@@ -73,19 +75,22 @@ class VisualizzaOperaController(QObject):
         # - Implementare elimina_spettacolo nel model
 
     def __display_regie(self, layout: QVBoxLayout) -> None:
-        """Visualizza a schermo le informazioni delle regie salvati e vincolate ad
+        """Visualizza a schermo le informazioni delle regie salvati e associate ad
         un'opera ed assegna a ciascuna pulsanti per modificarli o eliminarli.
 
         :param layout: layout dove saranno caricate tutti le regie
         """
+        lista_regie = self.__get_regie_by_opera(
+            self.__visualizza_opera_view.id_cur_opera
+        )
+
         # Verifica che la lista non sia vuota
-        cur_lista = self.__get_regie_by_opera(self.__visualizza_opera_view.id_cur_opera)
-        if not cur_lista:
+        if not lista_regie:
             self.__visualizza_opera_view.if_lista_vuota(layout)
             return
 
         # Mostra tutti le regie salvate a schermo
-        for regia in cur_lista:
+        for regia in lista_regie:
             cur_regia = RegiaDisplay(regia)
 
             # Setup della pagina di modifica delle regie
@@ -120,13 +125,12 @@ class VisualizzaOperaController(QObject):
 
     def __nuova_regia(self) -> None:
         """Carica la pagina `NuovaRegiaView`, dove l'utente può inserire i dati
-        necessari per creare una regia.
-        """
+        necessari per creare una regia."""
         # Ottieni la pagina NuovaOperaView
         from view.info.pagine.nuova_regia import NuovaRegiaView
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
-        pagina_nome = "nuova_regia"
+        pagina_nome = Pagina.NUOVA_REGIA
         self.getNavPageRequest.emit(pagina_nome, cur_pagina_dict)
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
@@ -147,7 +151,7 @@ class VisualizzaOperaController(QObject):
             MessageView.mostra_errore(
                 self.__visualizza_opera_view,
                 "Opera inesistente",
-                f"Non è presente nessun'opera con id {cur_id_opera}.",
+                f"Non è presente nessuna opera con id {cur_id_opera}.",
             )
             return
 
@@ -177,7 +181,7 @@ class VisualizzaOperaController(QObject):
         from view.info.pagine.modifica_regia import ModificaRegiaView
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
-        pagina_nome = "modifica_regia"
+        pagina_nome = Pagina.MODIFICA_REGIA
         self.getNavPageRequest.emit(pagina_nome, cur_pagina_dict)
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
@@ -207,7 +211,7 @@ class VisualizzaOperaController(QObject):
             MessageView.mostra_errore(
                 self.__visualizza_opera_view,
                 "Opera inesistente",
-                f"Non è presente nessun'opera con id '{cur_regia.get_id_opera()}'.",
+                f"Non è presente nessuna opera con id '{cur_regia.get_id_opera()}'.",
             )
             return
 

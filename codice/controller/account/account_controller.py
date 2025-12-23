@@ -1,6 +1,8 @@
 from PyQt6.QtCore import pyqtSignal, QObject
 from functools import partial
 
+from controller.navigation import Pagina
+
 from model.model import Model
 
 from view.account.pagine.account_section import AccountSectionView
@@ -13,16 +15,16 @@ class AccountController(QObject):
 
     Segnali:
     - logoutRequest(): emesso per eseguire la funzione di logout dall`AppContext`;
-    - goToPageRequest(str, bool): emesso per visualizzare un'altra pagina;
-    - goToSectionRequest(str): emesso per visualizzare un'altra pagina, senza salvarla
+    - goToPageRequest(Pagina, bool): emesso per visualizzare un'altra pagina;
+    - goToSectionRequest(Pagina): emesso per visualizzare un'altra pagina, senza salvarla
     nell'history del `NavigationController`;
-    - getNavPageRequest(str, dict): emesso per ottenere la pagina che vendrà visualizzata.
+    - getNavPageRequest(Pagina, dict): emesso per ottenere la pagina che vendrà visualizzata.
     """
 
     logoutRequest = pyqtSignal()
-    goToPageRequest = pyqtSignal(str, bool)
-    goToSectionRequest = pyqtSignal(str)
-    getNavPageRequest = pyqtSignal(str, dict)
+    goToPageRequest = pyqtSignal(Pagina, bool)
+    goToSectionRequest = pyqtSignal(Pagina)
+    getNavPageRequest = pyqtSignal(Pagina, dict)
 
     def __init__(
         self,
@@ -44,11 +46,11 @@ class AccountController(QObject):
         )
         # Visualizza Sezione Spettacoli
         self.__account_section.goToSpettacoli.connect(  # type:ignore
-            partial(self.goToSectionRequest.emit, "spettacoli_section")
+            partial(self.goToSectionRequest.emit, Pagina.SEZIONE_SPETTACOLI)
         )
         # Visualizza Sezione Info
         self.__account_section.goToInfo.connect(  # type:ignore
-            partial(self.goToSectionRequest.emit, "info_section")
+            partial(self.goToSectionRequest.emit, Pagina.SEZIONE_INFO)
         )
 
         # Display della Lista Account
@@ -81,8 +83,8 @@ class AccountController(QObject):
 
 
 # - QUESTE FUNZIONE DOVREBBERO ANDAR BENE NEL CONTROLLER (DOPO ADATTARLI OVVIAMENTE)
-# - SONO I display_admin() E display_biglietteria()
-# - EQUIVALENTI A display_opera() E display_genere() DELL'InfoController
+# SONO I display_admin() E display_biglietteria()
+# EQUIVALENTI A display_opera() E display_genere() DELL'InfoController
 
 # Questi metodi gli avevo scritto quando la view ed i controller stavano scritti insieme.
 # ## ADMIN DISPLAY

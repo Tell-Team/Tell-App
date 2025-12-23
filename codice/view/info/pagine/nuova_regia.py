@@ -163,7 +163,7 @@ class NuovaRegiaView(AbstractCreaView):
         label_opera.setObjectName("subheader")
         self.opera = QComboBox()
         self.opera.setEnabled(False)
-        # - Non so se questa pagina sarà esclusiva della sezione Info
+        # - Questa pagina sarà esclusiva della sezione Info?
 
         self._form_layout.addRow(label_titolo, self.titolo)
         self._form_layout.addRow(label_note, self.note)

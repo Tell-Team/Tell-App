@@ -149,7 +149,7 @@ class VisualizzaOperaView(QWidget):
 
         :param data: data salvata in una classe immutabile
         :param genere_nome: nome del genere scelto per l'opera
-        :param lista_regie: lista delle regie vincolate all'opera"""
+        :param lista_regie: lista delle regie associate all'opera"""
         LISTA_REGIE_VUOTA = "Al momento, non vi sono regie per questa opera."
 
         # Reset layout lista regie

@@ -18,8 +18,7 @@ class CUGenereController(AbstractCUController):
     """Gestisce il salvataggio dei generi creati e modificati.
 
     Segnali:
-    - goBackRequest(): emesso per tornare alla pagina `InfoSectionView`;
-    - getNavPageRequest(str, dict): emesso per ottenere la pagina da cui si prenderà l'input.
+    - goBackRequest(): emesso per tornare alla pagina `InfoSectionView`.
     """
 
     _view_nuova: NuovoGenereView
@@ -50,6 +49,10 @@ class CUGenereController(AbstractCUController):
 
     @override
     def _inizia_salvataggio(self, is_new: bool) -> None:
+        """Salva il genere creato o modificato nel `GestoreGeneri`.
+
+        :param is_new: verifica se si deve creare un genere o modificare una esistente
+        """
         CAMPI_NECESSARI = (
             "<b>ATTENZIONE</b>: E' necessario compilare tutti i campi d'input."
         )

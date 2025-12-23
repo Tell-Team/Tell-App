@@ -2,6 +2,8 @@ from PyQt6.QtCore import pyqtSignal, QObject
 from functools import partial
 from typing import Optional
 
+from controller.navigation import Pagina
+
 from model.model import Model
 from model.pianificazione.spettacolo import Spettacolo
 
@@ -15,16 +17,16 @@ class SpettacoliController(QObject):
 
     Segnali:
     - logoutRequest(): emesso per eseguire la funzione di logout dall`AppContext`;
-    - goToPageRequest(str, bool): emesso per visualizzare un'altra pagina;
-    - goToSectionRequest(str): emesso per visualizzare un'altra pagina, senza salvarla
+    - goToPageRequest(Pagina, bool): emesso per visualizzare un'altra pagina;
+    - goToSectionRequest(Pagina): emesso per visualizzare un'altra pagina, senza salvarla
     nell'history del `NavigationController`;
-    - getNavPageRequest(str, dict): emesso per ottenere la pagina che vendrà visualizzata.
+    - getNavPageRequest(Pagina, dict): emesso per ottenere la pagina che vendrà visualizzata.
     """
 
     logoutRequest = pyqtSignal()
-    goToPageRequest = pyqtSignal(str, bool)
-    goToSectionRequest = pyqtSignal(str)
-    getNavPageRequest = pyqtSignal(str, dict)
+    goToPageRequest = pyqtSignal(Pagina, bool)
+    goToSectionRequest = pyqtSignal(Pagina)
+    getNavPageRequest = pyqtSignal(Pagina, dict)
 
     def __init__(self, model: Model, spettacoli_s: SpettacoliSectionView) -> None:
         super().__init__()
@@ -42,11 +44,11 @@ class SpettacoliController(QObject):
         )
         # Visualizza Sezione Info
         self.__spettacoli_section.goToInfo.connect(  # type:ignore
-            partial(self.goToSectionRequest.emit, "info_section")
+            partial(self.goToSectionRequest.emit, Pagina.SEZIONE_INFO)
         )
         # Visualizza Sezione Account
         self.__spettacoli_section.goToAccount.connect(  # type:ignore
-            partial(self.goToSectionRequest.emit, "account_section")
+            partial(self.goToSectionRequest.emit, Pagina.SEZIONE_ACCOUNT)
         )
 
         # Display della Lista Spettacoli

@@ -19,8 +19,7 @@ class CURegiaController(AbstractCUController):
     """Gestisce il salvataggio delle regie create e modificate.
 
     Segnali:
-    - goBackRequest(): emesso per tornare alla pagina `VisualizzaOperaView`;
-    - getNavPageRequest(str, dict): emesso per ottenere la pagina da cui si prenderà l'input.
+    - goBackRequest(): emesso per tornare alla pagina `VisualizzaOperaView`.
     """
 
     _view_nuova: NuovaRegiaView
@@ -112,8 +111,8 @@ class CURegiaController(AbstractCUController):
         if nome in pagina.lista_interpreti.keys():
             pagina.label_lista_interpreti_error.setText("Interprete esistente")
             return
-        pagina.lista_interpreti[nome] = ruolo
 
+        pagina.lista_interpreti[nome] = ruolo
         pagina.aggiorna_pagina()
 
     def __aggiungi_tecnico(self, pagina: NuovaRegiaView, nome: str, posto: str) -> None:
@@ -121,7 +120,7 @@ class CURegiaController(AbstractCUController):
 
         :param pagina: pagina dove il tecnico sarà aggiunto
         :param nome: nome del tecnico
-        :param ruolo: posto del tecnico"""
+        :param posto: posto del tecnico"""
         # Verifiche che ci sia input
         if not nome or not posto:
             pagina.label_lista_tecnici_error.setText("Input non valido")
@@ -131,8 +130,8 @@ class CURegiaController(AbstractCUController):
         if nome in pagina.lista_tecnici.keys():
             pagina.label_lista_tecnici_error.setText("Tecnico esistente")
             return
-        pagina.lista_tecnici[nome] = posto
 
+        pagina.lista_tecnici[nome] = posto
         pagina.aggiorna_pagina()
 
     def __display_interpreti(self, pagina: NuovaRegiaView) -> None:
@@ -248,7 +247,7 @@ class CURegiaController(AbstractCUController):
             if not isinstance(copia_regia, Regia):
                 # Non esiste regia con l'id salvata nella pagina
                 MessageView.mostra_errore(
-                    cur_pagina,  # - Cercare un modo di ottenere il central_widget del nav
+                    cur_pagina,
                     "Errore nel salvataggio",
                     f"Non è presente nessuna regia con id {cur_pagina.cur_id_regia}. "
                     + "Impossibile effettuare le modifiche.",

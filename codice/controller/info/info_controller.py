@@ -3,6 +3,8 @@ from PyQt6.QtCore import pyqtSignal, QObject
 from typing import Optional
 from functools import partial
 
+from controller.navigation import Pagina
+
 from model.model import Model
 from model.pianificazione.opera import Opera
 from model.pianificazione.genere import Genere
@@ -22,16 +24,16 @@ class InfoController(QObject):
 
     Segnali:
     - logoutRequest(): emesso per eseguire la funzione di logout dall`AppContext`;
-    - goToPageRequest(str, bool): emesso per visualizzare un'altra pagina;
-    - goToSectionRequest(str): emesso per visualizzare un'altra pagina, senza salvarla
+    - goToPageRequest(Pagina, bool): emesso per visualizzare un'altra pagina;
+    - goToSectionRequest(Pagina): emesso per visualizzare un'altra pagina, senza salvarla
     nell'history del `NavigationController`;
-    - getNavPageRequest(str, dict): emesso per ottenere la pagina che vendrà visualizzata.
+    - getNavPageRequest(Pagina, dict): emesso per ottenere la pagina che vendrà visualizzata.
     """
 
     logoutRequest = pyqtSignal()
-    goToPageRequest = pyqtSignal(str, bool)
-    goToSectionRequest = pyqtSignal(str)
-    getNavPageRequest = pyqtSignal(str, dict)
+    goToPageRequest = pyqtSignal(Pagina, bool)
+    goToSectionRequest = pyqtSignal(Pagina)
+    getNavPageRequest = pyqtSignal(Pagina, dict)
 
     def __init__(self, model: Model, info_s: InfoSectionView) -> None:
         super().__init__()
@@ -49,11 +51,11 @@ class InfoController(QObject):
         )
         # Visualizza Sezione Spettacoli
         self.__info_section.goToSpettacoli.connect(  # type:ignore
-            partial(self.goToSectionRequest.emit, "spettacoli_section")
+            partial(self.goToSectionRequest.emit, Pagina.SEZIONE_SPETTACOLI)
         )
         # Visualizza Sezione Account
         self.__info_section.goToAccount.connect(  # type:ignore
-            partial(self.goToSectionRequest.emit, "account_section")
+            partial(self.goToSectionRequest.emit, Pagina.SEZIONE_ACCOUNT)
             # - CORRIGGERE: Account ancora non implementato
         )
 
@@ -107,8 +109,9 @@ class InfoController(QObject):
 
         :param layout: layout dove saranno caricate tutte le opere
         """
-        # Verifica se c'è un filtro di ricerca
         lista_opere: list[Opera] = []
+
+        # Verifica se c'è un filtro di ricerca
         filtro = self.__info_section.filtro_ricerca
 
         if filtro == "":
@@ -166,13 +169,15 @@ class InfoController(QObject):
 
         :param layout: layout dove saranno caricate tutti i generi
         """
+        lista_generi = self.__get_generi()
+
         # Verifica che la lista non sia vuota
-        if not self.__get_generi():
+        if not lista_generi:
             self.__info_section.if_lista_vuota(layout)
             return
 
         # Mostra tutti i generi salvati a schermo
-        for genere in self.__get_generi():
+        for genere in lista_generi:
             cur_genere = GenereDisplay(genere)
 
             # Setup della pagina di modifica dei generi
@@ -217,7 +222,7 @@ class InfoController(QObject):
             MessageView.mostra_errore(
                 self.__info_section,
                 "Opera inesistente",
-                f"Non è presente nessun'opera con id {id_}.",
+                f"Non è presente nessuna opera con id {id_}.",
             )
             return
 
@@ -225,7 +230,7 @@ class InfoController(QObject):
         from view.info.pagine.visualizza_opera import VisualizzaOperaView
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
-        pagina_nome = "visualizza_opera"
+        pagina_nome = Pagina.VISUALIZZA_OPERA
         self.getNavPageRequest.emit(pagina_nome, cur_pagina_dict)
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
@@ -265,17 +270,16 @@ class InfoController(QObject):
         cur_pagina.set_data(opera_data, cur_genere.get_nome(), lista_regie)
 
         # Apri la pagina
-        self.goToPageRequest.emit("visualizza_opera", True)
+        self.goToPageRequest.emit(pagina_nome, True)
 
     def __nuova_opera(self) -> None:
         """Carica la pagina `NuovaOperaView`, dove l'utente può inserire i dati
-        necessari per creare un'opera.
-        """
+        necessari per creare un'opera."""
         # Ottieni la pagina NuovaOperaView
         from view.info.pagine.nuova_opera import NuovaOperaView
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
-        pagina_nome = "nuova_opera"
+        pagina_nome = Pagina.NUOVA_OPERA
         self.getNavPageRequest.emit(pagina_nome, cur_pagina_dict)
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
@@ -307,7 +311,7 @@ class InfoController(QObject):
             MessageView.mostra_errore(
                 self.__info_section,
                 "Opera inesistente",
-                f"Non è presente nessun'opera con id {id_}.",
+                f"Non è presente nessuna opera con id {id_}.",
             )
             return
 
@@ -315,7 +319,7 @@ class InfoController(QObject):
         from view.info.pagine.modifica_opera import ModificaOperaView
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
-        pagina_nome = "modifica_opera"
+        pagina_nome = Pagina.MODIFICA_OPERA
         self.getNavPageRequest.emit(pagina_nome, cur_pagina_dict)
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
@@ -350,13 +354,12 @@ class InfoController(QObject):
 
     def __nuovo_genere(self) -> None:
         """Carica la pagina `NuovoGenereView`, dove l'utente può inserire i dati
-        necessari per creare un genere.
-        """
+        necessari per creare un genere."""
         # Ottieni la pagina NuovoGenereView
         from view.info.pagine.nuovo_genere import NuovoGenereView
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
-        pagina_nome = "nuovo_genere"
+        pagina_nome = Pagina.NUOVO_GENERE
         self.getNavPageRequest.emit(pagina_nome, cur_pagina_dict)
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
@@ -395,7 +398,7 @@ class InfoController(QObject):
         from view.info.pagine.modifica_genere import ModificaGenereView
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
-        pagina_nome = "modifica_genere"
+        pagina_nome = Pagina.MODIFICA_GENERE
         self.getNavPageRequest.emit(pagina_nome, cur_pagina_dict)
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 

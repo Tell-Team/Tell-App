@@ -1,5 +1,25 @@
 from PyQt6.QtWidgets import QMainWindow, QWidget, QStackedWidget
+from enum import Enum
 from typing import Optional
+
+
+class Pagina(Enum):
+    """Enum con i nomi (keys) per registrare pagine nel `NavigationController`."""
+
+    # I valori indicano il nome del file dove si trova la classe della pagina.
+    # Non hanno uno scopo funzionale dentro del codice.
+    PAGINA_LOGIN = "login_page"
+    PAGINA_AUTENTICAZIONE = "authentication_page"
+    SEZIONE_SPETTACOLI = "spettacoli_section"
+    SEZIONE_INFO = "info_section"
+    NUOVA_OPERA = "nuova_opera"
+    MODIFICA_OPERA = "modifica_opera"
+    VISUALIZZA_OPERA = "visualizza_opera"
+    NUOVA_REGIA = "nuova_regia"
+    MODIFICA_REGIA = "modifica_regia"
+    NUOVO_GENERE = "nuovo_genere"
+    MODIFICA_GENERE = "modifica_genere"
+    SEZIONE_ACCOUNT = "account_section"
 
 
 class NavigationController:
@@ -9,21 +29,21 @@ class NavigationController:
         self._main_window = main_window
         self._stack = QStackedWidget()
         self._history: list[QWidget] = []  # Pile di widget per tornare dietro
-        self._pages: dict[str, QWidget] = {}  # Registro delle pagine
+        self._pagine: dict[Pagina, QWidget] = {}  # Registro delle pagine
 
     def get_stack(self) -> QStackedWidget:
         return self._stack
 
     # def get_pagine(self) -> dict[str, QWidget]:
-    #     return self._pages
+    #     return self._pagine
 
-    def get_pagina(self, page_name: str) -> Optional[QWidget]:
+    def get_pagina(self, nome: Pagina) -> Optional[QWidget]:
         """Ritorna una pagina registrata.
 
-        :param page_name: key usata per cercare la pagina nel dict"""
-        for key in self._pages:
-            if key == page_name:
-                return self._pages.get(key)
+        :param nome: key usata per cercare la pagina nel dict"""
+        for key in self._pagine:
+            if key == nome:
+                return self._pagine.get(key)
 
     def get_cur_central_page(self) -> QWidget:
         """Ritorna la pagina visualizzata dall'utente.
@@ -37,26 +57,26 @@ class NavigationController:
             raise RuntimeError("Non c'è un central widget asegnato.")
         return widget
 
-    def registra_pagina(self, page_name: str, widget: QWidget) -> None:
+    def registra_pagina(self, nome: Pagina, widget: QWidget) -> None:
         """Registra una pagina nel controller.
 
-        :param page_name: key usata per salvare la pagina nel dict
+        :param nome: key usata per salvare la pagina nel dict
         :param widget: pagina da salvare nel dict"""
-        self._pages[page_name] = widget
+        self._pagine[nome] = widget
         self._stack.addWidget(widget)
 
-    def go_to(self, page_name: str, save_history: bool = True) -> None:
+    def go_to(self, nome: Pagina, save_history: bool = True) -> None:
         """Visualizza una pagina registrata nel controller.
 
-        :param page_name: key usata per trovare la pagina
+        :param nome: key usata per trovare la pagina
         :param save_history: verifica se la pagina sarà salvata nell'history del controller o no
 
         :raise KeyError: la pagina cercata non è stata trovata
         """
         try:
-            widget = self._pages[page_name]
+            widget = self._pagine[nome]
         except KeyError:
-            raise KeyError(f"Non è stata trovata la pagina '{page_name}'.")
+            raise KeyError(f"Non è stata trovata la pagina '{nome}'.")
 
         current = self._stack.currentWidget()
         if current and save_history:
@@ -69,11 +89,11 @@ class NavigationController:
 
         self._stack.setCurrentWidget(widget)
 
-    def section_go_to(self, page_name: str) -> None:
+    def section_go_to(self, nome: Pagina) -> None:
         """Visualizza una pagina senza salvare la pagina corrente nell'history del controller.
 
-        :param page_name: key usata per trovare la pagina"""
-        self.go_to(page_name, save_history=False)
+        :param nome: key usata per trovare la pagina"""
+        self.go_to(nome, save_history=False)
 
     def go_back(self) -> None:
         """Visualizza la pagina precedente, registrata nel'history del controller."""

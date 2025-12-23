@@ -1,4 +1,4 @@
-# - Dovrei togliere questo file dalla view? Viene anche usato dai controller infatti.
+# - Dovrei togliere questo file dalla view? Viene anche usato dai controller.
 from abc import ABCMeta
 from PyQt6.QtCore import QObject
 

@@ -41,7 +41,7 @@ class ModificaAccountView(NuovoAccountView):
     #     self.nome.setText(data.nome)
     #     self.cognome.setText(data.cognome)
     #     self.username.setText(data.username)
-    #     self.password.setText(data.password) # - Fare il testo di self.password vissibile
+    #     self.password.setText(data.password) # - Fare il testo di self.password vissibile(?)
 
     @override
     def reset_pagina(self) -> None:

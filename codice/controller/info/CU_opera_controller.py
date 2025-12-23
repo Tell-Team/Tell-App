@@ -18,8 +18,7 @@ class CUOperaController(AbstractCUController):
     """Gestisce il salvataggio delle opere create e modificate.
 
     Segnali:
-    - goBackRequest(): emesso per tornare all'ultima pagina visualizzata;
-    - getNavPageRequest(str, dict): emesso per ottenere la pagina da cui si prenderà l'input.
+    - goBackRequest(): emesso per tornare alla pagina `InfoSectionView`.
     """
 
     _view_nuova: NuovaOperaView
@@ -52,7 +51,8 @@ class CUOperaController(AbstractCUController):
     def _inizia_salvataggio(self, is_new: bool = True) -> None:
         """Salva l'opera creata o modificata nel `GestoreOpere`.
 
-        :param is_new: verifica se si deve creare un'opera o modificare una esistente"""
+        :param is_new: verifica se si deve creare un'opera o modificare una esistente
+        """
         CAMPI_NECESSARI = (
             "<b>ATTENZIONE</b>: E' necessario compilare tutti i campi d'input."
         )
@@ -113,7 +113,7 @@ class CUOperaController(AbstractCUController):
                 MessageView.mostra_errore(
                     cur_pagina,
                     "Errore nel salvataggio",
-                    f"Non è presente nessun'opera con id {cur_pagina.cur_id_opera}. "
+                    f"Non è presente nessuna opera con id {cur_pagina.cur_id_opera}. "
                     + "Impossibile effettuare le modifiche.",
                 )
                 return
