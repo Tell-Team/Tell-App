@@ -53,3 +53,18 @@ class Regia(Spettacolo):
             raise DatoIncongruenteException("L'id opera non può essere minore di 0.")
 
         self.__id_opera = id_opera
+
+    # Magics
+    def __eq__(self, other: object) -> bool:
+        if (
+            self.get_regista() == other.get_regista()  # type: ignore
+            and self.get_anno_produzione() == other.get_anno_produzione()  # type: ignore
+            and self.get_id_opera() == other.get_id_opera()  # type: ignore
+            and self.get_titolo() == other.get_titolo()  # type: ignore
+            and self.get_note() == other.get_note()  # type: ignore
+            and self.get_interpreti() == other.get_interpreti()  # type: ignore
+            and self.get_tecnici() == other.get_tecnici()  # type: ignore
+        ):
+            return True
+
+        return False

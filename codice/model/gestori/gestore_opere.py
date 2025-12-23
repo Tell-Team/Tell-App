@@ -40,10 +40,15 @@ class GestoreOpere:
         return None
 
     def get_opere(self) -> list[Opera]:
-        return self.__lista_opere
+        return copy.deepcopy(self.__lista_opere)
 
     def get_opere_by_nome(self, nome: str) -> list[Opera]:
-        return list(filter(lambda o: nome in o.get_nome(), self.__lista_opere))
+        nome_lower = nome.lower()
+        return copy.deepcopy(
+            list(
+                filter(lambda o: nome_lower in o.get_nome().lower(), self.__lista_opere)
+            )
+        )
 
     # Modificatori
     def aggiungi_opera(self, opera: Opera):
@@ -63,7 +68,7 @@ class GestoreOpere:
                 self.__lista_opere.pop(i)
                 return
 
-        raise IdInesistenteException(f"Non è presente nessun'opera con id {id_}.")
+        raise IdInesistenteException(f"Non è presente nessuna opera con id {id_}.")
 
     def modifica_opera(self, opera_modificata: Opera):
         """Throws: IdInesistenteException"""

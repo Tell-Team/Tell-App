@@ -133,3 +133,19 @@ class Opera:
             raise DatoIncongruenteException("L'id genere non può essere minore di 0.")
 
         self.__id_genere = id_genere
+
+    # Magics
+    def __eq__(self, other: object) -> bool:
+        if (
+            self.get_nome() == other.get_nome()  # type: ignore
+            and self.get_compositore() == other.get_compositore()  # type: ignore
+            and self.get_librettista() == other.get_librettista()  # type: ignore
+            and self.get_numero_atti() == other.get_numero_atti()  # type: ignore
+            and self.get_data_prima_rappresentazione() == other.get_data_prima_rappresentazione()  # type: ignore
+            and self.get_teatro_prima_rappresentazione() == other.get_teatro_prima_rappresentazione()  # type: ignore
+            and self.get_trama() == other.get_trama()  # type: ignore
+            and self.get_id_genere() == other.get_id_genere()  # type: ignore
+        ):
+            return True
+
+        return False

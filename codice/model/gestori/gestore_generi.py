@@ -33,7 +33,7 @@ class GestoreGeneri:
         return None
 
     def get_generi(self) -> list[Genere]:
-        return self.__lista_generi
+        return copy.deepcopy(self.__lista_generi)
 
     # Modificatori
     def aggiungi_genere(self, genere: Genere):

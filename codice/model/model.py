@@ -96,6 +96,9 @@ class Model:
     def get_opere_by_nome(self, nome: str) -> list[Opera]:
         return self.__gestore_opere.get_opere_by_nome(nome)
 
+    def get_spettacolo(self, id_: int) -> Optional[Spettacolo]:
+        return self.__gestore_spettacoli.get_spettacolo(id_)
+
     def get_spettacoli(self) -> list[Spettacolo]:
         return self.__gestore_spettacoli.get_spettacoli()
 

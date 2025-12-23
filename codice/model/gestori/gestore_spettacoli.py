@@ -34,13 +34,15 @@ class GestoreSpettacoli:
         return None
 
     def get_spettacoli(self) -> list[Spettacolo]:
-        return self.__lista_spettacoli
+        return copy.deepcopy(self.__lista_spettacoli)
 
     def get_spettacoli_by_titolo(self, titolo: str) -> list[Spettacolo]:
-        return list(
-            filter(
-                lambda o: titolo.lower() in o.get_titolo().lower(),
-                self.__lista_spettacoli,
+        return copy.deepcopy(
+            list(
+                filter(
+                    lambda o: titolo.lower() in o.get_titolo().lower(),
+                    self.__lista_spettacoli,
+                )
             )
         )
 
@@ -49,7 +51,7 @@ class GestoreSpettacoli:
         for s in self.__lista_spettacoli:
             if type(s) is Regia and s.get_id_opera() == id_:
                 regie.append(s)
-        return regie
+        return copy.deepcopy(regie)
 
     # Modificatori
     def aggiungi_spettacolo(self, spettacolo: Spettacolo):

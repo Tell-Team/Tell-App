@@ -50,3 +50,13 @@ class Genere:
             raise DatoIncongruenteException("La descrizione non può essere vuota.")
 
         self.__descrizione = descrizione_stripped
+
+    # Magics
+    def __eq__(self, other: object) -> bool:
+        if (
+            self.get_nome() == other.get_nome()  # type: ignore
+            and self.get_descrizione() == other.get_descrizione()  # type: ignore
+        ):
+            return True
+
+        return False
