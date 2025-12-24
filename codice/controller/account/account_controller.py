@@ -21,10 +21,10 @@ class AccountController(QObject):
     - getNavPageRequest(Pagina, dict): emesso per ottenere la pagina che vendrà visualizzata.
     """
 
-    logoutRequest = pyqtSignal()
-    goToPageRequest = pyqtSignal(Pagina, bool)
-    goToSectionRequest = pyqtSignal(Pagina)
-    getNavPageRequest = pyqtSignal(Pagina, dict)
+    logoutRequest: pyqtSignal = pyqtSignal()
+    goToPageRequest: pyqtSignal = pyqtSignal(Pagina, bool)
+    goToSectionRequest: pyqtSignal = pyqtSignal(Pagina)
+    getNavPageRequest: pyqtSignal = pyqtSignal(Pagina, dict)
 
     def __init__(
         self,

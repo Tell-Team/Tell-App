@@ -16,7 +16,7 @@ class AbstractCUController(QObject, metaclass=ABCQObjectMeta):
     - goBackRequest(): emesso per tornare all'ultima pagina visualizzata.
     """
 
-    goBackRequest = pyqtSignal()
+    goBackRequest: pyqtSignal = pyqtSignal()
 
     def __init__(
         self, model: Model, nuova: AbstractCreaView, modifica: AbstractCreaView

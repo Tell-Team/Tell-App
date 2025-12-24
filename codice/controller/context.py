@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QMainWindow, QWidget, QStackedWidget
-from typing import Optional
+from PyQt6.QtCore import QObject
+from typing import Optional, Callable
 
 from controller.navigation import NavigationController, Pagina
 
@@ -97,12 +98,15 @@ class AppContext:
 
         # ------------------------- CONTROLLERS DELLA VIEW -------------------------
 
+        controllers: list[QObject] = []
+
         # LoginController
         from controller.login.login_controller import LoginController
 
         self.__login_controller = LoginController(
             self.__model, self.__login_page, self.__authentication_page
         )
+        controllers.append(self.__login_controller)
 
         # SpettacoliController
         from controller.spettacoli.spettacoli_controller import SpettacoliController
@@ -110,11 +114,13 @@ class AppContext:
         self.__spettacoli_controller = SpettacoliController(
             self.__model, self.__spettacoli_section
         )
+        controllers.append(self.__spettacoli_controller)
 
         # InfoController
         from controller.info.info_controller import InfoController
 
         self.__info_controller = InfoController(self.__model, self.__info_section)
+        controllers.append(self.__info_controller)
 
         # CUOperaController
         from controller.info.CU_opera_controller import CUOperaController
@@ -122,6 +128,7 @@ class AppContext:
         self.__cu_opera_controller = CUOperaController(
             self.__model, self.__nuova_opera_view, self.__modifica_opera_view
         )
+        controllers.append(self.__cu_opera_controller)
 
         # CUGenereController
         from controller.info.CU_genere_controller import CUGenereController
@@ -129,6 +136,7 @@ class AppContext:
         self.__cu_genere_controller = CUGenereController(
             self.__model, self.__nuovo_genere_view, self.__modifica_genere_view
         )
+        controllers.append(self.__cu_genere_controller)
 
         # VisualizzaOperaController
         from controller.info.visualizza_opera_controller import (
@@ -138,6 +146,7 @@ class AppContext:
         self.__visualizza_opera_controller = VisualizzaOperaController(
             self.__model, self.__visualizza_opera_view
         )
+        controllers.append(self.__visualizza_opera_controller)
 
         # CURegiaController
         from controller.info.CU_regia_controller import CURegiaController
@@ -145,6 +154,7 @@ class AppContext:
         self.__cu_regia_controller = CURegiaController(
             self.__model, self.__nuova_regia_view, self.__modifica_regia_view
         )
+        controllers.append(self.__cu_regia_controller)
 
         # AccountController
         from controller.account.account_controller import AccountController
@@ -152,84 +162,37 @@ class AppContext:
         self.__account_controller = AccountController(
             self.__model, self.__account_section
         )
+        controllers.append(self.__account_controller)
 
         # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
 
-        # LoginController
-        self.__login_controller.goBackRequest.connect(  # type:ignore
-            self.__on_request_go_back
-        )
-        self.__login_controller.goToPageRequest.connect(  # type:ignore
-            self.__on_request_go_to
-        )
+        # Tutti i controller devono usare, al di più, questi 5 segnali per la navigazione.
+        signal_map: dict[str, Callable[..., None]] = {
+            "logoutRequest": self.__on_request_logout,
+            "goBackRequest": self.__on_request_go_back,
+            "goToPageRequest": self.__on_request_go_to,
+            "goToSectionRequest": self.__on_request_section_go_to,
+            "getNavPageRequest": self.__on_request_get_page,
+        }
 
-        # InfoController
-        self.__info_controller.logoutRequest.connect(  # type:ignore
-            self.__on_request_logout
-        )
-        self.__info_controller.goToPageRequest.connect(  # type:ignore
-            self.__on_request_go_to
-        )
-        self.__info_controller.goToSectionRequest.connect(  # type:ignore
-            self.__on_request_section_go_to
-        )
-        self.__info_controller.getNavPageRequest.connect(  # type:ignore
-            self.__on_request_get_page
-        )
+        def safe_connect(
+            controller: QObject, sig_name: str, handler: Callable[..., None]
+        ) -> None:
+            """Verifica che il controller abbia un segnale con un nome specifice
+            e lo collega con lo slot corrispondente.
 
-        # CUOperaController
-        self.__cu_opera_controller.goBackRequest.connect(  # type:ignore
-            self.__on_request_go_back
-        )
+            :param controller: controller da cui sarano collegati i segnali
+            :param sig_name: nome del segnale da cercare
+            :param handler: slot da collegare al segnale se trovato"""
+            sig = getattr(controller, sig_name, None)
+            if sig and hasattr(sig, "connect"):
+                sig.connect(handler)
+            # else:
+            #     print(f" - {sig_name} no trovato o non è un segnale di {c}")
 
-        # CUGenereController
-        self.__cu_genere_controller.goBackRequest.connect(  # type:ignore
-            self.__on_request_go_back
-        )
-
-        # VisualizzaOperaController
-        self.__visualizza_opera_controller.goBackRequest.connect(  # type:ignore
-            self.__on_request_go_back
-        )
-        self.__visualizza_opera_controller.goToPageRequest.connect(  # type:ignore
-            self.__on_request_go_to
-        )
-        self.__visualizza_opera_controller.getNavPageRequest.connect(  # type:ignore
-            self.__on_request_get_page
-        )
-
-        # CURegiaController
-        self.__cu_regia_controller.goBackRequest.connect(  # type:ignore
-            self.__on_request_go_back
-        )
-
-        # AccountController
-        self.__account_controller.logoutRequest.connect(  # type:ignore
-            self.__on_request_logout
-        )
-        self.__account_controller.goToPageRequest.connect(  # type:ignore
-            self.__on_request_go_to
-        )
-        self.__account_controller.goToSectionRequest.connect(  # type:ignore
-            self.__on_request_section_go_to
-        )
-        self.__account_controller.getNavPageRequest.connect(  # type:ignore
-            self.__on_request_get_page
-        )
-
-        # SpettacoliController
-        self.__spettacoli_controller.logoutRequest.connect(  # type:ignore
-            self.__on_request_logout
-        )
-        self.__spettacoli_controller.goToPageRequest.connect(  # type:ignore
-            self.__on_request_go_to
-        )
-        self.__spettacoli_controller.goToSectionRequest.connect(  # type:ignore
-            self.__on_request_section_go_to
-        )
-        self.__spettacoli_controller.getNavPageRequest.connect(  # type:ignore
-            self.__on_request_get_page
-        )
+        for c in controllers:
+            for sig_name, handler in signal_map.items():
+                safe_connect(c, sig_name, handler)
 
     # ------------------------- METODI DI NAVIGAZIONE -------------------------
 

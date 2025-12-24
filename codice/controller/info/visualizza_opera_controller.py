@@ -24,9 +24,9 @@ class VisualizzaOperaController(QObject):
     - getNavPageRequest(Pagina, dict): emesso per ottenere la pagina che vendrà visualizzata.
     """
 
-    goBackRequest = pyqtSignal()
-    goToPageRequest = pyqtSignal(Pagina, bool)
-    getNavPageRequest = pyqtSignal(Pagina, dict)
+    goBackRequest: pyqtSignal = pyqtSignal()
+    goToPageRequest: pyqtSignal = pyqtSignal(Pagina, bool)
+    getNavPageRequest: pyqtSignal = pyqtSignal(Pagina, dict)
 
     def __init__(self, model: Model, opera_v: VisualizzaOperaView) -> None:
         super().__init__()

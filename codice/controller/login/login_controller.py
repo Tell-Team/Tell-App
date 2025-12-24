@@ -12,8 +12,8 @@ from view.login.authentication_page import AuthenticationPage
 class LoginController(QObject):
     """# - ancora non so come funzionerà sto controller."""
 
-    goBackRequest = pyqtSignal()
-    goToPageRequest = pyqtSignal(Pagina, bool)
+    goBackRequest: pyqtSignal = pyqtSignal()
+    goToPageRequest: pyqtSignal = pyqtSignal(Pagina, bool)
 
     def __init__(
         self, model: Model, login_v: LoginPage, auth_v: AuthenticationPage
