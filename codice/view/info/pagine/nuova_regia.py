@@ -67,19 +67,19 @@ class NuovaRegiaView(AbstractCreaView):
     @override
     def _setup_form(self) -> None:
         label_titolo = QLabel('Titolo<span style="color:red;">*</span> :')
-        label_titolo.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
+        label_titolo.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
         self.titolo = QLineEdit()
         self.titolo.setPlaceholderText("Inserire titolo")
 
         label_note = QLabel('Note<span style="color:red;">*</span> :')
-        label_note.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
+        label_note.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
         self.note = QTextEdit()
         self.note.setPlaceholderText("Inserire note")
         self.note.setFixedHeight(80)
 
         # Lista interpreti
         label_interprete = QLabel("Interprete :")
-        label_interprete.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
+        label_interprete.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
         self.interprete_nome = QLineEdit()
         self.interprete_nome.setMaxLength(30)
         self.interprete_nome.setPlaceholderText("Inserire nome")
@@ -88,7 +88,9 @@ class NuovaRegiaView(AbstractCreaView):
         self.interprete_ruolo.setPlaceholderText("Inserire ruolo")
 
         self.__btn_aggiungi_interprete = QPushButton("Aggiungi")
-        self.__btn_aggiungi_interprete.setObjectName(QssStyle.WHITE_BUTTON.style_name)
+        self.__btn_aggiungi_interprete.setProperty(
+            QssStyle.WHITE_BUTTON.style_role, True
+        )
 
         interprete = QWidget()
         layout_interprete = QHBoxLayout(interprete)
@@ -101,25 +103,25 @@ class NuovaRegiaView(AbstractCreaView):
         self.lista_interpreti: dict[str, str] = {}
 
         self.label_lista_interpreti_error = QLabel("")
-        self.label_lista_interpreti_error.setObjectName(
-            QssStyle.ERROR_MESSAGE.style_name
+        self.label_lista_interpreti_error.setProperty(
+            QssStyle.ERROR_MESSAGE.style_role, True
         )
 
         self.label_lista_interpreti_vuota = QLabel("Non vi sono interpreti registrati.")
-        self.label_lista_interpreti_vuota.setObjectName(
-            QssStyle.SECONDARY_TEXT.style_name
+        self.label_lista_interpreti_vuota.setProperty(
+            QssStyle.SECONDARY_TEXT.style_role, True
         )
         self.label_lista_interpreti_vuota.hide()
 
         widget_lista_interpreti = QWidget()
-        widget_lista_interpreti.setObjectName(QssStyle.ITEM_LIST.style_name)
+        widget_lista_interpreti.setProperty(QssStyle.ITEM_LIST.style_role, True)
         self.layout_lista_interpreti = QVBoxLayout(widget_lista_interpreti)
         self.layout_lista_interpreti.setContentsMargins(3, 3, 3, 3)
         self.layout_lista_interpreti.addWidget(self.label_lista_interpreti_vuota)
 
         # Lista tectici
         label_tecnico = QLabel("Tecnico :")
-        label_tecnico.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
+        label_tecnico.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
         self.tecnico_nome = QLineEdit()
         self.tecnico_nome.setMaxLength(30)
         self.tecnico_nome.setPlaceholderText("Inserire nome")
@@ -128,7 +130,7 @@ class NuovaRegiaView(AbstractCreaView):
         self.tecnico_posto.setPlaceholderText("Inserire posto")
 
         self.__btn_aggiungi_tecnico = QPushButton("Aggiungi")
-        self.__btn_aggiungi_tecnico.setObjectName(QssStyle.WHITE_BUTTON.style_name)
+        self.__btn_aggiungi_tecnico.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
         tecnico = QWidget()
         layout_tecnico = QHBoxLayout(tecnico)
@@ -141,31 +143,35 @@ class NuovaRegiaView(AbstractCreaView):
         self.lista_tecnici: dict[str, str] = {}
 
         self.label_lista_tecnici_error = QLabel("")
-        self.label_lista_tecnici_error.setObjectName(QssStyle.ERROR_MESSAGE.style_name)
+        self.label_lista_tecnici_error.setProperty(
+            QssStyle.ERROR_MESSAGE.style_role, True
+        )
 
         self.label_lista_tecnici_vuota = QLabel("Non vi sono tecnici registrati.")
-        self.label_lista_tecnici_vuota.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
+        self.label_lista_tecnici_vuota.setProperty(
+            QssStyle.SECONDARY_TEXT.style_role, True
+        )
         self.label_lista_tecnici_vuota.hide()
 
         widget_lista_tecnici = QWidget()
-        widget_lista_tecnici.setObjectName(QssStyle.ITEM_LIST.style_name)
+        widget_lista_tecnici.setProperty(QssStyle.ITEM_LIST.style_role, True)
         self.layout_lista_tecnici = QVBoxLayout(widget_lista_tecnici)
         self.layout_lista_tecnici.setContentsMargins(3, 3, 3, 3)
         self.layout_lista_tecnici.addWidget(self.label_lista_tecnici_vuota)
 
         label_regista = QLabel('Regista<span style="color:red;">*</span> :')
-        label_regista.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
+        label_regista.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
         self.regista = QLineEdit()
         self.regista.setPlaceholderText("Inserire regista")
 
         label_anno = QLabel('Anno di produzione<span style="color:red;">*</span> :')
-        label_anno.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
+        label_anno.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
         self.anno = QSpinBox()
         self.anno.setRange(1597, QDate().currentDate().year())
         # - Serve un rango in particolare?
 
         label_opera = QLabel('Opera<span style="color:red;">*</span> :')
-        label_opera.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
+        label_opera.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
         self.opera = QComboBox()
         self.opera.setEnabled(False)
         # - Questa pagina sarà esclusiva della sezione Info?

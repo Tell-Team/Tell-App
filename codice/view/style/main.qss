@@ -1,27 +1,27 @@
 /* ------------------------ STYLES ------------------------ */
 
 /* --- Labels --- */
-QLabel#header1, QLabel#header2, QLabel#header3 {
+QLabel[header1="true"], QLabel[header2="true"], QLabel[header3="true"] {
     font-weight: 700;
     margin: 0;
     padding: 0;
     color: #222;
 }
 
-QLabel#header1 { font-size: 28px; }
-QLabel#header2 { font-size: 20px; }
-QLabel#header3 { font-size: 16px; }
+QLabel[header1="true"] { font-size: 28px; }
+QLabel[header2="true"] { font-size: 20px; }
+QLabel[header3="true"] { font-size: 16px; }
 
-QLabel#secondary-text , QLabel#error-message {
+QLabel[secondary-text="true"] , QLabel[error-message="true"] {
     font-size: 14px;
     color: #444;
     margin-top: 4px;
     padding: 0;
 }
 
-QLabel#error-message { color:#c3423f; }
+QLabel[error-message="true"] { color:#c3423f; }
 
-QLabel#paragraph {
+QLabel[paragraph="true"] {
     font-size: 14px;
     color: #222;
     margin-top: 4px;
@@ -29,62 +29,67 @@ QLabel#paragraph {
 }
 
 /* --- Pulsanti --- */
-QPushButton#blue-button {
+QPushButton[blue-button="true"] {
     background-color: #2b7cff;
     color: white;
-    border-radius: 6px;
+    border-radius: 6px;    
+}
+QPushButton[blue-button="true"]:hover { background-color: #005bee; }
+QPushButton[blue-button="true"]:pressed { background-color: #0045b3; }
+
+QPushButton[main-button="true"] {
     padding: 10px 16px;
     font-size: 14px;
 }
 
-QPushButton#search-button {
+QPushButton[search-button="true"] {
     image: url(search_icon.png); /* # - Si deve aggiungere nella view */
     border: 1px solid #b0b0b0;
-    background-color: #2b7cff;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    padding: 7px;
+    padding: 6px;
 }
 
-QPushButton#blue-button:hover, QPushButton#search-button:hover { background-color: #1d63d3; }
-QPushButton#blue-button:pressed, QPushButton#search-button:pressed { background-color: #154c9c; }
-
-QPushButton#white-button {
-    background-color: #fff;
+QPushButton[white-button="true"] {
+    background-color: white;
     color: black;
     border-radius: 6px;
-    padding: 5px 10px;
+    border: 1px solid #b0b0b0;
+}
+QPushButton[white-button="true"]:hover { background-color: #d1d1d1; }
+QPushButton[white-button="true"]:pressed { background-color: #9a9a9a; }
+
+QPushButton[destructive-button="true"] {
+    background-color: #b00020; /* Color: Material Design "Error" */
+    color: white;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-weight: bold;
+}
+QPushButton[destructive-button="true"]:hover { background-color: #8d001a; }
+QPushButton[destructive-button="true"]:pressed { background-color: #6a0013; }
+
+QPushButton {
     font-size: 12px;
+    padding: 6px 10px;
 }
 
-QPushButton#white-button:hover { background-color: #d1d1d1; }
-QPushButton#white-button:pressed { background-color: #9a9a9a; }
-QPushButton#white-button:disabled {
-    background-color: #ccc;
+QPushButton:disabled {
+    background-color: #ccc; /* Color: Light gray */
     color: #777;
 }
 
-QPushButton#remove-button {
-    background-color: #dc3545;
-    color: white;
-    border-radius: 5px;
-    font-weight: bold;
-}
-
-QPushButton#remove-button:hover { background-color: #941239; }
-QPushButton#remove-button:pressed { background-color: #6b202a; }
-
 /* --- QWidget speciale --- */
-QWidget#item-card {
+QWidget[item-card="true"] {
     border: 1px solid #111;
     border-radius: 15px;
     background-color: #f3f3f3;
     padding: 10px;
 }
 
-QWidget#item-list {
+QWidget[item-list="true"] {
     border: 1px solid #b0b0b0;
     border-radius: 5px;
     background-color: white;
@@ -94,13 +99,13 @@ QWidget#item-list {
 QLineEdit, QTextEdit, QComboBox, QSpinBox, QDateEdit {
     border: 1px solid #b0b0b0;
     border-radius: 6px;
-    padding: 5px;
+    padding: 6px;
     background-color: white;
     color: #222;
     font-size: 14px;
 }
 
-QLineEdit#search-bar {
+QLineEdit[search-bar="true"] {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border-top-right-radius: 0px;

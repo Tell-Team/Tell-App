@@ -39,7 +39,7 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
     def _setup_ui(self) -> None:
         # Logout
         self._btn_logout = QPushButton("Logout")
-        self._btn_logout.setObjectName(QssStyle.WHITE_BUTTON.style_name)
+        self._btn_logout.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
         widget_logout = QWidget()
         layout_logout = QHBoxLayout(widget_logout)
@@ -48,13 +48,13 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
 
         # Sezioni dell'app
         self._btn_sezione_spettacoli = QPushButton("Spettacoli")
-        self._btn_sezione_spettacoli.setObjectName(QssStyle.WHITE_BUTTON.style_name)
+        self._btn_sezione_spettacoli.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
         self._btn_sezione_info = QPushButton("Info")
-        self._btn_sezione_info.setObjectName(QssStyle.WHITE_BUTTON.style_name)
+        self._btn_sezione_info.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
         self._btn_sezione_account = QPushButton("Account")
-        self._btn_sezione_account.setObjectName(QssStyle.WHITE_BUTTON.style_name)
+        self._btn_sezione_account.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
         sezioni_app = QWidget()
         layout_sezioni = QHBoxLayout(sezioni_app)
@@ -67,7 +67,7 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
         container_top = QWidget()
         layout_top = QVBoxLayout(container_top)
         layout_top.addWidget(widget_logout)
-        layout_top.addSpacing(15)
+        layout_top.addSpacing(5)
         layout_top.addWidget(sezioni_app)
 
         # Funzione di scroll
@@ -121,11 +121,11 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
 
         :param widget: widget speciale per visualizzare una instanza del model
         :param layout: layout dove sarà inserito il widget"""
-        # C'era un errore al utilizzare widget.setObjectName() direttamente:
+        # C'era un errore al utilizzare widget.setProperty() direttamente:
         #   lo style non veniva asegnato al widget. Quindi ho decisso di aggiungere questo
         #   dummy widget per farlo funzionare.
         dummy_widget = QWidget()
-        dummy_widget.setObjectName(QssStyle.ITEM_CARD.style_name)
+        dummy_widget.setProperty(QssStyle.ITEM_CARD.style_role, True)
         l = QVBoxLayout(dummy_widget)
         l.addWidget(widget)
 

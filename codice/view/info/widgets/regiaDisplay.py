@@ -38,17 +38,17 @@ class RegiaDisplay(QWidget):
     def __setup_ui(self, r: Regia) -> None:
         # Labels
         titolo = QLabel(r.get_titolo())
-        titolo.setObjectName(QssStyle.PARAGRAPH.style_name)
+        titolo.setProperty(QssStyle.PARAGRAPH.style_role, True)
 
         regista_anno = QLabel(f"{r.get_regista()} ({r.get_anno_produzione()})")
-        regista_anno.setObjectName(QssStyle.PARAGRAPH.style_name)
+        regista_anno.setProperty(QssStyle.PARAGRAPH.style_role, True)
 
         # Pulsanti
         self.__btn_modifica = QPushButton("Modifica")
-        self.__btn_modifica.setObjectName(QssStyle.WHITE_BUTTON.style_name)
+        self.__btn_modifica.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
         self.__btn_elimina = QPushButton("Elimina")
-        self.__btn_elimina.setObjectName(QssStyle.WHITE_BUTTON.style_name)
+        self.__btn_elimina.setProperty(QssStyle.DESTRUCTIVE_BUTTON.style_role, True)
 
         self.__pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.__pulsanti)
@@ -58,13 +58,13 @@ class RegiaDisplay(QWidget):
 
         # Pannello di eliminazione
         domanda = QLabel("Sicuro di eliminare?")
-        domanda.setObjectName(QssStyle.PARAGRAPH.style_name)
+        domanda.setProperty(QssStyle.PARAGRAPH.style_role, True)
 
         self.__btn_si = QPushButton("Sì")
-        self.__btn_si.setObjectName(QssStyle.WHITE_BUTTON.style_name)
+        self.__btn_si.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
         self.__btn_no = QPushButton("No")
-        self.__btn_no.setObjectName(QssStyle.WHITE_BUTTON.style_name)
+        self.__btn_no.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
         self.__conferma_elimina = QWidget()
         layout_conferma = QHBoxLayout(self.__conferma_elimina)

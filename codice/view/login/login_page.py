@@ -28,22 +28,25 @@ class LoginPage(QWidget):
     def _setup_ui(self) -> None:
         # Content
         header = QLabel("Login")
-        header.setObjectName(QssStyle.HEADER1.style_name)
+        header.setProperty(QssStyle.HEADER1.style_role, True)
         header.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         subheader = QLabel("Scegliere il tipo di account:")
-        subheader.setObjectName(QssStyle.PARAGRAPH.style_name)
+        subheader.setProperty(QssStyle.PARAGRAPH.style_role, True)
         subheader.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         # Pulsanti
         self.__btn_cliente = QPushButton("Cliente")
-        self.__btn_cliente.setObjectName(QssStyle.BLUE_BUTTON.style_name)
+        self.__btn_cliente.setProperty(QssStyle.BLUE_BUTTON.style_role, True)
+        self.__btn_cliente.setProperty(QssStyle.MAIN_BUTTON.style_role, True)
 
         self.__btn_biglietteria = QPushButton("Biglietteria")
-        self.__btn_biglietteria.setObjectName(QssStyle.BLUE_BUTTON.style_name)
+        self.__btn_biglietteria.setProperty(QssStyle.BLUE_BUTTON.style_role, True)
+        self.__btn_biglietteria.setProperty(QssStyle.MAIN_BUTTON.style_role, True)
 
         self.__btn_admin = QPushButton("Amministratore")
-        self.__btn_admin.setObjectName(QssStyle.BLUE_BUTTON.style_name)
+        self.__btn_admin.setProperty(QssStyle.BLUE_BUTTON.style_role, True)
+        self.__btn_admin.setProperty(QssStyle.MAIN_BUTTON.style_role, True)
 
         self.pulsanti_utente = QWidget()
         layout_pulsanti_utente = QVBoxLayout(self.pulsanti_utente)

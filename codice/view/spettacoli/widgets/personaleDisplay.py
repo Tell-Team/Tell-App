@@ -24,14 +24,14 @@ class PersonaleDisplay(QWidget):
         self.__key = key
 
         widget_key = QLabel(self.__key)
-        widget_key.setObjectName(QssStyle.PARAGRAPH.style_name)
+        widget_key.setProperty(QssStyle.PARAGRAPH.style_role, True)
 
         widget_value = QLabel(value)
-        widget_value.setObjectName(QssStyle.PARAGRAPH.style_name)
+        widget_value.setProperty(QssStyle.PARAGRAPH.style_role, True)
 
         self.__btn_rimuovi = QPushButton("X")
-        self.__btn_rimuovi.setFixedSize(25, 25)
-        self.__btn_rimuovi.setObjectName(QssStyle.REMOVE_BUTTON.style_name)
+        self.__btn_rimuovi.setFixedSize(32, 32)
+        self.__btn_rimuovi.setProperty(QssStyle.DESTRUCTIVE_BUTTON.style_role, True)
 
         layout = QGridLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)

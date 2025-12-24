@@ -37,25 +37,26 @@ class SpettacoliSectionView(AbstractSectionView):
 
         # Spettacoli
         header_spettacoli = QLabel("Spettacoli")
-        header_spettacoli.setObjectName(QssStyle.HEADER1.style_name)
+        header_spettacoli.setProperty(QssStyle.HEADER1.style_role, True)
         header_spettacoli.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self.__btn_nuovo_spettacolo = QPushButton("Nuovo spettacolo")
-        self.__btn_nuovo_spettacolo.setObjectName(QssStyle.WHITE_BUTTON.style_name)
+        self.__btn_nuovo_spettacolo.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
         self.filtro_ricerca: str = ""
 
         self.ricerca_bar = QLineEdit()
         self.ricerca_bar.setPlaceholderText("Inserire nome...")
         self.ricerca_bar.setClearButtonEnabled(True)
-        self.ricerca_bar.setObjectName(QssStyle.SEARCH_BAR.style_name)
+        self.ricerca_bar.setProperty(QssStyle.SEARCH_BAR.style_role, True)
 
         self._btn_ricerca = QPushButton()
         # icon = QApplication.style().standardIcon(
         #     QStyle.StandardPixmap.SP_FileDialogContentsView
         # )
         # self._btn_ricerca.setIcon(icon)
-        self._btn_ricerca.setObjectName(QssStyle.SEARCH_BUTTON.style_name)
+        self._btn_ricerca.setProperty(QssStyle.SEARCH_BUTTON.style_role, True)
+        self._btn_ricerca.setProperty(QssStyle.BLUE_BUTTON.style_role, True)
         self._btn_ricerca.setFixedHeight(self.ricerca_bar.sizeHint().height())
 
         widget_ricerca = QWidget()
@@ -73,8 +74,8 @@ class SpettacoliSectionView(AbstractSectionView):
         self.layout_lista_spettacoli = QVBoxLayout()
 
         self.label_lista_spettacoli_vuota = QLabel("Non vi sono spettacoli registrati.")
-        self.label_lista_spettacoli_vuota.setObjectName(
-            QssStyle.SECONDARY_TEXT.style_name
+        self.label_lista_spettacoli_vuota.setProperty(
+            QssStyle.SECONDARY_TEXT.style_role, True
         )
         self.label_lista_spettacoli_vuota.hide()
 

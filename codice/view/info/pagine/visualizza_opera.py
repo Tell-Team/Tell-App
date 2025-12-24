@@ -47,7 +47,7 @@ class VisualizzaOperaView(QWidget):
 
         # Top widget
         self.__btn_indietro = QPushButton("Indietro")
-        self.__btn_indietro.setObjectName(QssStyle.WHITE_BUTTON.style_name)
+        self.__btn_indietro.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
         self.pagina_header = QWidget()
         layout_header = QHBoxLayout(self.pagina_header)
@@ -56,39 +56,41 @@ class VisualizzaOperaView(QWidget):
 
         # Labels
         self.label_nome = QLabel("[Nome Opera]")
-        self.label_nome.setObjectName(QssStyle.HEADER1.style_name)
+        self.label_nome.setProperty(QssStyle.HEADER1.style_role, True)
         self.label_nome.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self.label_librettista = QLabel("Libretto di [Librettista Opera].")
         self.label_librettista.setWordWrap(True)
-        self.label_librettista.setObjectName(QssStyle.PARAGRAPH.style_name)
+        self.label_librettista.setProperty(QssStyle.PARAGRAPH.style_role, True)
 
         self.label_compositore = QLabel("Musica composta da [Compositore Opera].")
         self.label_compositore.setWordWrap(True)
-        self.label_compositore.setObjectName(QssStyle.PARAGRAPH.style_name)
+        self.label_compositore.setProperty(QssStyle.PARAGRAPH.style_role, True)
 
         self.label_genere = QLabel(f"Genere: [Genere Opera]")
-        self.label_genere.setObjectName(QssStyle.PARAGRAPH.style_name)
+        self.label_genere.setProperty(QssStyle.PARAGRAPH.style_role, True)
 
         self.label_atti = QLabel(f"Numero di atti: [Atti Opera]")
-        self.label_atti.setObjectName(QssStyle.PARAGRAPH.style_name)
+        self.label_atti.setProperty(QssStyle.PARAGRAPH.style_role, True)
 
         self.label_prima_rappresentazione = QLabel(
             f"È stata rappresentata per prima volta il [Data Opera] nel teatro [Teatro Opera]."
         )
         self.label_prima_rappresentazione.setWordWrap(True)
-        self.label_prima_rappresentazione.setObjectName(QssStyle.PARAGRAPH.style_name)
+        self.label_prima_rappresentazione.setProperty(
+            QssStyle.PARAGRAPH.style_role, True
+        )
 
         self.label_trama = QLabel("[Trama Opera]")
         self.label_trama.setWordWrap(True)
-        self.label_trama.setObjectName(QssStyle.PARAGRAPH.style_name)
+        self.label_trama.setProperty(QssStyle.PARAGRAPH.style_role, True)
 
         # Lista Regie
         label_lista_regie = QLabel("Lista regie")
-        label_lista_regie.setObjectName(QssStyle.HEADER2.style_name)
+        label_lista_regie.setProperty(QssStyle.HEADER2.style_role, True)
 
         self.__btn_nuova_regia = QPushButton("Nuova regia")
-        self.__btn_nuova_regia.setObjectName(QssStyle.WHITE_BUTTON.style_name)
+        self.__btn_nuova_regia.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
         widget_header_regie = QWidget()
         self.layout_header_regie = QHBoxLayout(widget_header_regie)
@@ -100,10 +102,12 @@ class VisualizzaOperaView(QWidget):
         self.lista_regie: list[Regia] = []
 
         self.label_lista_regie_vuota = QLabel("")
-        self.label_lista_regie_vuota.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
+        self.label_lista_regie_vuota.setProperty(
+            QssStyle.SECONDARY_TEXT.style_role, True
+        )
 
         content_lista_regie = QWidget()
-        content_lista_regie.setObjectName(QssStyle.ITEM_LIST.style_name)
+        content_lista_regie.setProperty(QssStyle.ITEM_LIST.style_role, True)
         self.layout_lista_regie = QVBoxLayout(content_lista_regie)
         self.layout_lista_regie.setContentsMargins(3, 3, 3, 3)
         self.layout_lista_regie.addWidget(self.label_lista_regie_vuota)
@@ -115,11 +119,11 @@ class VisualizzaOperaView(QWidget):
             return line
 
         header_titolo = QLabel("Titolo")
-        header_titolo.setObjectName(QssStyle.HEADER3.style_name)
+        header_titolo.setProperty(QssStyle.HEADER3.style_role, True)
         header_regista = QLabel("Regista")
-        header_regista.setObjectName(QssStyle.HEADER3.style_name)
+        header_regista.setProperty(QssStyle.HEADER3.style_role, True)
         header_opzioni = QLabel("Opzioni")
-        header_opzioni.setObjectName(QssStyle.HEADER3.style_name)
+        header_opzioni.setProperty(QssStyle.HEADER3.style_role, True)
 
         header_lista_regie = QWidget()
         layout_header_lista_regie = QGridLayout(header_lista_regie)

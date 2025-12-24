@@ -97,12 +97,12 @@ class AccountController(QObject):
 # ):
 #     # ### Labels
 #     username = QLabel(f"{admin.get_username()}")
-#     username.setObjectName("header3")
+#     username.setProperty("role","header3")
 #     username.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
 #     # ### Pulsanti
 #     btn_modifica = QPushButton("Modifica")
-#     btn_modifica.setObjectName("whiteButton")
+#     btn_modifica.setProperty("role","whiteButton")
 #     btn_modifica.clicked.connect(  # type:ignore
 #         partial(
 #             AccountController.modifica_account, gestore_account, admin.get_id()
@@ -110,7 +110,7 @@ class AccountController(QObject):
 #     )
 
 #     btn_elimina = QPushButton("Rimuovi")
-#     btn_elimina.setObjectName("whiteButton")
+#     btn_elimina.setProperty("role","whiteButton")
 #     btn_elimina.clicked.connect(  # type:ignore
 #         partial(
 #             AccountController.elimina_account, gestore_account, admin.get_id()
@@ -139,12 +139,12 @@ class AccountController(QObject):
 # ):
 #     # ### Labels
 #     username = QLabel(f"{biglietteria.get_username()}")
-#     username.setObjectName("header3")
+#     username.setProperty("role","header3")
 #     username.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
 #     # ### Pulsanti
 #     btn_modifica = QPushButton("Modifica")
-#     btn_modifica.setObjectName("whiteButton")
+#     btn_modifica.setProperty("role","whiteButton")
 #     btn_modifica.clicked.connect(  # type:ignore
 #         partial(
 #             AccountController.modifica_account,
@@ -154,7 +154,7 @@ class AccountController(QObject):
 #     )
 
 #     btn_elimina = QPushButton("Rimuovi")
-#     btn_elimina.setObjectName("whiteButton")
+#     btn_elimina.setProperty("role","whiteButton")
 #     btn_elimina.clicked.connect(  # type:ignore
 #         partial(
 #             AccountController.elimina_account,

@@ -34,16 +34,16 @@ class AccountSectionView(AbstractSectionView):
 
         # Account Header
         header_account = QLabel("Account")
-        header_account.setObjectName(QssStyle.HEADER1.style_name)
+        header_account.setProperty(QssStyle.HEADER1.style_role, True)
         header_account.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         # Amministratore
         header_admin = QLabel("Amministratore")
-        header_admin.setObjectName(QssStyle.HEADER2.style_name)
+        header_admin.setProperty(QssStyle.HEADER2.style_role, True)
         header_admin.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self._btn_nuovo_admin = QPushButton("Nuovo Amministratore")
-        self._btn_nuovo_admin.setObjectName(QssStyle.WHITE_BUTTON.style_name)
+        self._btn_nuovo_admin.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
         layout_header_admin = QHBoxLayout()
         layout_header_admin.addWidget(header_admin)
@@ -58,7 +58,9 @@ class AccountSectionView(AbstractSectionView):
         self.label_lista_admin_vuota = QLabel(
             "Non vi sono account Amministratore registrati."
         )
-        self.label_lista_admin_vuota.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
+        self.label_lista_admin_vuota.setProperty(
+            QssStyle.SECONDARY_TEXT.style_role, True
+        )
         self.label_lista_admin_vuota.hide()
 
         container_admin = QWidget()
@@ -68,11 +70,11 @@ class AccountSectionView(AbstractSectionView):
 
         # Biglietteria
         header_biglietteria = QLabel("Biglietteria")
-        header_biglietteria.setObjectName(QssStyle.HEADER2.style_name)
+        header_biglietteria.setProperty(QssStyle.HEADER2.style_role, True)
         header_biglietteria.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self._btn_nuovo_biglietteria = QPushButton("Nuovo Biglietteria")
-        self._btn_nuovo_biglietteria.setObjectName(QssStyle.WHITE_BUTTON.style_name)
+        self._btn_nuovo_biglietteria.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
         layout_header_biglietteria = QHBoxLayout()
         layout_header_biglietteria.addWidget(header_biglietteria)
@@ -86,8 +88,8 @@ class AccountSectionView(AbstractSectionView):
         self.label_lista_biglietteria_vuota = QLabel(
             "Non vi sono account Biglietteria registrati."
         )
-        self.label_lista_biglietteria_vuota.setObjectName(
-            QssStyle.SECONDARY_TEXT.style_name
+        self.label_lista_biglietteria_vuota.setProperty(
+            QssStyle.SECONDARY_TEXT.style_role, True
         )
         self.label_lista_biglietteria_vuota.hide()
 

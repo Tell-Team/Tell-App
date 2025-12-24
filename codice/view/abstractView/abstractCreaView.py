@@ -31,7 +31,7 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
     def _setup_ui(self) -> None:
         # Setup Header
         self._header = QLabel("")
-        self._header.setObjectName(QssStyle.HEADER1.style_name)
+        self._header.setProperty(QssStyle.HEADER1.style_role, True)
         self._header.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         # Setup QFormLayout
@@ -53,10 +53,10 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
 
         # Setup Pulsanti
         self._btn_annulla = QPushButton("Annulla")
-        self._btn_annulla.setObjectName(QssStyle.WHITE_BUTTON.style_name)
+        self._btn_annulla.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
         self._btn_conferma = QPushButton("Crea")
-        self._btn_conferma.setObjectName(QssStyle.WHITE_BUTTON.style_name)
+        self._btn_conferma.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
         self._pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self._pulsanti)
@@ -66,7 +66,7 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
 
         # Label input_error
         self._input_error = QLabel("")
-        self._input_error.setObjectName(QssStyle.ERROR_MESSAGE.style_name)
+        self._input_error.setProperty(QssStyle.ERROR_MESSAGE.style_role, True)
 
         # Setup main layout
         self._main_layout = QVBoxLayout(self)
