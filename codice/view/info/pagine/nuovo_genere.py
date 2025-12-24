@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QLabel, QLineEdit, QTextEdit, QSizePolicy
 from typing import override
 
 from view.abstractView.abstractCreaView import AbstractCreaView
+from view.style import QssStyle
 
 
 class NuovoGenereView(AbstractCreaView):
@@ -39,12 +40,12 @@ class NuovoGenereView(AbstractCreaView):
     @override
     def _setup_form(self) -> None:
         label_nome = QLabel('Nome<span style="color:red;">*</span> :')
-        label_nome.setObjectName("subheader")
+        label_nome.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
         self.nome = QLineEdit()
         self.nome.setPlaceholderText("Inserire nome")
 
         label_descrizione = QLabel('Descrizione<span style="color:red;">*</span> :')
-        label_descrizione.setObjectName("subheader")
+        label_descrizione.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
         self.descrizione = QTextEdit()
         self.descrizione.setPlaceholderText("Inserire descrizione")
         self.descrizione.setFixedHeight(80)

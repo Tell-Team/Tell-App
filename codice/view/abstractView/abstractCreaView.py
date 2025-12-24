@@ -13,6 +13,7 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from functools import partial
 
 from view.abstractView.abcQObjectMeta import ABCQObjectMeta
+from view.style import QssStyle
 
 
 class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
@@ -30,7 +31,7 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
     def _setup_ui(self) -> None:
         # Setup Header
         self._header = QLabel("")
-        self._header.setObjectName("header1")
+        self._header.setObjectName(QssStyle.HEADER1.style_name)
         self._header.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         # Setup QFormLayout
@@ -52,10 +53,10 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
 
         # Setup Pulsanti
         self._btn_annulla = QPushButton("Annulla")
-        self._btn_annulla.setObjectName("whiteButton")
+        self._btn_annulla.setObjectName(QssStyle.WHITE_BUTTON.style_name)
 
         self._btn_conferma = QPushButton("Crea")
-        self._btn_conferma.setObjectName("whiteButton")
+        self._btn_conferma.setObjectName(QssStyle.WHITE_BUTTON.style_name)
 
         self._pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self._pulsanti)
@@ -65,7 +66,7 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
 
         # Label input_error
         self._input_error = QLabel("")
-        self._input_error.setObjectName("subheaderRed")
+        self._input_error.setObjectName(QssStyle.ERROR_MESSAGE.style_name)
 
         # Setup main layout
         self._main_layout = QVBoxLayout(self)

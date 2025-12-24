@@ -13,6 +13,7 @@ from typing import override
 from model.pianificazione.genere import Genere
 
 from view.abstractView.abstractCreaView import AbstractCreaView
+from view.style import QssStyle
 
 
 class NuovaOperaView(AbstractCreaView):
@@ -50,38 +51,38 @@ class NuovaOperaView(AbstractCreaView):
     @override
     def _setup_form(self) -> None:
         label_nome = QLabel('Nome<span style="color:red;">*</span> :')
-        label_nome.setObjectName("subheader")
+        label_nome.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
         self.nome = QLineEdit()
         self.nome.setPlaceholderText("Inserire nome")
 
         label_trama = QLabel('Trama<span style="color:red;">*</span> :')
-        label_trama.setObjectName("subheader")
+        label_trama.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
         self.trama = QTextEdit()
         self.trama.setPlaceholderText("Inserire trama")
         self.trama.setFixedHeight(80)
 
         label_genere = QLabel('Genere<span style="color:red;">*</span> :')
-        label_genere.setObjectName("subheader")
+        label_genere.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
         self.genere = QComboBox()
 
         label_compositore = QLabel('Compositore<span style="color:red;">*</span> :')
-        label_compositore.setObjectName("subheader")
+        label_compositore.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
         self.compositore = QLineEdit()
         self.compositore.setPlaceholderText("Inserire compositore")
 
         label_librettista = QLabel('Librettista<span style="color:red;">*</span> :')
-        label_librettista.setObjectName("subheader")
+        label_librettista.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
         self.librettista = QLineEdit()
         self.librettista.setPlaceholderText("Inserire librettista")
 
         label_atti = QLabel('Numeri di atti<span style="color:red;">*</span> :')
-        label_atti.setObjectName("subheader")
+        label_atti.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
         self.atti = QSpinBox()
         self.atti.setRange(0, 10)
         self.atti.setValue(0)
 
         label_data = QLabel('Prima rappresentazione<span style="color:red;">*</span> :')
-        label_data.setObjectName("subheader")
+        label_data.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
         self.data = QDateEdit()
         self.data.setCalendarPopup(True)
         self.data.setDisplayFormat("dd/MM/yyyy")
@@ -95,7 +96,7 @@ class NuovaOperaView(AbstractCreaView):
         label_teatro = QLabel(
             'Teatro prima rappresentazione<span style="color:red;">*</span> :'
         )
-        label_teatro.setObjectName("subheader")
+        label_teatro.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
         self.teatro = QLineEdit()
         self.teatro.setPlaceholderText("Inserire nome del teatro")
 

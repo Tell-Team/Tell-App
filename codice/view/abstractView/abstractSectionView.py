@@ -12,6 +12,7 @@ from PyQt6.QtCore import pyqtSignal
 from typing import Optional
 
 from view.abstractView.abcQObjectMeta import ABCQObjectMeta
+from view.style import QssStyle
 
 
 class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
@@ -38,7 +39,7 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
     def _setup_ui(self) -> None:
         # Logout
         self._btn_logout = QPushButton("Logout")
-        self._btn_logout.setObjectName("whiteButton")
+        self._btn_logout.setObjectName(QssStyle.WHITE_BUTTON.style_name)
 
         widget_logout = QWidget()
         layout_logout = QHBoxLayout(widget_logout)
@@ -47,13 +48,13 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
 
         # Sezioni dell'app
         self._btn_sezione_spettacoli = QPushButton("Spettacoli")
-        self._btn_sezione_spettacoli.setObjectName("whiteButton")
+        self._btn_sezione_spettacoli.setObjectName(QssStyle.WHITE_BUTTON.style_name)
 
         self._btn_sezione_info = QPushButton("Info")
-        self._btn_sezione_info.setObjectName("whiteButton")
+        self._btn_sezione_info.setObjectName(QssStyle.WHITE_BUTTON.style_name)
 
         self._btn_sezione_account = QPushButton("Account")
-        self._btn_sezione_account.setObjectName("whiteButton")
+        self._btn_sezione_account.setObjectName(QssStyle.WHITE_BUTTON.style_name)
 
         sezioni_app = QWidget()
         layout_sezioni = QHBoxLayout(sezioni_app)
@@ -120,11 +121,11 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
 
         :param widget: widget speciale per visualizzare una instanza del model
         :param layout: layout dove sarà inserito il widget"""
-        # C'era un errore al utilizzare widget.setObjectName("objectDetailsView") direttamente:
+        # C'era un errore al utilizzare widget.setObjectName() direttamente:
         #   lo style non veniva asegnato al widget. Quindi ho decisso di aggiungere questo
         #   dummy widget per farlo funzionare.
         dummy_widget = QWidget()
-        dummy_widget.setObjectName("objectDetailsView")
+        dummy_widget.setObjectName(QssStyle.ITEM_CARD.style_name)
         l = QVBoxLayout(dummy_widget)
         l.addWidget(widget)
 

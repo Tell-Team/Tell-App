@@ -26,24 +26,21 @@ class NavigationController:
     """Permette all'utente di navigare le pagine e sezioni dell'app."""
 
     def __init__(self, main_window: QMainWindow) -> None:
-        self._main_window = main_window
-        self._stack = QStackedWidget()
-        self._history: list[QWidget] = []  # Pile di widget per tornare dietro
-        self._pagine: dict[Pagina, QWidget] = {}  # Registro delle pagine
+        self.__main_window = main_window
+        self.__stack = QStackedWidget()
+        self.__history: list[QWidget] = []  # Pile di widget per tornare dietro
+        self.__pagine: dict[Pagina, QWidget] = {}  # Registro delle pagine
 
     def get_stack(self) -> QStackedWidget:
-        return self._stack
-
-    # def get_pagine(self) -> dict[str, QWidget]:
-    #     return self._pagine
+        return self.__stack
 
     def get_pagina(self, nome: Pagina) -> Optional[QWidget]:
         """Ritorna una pagina registrata.
 
         :param nome: key usata per cercare la pagina nel dict"""
-        for key in self._pagine:
+        for key in self.__pagine:
             if key == nome:
-                return self._pagine.get(key)
+                return self.__pagine.get(key)
 
     def get_cur_central_page(self) -> QWidget:
         """Ritorna la pagina visualizzata dall'utente.
@@ -52,7 +49,7 @@ class NavigationController:
         da `go_to`.
 
         :raise RuntimeError: non c'è un central widget asegnato alla `QMainWindow`"""
-        widget = self._main_window.centralWidget()
+        widget = self.__main_window.centralWidget()
         if widget is None:
             raise RuntimeError("Non c'è un central widget asegnato.")
         return widget
@@ -62,8 +59,8 @@ class NavigationController:
 
         :param nome: key usata per salvare la pagina nel dict
         :param widget: pagina da salvare nel dict"""
-        self._pagine[nome] = widget
-        self._stack.addWidget(widget)
+        self.__pagine[nome] = widget
+        self.__stack.addWidget(widget)
 
     def go_to(self, nome: Pagina, save_history: bool = True) -> None:
         """Visualizza una pagina registrata nel controller.
@@ -74,20 +71,20 @@ class NavigationController:
         :raise KeyError: la pagina cercata non è stata trovata
         """
         try:
-            widget = self._pagine[nome]
+            widget = self.__pagine[nome]
         except KeyError:
             raise KeyError(f"Non è stata trovata la pagina '{nome}'.")
 
-        current = self._stack.currentWidget()
+        current = self.__stack.currentWidget()
         if current and save_history:
-            self._history.append(current)
+            self.__history.append(current)
 
         # Dopo di andar ad un'altra pagina, questa viene aggiornata se ha il metodo
         #   `aggiorna_pagina` definito.
         if hasattr(widget, "aggiorna_pagina"):
             widget.aggiorna_pagina()  # type:ignore
 
-        self._stack.setCurrentWidget(widget)
+        self.__stack.setCurrentWidget(widget)
 
     def section_go_to(self, nome: Pagina) -> None:
         """Visualizza una pagina senza salvare la pagina corrente nell'history del controller.
@@ -97,15 +94,15 @@ class NavigationController:
 
     def go_back(self) -> None:
         """Visualizza la pagina precedente, registrata nel'history del controller."""
-        if not self._history:
+        if not self.__history:
             return
-        last_widget = self._history.pop()
+        last_widget = self.__history.pop()
 
         if hasattr(last_widget, "aggiorna_pagina"):
             last_widget.aggiorna_pagina()  # type:ignore
 
-        self._stack.setCurrentWidget(last_widget)
+        self.__stack.setCurrentWidget(last_widget)
 
     def svuota_history(self) -> None:
         """Svuota la lista history del controller."""
-        self._history.clear()
+        self.__history.clear()

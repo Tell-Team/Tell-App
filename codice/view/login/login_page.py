@@ -1,6 +1,8 @@
 from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout
 from PyQt6.QtCore import Qt, pyqtSignal
 
+from view.style import QssStyle
+
 
 class LoginPage(QWidget):
     """View della prima pagina dell'app.
@@ -26,22 +28,22 @@ class LoginPage(QWidget):
     def _setup_ui(self) -> None:
         # Content
         header = QLabel("Login")
-        header.setObjectName("header1")
+        header.setObjectName(QssStyle.HEADER1.style_name)
         header.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         subheader = QLabel("Scegliere il tipo di account:")
-        subheader.setObjectName("paragraph")
+        subheader.setObjectName(QssStyle.PARAGRAPH.style_name)
         subheader.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         # Pulsanti
         self.__btn_cliente = QPushButton("Cliente")
-        self.__btn_cliente.setObjectName("blueButton")
+        self.__btn_cliente.setObjectName(QssStyle.BLUE_BUTTON.style_name)
 
         self.__btn_biglietteria = QPushButton("Biglietteria")
-        self.__btn_biglietteria.setObjectName("blueButton")
+        self.__btn_biglietteria.setObjectName(QssStyle.BLUE_BUTTON.style_name)
 
         self.__btn_admin = QPushButton("Amministratore")
-        self.__btn_admin.setObjectName("blueButton")
+        self.__btn_admin.setObjectName(QssStyle.BLUE_BUTTON.style_name)
 
         self.pulsanti_utente = QWidget()
         layout_pulsanti_utente = QVBoxLayout(self.pulsanti_utente)

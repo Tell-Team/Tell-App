@@ -219,7 +219,7 @@ class CURegiaController(AbstractCUController):
                     regista, anno, id_opera, titolo, note, interpreti, tecnici
                 )
             except DatoIncongruenteException as exc:
-                # E' stato trovato un campo con input non valido
+                # È stato trovato un campo con input non valido
                 cur_pagina.show_input_error(CAMPI_NECESSARI)
                 MessageView.mostra_errore(
                     cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"

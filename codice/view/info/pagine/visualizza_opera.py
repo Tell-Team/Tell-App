@@ -5,6 +5,8 @@ from PyQt6.QtWidgets import (
     QLayout,
     QVBoxLayout,
     QHBoxLayout,
+    QGridLayout,
+    QFrame,
     QScrollArea,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
@@ -13,6 +15,7 @@ from typing import Optional
 from model.pianificazione.regia import Regia
 
 from view.info.utils.operaPageData import OperaPageData
+from view.style import QssStyle
 
 
 class VisualizzaOperaView(QWidget):
@@ -44,7 +47,7 @@ class VisualizzaOperaView(QWidget):
 
         # Top widget
         self.__btn_indietro = QPushButton("Indietro")
-        self.__btn_indietro.setObjectName("whiteButton")
+        self.__btn_indietro.setObjectName(QssStyle.WHITE_BUTTON.style_name)
 
         self.pagina_header = QWidget()
         layout_header = QHBoxLayout(self.pagina_header)
@@ -53,39 +56,39 @@ class VisualizzaOperaView(QWidget):
 
         # Labels
         self.label_nome = QLabel("[Nome Opera]")
-        self.label_nome.setObjectName("header1")
+        self.label_nome.setObjectName(QssStyle.HEADER1.style_name)
         self.label_nome.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self.label_librettista = QLabel("Libretto di [Librettista Opera].")
         self.label_librettista.setWordWrap(True)
-        self.label_librettista.setObjectName("paragraph")
+        self.label_librettista.setObjectName(QssStyle.PARAGRAPH.style_name)
 
         self.label_compositore = QLabel("Musica composta da [Compositore Opera].")
         self.label_compositore.setWordWrap(True)
-        self.label_compositore.setObjectName("paragraph")
+        self.label_compositore.setObjectName(QssStyle.PARAGRAPH.style_name)
 
         self.label_genere = QLabel(f"Genere: [Genere Opera]")
-        self.label_genere.setObjectName("paragraph")
+        self.label_genere.setObjectName(QssStyle.PARAGRAPH.style_name)
 
         self.label_atti = QLabel(f"Numero di atti: [Atti Opera]")
-        self.label_atti.setObjectName("paragraph")
+        self.label_atti.setObjectName(QssStyle.PARAGRAPH.style_name)
 
         self.label_prima_rappresentazione = QLabel(
             f"È stata rappresentata per prima volta il [Data Opera] nel teatro [Teatro Opera]."
         )
         self.label_prima_rappresentazione.setWordWrap(True)
-        self.label_prima_rappresentazione.setObjectName("paragraph")
+        self.label_prima_rappresentazione.setObjectName(QssStyle.PARAGRAPH.style_name)
 
         self.label_trama = QLabel("[Trama Opera]")
         self.label_trama.setWordWrap(True)
-        self.label_trama.setObjectName("paragraph")
+        self.label_trama.setObjectName(QssStyle.PARAGRAPH.style_name)
 
         # Lista Regie
         label_lista_regie = QLabel("Lista regie")
-        label_lista_regie.setObjectName("header2")
+        label_lista_regie.setObjectName(QssStyle.HEADER2.style_name)
 
         self.__btn_nuova_regia = QPushButton("Nuova regia")
-        self.__btn_nuova_regia.setObjectName("whiteButton")
+        self.__btn_nuova_regia.setObjectName(QssStyle.WHITE_BUTTON.style_name)
 
         widget_header_regie = QWidget()
         self.layout_header_regie = QHBoxLayout(widget_header_regie)
@@ -97,16 +100,47 @@ class VisualizzaOperaView(QWidget):
         self.lista_regie: list[Regia] = []
 
         self.label_lista_regie_vuota = QLabel("")
-        self.label_lista_regie_vuota.setObjectName("subheader")
+        self.label_lista_regie_vuota.setObjectName(QssStyle.SECONDARY_TEXT.style_name)
 
-        widget_lista_regie = QWidget()
-        self.layout_lista_regie = QVBoxLayout(widget_lista_regie)
+        content_lista_regie = QWidget()
+        content_lista_regie.setObjectName(QssStyle.ITEM_LIST.style_name)
+        self.layout_lista_regie = QVBoxLayout(content_lista_regie)
+        self.layout_lista_regie.setContentsMargins(3, 3, 3, 3)
         self.layout_lista_regie.addWidget(self.label_lista_regie_vuota)
+
+        def make_vline() -> QFrame:
+            line = QFrame()
+            line.setFrameShape(QFrame.Shape.VLine)
+            line.setFrameShadow(QFrame.Shadow.Sunken)
+            return line
+
+        header_titolo = QLabel("Titolo")
+        header_titolo.setObjectName(QssStyle.HEADER3.style_name)
+        header_regista = QLabel("Regista")
+        header_regista.setObjectName(QssStyle.HEADER3.style_name)
+        header_opzioni = QLabel("Opzioni")
+        header_opzioni.setObjectName(QssStyle.HEADER3.style_name)
+
+        header_lista_regie = QWidget()
+        layout_header_lista_regie = QGridLayout(header_lista_regie)
+        layout_header_lista_regie.setContentsMargins(1, 1, 1, 1)
+        layout_header_lista_regie.addWidget(
+            header_titolo, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        layout_header_lista_regie.addWidget(make_vline(), 0, 1)
+        layout_header_lista_regie.addWidget(
+            header_regista, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        layout_header_lista_regie.addWidget(make_vline(), 0, 3)
+        layout_header_lista_regie.addWidget(
+            header_opzioni, 0, 4, alignment=Qt.AlignmentFlag.AlignCenter
+        )
 
         self.regie = QWidget()
         self.layout_regie = QVBoxLayout(self.regie)
         self.layout_regie.addWidget(widget_header_regie)
-        self.layout_regie.addWidget(widget_lista_regie)
+        self.layout_regie.addWidget(header_lista_regie)
+        self.layout_regie.addWidget(content_lista_regie)
         # end-Lista Regie
 
         pagina_content = QWidget()
@@ -180,34 +214,22 @@ class VisualizzaOperaView(QWidget):
         else:
             self.displayRegieRequest.emit(self.layout_lista_regie)
 
-    # - STUDIARE: Come posso fare questi metodi modullari? (Sono usati da varie pagine non
-    #   necessariamente relazionate tra loro)
     def aggiungi_widget_a_layout(self, widget: QWidget, layout: QVBoxLayout):
         """Aggiunge un widget creato per il display delle istanze del model.
 
         :param widget: widget speciale per visualizzare una instanza del model
         :param layout: layout dove sarà inserito il widget"""
-        # C'era un errore al utilizzare widget.setObjectName("objectDetailsView") direttamente:
-        #   lo style non veniva asegnato al widget. Quindi ho decisso di aggiungere questo
-        #   dummy widget per farlo funzionare.
-        dummy_widget = QWidget()
-        dummy_widget.setObjectName("objectDetailsView")
-        l = QVBoxLayout(dummy_widget)
-        l.addWidget(widget)
+        layout.addWidget(widget)
 
-        layout.addWidget(dummy_widget)
-
-    # - Metodo da fare modullare(?)
     def if_lista_vuota(self, layout: QVBoxLayout) -> None:
         """Indica che la lista non ha istanze da visualizzare.
 
         :param layout: layout dove si mostrerà un messaggio indicando l'assenza di intanze
         """
         # Il suo funzionamento dipende di come aggiorna_pagina aggiunge il label di errore nei layout.
-        lista_vuota_error = layout.itemAt(0).widget()  # type:QLabel # type:ignore
-        lista_vuota_error.show()
+        error_msg = layout.itemAt(0).widget()  # type:QLabel # type:ignore
+        error_msg.show()
 
-    # - Metodo da fare modullare(?)
     def aggiorna_pagina(self) -> None:
         """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
         self.svuota_layout(self.layout_lista_regie)

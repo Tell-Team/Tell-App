@@ -6,7 +6,7 @@ from controller.context import AppContext
 
 from model.exceptions import DatoIncongruenteException
 
-from view.styles.styleLoader import load_stylesheet
+from view.style import load_main_stylesheet
 
 
 # Con `# - ` ho segnato le annotazioni sui dettagli da modificare o corriggere
@@ -32,7 +32,7 @@ class MainWindowView(QMainWindow):
 if __name__ == "__main__":
     app = QApplication([])
     # app.setStyle("Fusion")
-    app.setStyleSheet(load_stylesheet("view/styles/main.qss"))
+    app.setStyleSheet(load_main_stylesheet())
 
     try:
         window: MainWindowView

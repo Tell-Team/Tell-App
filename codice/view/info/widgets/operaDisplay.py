@@ -4,6 +4,8 @@ from functools import partial
 
 from model.pianificazione.opera import Opera
 
+from view.style import QssStyle
+
 
 class OperaDisplay(QWidget):
     """View delle singole opere della Lista Opere.
@@ -29,23 +31,23 @@ class OperaDisplay(QWidget):
     def __setup_ui(self, o: Opera) -> None:
         # Labels
         nome = QLabel(o.get_nome())
-        nome.setObjectName("header2")
+        nome.setObjectName(QssStyle.HEADER2.style_name)
 
         librettista = QLabel(f"Libretto di {o.get_librettista()}")
-        librettista.setObjectName("paragraph")
+        librettista.setObjectName(QssStyle.PARAGRAPH.style_name)
 
         compositore = QLabel(f"Musica di {o.get_compositore()}")
-        compositore.setObjectName("paragraph")
+        compositore.setObjectName(QssStyle.PARAGRAPH.style_name)
 
         # Pulsanti
         self.__btn_visualizza = QPushButton("Maggior info")
-        self.__btn_visualizza.setObjectName("whiteButton")
+        self.__btn_visualizza.setObjectName(QssStyle.WHITE_BUTTON.style_name)
 
         self.__btn_modifica = QPushButton("Modifica")
-        self.__btn_modifica.setObjectName("whiteButton")
+        self.__btn_modifica.setObjectName(QssStyle.WHITE_BUTTON.style_name)
 
         self.__btn_elimina = QPushButton("Elimina")
-        self.__btn_elimina.setObjectName("whiteButton")
+        self.__btn_elimina.setObjectName(QssStyle.WHITE_BUTTON.style_name)
 
         self.__pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.__pulsanti)
@@ -57,13 +59,13 @@ class OperaDisplay(QWidget):
 
         # Pannello di eliminazione
         domanda = QLabel("Sicuro di eliminare?")
-        domanda.setObjectName("paragraph")
+        domanda.setObjectName(QssStyle.PARAGRAPH.style_name)
 
         self.__btn_si = QPushButton("Sì")
-        self.__btn_si.setObjectName("whiteButton")
+        self.__btn_si.setObjectName(QssStyle.WHITE_BUTTON.style_name)
 
         self.__btn_no = QPushButton("No")
-        self.__btn_no.setObjectName("whiteButton")
+        self.__btn_no.setObjectName(QssStyle.WHITE_BUTTON.style_name)
 
         self.__conferma_elimina = QWidget()
         layout_conferma = QHBoxLayout(self.__conferma_elimina)

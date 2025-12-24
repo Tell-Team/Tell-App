@@ -12,14 +12,14 @@ QLabel#header1 { font-size: 28px; }
 QLabel#header2 { font-size: 20px; }
 QLabel#header3 { font-size: 16px; }
 
-QLabel#subheader , QLabel#subheaderRed {
+QLabel#secondary-text , QLabel#error-message {
     font-size: 14px;
     color: #444;
     margin-top: 4px;
     padding: 0;
 }
 
-QLabel#subheaderRed { color:#c3423f; }
+QLabel#error-message { color:#c3423f; }
 
 QLabel#paragraph {
     font-size: 14px;
@@ -29,7 +29,7 @@ QLabel#paragraph {
 }
 
 /* --- Pulsanti --- */
-QPushButton#blueButton {
+QPushButton#blue-button {
     background-color: #2b7cff;
     color: white;
     border-radius: 6px;
@@ -37,7 +37,7 @@ QPushButton#blueButton {
     font-size: 14px;
 }
 
-QPushButton#searchButton {
+QPushButton#search-button {
     image: url(search_icon.png); /* # - Si deve aggiungere nella view */
     border: 1px solid #b0b0b0;
     background-color: #2b7cff;
@@ -48,10 +48,10 @@ QPushButton#searchButton {
     padding: 7px;
 }
 
-QPushButton#blueButton:hover, QPushButton#searchButton:hover { background-color: #1d63d3; }
-QPushButton#blueButton:pressed, QPushButton#searchButton:pressed { background-color: #154c9c; }
+QPushButton#blue-button:hover, QPushButton#search-button:hover { background-color: #1d63d3; }
+QPushButton#blue-button:pressed, QPushButton#search-button:pressed { background-color: #154c9c; }
 
-QPushButton#whiteButton {
+QPushButton#white-button {
     background-color: #fff;
     color: black;
     border-radius: 6px;
@@ -59,32 +59,32 @@ QPushButton#whiteButton {
     font-size: 12px;
 }
 
-QPushButton#whiteButton:hover { background-color: #d1d1d1; }
-QPushButton#whiteButton:pressed { background-color: #9a9a9a; }
-QPushButton#whiteButton:disabled {
+QPushButton#white-button:hover { background-color: #d1d1d1; }
+QPushButton#white-button:pressed { background-color: #9a9a9a; }
+QPushButton#white-button:disabled {
     background-color: #ccc;
     color: #777;
 }
 
-QPushButton#removeButton {
+QPushButton#remove-button {
     background-color: #dc3545;
     color: white;
     border-radius: 5px;
     font-weight: bold;
 }
 
-QPushButton#removeButton:hover { background-color: #941239; }
-QPushButton#removeButton:pressed { background-color: #6b202a; }
+QPushButton#remove-button:hover { background-color: #941239; }
+QPushButton#remove-button:pressed { background-color: #6b202a; }
 
 /* --- QWidget speciale --- */
-QWidget#objectDetailsView {
+QWidget#item-card {
     border: 1px solid #111;
     border-radius: 15px;
     background-color: #f3f3f3;
     padding: 10px;
 }
 
-QWidget#listView {
+QWidget#item-list {
     border: 1px solid #b0b0b0;
     border-radius: 5px;
     background-color: white;
@@ -100,7 +100,7 @@ QLineEdit, QTextEdit, QComboBox, QSpinBox, QDateEdit {
     font-size: 14px;
 }
 
-QLineEdit#searchBar {
+QLineEdit#search-bar {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border-top-right-radius: 0px;

@@ -1,8 +1,17 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtWidgets import (
+    QWidget,
+    QLabel,
+    QPushButton,
+    QHBoxLayout,
+    QGridLayout,
+    QFrame,
+)
+from PyQt6.QtCore import Qt, pyqtSignal
 from functools import partial
 
 from model.pianificazione.regia import Regia
+
+from view.style import QssStyle
 
 
 class RegiaDisplay(QWidget):
@@ -26,41 +35,36 @@ class RegiaDisplay(QWidget):
 
     # ------------------------- SETUP INIT -------------------------
 
-    # - Il QWidget potrebbe essere una tabella. Per renderlo distinto dalle opere e generi.
     def __setup_ui(self, r: Regia) -> None:
         # Labels
         titolo = QLabel(r.get_titolo())
-        titolo.setObjectName("header3")
+        titolo.setObjectName(QssStyle.PARAGRAPH.style_name)
 
-        regista = QLabel(f"Regista: {r.get_regista()}")
-        regista.setObjectName("paragraph")
-
-        anno = QLabel(f"Anno di produzione: {r.get_anno_produzione()}")
-        anno.setObjectName("paragraph")
+        regista_anno = QLabel(f"{r.get_regista()} ({r.get_anno_produzione()})")
+        regista_anno.setObjectName(QssStyle.PARAGRAPH.style_name)
 
         # Pulsanti
         self.__btn_modifica = QPushButton("Modifica")
-        self.__btn_modifica.setObjectName("whiteButton")
+        self.__btn_modifica.setObjectName(QssStyle.WHITE_BUTTON.style_name)
 
         self.__btn_elimina = QPushButton("Elimina")
-        self.__btn_elimina.setObjectName("whiteButton")
+        self.__btn_elimina.setObjectName(QssStyle.WHITE_BUTTON.style_name)
 
         self.__pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.__pulsanti)
         layout_pulsanti.setContentsMargins(1, 1, 1, 1)
         layout_pulsanti.addWidget(self.__btn_modifica)
         layout_pulsanti.addWidget(self.__btn_elimina)
-        layout_pulsanti.addStretch()
 
         # Pannello di eliminazione
         domanda = QLabel("Sicuro di eliminare?")
-        domanda.setObjectName("paragraph")
+        domanda.setObjectName(QssStyle.PARAGRAPH.style_name)
 
         self.__btn_si = QPushButton("Sì")
-        self.__btn_si.setObjectName("whiteButton")
+        self.__btn_si.setObjectName(QssStyle.WHITE_BUTTON.style_name)
 
         self.__btn_no = QPushButton("No")
-        self.__btn_no.setObjectName("whiteButton")
+        self.__btn_no.setObjectName(QssStyle.WHITE_BUTTON.style_name)
 
         self.__conferma_elimina = QWidget()
         layout_conferma = QHBoxLayout(self.__conferma_elimina)
@@ -70,14 +74,29 @@ class RegiaDisplay(QWidget):
         layout_conferma.addWidget(self.__btn_no)
         self.__conferma_elimina.hide()
 
+        dummy = QWidget()
+        dummy_layout = QHBoxLayout(dummy)
+        dummy_layout.addWidget(self.__pulsanti)
+        dummy_layout.addWidget(self.__conferma_elimina)
+
+        def make_vline() -> QFrame:
+            line = QFrame()
+            line.setFrameShape(QFrame.Shape.VLine)
+            line.setFrameShadow(QFrame.Shadow.Sunken)
+            return line
+
         # Layout
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(1, 1, 1, 1)
-        layout.addWidget(titolo)
-        layout.addWidget(regista)
-        layout.addWidget(anno)
-        layout.addWidget(self.__pulsanti)
-        layout.addWidget(self.__conferma_elimina)
+        layout = QGridLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(titolo, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(make_vline(), 0, 1)
+        layout.addWidget(regista_anno, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(make_vline(), 0, 3)
+        layout.addWidget(dummy, 0, 4, alignment=Qt.AlignmentFlag.AlignCenter)
+
+        layout.setColumnStretch(0, 1)
+        layout.setColumnStretch(2, 1)
+        layout.setColumnStretch(4, 1)
 
     def __connect_signals(self, r: Regia) -> None:
         self.__id = r.get_id()

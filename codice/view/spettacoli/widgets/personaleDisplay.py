@@ -2,6 +2,8 @@ from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout
 from PyQt6.QtCore import pyqtSignal
 from functools import partial
 
+from view.style import QssStyle
+
 
 class PersonaleDisplay(QWidget):
     """View degli interpreti e tecnici degli spettacoli.
@@ -22,14 +24,14 @@ class PersonaleDisplay(QWidget):
         self.__key = key
 
         widget_key = QLabel(self.__key)
-        widget_key.setObjectName("paragraph")
+        widget_key.setObjectName(QssStyle.PARAGRAPH.style_name)
 
         widget_value = QLabel(value)
-        widget_value.setObjectName("paragraph")
+        widget_value.setObjectName(QssStyle.PARAGRAPH.style_name)
 
         self.__btn_rimuovi = QPushButton("X")
         self.__btn_rimuovi.setFixedSize(25, 25)
-        self.__btn_rimuovi.setObjectName("removeButton")
+        self.__btn_rimuovi.setObjectName(QssStyle.REMOVE_BUTTON.style_name)
 
         layout = QGridLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)

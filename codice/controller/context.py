@@ -257,7 +257,7 @@ class AppContext:
         except KeyError as exc:
             MessageView.mostra_errore(
                 self.__nav.get_cur_central_page(),
-                # E' sempre chiamato con un centralWidget definito. Quindi, lanciare
+                # È sempre chiamato con un centralWidget definito. Quindi, lanciare
                 #   un RuntimeError è segno di un bug.
                 "Pagina non trovata",
                 f"Si è verificato un errore: {exc}",
@@ -269,8 +269,8 @@ class AppContext:
         except KeyError as exc:
             MessageView.mostra_errore(
                 self.__nav.get_cur_central_page(),
-                # E' sempre chiamato con un centralWidget definito. Quindi, in teoria,
-                #   get_cur_central_page non lancia mai un RuntimeError.
+                # È sempre chiamato con un centralWidget definito. Quindi, lanciare
+                #   un RuntimeError è segno di un bug.
                 "Pagina non trovata",
                 f"Si è verificato un errore: {exc}",
             )

@@ -54,7 +54,7 @@ class CUOperaController(AbstractCUController):
         :param is_new: verifica se si deve creare un'opera o modificare una esistente
         """
         CAMPI_NECESSARI = (
-            "<b>ATTENZIONE</b>: E' necessario compilare tutti i campi d'input."
+            "<b>ATTENZIONE</b>: È necessario compilare tutti i campi d'input."
         )
 
         if is_new:
@@ -77,7 +77,7 @@ class CUOperaController(AbstractCUController):
                     nome, compositore, librettista, atti, data, teatro, trama, id_genere
                 )
             except DatoIncongruenteException as exc:
-                # E' stato trovato un campo con input non valido
+                # È stato trovato un campo con input non valido
                 cur_pagina.show_input_error(CAMPI_NECESSARI)
                 MessageView.mostra_errore(
                     cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
@@ -139,7 +139,7 @@ class CUOperaController(AbstractCUController):
                 copia_opera.set_data_prima_rappresentazione(data)
                 copia_opera.set_teatro_prima_rappresentazione(teatro)
             except DatoIncongruenteException as exc:
-                # E' stato trovato un campo con input non valido
+                # È stato trovato un campo con input non valido
                 cur_pagina.show_input_error(CAMPI_NECESSARI)
                 MessageView.mostra_errore(
                     cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
