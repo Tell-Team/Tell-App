@@ -72,7 +72,9 @@ class InfoSectionView(AbstractSectionView):
         layout_ricerca.addWidget(self.ricerca_bar)
         layout_ricerca.addWidget(self._btn_ricerca)
 
-        layout_header_opere = QHBoxLayout()
+        widget_header_opere = QWidget()
+        layout_header_opere = QHBoxLayout(widget_header_opere)
+        layout_header_opere.setContentsMargins(0, 0, 0, 0)
         layout_header_opere.addWidget(header_opere)
         layout_header_opere.addWidget(self._btn_nuova_opera)
         layout_header_opere.addWidget(widget_ricerca)
@@ -82,12 +84,15 @@ class InfoSectionView(AbstractSectionView):
         label_lista_opere_vuota = EmptyStateLabel("Non vi sono opere disponibili.")
         label_lista_opere_vuota.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
 
-        self.layout_lista_opere = ListLayout(None, label_lista_opere_vuota)
+        widget_lista_opere = QWidget()
+        self.layout_lista_opere = ListLayout(
+            widget_lista_opere, label_lista_opere_vuota
+        )
 
         container_opere = QWidget()
         layout_opere = QVBoxLayout(container_opere)
-        layout_opere.addLayout(layout_header_opere)
-        layout_opere.addLayout(self.layout_lista_opere)
+        layout_opere.addWidget(widget_header_opere)
+        layout_opere.addWidget(widget_lista_opere)
 
         # Generi
         header_generi = QLabel("Generi")
@@ -97,7 +102,9 @@ class InfoSectionView(AbstractSectionView):
         self._btn_nuovo_genere = QPushButton("Nuovo genere")
         self._btn_nuovo_genere.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
-        layout_header_generi = QHBoxLayout()
+        widget_header_generi = QWidget()
+        layout_header_generi = QHBoxLayout(widget_header_generi)
+        layout_header_generi.setContentsMargins(0, 0, 0, 0)
         layout_header_generi.addWidget(header_generi)
         layout_header_generi.addWidget(self._btn_nuovo_genere)
         layout_header_generi.addStretch()
@@ -105,12 +112,15 @@ class InfoSectionView(AbstractSectionView):
         label_lista_generi_vuota = EmptyStateLabel("Non vi sono generi disponibili.")
         label_lista_generi_vuota.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
 
-        self.layout_lista_generi = ListLayout(None, label_lista_generi_vuota)
+        widget_lista_generi = QWidget()
+        self.layout_lista_generi = ListLayout(
+            widget_lista_generi, label_lista_generi_vuota
+        )
 
         container_generi = QWidget()
         layout_generi = QVBoxLayout(container_generi)
-        layout_generi.addLayout(layout_header_generi)
-        layout_generi.addLayout(self.layout_lista_generi)
+        layout_generi.addWidget(widget_header_generi)
+        layout_generi.addWidget(widget_lista_generi)
 
         # Teatro
         header_teatro = QLabel("Teatro")

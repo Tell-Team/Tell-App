@@ -119,7 +119,6 @@ class NuovaRegiaView(AbstractCreaView):
         self.layout_lista_interpreti = ListLayout(
             widget_lista_interpreti, label_lista_interpreti_vuota
         )
-        self.layout_lista_interpreti.setContentsMargins(3, 3, 3, 3)
         # end-Lista interpreti
 
         # Lista tectici
@@ -158,7 +157,6 @@ class NuovaRegiaView(AbstractCreaView):
         self.layout_lista_tecnici = ListLayout(
             widget_lista_tecnici, label_lista_tecnici_vuota
         )
-        self.layout_lista_tecnici.setContentsMargins(3, 3, 3, 3)
         # end-Lista tecnici
 
         label_regista = QLabel('Regista<span style="color:red;">*</span> :')
@@ -226,14 +224,6 @@ class NuovaRegiaView(AbstractCreaView):
         self.opera.insertItem(1, o.get_nome(), o.get_id())
         # - Se questa pagina sarà usata anche dalla sezione Spettacoli, devo carica tutte le opere
         #   nel QComboBox e abilitarlo.
-
-    def aggiungi_widget_a_lista(self, widget: QWidget, layout: ListLayout):
-        """Aggiunge un widget creato per il display del personale della regia (interpreti e tecnici)
-        al layout corrispondente.
-
-        :param widget: widget speciale per visualizzare un membro del personale
-        :param layout: layout dove sarà inserito il widget"""
-        layout.addWidget(widget)
 
     def aggiorna_pagina(self) -> None:
         """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""

@@ -47,7 +47,8 @@ class AccountSectionView(AbstractSectionView):
         self._btn_nuovo_admin = QPushButton("Nuovo Amministratore")
         self._btn_nuovo_admin.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
-        layout_header_admin = QHBoxLayout()
+        widget_header_admin = QWidget()
+        layout_header_admin = QHBoxLayout(widget_header_admin)
         layout_header_admin.addWidget(header_admin)
         layout_header_admin.addWidget(self._btn_nuovo_admin)
         layout_header_admin.addStretch()
@@ -60,12 +61,14 @@ class AccountSectionView(AbstractSectionView):
         label_lista_admin_vuota.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
 
         # Si usa 'admin' nei nomi delle variabili e 'amministratore' nei testi della UI.
-        self.layout_lista_admin = ListLayout(None, label_lista_admin_vuota)
-
+        widget_lista_admin = QWidget()
+        self.layout_lista_admin = ListLayout(
+            widget_lista_admin, label_lista_admin_vuota
+        )
         container_admin = QWidget()
         layout_admin = QVBoxLayout(container_admin)
-        layout_admin.addLayout(layout_header_admin)
-        layout_admin.addLayout(self.layout_lista_admin)
+        layout_admin.addWidget(widget_header_admin)
+        layout_admin.addWidget(widget_lista_admin)
 
         # Biglietteria
         header_biglietteria = QLabel("Biglietteria")
@@ -75,7 +78,8 @@ class AccountSectionView(AbstractSectionView):
         self._btn_nuovo_biglietteria = QPushButton("Nuovo Biglietteria")
         self._btn_nuovo_biglietteria.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
-        layout_header_biglietteria = QHBoxLayout()
+        widget_header_biglietteria = QWidget()
+        layout_header_biglietteria = QHBoxLayout(widget_header_biglietteria)
         layout_header_biglietteria.addWidget(header_biglietteria)
         layout_header_biglietteria.addWidget(self._btn_nuovo_biglietteria)
         layout_header_biglietteria.addStretch()
@@ -89,14 +93,15 @@ class AccountSectionView(AbstractSectionView):
 
         # Viene usato 'biglietteria' in singolare per le variabili perché è il tipo di account.
         #   Quindi, è un nome proprio.
+        widget_lista_biglietteria = QWidget()
         self.layout_lista_biglietteria = ListLayout(
-            None, label_lista_biglietteria_vuota
+            widget_lista_biglietteria, label_lista_biglietteria_vuota
         )
 
         container_biglietteria = QWidget()
         layout_biglietterie = QVBoxLayout(container_biglietteria)
-        layout_biglietterie.addLayout(layout_header_biglietteria)
-        layout_biglietterie.addLayout(self.layout_lista_biglietteria)
+        layout_biglietterie.addWidget(widget_header_biglietteria)
+        layout_biglietterie.addWidget(widget_lista_biglietteria)
 
         # Scroll layout
         self.scroll_layout.addWidget(header_account)

@@ -155,9 +155,7 @@ class CURegiaController(AbstractCUController):
                 elimina_interprete
             )
 
-            pagina.aggiungi_widget_a_lista(
-                cur_interprete, pagina.layout_lista_interpreti
-            )
+            pagina.layout_lista_interpreti.aggiungi_list_item(cur_interprete)
 
     def __display_tecnici(self, pagina: NuovaRegiaView) -> None:
         """Visualizza a schermo le informazioni dei tecnici salvati nella
@@ -185,7 +183,7 @@ class CURegiaController(AbstractCUController):
                 elimina_interprete
             )
 
-            pagina.aggiungi_widget_a_lista(cur_tecnico, pagina.layout_lista_tecnici)
+            pagina.layout_lista_tecnici.aggiungi_list_item(cur_tecnico)
 
     @override
     def _inizia_salvataggio(self, is_new: bool) -> None:

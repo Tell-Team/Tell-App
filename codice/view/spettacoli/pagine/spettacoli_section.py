@@ -68,7 +68,9 @@ class SpettacoliSectionView(AbstractSectionView):
         layout_ricerca.addWidget(self.ricerca_bar)
         layout_ricerca.addWidget(self._btn_ricerca)
 
-        layout_header_spettacoli = QHBoxLayout()
+        widget_header_spettacoli = QWidget()
+        layout_header_spettacoli = QHBoxLayout(widget_header_spettacoli)
+        layout_header_spettacoli.setContentsMargins(0, 0, 0, 0)
         layout_header_spettacoli.addWidget(header_spettacoli)
         layout_header_spettacoli.addWidget(self.__btn_nuovo_spettacolo)
         layout_header_spettacoli.addWidget(widget_ricerca)
@@ -80,12 +82,15 @@ class SpettacoliSectionView(AbstractSectionView):
             QssStyle.SECONDARY_TEXT.style_role, True
         )
 
-        self.layout_lista_spettacoli = ListLayout(None, label_lista_spettacoli_vuota)
+        widget_lista_spettacoli = QWidget()
+        self.layout_lista_spettacoli = ListLayout(
+            widget_lista_spettacoli, label_lista_spettacoli_vuota
+        )
 
         container_spettacoli = QWidget()
         layout_spettacoli = QVBoxLayout(container_spettacoli)
-        layout_spettacoli.addLayout(layout_header_spettacoli)
-        layout_spettacoli.addLayout(self.layout_lista_spettacoli)
+        layout_spettacoli.addWidget(widget_header_spettacoli)
+        layout_spettacoli.addWidget(widget_lista_spettacoli)
 
         # Scroll layout
         self.scroll_layout.addWidget(container_spettacoli)

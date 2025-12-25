@@ -111,7 +111,6 @@ class VisualizzaOperaView(QWidget):
         self.layout_lista_regie = ListLayout(
             content_lista_regie, label_lista_regie_vuota
         )
-        self.layout_lista_regie.setContentsMargins(3, 3, 3, 3)
 
         def make_vline() -> QFrame:
             line = QFrame()

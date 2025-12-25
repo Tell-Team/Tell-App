@@ -84,6 +84,8 @@ class AppContext:
         nav.registra_pagina(Pagina.MODIFICA_GENERE, self.__modifica_genere_view)
         nav.registra_pagina(Pagina.SEZIONE_ACCOUNT, self.__account_section)
 
+        self.get_stack().setCurrentWidget(self.__login_page)
+
         # ------------------------- CONTROLLERS DELLA VIEW -------------------------
 
         # Account

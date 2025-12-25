@@ -10,7 +10,6 @@ from PyQt6.QtCore import pyqtSignal
 
 from view.abstractView.abcQObjectMeta import ABCQObjectMeta
 
-from view.utils import ListLayout
 from view.style import QssStyle
 
 
@@ -105,18 +104,3 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
     def aggiorna_pagina(self) -> None:
         """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
         ...
-
-    def aggiungi_widget_a_lista(self, widget: QWidget, layout: ListLayout):
-        """Aggiunge un widget creato per il display delle istanze del model.
-
-        :param widget: widget speciale per visualizzare una instanza del model
-        :param layout: layout dove sarà inserito il widget"""
-        # C'è un errore al utilizzare widget.setProperty() direttamente:
-        #   lo style non veniva asegnato al widget. Quindi ho decisso di aggiungere questo
-        #   dummy widget per farlo funzionare.
-        dummy_widget = QWidget()
-        dummy_widget.setProperty(QssStyle.ITEM_CARD.style_role, True)
-        l = QVBoxLayout(dummy_widget)
-        l.addWidget(widget)
-
-        layout.addWidget(dummy_widget)
