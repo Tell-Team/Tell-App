@@ -18,10 +18,10 @@ class ListLayout(QVBoxLayout):
     def __init__(self, parent: Optional[QWidget], label: EmptyStateLabel) -> None:
         super().__init__(parent)
 
-        self.label = label
+        self.__label = label
 
-        self.addWidget(self.label)
-        self.label.hide()  # Il label viene nascosto dalla propria ListLayout.
+        self.addWidget(self.__label)
+        self.__label.hide()  # Il label viene nascosto dalla propria ListLayout.
 
     def svuota_layout(self, layout: Optional[QLayout] = None) -> None:
         """Aggiunge il `EmptyStateLabel` indicato nell'`__init__` dopo svuotare il layout."""
@@ -34,8 +34,8 @@ class ListLayout(QVBoxLayout):
                 self.svuota_layout(child_layout)
 
         # Ritorna allo stato iniziale
-        self.addWidget(self.label)
-        self.label.hide()
+        self.addWidget(self.__label)
+        self.__label.hide()
 
     def if_lista_vuota(self) -> None:
         """Mostra un messaggio indicando che la lista non ha istanze da visualizzare."""

@@ -28,54 +28,44 @@ class AppContext:
 
         # ------------------------- PAGINE DELL'APP -------------------------
 
-        # Login
-        from view.login.login_page import LoginPage
+        # Account
+        from view.account.pagine import (
+            LoginPage,
+            AuthenticationPage,
+            AccountSectionView,  # NuovoAccountView, ModificaAccountView
+        )
 
         self.__login_page = LoginPage()
-
-        from view.login.authentication_page import AuthenticationPage
-
         self.__authentication_page = AuthenticationPage()
+        self.__account_section = AccountSectionView()
+        # self.nuovo_account_view = NuovoAccountView()
+        # self.modifica_account_view = ModificaAccountView()
 
         # Spettacoli
-        from view.spettacoli.pagine.spettacoli_section import SpettacoliSectionView
+        from view.spettacoli.pagine import SpettacoliSectionView
 
         self.__spettacoli_section = SpettacoliSectionView()
 
         # Info
-        from view.info.pagine.info_section import InfoSectionView
-        from view.info.pagine.visualizza_opera import VisualizzaOperaView
+        from view.info.pagine import (
+            InfoSectionView,
+            NuovaOperaView,
+            ModificaOperaView,
+            NuovoGenereView,
+            ModificaGenereView,
+            VisualizzaOperaView,
+            NuovaRegiaView,
+            ModificaRegiaView,
+        )
 
         self.__info_section = InfoSectionView()
-        self.__visualizza_opera_view = VisualizzaOperaView()
-
-        from view.info.pagine.modifica_opera import NuovaOperaView, ModificaOperaView
-
         self.__nuova_opera_view = NuovaOperaView()
         self.__modifica_opera_view = ModificaOperaView()
-
-        from view.info.pagine.modifica_genere import NuovoGenereView, ModificaGenereView
-
         self.__nuovo_genere_view = NuovoGenereView()
         self.__modifica_genere_view = ModificaGenereView()
-
-        from view.info.pagine.modifica_regia import NuovaRegiaView, ModificaRegiaView
-
+        self.__visualizza_opera_view = VisualizzaOperaView()
         self.__nuova_regia_view = NuovaRegiaView()
         self.__modifica_regia_view = ModificaRegiaView()
-
-        # Account
-        from view.account.pagine.account_section import AccountSectionView
-
-        self.__account_section = AccountSectionView()
-
-        # from view.account.pagine.modifica_account import (
-        #     NuovoAccountView,
-        #     ModificaAccountView,
-        # )
-
-        # self.nuovo_account_view = NuovoAccountView()
-        # self.modifica_account_view = ModificaAccountView()
 
         # ------------------------- REGISTRAZIONE DELLE PAGINE -------------------------
 
@@ -96,23 +86,20 @@ class AppContext:
 
         # ------------------------- CONTROLLERS DELLA VIEW -------------------------
 
-        # Login
-        from controller.login.login_controller import LoginController
+        # Account
+        from controller.account import LoginController, AccountController
 
         # Spettacoli
-        from controller.spettacoli.spettacoli_controller import SpettacoliController
+        from controller.spettacoli import SpettacoliController
 
         # Info
-        from controller.info.info_controller import InfoController
-        from controller.info.CU_opera_controller import CUOperaController
-        from controller.info.CU_genere_controller import CUGenereController
-        from controller.info.visualizza_opera_controller import (
+        from controller.info import (
+            InfoController,
             VisualizzaOperaController,
+            CUOperaController,
+            CUGenereController,
+            CURegiaController,
         )
-        from controller.info.CU_regia_controller import CURegiaController
-
-        # Account
-        from controller.account.account_controller import AccountController
 
         # Definizioni dei controller come attributi privati
         controller_defs: list[tuple[str, Type[QObject], Tuple[Any, ...]]] = [
@@ -120,6 +107,11 @@ class AppContext:
                 "__login_controller",
                 LoginController,
                 (self.__model, self.__login_page, self.__authentication_page),
+            ),
+            (
+                "__account_controller",
+                AccountController,
+                (self.__model, self.__account_section),
             ),
             (
                 "__spettacoli_controller",
@@ -146,11 +138,6 @@ class AppContext:
                 "__cu_regia_controller",
                 CURegiaController,
                 (self.__model, self.__nuova_regia_view, self.__modifica_regia_view),
-            ),
-            (
-                "__account_controller",
-                AccountController,
-                (self.__model, self.__account_section),
             ),
         ]
 

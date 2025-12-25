@@ -5,8 +5,8 @@ from controller.navigation import Pagina
 
 from model.model import Model
 
-from view.login.login_page import LoginPage
-from view.login.authentication_page import AuthenticationPage
+from view.account.pagine.login_page import LoginPage
+from view.account.pagine.authentication_page import AuthenticationPage
 
 
 class LoginController(QObject):
