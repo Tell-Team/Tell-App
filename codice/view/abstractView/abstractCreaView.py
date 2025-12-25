@@ -13,6 +13,7 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from functools import partial
 
 from view.abstractView.abcQObjectMeta import ABCQObjectMeta
+
 from view.style import QssStyle
 
 

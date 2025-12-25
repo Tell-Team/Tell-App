@@ -6,16 +6,16 @@ from PyQt6.QtWidgets import (
     QComboBox,
     QSpinBox,
     QPushButton,
-    QLayout,
-    QVBoxLayout,
     QHBoxLayout,
 )
 from PyQt6.QtCore import pyqtSignal, QDate
-from typing import Optional, override
+from typing import override
 
 from model.pianificazione.opera import Opera
 
 from view.abstractView.abstractCreaView import AbstractCreaView
+
+from view.utils import ListLayout, EmptyStateLabel
 from view.style import QssStyle
 
 
@@ -107,17 +107,20 @@ class NuovaRegiaView(AbstractCreaView):
             QssStyle.ERROR_MESSAGE.style_role, True
         )
 
-        self.label_lista_interpreti_vuota = QLabel("Non vi sono interpreti registrati.")
-        self.label_lista_interpreti_vuota.setProperty(
+        label_lista_interpreti_vuota = EmptyStateLabel(
+            "Non vi sono interpreti registrati."
+        )
+        label_lista_interpreti_vuota.setProperty(
             QssStyle.SECONDARY_TEXT.style_role, True
         )
-        self.label_lista_interpreti_vuota.hide()
 
         widget_lista_interpreti = QWidget()
         widget_lista_interpreti.setProperty(QssStyle.ITEM_LIST.style_role, True)
-        self.layout_lista_interpreti = QVBoxLayout(widget_lista_interpreti)
+        self.layout_lista_interpreti = ListLayout(
+            widget_lista_interpreti, label_lista_interpreti_vuota
+        )
         self.layout_lista_interpreti.setContentsMargins(3, 3, 3, 3)
-        self.layout_lista_interpreti.addWidget(self.label_lista_interpreti_vuota)
+        # end-Lista interpreti
 
         # Lista tectici
         label_tecnico = QLabel("Tecnico :")
@@ -147,17 +150,16 @@ class NuovaRegiaView(AbstractCreaView):
             QssStyle.ERROR_MESSAGE.style_role, True
         )
 
-        self.label_lista_tecnici_vuota = QLabel("Non vi sono tecnici registrati.")
-        self.label_lista_tecnici_vuota.setProperty(
-            QssStyle.SECONDARY_TEXT.style_role, True
-        )
-        self.label_lista_tecnici_vuota.hide()
+        label_lista_tecnici_vuota = EmptyStateLabel("Non vi sono tecnici registrati.")
+        label_lista_tecnici_vuota.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
 
         widget_lista_tecnici = QWidget()
         widget_lista_tecnici.setProperty(QssStyle.ITEM_LIST.style_role, True)
-        self.layout_lista_tecnici = QVBoxLayout(widget_lista_tecnici)
+        self.layout_lista_tecnici = ListLayout(
+            widget_lista_tecnici, label_lista_tecnici_vuota
+        )
         self.layout_lista_tecnici.setContentsMargins(3, 3, 3, 3)
-        self.layout_lista_tecnici.addWidget(self.label_lista_tecnici_vuota)
+        # end-Lista tecnici
 
         label_regista = QLabel('Regista<span style="color:red;">*</span> :')
         label_regista.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
@@ -216,7 +218,7 @@ class NuovaRegiaView(AbstractCreaView):
     # ------------------------- METODI DI VIEW -------------------------
 
     def setup_opera_combobox(self, o: Opera) -> None:
-        """Riempisce il `QComboBox` de opere (con solo l'opera indicata)."""
+        """Riempisce il `QComboBox` delle opere."""
         # - Solo inserisce l'opera da dove si chiama il Crea/Modifica Regia
         self.opera.clear()
 
@@ -225,49 +227,26 @@ class NuovaRegiaView(AbstractCreaView):
         # - Se questa pagina sarà usata anche dalla sezione Spettacoli, devo carica tutte le opere
         #   nel QComboBox e abilitarlo.
 
-    def aggiungi_widget_a_layout(self, widget: QWidget, layout: QVBoxLayout):
-        """Aggiunge un widget creato per il display del personale della regia (interpreti e tecnici).
+    def aggiungi_widget_a_lista(self, widget: QWidget, layout: ListLayout):
+        """Aggiunge un widget creato per il display del personale della regia (interpreti e tecnici)
+        al layout corrispondente.
 
         :param widget: widget speciale per visualizzare un membro del personale
         :param layout: layout dove sarà inserito il widget"""
         layout.addWidget(widget)
-
-    def __svuota_layout(self, layout: Optional[QLayout]) -> None:
-        """Svuota un layout, eliminando i riferimenti ai widget contenuti. In caso
-        ci sia un layout contenuto, questo viene anche pulito.
-
-        :param layout: layout da pulire
-        """
-        if layout:
-            while layout.count():
-                item = layout.takeAt(0)
-                assert item is not None
-                widget = item.widget()
-
-                if widget:
-                    widget.setParent(None)
-                    continue
-
-                child_layout = item.layout()
-                if child_layout:
-                    self.__svuota_layout(child_layout)
 
     def aggiorna_pagina(self) -> None:
         """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
         self.interprete_nome.setText("")
         self.interprete_ruolo.setText("")
         self.label_lista_interpreti_error.setText("")
-        self.__svuota_layout(self.layout_lista_interpreti)
-        self.label_lista_interpreti_vuota.hide()
-        self.layout_lista_interpreti.addWidget(self.label_lista_interpreti_vuota)
+        self.layout_lista_interpreti.svuota_layout()
         self.displayInterpreti.emit(self)
 
         self.tecnico_nome.setText("")
         self.tecnico_posto.setText("")
         self.label_lista_tecnici_error.setText("")
-        self.__svuota_layout(self.layout_lista_tecnici)
-        self.label_lista_tecnici_vuota.hide()
-        self.layout_lista_tecnici.addWidget(self.label_lista_tecnici_vuota)
+        self.layout_lista_tecnici.svuota_layout()
         self.displayTecnici.emit(self)
 
     @override

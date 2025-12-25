@@ -10,7 +10,9 @@ class Pagina(Enum):
     # Non hanno uno scopo funzionale dentro del codice.
     PAGINA_LOGIN = "login_page"
     PAGINA_AUTENTICAZIONE = "authentication_page"
+
     SEZIONE_SPETTACOLI = "spettacoli_section"
+
     SEZIONE_INFO = "info_section"
     NUOVA_OPERA = "nuova_opera"
     MODIFICA_OPERA = "modifica_opera"
@@ -19,6 +21,7 @@ class Pagina(Enum):
     MODIFICA_REGIA = "modifica_regia"
     NUOVO_GENERE = "nuovo_genere"
     MODIFICA_GENERE = "modifica_genere"
+
     SEZIONE_ACCOUNT = "account_section"
 
 
@@ -49,6 +52,8 @@ class NavigationController:
         da `go_to`.
 
         :raise RuntimeError: non c'è un central widget asegnato alla `QMainWindow`"""
+        # È sempre chiamato con un centralWidget definito. Quindi, lanciare
+        #   un RuntimeError è segno di un bug.
         widget = self.__main_window.centralWidget()
         if widget is None:
             raise RuntimeError("Non c'è un central widget asegnato.")
@@ -81,8 +86,9 @@ class NavigationController:
 
         # Dopo di andar ad un'altra pagina, questa viene aggiornata se ha il metodo
         #   `aggiorna_pagina` definito.
-        if hasattr(widget, "aggiorna_pagina"):
-            widget.aggiorna_pagina()  # type:ignore
+        attr = getattr(widget, "aggiorna_pagina", None)
+        if callable(attr):
+            attr()
 
         self.__stack.setCurrentWidget(widget)
 
@@ -98,8 +104,9 @@ class NavigationController:
             return
         last_widget = self.__history.pop()
 
-        if hasattr(last_widget, "aggiorna_pagina"):
-            last_widget.aggiorna_pagina()  # type:ignore
+        attr = getattr(last_widget, "aggiorna_pagina", None)
+        if callable(attr):
+            attr()
 
         self.__stack.setCurrentWidget(last_widget)
 

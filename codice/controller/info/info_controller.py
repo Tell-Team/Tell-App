@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout
+from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import pyqtSignal, QObject
 from typing import Optional
 from functools import partial
@@ -16,7 +16,8 @@ from view.info.widgets.operaDisplay import OperaDisplay
 from view.info.widgets.genereDisplay import GenereDisplay
 from view.info.utils.operaPageData import OperaPageData
 from view.info.utils.generePageData import GenerePageData
-from view.messageView import MessageView
+
+from view.utils import MessageView, ListLayout
 
 
 class InfoController(QObject):
@@ -103,7 +104,7 @@ class InfoController(QObject):
     def __get_regie_by_opera(self, id_: int) -> list[Regia]:
         return self.__model.get_regie_by_opera(id_)
 
-    def __display_opere(self, layout: QVBoxLayout) -> None:
+    def __display_opere(self, layout_opere: ListLayout) -> None:
         """Visualizza a schermo alcune informazioni delle opere salvate ed assegna a
         ciascuna pulsanti per visualizzarle in dettaglio, modificarle o eliminarle.
 
@@ -121,7 +122,7 @@ class InfoController(QObject):
 
         # Verifica che la lista non sia vuota
         if not lista_opere:
-            self.__info_section.if_lista_vuota(layout)
+            layout_opere.if_lista_vuota()
             return
 
         # Mostra tutte le opere della lista a schermo
@@ -139,7 +140,7 @@ class InfoController(QObject):
             )
 
             # Aggiungi cur_opera al layout di ListaOpere
-            self.__info_section.aggiungi_widget_a_layout(cur_opera, layout)
+            self.__info_section.aggiungi_widget_a_lista(cur_opera, layout_opere)
 
             # Funzione di elimina per l'opera
             def on_si(id_: int) -> None:
@@ -163,7 +164,7 @@ class InfoController(QObject):
                 on_si
             )
 
-    def __display_generi(self, layout: QVBoxLayout) -> None:
+    def __display_generi(self, layout_generi: ListLayout) -> None:
         """Visualizza a schermo le informazioni dei generi salvati ed assegna a
         ciascuno pulsanti per modificarli o eliminarli.
 
@@ -173,7 +174,7 @@ class InfoController(QObject):
 
         # Verifica che la lista non sia vuota
         if not lista_generi:
-            self.__info_section.if_lista_vuota(layout)
+            layout_generi.if_lista_vuota()
             return
 
         # Mostra tutti i generi salvati a schermo
@@ -186,7 +187,7 @@ class InfoController(QObject):
             )
 
             # Aggiungi cur_genere al layout di ListaOpere
-            self.__info_section.aggiungi_widget_a_layout(cur_genere, layout)
+            self.__info_section.aggiungi_widget_a_lista(cur_genere, layout_generi)
 
             # Funzione di elimina per il genere
             def on_si(id_: int) -> None:

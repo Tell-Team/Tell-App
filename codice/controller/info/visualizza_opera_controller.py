@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout
+from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import pyqtSignal, QObject
 from typing import Optional
 
@@ -12,7 +12,8 @@ from model.exceptions import OggettoInUsoException
 from view.info.pagine.visualizza_opera import VisualizzaOperaView
 from view.info.widgets.regiaDisplay import RegiaDisplay
 from view.info.utils.regiaPageData import RegiaPageData
-from view.messageView import MessageView
+
+from view.utils import MessageView, ListLayout
 
 
 class VisualizzaOperaController(QObject):
@@ -59,13 +60,7 @@ class VisualizzaOperaController(QObject):
         return self.__model.get_opera(id_)
 
     def __get_regia(self, id_: int) -> Optional[Regia]:
-        regia = self.__model.get_spettacolo(id_)
-        # Verifica che sia Regia e non nessuna (ipotetica) sottoclasse
-        #   Usare not isinstance(regia, Regia) nel caso contrario.
-        if type(regia) is not Regia:
-            return None
-        return regia
-        # - Questa definizione dovrebbe esser parte del model
+        return self.__model.get_regia(id_)
 
     def __get_regie_by_opera(self, id_: int) -> list[Regia]:
         return self.__model.get_regie_by_opera(id_)
@@ -74,7 +69,7 @@ class VisualizzaOperaController(QObject):
         self.__model.elimina_spettacolo(id_)
         # - Implementare elimina_spettacolo nel model
 
-    def __display_regie(self, layout: QVBoxLayout) -> None:
+    def __display_regie(self, layout_regie: ListLayout) -> None:
         """Visualizza a schermo le informazioni delle regie salvati e associate ad
         un'opera ed assegna a ciascuna pulsanti per modificarli o eliminarli.
 
@@ -86,7 +81,7 @@ class VisualizzaOperaController(QObject):
 
         # Verifica che la lista non sia vuota
         if not lista_regie:
-            self.__visualizza_opera_view.if_lista_vuota(layout)
+            layout_regie.if_lista_vuota()
             return
 
         # Mostra tutti le regie salvate a schermo
@@ -99,7 +94,9 @@ class VisualizzaOperaController(QObject):
             )
 
             # Aggiungi cur_regia al layout di ListaRegie
-            self.__visualizza_opera_view.aggiungi_widget_a_layout(cur_regia, layout)
+            self.__visualizza_opera_view.aggiungi_widget_a_layout(
+                cur_regia, layout_regie
+            )
 
             # Funzione di elimina per la regia
             def on_si(id_: int) -> None:

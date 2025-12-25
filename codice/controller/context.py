@@ -1,12 +1,12 @@
 from PyQt6.QtWidgets import QMainWindow, QWidget, QStackedWidget
 from PyQt6.QtCore import QObject
-from typing import Optional, Callable
+from typing import Optional, Callable, Tuple, Type, Any
 
 from controller.navigation import NavigationController, Pagina
 
 from model.model import Model
 
-from view.messageView import MessageView
+from view.utils import MessageView
 
 
 class AppContext:
@@ -79,90 +79,88 @@ class AppContext:
 
         # ------------------------- REGISTRAZIONE DELLE PAGINE -------------------------
 
-        self.__nav.registra_pagina(Pagina.PAGINA_LOGIN, self.__login_page)
-        self.__nav.registra_pagina(
-            Pagina.PAGINA_AUTENTICAZIONE, self.__authentication_page
-        )
-        self.__nav.registra_pagina(Pagina.SEZIONE_SPETTACOLI, self.__spettacoli_section)
-        self.__nav.registra_pagina(Pagina.SEZIONE_INFO, self.__info_section)
-        self.__nav.registra_pagina(Pagina.NUOVA_OPERA, self.__nuova_opera_view)
-        self.__nav.registra_pagina(Pagina.MODIFICA_OPERA, self.__modifica_opera_view)
-        self.__nav.registra_pagina(
-            Pagina.VISUALIZZA_OPERA, self.__visualizza_opera_view
-        )
-        self.__nav.registra_pagina(Pagina.NUOVA_REGIA, self.__nuova_regia_view)
-        self.__nav.registra_pagina(Pagina.MODIFICA_REGIA, self.__modifica_regia_view)
-        self.__nav.registra_pagina(Pagina.NUOVO_GENERE, self.__nuovo_genere_view)
-        self.__nav.registra_pagina(Pagina.MODIFICA_GENERE, self.__modifica_genere_view)
-        self.__nav.registra_pagina(Pagina.SEZIONE_ACCOUNT, self.__account_section)
+        nav = self.__nav
+
+        nav.registra_pagina(Pagina.PAGINA_LOGIN, self.__login_page)
+        nav.registra_pagina(Pagina.PAGINA_AUTENTICAZIONE, self.__authentication_page)
+        nav.registra_pagina(Pagina.SEZIONE_SPETTACOLI, self.__spettacoli_section)
+        nav.registra_pagina(Pagina.SEZIONE_INFO, self.__info_section)
+        nav.registra_pagina(Pagina.NUOVA_OPERA, self.__nuova_opera_view)
+        nav.registra_pagina(Pagina.MODIFICA_OPERA, self.__modifica_opera_view)
+        nav.registra_pagina(Pagina.VISUALIZZA_OPERA, self.__visualizza_opera_view)
+        nav.registra_pagina(Pagina.NUOVA_REGIA, self.__nuova_regia_view)
+        nav.registra_pagina(Pagina.MODIFICA_REGIA, self.__modifica_regia_view)
+        nav.registra_pagina(Pagina.NUOVO_GENERE, self.__nuovo_genere_view)
+        nav.registra_pagina(Pagina.MODIFICA_GENERE, self.__modifica_genere_view)
+        nav.registra_pagina(Pagina.SEZIONE_ACCOUNT, self.__account_section)
 
         # ------------------------- CONTROLLERS DELLA VIEW -------------------------
 
-        controllers: list[QObject] = []
-
-        # LoginController
+        # Login
         from controller.login.login_controller import LoginController
 
-        self.__login_controller = LoginController(
-            self.__model, self.__login_page, self.__authentication_page
-        )
-        controllers.append(self.__login_controller)
-
-        # SpettacoliController
+        # Spettacoli
         from controller.spettacoli.spettacoli_controller import SpettacoliController
 
-        self.__spettacoli_controller = SpettacoliController(
-            self.__model, self.__spettacoli_section
-        )
-        controllers.append(self.__spettacoli_controller)
-
-        # InfoController
+        # Info
         from controller.info.info_controller import InfoController
-
-        self.__info_controller = InfoController(self.__model, self.__info_section)
-        controllers.append(self.__info_controller)
-
-        # CUOperaController
         from controller.info.CU_opera_controller import CUOperaController
-
-        self.__cu_opera_controller = CUOperaController(
-            self.__model, self.__nuova_opera_view, self.__modifica_opera_view
-        )
-        controllers.append(self.__cu_opera_controller)
-
-        # CUGenereController
         from controller.info.CU_genere_controller import CUGenereController
-
-        self.__cu_genere_controller = CUGenereController(
-            self.__model, self.__nuovo_genere_view, self.__modifica_genere_view
-        )
-        controllers.append(self.__cu_genere_controller)
-
-        # VisualizzaOperaController
         from controller.info.visualizza_opera_controller import (
             VisualizzaOperaController,
         )
-
-        self.__visualizza_opera_controller = VisualizzaOperaController(
-            self.__model, self.__visualizza_opera_view
-        )
-        controllers.append(self.__visualizza_opera_controller)
-
-        # CURegiaController
         from controller.info.CU_regia_controller import CURegiaController
 
-        self.__cu_regia_controller = CURegiaController(
-            self.__model, self.__nuova_regia_view, self.__modifica_regia_view
-        )
-        controllers.append(self.__cu_regia_controller)
-
-        # AccountController
+        # Account
         from controller.account.account_controller import AccountController
 
-        self.__account_controller = AccountController(
-            self.__model, self.__account_section
-        )
-        controllers.append(self.__account_controller)
+        # Definizioni dei controller come attributi privati
+        controller_defs: list[tuple[str, Type[QObject], Tuple[Any, ...]]] = [
+            (
+                "__login_controller",
+                LoginController,
+                (self.__model, self.__login_page, self.__authentication_page),
+            ),
+            (
+                "__spettacoli_controller",
+                SpettacoliController,
+                (self.__model, self.__spettacoli_section),
+            ),
+            ("__info_controller", InfoController, (self.__model, self.__info_section)),
+            (
+                "__cu_opera_controller",
+                CUOperaController,
+                (self.__model, self.__nuova_opera_view, self.__modifica_opera_view),
+            ),
+            (
+                "__cu_genere_controller",
+                CUGenereController,
+                (self.__model, self.__nuovo_genere_view, self.__modifica_genere_view),
+            ),
+            (
+                "__visualizza_opera_controller",
+                VisualizzaOperaController,
+                (self.__model, self.__visualizza_opera_view),
+            ),
+            (
+                "__cu_regia_controller",
+                CURegiaController,
+                (self.__model, self.__nuova_regia_view, self.__modifica_regia_view),
+            ),
+            (
+                "__account_controller",
+                AccountController,
+                (self.__model, self.__account_section),
+            ),
+        ]
+
+        controllers: list[QObject] = []
+
+        # Creazione dei controller
+        for attr, cls, args in controller_defs:
+            controller = cls(*args)
+            setattr(self, attr, controller)
+            controllers.append(controller)
 
         # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
 
@@ -220,8 +218,6 @@ class AppContext:
         except KeyError as exc:
             MessageView.mostra_errore(
                 self.__nav.get_cur_central_page(),
-                # È sempre chiamato con un centralWidget definito. Quindi, lanciare
-                #   un RuntimeError è segno di un bug.
                 "Pagina non trovata",
                 f"Si è verificato un errore: {exc}",
             )
@@ -232,8 +228,6 @@ class AppContext:
         except KeyError as exc:
             MessageView.mostra_errore(
                 self.__nav.get_cur_central_page(),
-                # È sempre chiamato con un centralWidget definito. Quindi, lanciare
-                #   un RuntimeError è segno di un bug.
                 "Pagina non trovata",
                 f"Si è verificato un errore: {exc}",
             )

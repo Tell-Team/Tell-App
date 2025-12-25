@@ -1,3 +1,5 @@
+# Metodi condivisi tra diverse pagine della view e controller.
+
 from PyQt6.QtWidgets import QWidget, QMessageBox
 
 

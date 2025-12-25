@@ -12,6 +12,8 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from typing import override
 
 from view.abstractView.abstractSectionView import AbstractSectionView
+
+from view.utils import ListLayout, EmptyStateLabel
 from view.style import QssStyle
 
 
@@ -71,13 +73,14 @@ class SpettacoliSectionView(AbstractSectionView):
         layout_header_spettacoli.addWidget(self.__btn_nuovo_spettacolo)
         layout_header_spettacoli.addWidget(widget_ricerca)
 
-        self.layout_lista_spettacoli = QVBoxLayout()
-
-        self.label_lista_spettacoli_vuota = QLabel("Non vi sono spettacoli registrati.")
-        self.label_lista_spettacoli_vuota.setProperty(
+        label_lista_spettacoli_vuota = EmptyStateLabel(
+            "Non vi sono spettacoli registrati."
+        )
+        label_lista_spettacoli_vuota.setProperty(
             QssStyle.SECONDARY_TEXT.style_role, True
         )
-        self.label_lista_spettacoli_vuota.hide()
+
+        self.layout_lista_spettacoli = ListLayout(None, label_lista_spettacoli_vuota)
 
         container_spettacoli = QWidget()
         layout_spettacoli = QVBoxLayout(container_spettacoli)
@@ -112,9 +115,7 @@ class SpettacoliSectionView(AbstractSectionView):
 
     @override
     def aggiorna_pagina(self) -> None:
-        self._svuota_layout(self.layout_lista_spettacoli)
-        self.layout_lista_spettacoli.addWidget(self.label_lista_spettacoli_vuota)
-        self.label_lista_spettacoli_vuota.hide()
+        self.layout_lista_spettacoli.svuota_layout()
         self.displaySpettacoliRequest.emit(self.layout_lista_spettacoli)
 
         vertical_scroll = self._scroll_area.verticalScrollBar()

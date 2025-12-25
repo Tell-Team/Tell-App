@@ -1,17 +1,16 @@
 from abc import abstractmethod
 from PyQt6.QtWidgets import (
     QWidget,
-    QLabel,
     QPushButton,
-    QLayout,
     QVBoxLayout,
     QHBoxLayout,
     QScrollArea,
 )
 from PyQt6.QtCore import pyqtSignal
-from typing import Optional
 
 from view.abstractView.abcQObjectMeta import ABCQObjectMeta
+
+from view.utils import ListLayout
 from view.style import QssStyle
 
 
@@ -107,21 +106,12 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
         """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
         ...
 
-    def if_lista_vuota(self, layout: QVBoxLayout) -> None:
-        """Indica che la lista non ha istanze da visualizzare.
-
-        :param layout: layout dove si mostrerà un messaggio indicando l'assenza di intanze
-        """
-        # Il suo funzionamento dipende di come aggiorna_pagina aggiunge il label di errore nei layout.
-        error_msg = layout.itemAt(0).widget()  # type:QLabel # type:ignore
-        error_msg.show()
-
-    def aggiungi_widget_a_layout(self, widget: QWidget, layout: QVBoxLayout):
+    def aggiungi_widget_a_lista(self, widget: QWidget, layout: ListLayout):
         """Aggiunge un widget creato per il display delle istanze del model.
 
         :param widget: widget speciale per visualizzare una instanza del model
         :param layout: layout dove sarà inserito il widget"""
-        # C'era un errore al utilizzare widget.setProperty() direttamente:
+        # C'è un errore al utilizzare widget.setProperty() direttamente:
         #   lo style non veniva asegnato al widget. Quindi ho decisso di aggiungere questo
         #   dummy widget per farlo funzionare.
         dummy_widget = QWidget()
@@ -130,23 +120,3 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
         l.addWidget(widget)
 
         layout.addWidget(dummy_widget)
-
-    def _svuota_layout(self, layout: Optional[QLayout]) -> None:
-        """Svuota un layout, eliminando i riferimenti ai widget contenuti. In caso
-        ci sia un layout contenuto, questo viene anche pulito.
-
-        :param layout: layout da pulire
-        """
-        if layout:
-            while layout.count():
-                item = layout.takeAt(0)
-                assert item is not None
-                widget = item.widget()
-
-                if widget:
-                    widget.setParent(None)
-                    continue
-
-                child_layout = item.layout()
-                if child_layout:
-                    self._svuota_layout(child_layout)

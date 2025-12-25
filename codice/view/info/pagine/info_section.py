@@ -12,10 +12,9 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from typing import override
 
 from view.abstractView.abstractSectionView import AbstractSectionView
-from view.style import QssStyle
 
-# - Se l'app, in teoria, vendrà usata in un schermo tattile dai clienti, sarà comodo scambiare
-#   alcuni .clicked per .pressed
+from view.utils import ListLayout, EmptyStateLabel
+from view.style import QssStyle
 
 
 class InfoSectionView(AbstractSectionView):
@@ -78,13 +77,12 @@ class InfoSectionView(AbstractSectionView):
         layout_header_opere.addWidget(self._btn_nuova_opera)
         layout_header_opere.addWidget(widget_ricerca)
 
-        self.layout_lista_opere = QVBoxLayout()
+        # Non è necessario salvare questo label come attributo perché il suo funzionamento
+        #   viene gestito dal ListLayout a cui viene collegato.
+        label_lista_opere_vuota = EmptyStateLabel("Non vi sono opere disponibili.")
+        label_lista_opere_vuota.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
 
-        self.label_lista_opere_vuota = QLabel("Non vi sono opere disponibili.")
-        self.label_lista_opere_vuota.setProperty(
-            QssStyle.SECONDARY_TEXT.style_role, True
-        )
-        self.label_lista_opere_vuota.hide()
+        self.layout_lista_opere = ListLayout(None, label_lista_opere_vuota)
 
         container_opere = QWidget()
         layout_opere = QVBoxLayout(container_opere)
@@ -104,13 +102,10 @@ class InfoSectionView(AbstractSectionView):
         layout_header_generi.addWidget(self._btn_nuovo_genere)
         layout_header_generi.addStretch()
 
-        self.layout_lista_generi = QVBoxLayout()
+        label_lista_generi_vuota = EmptyStateLabel("Non vi sono generi disponibili.")
+        label_lista_generi_vuota.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
 
-        self.label_lista_generi_vuota = QLabel("Non vi sono generi disponibili.")
-        self.label_lista_generi_vuota.setProperty(
-            QssStyle.SECONDARY_TEXT.style_role, True
-        )
-        self.label_lista_generi_vuota.hide()
+        self.layout_lista_generi = ListLayout(None, label_lista_generi_vuota)
 
         container_generi = QWidget()
         layout_generi = QVBoxLayout(container_generi)
@@ -182,14 +177,10 @@ class InfoSectionView(AbstractSectionView):
 
     @override
     def aggiorna_pagina(self) -> None:
-        self._svuota_layout(self.layout_lista_opere)
-        self.layout_lista_opere.addWidget(self.label_lista_opere_vuota)
-        self.label_lista_opere_vuota.hide()
+        self.layout_lista_opere.svuota_layout()
         self.displayOpereRequest.emit(self.layout_lista_opere)
 
-        self._svuota_layout(self.layout_lista_generi)
-        self.layout_lista_generi.addWidget(self.label_lista_generi_vuota)
-        self.label_lista_generi_vuota.hide()
+        self.layout_lista_generi.svuota_layout()
         self.displayGeneriRequest.emit(self.layout_lista_generi)
 
         vertical_scroll = self._scroll_area.verticalScrollBar()

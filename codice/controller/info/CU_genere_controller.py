@@ -11,7 +11,8 @@ from model.exceptions import (
 )
 
 from view.info.pagine.modifica_genere import ModificaGenereView, NuovoGenereView
-from view.messageView import MessageView
+
+from view.utils import MessageView
 
 
 class CUGenereController(AbstractCUController):

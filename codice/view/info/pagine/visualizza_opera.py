@@ -2,7 +2,6 @@ from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
     QPushButton,
-    QLayout,
     QVBoxLayout,
     QHBoxLayout,
     QGridLayout,
@@ -10,11 +9,12 @@ from PyQt6.QtWidgets import (
     QScrollArea,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
-from typing import Optional
 
 from model.pianificazione.regia import Regia
 
 from view.info.utils.operaPageData import OperaPageData
+
+from view.utils import ListLayout, EmptyStateLabel
 from view.style import QssStyle
 
 
@@ -92,8 +92,8 @@ class VisualizzaOperaView(QWidget):
         self.__btn_nuova_regia = QPushButton("Nuova regia")
         self.__btn_nuova_regia.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
-        widget_header_regie = QWidget()
-        self.layout_header_regie = QHBoxLayout(widget_header_regie)
+        header_regie = QWidget()
+        self.layout_header_regie = QHBoxLayout(header_regie)
         self.layout_header_regie.setContentsMargins(0, 0, 0, 0)
         self.layout_header_regie.addWidget(label_lista_regie)
         self.layout_header_regie.addWidget(self.__btn_nuova_regia)
@@ -101,16 +101,17 @@ class VisualizzaOperaView(QWidget):
 
         self.lista_regie: list[Regia] = []
 
-        self.label_lista_regie_vuota = QLabel("")
-        self.label_lista_regie_vuota.setProperty(
-            QssStyle.SECONDARY_TEXT.style_role, True
+        label_lista_regie_vuota = EmptyStateLabel(
+            "Al momento, non vi sono regie per questa opera."
         )
+        label_lista_regie_vuota.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
 
         content_lista_regie = QWidget()
         content_lista_regie.setProperty(QssStyle.ITEM_LIST.style_role, True)
-        self.layout_lista_regie = QVBoxLayout(content_lista_regie)
+        self.layout_lista_regie = ListLayout(
+            content_lista_regie, label_lista_regie_vuota
+        )
         self.layout_lista_regie.setContentsMargins(3, 3, 3, 3)
-        self.layout_lista_regie.addWidget(self.label_lista_regie_vuota)
 
         def make_vline() -> QFrame:
             line = QFrame()
@@ -142,7 +143,7 @@ class VisualizzaOperaView(QWidget):
 
         self.regie = QWidget()
         self.layout_regie = QVBoxLayout(self.regie)
-        self.layout_regie.addWidget(widget_header_regie)
+        self.layout_regie.addWidget(header_regie)
         self.layout_regie.addWidget(header_lista_regie)
         self.layout_regie.addWidget(content_lista_regie)
         # end-Lista Regie
@@ -188,12 +189,8 @@ class VisualizzaOperaView(QWidget):
         :param data: data salvata in una classe immutabile
         :param genere_nome: nome del genere scelto per l'opera
         :param lista_regie: lista delle regie associate all'opera"""
-        LISTA_REGIE_VUOTA = "Al momento, non vi sono regie per questa opera."
-
         # Reset layout lista regie
-        self.svuota_layout(self.layout_lista_regie)
-        self.layout_lista_regie.addWidget(self.label_lista_regie_vuota)
-        self.label_lista_regie_vuota.setText("")
+        self.layout_lista_regie.svuota_layout()
 
         # Salva dati dell'opera nella pagina
         self.id_cur_opera = data.id
@@ -214,50 +211,18 @@ class VisualizzaOperaView(QWidget):
 
         # Carica lista regie
         if not self.lista_regie:
-            self.label_lista_regie_vuota.setText(LISTA_REGIE_VUOTA)
+            self.layout_lista_regie.if_lista_vuota()
         else:
             self.displayRegieRequest.emit(self.layout_lista_regie)
 
-    def aggiungi_widget_a_layout(self, widget: QWidget, layout: QVBoxLayout):
+    def aggiungi_widget_a_layout(self, widget: QWidget, layout: ListLayout):
         """Aggiunge un widget creato per il display delle istanze del model.
 
         :param widget: widget speciale per visualizzare una instanza del model
         :param layout: layout dove sarà inserito il widget"""
         layout.addWidget(widget)
 
-    def if_lista_vuota(self, layout: QVBoxLayout) -> None:
-        """Indica che la lista non ha istanze da visualizzare.
-
-        :param layout: layout dove si mostrerà un messaggio indicando l'assenza di intanze
-        """
-        # Il suo funzionamento dipende di come aggiorna_pagina aggiunge il label di errore nei layout.
-        error_msg = layout.itemAt(0).widget()  # type:QLabel # type:ignore
-        error_msg.show()
-
     def aggiorna_pagina(self) -> None:
         """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
-        self.svuota_layout(self.layout_lista_regie)
-        self.layout_lista_regie.addWidget(self.label_lista_regie_vuota)
-        self.label_lista_regie_vuota.hide()
+        self.layout_lista_regie.svuota_layout()
         self.displayRegieRequest.emit(self.layout_lista_regie)
-
-    def svuota_layout(self, layout: Optional[QLayout]) -> None:
-        """Svuota un layout, eliminando i riferimenti ai widget contenuti. In caso
-        ci sia un layout contenuto, questo viene anche pulito.
-
-        :param layout: layout da pulire"""
-        # Siccome il layout solo contiene widget di regie, non è necessario rimuovere dei layout.
-        #   Comunque, lascio la parte finale per completezza.
-        if layout:
-            while layout.count():
-                item = layout.takeAt(0)
-                assert item is not None
-                widget = item.widget()
-
-                if widget:
-                    widget.setParent(None)
-                    continue
-
-                child_layout = item.layout()
-                if child_layout:
-                    self.svuota_layout(child_layout)

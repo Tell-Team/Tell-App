@@ -12,7 +12,8 @@ from model.exceptions import (
 
 from view.info.pagine.modifica_regia import ModificaRegiaView, NuovaRegiaView
 from view.spettacoli.widgets.personaleDisplay import PersonaleDisplay
-from view.messageView import MessageView
+
+from view.utils import MessageView
 
 
 class CURegiaController(AbstractCUController):
@@ -80,13 +81,7 @@ class CURegiaController(AbstractCUController):
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
     def __get_regia(self, id_: int) -> Optional[Regia]:
-        regia = self._model.get_spettacolo(id_)
-        # Verifica che sia Regia e non nessuna (ipotetica) sottoclasse
-        #   Usare not isinstance(regia, Regia) nel caso contrario.
-        if type(regia) is not Regia:
-            return None
-        return regia
-        # - Questa definizione dovrebbe esser parte del model
+        return self._model.get_regia(id_)
 
     def __aggiungi_regia(self, regia: Regia) -> None:
         self._model.aggiungi_spettacolo(regia)
@@ -145,7 +140,7 @@ class CURegiaController(AbstractCUController):
 
         # Verifica che il dict non sia vuoto
         if len(interpreti) == 0:
-            pagina.label_lista_interpreti_vuota.show()
+            pagina.layout_lista_interpreti.if_lista_vuota()
             return
 
         # Mostra tutti gli interpreti salvati a schermo
@@ -160,7 +155,7 @@ class CURegiaController(AbstractCUController):
                 elimina_interprete
             )
 
-            pagina.aggiungi_widget_a_layout(
+            pagina.aggiungi_widget_a_lista(
                 cur_interprete, pagina.layout_lista_interpreti
             )
 
@@ -175,7 +170,7 @@ class CURegiaController(AbstractCUController):
 
         # Verifica che il dict non sia vuoto
         if len(tecnici) == 0:
-            pagina.label_lista_tecnici_vuota.show()
+            pagina.layout_lista_tecnici.if_lista_vuota()
             return
 
         # Mostra tutti i tecnici salvati a schermo
@@ -190,7 +185,7 @@ class CURegiaController(AbstractCUController):
                 elimina_interprete
             )
 
-            pagina.aggiungi_widget_a_layout(cur_tecnico, pagina.layout_lista_tecnici)
+            pagina.aggiungi_widget_a_lista(cur_tecnico, pagina.layout_lista_tecnici)
 
     @override
     def _inizia_salvataggio(self, is_new: bool) -> None:

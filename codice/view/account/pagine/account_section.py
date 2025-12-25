@@ -3,6 +3,8 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from typing import override
 
 from view.abstractView.abstractSectionView import AbstractSectionView
+
+from view.utils import ListLayout, EmptyStateLabel
 from view.style import QssStyle
 
 
@@ -50,18 +52,15 @@ class AccountSectionView(AbstractSectionView):
         layout_header_admin.addWidget(self._btn_nuovo_admin)
         layout_header_admin.addStretch()
 
-        # Si usa 'admin' nei nomi delle variabili e 'amministratore' nei testi della UI.
-        self.layout_lista_admin = QVBoxLayout()
-
         # Non è necessario, perché in prattica non vendrà mai visualizzato. Comunque
         #   lo lascio, in caso sia utile.
-        self.label_lista_admin_vuota = QLabel(
+        label_lista_admin_vuota = EmptyStateLabel(
             "Non vi sono account Amministratore registrati."
         )
-        self.label_lista_admin_vuota.setProperty(
-            QssStyle.SECONDARY_TEXT.style_role, True
-        )
-        self.label_lista_admin_vuota.hide()
+        label_lista_admin_vuota.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
+
+        # Si usa 'admin' nei nomi delle variabili e 'amministratore' nei testi della UI.
+        self.layout_lista_admin = ListLayout(None, label_lista_admin_vuota)
 
         container_admin = QWidget()
         layout_admin = QVBoxLayout(container_admin)
@@ -81,17 +80,18 @@ class AccountSectionView(AbstractSectionView):
         layout_header_biglietteria.addWidget(self._btn_nuovo_biglietteria)
         layout_header_biglietteria.addStretch()
 
-        # Viene usato 'biglietteria' in singolare per le variabili perché è il tipo di account.
-        #   Quindi, è un nome proprio.
-        self.layout_lista_biglietteria = QVBoxLayout()
-
-        self.label_lista_biglietteria_vuota = QLabel(
+        label_lista_biglietteria_vuota = EmptyStateLabel(
             "Non vi sono account Biglietteria registrati."
         )
-        self.label_lista_biglietteria_vuota.setProperty(
+        label_lista_biglietteria_vuota.setProperty(
             QssStyle.SECONDARY_TEXT.style_role, True
         )
-        self.label_lista_biglietteria_vuota.hide()
+
+        # Viene usato 'biglietteria' in singolare per le variabili perché è il tipo di account.
+        #   Quindi, è un nome proprio.
+        self.layout_lista_biglietteria = ListLayout(
+            None, label_lista_biglietteria_vuota
+        )
 
         container_biglietteria = QWidget()
         layout_biglietterie = QVBoxLayout(container_biglietteria)
@@ -126,14 +126,10 @@ class AccountSectionView(AbstractSectionView):
 
     @override
     def aggiorna_pagina(self) -> None:
-        self._svuota_layout(self.layout_lista_admin)
-        self.layout_lista_admin.addWidget(self.label_lista_admin_vuota)
-        self.label_lista_admin_vuota.hide()
+        self.layout_lista_admin.svuota_layout()
         self.displayAdminRequest.emit(self.layout_lista_admin)
 
-        self._svuota_layout(self.layout_lista_biglietteria)
-        self.layout_lista_biglietteria.addWidget(self.label_lista_biglietteria_vuota)
-        self.label_lista_biglietteria_vuota.hide()
+        self.layout_lista_biglietteria.svuota_layout()
         self.displayBiglietteriaRequest.emit(self.layout_lista_biglietteria)
 
         vertical_scroll = self._scroll_area.verticalScrollBar()

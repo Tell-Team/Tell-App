@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QLabel, QLineEdit, QComboBox
 from typing import override
 
 from view.abstractView.abstractCreaView import AbstractCreaView
+
 from view.style import QssStyle
 
 

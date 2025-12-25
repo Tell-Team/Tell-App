@@ -11,7 +11,8 @@ from model.exceptions import (
 )
 
 from view.info.pagine.modifica_opera import ModificaOperaView, NuovaOperaView
-from view.messageView import MessageView
+
+from view.utils import MessageView
 
 
 class CUOperaController(AbstractCUController):

@@ -13,6 +13,7 @@ from typing import override
 from model.pianificazione.genere import Genere
 
 from view.abstractView.abstractCreaView import AbstractCreaView
+
 from view.style import QssStyle
 
 

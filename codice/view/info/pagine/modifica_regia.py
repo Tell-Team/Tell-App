@@ -34,8 +34,8 @@ class ModificaRegiaView(NuovaRegiaView):
 
         self.titolo.setText(data.titolo)
         self.note.setText(data.note)
-        self.lista_interpreti = data.interpreti.copy()
-        self.lista_tecnici = data.tecnici.copy()
+        self.lista_interpreti = data.interpreti
+        self.lista_tecnici = data.tecnici
         self.regista.setText(data.regista)
         self.anno.setValue(data.anno_produzione)
 
