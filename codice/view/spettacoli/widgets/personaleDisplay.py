@@ -1,11 +1,12 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout
+from PyQt6.QtWidgets import QLabel, QPushButton, QGridLayout
 from PyQt6.QtCore import pyqtSignal
 from functools import partial
 
+from view.utils.list_widgets import ItemDisplay
 from view.style import QssStyle
 
 
-class PersonaleDisplay(QWidget):
+class PersonaleDisplay(ItemDisplay):
     """View degli interpreti e tecnici degli spettacoli.
 
     Segnali:

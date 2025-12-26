@@ -1,6 +1,6 @@
 from typing import Optional, override
 
-from controller.abstractController.abstractCUController import AbstractCUController
+from core.controller import AbstractCUController
 
 from model.model import Model
 from model.pianificazione.regia import Regia
@@ -10,10 +10,10 @@ from model.exceptions import (
     IdOccupatoException,
 )
 
-from view.info.pagine.modifica_regia import ModificaRegiaView, NuovaRegiaView
-from view.spettacoli.widgets.personaleDisplay import PersonaleDisplay
+from view.info.pagine import ModificaRegiaView, NuovaRegiaView
+from view.spettacoli.widgets import PersonaleDisplay
 
-from view.utils import MessageView
+from view.utils import PopupMessage
 
 
 class CURegiaController(AbstractCUController):
@@ -214,7 +214,7 @@ class CURegiaController(AbstractCUController):
             except DatoIncongruenteException as exc:
                 # È stato trovato un campo con input non valido
                 cur_pagina.show_input_error(CAMPI_NECESSARI)
-                MessageView.mostra_errore(
+                PopupMessage.mostra_errore(
                     cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
             else:
@@ -224,7 +224,7 @@ class CURegiaController(AbstractCUController):
                     self.__aggiungi_regia(nuova_regia)
                 except IdOccupatoException as exc:
                     # Esiste già una regia con quell'id
-                    MessageView.mostra_errore(
+                    PopupMessage.mostra_errore(
                         cur_pagina,
                         "ID Regia occupata",
                         f"Si è verificato un errore: {exc}",
@@ -239,7 +239,7 @@ class CURegiaController(AbstractCUController):
             copia_regia: Optional[Regia] = self.__get_regia(cur_pagina.cur_id_regia)
             if not isinstance(copia_regia, Regia):
                 # Non esiste regia con l'id salvata nella pagina
-                MessageView.mostra_errore(
+                PopupMessage.mostra_errore(
                     cur_pagina,
                     "Errore nel salvataggio",
                     f"Non è presente nessuna regia con id {cur_pagina.cur_id_regia}. "
@@ -267,7 +267,7 @@ class CURegiaController(AbstractCUController):
                 copia_regia.set_id_opera(id_opera)
             except DatoIncongruenteException as exc:
                 cur_pagina.show_input_error(CAMPI_NECESSARI)
-                MessageView.mostra_errore(
+                PopupMessage.mostra_errore(
                     cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
             else:
@@ -277,7 +277,7 @@ class CURegiaController(AbstractCUController):
                     self.__modifica_regia(copia_regia)
                 except IdInesistenteException as exc:
                     # Non esiste una regia con quell'id
-                    MessageView.mostra_errore(
+                    PopupMessage.mostra_errore(
                         cur_pagina,
                         "ID Regia insesistente",
                         f"Si è verificato un errore: {exc}",

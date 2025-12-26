@@ -1,6 +1,6 @@
 from typing import Optional, override
 
-from controller.abstractController.abstractCUController import AbstractCUController
+from core.controller import AbstractCUController
 
 from model.model import Model
 from model.pianificazione.opera import Opera
@@ -10,9 +10,9 @@ from model.exceptions import (
     IdOccupatoException,
 )
 
-from view.info.pagine.modifica_opera import ModificaOperaView, NuovaOperaView
+from view.info.pagine import ModificaOperaView, NuovaOperaView
 
-from view.utils import MessageView
+from view.utils import PopupMessage
 
 
 class CUOperaController(AbstractCUController):
@@ -80,7 +80,7 @@ class CUOperaController(AbstractCUController):
             except DatoIncongruenteException as exc:
                 # È stato trovato un campo con input non valido
                 cur_pagina.show_input_error(CAMPI_NECESSARI)
-                MessageView.mostra_errore(
+                PopupMessage.mostra_errore(
                     cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
             else:
@@ -89,14 +89,14 @@ class CUOperaController(AbstractCUController):
                     self.__aggiungi_opera(nuova_opera)
                 except IdInesistenteException as exc:
                     # L'opera è collegata ad un genere che non esiste
-                    MessageView.mostra_errore(
+                    PopupMessage.mostra_errore(
                         cur_pagina,
                         "Genere inesistente",
                         f"Si è verificato un errore: {exc}",
                     )
                 except IdOccupatoException as exc:
                     # Esiste già un'opera con quell'id
-                    MessageView.mostra_errore(
+                    PopupMessage.mostra_errore(
                         cur_pagina,
                         "ID Opera occupato",
                         f"Si è verificato un errore: {exc}",
@@ -111,7 +111,7 @@ class CUOperaController(AbstractCUController):
             copia_opera: Optional[Opera] = self.__get_opera(cur_pagina.cur_id_opera)
             if not isinstance(copia_opera, Opera):
                 # Non esiste opera con l'id salvata nella pagina
-                MessageView.mostra_errore(
+                PopupMessage.mostra_errore(
                     cur_pagina,
                     "Errore nel salvataggio",
                     f"Non è presente nessuna opera con id {cur_pagina.cur_id_opera}. "
@@ -142,7 +142,7 @@ class CUOperaController(AbstractCUController):
             except DatoIncongruenteException as exc:
                 # È stato trovato un campo con input non valido
                 cur_pagina.show_input_error(CAMPI_NECESSARI)
-                MessageView.mostra_errore(
+                PopupMessage.mostra_errore(
                     cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
                 )
             else:
@@ -152,7 +152,7 @@ class CUOperaController(AbstractCUController):
                     self.__modifica_opera(copia_opera)
                 except IdInesistenteException as exc:
                     # Non esiste un'opera con quell'id
-                    MessageView.mostra_errore(
+                    PopupMessage.mostra_errore(
                         cur_pagina,
                         "ID Opera inesistente",
                         f"Si è verificato un errore: {exc}",

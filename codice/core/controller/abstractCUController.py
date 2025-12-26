@@ -4,8 +4,8 @@ from functools import partial
 
 from model.model import Model
 
-from view.abstractView.abcQObjectMeta import ABCQObjectMeta
-from view.abstractView.abstractCreaView import AbstractCreaView
+from core.metaclasses import ABCQObjectMeta
+from core.view import AbstractCreaView
 
 
 class AbstractCUController(QObject, metaclass=ABCQObjectMeta):

@@ -1,8 +1,8 @@
 from PyQt6.QtWidgets import QWidget, QMessageBox
 
 
-class MessageView:
-    """View dedicata alla visualizzazione di popup."""
+class PopupMessage:
+    """Classe dedicata alla visualizzazione di popup."""
 
     # Se servono altri tipi di popup, basta aggiungere un metodo nuovo alla classe.
 

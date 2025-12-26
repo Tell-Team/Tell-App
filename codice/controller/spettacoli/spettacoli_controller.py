@@ -7,9 +7,9 @@ from controller.navigation import Pagina
 from model.model import Model
 from model.pianificazione.spettacolo import Spettacolo
 
-from view.spettacoli.pagine.spettacoli_section import SpettacoliSectionView
+from view.spettacoli.pagine import SpettacoliSectionView
 
-# from view.messageView import MessageView
+# from view.utils import MessageView
 
 
 class SpettacoliController(QObject):

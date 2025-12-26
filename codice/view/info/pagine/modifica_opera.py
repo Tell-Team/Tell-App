@@ -1,8 +1,7 @@
 from typing import override
 
-from view.info.pagine.nuova_opera import NuovaOperaView
-
-from view.info.utils.operaPageData import OperaPageData
+from view.info.pagine import NuovaOperaView
+from view.info.utils import OperaPageData
 
 
 class ModificaOperaView(NuovaOperaView):

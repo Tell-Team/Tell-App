@@ -1,8 +1,7 @@
 from typing import override
 
-from view.info.pagine.nuova_regia import NuovaRegiaView
-
-from view.info.utils.regiaPageData import RegiaPageData
+from view.info.pagine import NuovaRegiaView
+from view.info.utils import RegiaPageData
 
 
 class ModificaRegiaView(NuovaRegiaView):

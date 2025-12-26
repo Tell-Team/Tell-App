@@ -11,11 +11,11 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import pyqtSignal, QDate
 from typing import override
 
+from core.view import AbstractCreaView
+
 from model.pianificazione.opera import Opera
 
-from view.abstractView.abstractCreaView import AbstractCreaView
-
-from view.utils import ListLayout, EmptyStateLabel
+from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.style import QssStyle
 
 

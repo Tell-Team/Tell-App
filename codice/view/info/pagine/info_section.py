@@ -11,9 +11,9 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import override
 
-from view.abstractView.abstractSectionView import AbstractSectionView
+from core.view import AbstractSectionView
 
-from view.utils import ListLayout, EmptyStateLabel
+from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.style import QssStyle
 
 

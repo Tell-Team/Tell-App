@@ -11,10 +11,11 @@ from functools import partial
 
 from model.pianificazione.regia import Regia
 
+from view.utils.list_widgets import ItemDisplay
 from view.style import QssStyle
 
 
-class RegiaDisplay(QWidget):
+class RegiaDisplay(ItemDisplay):
     """View delle singole regia della Lista Regie dentro della pagina `VisualizzaOperaView`.
 
     Segnali:

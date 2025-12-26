@@ -9,11 +9,12 @@ from model.pianificazione.opera import Opera
 from model.pianificazione.regia import Regia
 from model.exceptions import OggettoInUsoException
 
-from view.info.pagine.visualizza_opera import VisualizzaOperaView
-from view.info.widgets.regiaDisplay import RegiaDisplay
-from view.info.utils.regiaPageData import RegiaPageData
+from view.info.pagine import VisualizzaOperaView
+from view.info.widgets import RegiaDisplay
+from view.info.utils import RegiaPageData
 
-from view.utils import MessageView, ListLayout
+from view.utils.list_widgets import ListLayout
+from view.utils import PopupMessage
 
 
 class VisualizzaOperaController(QObject):
@@ -108,7 +109,7 @@ class VisualizzaOperaController(QObject):
                     self.__elimina_regia(id_)
                 except OggettoInUsoException as exc:
                     cur_regia.annulla_elimina()
-                    MessageView.mostra_errore(
+                    PopupMessage.mostra_errore(
                         self.__visualizza_opera_view,
                         "Regia in uso",
                         f"Si è verificato un errore: {exc}",
@@ -124,7 +125,7 @@ class VisualizzaOperaController(QObject):
         """Carica la pagina `NuovaRegiaView`, dove l'utente può inserire i dati
         necessari per creare una regia."""
         # Ottieni la pagina NuovaOperaView
-        from view.info.pagine.nuova_regia import NuovaRegiaView
+        from view.info.pagine import NuovaRegiaView
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.NUOVA_REGIA
@@ -132,7 +133,7 @@ class VisualizzaOperaController(QObject):
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(cur_pagina) is not NuovaRegiaView:
-            MessageView.mostra_errore(
+            PopupMessage.mostra_errore(
                 self.__visualizza_opera_view,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
@@ -145,7 +146,7 @@ class VisualizzaOperaController(QObject):
         cur_opera = self.__get_opera(cur_id_opera)
 
         if not isinstance(cur_opera, Opera):
-            MessageView.mostra_errore(
+            PopupMessage.mostra_errore(
                 self.__visualizza_opera_view,
                 "Opera inesistente",
                 f"Non è presente nessuna opera con id {cur_id_opera}.",
@@ -167,7 +168,7 @@ class VisualizzaOperaController(QObject):
         # Copia della regia da modificare
         cur_regia = self.__get_regia(id_)
         if not cur_regia:
-            MessageView.mostra_errore(
+            PopupMessage.mostra_errore(
                 self.__visualizza_opera_view,
                 "Regia inesistente",
                 f"Non è presente nessuna regia con id {id_}.",
@@ -175,7 +176,7 @@ class VisualizzaOperaController(QObject):
             return
 
         # Ottieni la pagina ModificaRegiaView
-        from view.info.pagine.modifica_regia import ModificaRegiaView
+        from view.info.pagine import ModificaRegiaView
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.MODIFICA_REGIA
@@ -183,7 +184,7 @@ class VisualizzaOperaController(QObject):
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(cur_pagina) is not ModificaRegiaView:
-            MessageView.mostra_errore(
+            PopupMessage.mostra_errore(
                 self.__visualizza_opera_view,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
@@ -205,7 +206,7 @@ class VisualizzaOperaController(QObject):
 
         cur_opera = self.__get_opera(cur_regia.get_id_opera())
         if not isinstance(cur_opera, Opera):
-            MessageView.mostra_errore(
+            PopupMessage.mostra_errore(
                 self.__visualizza_opera_view,
                 "Opera inesistente",
                 f"Non è presente nessuna opera con id '{cur_regia.get_id_opera()}'.",

@@ -1,11 +1,24 @@
-# Widget speciali per il display delle lista di oggetti.
+"""
+Modulo dedicato al display delle lista di oggetti.
+
+Contieni le classi e metodi necessari per aggiungere item alle liste,
+resettarle e mostrare in messaggio di errore nel caso non ci sia nessun
+item.
+"""
 
 from PyQt6.QtWidgets import QWidget, QLabel, QLayout, QVBoxLayout
 from typing import Optional
 
 
+# Queste classi vuote servono per evitare possibili errori al chiamare i metodi di ListLayout.
+class ItemDisplay(QWidget):
+    """Widget per caricare le informazionidelle istanze del model."""
+
+    pass
+
+
 class EmptyStateLabel(QLabel):
-    """Label usato per messaggi di 'Lista vuota' nelle pagine della view."""
+    """Label per messaggi di 'Lista vuota' nelle pagine della view."""
 
     pass
 
@@ -41,22 +54,28 @@ class ListLayout(QVBoxLayout):
 
     def if_lista_vuota(self) -> None:
         """Mostra un messaggio indicando che la lista non ha istanze da visualizzare."""
-        item = self.itemAt(0)
-        if not item:
-            return
+        self.__label.show()
+        # Siccome il label non viene mai rimosso dal layout, usare direttamente
+        #   self.__label.show() è sicuro. Comunque, questa è la logica usata nel
+        #   caso in cui non è sicuro che il primo elemento (se c'è) sia EmptyStateLabel.
+        # item = self.itemAt(0)
+        # if not item:
+        #     return
 
-        error_msg = item.widget()
-        if isinstance(error_msg, EmptyStateLabel):
-            error_msg.show()
+        # error_msg = item.widget()
+        # if isinstance(error_msg, EmptyStateLabel):
+        #     error_msg.show()
 
-    def aggiungi_list_item(self, widget: QWidget, style: Optional[str] = None):
+    def aggiungi_list_item(
+        self, widget: ItemDisplay, style: Optional[str] = None
+    ) -> None:
         """Aggiunge un widget creato per il display delle istanze del model.
 
         :param widget: widget speciale per visualizzare una instanza del model
         :param style: style opzionale da assegnare al widget"""
-        # C'è un errore al utilizzare widget.setProperty() direttamente al widget:
-        #   lo style non veniva asegnato. Quindi ho decisso di aggiungere questo
-        #   dummy_widget per farlo funzionare.
+        # C'è un errore al utilizzare widget.setProperty() direttamente:
+        #   lo style non veniva asegnato per qualche motivo. Quindi ho decisso
+        #   di aggiungere questo dummy_widget per farlo funzionare.
         dummy_widget = QWidget()
         if style:
             dummy_widget.setProperty(style, True)

@@ -2,9 +2,9 @@ from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayo
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import override
 
-from view.abstractView.abstractSectionView import AbstractSectionView
+from core.view import AbstractSectionView
 
-from view.utils import ListLayout, EmptyStateLabel
+from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.style import QssStyle
 
 
@@ -38,6 +38,19 @@ class AccountSectionView(AbstractSectionView):
         header_account = QLabel("Account")
         header_account.setProperty(QssStyle.HEADER1.style_role, True)
         header_account.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+        # - Questo blocco posiziona il header Account della pagina all'altura degli header
+        #   delle altre sezioni (Opere e Spettacoli). È una soluzione temporanea mentre non
+        #   ci sia model per gli Account per testare la view.
+        widget_header_account = QWidget()
+        layout_header_account = QHBoxLayout(widget_header_account)
+        layout_header_account.setContentsMargins(0, 0, 0, 0)
+        layout_header_account.addWidget(header_account)
+
+        top_header = QWidget()
+        top_layout = QVBoxLayout(top_header)
+        top_layout.addWidget(widget_header_account)
+        # - END
 
         # Amministratore
         header_admin = QLabel("Amministratore")
@@ -104,7 +117,7 @@ class AccountSectionView(AbstractSectionView):
         layout_biglietterie.addWidget(widget_lista_biglietteria)
 
         # Scroll layout
-        self.scroll_layout.addWidget(header_account)
+        self.scroll_layout.addWidget(top_header)  # - DA CORRIGERE
         self.scroll_layout.addWidget(container_admin)
         self.scroll_layout.addWidget(container_biglietteria)
         self.scroll_layout.addStretch()

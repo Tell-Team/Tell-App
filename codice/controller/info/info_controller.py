@@ -11,13 +11,12 @@ from model.pianificazione.genere import Genere
 from model.pianificazione.regia import Regia
 from model.exceptions import OggettoInUsoException
 
-from view.info.pagine.info_section import InfoSectionView
-from view.info.widgets.operaDisplay import OperaDisplay
-from view.info.widgets.genereDisplay import GenereDisplay
-from view.info.utils.operaPageData import OperaPageData
-from view.info.utils.generePageData import GenerePageData
+from view.info.pagine import InfoSectionView
+from view.info.widgets import OperaDisplay, GenereDisplay
+from view.info.utils import OperaPageData, GenerePageData
 
-from view.utils import MessageView, ListLayout
+from view.utils.list_widgets import ListLayout
+from view.utils import PopupMessage
 from view.style import QssStyle
 
 
@@ -153,7 +152,7 @@ class InfoController(QObject):
                     self.__elimina_opera(id_)
                 except OggettoInUsoException as exc:
                     cur_opera.annulla_elimina()
-                    MessageView.mostra_errore(
+                    PopupMessage.mostra_errore(
                         self.__info_section,
                         "Opera in uso",
                         f"Si è verificato un errore: {exc}",
@@ -200,7 +199,7 @@ class InfoController(QObject):
                     self.__elimina_genere(id_)
                 except OggettoInUsoException as exc:
                     cur_genere.annulla_elimina()
-                    MessageView.mostra_errore(
+                    PopupMessage.mostra_errore(
                         self.__info_section,
                         "Genere in uso",
                         f"Si è verificato un errore: {exc}",
@@ -221,7 +220,7 @@ class InfoController(QObject):
         # Copia dell'opera da visualizzare
         cur_opera = self.__get_opera(id_)
         if not cur_opera:
-            MessageView.mostra_errore(
+            PopupMessage.mostra_errore(
                 self.__info_section,
                 "Opera inesistente",
                 f"Non è presente nessuna opera con id {id_}.",
@@ -229,7 +228,7 @@ class InfoController(QObject):
             return
 
         # Ottieni la pagina VisualizzaOperaView
-        from view.info.pagine.visualizza_opera import VisualizzaOperaView
+        from view.info.pagine import VisualizzaOperaView
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.VISUALIZZA_OPERA
@@ -237,7 +236,7 @@ class InfoController(QObject):
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(cur_pagina) is not VisualizzaOperaView:
-            MessageView.mostra_errore(
+            PopupMessage.mostra_errore(
                 self.__info_section,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
@@ -248,7 +247,7 @@ class InfoController(QObject):
         # Setup pagina con i dati dell'opera
         cur_genere = self.__get_genere(cur_opera.get_id_genere())
         if not cur_genere:
-            MessageView.mostra_errore(
+            PopupMessage.mostra_errore(
                 self.__info_section,
                 "Genere inesistente",
                 f"Non è presente nessun genere con id {cur_opera.get_id_genere()}.",
@@ -278,7 +277,7 @@ class InfoController(QObject):
         """Carica la pagina `NuovaOperaView`, dove l'utente può inserire i dati
         necessari per creare un'opera."""
         # Ottieni la pagina NuovaOperaView
-        from view.info.pagine.nuova_opera import NuovaOperaView
+        from view.info.pagine import NuovaOperaView
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.NUOVA_OPERA
@@ -286,7 +285,7 @@ class InfoController(QObject):
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(cur_pagina) is not NuovaOperaView:
-            MessageView.mostra_errore(
+            PopupMessage.mostra_errore(
                 self.__info_section,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
@@ -310,7 +309,7 @@ class InfoController(QObject):
         # Copia dell'opera da modificare
         cur_opera = self.__get_opera(id_)
         if not cur_opera:
-            MessageView.mostra_errore(
+            PopupMessage.mostra_errore(
                 self.__info_section,
                 "Opera inesistente",
                 f"Non è presente nessuna opera con id {id_}.",
@@ -318,7 +317,7 @@ class InfoController(QObject):
             return
 
         # Ottieni la pagina ModificaOperaView
-        from view.info.pagine.modifica_opera import ModificaOperaView
+        from view.info.pagine import ModificaOperaView
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.MODIFICA_OPERA
@@ -326,7 +325,7 @@ class InfoController(QObject):
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(cur_pagina) is not ModificaOperaView:
-            MessageView.mostra_errore(
+            PopupMessage.mostra_errore(
                 self.__info_section,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
@@ -358,7 +357,7 @@ class InfoController(QObject):
         """Carica la pagina `NuovoGenereView`, dove l'utente può inserire i dati
         necessari per creare un genere."""
         # Ottieni la pagina NuovoGenereView
-        from view.info.pagine.nuovo_genere import NuovoGenereView
+        from view.info.pagine import NuovoGenereView
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.NUOVO_GENERE
@@ -366,7 +365,7 @@ class InfoController(QObject):
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(cur_pagina) is not NuovoGenereView:
-            MessageView.mostra_errore(
+            PopupMessage.mostra_errore(
                 self.__info_section,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
@@ -389,7 +388,7 @@ class InfoController(QObject):
         # Copia del genere da modificare
         cur_genere = self.__get_genere(id_)
         if not cur_genere:
-            MessageView.mostra_errore(
+            PopupMessage.mostra_errore(
                 self.__info_section,
                 "Genere inesistente",
                 f"Non è presente nessun genere con id {id_}.",
@@ -397,7 +396,7 @@ class InfoController(QObject):
             return
 
         # Ottieni la pagina ModificaGenereView
-        from view.info.pagine.modifica_genere import ModificaGenereView
+        from view.info.pagine import ModificaGenereView
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.MODIFICA_GENERE
@@ -405,7 +404,7 @@ class InfoController(QObject):
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(cur_pagina) is not ModificaGenereView:
-            MessageView.mostra_errore(
+            PopupMessage.mostra_errore(
                 self.__info_section,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "

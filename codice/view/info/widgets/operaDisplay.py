@@ -4,10 +4,11 @@ from functools import partial
 
 from model.pianificazione.opera import Opera
 
+from view.utils.list_widgets import ItemDisplay
 from view.style import QssStyle
 
 
-class OperaDisplay(QWidget):
+class OperaDisplay(ItemDisplay):
     """View delle singole opere della Lista Opere.
 
     Segnali:

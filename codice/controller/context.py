@@ -6,7 +6,7 @@ from controller.navigation import NavigationController, Pagina
 
 from model.model import Model
 
-from view.utils import MessageView
+from view.utils import PopupMessage
 
 
 class AppContext:
@@ -205,7 +205,7 @@ class AppContext:
         try:
             self.__nav.go_to(nome, save_history)
         except KeyError as exc:
-            MessageView.mostra_errore(
+            PopupMessage.mostra_errore(
                 self.__nav.get_cur_central_page(),
                 "Pagina non trovata",
                 f"Si è verificato un errore: {exc}",
@@ -215,7 +215,7 @@ class AppContext:
         try:
             self.__nav.section_go_to(nome)
         except KeyError as exc:
-            MessageView.mostra_errore(
+            PopupMessage.mostra_errore(
                 self.__nav.get_cur_central_page(),
                 "Pagina non trovata",
                 f"Si è verificato un errore: {exc}",

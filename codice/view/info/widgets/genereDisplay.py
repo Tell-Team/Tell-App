@@ -4,10 +4,11 @@ from functools import partial
 
 from model.pianificazione.genere import Genere
 
+from view.utils.list_widgets import ItemDisplay
 from view.style import QssStyle
 
 
-class GenereDisplay(QWidget):
+class GenereDisplay(ItemDisplay):
     """View dei singoli generi della Lista Generi.
 
     Segnali:

@@ -1,4 +1,4 @@
-from controller.abstractController.abstractCUController import AbstractCUController
+from core.controller import AbstractCUController
 
 
 class CUAccountController(AbstractCUController):

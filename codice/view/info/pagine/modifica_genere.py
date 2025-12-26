@@ -1,8 +1,7 @@
 from typing import override
 
-from view.info.pagine.nuovo_genere import NuovoGenereView
-
-from view.info.utils.generePageData import GenerePageData
+from view.info.pagine import NuovoGenereView
+from view.info.utils import GenerePageData
 
 
 class ModificaGenereView(NuovoGenereView):

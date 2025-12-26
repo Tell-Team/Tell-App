@@ -5,9 +5,9 @@ from controller.navigation import Pagina
 
 from model.model import Model
 
-from view.account.pagine.account_section import AccountSectionView
+from view.account.pagine import AccountSectionView
 
-# from view.messageView import MessageView
+# from view.utils import MessageView
 
 
 class AccountController(QObject):

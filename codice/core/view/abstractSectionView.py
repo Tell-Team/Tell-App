@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import pyqtSignal
 
-from view.abstractView.abcQObjectMeta import ABCQObjectMeta
+from core.metaclasses import ABCQObjectMeta
 
 from view.style import QssStyle
 

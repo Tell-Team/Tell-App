@@ -10,9 +10,9 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import QDate
 from typing import override
 
-from model.pianificazione.genere import Genere
+from core.view import AbstractCreaView
 
-from view.abstractView.abstractCreaView import AbstractCreaView
+from model.pianificazione.genere import Genere
 
 from view.style import QssStyle
 

@@ -1,6 +1,6 @@
 from typing import override
 
-from view.account.pagine.nuovo_account import NuovoAccountView
+from view.account.pagine import NuovoAccountView
 
 # - from view.account.utils.accountPageData import AccountPageData
 

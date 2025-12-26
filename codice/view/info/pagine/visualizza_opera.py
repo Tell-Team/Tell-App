@@ -12,9 +12,9 @@ from PyQt6.QtCore import Qt, pyqtSignal
 
 from model.pianificazione.regia import Regia
 
-from view.info.utils.operaPageData import OperaPageData
+from view.info.utils import OperaPageData
 
-from view.utils import ListLayout, EmptyStateLabel
+from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.style import QssStyle
 
 
