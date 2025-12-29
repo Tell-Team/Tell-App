@@ -30,12 +30,12 @@ QLabel[paragraph="true"] {
 
 /* --- Pulsanti --- */
 QPushButton[blue-button="true"] {
-    background-color: #2b7cff;
+    background-color: hsl(217, 100.0%, 58.0%); /* #2b7cff */
     color: white;
     border-radius: 6px;    
 }
-QPushButton[blue-button="true"]:hover { background-color: #005bee; }
-QPushButton[blue-button="true"]:pressed { background-color: #0045b3; }
+QPushButton[blue-button="true"]:hover { background-color: hsl(217, 92.0%, 63.0%); }
+QPushButton[blue-button="true"]:pressed { background-color: hsl(217, 100.0%, 50.0%); }
 
 QPushButton[main-button="true"] {
     padding: 10px 16px;
@@ -43,7 +43,6 @@ QPushButton[main-button="true"] {
 }
 
 QPushButton[search-button="true"] {
-    image: url(search_icon.png); /* # - Si deve aggiungere nella view */
     border: 1px solid #b0b0b0;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
@@ -61,15 +60,35 @@ QPushButton[white-button="true"] {
 QPushButton[white-button="true"]:hover { background-color: #d1d1d1; }
 QPushButton[white-button="true"]:pressed { background-color: #9a9a9a; }
 
-QPushButton[destructive-button="true"] {
-    background-color: #b00020; /* Color: Material Design "Error" */
+QPushButton[save-button="true"] {
+    background-color: hsl(123, 46.0%, 34.0%); /* #2f5731 */
     color: white;
     border-radius: 6px;
     padding: 6px 10px;
     font-weight: bold;
 }
-QPushButton[destructive-button="true"]:hover { background-color: #8d001a; }
-QPushButton[destructive-button="true"]:pressed { background-color: #6a0013; }
+QPushButton[save-button="true"]:hover { background-color: hsl(123, 42.0%, 38.0%); }
+QPushButton[save-button="true"]:pressed { background-color: hsl(123, 50.0%, 28.0%); }
+
+QPushButton[modify-button="true"] {
+    background-color: hsl(209, 61.6%, 50%); /* #3182ce */
+    color: white;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-weight: bold;
+}
+QPushButton[modify-button="true"]:hover { background-color: hsl(209, 58.0%, 55.0%); }
+QPushButton[modify-button="true"]:pressed { background-color: hsl(209, 66.0%, 42.0%); }
+
+QPushButton[destructive-button="true"] {
+    background-color: hsl(349, 100%, 34.5%) ; /* #b00020: Material Design "Error" */
+    color: white;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-weight: bold;
+}
+QPushButton[destructive-button="true"]:hover { background-color: hsl(349, 92.0%, 40.0%); }
+QPushButton[destructive-button="true"]:pressed { background-color: hsl(349, 100.0%, 28.0%); }
 
 QPushButton {
     font-size: 12px;

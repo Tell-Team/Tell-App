@@ -20,9 +20,6 @@ class ModificaOperaView(NuovaOperaView):
         # Aggiorna header
         self._header.setText("Modifica opera")
 
-        # Aggiorna btn_conferma
-        self._btn_conferma.setText("Modifica")
-
     # ------------------------- METODI DI VIEW -------------------------
 
     def set_data(self, data: OperaPageData) -> None:

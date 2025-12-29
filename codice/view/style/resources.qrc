@@ -1,0 +1,11 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+  <qresource prefix="/styles">
+    <file>main.qss</file>
+  </qresource>
+  <qresource prefix="/icons">
+    <file>icons/elimina.svg</file>
+    <file>icons/modifica.svg</file>
+    <file>icons/ricerca.svg</file>
+  </qresource>
+</RCC>

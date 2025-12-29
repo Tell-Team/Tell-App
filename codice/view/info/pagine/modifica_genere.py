@@ -20,9 +20,6 @@ class ModificaGenereView(NuovoGenereView):
         # Aggiorna header
         self._header.setText("Modifica genere")
 
-        # Aggiorna btn_conferma
-        self._btn_conferma.setText("Modifica")
-
     # ------------------------- METODI DI VIEW -------------------------
 
     def set_data(self, data: GenerePageData) -> None:

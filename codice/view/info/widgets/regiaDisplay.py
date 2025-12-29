@@ -4,7 +4,6 @@ from PyQt6.QtWidgets import (
     QPushButton,
     QHBoxLayout,
     QGridLayout,
-    QFrame,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from functools import partial
@@ -12,6 +11,7 @@ from functools import partial
 from model.pianificazione.regia import Regia
 
 from view.utils.list_widgets import ItemDisplay
+from view.utils import make_vline
 from view.style import QssStyle
 
 
@@ -46,7 +46,7 @@ class RegiaDisplay(ItemDisplay):
 
         # Pulsanti
         self.__btn_modifica = QPushButton("Modifica")
-        self.__btn_modifica.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
+        self.__btn_modifica.setProperty(QssStyle.MODIFY_BUTTON.style_role, True)
 
         self.__btn_elimina = QPushButton("Elimina")
         self.__btn_elimina.setProperty(QssStyle.DESTRUCTIVE_BUTTON.style_role, True)
@@ -79,12 +79,6 @@ class RegiaDisplay(ItemDisplay):
         dummy_layout = QHBoxLayout(dummy)
         dummy_layout.addWidget(self.__pulsanti)
         dummy_layout.addWidget(self.__conferma_elimina)
-
-        def make_vline() -> QFrame:
-            line = QFrame()
-            line.setFrameShape(QFrame.Shape.VLine)
-            line.setFrameShadow(QFrame.Shadow.Sunken)
-            return line
 
         # Layout
         layout = QGridLayout(self)

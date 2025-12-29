@@ -5,7 +5,6 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QGridLayout,
-    QFrame,
     QScrollArea,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
@@ -15,6 +14,7 @@ from model.pianificazione.regia import Regia
 from view.info.utils import OperaPageData
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
+from view.utils import make_vline
 from view.style import QssStyle
 
 
@@ -111,12 +111,6 @@ class VisualizzaOperaView(QWidget):
         self.layout_lista_regie = ListLayout(
             content_lista_regie, label_lista_regie_vuota
         )
-
-        def make_vline() -> QFrame:
-            line = QFrame()
-            line.setFrameShape(QFrame.Shape.VLine)
-            line.setFrameShadow(QFrame.Shadow.Sunken)
-            return line
 
         header_titolo = QLabel("Titolo")
         header_titolo.setProperty(QssStyle.HEADER3.style_role, True)

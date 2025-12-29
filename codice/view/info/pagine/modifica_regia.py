@@ -20,9 +20,6 @@ class ModificaRegiaView(NuovaRegiaView):
         # Aggiorna header
         self._header.setText("Modifica regia")
 
-        # Aggiorna btn_conferma
-        self._btn_conferma.setText("Modifica")
-
     # ------------------------- METODI DI VIEW -------------------------
 
     def set_data(self, data: RegiaPageData) -> None:

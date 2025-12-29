@@ -45,7 +45,7 @@ class OperaDisplay(ItemDisplay):
         self.__btn_visualizza.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
         self.__btn_modifica = QPushButton("Modifica")
-        self.__btn_modifica.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
+        self.__btn_modifica.setProperty(QssStyle.MODIFY_BUTTON.style_role, True)
 
         self.__btn_elimina = QPushButton("Elimina")
         self.__btn_elimina.setProperty(QssStyle.DESTRUCTIVE_BUTTON.style_role, True)

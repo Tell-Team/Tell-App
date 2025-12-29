@@ -56,8 +56,8 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
         self._btn_annulla = QPushButton("Annulla")
         self._btn_annulla.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
-        self._btn_conferma = QPushButton("Crea")
-        self._btn_conferma.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
+        self._btn_conferma = QPushButton("Salva")
+        self._btn_conferma.setProperty(QssStyle.SAVE_BUTTON.style_role, True)
 
         self._pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self._pulsanti)

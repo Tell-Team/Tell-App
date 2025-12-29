@@ -1,8 +1,9 @@
 from PyQt6.QtWidgets import QLabel, QPushButton, QGridLayout
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtCore import Qt, pyqtSignal
 from functools import partial
 
 from view.utils.list_widgets import ItemDisplay
+from view.utils import make_vline
 from view.style import QssStyle
 
 
@@ -31,14 +32,17 @@ class PersonaleDisplay(ItemDisplay):
         widget_value.setProperty(QssStyle.PARAGRAPH.style_role, True)
 
         self.__btn_rimuovi = QPushButton("X")
+        # - Quitar el texto del botón para cuando pueda usar icons
         self.__btn_rimuovi.setFixedSize(32, 32)
         self.__btn_rimuovi.setProperty(QssStyle.DESTRUCTIVE_BUTTON.style_role, True)
 
         layout = QGridLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(widget_key, 0, 0)
-        layout.addWidget(widget_value, 0, 1)
-        layout.addWidget(self.__btn_rimuovi, 0, 2)
+        layout.setContentsMargins(5, 5, 5, 5)
+        layout.addWidget(widget_key, 0, 0, alignment=Qt.AlignmentFlag.AlignLeft)
+        layout.addWidget(make_vline(), 0, 1)
+        layout.addWidget(widget_value, 0, 2, alignment=Qt.AlignmentFlag.AlignLeft)
+        layout.addWidget(make_vline(), 0, 3)
+        layout.addWidget(self.__btn_rimuovi, 0, 4)
 
     def __connect_signals(self) -> None:
         self.__btn_rimuovi.clicked.connect(  # type:ignore

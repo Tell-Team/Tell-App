@@ -41,11 +41,13 @@ class ListLayout(QVBoxLayout):
         # Non elimina il primo elemento: il EmptyStateLabel
         if self.count() <= 1:
             self.__label.hide()
+            self.setContentsMargins(1, 1, 1, 1)
             return
 
         while self.count() > 1:
             item = self.takeAt(1)
-            assert item is not None
+            if item is None:  # Sempre c'è un EmptyStateLabel
+                raise ValueError("Expected item at index 1")  # Non lancia mai l'error
             if widget := item.widget():
                 widget.setParent(None)
                 widget.deleteLater()  # Evita potenziali memory leaks
@@ -54,6 +56,7 @@ class ListLayout(QVBoxLayout):
 
     def if_lista_vuota(self) -> None:
         """Mostra un messaggio indicando che la lista non ha istanze da visualizzare."""
+        self.setContentsMargins(2, 2, 2, 2)
         self.__label.show()
         # Siccome il label non viene mai rimosso dal layout, usare direttamente
         #   self.__label.show() è sicuro. Comunque, questa è la logica usata nel
@@ -64,6 +67,7 @@ class ListLayout(QVBoxLayout):
 
         # error_msg = item.widget()
         # if isinstance(error_msg, EmptyStateLabel):
+        #     self.setContentsMargins(2, 2, 2, 2)
         #     error_msg.show()
 
     def aggiungi_list_item(
@@ -76,11 +80,11 @@ class ListLayout(QVBoxLayout):
         # C'è un errore al utilizzare widget.setProperty() direttamente:
         #   lo style non veniva asegnato per qualche motivo. Quindi ho decisso
         #   di aggiungere questo dummy_widget per farlo funzionare.
+        if not style:
+            self.addWidget(widget)
+            return
         dummy_widget = QWidget()
-        if style:
-            dummy_widget.setProperty(style, True)
-
+        dummy_widget.setProperty(style, True)
         l = QVBoxLayout(dummy_widget)
         l.addWidget(widget)
-
         self.addWidget(dummy_widget)

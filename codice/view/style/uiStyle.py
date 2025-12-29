@@ -12,10 +12,14 @@ class QssStyle(Enum):
     SECONDARY_TEXT = "secondary-text"  # QLabel
     ERROR_MESSAGE = "error-message"  # QLabel
 
-    BLUE_BUTTON = "blue-button"  # QPushButton
     MAIN_BUTTON = "main-button"  # QPushButton
     SEARCH_BUTTON = "search-button"  # QPushButton
+
+    BLUE_BUTTON = "blue-button"  # QPushButton
     WHITE_BUTTON = "white-button"  # QPushButton
+
+    SAVE_BUTTON = "save-button"  # QPushButton
+    MODIFY_BUTTON = "modify-button"  # QPushButton
     DESTRUCTIVE_BUTTON = "destructive-button"  # QPushButton
 
     ITEM_CARD = "item-card"  # QWidget

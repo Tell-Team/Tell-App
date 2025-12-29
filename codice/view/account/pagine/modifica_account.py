@@ -22,9 +22,6 @@ class ModificaAccountView(NuovoAccountView):
         # Aggiorna header
         self._header.setText("Modifica account")
 
-        # Aggiorna btn_conferma
-        self._btn_conferma.setText("Modifica")
-
         # - Una volta creato l'account, il nome e cognome vincolati all'account potrano esser modificati?
 
         # Abilita il QComboBox del ruolo
