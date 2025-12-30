@@ -1,3 +1,14 @@
+% UC: Crea Spettacolo			[X]
+% UC ext: Modifica Spettacolo		[X]
+% UC ext: Elimina Spettacolo		[] <- C'è UI per facilitare la descrizione
+% UC ext: Crea Evento			[]
+% UC ext: Modifica Evento		[]
+% UC ext: Elimina Evento		[]
+% UC: Lista Prenotazioni		[]
+% UC ext: Ricerca Prenotazione		[]
+% UC ext: Segna Prenotazione come pagata	[]
+
+
 % UC: Crea Spettacolo
 \begin{table}[H]
     \begin{tabular}{|p{\linewidth}|}
@@ -11,7 +22,8 @@
         \cellcolor{gray!20}
         \textbf{Breve descrizione:} \\
         \cellcolor{gray!20}
-        L'utente crea l'istanza di uno spettacolo svolto nel teatro. \\
+        L'utente crea un'istanza di spettacolo svolto nel teatro. \\
+        % - Da discutere
         \hline
         \textbf{Attori primari:} \\
         \begin{minipage}{\linewidth}
@@ -29,17 +41,18 @@
         \begin{minipage}{\linewidth}
             \begin{enumerate}
                 \item L'utente è stato autenticato come Amministratore o Biglietteria.
-                \item L'utente si trova nella categoria ”Spettacolo”. %/""
+                \item L'utente è posizionato nella sezione Spettacoli.
+                % "Spettacoli"(8)
             \end{enumerate}
         \end{minipage} \\
         \hline
         \textbf{Sequenza degli eventi principale:}
         \begin{enumerate}
-            \item Il caso d'uso inizia quando l'utente preme il pulsante di creazione.
-            \item Il Sistema mostra una interfaccia per inserire dati e impostazioni relativi allo spettacolo.
-            \item L'utente inserisce i dati anagrafici dello spettacolo.
+            \item L'utente avvia il caso d'uso selezionando il comando Creazione.
+            \item Il sistema mostra una interfaccia per inserire dati e impostazioni dello spettacolo.
+            \item L'utente inserisce le informazioni dello spettacolo.
             \item L'utente conferma la creazione.
-            \item Il Sistema verifica i dati e li salva in memoria.
+            \item Il sistema verifica i dati e li salva in memoria.
         \end{enumerate} \\
         \hline
         \cellcolor{gray!20}
@@ -70,7 +83,7 @@
         \cellcolor{gray!20}
         \textbf{Breve descrizione:} \\
         \cellcolor{gray!20}
-        \textbf{Segmento 1:} L'utente modifica le informazioni relative a uno spettacolo. \\
+        \textbf{Segmento 1:} L'utente modifica le informazioni di uno spettacolo. \\
         \hline
         \textbf{Attori primari:} \\
         \begin{minipage}{\linewidth}
@@ -87,19 +100,17 @@
         \cellcolor{gray!20}
         \begin{minipage}{\linewidth}
             \begin{enumerate}
-                \item L'utente visualizza i dettagli di uno spettacolo.
-                \item L'utente ha premuto il pulsante di modifica.
+                \item L'utente è stato autenticato come Amministratore o Biglietteria.
+                \item L'utente è posizionato nella sezione Spettacoli.
             \end{enumerate}
         \end{minipage} \\
         \hline
         \textbf{Sequenza degli eventi principale del segmento 1:}
         \begin{enumerate}
-            \item Il Sistema presenta un modulo precompilato con i dati dello spettacolo.
-            \item L'utente modifica i dati desiderati dello spettacolo.
-            \item[] \textbf{punto di estensione:} creaEvento
-            \item[] \textbf{punto di estensione:} modificaEvento
-            \item L'utente conferma la modifica dello spettacolo.
-            \item Il Sistema verifica i dati e li salva in memoria.
+            \item L'utente avvia il caso d'uso selezionando il comando Modifica associato ad uno spettacolo.
+            \item Il sistema consente all'utente di modificare le informazioni dell'opera.
+            \item L'utente inserisce le modifiche desiderate e le conferma.
+            \item Il sistema verifica i dati e li salva in memoria.
         \end{enumerate} \\
         \hline
         \cellcolor{gray!20}
@@ -127,7 +138,7 @@
         \cellcolor{gray!20}
         \textbf{Breve descrizione:} \\
         \cellcolor{gray!20}
-        \textbf{Segmento 1:} L'utente elimina uno spettacolo dal Sistema. \\
+        \textbf{Segmento 1:} L'utente elimina uno spettacolo dalla lista di spettacoli memorizzati. \\
         \hline
         \textbf{Attori primari:} \\
         \begin{minipage}{\linewidth}
@@ -165,7 +176,7 @@
         \cellcolor{gray!20}
         \begin{minipage}{\linewidth}
             \begin{enumerate}
-                \item L'utente effettua l'elimina di uno spettacolo (e i suoi eventi).
+                \item L'utente effettua l'elimina di uno spettacolo.
             \end{enumerate}
         \end{minipage} \\
         \hline

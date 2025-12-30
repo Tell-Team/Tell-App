@@ -1,3 +1,69 @@
+% Secondo UML puro, non posso usare nelle descrizioni di casi d'uso:
+%   - Elementi di UI (es. pulsanti);
+%   - include() come passo del main flow;
+%   - Blocchi if-else o for;
+%   - Niente di error handling;
+%   - Niente di "Il caso d'uso inizia quando..."
+
+% Nelle definizioni, usare "WORD, Word" o "WORD" per indicare la parola
+%   da definere (non usare minuscolo).
+% Evitare usare solo "word" (può essere confuso se nelle descrizioni di casi
+%   d'uso uso "WORD").
+
+% Io penso che "WORD" come la parola da definire ed includere "Word" nei sinonimi
+%   è la forma corretta di fare le definizioni.
+
+% Potrei aggiungere nei sinonimi le possibile varianti di "WORD".
+% --- ESSERE SEMPRE CONSISTENTE NELL'USO DELLE PAROLE ---
+% Potrei usare una sezione del dizionario per indicare "Note e esempi di dove trovare la parola".
+%   Meglio non aggiungere plurali nei sinonimi. Quella sezione è riservata per termini canonici.
+
+
+% "memorizzate nel sistema"(1) :  Deve avere un uso consistente in tutte le tabelle.
+% "Informazioni"(2) : In maiuscole, è il nome della sezione Info ed ha bisogno di una
+%   definizione precisa.
+% "mostra <oggetto> a schermo"(3) : Concetto usato nei passi realizzati dal sistema.
+% "visualizza <oggetto> a schermo"(4) : Concetto usato nei passi realizzati dal'utente.
+% "è posizionato"(5) : Deve avere un uso consistente in tutte le tabelle.
+% "associate"(6) : Il suo modo di uso è "lista [instanze A] associate a [instanza B]".
+% "lista di <oggetto>"(7) : Deve usare sempre "di". No "delle" o "degli".
+% "Spettacoli"(8) : In maiuscole, è il nome della sezione Spettacoli ed ha bisogno di
+%   una definizione precisa.
+% "visualizza in più dettaglio"(9) : Per indicare i casi d'uso Visualizza. Devo darli una
+%   definizione megliore.
+
+% La parola "sistema" viene scritta in minuscolo.
+% "nel suo nome" : Usato in Ricerca Opera
+% "nel suo titolo" : Usato in Ricerca Spettacolo
+
+% Evitare l'uso di "dettagli".
+% Utilizzare "informazioni essenziali" per i casi d'uso di Lista.
+% Utilizzare "informazioni" per i casi d'uso di Visualizza.
+% - Revisare l'uso di "dati" nelle descrizioni.
+
+% - "ottiene" : Studiarla nel suo contesto. Non sono convinto.
+% - "eliminate" : Studiarla nel suo contesto. Non sono convinto.
+% - "visualizzare in più dettaglio" : Studiare il suo uso nelle descrizioni.
+
+
+% UC: Lista Opere		[X]
+% UC ext: Ricerca Opera	[X]
+% UC: Visualizza Opera	[X]
+% UC: Lista Regie		[X]
+% UC: Lista Spettacoli		[X]
+% UC ext: Ricerca Spettacolo	[X]
+% UC: Visualizza Spettacolo	[X]
+% UC: Lista Eventi		[]
+% UC: Lista Sezioni		[]
+% UC: Visualizza Sezione	[]
+% UC: Lista Posti		[]
+% UC: Crea Prenotazione	[]
+% UC: Visualizza Prenotazione	[]
+% UC ext: Modifica Prenotazione	[]
+% UC ext: Elimina Prenotazione	[]
+% UC: Genera ricevuta		[X]
+
+
 % UC: Lista Opere
 \begin{table}[H]
     \begin{tabular}{|p{\linewidth}|}
@@ -12,6 +78,8 @@
         \textbf{Breve descrizione:} \\
         \cellcolor{gray!20}
         L'utente ottiene la lista di opere memorizzate nel sistema. \\
+        % - "ottiene"
+        % "memorizzate nel sistema"(1)
         \hline
         \textbf{Attori primari:} \\
         \begin{minipage}{\linewidth}
@@ -29,25 +97,20 @@
         \cellcolor{gray!20}
         \begin{minipage}{\linewidth}
             \begin{enumerate}
-                \item L'utente è posizionato nella sezione informazioni.
+                \item L'utente è posizionato nella sezione Informazioni.
+                % "Informazioni"(2)
+                % "è posizionato"(5)
             \end{enumerate}
         \end{minipage} \\
         \hline
         \textbf{Sequenza degli eventi principale:}
         \begin{enumerate}
-            \item Il caso d'uso inizia quando l'utente entra nella sezione informazioni.
-            \item \textbf{If} nel sistema è memorizzata almeno un'opera
-            \begin{enumerate}
-                \item \textbf{For} ogni opera nel sistema
-                \begin{enumerate}
-                    \item[] \textbf{punto di estensione:} filtro ricerca
-                    \item Vengono visualizzate le informazioni essenziali dell'opera.
-                \end{enumerate}
-            \end{enumerate}
-            \item \textbf{Else}
-            \begin{enumerate}
-                \item Il sistema informa l'utente che non vi sono opere memorizzate.
-            \end{enumerate}
+            \item Il sistema mostra le informazioni essenziali di tutte le opere memorizzate a schermo.
+            % "mostra <oggetto> a schermo"(3)
+            \item Il sistema permette all'utente di visualizzare in più dettaglio le opere.
+            % "visualizza in più dettaglio"(9)
+            \item Il sistema permette all'Amministratore di modificare ed eliminare le opere.
+            \item[] \textbf{punto di estensione:} filtro ricerca
         \end{enumerate} \\
         \hline
         \cellcolor{gray!20}
@@ -55,7 +118,8 @@
         \cellcolor{gray!20}
         \begin{minipage}{\linewidth}
             \begin{enumerate}
-                \item Viene visualizzata a schermo la lista delle opere memorizzate.
+                \item Viene visualizzata la lista di opere memorizzate a schermo.
+                % "visualizza <oggetto> a schermo"(4)
             \end{enumerate}
         \end{minipage} \\
         \hline
@@ -78,7 +142,7 @@
         \cellcolor{gray!20}
         \textbf{Breve descrizione:} \\
         \cellcolor{gray!20}
-        \textbf{Segmento 1:} L'utente filtra la lista di opere tramite parola chiave ricercata nel nome. \\
+        \textbf{Segmento 1:} L'utente filtra la lista di opere tramite una parola chiave ricercata nel nome. \\
         \hline
         \textbf{Attori primari:} \\
         \begin{minipage}{\linewidth}
@@ -86,7 +150,7 @@
             Biglietteria \\
             Amministratore
         \end{minipage}
-        \vspace{0pt} \\  % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+        \vspace{0pt} \\
         \hline
         \textbf{Attori secondari:} \\
         Nessuno. \\
@@ -96,14 +160,18 @@
         \cellcolor{gray!20}
         \begin{minipage}{\linewidth}
             \begin{enumerate}
-                \item L'utente ha inserito una chiave di ricerca.
-                \item L'utente ha premuto il pulsante di ricerca.
+                \item L'utente è posizionato nella sezione Informazioni.
+                % "è posizionato"(5)
+                % "Informazioni"(2)
             \end{enumerate}
         \end{minipage} \\
         \hline
         \textbf{Sequenza degli eventi principale del segmento 1:}
         \begin{enumerate}
-            \item Le opere che non contengono la parola chiave vengono eliminate dalla lista risultante.
+            \item L'utente effettua una ricerca specificando una chiave di ricerca.
+            \item Le opere che non contengono la parola chiave nel suo nome vengono eliminate dalla lista risultante.
+            % "nel suo nome"
+            % - "eliminate"??? "rimosse" sarebbe grammaticalmente corretto?
         \end{enumerate} \\
         \hline
         \cellcolor{gray!20}
@@ -131,7 +199,8 @@
         \cellcolor{gray!20}
         \textbf{Breve descrizione:} \\
         \cellcolor{gray!20}
-        L'utente ottiene le informazioni anagrafiche riguardo una singola opera. \\
+        L'utente ottiene le informazioni riguardo una singola opera. \\
+        % - "ottiene"
         \hline
         \textbf{Attori primari:} \\
         \begin{minipage}{\linewidth}
@@ -139,7 +208,7 @@
             Biglietteria \\
             Amministratore
         \end{minipage}
-        \vspace{0pt} \\ % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+        \vspace{0pt} \\
         \hline
         \textbf{Attori secondari:} \\
         Nessuno. \\
@@ -149,17 +218,21 @@
         \cellcolor{gray!20}
         \begin{minipage}{\linewidth}
             \begin{enumerate}
-                \item L'utente è posizionato nella sezione informazioni.
+                \item L'utente è posizionato nella sezione Informazioni.
+                % "Informazioni"(2)
+                % "è posizionato"(5)
             \end{enumerate}
         \end{minipage} \\
         \hline
         \textbf{Sequenza degli eventi principale:}
         \begin{enumerate}
-            \item Il caso d'uso inizia quando l'utente richiede le informazioni di un'opera.
-            \item Il sistema cerca le informazioni anagrafiche nella memoria.
+            \item L'utente richiede le informazioni di un'opera.
             \item Il sistema mostra le informazioni a schermo.
-            \item \textbf{include}(Lista Regie)
-            \item[] \textbf{punto di estensione:} modifica
+            \item Il sistema mostra la lista di regie, associate all'opera, a schermo.
+            % "mostra <oggetto> a schermo"(3) 
+            % "associate"(6)
+            \item[] \textbf{punto di estensione:} Crea nuova Regia
+            % - Le regie sono create nella pagina VisualizzaOpera
         \end{enumerate} \\
         \hline
         \cellcolor{gray!20}
@@ -167,7 +240,8 @@
         \cellcolor{gray!20}
         \begin{minipage}{\linewidth}
             \begin{enumerate}
-                \item Sono visualizzate a schermo le informazioni anagrafiche dell'opera.
+                \item Sono visualizzate le informazioni dell'opera a schermo.
+                % "visualizza <oggetto> a schermo"(4)
             \end{enumerate}
         \end{minipage} \\
         \hline
@@ -190,7 +264,9 @@
         \cellcolor{gray!20}
         \textbf{Breve descrizione:} \\
         \cellcolor{gray!20}
-        L'utente ottiene la lista di regie relative all'opera che sta visualizzando. \\
+        L'utente ottiene la lista di regie associate all'opera che sta visualizzando. \\
+        % - "ottiene"
+        % "associate"(6)
         \hline
         \textbf{Attori primari:} \\
         \begin{minipage}{\linewidth}
@@ -198,7 +274,7 @@
             Biglietteria \\
             Amministratore
         \end{minipage}
-        \vspace{0pt} \\ % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+        \vspace{0pt} \\
         \hline
         \textbf{Attori secondari:} \\
         Nessuno. \\
@@ -214,18 +290,12 @@
         \hline
         \textbf{Sequenza degli eventi principale:}
         \begin{enumerate}
-            \item Il caso d'uso inizia quando l'utente visualizza una singola opera.
-            \item \textbf{If} per l'opera è memorizzata almeno una regia
-            \begin{enumerate}
-                \item \textbf{For} ogni regia dell'opera
-                \begin{enumerate}
-                    \item Il sistema mostra le informazioni della regia a schermo.
-                \end{enumerate}
-            \end{enumerate}
-            \item \textbf{Else}
-            \begin{enumerate}
-                \item Il sistema informa l'utente che non vi sono regie memorizzate.
-            \end{enumerate}
+            \item Il sistema mostra le informazioni essenziali di tutte le regie, associate all'opera, a schermo.
+            % "mostra <oggetto> a schermo"(3)
+            % "associate"(6)
+            % - Qui non uso la parola "memorizzate". Dovrei omittere la parola del concetto?
+            % - Mattia usa "informazioni rilevanti dell'evento (es. ...)" per Lista Eventi
+            \item Il sistema permette all'Amministratore di modificare ed eliminare le regie.
         \end{enumerate} \\
         \hline
         \cellcolor{gray!20}
@@ -233,7 +303,9 @@
         \cellcolor{gray!20}
         \begin{minipage}{\linewidth}
             \begin{enumerate}
-                \item E' visualizzata a schermo la lista delle regie associate all'opera.
+                \item Viene visualizzata la lista di regie, associate all'opera, a schermo.
+                % "visualizza <oggetto> a schermo"(4)
+                % "associate"(6)
             \end{enumerate}
         \end{minipage} \\
         \hline
@@ -256,7 +328,9 @@
         \cellcolor{gray!20}
         \textbf{Breve descrizione:} \\
         \cellcolor{gray!20}
-        L'utente visualizzare l'elenco degli spettacoli disponibili presso il teatro. \\
+        L'utente ottiene la lista di spettacoli memorizzati nel sistema. \\
+        % - "ottiene"
+        % "memorizzate nel sistema"(1)
         \hline
         \textbf{Attori primari:} \\
         \begin{minipage}{\linewidth}
@@ -274,25 +348,22 @@
         \cellcolor{gray!20}
         \begin{minipage}{\linewidth}
             \begin{enumerate}
-                \item L'utente è posizionato nella sezione informazione.
+                \item L'utente è posizionato nella sezione Spettacoli.
+                % "Spettacoli"(8)
             \end{enumerate}
         \end{minipage} \\
         \hline
         \textbf{Sequenza degli eventi principale:}
         \begin{enumerate}
-            \item Il caso d'uso inizia quando l'utente richiede di visualizzare la lista completa degli spettacoli.
-            \item \textbf{If} c'è almeno uno spettacolo memorizzato nel Sistema
-            \begin{enumerate}
-                \item \textbf{For} ogni spettacolo nel Sistema
-                \begin{enumerate}
-                    \item Il sistema mostra un'anteprima dello spettacolo con informazioni basiche (es. titolo, data, genere). % Disponibilità?
-                \end{enumerate}
-                \item[] \textbf{punto di estensione:} filtrareElenco
-            \end{enumerate}
-            \item \textbf{Else}
-            \begin{enumerate}
-                \item Il Sistema informa l'utente che non vi sono spettacoli memorizzati.
-            \end{enumerate}
+            \item Il sistema mostra le informazioni essenziali di tutti gli spettacoli memorizzati a schermo.
+            % "mostra <oggetto> a schermo"(3)
+            \item Il sistema permette all'utente di visualizzare in più dettaglio gli spettacoli.
+            % "visualizza in più dettaglio"(9)
+            % - Che passi bisogna seguire? Non sono sicuro del passo precedente.
+            % - Ancora non conosco come vogliono la view della sezione Spettacoli
+            \item Il sistema permette all'Amministratore e Biglietteria di modificare ed eliminare gli spettacoli.
+            % - Non sono neanche sicuro se questo passo precedente è vero.
+            \item[] \textbf{punto di estensione:} filtro ricerca
         \end{enumerate} \\
         \hline
         \cellcolor{gray!20}
@@ -300,7 +371,8 @@
         \cellcolor{gray!20}
         \begin{minipage}{\linewidth}
             \begin{enumerate}
-                \item Viene visualizzata a schermo la lista degli spettacoli memorizzati.
+                \item Viene visualizzata la lista di spettacoli memorizzate a schermo.
+                % "visualizza <oggetto> a schermo"(4)
             \end{enumerate}
         \end{minipage} \\
         \hline
@@ -323,7 +395,7 @@
         \cellcolor{gray!20}
         \textbf{Breve descrizione:} \\
         \cellcolor{gray!20}
-        \textbf{Segmento 1:} L'utente filtra la lista di spettacoli applicando eventuali filtri (es. titolo, data, genere). \\
+        \textbf{Segmento 1:} L'utente filtra la lista di spettacoli tramite una parola chiave ricercata nel titolo. \\
         \hline
         \textbf{Attori primari:} \\
         \begin{minipage}{\linewidth}
@@ -341,25 +413,17 @@
         \cellcolor{gray!20}
         \begin{minipage}{\linewidth}
             \begin{enumerate}
-                \item L'utente ha inserito i criteri di ricerca.
-                \item L'utente ha premuto il pulsante di ricerca.
+                \item L'utente è posizionato nella sezione Spettacoli.
+                % "è posizionato"(5)
             \end{enumerate}
         \end{minipage} \\
         \hline
         \textbf{Sequenza degli eventi principale del segmento 1:}
         \begin{enumerate}
-            \item Il Sistema ricerca, nell'elenco di spettacoli, degli spettacoli coincidenti.
-            \item \textbf{If} il Sistema trova almeno uno spettacolo coincidente
-            \begin{enumerate}
-                \item \textbf{For} ogni spettacolo coincidente
-                \begin{enumerate}
-                    \item Il sistema mostra un'anteprima dello spettacolo con informazioni basiche.
-                \end{enumerate}
-            \end{enumerate}
-            \item \textbf{Else}
-            \begin{enumerate}
-                \item Il Sistema informa l'utente che non vi sono spettacoli coincidenti.
-            \end{enumerate}
+            \item L'utente effettua una ricerca specificando una chiave di ricerca.
+            \item Gli spettacoli che non contengono la parola chiave nel suo titolo vengono eliminati dalla lista risultante.
+            % "nel suo titolo"
+            % - "eliminate"??? "rimosse" sarebbe grammaticalmente corretto?
         \end{enumerate} \\
         \hline
         \cellcolor{gray!20}
@@ -367,7 +431,7 @@
         \cellcolor{gray!20}
         \begin{minipage}{\linewidth}
             \begin{enumerate}
-                \item L'utente visualizza l'elenco filtrato.
+                \item La lista risultante è filtrata.
             \end{enumerate}
         \end{minipage} \\
         \hline
@@ -387,7 +451,8 @@
         \cellcolor{gray!20}
         \textbf{Breve descrizione:} \\
         \cellcolor{gray!20}
-        L'utente visualizza i dettagli di uno spettacolo selezionato dalla lista. \\
+        L'utente ottiene le informazioni riguardo un singolo spettacolo. \\
+        % - "ottiene"
         \hline
         \textbf{Attori primari:} \\
         \begin{minipage}{\linewidth}
@@ -405,19 +470,20 @@
         \cellcolor{gray!20}
         \begin{minipage}{\linewidth}
             \begin{enumerate}
-                \item L'utente visualizza la lista degli spettacoli.
-                \item L'utente ha selezionato uno spettacolo della lista.
+                \item L'utente è posizionato nella sezione Spettacoli.
+                % "Spettacoli"(8)
             \end{enumerate}
         \end{minipage} \\
         \hline
         \textbf{Sequenza degli eventi principale:}
         \begin{enumerate}
-            \item Il Sistema mostra tutti i dettagli dello spettacolo: titolo, descrizione, durata, ecc.
-            \item \textbf{include}(Lista Eventi)
-            \item \textbf{If} l'utente è autenticato come Amministratore
-            \begin{enumerate}
-                \item[] \textbf{punto di estensione:} modificaSpettacolo
-            \end{enumerate}
+            \item L'utente richiede le informazioni di uno spettacolo.
+            \item Il sistema mostra le informazioni a schermo.
+            \item Il sistema mostra la lista di eventi, associati allo spettacolo, a schermo.
+            % "mostra <oggetto> a schermo"(3) 
+            % "associate"(6)
+            \item[] \textbf{punto di estensione:} Crea nuovo Evento
+            % - Gli eventi sono create nella pagina VisualizzaSpettacolo
         \end{enumerate} \\
         \hline
         \cellcolor{gray!20}
@@ -425,7 +491,8 @@
         \cellcolor{gray!20}
         \begin{minipage}{\linewidth}
             \begin{enumerate}
-                \item Sono visualizzate a schermo le informazioni anagrafiche dello spettacolo.
+                \item Sono visualizzate le informazioni dello spettacolo a schermo.
+                % "visualizza <oggetto> a schermo"(4)
             \end{enumerate}
         \end{minipage} \\
         \hline
@@ -448,7 +515,7 @@
         \cellcolor{gray!20}
         \textbf{Breve descrizione:} \\
         \cellcolor{gray!20}
-        L'utente visualizza l'elenco di tutti gli eventi programmati per uno spettacolo. \\
+        L'utente ottiene la lista di eventi associati allo spettacolo che sta visualizzando. \\
         \hline
         \textbf{Attori primari:} \\
         \begin{minipage}{\linewidth}
@@ -466,17 +533,17 @@
         \cellcolor{gray!20}
         \begin{minipage}{\linewidth}
             \begin{enumerate}
-                \item L'utente visualizza i dettagli di uno spettacolo.
+                \item L'utente sta visualizzando un singolo spettacolo.
             \end{enumerate}
         \end{minipage} \\
         \hline
         \textbf{Sequenza degli eventi principale:}
         \begin{enumerate}
-            \item Il caso d'uso inizia dopo che l'utente visualizza i dettagli di uno spettacolo.
-            \item \textbf{For} ogni eventi vincolato allo spettacolo
-            \begin{enumerate}
-                \item Il Sistema mostra informazioni rilevanti dell'evento (es. data, ora, sala).
-            \end{enumerate}
+            \item Il sistema mostra le informazioni essenziali di tutti gli eventi associati allo spettacolo a schermo.
+            % "mostra <oggetto> a schermo"(3)
+            % "associate"(6)
+            % - Qui non uso la parola "memorizzate". Dovrei omittere la parola del concetto?
+            \item Il sistema permette all'Amministratore e Biglietteria di modificare ed eliminare gli eventi.
         \end{enumerate} \\
         \hline
         \cellcolor{gray!20}
@@ -484,7 +551,9 @@
         \cellcolor{gray!20}
         \begin{minipage}{\linewidth}
             \begin{enumerate}
-                \item E' visualizzata a schermo la lista degli eventi associati allo spettacolo.
+                \item Viene visualizzata la lista di eventi, associati allo spettacolo, a schermo.
+                % "visualizza <oggetto> a schermo"(4)
+                % "associate"(6)
             \end{enumerate}
         \end{minipage} \\
         \hline
@@ -493,6 +562,8 @@
         \hline
     \end{tabular}
 \end{table}
+
+% ------ HASTA AQUÍ LLEGUÉ ----------
 
 % UC: Lista Sezioni
 \begin{table}[H]
@@ -508,6 +579,8 @@
         \textbf{Breve descrizione:} \\
         \cellcolor{gray!20}
         Messa a schermo delle sezioni. \\
+        % - Sembra intuitivo e conciso. Magari lo uso come una forma alternativa di "visualizza ... a schermo"
+        %   in casi ben definiti.
         \hline
         \textbf{Attori primari:} \\
         \begin{minipage}{\linewidth}
@@ -515,7 +588,7 @@
             Biglietteria \\
             Amministratore 
         \end{minipage}
-        \vspace{0pt} \\  % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
+        \vspace{0pt} \\
         \hline
         \textbf{Attori secondari:} \\
         Nessuno. \\
@@ -837,7 +910,7 @@
         \begin{minipage}{\linewidth}
             Cliente \\
             Biglietteria \\
-            Amministatore
+            Amministratore
         \end{minipage}
         \vspace{0pt} \\
         \hline
@@ -968,9 +1041,9 @@
         \hline
         \textbf{Sequenza degli eventi principale:}
         \begin{enumerate}
-            \item Il caso d'uso inizia quando l'utente preme \emph{Genera ricevuta}. %/""
-            \item Il Sistema genera un documento con tutta l'informazione relativa all'acquisto dei biglietti prenotati.
-            \item Il Sistema stampa il documento.
+            \item L'utente avvia il caso d'uso selezionando il comando Genera ricevuta.
+            \item Il sistema genera un documento con tutta l'informazione relativa all'acquisto dei biglietti prenotati.
+            \item Il sistema stampa il documento.
         \end{enumerate} \\
         \hline
         \cellcolor{gray!20}
