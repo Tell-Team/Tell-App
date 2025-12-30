@@ -20,7 +20,7 @@ class RegiaDisplay(ItemDisplay):
 
     Segnali:
     - modificaRequest(int): emesso quando si clicca il pulsante Modifica;
-    - eliminaConfermata(int): emesso quando si clicca il pulsante Sì;
+    - eliminaConfermata(int): emesso quando si clicca il pulsante Sì.
     """
 
     # In prattica, questo QWidget pottrebe essere nella pagina NuovaRegiaView stessa, ma per

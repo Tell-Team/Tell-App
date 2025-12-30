@@ -70,9 +70,7 @@ class ListLayout(QVBoxLayout):
         #     self.setContentsMargins(2, 2, 2, 2)
         #     error_msg.show()
 
-    def aggiungi_list_item(
-        self, widget: ItemDisplay, style: Optional[str] = None
-    ) -> None:
+    def aggiungi_list_item(self, widget: ItemDisplay, style: str = "") -> None:
         """Aggiunge un widget creato per il display delle istanze del model.
 
         :param widget: widget speciale per visualizzare una instanza del model

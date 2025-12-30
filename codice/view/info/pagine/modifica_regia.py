@@ -14,7 +14,7 @@ class ModificaRegiaView(NuovaRegiaView):
     def _setup_ui(self) -> None:
         super()._setup_ui()
 
-        # Il valore è assegnato quando si chiama InfoController.modifica_regia(id_regia)
+        # Il valore è assegnato quando si chiama VisualizzaOperaController.modifica_regia
         self.cur_id_regia: int = -1
 
         # Aggiorna header

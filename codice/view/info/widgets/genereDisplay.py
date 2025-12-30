@@ -13,7 +13,7 @@ class GenereDisplay(ItemDisplay):
 
     Segnali:
     - modificaRequest(int): emesso quando si clicca il pulsante Modifica;
-    - eliminaConfermata(int): emesso quando si clicca il pulsante Sì;
+    - eliminaConfermata(int): emesso quando si clicca il pulsante Sì.
     """
 
     modificaRequest = pyqtSignal(int)
@@ -51,21 +51,21 @@ class GenereDisplay(ItemDisplay):
         layout_pulsanti.addStretch()
 
         # Pannello di eliminazione
-        domanda = QLabel("Sicuro di eliminare?")
+        domanda = QLabel("<b>Sicuro di eliminare?</b>")
         domanda.setProperty(QssStyle.PARAGRAPH.style_role, True)
-
-        self.__btn_si = QPushButton("Sì")
-        self.__btn_si.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
 
         self.__btn_no = QPushButton("No")
         self.__btn_no.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
+
+        self.__btn_si = QPushButton("Sì")
+        self.__btn_si.setProperty(QssStyle.DESTRUCTIVE_BUTTON.style_role, True)
 
         self.__conferma_elimina = QWidget()
         layout_conferma = QHBoxLayout(self.__conferma_elimina)
         layout_conferma.setContentsMargins(1, 1, 1, 1)
         layout_conferma.addWidget(domanda)
-        layout_conferma.addWidget(self.__btn_si)
         layout_conferma.addWidget(self.__btn_no)
+        layout_conferma.addWidget(self.__btn_si)
         self.__conferma_elimina.hide()
 
         # Layout

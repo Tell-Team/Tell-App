@@ -61,11 +61,11 @@ class CURegiaController(AbstractCUController):
             self.__display_tecnici
         )
 
-        # Aggiungi un interprete alla pagina NuovaRegiaView
+        # Aggiungi un interprete alla pagina ModificaRegiaView
         self._view_modifica.aggiungiInterprete.connect(  # type:ignore
             self.__aggiungi_interprete
         )
-        # Aggiungi un tecnico alla pagina NuovaRegiaView
+        # Aggiungi un tecnico alla pagina ModificaRegiaView
         self._view_modifica.aggiungiTecnico.connect(  # type:ignore
             self.__aggiungi_tecnico
         )
@@ -206,7 +206,7 @@ class CURegiaController(AbstractCUController):
             anno = cur_pagina.anno.value()
             id_opera = cur_pagina.opera.currentData()
 
-            # Tenta di creare la nuova opera
+            # Tenta di creare la nuova regia
             try:
                 nuova_regia = Regia(
                     regista, anno, id_opera, titolo, note, interpreti, tecnici

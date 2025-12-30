@@ -14,7 +14,7 @@ class ModificaGenereView(NuovoGenereView):
     def _setup_ui(self) -> None:
         super()._setup_ui()
 
-        # Il valore è assegnato quando si chiama InfoController.modifica_genere(id_genere)
+        # Il valore è assegnato quando si chiama InfoController.modifica_genere
         self.cur_id_genere: int = -1
 
         # Aggiorna header

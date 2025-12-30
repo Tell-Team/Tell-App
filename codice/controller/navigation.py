@@ -12,6 +12,8 @@ class Pagina(Enum):
     PAGINA_AUTENTICAZIONE = "authentication_page"
 
     SEZIONE_SPETTACOLI = "spettacoli_section"
+    NUOVO_SPETTACOLO = "nuovo_spettacolo"
+    MODIFICA_SPETTACOLO = "modifica_spettacolo"
 
     SEZIONE_INFO = "info_section"
     NUOVA_OPERA = "nuova_opera"

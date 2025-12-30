@@ -42,9 +42,15 @@ class AppContext:
         # self.modifica_account_view = ModificaAccountView()
 
         # Spettacoli
-        from view.spettacoli.pagine import SpettacoliSectionView
+        from view.spettacoli.pagine import (
+            SpettacoliSectionView,
+            NuovoSpettacoloView,
+            ModificaSpettacoloView,
+        )
 
         self.__spettacoli_section = SpettacoliSectionView()
+        self.__nuovo_spettacolo_view = NuovoSpettacoloView()
+        self.__modifica_spettacolo_view = ModificaSpettacoloView()
 
         # Info
         from view.info.pagine import (
@@ -74,6 +80,8 @@ class AppContext:
         nav.registra_pagina(Pagina.PAGINA_LOGIN, self.__login_page)
         nav.registra_pagina(Pagina.PAGINA_AUTENTICAZIONE, self.__authentication_page)
         nav.registra_pagina(Pagina.SEZIONE_SPETTACOLI, self.__spettacoli_section)
+        nav.registra_pagina(Pagina.NUOVO_SPETTACOLO, self.__nuovo_spettacolo_view)
+        nav.registra_pagina(Pagina.MODIFICA_SPETTACOLO, self.__modifica_spettacolo_view)
         nav.registra_pagina(Pagina.SEZIONE_INFO, self.__info_section)
         nav.registra_pagina(Pagina.NUOVA_OPERA, self.__nuova_opera_view)
         nav.registra_pagina(Pagina.MODIFICA_OPERA, self.__modifica_opera_view)
@@ -92,7 +100,7 @@ class AppContext:
         from controller.account import LoginController, AccountController
 
         # Spettacoli
-        from controller.spettacoli import SpettacoliController
+        from controller.spettacoli import SpettacoliController, CUSpettacoloController
 
         # Info
         from controller.info import (
@@ -119,6 +127,15 @@ class AppContext:
                 "__spettacoli_controller",
                 SpettacoliController,
                 (self.__model, self.__spettacoli_section),
+            ),
+            (
+                "__cu_spettacolo_controller",
+                CUSpettacoloController,
+                (
+                    self.__model,
+                    self.__nuovo_spettacolo_view,
+                    self.__modifica_spettacolo_view,
+                ),
             ),
             ("__info_controller", InfoController, (self.__model, self.__info_section)),
             (

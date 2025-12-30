@@ -7,7 +7,7 @@ from model.model import Model
 
 from view.account.pagine import AccountSectionView
 
-# from view.utils import MessageView
+# from view.utils import PopupView
 
 
 class AccountController(QObject):
