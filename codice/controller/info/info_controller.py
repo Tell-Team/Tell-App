@@ -140,7 +140,7 @@ class InfoController(QObject):
             )
 
             # Aggiungi cur_opera al layout di ListaOpere
-            layout_opere.aggiungi_list_item(cur_opera, QssStyle.ITEM_CARD.style_role)
+            layout_opere.aggiungi_list_item(cur_opera, QssStyle.ITEM_CARD)
 
             # Funzione di elimina per l'opera
             def on_si(id_: int) -> None:
@@ -187,7 +187,7 @@ class InfoController(QObject):
             )
 
             # Aggiungi cur_genere al layout di ListaOpere
-            layout_generi.aggiungi_list_item(cur_genere, QssStyle.ITEM_CARD.style_role)
+            layout_generi.aggiungi_list_item(cur_genere, QssStyle.ITEM_CARD)
 
             # Funzione di elimina per il genere
             def on_si(id_: int) -> None:

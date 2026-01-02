@@ -43,26 +43,26 @@ class InfoSectionView(AbstractSectionView):
 
         # Opere
         header_opere = QLabel("Opere")
-        header_opere.setProperty(QssStyle.HEADER1.style_role, True)
+        header_opere.setProperty(QssStyle.HEADER1, True)
         header_opere.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self._btn_nuova_opera = QPushButton("Nuova opera")
-        self._btn_nuova_opera.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
+        self._btn_nuova_opera.setProperty(QssStyle.WHITE_BUTTON, True)
 
         self.filtro_ricerca: str = ""
 
         self.ricerca_bar = QLineEdit()
         self.ricerca_bar.setPlaceholderText("Inserire nome...")
         self.ricerca_bar.setClearButtonEnabled(True)
-        self.ricerca_bar.setProperty(QssStyle.SEARCH_BAR.style_role, True)
+        self.ricerca_bar.setProperty(QssStyle.SEARCH_BAR, True)
 
         self._btn_ricerca = QPushButton()
         # icon = QApplication.style().standardIcon(
         #     QStyle.StandardPixmap.SP_FileDialogContentsView
         # )
         # self._btn_ricerca.setIcon(icon)
-        self._btn_ricerca.setProperty(QssStyle.SEARCH_BUTTON.style_role, True)
-        self._btn_ricerca.setProperty(QssStyle.BLUE_BUTTON.style_role, True)
+        self._btn_ricerca.setProperty(QssStyle.SEARCH_BUTTON, True)
+        self._btn_ricerca.setProperty(QssStyle.BLUE_BUTTON, True)
         self._btn_ricerca.setFixedHeight(self.ricerca_bar.sizeHint().height())
 
         widget_ricerca = QWidget()
@@ -82,7 +82,7 @@ class InfoSectionView(AbstractSectionView):
         # Non è necessario salvare questo label come attributo perché il suo funzionamento
         #   viene gestito dal ListLayout a cui viene collegato.
         label_lista_opere_vuota = EmptyStateLabel("Non vi sono opere disponibili.")
-        label_lista_opere_vuota.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
+        label_lista_opere_vuota.setProperty(QssStyle.SECONDARY_TEXT, True)
 
         widget_lista_opere = QWidget()
         self.layout_lista_opere = ListLayout(
@@ -96,11 +96,11 @@ class InfoSectionView(AbstractSectionView):
 
         # Generi
         header_generi = QLabel("Generi")
-        header_generi.setProperty(QssStyle.HEADER1.style_role, True)
+        header_generi.setProperty(QssStyle.HEADER1, True)
         header_generi.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self._btn_nuovo_genere = QPushButton("Nuovo genere")
-        self._btn_nuovo_genere.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
+        self._btn_nuovo_genere.setProperty(QssStyle.WHITE_BUTTON, True)
 
         widget_header_generi = QWidget()
         layout_header_generi = QHBoxLayout(widget_header_generi)
@@ -110,7 +110,7 @@ class InfoSectionView(AbstractSectionView):
         layout_header_generi.addStretch()
 
         label_lista_generi_vuota = EmptyStateLabel("Non vi sono generi disponibili.")
-        label_lista_generi_vuota.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
+        label_lista_generi_vuota.setProperty(QssStyle.SECONDARY_TEXT, True)
 
         widget_lista_generi = QWidget()
         self.layout_lista_generi = ListLayout(
@@ -124,11 +124,11 @@ class InfoSectionView(AbstractSectionView):
 
         # Teatro
         header_teatro = QLabel("Teatro")
-        header_teatro.setProperty(QssStyle.HEADER1.style_role, True)
+        header_teatro.setProperty(QssStyle.HEADER1, True)
         header_teatro.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         teatro_nome = QLabel("Vitrifrigo Arena")
-        teatro_nome.setProperty(QssStyle.HEADER2.style_role, True)
+        teatro_nome.setProperty(QssStyle.HEADER2, True)
 
         teatro_desc = QLabel(
             "Inaugurato nel 1996\nVia R. Ripa, 1\nLa Vitrifrigo Arena è un'ampio "
@@ -137,11 +137,11 @@ class InfoSectionView(AbstractSectionView):
             + "viene allestita una struttura in legno al suo interno per ricreare "
             + "l'esperienza acustica di un teatro tradizionale."
         )
-        teatro_desc.setProperty(QssStyle.PARAGRAPH.style_role, True)
+        teatro_desc.setProperty(QssStyle.PARAGRAPH, True)
         teatro_desc.setWordWrap(True)
 
         info_teatro = QWidget()
-        info_teatro.setProperty(QssStyle.ITEM_CARD.style_role, True)
+        info_teatro.setProperty(QssStyle.ITEM_CARD, True)
         layout_info_teatro = QVBoxLayout(info_teatro)
         layout_info_teatro.addWidget(teatro_nome)
         layout_info_teatro.addWidget(teatro_desc)

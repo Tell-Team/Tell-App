@@ -26,7 +26,7 @@ class ModificaSpettacoloView(NuovoSpettacoloView):
 
         self.__tipo_spettacolo = QLabel("")
         self.__tipo_spettacolo.setWordWrap(True)
-        self.__tipo_spettacolo.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
+        self.__tipo_spettacolo.setProperty(QssStyle.SECONDARY_TEXT, True)
         self._form_layout.addWidget(self.__tipo_spettacolo)
 
     # ------------------------- METODI DI VIEW -------------------------

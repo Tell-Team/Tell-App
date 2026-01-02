@@ -9,6 +9,8 @@ item.
 from PyQt6.QtWidgets import QWidget, QLabel, QLayout, QVBoxLayout
 from typing import Optional
 
+from view.style import QssStyle
+
 
 # Queste classi vuote servono per evitare possibili errori al chiamare i metodi di ListLayout.
 class ItemDisplay(QWidget):
@@ -70,7 +72,9 @@ class ListLayout(QVBoxLayout):
         #     self.setContentsMargins(2, 2, 2, 2)
         #     error_msg.show()
 
-    def aggiungi_list_item(self, widget: ItemDisplay, style: str = "") -> None:
+    def aggiungi_list_item(
+        self, widget: ItemDisplay, style: Optional[QssStyle] = None
+    ) -> None:
         """Aggiunge un widget creato per il display delle istanze del model.
 
         :param widget: widget speciale per visualizzare una instanza del model
@@ -78,7 +82,7 @@ class ListLayout(QVBoxLayout):
         # C'è un errore al utilizzare widget.setProperty() direttamente:
         #   lo style non veniva asegnato per qualche motivo. Quindi ho decisso
         #   di aggiungere questo dummy_widget per farlo funzionare.
-        if not style:
+        if style is None:
             self.addWidget(widget)
             return
         dummy_widget = QWidget()

@@ -131,9 +131,7 @@ class SpettacoliController(QObject):
             )
 
             # Aggiungi cur_spettacolo al layout di ListaSpettacoli
-            layout_spettacoli.aggiungi_list_item(
-                cur_spettacolo, QssStyle.ITEM_CARD.style_role
-            )
+            layout_spettacoli.aggiungi_list_item(cur_spettacolo, QssStyle.ITEM_CARD)
 
             # Funzione di elimina per lo spettacolo
             def on_si(id_: int) -> None:

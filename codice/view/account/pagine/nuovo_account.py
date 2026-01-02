@@ -46,34 +46,34 @@ class NuovoAccountView(AbstractCreaView):
     @override
     def _setup_form(self) -> None:
         label_anagrafica_header = QLabel("Anagrafica")
-        label_anagrafica_header.setProperty(QssStyle.HEADER2.style_role, True)
+        label_anagrafica_header.setProperty(QssStyle.HEADER2, True)
 
         label_nome = QLabel('Nome<span style="color:red;">*</span> :')
-        label_nome.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
+        label_nome.setProperty(QssStyle.SECONDARY_TEXT, True)
         self.nome = QLineEdit()
         self.nome.setPlaceholderText("Inserire nome")
 
         label_cognome = QLabel('Cognome<span style="color:red;">*</span> :')
-        label_cognome.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
+        label_cognome.setProperty(QssStyle.SECONDARY_TEXT, True)
         self.cognome = QLineEdit()
         self.cognome.setPlaceholderText("Inserire cognome")
 
         label_account_header = QLabel("Accesso e Ruolo")
-        label_account_header.setProperty(QssStyle.HEADER2.style_role, True)
+        label_account_header.setProperty(QssStyle.HEADER2, True)
 
         label_username = QLabel('Username<span style="color:red;">*</span> :')
-        label_username.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
+        label_username.setProperty(QssStyle.SECONDARY_TEXT, True)
         self.username = QLineEdit()
         self.username.setPlaceholderText("Inserire username")
 
         label_password = QLabel('Password<span style="color:red;">*</span> :')
-        label_password.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
+        label_password.setProperty(QssStyle.SECONDARY_TEXT, True)
         self.password = QLineEdit()
         self.password.setPlaceholderText("Inserire password")
         self.password.setEchoMode(QLineEdit.EchoMode.Password)
 
         label_ruolo = QLabel('Ruolo<span style="color:red;">*</span> : ')
-        label_ruolo.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
+        label_ruolo.setProperty(QssStyle.SECONDARY_TEXT, True)
         self.ruolo = QComboBox()
         # - Hard-coded options
         self.ruolo.insertItem(0, "Scegli ruolo")

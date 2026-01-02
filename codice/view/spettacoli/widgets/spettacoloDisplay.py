@@ -35,20 +35,20 @@ class SpettacoloDisplay(ItemDisplay):
     def __setup_ui(self, s: Spettacolo, dati: tuple[str, ...] = ()) -> None:
         # Labels
         titolo = QLabel(s.get_titolo())
-        titolo.setProperty(QssStyle.HEADER2.style_role, True)
+        titolo.setProperty(QssStyle.HEADER2, True)
 
         # Pulsanti
         self.__btn_visualizza = QPushButton("Maggior info")
-        self.__btn_visualizza.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
+        self.__btn_visualizza.setProperty(QssStyle.WHITE_BUTTON, True)
 
         self.__btn_scegli_posti = QPushButton("Scegli posti")
-        self.__btn_scegli_posti.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
+        self.__btn_scegli_posti.setProperty(QssStyle.WHITE_BUTTON, True)
 
         self.__btn_modifica = QPushButton("Modifica")
-        self.__btn_modifica.setProperty(QssStyle.MODIFY_BUTTON.style_role, True)
+        self.__btn_modifica.setProperty(QssStyle.MODIFY_BUTTON, True)
 
         self.__btn_elimina = QPushButton("Elimina")
-        self.__btn_elimina.setProperty(QssStyle.DESTRUCTIVE_BUTTON.style_role, True)
+        self.__btn_elimina.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
 
         self.__pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.__pulsanti)
@@ -61,13 +61,13 @@ class SpettacoloDisplay(ItemDisplay):
 
         # Pannello di eliminazione
         domanda = QLabel("<b>Sicuro di eliminare?</b>")
-        domanda.setProperty(QssStyle.PARAGRAPH.style_role, True)
+        domanda.setProperty(QssStyle.PARAGRAPH, True)
 
         self.__btn_no = QPushButton("No")
-        self.__btn_no.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
+        self.__btn_no.setProperty(QssStyle.WHITE_BUTTON, True)
 
         self.__btn_si = QPushButton("Sì")
-        self.__btn_si.setProperty(QssStyle.DESTRUCTIVE_BUTTON.style_role, True)
+        self.__btn_si.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
 
         self.__conferma_elimina = QWidget()
         layout_conferma = QHBoxLayout(self.__conferma_elimina)
@@ -136,9 +136,9 @@ class SpettacoloDisplay(ItemDisplay):
             raise ValueError("dati deve essere un tuple di 2 string")
 
         compositore = QLabel(f"Direttore d'orchestra: {dati[0]}")
-        compositore.setProperty(QssStyle.PARAGRAPH.style_role, True)
+        compositore.setProperty(QssStyle.PARAGRAPH, True)
         self.__layout.addWidget(compositore)
 
         regista = QLabel(f"Regista: {dati[1]}")
-        regista.setProperty(QssStyle.PARAGRAPH.style_role, True)
+        regista.setProperty(QssStyle.PARAGRAPH, True)
         self.__layout.addWidget(regista)

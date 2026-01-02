@@ -1,10 +1,11 @@
-from enum import Enum
+from enum import StrEnum, verify, UNIQUE
 
 
-class QssStyle(Enum):
-    """Enum con i ruoli (keys) per assegnare uno style ai widget."""
+@verify(UNIQUE)
+class QssStyle(StrEnum):
+    """Enum con i ruoli (style) da assegnare ai widget."""
 
-    # Usare .setProperty(QssStyle.NOME_RUOLO.style_role, True) per assegnare uno style.
+    # Usare .setProperty(QssStyle.NOME_RUOLO, True) per assegnare uno style.
     HEADER1 = "header1"  # QLabel
     HEADER2 = "header2"  # QLabel
     HEADER3 = "header3"  # QLabel
@@ -26,8 +27,3 @@ class QssStyle(Enum):
     ITEM_LIST = "item-list"  # QWidget
 
     SEARCH_BAR = "search-bar"  # QLineEdit
-
-    @property
-    def style_role(self) -> str:
-        """Ottieni la string con il ruolo da asegnare."""
-        return self.value

@@ -26,15 +26,15 @@ class PersonaleDisplay(ItemDisplay):
         self.__key = key
 
         widget_key = QLabel(self.__key)
-        widget_key.setProperty(QssStyle.PARAGRAPH.style_role, True)
+        widget_key.setProperty(QssStyle.PARAGRAPH, True)
 
         widget_value = QLabel(value)
-        widget_value.setProperty(QssStyle.PARAGRAPH.style_role, True)
+        widget_value.setProperty(QssStyle.PARAGRAPH, True)
 
         self.__btn_rimuovi = QPushButton("X")
         # - Quitar el texto del botón para cuando pueda usar icons
         self.__btn_rimuovi.setFixedSize(32, 32)
-        self.__btn_rimuovi.setProperty(QssStyle.DESTRUCTIVE_BUTTON.style_role, True)
+        self.__btn_rimuovi.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
 
         layout = QGridLayout(self)
         layout.setContentsMargins(5, 5, 5, 5)

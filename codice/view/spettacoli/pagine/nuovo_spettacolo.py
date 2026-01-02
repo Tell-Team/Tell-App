@@ -62,19 +62,19 @@ class NuovoSpettacoloView(AbstractCreaView):
     @override
     def _setup_form(self) -> None:
         label_titolo = QLabel('Titolo<span style="color:red;">*</span> :')
-        label_titolo.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
+        label_titolo.setProperty(QssStyle.SECONDARY_TEXT, True)
         self.titolo = QLineEdit()
         self.titolo.setPlaceholderText("Inserire titolo")
 
         label_note = QLabel('Note<span style="color:red;">*</span> :')
-        label_note.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
+        label_note.setProperty(QssStyle.SECONDARY_TEXT, True)
         self.note = QTextEdit()
         self.note.setPlaceholderText("Inserire note")
         self.note.setFixedHeight(80)
 
         # Lista interpreti
         label_interprete = QLabel("Interprete :")
-        label_interprete.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
+        label_interprete.setProperty(QssStyle.SECONDARY_TEXT, True)
         self.interprete_nome = QLineEdit()
         self.interprete_nome.setMaxLength(30)
         self.interprete_nome.setPlaceholderText("Inserire nome")
@@ -83,9 +83,7 @@ class NuovoSpettacoloView(AbstractCreaView):
         self.interprete_ruolo.setPlaceholderText("Inserire ruolo")
 
         self._btn_aggiungi_interprete = QPushButton("Aggiungi")
-        self._btn_aggiungi_interprete.setProperty(
-            QssStyle.WHITE_BUTTON.style_role, True
-        )
+        self._btn_aggiungi_interprete.setProperty(QssStyle.WHITE_BUTTON, True)
 
         interprete = QWidget()
         layout_interprete = QHBoxLayout(interprete)
@@ -98,19 +96,15 @@ class NuovoSpettacoloView(AbstractCreaView):
         self.lista_interpreti: dict[str, str] = {}
 
         self.label_lista_interpreti_error = QLabel("")
-        self.label_lista_interpreti_error.setProperty(
-            QssStyle.ERROR_MESSAGE.style_role, True
-        )
+        self.label_lista_interpreti_error.setProperty(QssStyle.ERROR_MESSAGE, True)
 
         label_lista_interpreti_vuota = EmptyStateLabel(
             "Non vi sono interpreti registrati."
         )
-        label_lista_interpreti_vuota.setProperty(
-            QssStyle.SECONDARY_TEXT.style_role, True
-        )
+        label_lista_interpreti_vuota.setProperty(QssStyle.SECONDARY_TEXT, True)
 
         widget_lista_interpreti = QWidget()
-        widget_lista_interpreti.setProperty(QssStyle.ITEM_LIST.style_role, True)
+        widget_lista_interpreti.setProperty(QssStyle.ITEM_LIST, True)
         self.layout_lista_interpreti = ListLayout(
             widget_lista_interpreti, label_lista_interpreti_vuota
         )
@@ -118,7 +112,7 @@ class NuovoSpettacoloView(AbstractCreaView):
 
         # Lista tectici
         label_tecnico = QLabel("Tecnico :")
-        label_tecnico.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
+        label_tecnico.setProperty(QssStyle.SECONDARY_TEXT, True)
         self.tecnico_nome = QLineEdit()
         self.tecnico_nome.setMaxLength(30)
         self.tecnico_nome.setPlaceholderText("Inserire nome")
@@ -127,7 +121,7 @@ class NuovoSpettacoloView(AbstractCreaView):
         self.tecnico_posto.setPlaceholderText("Inserire posto")
 
         self._btn_aggiungi_tecnico = QPushButton("Aggiungi")
-        self._btn_aggiungi_tecnico.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
+        self._btn_aggiungi_tecnico.setProperty(QssStyle.WHITE_BUTTON, True)
 
         tecnico = QWidget()
         layout_tecnico = QHBoxLayout(tecnico)
@@ -140,15 +134,13 @@ class NuovoSpettacoloView(AbstractCreaView):
         self.lista_tecnici: dict[str, str] = {}
 
         self.label_lista_tecnici_error = QLabel("")
-        self.label_lista_tecnici_error.setProperty(
-            QssStyle.ERROR_MESSAGE.style_role, True
-        )
+        self.label_lista_tecnici_error.setProperty(QssStyle.ERROR_MESSAGE, True)
 
         label_lista_tecnici_vuota = EmptyStateLabel("Non vi sono tecnici registrati.")
-        label_lista_tecnici_vuota.setProperty(QssStyle.SECONDARY_TEXT.style_role, True)
+        label_lista_tecnici_vuota.setProperty(QssStyle.SECONDARY_TEXT, True)
 
         widget_lista_tecnici = QWidget()
-        widget_lista_tecnici.setProperty(QssStyle.ITEM_LIST.style_role, True)
+        widget_lista_tecnici.setProperty(QssStyle.ITEM_LIST, True)
         self.layout_lista_tecnici = ListLayout(
             widget_lista_tecnici, label_lista_tecnici_vuota
         )

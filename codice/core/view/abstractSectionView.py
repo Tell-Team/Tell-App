@@ -37,7 +37,7 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
     def _setup_ui(self) -> None:
         # Logout
         self._btn_logout = QPushButton("Logout")
-        self._btn_logout.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
+        self._btn_logout.setProperty(QssStyle.WHITE_BUTTON, True)
 
         widget_logout = QWidget()
         layout_logout = QHBoxLayout(widget_logout)
@@ -46,13 +46,13 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
 
         # Sezioni dell'app
         self._btn_sezione_spettacoli = QPushButton("Spettacoli")
-        self._btn_sezione_spettacoli.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
+        self._btn_sezione_spettacoli.setProperty(QssStyle.WHITE_BUTTON, True)
 
         self._btn_sezione_info = QPushButton("Info")
-        self._btn_sezione_info.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
+        self._btn_sezione_info.setProperty(QssStyle.WHITE_BUTTON, True)
 
         self._btn_sezione_account = QPushButton("Account")
-        self._btn_sezione_account.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
+        self._btn_sezione_account.setProperty(QssStyle.WHITE_BUTTON, True)
 
         sezioni_app = QWidget()
         layout_sezioni = QHBoxLayout(sezioni_app)

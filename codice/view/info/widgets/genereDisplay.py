@@ -30,18 +30,18 @@ class GenereDisplay(ItemDisplay):
     def __setup_ui(self, g: Genere) -> None:
         # Labels
         nome = QLabel(g.get_nome())
-        nome.setProperty(QssStyle.HEADER2.style_role, True)
+        nome.setProperty(QssStyle.HEADER2, True)
 
         descrizione = QLabel(g.get_descrizione())
-        descrizione.setProperty(QssStyle.PARAGRAPH.style_role, True)
+        descrizione.setProperty(QssStyle.PARAGRAPH, True)
         descrizione.setWordWrap(True)
 
         # Pulsanti Modifica-Elimina
         self.__btn_modifica = QPushButton("Modifica")
-        self.__btn_modifica.setProperty(QssStyle.MODIFY_BUTTON.style_role, True)
+        self.__btn_modifica.setProperty(QssStyle.MODIFY_BUTTON, True)
 
         self.__btn_elimina = QPushButton("Elimina")
-        self.__btn_elimina.setProperty(QssStyle.DESTRUCTIVE_BUTTON.style_role, True)
+        self.__btn_elimina.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
 
         self.__pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.__pulsanti)
@@ -52,13 +52,13 @@ class GenereDisplay(ItemDisplay):
 
         # Pannello di eliminazione
         domanda = QLabel("<b>Sicuro di eliminare?</b>")
-        domanda.setProperty(QssStyle.PARAGRAPH.style_role, True)
+        domanda.setProperty(QssStyle.PARAGRAPH, True)
 
         self.__btn_no = QPushButton("No")
-        self.__btn_no.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
+        self.__btn_no.setProperty(QssStyle.WHITE_BUTTON, True)
 
         self.__btn_si = QPushButton("Sì")
-        self.__btn_si.setProperty(QssStyle.DESTRUCTIVE_BUTTON.style_role, True)
+        self.__btn_si.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
 
         self.__conferma_elimina = QWidget()
         layout_conferma = QHBoxLayout(self.__conferma_elimina)

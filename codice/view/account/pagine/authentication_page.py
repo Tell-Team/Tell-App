@@ -35,7 +35,7 @@ class AuthenticationPage(QWidget):
     def _setup_ui(self) -> None:
         # Top widget
         self.__btn_indietro = QPushButton("Indietro")
-        self.__btn_indietro.setProperty(QssStyle.WHITE_BUTTON.style_role, True)
+        self.__btn_indietro.setProperty(QssStyle.WHITE_BUTTON, True)
 
         pagina_header = QWidget()
         layout_header = QHBoxLayout(pagina_header)
@@ -44,25 +44,25 @@ class AuthenticationPage(QWidget):
 
         # Content
         label_header = QLabel("Login")
-        label_header.setProperty(QssStyle.HEADER1.style_role, True)
+        label_header.setProperty(QssStyle.HEADER1, True)
         label_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         label_username = QLabel("Username")
-        label_username.setProperty(QssStyle.PARAGRAPH.style_role, True)
+        label_username.setProperty(QssStyle.PARAGRAPH, True)
         label_username.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.username = QLineEdit()
         self.username.setPlaceholderText("Username")
 
         label_password = QLabel("Password")
-        label_password.setProperty(QssStyle.PARAGRAPH.style_role, True)
+        label_password.setProperty(QssStyle.PARAGRAPH, True)
         label_password.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.password = QLineEdit()
         self.password.setPlaceholderText("Password")
         self.password.setEchoMode(QLineEdit.EchoMode.Password)
 
         self.__btn_login = QPushButton("LOGIN")
-        self.__btn_login.setProperty(QssStyle.BLUE_BUTTON.style_role, True)
-        self.__btn_login.setProperty(QssStyle.MAIN_BUTTON.style_role, True)
+        self.__btn_login.setProperty(QssStyle.BLUE_BUTTON, True)
+        self.__btn_login.setProperty(QssStyle.MAIN_BUTTON, True)
 
         pagina_content = QWidget()
         layout_content = QVBoxLayout(pagina_content)
