@@ -14,6 +14,7 @@ from typing import override
 from core.view import AbstractSectionView
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
+from view.utils.hyphenate_text import HyphenatedLabel
 from view.style import QssStyle
 
 
@@ -79,8 +80,8 @@ class InfoSectionView(AbstractSectionView):
         layout_header_opere.addWidget(self._btn_nuova_opera)
         layout_header_opere.addWidget(widget_ricerca)
 
-        # Non è necessario salvare questo label come attributo perché il suo funzionamento
-        #   viene gestito dal ListLayout a cui viene collegato.
+        # Non è necessario salvare questa label come attributo perché il suo funzionamento
+        #   viene gestito dal ListLayout a cui viene collegata.
         label_lista_opere_vuota = EmptyStateLabel("Non vi sono opere disponibili.")
         label_lista_opere_vuota.setProperty(QssStyle.SECONDARY_TEXT, True)
 
@@ -130,7 +131,7 @@ class InfoSectionView(AbstractSectionView):
         teatro_nome = QLabel("Vitrifrigo Arena")
         teatro_nome.setProperty(QssStyle.HEADER2, True)
 
-        teatro_desc = QLabel(
+        teatro_desc = HyphenatedLabel(
             "Inaugurato nel 1996\nVia R. Ripa, 1\nLa Vitrifrigo Arena è un'ampio "
             + "palazzetto che ospita numerosi eventi sportivi e musicali di "
             + "rilevanza mondiale. In occasione dello Rossini Opera Festival, "
@@ -138,7 +139,6 @@ class InfoSectionView(AbstractSectionView):
             + "l'esperienza acustica di un teatro tradizionale."
         )
         teatro_desc.setProperty(QssStyle.PARAGRAPH, True)
-        teatro_desc.setWordWrap(True)
 
         info_teatro = QWidget()
         info_teatro.setProperty(QssStyle.ITEM_CARD, True)

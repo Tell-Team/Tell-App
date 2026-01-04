@@ -5,7 +5,7 @@ from view.info.utils import OperaPageData
 
 
 class ModificaOperaView(NuovaOperaView):
-    """Sottoclasse di `NuovaOperaView`. Modifica alcuni label della pagina ed aggiunge
+    """Sottoclasse di `NuovaOperaView`. Modifica alcune label della pagina ed aggiunge
     un'attributo `cur_id_opera` per indicare l'id dell'opera da modificare."""
 
     # ------------------------- SETUP INIT -------------------------

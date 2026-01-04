@@ -89,15 +89,14 @@ class SpettacoliController(QObject):
 
         :param layout: layout dove saranno caricate tutte le opere
         """
-        lista_spettacoli: list[Spettacolo] = []
-
         # Verifica se c'è un filtro di ricerca
         filtro = self.__spettacoli_section.filtro_ricerca
 
-        if filtro == "":
-            lista_spettacoli = self.__get_spettacoli()
-        else:
-            lista_spettacoli = self.__get_spettacoli_by_titolo(filtro)
+        lista_spettacoli = (
+            self.__get_spettacoli()
+            if not filtro
+            else self.__get_spettacoli_by_titolo(filtro)
+        )
 
         # Verifica che la lista non sia vuota
         if not lista_spettacoli:
@@ -228,7 +227,10 @@ class SpettacoliController(QObject):
         if isinstance(cur_spettacolo, Regia):
             tipo_spettacolo: str = ""
             if cur_opera := self.__model.get_opera(cur_spettacolo.get_id_opera()):
-                tipo_spettacolo = f'Questo spettacolo è una Regia associata all\'opera "{cur_opera.get_nome()}".'
+                tipo_spettacolo = (
+                    "**Questo spettacolo è una Regia associata "
+                    + f'all\'opera "{cur_opera.get_nome()}".**'
+                )
             cur_pagina.set_data(spettacolo_data, tipo_spettacolo)
         else:
             cur_pagina.set_data(spettacolo_data)

@@ -36,7 +36,7 @@ class ListLayout(QVBoxLayout):
         self.__label = label  # Messagi di errore quando la lista è vuota
 
         self.addWidget(self.__label)
-        self.__label.hide()  # Il label viene nascosto dalla propria ListLayout.
+        self.__label.hide()  # La label viene nascosta dalla propria ListLayout.
 
     def svuota_layout(self, layout: Optional[QLayout] = None) -> None:
         """Aggiunge il `EmptyStateLabel` indicato nell'`__init__` dopo svuotare il layout."""
@@ -60,7 +60,7 @@ class ListLayout(QVBoxLayout):
         """Mostra un messaggio indicando che la lista non ha istanze da visualizzare."""
         self.setContentsMargins(2, 2, 2, 2)
         self.__label.show()
-        # Siccome il label non viene mai rimosso dal layout, usare direttamente
+        # Siccome la label non viene mai rimosso dal layout, usare direttamente
         #   self.__label.show() è sicuro. Comunque, questa è la logica usata nel
         #   caso in cui non è sicuro che il primo elemento (se c'è) sia EmptyStateLabel.
         # item = self.itemAt(0)

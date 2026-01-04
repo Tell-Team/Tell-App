@@ -5,7 +5,7 @@ from view.info.utils import GenerePageData
 
 
 class ModificaGenereView(NuovoGenereView):
-    """Sottoclasse di `NuovoGenereView`. Modifica alcuni label della pagina ed aggiunge
+    """Sottoclasse di `NuovoGenereView`. Modifica alcune label della pagina ed aggiunge
     un'attributo `cur_id_genere` per indicare l'id del genere da modificare."""
 
     # ------------------------- SETUP INIT -------------------------

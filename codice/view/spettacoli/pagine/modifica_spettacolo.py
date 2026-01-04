@@ -1,14 +1,14 @@
-from PyQt6.QtWidgets import QLabel
 from typing import override
 
 from view.spettacoli.pagine import NuovoSpettacoloView
 from view.spettacoli.utils import SpettacoloPageData
 
+from view.utils.hyphenate_text import HyphenatedLabel
 from view.style.uiStyle import QssStyle
 
 
 class ModificaSpettacoloView(NuovoSpettacoloView):
-    """Sottoclasse di `NuovoSpettacoloView`. Modifica alcuni label della pagina ed aggiunge
+    """Sottoclasse di `NuovoSpettacoloView`. Modifica alcune label della pagina ed aggiunge
     un'attributo `cur_id_spettacolo` per indicare l'id dello spettacolo da modificare.
     """
 
@@ -24,9 +24,9 @@ class ModificaSpettacoloView(NuovoSpettacoloView):
         # Aggiorna header
         self._header.setText("Modifica spettacolo")
 
-        self.__tipo_spettacolo = QLabel("")
-        self.__tipo_spettacolo.setWordWrap(True)
+        self.__tipo_spettacolo = HyphenatedLabel()
         self.__tipo_spettacolo.setProperty(QssStyle.SECONDARY_TEXT, True)
+
         self._form_layout.addWidget(self.__tipo_spettacolo)
 
     # ------------------------- METODI DI VIEW -------------------------

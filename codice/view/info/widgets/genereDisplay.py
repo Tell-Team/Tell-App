@@ -5,6 +5,7 @@ from functools import partial
 from model.pianificazione.genere import Genere
 
 from view.utils.list_widgets import ItemDisplay
+from view.utils.hyphenate_text import HyphenatedLabel
 from view.style import QssStyle
 
 
@@ -32,9 +33,8 @@ class GenereDisplay(ItemDisplay):
         nome = QLabel(g.get_nome())
         nome.setProperty(QssStyle.HEADER2, True)
 
-        descrizione = QLabel(g.get_descrizione())
+        descrizione = HyphenatedLabel(g.get_descrizione())
         descrizione.setProperty(QssStyle.PARAGRAPH, True)
-        descrizione.setWordWrap(True)
 
         # Pulsanti Modifica-Elimina
         self.__btn_modifica = QPushButton("Modifica")

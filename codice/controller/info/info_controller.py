@@ -110,15 +110,12 @@ class InfoController(QObject):
 
         :param layout: layout dove saranno caricate tutte le opere
         """
-        lista_opere: list[Opera] = []
-
         # Verifica se c'è un filtro di ricerca
         filtro = self.__info_section.filtro_ricerca
 
-        if filtro == "":
-            lista_opere = self.__get_opere()
-        else:
-            lista_opere = self.__get_opere_by_nome(filtro)
+        lista_opere = (
+            self.__get_opere() if not filtro else self.__get_opere_by_nome(filtro)
+        )
 
         # Verifica che la lista non sia vuota
         if not lista_opere:

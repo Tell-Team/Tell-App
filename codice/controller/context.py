@@ -192,7 +192,7 @@ class AppContext:
             if sig and hasattr(sig, "connect"):
                 sig.connect(handler)
             # else:
-            #     print(f" - {sig_name} no trovato o non è un segnale di {c}")
+            #     print(f" - {sig_name} non trovato o non è un segnale di {controller}")
 
         for c in controllers:
             for sig_name, handler in signal_map.items():
