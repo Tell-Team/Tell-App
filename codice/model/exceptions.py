@@ -20,3 +20,27 @@ class OggettoInUsoException(Exception):
     """L'oggetto fornito è collegato ad altri oggetti in memoria."""
 
     pass
+
+
+class PermessiInsufficientiException(Exception):
+    """L'utente corrente non ha permessi sufficienti per compiere l'azione."""
+
+    pass
+
+
+class AccountInesistenteException(Exception):
+    """L'account richiesto non è presente in memoria."""
+
+    pass
+
+
+class CredenzialiErrateException(Exception):
+    """Le credenziali fornite sono errate."""
+
+    pass
+
+
+class UsernameOccupatoException(Exception):
+    """L'username è già in uso da parte di un altro account"""
+
+    pass

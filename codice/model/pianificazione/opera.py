@@ -65,7 +65,6 @@ class Opera:
             raise DatoIncongruenteException("Il next_id non può essere minore di 0.")
 
         Opera.__next_id = next_id
-        return True
 
     def set_nome(self, nome: str):
         """Throws: DatoIncongruenteException"""
@@ -74,7 +73,6 @@ class Opera:
             raise DatoIncongruenteException("Il nome non può essere vuoto.")
 
         self.__nome = nome_stripped
-        return True
 
     def set_compositore(self, compositore: str):
         """Throws: DatoIncongruenteException"""
@@ -83,7 +81,6 @@ class Opera:
             raise DatoIncongruenteException("Il compositore non può essere vuoto.")
 
         self.__compositore = compositore_stripped
-        return True
 
     def set_librettista(self, librettista: str):
         """Throws: DatoIncongruenteException"""
@@ -92,7 +89,6 @@ class Opera:
             raise DatoIncongruenteException("Il librettista non può essere vuoto.")
 
         self.__librettista = librettista_stripped
-        return True
 
     def set_numero_atti(self, numero_atti: int):
         """Throws: DatoIncongruenteException"""
@@ -102,7 +98,6 @@ class Opera:
             )
 
         self.__numero_atti = numero_atti
-        return True
 
     def set_data_prima_rappresentazione(self, data_prima_rappresentazione: date):
         self.__data_prima_rappresentazione = data_prima_rappresentazione
@@ -116,7 +111,6 @@ class Opera:
             )
 
         self.__teatro_prima_rappresentazione = teatro_prima_rappresentazione_stripped
-        return True
 
     def set_trama(self, trama: str):
         """Throws: DatoIncongruenteException"""
@@ -125,7 +119,6 @@ class Opera:
             raise DatoIncongruenteException("La trama non può essere vuota.")
 
         self.__trama = trama_stripped
-        return True
 
     def set_id_genere(self, id_genere: int):
         """Throws: DatoIncongruenteException"""

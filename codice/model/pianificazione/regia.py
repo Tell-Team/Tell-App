@@ -33,10 +33,11 @@ class Regia(Spettacolo):
     # Setters
     def set_regista(self, regista: str):
         """Throws: DatoIncongruenteException"""
-        if regista == "":
+        regista_stripped = regista.strip()
+        if regista_stripped == "":
             raise DatoIncongruenteException("Il regista non può essere vuoto.")
 
-        self.__regista = regista
+        self.__regista = regista_stripped
 
     def set_anno_produzione(self, anno_produzione: int):
         """Throws: DatoIncongruenteException"""

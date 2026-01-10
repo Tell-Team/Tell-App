@@ -47,38 +47,54 @@ class Spettacolo:
 
     def set_titolo(self, titolo: str):
         """Throws: DatoIncongruenteException"""
-        if titolo == "":
+        titolo_stripped = titolo.strip()
+        if titolo_stripped == "":
             raise DatoIncongruenteException("Il titolo non può essere vuoto.")
 
-        self.__titolo = titolo
+        self.__titolo = titolo_stripped
 
     def set_note(self, note: str):
         """Throws: DatoIncongruenteException"""
-        if note == "":
+        note_stripped = note.strip()
+        if note_stripped == "":
             raise DatoIncongruenteException("Le note non possono essere vuote.")
 
-        self.__note = note
+        self.__note = note_stripped
 
     def set_interpreti(self, interpreti: dict[str, str]):
         """Throws: DatoIncongruenteException"""
-        if "" in interpreti.keys():
+        interpreti_stripped = dict(
+            zip(
+                map(lambda i: i.strip(), interpreti.keys()),
+                map(lambda i: i.strip(), interpreti.values()),
+            )
+        )
+
+        if "" in interpreti_stripped.keys():
             raise DatoIncongruenteException(
                 "Il ruolo dell'interprete non può essere vuoto."
             )
-        if "" in interpreti.values():
+        if "" in interpreti_stripped.values():
             raise DatoIncongruenteException(
                 "Il nome dell'interprete non può essere vuoto."
             )
 
-        self.__interpreti = interpreti
+        self.__interpreti = interpreti_stripped
 
     def set_tecnici(self, tecnici: dict[str, str]):
         """Throws: DatoIncongruenteException"""
-        if "" in tecnici.keys():
+        tecnici_stripped = dict(
+            zip(
+                map(lambda i: i.strip(), tecnici.keys()),
+                map(lambda i: i.strip(), tecnici.values()),
+            )
+        )
+
+        if "" in tecnici_stripped.keys():
             raise DatoIncongruenteException(
                 "Il ruolo del tecnico non può essere vuoto."
             )
-        if "" in tecnici.values():
+        if "" in tecnici_stripped.values():
             raise DatoIncongruenteException("Il nome del tecnico non può essere vuoto.")
 
-        self.__tecnici = tecnici
+        self.__tecnici = tecnici_stripped

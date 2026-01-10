@@ -38,11 +38,10 @@ class GestoreGeneri:
     # Modificatori
     def aggiungi_genere(self, genere: Genere):
         """Throws: IdOccupatoException"""
-        for g in self.__lista_generi:
-            if g.get_id() == genere.get_id():
-                raise IdOccupatoException(
-                    f"E' già presente un genere con id {g.get_id()}."
-                )
+        if self.ha_genere(genere.get_id()):
+            raise IdOccupatoException(
+                f"E' già presente un genere con id {genere.get_id()}."
+            )
 
         self.__lista_generi.append(genere)
 

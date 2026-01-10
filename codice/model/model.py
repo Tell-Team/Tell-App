@@ -1,3 +1,5 @@
+from model.gestori.gestore_accounts import GestoreAccounts
+from model.account.account import Account, Ruolo
 from model.gestori.gestore_generi import GestoreGeneri
 from model.gestori.gestore_opere import GestoreOpere
 from model.gestori.gestore_spettacoli import GestoreSpettacoli
@@ -22,6 +24,12 @@ class Model:
             self.set_db_path("./db/")
         else:
             self.set_db_path(db_path)
+
+        try:
+            self.__carica_accounts()
+            Account.set_next_id(self.__gestore_accounts.get_max_id() + 1)
+        except FileNotFoundError:
+            self.__gestore_accounts = GestoreAccounts()
 
         try:
             self.__carica_generi()
@@ -55,6 +63,10 @@ class Model:
         self.__db_path = db_path
 
     # Caricamenti
+    def __carica_accounts(self):
+        with open(os.path.join(self.__db_path, "accounts.pkl"), "rb") as f:
+            self.__gestore_accounts: GestoreAccounts = load(f)
+
     def __carica_generi(self):
         with open(os.path.join(self.__db_path, "generi.pkl"), "rb") as f:
             self.__gestore_generi: GestoreGeneri = load(f)
@@ -68,6 +80,10 @@ class Model:
             self.__gestore_spettacoli: GestoreSpettacoli = load(f)
 
     # Salvataggi
+    def __salva_accounts(self):
+        with open(os.path.join(self.__db_path, "accounts.pkl"), "wb") as f:
+            dump(self.__gestore_accounts, f)
+
     def __salva_generi(self):
         with open(os.path.join(self.__db_path, "generi.pkl"), "wb") as f:
             dump(self.__gestore_generi, f)
@@ -81,12 +97,21 @@ class Model:
             dump(self.__gestore_spettacoli, f)
 
     # Getters
+    #   ACCOUNTS
+    def get_account(self, id_: int) -> Optional[Account]:
+        return self.__gestore_accounts.get_account(id_)
+
+    def get_accounts(self) -> list[Account]:
+        return self.__gestore_accounts.get_accounts()
+
+    #   GENERI
     def get_genere(self, id_: int) -> Optional[Genere]:
         return self.__gestore_generi.get_genere(id_)
 
     def get_generi(self) -> list[Genere]:
         return self.__gestore_generi.get_generi()
 
+    #   OPERE
     def get_opera(self, id_: int) -> Optional[Opera]:
         return self.__gestore_opere.get_opera(id_)
 
@@ -96,6 +121,7 @@ class Model:
     def get_opere_by_nome(self, nome: str) -> list[Opera]:
         return self.__gestore_opere.get_opere_by_nome(nome)
 
+    #   SPETTACOLI
     def get_spettacolo(self, id_: int) -> Optional[Spettacolo]:
         return self.__gestore_spettacoli.get_spettacolo(id_)
 
@@ -105,6 +131,7 @@ class Model:
     def get_spettacoli_by_titolo(self, titolo: str) -> list[Spettacolo]:
         return self.__gestore_spettacoli.get_spettacoli_by_titolo(titolo)
 
+    #   REGIE
     def get_regie_by_opera(self, id_: int) -> list[Regia]:
         return self.__gestore_spettacoli.get_regie_by_opera(id_)
 
@@ -123,7 +150,38 @@ class Model:
                 f"Non è presente nessun'opera con id {regia.get_id_opera()}."
             )
 
+    # Login
+    def login(self, username: str, password: str) -> int:
+        """Throws: CredenzialiErrateException, AccountInesistenteException"""
+        return self.__gestore_accounts.login(username, password)
+
     # Modificatori
+    #   ACCOUNTS
+    def aggiungi_account(self, account: Account, agent_id: int):
+        """Throws: UsernameOccupatoException, PermessiInsufficientiException, IdOccupatoException, IdInesistenteException"""
+        self.__gestore_accounts.aggiungi_account(account, agent_id)
+        self.__salva_accounts()
+
+    def elimina_account(self, id_: int, agent_id: int):
+        """Throws: IdInesistenteException, PermessiInsufficientiException"""
+        self.__gestore_accounts.elimina_account(id_, agent_id)
+        self.__salva_accounts()
+
+    def cambia_password(
+        self, account_id: int, password_corrente: str, nuova_password: str
+    ):
+        """Throws: CredenzialiErrateException, DatoIncongruenteException, IdInesistenteException"""
+        self.__gestore_accounts.cambia_password(
+            account_id, password_corrente, nuova_password
+        )
+        self.__salva_accounts()
+
+    def cambia_ruolo(self, account_id: int, nuovo_ruolo: Ruolo, agent_id: int):
+        """Throws: PermessiInsufficientiException, IdInesistenteException"""
+        self.__gestore_accounts.cambia_ruolo(account_id, nuovo_ruolo, agent_id)
+        self.__salva_accounts()
+
+    #   GENERI
     def aggiungi_genere(self, genere: Genere):
         """Throws: IdOccupatoException"""
         self.__gestore_generi.aggiungi_genere(genere)
@@ -142,6 +200,7 @@ class Model:
         self.__gestore_generi.modifica_genere(genere_modificato)
         self.__salva_generi()
 
+    #   OPERE
     def aggiungi_opera(self, opera: Opera):
         """Throws: IdInesistenteException, IdOccupatoException"""
         self.__valida_opera(opera)
@@ -164,6 +223,7 @@ class Model:
         self.__gestore_opere.modifica_opera(opera_modificata)
         self.__salva_opere()
 
+    #   SPETTACOLI
     def aggiungi_spettacolo(self, spettacolo: Spettacolo):
         """Throws: IdInesistenteException, IdOccupatoException"""
         if type(spettacolo) is Regia:

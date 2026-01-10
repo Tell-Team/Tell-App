@@ -53,11 +53,10 @@ class GestoreOpere:
     # Modificatori
     def aggiungi_opera(self, opera: Opera):
         """Throws: IdOccupatoException"""
-        for o in self.__lista_opere:
-            if o.get_id() == opera.get_id():
-                raise IdOccupatoException(
-                    f"E' già presente un'opera con id {o.get_id()}."
-                )
+        if self.ha_opera(opera.get_id()):
+            raise IdOccupatoException(
+                f"E' già presente un'opera con id {opera.get_id()}."
+            )
 
         self.__lista_opere.append(opera)
 
