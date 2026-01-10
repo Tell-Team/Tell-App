@@ -5,46 +5,59 @@
 %   - Niente di error handling;
 %   - Niente di "Il caso d'uso inizia quando..."
 
-% Nelle definizioni, usare "WORD, Word" o "WORD" per indicare la parola
-%   da definere (non usare minuscolo).
-% Evitare usare solo "word" (può essere confuso se nelle descrizioni di casi
-%   d'uso uso "WORD").
 
-% Io penso che "WORD" come la parola da definire ed includere "Word" nei sinonimi
-%   è la forma corretta di fare le definizioni.
+%--- CONVENZIONI NELLA GRAMMATICA DELLA TESINA: ---
+% #1: Per pratticità, noi useremo include() e blocchi if nelle descrizioni dei casi d'uso.
+%   - "include()" viene usato per indicare altri casi d'uso come passi della sequenza degli eventi
+%        principali di un casi d'uso in particolare.
+%   - I "blocchi if" vengono usati per i passi dove si verifica il tipo di account dell'utente.
+%
+% #2: Nella tabella del glossario ci devono essere 4 sezioni: Termine, Sinonimi, Definizione, Esempi d'uso.
+%     - "Termine" contiene il termino canonico da utilizzare nelle descrizioni dei casi d'uso scritto in 
+%         all-caps "PAROLA" (oppure come "Parola" se necessario). Se "parola" è presente nelle descrizioni,
+%         si riferisce ad un'altro termine, e.g. sezione (dell'app) e Sezione (del teatro). 
+%     - "Sinonimi" contiene tutte le possibili varianti trovate nelle descrizioni. Qui ci possono essere le
+%         versioni come "Parola".
+%     - "Definizione" contiene il significato inequivocabile del termine.
+%     - "Esempi d'uso" contiene i casi un cui si può usare e trovare il termine, se necessario chiarirlo.
+%
+% #3: Le precondizioni possono usare questi tre tempi verbali:
+%  	- Presente semplice per condizioni che devono verificarsi una volta, e.g. "si trova", "è autenticato".
+% 	- Presente progresivo per condizioni che devono verificarsi continuamente, e.g. "sta visualizzando".
+%
+% #4: Sia le precondizioni che le postcondizioni devono seguire la struttura della Soggetto-Verbo-Oggetto.
+%--- END
 
-% Potrei aggiungere nei sinonimi le possibile varianti di "WORD".
-% --- ESSERE SEMPRE CONSISTENTE NELL'USO DELLE PAROLE ---
-% Potrei usare una sezione del dizionario per indicare "Note e esempi di dove trovare la parola".
-%   Meglio non aggiungere plurali nei sinonimi. Quella sezione è riservata per termini canonici.
+%--- CONVEZIONE NEI TERMINI USATI NELLA TESINA: ---
+% La parola "sistema" viene scritta in minuscolo.
+% Evitare l'uso di "dettagli".
 
-
-% "memorizzate nel sistema"(1) :  Deve avere un uso consistente in tutte le tabelle.
+% "memorizzate"(1) :  Deve avere un uso consistente in tutte le tabelle. Usato per indicare istanze
+%   memorizzate nel model. Quando si parla di liste associate a un'istanza, e.g. le regie associate all'opera,
+%    non è necessario usare questo termine.
 % "Informazioni"(2) : In maiuscole, è il nome della sezione Info ed ha bisogno di una
 %   definizione precisa.
-% "mostra <oggetto> a schermo"(3) : Concetto usato nei passi realizzati dal sistema.
-% "visualizza <oggetto> a schermo"(4) : Concetto usato nei passi realizzati dal'utente.
-% "è posizionato"(5) : Deve avere un uso consistente in tutte le tabelle.
+% "mostra a schermo <oggetto>"(3) : Concetto usato nei passi realizzati dal sistema.
+% "visualizza a schermo <oggetto>"(4) : Concetto usato nei passi realizzati dal'utente.
+% "si trova"(5) : Deve avere un uso consistente in tutte le tabelle.
 % "associate"(6) : Il suo modo di uso è "lista [instanze A] associate a [instanza B]".
 % "lista di <oggetto>"(7) : Deve usare sempre "di". No "delle" o "degli".
 % "Spettacoli"(8) : In maiuscole, è il nome della sezione Spettacoli ed ha bisogno di
 %   una definizione precisa.
 % "visualizza in più dettaglio"(9) : Per indicare i casi d'uso Visualizza. Devo darli una
-%   definizione megliore.
+%   definizione megliore. % - Studiare il suo uso nelle descrizioni.
 
-% La parola "sistema" viene scritta in minuscolo.
 % "nel suo nome" : Usato in Ricerca Opera
 % "nel suo titolo" : Usato in Ricerca Spettacolo
 
-% Evitare l'uso di "dettagli".
 % Utilizzare "informazioni essenziali" per i casi d'uso di Lista.
 % Utilizzare "informazioni" per i casi d'uso di Visualizza.
 % - Revisare l'uso di "dati" nelle descrizioni.
 
-% - "ottiene" : Studiarla nel suo contesto. Non sono convinto.
-% - "eliminate" : Studiarla nel suo contesto. Non sono convinto.
-% - "visualizzare in più dettaglio" : Studiare il suo uso nelle descrizioni.
+% "non vengono inclusi" : Usato per indicare le instanze che non sono visualizzate nei casi d'uso di ricerca.
 
+% - "ottiene" : Studiarla nel suo contesto. Non sono convinto.
+%---END
 
 % UC: Lista Opere		[X]
 % UC ext: Ricerca Opera	[X]
@@ -63,332 +76,233 @@
 % UC ext: Elimina Prenotazione	[]
 % UC: Genera ricevuta		[X]
 
+\newcommand{\attori}{Cliente \\ Biglietteria \\ Amministratore}
 
-% UC: Lista Opere
-\begin{table}[H]
-    \begin{tabular}{|p{\linewidth}|}
-        \hline
-        \cellcolor{gray!100}
-        \color{white}
-        \centerline{\textbf{Caso d'uso:} Lista Opere} \\
-        \hline
-        \textbf{ID:} 1 \\
-        \hline
-        \cellcolor{gray!20}
-        \textbf{Breve descrizione:} \\
-        \cellcolor{gray!20}
-        L'utente ottiene la lista di opere memorizzate nel sistema. \\
-        % - "ottiene"
-        % "memorizzate nel sistema"(1)
-        \hline
-        \textbf{Attori primari:} \\
-        \begin{minipage}{\linewidth}
-            Cliente \\
-            Biglietteria \\
-            Amministratore
-        \end{minipage}
-        \vspace{0pt} \\  % Utilizzo \vspace{} per regolare lo spazio tra le sezioni delle tabelle.
-        \hline
-        \textbf{Attori secondari:} \\
-        Nessuno. \\
-        \hline
-        \cellcolor{gray!20}
-        \textbf{Precondizioni:} \\
-        \cellcolor{gray!20}
-        \begin{minipage}{\linewidth}
-            \begin{enumerate}
-                \item L'utente è posizionato nella sezione Informazioni.
-                % "Informazioni"(2)
-                % "è posizionato"(5)
-            \end{enumerate}
-        \end{minipage} \\
-        \hline
-        \textbf{Sequenza degli eventi principale:}
-        \begin{enumerate}
-            \item Il sistema mostra le informazioni essenziali di tutte le opere memorizzate a schermo.
-            % "mostra <oggetto> a schermo"(3)
-            \item Il sistema permette all'utente di visualizzare in più dettaglio le opere.
-            % "visualizza in più dettaglio"(9)
-            \item Il sistema permette all'Amministratore di modificare ed eliminare le opere.
-            \item[] \textbf{punto di estensione:} filtro ricerca
-        \end{enumerate} \\
-        \hline
-        \cellcolor{gray!20}
-        \textbf{Postcondizioni:} \\
-        \cellcolor{gray!20}
-        \begin{minipage}{\linewidth}
-            \begin{enumerate}
-                \item Viene visualizzata la lista di opere memorizzate a schermo.
-                % "visualizza <oggetto> a schermo"(4)
-            \end{enumerate}
-        \end{minipage} \\
-        \hline
-        \textbf{Sequenza degli eventi alternativa:} \\
-        Nessuna. \\
-        \hline
-    \end{tabular}
-\end{table}
 
-% UC EXT: Ricerca Opera
-\begin{table}[H]
-    \begin{tabular}{|p{\linewidth}|}
-        \hline
-        \cellcolor{gray!100}
-        \color{white}
-        \centerline{\textbf{Caso d'uso di estensione:} Ricerca Opera} \\
-        \hline
-        \textbf{ID:} 2 \\
-        \hline
-        \cellcolor{gray!20}
-        \textbf{Breve descrizione:} \\
-        \cellcolor{gray!20}
-        \textbf{Segmento 1:} L'utente filtra la lista di opere tramite una parola chiave ricercata nel nome. \\
-        \hline
-        \textbf{Attori primari:} \\
-        \begin{minipage}{\linewidth}
-            Cliente \\
-            Biglietteria \\
-            Amministratore
-        \end{minipage}
-        \vspace{0pt} \\
-        \hline
-        \textbf{Attori secondari:} \\
-        Nessuno. \\
-        \hline
-        \cellcolor{gray!20}
-        \textbf{Precondizioni del segmento 1:} \\
-        \cellcolor{gray!20}
-        \begin{minipage}{\linewidth}
-            \begin{enumerate}
-                \item L'utente è posizionato nella sezione Informazioni.
-                % "è posizionato"(5)
-                % "Informazioni"(2)
-            \end{enumerate}
-        \end{minipage} \\
-        \hline
-        \textbf{Sequenza degli eventi principale del segmento 1:}
-        \begin{enumerate}
-            \item L'utente effettua una ricerca specificando una chiave di ricerca.
-            \item Le opere che non contengono la parola chiave nel suo nome vengono eliminate dalla lista risultante.
-            % "nel suo nome"
-            % - "eliminate"??? "rimosse" sarebbe grammaticalmente corretto?
-        \end{enumerate} \\
-        \hline
-        \cellcolor{gray!20}
-        \textbf{Postcondizioni del segmento 1:} \\
-        \cellcolor{gray!20}
-        \begin{minipage}{\linewidth}
-            \begin{enumerate}
-                \item La lista risultante è filtrata.
-            \end{enumerate}
-        \end{minipage} \\
-        \hline
-    \end{tabular}
-\end{table}
+{\ucTable	% UC: Lista Opere
+{	% Caso d'uso
+	Lista Opere
+	
+}{	% ID
+	1
+	
+}{	% Breve descrizione
+	L'utente ottiene la lista di opere memorizzate nel sistema.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+		\item L'utente è posizionato nella sezione Informazioni.
+		% "Informazioni"(2)
+		% "è posizionato"(5)
+	\end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+		\item Il sistema mostra le informazioni essenziali di tutte le opere memorizzate a schermo.
+		% "mostra <oggetto> a schermo"(3)
+		\item Il sistema permette all'utente di visualizzare in più dettaglio le opere.
+		% "visualizza in più dettaglio"(9)
+		\item Il sistema permette all'Amministratore di modificare ed eliminare le opere.
+		\item[] \textbf{punto di estensione:} filtro ricerca
+	\end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+		\item Viene visualizzata la lista di opere memorizzate a schermo.
+		% "visualizza <oggetto> a schermo"(4)
+	\end{enumerate}
+	
+}{	% Sequenza Eventi Alternativa
+} }
 
-% UC: Visualizza Opera
-\begin{table}[H]
-    \begin{tabular}{|p{\linewidth}|}
-        \hline
-        \cellcolor{gray!100}
-        \color{white}
-        \centerline{\textbf{Caso d'uso:} Visualizza Opera} \\
-        \hline
-        \textbf{ID:} 3 \\
-        \hline
-        \cellcolor{gray!20}
-        \textbf{Breve descrizione:} \\
-        \cellcolor{gray!20}
-        L'utente ottiene le informazioni riguardo una singola opera. \\
-        % - "ottiene"
-        \hline
-        \textbf{Attori primari:} \\
-        \begin{minipage}{\linewidth}
-            Cliente \\
-            Biglietteria \\
-            Amministratore
-        \end{minipage}
-        \vspace{0pt} \\
-        \hline
-        \textbf{Attori secondari:} \\
-        Nessuno. \\
-        \hline
-        \cellcolor{gray!20}
-        \textbf{Precondizioni:} \\
-        \cellcolor{gray!20}
-        \begin{minipage}{\linewidth}
-            \begin{enumerate}
-                \item L'utente è posizionato nella sezione Informazioni.
-                % "Informazioni"(2)
-                % "è posizionato"(5)
-            \end{enumerate}
-        \end{minipage} \\
-        \hline
-        \textbf{Sequenza degli eventi principale:}
-        \begin{enumerate}
-            \item L'utente richiede le informazioni di un'opera.
-            \item Il sistema mostra le informazioni a schermo.
-            \item Il sistema mostra la lista di regie, associate all'opera, a schermo.
-            % "mostra <oggetto> a schermo"(3) 
-            % "associate"(6)
-            \item[] \textbf{punto di estensione:} Crea nuova Regia
-            % - Le regie sono create nella pagina VisualizzaOpera
-        \end{enumerate} \\
-        \hline
-        \cellcolor{gray!20}
-        \textbf{Postcondizioni:} \\
-        \cellcolor{gray!20}
-        \begin{minipage}{\linewidth}
-            \begin{enumerate}
-                \item Sono visualizzate le informazioni dell'opera a schermo.
-                % "visualizza <oggetto> a schermo"(4)
-            \end{enumerate}
-        \end{minipage} \\
-        \hline
-        \textbf{Sequenza degli eventi alternativa:} \\
-        Nessuna. \\
-        \hline
-    \end{tabular}
-\end{table}
 
-% UC: Lista Regie
-\begin{table}[H]
-    \begin{tabular}{|p{\linewidth}|}
-        \hline
-        \cellcolor{gray!100}
-        \color{white}
-        \centerline{\textbf{Caso d'uso:} Lista Regie} \\
-        \hline
-        \textbf{ID:} 4 \\
-        \hline
-        \cellcolor{gray!20}
-        \textbf{Breve descrizione:} \\
-        \cellcolor{gray!20}
-        L'utente ottiene la lista di regie associate all'opera che sta visualizzando. \\
-        % - "ottiene"
-        % "associate"(6)
-        \hline
-        \textbf{Attori primari:} \\
-        \begin{minipage}{\linewidth}
-            Cliente \\
-            Biglietteria \\
-            Amministratore
-        \end{minipage}
-        \vspace{0pt} \\
-        \hline
-        \textbf{Attori secondari:} \\
-        Nessuno. \\
-        \hline
-        \cellcolor{gray!20}
-        \textbf{Precondizioni:} \\
-        \cellcolor{gray!20}
-        \begin{minipage}{\linewidth}
-            \begin{enumerate}
-                \item L'utente sta visualizzando una singola opera.
-            \end{enumerate}
-        \end{minipage} \\
-        \hline
-        \textbf{Sequenza degli eventi principale:}
-        \begin{enumerate}
-            \item Il sistema mostra le informazioni essenziali di tutte le regie, associate all'opera, a schermo.
-            % "mostra <oggetto> a schermo"(3)
-            % "associate"(6)
-            % - Qui non uso la parola "memorizzate". Dovrei omittere la parola del concetto?
-            % - Mattia usa "informazioni rilevanti dell'evento (es. ...)" per Lista Eventi
-            \item Il sistema permette all'Amministratore di modificare ed eliminare le regie.
-        \end{enumerate} \\
-        \hline
-        \cellcolor{gray!20}
-        \textbf{Postcondizioni:} \\
-        \cellcolor{gray!20}
-        \begin{minipage}{\linewidth}
-            \begin{enumerate}
-                \item Viene visualizzata la lista di regie, associate all'opera, a schermo.
-                % "visualizza <oggetto> a schermo"(4)
-                % "associate"(6)
-            \end{enumerate}
-        \end{minipage} \\
-        \hline
-        \textbf{Sequenza degli eventi alternativa:} \\
-        Nessuna. \\
-        \hline
-    \end{tabular}
-\end{table}
 
-% UC: Lista Spettacoli
-\begin{table}[H]
-    \begin{tabular}{|p{\linewidth}|}
-        \hline
-        \cellcolor{gray!100}
-        \color{white}
-        \centerline{\textbf{Caso d'uso:} Lista Spettacoli} \\
-        \hline
-        \textbf{ID:} 5 \\
-        \hline
-        \cellcolor{gray!20}
-        \textbf{Breve descrizione:} \\
-        \cellcolor{gray!20}
-        L'utente ottiene la lista di spettacoli memorizzati nel sistema. \\
-        % - "ottiene"
-        % "memorizzate nel sistema"(1)
-        \hline
-        \textbf{Attori primari:} \\
-        \begin{minipage}{\linewidth}
-            Cliente \\
-            Biglietteria \\
-            Amministratore \\
-        \end{minipage}
-        \vspace{-10pt} \\ 
-        \hline
-        \textbf{Attori secondari:} \\
-        Nessuno. \\
-        \hline
-        \cellcolor{gray!20}
-        \textbf{Precondizioni:} \\
-        \cellcolor{gray!20}
-        \begin{minipage}{\linewidth}
-            \begin{enumerate}
-                \item L'utente è posizionato nella sezione Spettacoli.
-                % "Spettacoli"(8)
-            \end{enumerate}
-        \end{minipage} \\
-        \hline
-        \textbf{Sequenza degli eventi principale:}
-        \begin{enumerate}
-            \item Il sistema mostra le informazioni essenziali di tutti gli spettacoli memorizzati a schermo.
-            % "mostra <oggetto> a schermo"(3)
-            \item Il sistema permette all'utente di visualizzare in più dettaglio gli spettacoli.
-            % "visualizza in più dettaglio"(9)
-            % - Che passi bisogna seguire? Non sono sicuro del passo precedente.
-            % - Ancora non conosco come vogliono la view della sezione Spettacoli
-            \item Il sistema permette all'Amministratore e Biglietteria di modificare ed eliminare gli spettacoli.
-            % - Non sono neanche sicuro se questo passo precedente è vero.
-            \item[] \textbf{punto di estensione:} filtro ricerca
-        \end{enumerate} \\
-        \hline
-        \cellcolor{gray!20}
-        \textbf{Postcondizioni:} \\
-        \cellcolor{gray!20}
-        \begin{minipage}{\linewidth}
-            \begin{enumerate}
-                \item Viene visualizzata la lista di spettacoli memorizzate a schermo.
-                % "visualizza <oggetto> a schermo"(4)
-            \end{enumerate}
-        \end{minipage} \\
-        \hline
-        \textbf{Sequenza degli eventi alternativa:} \\
-        Nessuna. \\
-        \hline
-    \end{tabular}
-\end{table}
+{\ucExtTable	% UC EXT: Ricerca Opera
+{	% Caso d'uso
+	Ricerca Opera
+	
+}{	% ID
+	2
+	
+}{	% Breve descrizione
+	L'utente filtra la lista di opere tramite una parola chiave ricercata nel nome.
+	
+}{	% Attori Primari
+	\attori
+}{	% Precondizioni
+	\begin{enumerate}
+		\item L'utente è posizionato nella sezione Informazioni.
+		% "è posizionato"(5)
+		% "Informazioni"(2)
+	\end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+		\item L'utente effettua una ricerca specificando una chiave di ricerca.
+		\item Le opere che non contengono la parola chiave nel suo nome vengono eliminate dalla lista risultante.
+		% "nel suo nome"
+		% - "eliminate"??? "rimosse" sarebbe grammaticalmente corretto?
+	\end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+		\item La lista risultante è filtrata.
+	\end{enumerate}
+} }
+
+
+{\ucTable	% UC: Visualizza Opera
+	{	% Caso d'uso
+		Visualizza Opera
+		
+	}{	% ID
+		3
+		
+	}{	% Breve descrizione
+		L'utente ottiene le informazioni riguardo una singola opera.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'utente è posizionato nella sezione Informazioni.
+			% "Informazioni"(2)
+			% "è posizionato"(5)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item L'utente richiede le informazioni di un'opera.
+			\item Il sistema mostra le informazioni a schermo.
+			\item Il sistema mostra la lista di regie, associate all'opera, a schermo.
+			% "mostra <oggetto> a schermo"(3) 
+			% "associate"(6)
+			\item[] \textbf{punto di estensione:} Crea nuova Regia
+			% - Le regie sono create nella pagina VisualizzaOpera
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item Sono visualizzate le informazioni dell'opera a schermo.
+			% "visualizza <oggetto> a schermo"(4)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucTable	% UC: Lista Regie
+	{	% Caso d'uso
+		Lista Regie
+		
+	}{	% ID
+		4
+		
+	}{	% Breve descrizione
+		L'utente ottiene la lista di regie associate all'opera che sta visualizzando.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'utente sta visualizzando una singola opera.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item Il sistema mostra le informazioni essenziali di tutte le regie, associate all'opera, a schermo.
+			% "mostra <oggetto> a schermo"(3)
+			% "associate"(6)
+			% - Qui non uso la parola "memorizzate". Dovrei omittere la parola del concetto?
+			% - Mattia usa "informazioni rilevanti dell'evento (es. ...)" per Lista Eventi
+			\item Il sistema permette all'Amministratore di modificare ed eliminare le regie.
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item Viene visualizzata la lista di regie, associate all'opera, a schermo.
+			% "visualizza <oggetto> a schermo"(4)
+			% "associate"(6)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucTable	% UC: Lista Spettacoli
+	{	% Caso d'uso
+		Lista Spettacoli
+		
+	}{	% ID
+		5
+		
+	}{	% Breve descrizione
+		L'utente ottiene la lista di spettacoli memorizzati nel sistema.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'utente è posizionato nella sezione Spettacoli.
+			% "Spettacoli"(8)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item Il sistema mostra le informazioni essenziali di tutti gli spettacoli memorizzati a schermo.
+			% "mostra <oggetto> a schermo"(3)
+			\item Il sistema permette all'utente di visualizzare in più dettaglio gli spettacoli.
+			% "visualizza in più dettaglio"(9)
+			% - Che passi bisogna seguire? Non sono sicuro del passo precedente.
+			% - Ancora non conosco come vogliono la view della sezione Spettacoli
+			\item Il sistema permette all'Amministratore e Biglietteria di modificare ed eliminare gli spettacoli.
+			% - Non sono neanche sicuro se questo passo precedente è vero.
+			\item[] \textbf{punto di estensione:} filtro ricerca
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item Viene visualizzata la lista di spettacoli memorizzati a schermo.
+			% "visualizza <oggetto> a schermo"(4)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+		Nessuna.
+} }
+
 
 % UC EXT: Ricerca Spettacolo
+{\ucExtTable
+	{	% Caso d'uso
+		Ricerca Spettacolo
+		
+	}{	% ID
+		
+		
+	}{	% Breve descrizione
+		
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		
+		
+	}{	% Sequenza Eventi Principale
+		
+		
+	}{	% Postcondizioni
+		
+		
+} }
 \begin{table}[H]
     \begin{tabular}{|p{\linewidth}|}
         \hline
         \cellcolor{gray!100}
         \color{white}
-        \centerline{\textbf{Caso d'uso di estensione:} Ricerca Spettacolo} \\
+        \centerline{\textbf{Caso d'uso di estensione:} } \\
         \hline
         \textbf{ID:} 6 \\
         \hline
