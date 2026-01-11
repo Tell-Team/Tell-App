@@ -14,13 +14,15 @@
 \setlist[enumerate]{label*=\arabic*., topsep=0pt, itemsep=0pt, parsep=0pt, partopsep=0pt} % Imposta gli indici di tutti i livelli di enumerazione come numeri arabi (invece del default che passa alle lettere) e rimuove il padding
 \usepackage{float} % Fornisce la posizione 'H' per le tabelle, che le posiziona direttamente dove specificato nel codice latex e non in cima alla pagina o altri comportamenti 'float' non desiderati
 
+\usepackage{etoolbox} % Permette di creare consdizioni nelle macro con \ifstrequal
+
 % Macros
-\newcommand{\mycount}[1]{\stepcounter{#1}\arabic{#1}}
+\input{macros.tex}
+
 
 \title{Tell: Gestore teatrale}
 \date{2025-06-20}
-\author
-{
+\author {
     Giuseppe Mariotti \\
     Riccardo Ripa \\
     Rodrigo Rengifo \\
@@ -33,123 +35,10 @@
     \newpage
     \pagenumbering{arabic}
 
-    \section{Panoramica}
-        Il progetto prevede la realizzazione di un applicativo che consenta la vendita di biglietti per eventi teatrali (come opere e concerti) e la divulgazione di informazioni a riguardo. Il sistema si articolerà, per l’acquirente, in due sezioni: la prima conterrà la lista di eventi disponibili all'acquisto, la seconda conterrà maggiori informazioni riguardo le opere, incluse quelle non in programma al momento. Per la biglietteria saranno disponibili sezioni per la gestione degli eventi e delle prenotazioni, mentre per l'amministratore saranno disponibili sezioni per la gestione delle informazioni riguardo le opere e della struttura posti del teatro. Dall’intervista con i responsabili marketing e ufficio stampa di un ente pesarese operante nel settore sono emerse varie necessità. L’interfaccia dovrà essere ottimizzata per favorire la semplicità del processo di acquisto del biglietto: un’eccessiva quantità di informazioni in primo accesso ridurrebbe l’intuitività e l’accessibilità. Il prezzo di un biglietto è determinato dalla tipologia di posto scelto e dal tipo di evento, nonché da una lista di sconti applicabili in base a determinati criteri. Una volta confermata la prenotazione, il totem digitale stamperà una ricevuta contenente l'identificativo che potrà essere usato per effettuare il pagamento in biglietteria. Le voci delle informazioni dell’evento (direttore d’orchestra, interpreti, tecnici e altri) dovranno essere totalmente flessibili viste le notevoli differenze fra i vari tipi di eventi. Un caso particolare di eventi sono le opere, che possono essere messe in scena solo tramite una regia (una direzione artistica che accoppia alle musiche e al libretto dell’opera i costumi, fondali e altri elementi necessari alla rappresentazione). Infine, nella sezione anagrafica, per ogni opera dovrà essere memorizzato e mostrato all’utente lo storico delle regie presenti e passate.
-    \newpage
 
-    \section{Glossario dei termini}
-        \begin{tblr}{h{3cm}h{2cm}m{10cm}}
-            \hline
-            \textbf{Termine} & \textbf{Sinonimi} & \textbf{Definizione} \\
-            \hline
-            Opera & N/A & Il testo e le musiche di un'opera lirica. Questi, a meno di casi li- mite che non interessano la realizzazione del software in questione, non vengono mai modificati. \\
-            Regia & N/A & I costumi, i fondali, la direzione coreografica e degli effetti speciali e, in generale, della narrazione visiva dell'opera. Periodicamente le opere ricevono una nuova regia, che viene realizzata da un regista. \\
-            Spettacolo & N/A & Le informazioni organizzative riguardo una determinata rappresentazione teatrale (di una \textbf{Regia} o altro tipo di spettacolo), come il cast, il direttore o il coro. \\
-            Evento & N/A & La data e l'ora in cui un determinato spettacolo viene messo in scena. Solitamente, ciascuno spettacolo viene ripetuto in molteplici eventi. \\
-            Cliente & N/A & L'aquirente di biglietti \\
-            Biglietteria & N/A & Il dipendente dell'ufficio biglietteria \\
-            Amministratore & N/A & Il gestore del sistema \\
-            Utente & N/A & Uno qualunque tra \textbf{Cliente}, \textbf{Biglietteria} e \textbf{Amministratore} \\
-            \hline
-        \end{tblr}
-    \newpage
-
-    \section{Gestione dei Requisiti}
-        \subsection{Requisiti progettuali}
-            \subsubsection{Diagramma}
-                \includegraphics{imgs/requisiti/requisiti}
-
-            \subsubsection{Requisiti Funzionali}
-                \newcounter{rf}
-
-                \textbf{Area Cliente} \\
-                    \textbf{RF\mycount{rf}: Visualizza opere} \\
-                    Il sistema dovrà mostrare al cliente le anagrafiche delle opere e l'archivio delle relative regie. \\
-                    \\
-                    \textbf{RF\mycount{rf}: Visualizza spettacoli} \\
-                    Il sistema dovrà mostrare al cliente la lista degli spettacoli e dei relativi eventi disponibili all'acquisto. \\
-                    \\
-                    \textbf{RF\mycount{rf}: Visualizza struttura posti} \\
-                    Il sistema dovrà consentire al cliente di visualizzare la struttura posti del teatro durante la composizione della prenotazione. \\
-                    \\
-                    \textbf{RF\mycount{rf}: Gestisci prenotazione} \\
-                    Il sistema dovrà consentire al cliente di creare una prenotazione e modificarne i posti o eliminarla completamente prima di averla confermata. \\
-                    \\
-                    \textbf{RF\mycount{rf}: Conferma prenotazione} \\
-                    Il sistema dovrà consentire al cliente di confermare la prenotazione, e produrre la ricevuta contenente l'identificativo della prenotazione per il pagamento alla cassa. \\ \\
-
-                \noindent \textbf{Area Biglietteria} \\
-                    \textbf{RF\mycount{rf}: Gestisci spettacoli} \\
-                    Il sistema dovrà consentire alla biglietteria di creare, modificare e rimuovere gli spettacoli in programma e i relativie eventi. \\
-                    \\
-                    \textbf{RF\mycount{rf}: Gestisci lista prenotazioni} \\
-                    Il sistema dovrà consentire alla biglietteria di visualizzare e modificare tutte le prenotazioni effettuate nel teatro e di contrassegnare le prenotazioni che sono state pagate in cassa. \\ \\
-
-                \noindent \textbf{Area Amministratore} \\
-                    \textbf{RF\mycount{rf}: Gestisci opere} \\
-                    Il sistema dovrà consentire all'amministratore di creare, modificare e rimuovere le anagrafiche delle opere e l'archivio delle relative regie. \\
-                    \\
-                    \textbf{RF\mycount{rf}: Gestisci struttura posti} \\
-                    Il sistema dovrà consentire all'amministratore di modificare la struttura posti del teatro. \\
-
-            \subsubsection{Requisiti Non Funzionali}
-                \newcounter{rnf}
-
-                \textbf{RNF\mycount{rnf}: Python3} \\
-                Il sistema dovrà essere implementato in linguaggio Python3. \\
-        \newpage
-
-        \subsection{Casi d'uso}
-            \subsubsection{Attori}
-                \textbf{Diagramma} \\ \\
-                    \includegraphics{imgs/use_case/attori}
-            \newpage
-
-            \subsubsection{Cliente}
-                \textbf{Diagramma} \\ \\
-                    \includegraphics[scale=0.8]{imgs/use_case/cliente}
-                \newpage
-
-                \textbf{Descrizioni}
-                    \input{ucdescriptions/cliente.tex}
-            \newpage
-
-            \subsubsection{Biglietteria}
-                \textbf{Diagramma} \\ \\
-                    \includegraphics[scale=0.6]{imgs/use_case/biglietteria}
-                \newpage
-
-                \textbf{Descrizioni}
-                    \input{ucdescriptions/biglietteria.tex}
-            \newpage
-
-            \subsubsection{Amministratore}
-                \textbf{Diagramma} \\ \\
-                    \includegraphics[scale=0.55]{imgs/use_case/amministratore}
-                \newpage
-
-                \textbf{Descrizioni}
-                    \input{ucdescriptions/amministratore.tex}
-                    
-        \subsection{Matrice di mapping}
-            \includegraphics[height=\textheight]{imgs/matrice/matrice}
-
-    \section{Analisi}
-        \subsection{Package}
-            \includegraphics{imgs/analisi/package}
-        \newpage
-
-        \subsection{Classi}
-            \includegraphics[height=\textheight]{imgs/analisi/classi}
-    
-    \section{Progettazione}
-        \subsection{Package}
-            \includegraphics{imgs/progettazione/package}
-        \newpage
-
-        \subsection{Classi}
-            \subsubsection{Principali}
-                \includegraphics[scale=0.8]{imgs/progettazione/classi}
-            \subsubsection{Gestori}
-                \includegraphics[scale=0.8]{imgs/progettazione/gestori}
+	%\include{sections/panoramica.tex}
+	%\include{sections/glossario-termini.tex}
+	\include{sections/gestione-requisiti.tex}
+	%\include{sections/analisi.tex}
+	%\include{sections/progettazione.tex}
 \end{document}
