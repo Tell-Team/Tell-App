@@ -20,11 +20,11 @@ from view.utils import PopupMessage
 from view.style import QssStyle
 
 
-class InfoController(QObject):
+class InfoSectionController(QObject):
     """Gestice la sezione Info (`InfoSectionView`) dell'app.
 
     Segnali:
-    - logoutRequest(): emesso per eseguire la funzione di logout dall`AppContext`;
+    - logoutRequest(): emesso per eseguire la funzione di logout dall'`AppContext`;
     - goToPageRequest(Pagina, bool): emesso per visualizzare un'altra pagina;
     - goToSectionRequest(Pagina): emesso per visualizzare un'altra pagina, senza salvarla
     nell'history del `NavigationController`;

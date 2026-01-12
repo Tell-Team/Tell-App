@@ -1,10 +1,21 @@
 from typing import Dict, Any, Optional
 from PyQt6.QtCore import pyqtSignal, QDate, QTime, Qt
 from PyQt6.QtWidgets import (
-    QWidget, QLabel, QComboBox, QPushButton, QFormLayout, QHBoxLayout,
-    QVBoxLayout, QMessageBox, QDateEdit, QTimeEdit, QCheckBox, QLineEdit
+    QWidget,
+    QLabel,
+    QComboBox,
+    QPushButton,
+    QFormLayout,
+    QHBoxLayout,
+    QVBoxLayout,
+    QMessageBox,
+    QDateEdit,
+    QTimeEdit,
+    QCheckBox,
+    QLineEdit,
 )
 from PyQt6.QtGui import QIntValidator
+
 
 class ModificaEventoView(QWidget):
     """
@@ -33,7 +44,7 @@ class ModificaEventoView(QWidget):
         self.setWindowTitle("Modifica Evento")
         self.setMinimumWidth(500)
         self.__titolo = QLabel("<h2>Modifica Evento</h2>")
-        
+
         self.__data_input = QDateEdit(calendarPopup=True)
         self.__ora_input = QTimeEdit()
         self.__sala_select = QComboBox()
@@ -64,7 +75,7 @@ class ModificaEventoView(QWidget):
         form.addRow(self.__prezzo_check)
         form.addRow("Prezzo:", self.__prezzo_input)
         layout.addLayout(form)
-        
+
         btns = QHBoxLayout()
         btns.addWidget(self.__btn_elimina)
         btns.addStretch()
@@ -88,9 +99,13 @@ class ModificaEventoView(QWidget):
         Popola il form.
         :raises: nessuna eccezione prevista.
         """
-        self.__data_input.setDate(QDate.fromString(dati.get("data"), Qt.DateFormat.ISODate))
-        self.__ora_input.setTime(QTime.fromString(dati.get("ora"), Qt.DateFormat.ISODate))
-        #Aggiungere logica per settare combobox e checkbox(?)
+        self.__data_input.setDate(
+            QDate.fromString(dati.get("data"), Qt.DateFormat.ISODate)
+        )
+        self.__ora_input.setTime(
+            QTime.fromString(dati.get("ora"), Qt.DateFormat.ISODate)
+        )
+        # Aggiungere logica per settare combobox e checkbox(?)
 
     def get_dati_form(self) -> Dict[str, Any]:
         """
@@ -114,5 +129,35 @@ class ModificaEventoView(QWidget):
         Gestisce eliminazione.
         :raises: nessuna eccezione prevista.
         """
-        if QMessageBox.question(self, "Elimina", "Confermi?") == QMessageBox.StandardButton.Yes:
+        if (
+            QMessageBox.question(self, "Elimina", "Confermi?")
+            == QMessageBox.StandardButton.Yes
+        ):
             self.evento_eliminato.emit()
+
+
+if __name__ == "__main__":
+    import sys
+    from PyQt6.QtWidgets import QApplication
+
+    app = QApplication(sys.argv)
+    finestra = ModificaEventoView()
+
+    def on_evento_creato(dati: Any) -> None:
+        print("\n--- EVENTO CREATO ---")
+        QMessageBox.information(finestra, "Dati Evento", str(dati))
+
+    def on_mappa_richiesta() -> None:
+        QMessageBox.information(
+            finestra, "Azione", "Richiesta di Modifica Mappa Posti."
+        )
+
+    finestra.evento_modificato.connect(on_evento_creato)
+    finestra.annullato.connect(
+        lambda: QMessageBox.information(
+            finestra, "Annullato", "Creazione evento annullata"
+        )
+    )
+
+    finestra.show()
+    sys.exit(app.exec())

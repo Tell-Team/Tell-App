@@ -14,7 +14,7 @@ class ModificaOperaView(NuovaOperaView):
     def _setup_ui(self) -> None:
         super()._setup_ui()
 
-        # Il valore è assegnato quando si chiama InfoController.modifica_opera
+        # Il valore è assegnato quando si chiama InfoSectionController.modifica_opera
         self.cur_id_opera: int = -1
 
         # Aggiorna header

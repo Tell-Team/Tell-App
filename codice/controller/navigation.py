@@ -1,6 +1,8 @@
-from PyQt6.QtWidgets import QMainWindow, QWidget, QStackedWidget
+from PyQt6.QtWidgets import QWidget, QStackedWidget
 from enum import Enum
 from typing import Optional
+
+from view.main_window import MainWindow
 
 
 class Pagina(Enum):
@@ -8,9 +10,6 @@ class Pagina(Enum):
 
     # I valori indicano il nome del file dove si trova la classe della pagina.
     # Non hanno uno scopo funzionale dentro del codice.
-    PAGINA_LOGIN = "login_page"
-    PAGINA_AUTENTICAZIONE = "authentication_page"
-
     SEZIONE_SPETTACOLI = "spettacoli_section"
     NUOVO_SPETTACOLO = "nuovo_spettacolo"
     MODIFICA_SPETTACOLO = "modifica_spettacolo"
@@ -30,14 +29,13 @@ class Pagina(Enum):
 class NavigationController:
     """Permette all'utente di navigare le pagine e sezioni dell'app."""
 
-    def __init__(self, main_window: QMainWindow) -> None:
+    def __init__(self, main_window: MainWindow) -> None:
         self.__main_window = main_window
-        self.__stack = QStackedWidget()
         self.__history: list[QWidget] = []  # Pile di widget per tornare dietro
         self.__pagine: dict[Pagina, QWidget] = {}  # Registro delle pagine
 
     def get_stack(self) -> QStackedWidget:
-        return self.__stack
+        return self.__main_window.get_stack()
 
     def get_pagina(self, nome: Pagina) -> Optional[QWidget]:
         """Ritorna una pagina registrata.
@@ -67,7 +65,7 @@ class NavigationController:
         :param nome: key usata per salvare la pagina nel dict
         :param widget: pagina da salvare nel dict"""
         self.__pagine[nome] = widget
-        self.__stack.addWidget(widget)
+        self.get_stack().addWidget(widget)
 
     def go_to(self, nome: Pagina, save_history: bool = True) -> None:
         """Visualizza una pagina registrata nel controller.
@@ -82,7 +80,7 @@ class NavigationController:
         except KeyError:
             raise KeyError(f"Non è stata trovata la pagina '{nome}'.")
 
-        current = self.__stack.currentWidget()
+        current = self.get_stack().currentWidget()
         if current and save_history:
             self.__history.append(current)
 
@@ -92,7 +90,7 @@ class NavigationController:
         if callable(attr):
             attr()
 
-        self.__stack.setCurrentWidget(widget)
+        self.get_stack().setCurrentWidget(widget)
 
     def section_go_to(self, nome: Pagina) -> None:
         """Visualizza una pagina senza salvare la pagina corrente nell'history del controller.
@@ -110,7 +108,7 @@ class NavigationController:
         if callable(attr):
             attr()
 
-        self.__stack.setCurrentWidget(last_widget)
+        self.get_stack().setCurrentWidget(last_widget)
 
     def svuota_history(self) -> None:
         """Svuota la lista history del controller."""

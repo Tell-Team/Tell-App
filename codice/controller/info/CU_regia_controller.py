@@ -3,7 +3,7 @@ from typing import Optional, override
 from core.controller import AbstractCUController
 
 from model.model import Model
-from model.pianificazione.regia import Regia
+from model.pianificazione.regia import Regia, Spettacolo
 from model.exceptions import (
     DatoIncongruenteException,
     IdInesistenteException,
@@ -80,8 +80,8 @@ class CURegiaController(AbstractCUController):
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
-    def __get_regia(self, id_: int) -> Optional[Regia]:
-        return self._model.get_regia(id_)
+    def __get_spettacolo(self, id_: int) -> Optional[Spettacolo]:
+        return self._model.get_spettacolo(id_)
 
     def __aggiungi_regia(self, regia: Regia) -> None:
         self._model.aggiungi_spettacolo(regia)
@@ -236,7 +236,9 @@ class CURegiaController(AbstractCUController):
             cur_pagina = self._view_modifica
 
             # Crea una copia della regia originale
-            copia_regia: Optional[Regia] = self.__get_regia(cur_pagina.cur_id_regia)
+            copia_regia: Optional[Spettacolo] = self.__get_spettacolo(
+                cur_pagina.cur_id_regia
+            )
             if not isinstance(copia_regia, Regia):
                 # Non esiste regia con l'id salvata nella pagina
                 PopupMessage.mostra_errore(

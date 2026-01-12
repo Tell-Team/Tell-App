@@ -19,11 +19,11 @@ from view.utils import PopupMessage
 from view.style import QssStyle
 
 
-class SpettacoliController(QObject):
+class SpettacoliSectionController(QObject):
     """Gestice la sezione Spettacoli (`SpettacoliSectionView`) dell'app.
 
     Segnali:
-    - logoutRequest(): emesso per eseguire la funzione di logout dall`AppContext`;
+    - logoutRequest(): emesso per eseguire la funzione di logout dall'`AppContext`;
     - goToPageRequest(Pagina, bool): emesso per visualizzare un'altra pagina;
     - goToSectionRequest(Pagina): emesso per visualizzare un'altra pagina, senza salvarla
     nell'history del `NavigationController`;
@@ -41,6 +41,11 @@ class SpettacoliController(QObject):
         self.__spettacoli_section = spettacoli_s
 
         self.__connect_signals()
+
+        self.__spettacoli_section.aggiorna_pagina()
+        # Serve per aggiornare la pagina con i dati del model. Siccome questa è la prima pagina
+        #   caricata nella MainWindow, non si chiama nessun metodo del NavigationController al
+        #   momento di visualizzarla e non viene aggiornata.
 
     # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
 
@@ -80,14 +85,14 @@ class SpettacoliController(QObject):
         return self.__model.get_spettacoli_by_titolo(titolo)
 
     def __elimina_spettacolo(self, id_: int) -> None:
-        self.__model.elimina_spettacolo(id_)
-        # - Implementare elimina_spettacolo nel model
+        ...
+        # - self.__model.elimina_spettacolo(id_)
 
     def __display_spettacoli(self, layout_spettacoli: ListLayout) -> None:
-        """Visualizza a schermo alcune informazioni delgli spettacoli salvati ed assegna a
-        ciascuno pulsanti per [# - CORRIGGERE].
+        """Visualizza a schermo alcune informazioni degli spettacoli salvati ed assegna a
+        ciascuno pulsanti per visualizzarli in dettaglio, scegliere posti, modificarli o eliminarli.
 
-        :param layout: layout dove saranno caricate tutte le opere
+        :param layout: layout dove saranno caricati tutti gli spettacoli
         """
         # Verifica se c'è un filtro di ricerca
         filtro = self.__spettacoli_section.filtro_ricerca

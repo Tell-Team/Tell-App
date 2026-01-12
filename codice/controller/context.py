@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QMainWindow, QWidget, QStackedWidget
+from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import QObject
 from typing import Optional, Callable, Tuple, Type, Any
 
@@ -8,35 +8,63 @@ from model.model import Model
 
 from view.utils import PopupMessage
 
+from view.main_window import MainWindow
+
 
 class AppContext:
     """Classe dedicata a caricare tutto il contesto dell'app.
+    - Crea un QDialog per il login;
     - Crea le pagine della view;
-    - Registra le pagine nel controller di navigazione `self.__nav`;
+    - Registra le pagine nel `NavigationController`;
     - Crea i controller delle pagine della view;
-    - Collega i segnali di navigazione con metodi collegati a `self.__nav`.
+    - Collega i segnali di navigazione del controller al `NavigationController`.
 
     :raise DatoIncongruenteException: il percorso specificato per il salvataggio
     dei dati dell'applicazione non è valido (non è una cartella).
     """
 
-    def __init__(self, main_window: QMainWindow, db_path: Optional[str]) -> None:
-
-        # Crea un NavigationController ed un Model unici per tutta l'app
-        self.__nav = NavigationController(main_window)
+    def __init__(self, db_path: Optional[str]) -> None:
+        # Crea un Model unici per tutta l'app
         self.__model = Model(db_path)
 
-        # ------------------------- PAGINE DELL'APP -------------------------
+        # Logica Login
+        from view.login import LoginDialog
+        from controller.login import LoginController
 
+        self.__login_dialog = LoginDialog()
+        self.__login_controller = LoginController(self.__model, self.__login_dialog)
+
+        self.__login_controller.loginSucceeded.connect(  # type:ignore
+            self.__successful_login
+        )
+
+    def start(self) -> None:
+        self.__login_dialog.show()
+
+    # ------------------------- METODI DI LOGGING -------------------------
+
+    def __successful_login(self) -> None:
+        """Effettua un login dopo aver ricevuto credenziali valide."""
+        self.__main_window = MainWindow()
+
+        self.__nav = NavigationController(self.__main_window)
+
+        self.carica_pagine()  # Carica le pagine dell'app
+        self.registra_pagine()  # Registra le pagine nel NavigationController
+        controllers = self.carica_controllers()  # Carica i controller della view
+        self.collega_controllers(controllers)  # Collega i segnali dei controller
+
+        self.__login_dialog.close()  # Chiede il LoginDialog
+        self.__main_window.show()  # Mostra la MainWindow
+
+    # ------------------------- PAGINE DELL'APP -------------------------
+
+    def carica_pagine(self) -> None:
         # Account
         from view.account.pagine import (
-            LoginPage,
-            AuthenticationPage,
             AccountSectionView,  # NuovoAccountView, ModificaAccountView
         )
 
-        self.__login_page = LoginPage()
-        self.__authentication_page = AuthenticationPage()
         self.__account_section = AccountSectionView()
         # self.nuovo_account_view = NuovoAccountView()
         # self.modifica_account_view = ModificaAccountView()
@@ -73,12 +101,11 @@ class AppContext:
         self.__nuova_regia_view = NuovaRegiaView()
         self.__modifica_regia_view = ModificaRegiaView()
 
-        # ------------------------- REGISTRAZIONE DELLE PAGINE -------------------------
+    # ------------------------- REGISTRAZIONE DELLE PAGINE -------------------------
 
+    def registra_pagine(self) -> None:
         nav = self.__nav
 
-        nav.registra_pagina(Pagina.PAGINA_LOGIN, self.__login_page)
-        nav.registra_pagina(Pagina.PAGINA_AUTENTICAZIONE, self.__authentication_page)
         nav.registra_pagina(Pagina.SEZIONE_SPETTACOLI, self.__spettacoli_section)
         nav.registra_pagina(Pagina.NUOVO_SPETTACOLO, self.__nuovo_spettacolo_view)
         nav.registra_pagina(Pagina.MODIFICA_SPETTACOLO, self.__modifica_spettacolo_view)
@@ -92,19 +119,23 @@ class AppContext:
         nav.registra_pagina(Pagina.MODIFICA_GENERE, self.__modifica_genere_view)
         nav.registra_pagina(Pagina.SEZIONE_ACCOUNT, self.__account_section)
 
-        self.get_stack().setCurrentWidget(self.__login_page)
+        nav.get_stack().setCurrentWidget(self.__spettacoli_section)
 
-        # ------------------------- CONTROLLERS DELLA VIEW -------------------------
+    # ------------------------- CONTROLLERS DELLA VIEW -------------------------
 
+    def carica_controllers(self) -> list[QObject]:
         # Account
-        from controller.account import LoginController, AccountController
+        from controller.account import AccountSectionController
 
         # Spettacoli
-        from controller.spettacoli import SpettacoliController, CUSpettacoloController
+        from controller.spettacoli import (
+            SpettacoliSectionController,
+            CUSpettacoloController,
+        )
 
         # Info
         from controller.info import (
-            InfoController,
+            InfoSectionController,
             VisualizzaOperaController,
             CUOperaController,
             CUGenereController,
@@ -114,18 +145,13 @@ class AppContext:
         # Definizioni dei controller come attributi privati
         controller_defs: list[tuple[str, Type[QObject], Tuple[Any, ...]]] = [
             (
-                "__login_controller",
-                LoginController,
-                (self.__model, self.__login_page, self.__authentication_page),
-            ),
-            (
                 "__account_controller",
-                AccountController,
+                AccountSectionController,
                 (self.__model, self.__account_section),
             ),
             (
                 "__spettacoli_controller",
-                SpettacoliController,
+                SpettacoliSectionController,
                 (self.__model, self.__spettacoli_section),
             ),
             (
@@ -137,7 +163,11 @@ class AppContext:
                     self.__modifica_spettacolo_view,
                 ),
             ),
-            ("__info_controller", InfoController, (self.__model, self.__info_section)),
+            (
+                "__info_controller",
+                InfoSectionController,
+                (self.__model, self.__info_section),
+            ),
             (
                 "__cu_opera_controller",
                 CUOperaController,
@@ -168,15 +198,18 @@ class AppContext:
             setattr(self, attr, controller)
             controllers.append(controller)
 
-        # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
+        return controllers
 
+    # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
+
+    def collega_controllers(self, controllers: list[QObject]) -> None:
         # Tutti i controller devono usare, al di più, questi 5 segnali per la navigazione.
         signal_map: dict[str, Callable[..., None]] = {
-            "logoutRequest": self.__on_request_logout,
-            "goBackRequest": self.__on_request_go_back,
-            "goToPageRequest": self.__on_request_go_to,
-            "goToSectionRequest": self.__on_request_section_go_to,
-            "getNavPageRequest": self.__on_request_get_page,
+            "logoutRequest": self.__logout,
+            "goBackRequest": self.__go_back,
+            "goToPageRequest": self.__go_to_page,
+            "goToSectionRequest": self.__go_to_section,
+            "getNavPageRequest": self.__get_page,
         }
 
         def safe_connect(
@@ -200,25 +233,18 @@ class AppContext:
 
     # ------------------------- METODI DI NAVIGAZIONE -------------------------
 
-    def get_stack(self) -> QStackedWidget:
-        return self.__nav.get_stack()
+    def __logout(self) -> None:
+        """Effettua un logout eliminando la sessione utente."""
+        if self.__main_window:  # Elimina la MainWindow
+            self.__main_window.close()
+            self.__main_window = None
 
-    def __on_request_logout(self) -> None:
-        # - CORRIGERE: Da implementare autenticazione.
-        self.__nav.go_to(Pagina.PAGINA_LOGIN, False)
-        # - Come faccio per resettare i filtri di ricerca delle sezioni
-        # - TEST
-        self.__spettacoli_section.filtro_ricerca = ""
-        self.__spettacoli_section.ricerca_bar.setText("")
-        self.__info_section.filtro_ricerca = ""
-        self.__info_section.ricerca_bar.setText("")
-        # - END
-        self.__nav.svuota_history()
+        self.__login_dialog.show()  # Mostra il LoginDialog di nuovo
 
-    def __on_request_go_back(self) -> None:
+    def __go_back(self) -> None:
         self.__nav.go_back()
 
-    def __on_request_go_to(self, nome: Pagina, save_history: bool) -> None:
+    def __go_to_page(self, nome: Pagina, save_history: bool) -> None:
         try:
             self.__nav.go_to(nome, save_history)
         except KeyError as exc:
@@ -228,7 +254,7 @@ class AppContext:
                 f"Si è verificato un errore: {exc}",
             )
 
-    def __on_request_section_go_to(self, nome: Pagina) -> None:
+    def __go_to_section(self, nome: Pagina) -> None:
         try:
             self.__nav.section_go_to(nome)
         except KeyError as exc:
@@ -238,7 +264,5 @@ class AppContext:
                 f"Si è verificato un errore: {exc}",
             )
 
-    def __on_request_get_page(
-        self, nome: Pagina, container: dict[str, Optional[QWidget]]
-    ) -> None:
+    def __get_page(self, nome: Pagina, container: dict[str, Optional[QWidget]]) -> None:
         container["value"] = self.__nav.get_pagina(nome)

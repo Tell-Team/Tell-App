@@ -1,9 +1,18 @@
 from typing import Dict, Any, Optional
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import (
-    QWidget, QLabel, QLineEdit, QTextEdit, QPushButton,
-    QFormLayout, QHBoxLayout, QVBoxLayout, QMessageBox, QSpinBox
+    QWidget,
+    QLabel,
+    QLineEdit,
+    QTextEdit,
+    QPushButton,
+    QFormLayout,
+    QHBoxLayout,
+    QVBoxLayout,
+    QMessageBox,
+    QSpinBox,
 )
+
 
 class CreaSpettacoloView(QWidget):
     """
@@ -46,7 +55,9 @@ class CreaSpettacoloView(QWidget):
 
         # Bottoni
         self.__btn_salva: QPushButton = QPushButton("Salva")
-        self.__btn_salva.setStyleSheet("background-color: #28a745; color: white; font-weight: bold;")
+        self.__btn_salva.setStyleSheet(
+            "background-color: #28a745; color: white; font-weight: bold;"
+        )
         self.__btn_annulla: QPushButton = QPushButton("Annulla")
         self.__btn_annulla.setStyleSheet("background-color: #6c757d; color: white;")
 
@@ -84,7 +95,7 @@ class CreaSpettacoloView(QWidget):
         return {
             "titolo": self.__input_titolo.text().strip(),
             "descrizione": self.__input_descrizione.toPlainText().strip(),
-            "durata": self.__input_durata.value()
+            "durata": self.__input_durata.value(),
         }
 
     def reset_form(self) -> None:
@@ -108,12 +119,16 @@ class CreaSpettacoloView(QWidget):
         """
         titolo = self.__input_titolo.text().strip()
         if not titolo:
-            self.__mostra_errore("Errore Validazione", "Il campo 'Titolo' è obbligatorio.")
+            self.__mostra_errore(
+                "Errore Validazione", "Il campo 'Titolo' è obbligatorio."
+            )
             return False
-        
+
         # Esempio di validazione aggiuntiva(?)
         if self.__input_durata.value() <= 0:
-            self.__mostra_errore("Errore Validazione", "La durata deve essere maggiore di 0.")
+            self.__mostra_errore(
+                "Errore Validazione", "La durata deve essere maggiore di 0."
+            )
             return False
 
         return True
@@ -122,7 +137,7 @@ class CreaSpettacoloView(QWidget):
         """
         Gestisce il click sul tasto Salva.
         Valida i dati ed emette il segnale se tutto è corretto.
-        
+
         :raises: nessuna eccezione prevista.
         """
         if self.__valida_dati():
@@ -131,7 +146,7 @@ class CreaSpettacoloView(QWidget):
     def __on_annulla_clicked(self) -> None:
         """
         Gestisce il click sul tasto Annulla.
-        
+
         :raises: nessuna eccezione prevista.
         """
         self.reset_form()
@@ -146,3 +161,32 @@ class CreaSpettacoloView(QWidget):
         :raises: nessuna eccezione prevista.
         """
         QMessageBox.warning(self, titolo, messaggio)
+
+
+if __name__ == "__main__":
+    import sys
+    from PyQt6.QtWidgets import QApplication
+
+    app = QApplication(sys.argv)
+    finestra = CreaSpettacoloView()
+
+    # Esempio di utilizzo:
+
+    def on_regia_creata(dati: Any) -> None:
+        print("\n--- REGIA CREATA ---")
+        print(f"Dati Base: {dati['nome_regia']}, {dati['regista']}, {dati['stagione']}")
+        print(f"Dettagli Flessibili ({len(dati['dettagli'])}):")
+        for dett in dati["dettagli"]:
+            print(f"  - Ruolo: {dett['ruolo']}, Nominativo: {dett['nominativo']}")
+        QMessageBox.information(
+            finestra, "Dati Ricevuti", "Regia salvata con successo!"
+        )
+
+    def on_annullata() -> None:
+        QMessageBox.information(finestra, "Annullato", "Operazione annullata")
+
+    finestra.spettacolo_creato.connect(on_regia_creata)
+    finestra.annullato.connect(on_annullata)
+
+    finestra.show()
+    sys.exit(app.exec())

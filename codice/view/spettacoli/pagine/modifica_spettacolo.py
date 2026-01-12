@@ -18,7 +18,7 @@ class ModificaSpettacoloView(NuovoSpettacoloView):
     def _setup_ui(self) -> None:
         super()._setup_ui()
 
-        # Il valore è assegnato quando si chiama SpettacoliController.modifica_spettacolo
+        # Il valore è assegnato quando si chiama SpettacoliSectionController.modifica_spettacolo
         self.cur_id_spettacolo: int = -1
 
         # Aggiorna header

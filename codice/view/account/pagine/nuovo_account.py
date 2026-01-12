@@ -3,6 +3,8 @@ from typing import override
 
 from core.view import AbstractCreaView
 
+from model.account.account import Ruolo
+
 from view.style import QssStyle
 
 
@@ -75,12 +77,10 @@ class NuovoAccountView(AbstractCreaView):
         label_ruolo = QLabel('Ruolo<span style="color:red;">*</span> : ')
         label_ruolo.setProperty(QssStyle.SECONDARY_TEXT, True)
         self.ruolo = QComboBox()
-        # - Hard-coded options
-        self.ruolo.insertItem(0, "Scegli ruolo")
-        self.ruolo.insertItem(1, "Biglietteria")
-        self.ruolo.insertItem(2, "Amministratore")
+        self.ruolo.insertItem(0, "Scegli ruolo", None)
+        self.ruolo.insertItem(1, "Biglietteria", Ruolo.BIGLIETTERIA)
+        self.ruolo.insertItem(2, "Amministratore", Ruolo.AMMINISTRATORE)
         self.ruolo.setEnabled(False)
-        # - END
 
         self._form_layout.addRow(label_anagrafica_header)
         self._form_layout.addRow(label_nome, self.nome)

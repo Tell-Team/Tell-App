@@ -6,7 +6,7 @@ from controller.navigation import Pagina
 
 from model.model import Model
 from model.pianificazione.opera import Opera
-from model.pianificazione.regia import Regia
+from model.pianificazione.regia import Regia, Spettacolo
 from model.exceptions import OggettoInUsoException
 
 from view.info.pagine import VisualizzaOperaView
@@ -60,15 +60,15 @@ class VisualizzaOperaController(QObject):
     def __get_opera(self, id_: int) -> Optional[Opera]:
         return self.__model.get_opera(id_)
 
-    def __get_regia(self, id_: int) -> Optional[Regia]:
-        return self.__model.get_regia(id_)
+    def __get_spettacolo(self, id_: int) -> Optional[Spettacolo]:
+        return self.__model.get_spettacolo(id_)
 
     def __get_regie_by_opera(self, id_: int) -> list[Regia]:
         return self.__model.get_regie_by_opera(id_)
 
     def __elimina_regia(self, id_: int) -> None:
-        self.__model.elimina_spettacolo(id_)
-        # - Implementare elimina_spettacolo nel model
+        ...
+        # - self.__model.elimina_spettacolo(id_)
 
     def __display_regie(self, layout_regie: ListLayout) -> None:
         """Visualizza a schermo le informazioni delle regie salvati e associate ad
@@ -166,8 +166,8 @@ class VisualizzaOperaController(QObject):
         :param id_: id della regia da modificare
         """
         # Copia della regia da modificare
-        cur_regia = self.__get_regia(id_)
-        if not cur_regia:
+        cur_regia = self.__get_spettacolo(id_)
+        if not isinstance(cur_regia, Regia):
             PopupMessage.mostra_errore(
                 self.__visualizza_opera_view,
                 "Regia inesistente",

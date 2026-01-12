@@ -16,7 +16,7 @@ class ModificaAccountView(NuovoAccountView):
     def _setup_ui(self) -> None:
         super()._setup_ui()
 
-        # Il valore è assegnato quando si chiama AccountController.modifica_account(id_account)
+        # Il valore è assegnato quando si chiama AccountSectionController.modifica_account(id_account)
         self.cur_id_account: int = -1
 
         # Aggiorna header

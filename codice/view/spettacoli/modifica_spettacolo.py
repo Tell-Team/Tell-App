@@ -1,9 +1,18 @@
 from typing import Dict, Any, Optional
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import (
-    QWidget, QLabel, QLineEdit, QTextEdit, QPushButton,
-    QFormLayout, QHBoxLayout, QVBoxLayout, QMessageBox, QSpinBox
+    QWidget,
+    QLabel,
+    QLineEdit,
+    QTextEdit,
+    QPushButton,
+    QFormLayout,
+    QHBoxLayout,
+    QVBoxLayout,
+    QMessageBox,
+    QSpinBox,
 )
+
 
 class ModificaSpettacoloView(QWidget):
     """
@@ -52,11 +61,13 @@ class ModificaSpettacoloView(QWidget):
 
         # Bottoni
         self.__btn_salva: QPushButton = QPushButton("Salva Modifiche")
-        self.__btn_salva.setStyleSheet("background-color: #007bff; color: white; font-weight: bold;")
-        
+        self.__btn_salva.setStyleSheet(
+            "background-color: #007bff; color: white; font-weight: bold;"
+        )
+
         self.__btn_elimina: QPushButton = QPushButton("Elimina Spettacolo")
         self.__btn_elimina.setStyleSheet("background-color: #dc3545; color: white;")
-        
+
         self.__btn_annulla: QPushButton = QPushButton("Annulla")
         self.__btn_annulla.setStyleSheet("background-color: #6c757d; color: white;")
 
@@ -93,15 +104,19 @@ class ModificaSpettacoloView(QWidget):
         :param dati: Dict contenente 'titolo', 'descrizione', 'durata', e opzionalmente 'id'.
         :raises: nessuna eccezione prevista.
         """
-        self.__id_spettacolo_corrente = dati.get("id") # modificabile con "id_spettacolo"(?)
-        
+        self.__id_spettacolo_corrente = dati.get(
+            "id"
+        )  # modificabile con "id_spettacolo"(?)
+
         self.__input_titolo.setText(dati.get("titolo", ""))
         self.__input_descrizione.setText(dati.get("descrizione", ""))
         self.__input_durata.setValue(int(dati.get("durata", 60)))
-        
+
         # Aggiornamento titolo finestra per feedback visivo
         if self.__id_spettacolo_corrente:
-             self.__titolo_label.setText(f"<h2>Modifica Spettacolo #{self.__id_spettacolo_corrente}</h2>")
+            self.__titolo_label.setText(
+                f"<h2>Modifica Spettacolo #{self.__id_spettacolo_corrente}</h2>"
+            )
 
     def get_dati_form(self) -> Dict[str, Any]:
         """
@@ -114,13 +129,13 @@ class ModificaSpettacoloView(QWidget):
             "id": self.__id_spettacolo_corrente,
             "titolo": self.__input_titolo.text().strip(),
             "descrizione": self.__input_descrizione.toPlainText().strip(),
-            "durata": self.__input_durata.value()
+            "durata": self.__input_durata.value(),
         }
 
     def reset_form(self) -> None:
         """
         Pulisce i campi e l'ID corrente.
-        
+
         :raises: nessuna eccezione prevista.
         """
         self.__id_spettacolo_corrente = None
@@ -134,7 +149,7 @@ class ModificaSpettacoloView(QWidget):
     def __valida_dati(self) -> bool:
         """
         Verifica che i dati siano coerenti prima del salvataggio.
-        
+
         :return: True se validi, False altrimenti.
         :raises: nessuna eccezione prevista.
         """
@@ -146,7 +161,7 @@ class ModificaSpettacoloView(QWidget):
     def __on_salva_clicked(self) -> None:
         """
         Gestisce il salvataggio delle modifiche.
-        
+
         :raises: nessuna eccezione prevista.
         """
         if self.__valida_dati():
@@ -155,14 +170,14 @@ class ModificaSpettacoloView(QWidget):
     def __on_elimina_clicked(self) -> None:
         """
         Chiede conferma e poi emette il segnale di eliminazione.
-        
+
         :raises: nessuna eccezione prevista.
         """
         risposta = QMessageBox.question(
-            self, 
-            "Conferma Eliminazione", 
+            self,
+            "Conferma Eliminazione",
             "Sei sicuro di voler eliminare questo spettacolo? L'operazione è irreversibile.",
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
         if risposta == QMessageBox.StandardButton.Yes:
             self.spettacolo_eliminato.emit()
@@ -170,7 +185,7 @@ class ModificaSpettacoloView(QWidget):
     def __on_annulla_clicked(self) -> None:
         """
         Gestisce l'annullamento.
-        
+
         :raises: nessuna eccezione prevista.
         """
         self.annullato.emit()
@@ -178,7 +193,36 @@ class ModificaSpettacoloView(QWidget):
     def __mostra_errore(self, titolo: str, messaggio: str) -> None:
         """
         Mostra popup di errore.
-        
+
         :raises: nessuna eccezione prevista.
         """
         QMessageBox.critical(self, titolo, messaggio)
+
+
+if __name__ == "__main__":
+    import sys
+    from PyQt6.QtWidgets import QApplication
+
+    app = QApplication(sys.argv)
+    finestra = ModificaSpettacoloView()
+
+    # Esempio di utilizzo:
+
+    def on_regia_creata(dati: Any) -> None:
+        print("\n--- REGIA CREATA ---")
+        print(f"Dati Base: {dati['nome_regia']}, {dati['regista']}, {dati['stagione']}")
+        print(f"Dettagli Flessibili ({len(dati['dettagli'])}):")
+        for dett in dati["dettagli"]:
+            print(f"  - Ruolo: {dett['ruolo']}, Nominativo: {dett['nominativo']}")
+        QMessageBox.information(
+            finestra, "Dati Ricevuti", "Regia salvata con successo!"
+        )
+
+    def on_annullata() -> None:
+        QMessageBox.information(finestra, "Annullato", "Operazione annullata")
+
+    finestra.spettacolo_modificato.connect(on_regia_creata)
+    finestra.annullato.connect(on_annullata)
+
+    finestra.show()
+    sys.exit(app.exec())

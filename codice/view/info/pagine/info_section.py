@@ -5,8 +5,6 @@ from PyQt6.QtWidgets import (
     QPushButton,
     QVBoxLayout,
     QHBoxLayout,
-    # QApplication,
-    # QStyle,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import override
@@ -58,10 +56,6 @@ class InfoSectionView(AbstractSectionView):
         self.ricerca_bar.setProperty(QssStyle.SEARCH_BAR, True)
 
         self._btn_ricerca = QPushButton()
-        # icon = QApplication.style().standardIcon(
-        #     QStyle.StandardPixmap.SP_FileDialogContentsView
-        # )
-        # self._btn_ricerca.setIcon(icon)
         self._btn_ricerca.setProperty(QssStyle.SEARCH_BUTTON, True)
         self._btn_ricerca.setProperty(QssStyle.BLUE_BUTTON, True)
         self._btn_ricerca.setFixedHeight(self.ricerca_bar.sizeHint().height())

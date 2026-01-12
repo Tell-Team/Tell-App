@@ -3,14 +3,16 @@ from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
-    QLabel, 
-    QLineEdit, 
-    QTextEdit, 
-    QPushButton, 
-    QHBoxLayout, QScrollArea, 
-    QFrame, 
-    QMessageBox
+    QLabel,
+    QLineEdit,
+    QTextEdit,
+    QPushButton,
+    QHBoxLayout,
+    QScrollArea,
+    QFrame,
+    QMessageBox,
 )
+
 
 class ModificaRegiaView(QWidget):
     """
@@ -30,7 +32,7 @@ class ModificaRegiaView(QWidget):
     def __init__(self, parent: Optional[QWidget] = None) -> None:
         """
         Inizializza la view.
-        
+
         :param parent: widget genitore.
         :raises: nessuna eccezione prevista.
         """
@@ -64,7 +66,7 @@ class ModificaRegiaView(QWidget):
 
         self.__btn_salva: QPushButton = QPushButton("Salva Modifiche")
         self.__btn_salva.setStyleSheet("background-color: #007bff; color: white;")
-        
+
         self.__btn_elimina: QPushButton = QPushButton("Elimina Regia")
         self.__btn_elimina.setStyleSheet("background-color: #dc3545; color: white;")
 
@@ -95,7 +97,7 @@ class ModificaRegiaView(QWidget):
     def __aggiungi_riga_dettaglio(self, dati: Optional[Dict[str, str]] = None) -> None:
         """
         Aggiunge una riga visiva per un dettaglio tecnico.
-        
+
         :param dati: Dati opzionali per popolare la riga.
         :raises: nessuna eccezione prevista.
         """
@@ -120,22 +122,18 @@ class ModificaRegiaView(QWidget):
         layout.addWidget(input_desc, 3)
         layout.addWidget(btn_remove)
 
-        riga_obj = {
-            "widget": frame,
-            "input_tipo": input_tipo,
-            "input_desc": input_desc
-        }
+        riga_obj = {"widget": frame, "input_tipo": input_tipo, "input_desc": input_desc}
         self.__righe_dettaglio.append(riga_obj)
-        
+
         # Inserire prima dello stretch
         self.__layout_dettagli.insertWidget(self.__layout_dettagli.count() - 1, frame)
-        
+
         btn_remove.clicked.connect(lambda: self.__rimuovi_riga(riga_obj))
 
     def __rimuovi_riga(self, riga_obj: Dict[str, Any]) -> None:
         """
         Rimuove una riga dalla UI e dalla lista interna.
-        
+
         :raises: nessuna eccezione prevista.
         """
         if riga_obj in self.__righe_dettaglio:
@@ -147,7 +145,7 @@ class ModificaRegiaView(QWidget):
     def set_dati_form(self, dati: Dict[str, Any]) -> None:
         """
         Popola la view con i dati della regia.
-        
+
         :param dati: Dict con 'titolo_spettacolo' e lista 'dettagli'.
         :raises: nessuna eccezione prevista.
         """
@@ -166,7 +164,7 @@ class ModificaRegiaView(QWidget):
     def get_dati_form(self) -> Dict[str, Any]:
         """
         Recupera i dati modificati.
-        
+
         :return: Dict con la lista 'dettagli'.
         :raises: nessuna eccezione prevista.
         """
@@ -183,7 +181,7 @@ class ModificaRegiaView(QWidget):
     def __on_salva_clicked(self) -> None:
         """
         Gestisce il salvataggio.
-        
+
         :raises: nessuna eccezione prevista.
         """
         # Aggiungere __valida_dati se necessario(?)
@@ -192,18 +190,51 @@ class ModificaRegiaView(QWidget):
     def __on_elimina_clicked(self) -> None:
         """
         Gestisce l'eliminazione.
-        
+
         :raises: nessuna eccezione prevista.
         """
-        risp = QMessageBox.question(self, "Elimina", "Eliminare questa scheda tecnica?",
-                                    QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        risp = QMessageBox.question(
+            self,
+            "Elimina",
+            "Eliminare questa scheda tecnica?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+        )
         if risp == QMessageBox.StandardButton.Yes:
             self.regia_eliminata.emit()
 
     def __on_annulla_clicked(self) -> None:
         """
         Gestisce l'annullamento.
-        
+
         :raises: nessuna eccezione prevista.
         """
         self.annullato.emit()
+
+
+if __name__ == "__main__":
+    import sys
+    from PyQt6.QtWidgets import QApplication
+
+    app = QApplication(sys.argv)
+    finestra = ModificaRegiaView()
+
+    # Esempio di utilizzo:
+
+    def on_regia_creata(dati: Any) -> None:
+        print("\n--- REGIA CREATA ---")
+        print(f"Dati Base: {dati['nome_regia']}, {dati['regista']}, {dati['stagione']}")
+        print(f"Dettagli Flessibili ({len(dati['dettagli'])}):")
+        for dett in dati["dettagli"]:
+            print(f"  - Ruolo: {dett['ruolo']}, Nominativo: {dett['nominativo']}")
+        QMessageBox.information(
+            finestra, "Dati Ricevuti", "Regia salvata con successo!"
+        )
+
+    def on_annullata() -> None:
+        QMessageBox.information(finestra, "Annullato", "Operazione annullata")
+
+    finestra.regia_modificata.connect(on_regia_creata)
+    finestra.annullato.connect(on_annullata)
+
+    finestra.show()
+    sys.exit(app.exec())

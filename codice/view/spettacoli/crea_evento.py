@@ -1,8 +1,18 @@
 from typing import Dict, Any, Optional
 from PyQt6.QtCore import pyqtSignal, QDate, QTime
 from PyQt6.QtWidgets import (
-    QWidget, QLabel, QComboBox, QPushButton, QFormLayout, QHBoxLayout,
-    QVBoxLayout, QMessageBox, QDateEdit, QTimeEdit, QCheckBox
+    QWidget,
+    QLabel,
+    QComboBox,
+    QPushButton,
+    QFormLayout,
+    QHBoxLayout,
+    QVBoxLayout,
+    QMessageBox,
+    QDateEdit,
+    QTimeEdit,
+    QCheckBox,
+    QLineEdit,
 )
 from PyQt6.QtGui import QFont, QIntValidator
 
@@ -44,7 +54,9 @@ class CreaEventoView(QWidget):
 
         # 1. Titolo
         self.__titolo: QLabel = QLabel("Aggiungi Nuovo Evento (Replica)")
-        self.__titolo.setStyleSheet("font-size: 18pt; font-weight: bold; border-bottom: 2px solid #ccc;")
+        self.__titolo.setStyleSheet(
+            "font-size: 18pt; font-weight: bold; border-bottom: 2px solid #ccc;"
+        )
         self.__titolo.setContentsMargins(0, 0, 0, 10)
 
         # 2. Campi Data e Luogo (Gestiti in una griglia per l'allineamento affiancato)
@@ -55,7 +67,7 @@ class CreaEventoView(QWidget):
         self.__data_input.setDisplayFormat("dd/MM/yyyy")
 
         self.__ora_input: QTimeEdit = QTimeEdit()
-        self.__ora_input.setTime(QTime(21, 0)) # Default ora serale
+        self.__ora_input.setTime(QTime(21, 0))  # Default ora serale
         self.__ora_input.setDisplayFormat("HH:mm")
 
         # Input Sala
@@ -67,7 +79,9 @@ class CreaEventoView(QWidget):
         # Input Stato Pubblicazione
         self.__stato_pubblicazione_select: QComboBox = QComboBox()
         self.__stato_pubblicazione_select.addItem("Bozza (Non in vendita)", "bozza")
-        self.__stato_pubblicazione_select.addItem("Pubblicato (In vendita)", "pubblicato")
+        self.__stato_pubblicazione_select.addItem(
+            "Pubblicato (In vendita)", "pubblicato"
+        )
         self.__stato_pubblicazione_select.addItem("Annullato", "annullato")
 
         # Layout Data e Ora Affiancati (Simulazione form-row)
@@ -76,27 +90,35 @@ class CreaEventoView(QWidget):
         data_ora_layout.addWidget(self.__data_input)
         data_ora_layout.addWidget(QLabel("Ora Evento *"))
         data_ora_layout.addWidget(self.__ora_input)
-        
+
         # Layout Dettagli (Form Layout per il resto)
         dettagli_layout: QFormLayout = QFormLayout()
         dettagli_layout.addRow(QLabel("<h2>Dettagli Data e Luogo</h2>"))
         dettagli_layout.addRow(data_ora_layout)
         dettagli_layout.addRow(QLabel("Luogo/Sala *"), self.__sala_select)
-        dettagli_layout.addRow(QLabel("Stato Pubblicazione *"), self.__stato_pubblicazione_select)
+        dettagli_layout.addRow(
+            QLabel("Stato Pubblicazione *"), self.__stato_pubblicazione_select
+        )
 
         # 3. Prezzo e Posti
 
-        self.__override_prezzo_check: QCheckBox = QCheckBox("Applica Prezzo Manuale (Override del prezzo dello Spettacolo)")
+        self.__override_prezzo_check: QCheckBox = QCheckBox(
+            "Applica Prezzo Manuale (Override del prezzo dello Spettacolo)"
+        )
         self.__override_prezzo_check.stateChanged.connect(self.__toggle_prezzo_manuale)
-        
+
         # Campo per il prezzo manuale (visibile solo se il checkbox è spuntato)
         self.__prezzo_input: QLineEdit = QLineEdit()
         self.__prezzo_input.setPlaceholderText("Prezzo in EUR (es. 25.00)")
         self.__prezzo_input.setVisible(False)
-        self.__prezzo_input.setValidator(QIntValidator(0, 9999)) # Esempio di validatore numerico
+        self.__prezzo_input.setValidator(
+            QIntValidator(0, 9999)
+        )  # Esempio di validatore numerico
 
         self.__btn_mappa_posti: QPushButton = QPushButton("Vedi/Modifica Mappa Posti")
-        self.__btn_mappa_posti.setStyleSheet("margin-top: 10px;") # Stile per spaziatura
+        self.__btn_mappa_posti.setStyleSheet(
+            "margin-top: 10px;"
+        )  # Stile per spaziatura
 
         # Layout Prezzo e Posti
         prezzo_posti_layout: QVBoxLayout = QVBoxLayout()
@@ -104,7 +126,6 @@ class CreaEventoView(QWidget):
         prezzo_posti_layout.addWidget(self.__override_prezzo_check)
         prezzo_posti_layout.addWidget(self.__prezzo_input)
         prezzo_posti_layout.addWidget(self.__btn_mappa_posti)
-
 
         # 4. Bottoni Azioni
         self.__btn_annulla: QPushButton = QPushButton("Annulla")
@@ -124,7 +145,7 @@ class CreaEventoView(QWidget):
         main_layout.addLayout(dettagli_layout)
         main_layout.addWidget(QLabel("<hr>"))
         main_layout.addLayout(prezzo_posti_layout)
-        main_layout.addWidget(QLabel("<hr>")) # Separatore per i bottoni
+        main_layout.addWidget(QLabel("<hr>"))  # Separatore per i bottoni
         main_layout.addLayout(btn_layout)
         main_layout.addStretch(1)
         main_layout.setSpacing(15)
@@ -148,7 +169,6 @@ class CreaEventoView(QWidget):
         if stato == 0:
             self.__prezzo_input.clear()
 
-
     def __mostra_errore(self, titolo: str, testo: str) -> None:
         """
         Mostra un messaggio di errore all'utente.
@@ -170,22 +190,28 @@ class CreaEventoView(QWidget):
         """
         override: bool = self.__override_prezzo_check.isChecked()
         prezzo_manuale: Optional[float] = None
-        
+
         if override and self.__prezzo_input.text().strip():
-             # Assumiamo che l'input sia gestito come stringa per i decimali, sebbene QIntValidator sia stato usato per esempio.
-             try:
-                 prezzo_manuale = float(self.__prezzo_input.text().replace(',', '.').strip())
-             except ValueError:
-                 # In caso di errore (se avessimo usato un LineEdit senza validatore)
-                 prezzo_manuale = 0.0
+            # Assumiamo che l'input sia gestito come stringa per i decimali, sebbene QIntValidator sia stato usato per esempio.
+            try:
+                prezzo_manuale = float(
+                    self.__prezzo_input.text().replace(",", ".").strip()
+                )
+            except ValueError:
+                # In caso di errore (se avessimo usato un LineEdit senza validatore)
+                prezzo_manuale = 0.0
 
         return {
-            "data": self.__data_input.date().toString(Qt.DateFormat.ISODate), # Es. 2025-12-14
-            "ora": self.__ora_input.time().toString(Qt.DateFormat.ISODate), # Es. 21:00:00
+            "data": self.__data_input.date().toString(
+                Qt.DateFormat.ISODate
+            ),  # Es. 2025-12-14
+            "ora": self.__ora_input.time().toString(
+                Qt.DateFormat.ISODate
+            ),  # Es. 21:00:00
             "sala": str(self.__sala_select.currentData()),
             "stato_pubblicazione": str(self.__stato_pubblicazione_select.currentData()),
             "override_prezzo": override,
-            "prezzo_manuale": prezzo_manuale
+            "prezzo_manuale": prezzo_manuale,
         }
 
     def reset_form(self) -> None:
@@ -202,7 +228,6 @@ class CreaEventoView(QWidget):
         self.__prezzo_input.clear()
         self.__prezzo_input.setVisible(False)
 
-
     # ------------------------- VALIDAZIONE E CALLBACKS -------------------------
 
     def __valida_dati(self) -> bool:
@@ -216,26 +241,38 @@ class CreaEventoView(QWidget):
         :raises: nessuna eccezione prevista.
         """
         if not self.__sala_select.currentData():
-            self.__mostra_errore("Valore mancante", "Il campo 'Luogo/Sala' è obbligatorio.")
+            self.__mostra_errore(
+                "Valore mancante", "Il campo 'Luogo/Sala' è obbligatorio."
+            )
             return False
-        
+
         # Data e ora sono quasi sempre validi se usiamo QDateEdit/QTimeEdit,
         # ma controllare per completezza la selezione Sala e Stato
         if not self.__stato_pubblicazione_select.currentData():
-            self.__mostra_errore("Valore mancante", "Il campo 'Stato Pubblicazione' è obbligatorio.")
+            self.__mostra_errore(
+                "Valore mancante", "Il campo 'Stato Pubblicazione' è obbligatorio."
+            )
             return False
-            
+
         if self.__override_prezzo_check.isChecked():
-            prezzo_str: str = self.__prezzo_input.text().strip().replace(',', '.')
+            prezzo_str: str = self.__prezzo_input.text().strip().replace(",", ".")
             if not prezzo_str:
-                self.__mostra_errore("Valore mancante", "Se l'Override Prezzo è attivo, il prezzo manuale è obbligatorio.")
+                self.__mostra_errore(
+                    "Valore mancante",
+                    "Se l'Override Prezzo è attivo, il prezzo manuale è obbligatorio.",
+                )
                 return False
             try:
                 if float(prezzo_str) < 0:
-                    self.__mostra_errore("Valore non valido", "Il prezzo non può essere negativo.")
+                    self.__mostra_errore(
+                        "Valore non valido", "Il prezzo non può essere negativo."
+                    )
                     return False
             except ValueError:
-                self.__mostra_errore("Formato non valido", "Il prezzo manuale deve essere un numero valido.")
+                self.__mostra_errore(
+                    "Formato non valido",
+                    "Il prezzo manuale deve essere un numero valido.",
+                )
                 return False
 
         return True
@@ -274,11 +311,17 @@ if __name__ == "__main__":
         QMessageBox.information(finestra, "Dati Evento", str(dati))
 
     def on_mappa_richiesta() -> None:
-        QMessageBox.information(finestra, "Azione", "Richiesta di Modifica Mappa Posti.")
+        QMessageBox.information(
+            finestra, "Azione", "Richiesta di Modifica Mappa Posti."
+        )
 
     finestra.evento_creato.connect(on_evento_creato)
     finestra.modifica_mappa_posti_richiesta.connect(on_mappa_richiesta)
-    finestra.annullato.connect(lambda: QMessageBox.information(finestra, "Annullato", "Creazione evento annullata"))
+    finestra.annullato.connect(
+        lambda: QMessageBox.information(
+            finestra, "Annullato", "Creazione evento annullata"
+        )
+    )
 
     finestra.show()
     sys.exit(app.exec())

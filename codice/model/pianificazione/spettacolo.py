@@ -1,4 +1,5 @@
 from model.exceptions import DatoIncongruenteException
+import copy
 
 
 class Spettacolo:
@@ -31,10 +32,10 @@ class Spettacolo:
         return self.__note
 
     def get_interpreti(self) -> dict[str, str]:
-        return self.__interpreti
+        return copy.copy(self.__interpreti)
 
     def get_tecnici(self) -> dict[str, str]:
-        return self.__tecnici
+        return copy.copy(self.__tecnici)
 
     # Setters
     @staticmethod
