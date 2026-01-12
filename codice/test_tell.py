@@ -1,5 +1,5 @@
 from model.pianificazione.spettacolo import Spettacolo
-from model.pianificazione.evento import Evento
+from model.organizzazione.evento import Evento
 from model.model import Model
 from model.account.account import Account, Ruolo
 from model.pianificazione.genere import Genere

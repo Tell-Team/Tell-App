@@ -1,4 +1,4 @@
-from model.pianificazione.evento import Evento
+from model.organizzazione.evento import Evento
 from model.exceptions import IdOccupatoException, IdInesistenteException
 from typing import Optional
 import copy

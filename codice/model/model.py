@@ -1,5 +1,5 @@
 from model.gestori.gestore_eventi import GestoreEventi
-from model.pianificazione.evento import Evento
+from model.organizzazione.evento import Evento
 from model.gestori.gestore_accounts import GestoreAccounts
 from model.account.account import Account, Ruolo
 from model.gestori.gestore_generi import GestoreGeneri
