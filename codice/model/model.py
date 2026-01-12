@@ -1,3 +1,5 @@
+from model.gestori.gestore_eventi import GestoreEventi
+from model.pianificazione.evento import Evento
 from model.gestori.gestore_accounts import GestoreAccounts
 from model.account.account import Account, Ruolo
 from model.gestori.gestore_generi import GestoreGeneri
@@ -49,6 +51,12 @@ class Model:
         except FileNotFoundError:
             self.__gestore_spettacoli = GestoreSpettacoli()
 
+        try:
+            self.__carica_eventi()
+            Evento.set_next_id(self.__gestore_eventi.get_max_id() + 1)
+        except FileNotFoundError:
+            self.__gestore_eventi = GestoreEventi()
+
     # DB Path
     def set_db_path(self, db_path: str):
         """Throws: DatoIncongruenteException"""
@@ -79,6 +87,10 @@ class Model:
         with open(os.path.join(self.__db_path, "spettacoli.pkl"), "rb") as f:
             self.__gestore_spettacoli: GestoreSpettacoli = load(f)
 
+    def __carica_eventi(self):
+        with open(os.path.join(self.__db_path, "eventi.pkl"), "rb") as f:
+            self.__gestore_eventi: GestoreEventi = load(f)
+
     # Salvataggi
     def __salva_accounts(self):
         with open(os.path.join(self.__db_path, "accounts.pkl"), "wb") as f:
@@ -95,6 +107,10 @@ class Model:
     def __salva_spettacoli(self):
         with open(os.path.join(self.__db_path, "spettacoli.pkl"), "wb") as f:
             dump(self.__gestore_spettacoli, f)
+
+    def __salva_eventi(self):
+        with open(os.path.join(self.__db_path, "eventi.pkl"), "wb") as f:
+            dump(self.__gestore_eventi, f)
 
     # Getters
     #   ACCOUNTS
@@ -135,6 +151,16 @@ class Model:
     def get_regie_by_opera(self, id_: int) -> list[Regia]:
         return self.__gestore_spettacoli.get_regie_by_opera(id_)
 
+    #   EVENTI
+    def get_evento(self, id_: int) -> Optional[Evento]:
+        return self.__gestore_eventi.get_evento(id_)
+
+    def get_eventi(self) -> list[Evento]:
+        return self.__gestore_eventi.get_eventi()
+
+    def get_eventi_by_spettacolo(self, id_: int) -> list[Evento]:
+        return self.__gestore_eventi.get_eventi_by_spettacolo(id_)
+
     # Validazione
     def __valida_opera(self, opera: Opera):
         """Throws: IdInesistenteException"""
@@ -148,6 +174,13 @@ class Model:
         if not self.__gestore_opere.ha_opera(regia.get_id_opera()):
             raise IdInesistenteException(
                 f"Non è presente nessun'opera con id {regia.get_id_opera()}."
+            )
+
+    def __valida_evento(self, evento: Evento):
+        """Throws: IdInesistenteException"""
+        if not self.__gestore_spettacoli.ha_spettacolo(evento.get_id_spettacolo()):
+            raise IdInesistenteException(
+                f"Non è presente nessuno spettacolo con id {evento.get_id_spettacolo()}."
             )
 
     # Login
@@ -232,6 +265,16 @@ class Model:
         self.__gestore_spettacoli.aggiungi_spettacolo(spettacolo)
         self.__salva_spettacoli()
 
+    def elimina_spettacolo(self, id_: int):
+        """Throws: OggettoInUsoException, IdInesistenteException"""
+        if self.__gestore_eventi.spettacolo_in_uso(id_):
+            raise OggettoInUsoException(
+                "Lo spettacolo è ancora legato ad uno o più eventi."
+            )
+
+        self.__gestore_spettacoli.elimina_spettacolo(id_)
+        self.__salva_spettacoli()
+
     def modifica_spettacolo(self, spettacolo_modificato: Spettacolo):
         """Throws: IdInesistenteException"""
         if type(spettacolo_modificato) is Regia:
@@ -239,3 +282,26 @@ class Model:
 
         self.__gestore_spettacoli.modifica_spettacolo(spettacolo_modificato)
         self.__salva_spettacoli()
+
+    #   EVENTI
+    def aggiungi_evento(self, evento: Evento):
+        """Throws: IdInesistenteException, IdOccupatoException"""
+        self.__valida_evento(evento)
+
+        self.__gestore_eventi.aggiungi_evento(evento)
+        self.__salva_eventi()
+
+    # def elimina_opera(self, id_: int):
+    #     """Throws: OggettoInUsoException, IdInesistenteException"""
+    #     if self.__gestore_spettacoli.opera_in_uso(id_):
+    #         raise OggettoInUsoException("L'opera è ancora legata ad una o più regie.")
+
+    #     self.__gestore_opere.elimina_opera(id_)
+    #     self.__salva_opere()
+
+    def modifica_evento(self, evento_modificato: Evento):
+        """Throws: IdInesistenteException"""
+        self.__valida_evento(evento_modificato)
+
+        self.__gestore_eventi.modifica_evento(evento_modificato)
+        self.__salva_eventi()

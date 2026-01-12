@@ -17,6 +17,13 @@ class GestoreSpettacoli:
 
         return False
 
+    def ha_spettacolo(self, id_: int) -> bool:
+        for s in self.__lista_spettacoli:
+            if s.get_id() == id_:
+                return True
+
+        return False
+
     # Getters
     def get_max_id(self) -> int:
         ids = map(lambda x: x.get_id(), self.__lista_spettacoli)
@@ -63,6 +70,15 @@ class GestoreSpettacoli:
                 )
 
         self.__lista_spettacoli.append(spettacolo)
+
+    def elimina_spettacolo(self, id_: int):
+        """Throws: IdInesistenteException"""
+        for i, s in enumerate(self.__lista_spettacoli):
+            if s.get_id() == id_:
+                self.__lista_spettacoli.pop(i)
+                return
+
+        raise IdInesistenteException(f"Non è presente nessuno spettacolo con id {id_}.")
 
     def modifica_spettacolo(self, spettacolo_modificato: Spettacolo):
         """Throws: IdInesistenteException"""
