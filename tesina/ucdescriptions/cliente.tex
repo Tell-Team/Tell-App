@@ -55,6 +55,7 @@
 % - Revisare l'uso di "dati" nelle descrizioni.
 
 % "non vengono inclusi" : Usato per indicare le instanze che non sono visualizzate nei casi d'uso di ricerca.
+% 'comando "Nome del comando"' : Qui, "Nome del comando" è un nome descrittivo del comando chiamato, e.g. "Crea Opera", "Genera ricevuta".
 
 % - "ottiene" : Studiarla nel suo contesto. Non sono convinto.
 %---END
@@ -66,7 +67,7 @@
 % UC: Lista Spettacoli		[X]
 % UC ext: Ricerca Spettacolo	[X]
 % UC: Visualizza Spettacolo	[X]
-% UC: Lista Eventi		[]
+% UC: Lista Eventi		[X]
 % UC: Lista Sezioni		[]
 % UC: Visualizza Sezione	[]
 % UC: Lista Posti		[]
@@ -221,7 +222,6 @@
 			\item Il sistema mostra a schermo le informazioni essenziali di tutte le regie associate all'opera.
             % "mostra a schermo <oggetto>"(3)
             % "associate"(6)
-            % - Mattia usa "informazioni rilevanti dell'evento (es. ...)" per Lista Eventi
             \item \textbf{If} l'utente è autenticato come Amministratore
             \begin{enumerate}
                 \item Il sistema permette all'utente di modificare ed eliminare le regie.
@@ -264,15 +264,12 @@
 		\begin{enumerate}
 			\item Il sistema mostra a schermo le informazioni essenziali di tutti gli spettacoli memorizzati.
             % "mostra a schermo <oggetto>"(3)
-            \item Il sistema permette all'utente di visualizzare in più dettaglio gli spettacoli.
+            \item Il sistema permette all'utente di visualizzare in più dettaglio e scegliere posti per gli spettacoli.
             % "visualizza in più dettaglio"(9)
-            % - Che passi bisogna seguire? Non sono sicuro del passo precedente.
-            % - Ancora non conosco come vogliono la view della sezione Spettacoli
             \item \textbf{If} l'utente è autenticato come Amministratore o Biglietteria
             \begin{enumerate}
                 \item Il sistema permette all'utente di modificare ed eliminare gli spettacoli.
             \end{enumerate}
-            % - Non sono neanche sicuro se questo passo precedente è vero.
             \item[] \textbf{punto di estensione:} Ricerca Spettacolo
 		\end{enumerate}
 		
@@ -397,7 +394,7 @@
 } }
 
 
-% ------ HASTA AQUÍ LLEGUÉ ----------
+% - DA QUESTO PUNTO IN AVANTI, NON HO FATTO CORREZIONI NEI USECASE
 
 
 {\ucTable	% UC: Lista Sezioni

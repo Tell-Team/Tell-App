@@ -5,9 +5,9 @@
 % UC: Crea Opera		[X]
 % UC ext: Modifica Opera	[X]
 % UC ext: Elimina Opera	[X]
-% UC ext: Crea Regia		[] <- C'è UI per facilitare la descrizione
-% UC ext: Modifica Regia	[] <- C'è UI per facilitare la descrizione
-% UC ext: Elimina Regia	[] <- C'è UI per facilitare la descrizione
+% UC ext: Crea Regia		[X]
+% UC ext: Modifica Regia	[X]
+% UC ext: Elimina Regia	[X]
 % UC: Crea Sezione		[]
 % UC ext: Modifica Sezione	[]
 % UC ext: Elimina Sezione	[]
@@ -27,21 +27,20 @@
 	
 }{	% Breve descrizione
 	L'utente crea un'istanza di opera svolta nel teatro.
-    % - Da discutere
+    % - DISCUTERE: "istanza" non è il termine appropriato.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente è autenticato come Amministratore.
         \item L'utente si trova nella sezione Informazioni.
         % "Informazioni"(2)
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item L'utente avvia il caso d'uso selezionando il comando Creazione.
+        \item L'utente avvia il caso d'uso selezionando il comando "Crea Opera".
         \item Il sistema mostra una interfaccia per inserire dati e impostazioni dell'opera.
         \item L'utente inserisce le informazioni dell'opera.
         \item L'utente conferma la creazione.
@@ -50,7 +49,7 @@
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item L'utente crea un'opera.
+        \item La nuova opera è memorizzata e immediatamente visibile a tutti gli utenti.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Alternativa
@@ -71,7 +70,6 @@
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente è autenticato come Amministratore.
         \item L'utente si trova nella sezione Informazioni.
         % "si trova"(5)
         % "Informazioni"(2)
@@ -79,16 +77,15 @@
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item L'utente avvia il caso d'uso selezionando il comando Modifica associato ad un'opera.
+        \item L'utente avvia il caso d'uso selezionando il comando "Modifica" associato ad un'opera.
         \item Il sistema consente all'utente di modificare le informazioni dell'opera.
         \item L'utente inserisce le modifiche desiderate e le conferma.
-        % - Posso riutilizzare questo blocco per altri casi d'uso.
         \item Il sistema verifica i dati e li salva in memoria.
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item L'utente effettua la modifica di un'opera.
+        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
     \end{enumerate}
 	
 } }
@@ -108,14 +105,13 @@
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente è autenticato come Amministratore.
         \item L'utente si trova nella sezione Informazioni.
         % "si trova"(5)
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item L'utente avvia il caso d'uso selezionando il comando Elimina associato ad un'opera.
+        \item L'utente avvia il caso d'uso selezionando il comando "Elimina" associato ad un'opera.
         \item Il sistema richiede all'utente di confermare l'intenzione di eliminare l'opera.
         \item L'utente conferma l'elimina.
         \item Il sistema verifica che non ci siano regie associate all'opera e la elimina permanentemente.
@@ -124,7 +120,7 @@
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item L'utente effettua l'elimina di un'opera.
+        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
     \end{enumerate}
 	
 } }
@@ -143,30 +139,17 @@
 	\attori
 	
 }{	% Precondizioni
-	\begin{enumerate}
-        \item L'utente ha premuto il pulsante di aggiunta di una nuova regia.
+    \begin{enumerate}
+        \item L'utente sta visualizzando un'opera.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
-	\begin{enumerate}
-        \item Il sistema richiede all'utente le informazioni della regia. \label{beginning}
-        \item \textbf{If} l'utente conferma
-            \begin{enumerate}
-                \item Il sistema controlla la validità dei valori inseriti.
-                \item \textbf{If} i valori sono validi 
-                    \begin{enumerate}
-                        \item Il sistema memorizza permanentemente la nuova regia.
-                    \end{enumerate}
-                \item \textbf{Else}
-                    \begin{enumerate}
-                        \item Il sistema informa l'utente dell'errore.
-                        \item Il caso d'uso ricomincia da \ref{beginning}
-                    \end{enumerate}
-            \end{enumerate}
-        \item \textbf{Else}
-            \begin{enumerate}
-                \item Il sistema non aggiunge la nuova regia.
-            \end{enumerate}
+    \begin{enumerate}
+        \item L'utente avvia il caso d'uso selezionando il comando "Crea Regia".
+        \item Il sistema mostra una interfaccia per inserire dati e impostazioni della regia.
+        \item L'utente inserisce le informazioni della regia.
+        \item L'utente conferma la creazione.
+        \item Il sistema verifica i dati e li salva in memoria.
     \end{enumerate}
 	
 }{	% Postcondizioni
@@ -191,30 +174,15 @@
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente ha premuto il pulsante di modifica di una regia.
+        \item L'utente sta visualizzando un'opera.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
-	\begin{enumerate}
-        \item Il sistema consente all'utente di modificare le informazioni della regia. \label{start_mod_regia}
-        \item Il sistema richiede all'utente di confermare l'intenzione di apportare le modifiche.
-        \item \textbf{If} l'utente conferma
-            \begin{enumerate}
-                \item Il sistema controlla la validità dei valori inseriti.
-                \item \textbf{If} i valori sono validi 
-                    \begin{enumerate}
-                        \item Il sistema memorizza permanentemente le modifiche apportate.
-                    \end{enumerate}
-                \item \textbf{Else}
-                    \begin{enumerate}
-                        \item Il sistema informa l'utente dell'errore.
-                        \item Il caso d'uso ricomincia da \ref{start_mod_regia}
-                    \end{enumerate}
-            \end{enumerate}
-        \item \textbf{Else}
-            \begin{enumerate}
-                \item Il sistema ignora i cambiamenti apportati.
-            \end{enumerate}
+    \begin{enumerate}
+        \item L'utente avvia il caso d'uso selezionando il comando "Modifica" associato ad una regia.
+        \item Il sistema consente all'utente di modificare le informazioni della regia.
+        \item L'utente inserisce le modifiche desiderate e le conferma.
+        \item Il sistema verifica i dati e li salva in memoria.
     \end{enumerate}
 	
 }{	% Postcondizioni
@@ -238,19 +206,17 @@
 	\attori
 	
 }{	% Precondizioni
-	Nessuna.
+	\begin{enumerate}
+        \item L'utente sta visualizzando un'opera.
+    \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
-	\begin{enumerate}
+    \begin{enumerate}
+        \item L'utente avvia il caso d'uso selezionando il comando "Elimina" associato ad una regia.
         \item Il sistema richiede all'utente di confermare l'intenzione di eliminare la regia.
-        \item \textbf{If} l'utente conferma
-            \begin{enumerate}
-                \item Il sistema elimina permanentemente la regia dalla lista.
-            \end{enumerate}
-        \item \textbf{Else}
-            \begin{enumerate}
-                \item Il sistema ignora la richiesta di eliminazione.
-            \end{enumerate}
+        \item L'utente conferma l'elimina.
+        \item Il sistema verifica che non ci siano eventi associate alla regia e la elimina permanentemente.
+        % "e la elimina permanentemente"(10)
     \end{enumerate}
 	
 }{	% Postcondizioni
@@ -259,6 +225,10 @@
     \end{enumerate}
 	
 } }
+
+
+% - DA QUESTO PUNTO IN AVANTI, NON HO FATTO CORREZIONI NEI USECASE
+
 
 {\ucTable	% UC: Crea Sezione
 {	% Caso d'uso

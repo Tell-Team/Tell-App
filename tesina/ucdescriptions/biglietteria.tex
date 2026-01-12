@@ -6,7 +6,7 @@
 % UC ext: Elimina Evento		[]
 % UC: Lista Prenotazioni		[]
 % UC ext: Ricerca Prenotazione		[]
-% UC ext: Segna Prenotazione come pagata	[]
+% UC ext: Segna Prenotazione come pagata	[X]
 
 \newcommand{\attori}{Biglietteria \\ Amministratore}
 
@@ -20,14 +20,13 @@
 	
 }{	% Breve descrizione
 	L'utente crea un'istanza di spettacolo svolto nel teatro.
-    % - Da discutere
+    % - DISCUTERE: "istanza" non è il termine appropriato.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente è autenticato come Amministratore o Biglietteria.
         \item L'utente si trova nella sezione Spettacoli.
         % "si trova"(5)
         % "Spettacoli"(8)
@@ -65,7 +64,6 @@
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente è autenticato come Amministratore o Biglietteria.
         \item L'utente si trova nella sezione Spettacoli.
         % "si trova"(5)
     \end{enumerate}
@@ -323,20 +321,21 @@
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente visualizza l'elenco delle prenotazioni.
-        \item L'utente ha premuto il pulsante di assegnamento (come \emph{pagata}).
+        \item L'utente sta visualizzando l'elenco delle prenotazioni.
+        % - CORRIGGERE: È necessario conoscere come funziona Lista Prenotazioni
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item Il Sistema chiede conferma all'utente.
+        \item L'utente avvia il caso d'uso selezionando il comando "Segna come \emph{pagata}" associato ad una prenotazione.
+        \item Il sistema chiede conferma all'utente.
         \item L'utente conferma l'assegnamento della prenotazione come \emph{pagata}.
-        \item Il Sistema segna la prenotazione come \emph{pagata}.
+        \item Il sistema effettua l'assegnamento.
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item L'utente effettua l'assegnamento di una prenotazione come \emph{pagata}.
+        \item La prenotazione è segnata come \emph{pagata}.
     \end{enumerate}
 	
 } }
