@@ -7,18 +7,12 @@ from view.style import QssStyle
 
 
 class NuovoGenereView(AbstractCreaView):
-    """View per la creazione di un nuovo genere.
+    """Pagina per la creazione di un nuovo genere.
 
     Segnali:
-    - annullaRequest(QWidget): emesso quando si clicca il pulsante Annulla;
-    - salvaRequest(): emesso quando si clicca il pulsante Crea.
+    - `annullaRequest(QWidget)`: emesso quando si clicca il pulsante Annulla;
+    - `salvaRequest()`: emesso quando si clicca il pulsante Salva.
     """
-
-    def __init__(self) -> None:
-        super().__init__()
-
-        self._setup_ui()
-        self._connect_signals()
 
     # ------------------------- SETUP INIT -------------------------
 
@@ -28,9 +22,6 @@ class NuovoGenereView(AbstractCreaView):
 
         # Header
         self._header.setText("Aggiungi nuovo genere")
-
-        # Form
-        self._setup_form()
 
         # Layout
         self._main_layout.addWidget(self._header)

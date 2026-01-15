@@ -14,8 +14,7 @@ from view.style import QssStyle
 
 
 class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
-    """Classe astratta che facilita la creazione delle pagine di sezione
-    dell'app: Spettacoli, Info ed Account.
+    """Classe astratta per la creazione di pagine di sezione dell'app: Spettacoli, Info ed Account.
 
     - logoutRequest(): emesso quando si clicca il pulsante Logout;
     - goToSpettacoli(): emesso quando si clicca il pulsante Spettacoli;
@@ -28,7 +27,7 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
     goToInfo = pyqtSignal()
     goToAccount = pyqtSignal()
 
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__()
 
         self._setup_ui()

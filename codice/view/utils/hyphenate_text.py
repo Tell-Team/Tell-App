@@ -18,7 +18,7 @@ def _soft_hyphenate(text: str, step: int = 1):  # alt: step = 6
 class HyphenatedLabel(QLabel):
     """Label che applica automaticamente la sillabazione al testo."""
 
-    def __init__(self, text: Optional[str] = None) -> None:
+    def __init__(self, text: Optional[str] = None):
         super().__init__()
         self.setWordWrap(True)
         self._raw_text = text or ""

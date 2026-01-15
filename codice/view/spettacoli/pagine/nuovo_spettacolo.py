@@ -17,29 +17,23 @@ from view.style import QssStyle
 
 
 class NuovoSpettacoloView(AbstractCreaView):
-    """View per la creazione di un nuovo spettacolo.
+    """Pagina per la creazione di un nuovo spettacolo.
 
     Segnali:
-    - displayInterpreti(CreaAbstractView): emesso per mostrare la lista interpreti a schermo;
-    - displayTecnici(CreaAbstractView): emesso per mostrare la lista tecnici a schermo;
-    - aggiungiInterprete(CreaAbstractView, str, str): emesso quando si clicca il pulsante
+    - `displayInterpreti(CreaAbstractView)`: emesso per mostrare la lista interpreti a schermo;
+    - `displayTecnici(CreaAbstractView)`: emesso per mostrare la lista tecnici a schermo;
+    - `aggiungiInterprete(CreaAbstractView, str, str)`: emesso quando si clicca il pulsante
     Aggiungi degli interpreti;
-    - aggiungiTecnico(CreaAbstractView, str, str): emesso quando si clicca il pulsante Aggiungi
+    - `aggiungiTecnico(CreaAbstractView, str, str)`: emesso quando si clicca il pulsante Aggiungi
     dei tecnici;
-    - annullaRequest(QWidget): emesso quando si clicca il pulsante Annulla;
-    - salvaRequest(): emesso quando si clicca il pulsante Crea.
+    - `annullaRequest(QWidget)`: emesso quando si clicca il pulsante Annulla;
+    - `salvaRequest()`: emesso quando si clicca il pulsante Crea.
     """
 
     displayInterpreti = pyqtSignal(AbstractCreaView)
     displayTecnici = pyqtSignal(AbstractCreaView)
     aggiungiInterprete = pyqtSignal(AbstractCreaView, str, str)
     aggiungiTecnico = pyqtSignal(AbstractCreaView, str, str)
-
-    def __init__(self) -> None:
-        super().__init__()
-
-        self._setup_ui()
-        self._connect_signals()
 
     # ------------------------- SETUP INIT -------------------------
 
@@ -49,9 +43,6 @@ class NuovoSpettacoloView(AbstractCreaView):
 
         # Header
         self._header.setText("Aggiungi nuovo spettacolo")
-
-        # Form
-        self._setup_form()
 
         # Layout
         self._main_layout.addWidget(self._header)
@@ -76,10 +67,8 @@ class NuovoSpettacoloView(AbstractCreaView):
         label_interprete = QLabel("Interprete :")
         label_interprete.setProperty(QssStyle.SECONDARY_TEXT, True)
         self.interprete_nome = QLineEdit()
-        self.interprete_nome.setMaxLength(30)
         self.interprete_nome.setPlaceholderText("Inserire nome")
         self.interprete_ruolo = QLineEdit()
-        self.interprete_ruolo.setMaxLength(30)
         self.interprete_ruolo.setPlaceholderText("Inserire ruolo")
 
         self._btn_aggiungi_interprete = QPushButton("Aggiungi")
@@ -114,10 +103,8 @@ class NuovoSpettacoloView(AbstractCreaView):
         label_tecnico = QLabel("Tecnico :")
         label_tecnico.setProperty(QssStyle.SECONDARY_TEXT, True)
         self.tecnico_nome = QLineEdit()
-        self.tecnico_nome.setMaxLength(30)
         self.tecnico_nome.setPlaceholderText("Inserire nome")
         self.tecnico_posto = QLineEdit()
-        self.tecnico_posto.setMaxLength(30)
         self.tecnico_posto.setPlaceholderText("Inserire posto")
 
         self._btn_aggiungi_tecnico = QPushButton("Aggiungi")

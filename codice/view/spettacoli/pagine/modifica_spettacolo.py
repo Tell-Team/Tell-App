@@ -8,7 +8,9 @@ from view.style.uiStyle import QssStyle
 
 
 class ModificaSpettacoloView(NuovoSpettacoloView):
-    """Sottoclasse di `NuovoSpettacoloView`. Modifica alcune label della pagina ed aggiunge
+    """Pagina per la modifica di spettacoli.
+
+    Sottoclasse di `NuovoSpettacoloView`. Modifica alcune label della pagina ed aggiunge
     un'attributo `cur_id_spettacolo` per indicare l'id dello spettacolo da modificare.
     """
 

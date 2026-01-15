@@ -11,22 +11,26 @@ from typing import override
 
 from core.view import AbstractSectionView
 
+from controller.login.auth_service import AuthenticationService
+
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
 from view.style import QssStyle
 
 
 class InfoSectionView(AbstractSectionView):
-    """View della sezione Info dell'app.
+    """Sezione Info dell'app.
+
+    Contiene le informazioni sulle `Opera` e `Genere` memorizzati.
 
     Segnali:
-    - logoutRequest(): emesso quando si clicca il pulsante Logout;
-    - goToSpettacoli(): emesso quando si clicca il pulsante Spettacoli;
-    - goToAccount(): emesso quando si clicca il pulsante Account;
-    - nuovaOperaRequest(): emesso quando si clicca il pulsante Nuova opera;
-    - nuovoGenereRequest(): emesso quando si clicca il pulsante Nuovo genere;
-    - displayOpereRequest(QVBoxLayout): emesso per caricare la lista delle opere nella sezione Info;
-    - displayGeneriRequest(QVBoxLayout): emesso per caricare la lista dei generi nella sezione Info.
+    - `logoutRequest()`: emesso quando si clicca il pulsante Logout;
+    - `goToSpettacoli()`: emesso quando si clicca il pulsante Spettacoli;
+    - `goToAccount()`: emesso quando si clicca il pulsante Account;
+    - `nuovaOperaRequest()`: emesso quando si clicca il pulsante Nuova opera;
+    - `nuovoGenereRequest()`: emesso quando si clicca il pulsante Nuovo genere;
+    - `displayOpereRequest(QVBoxLayout)`: emesso per caricare la lista delle opere nella sezione;
+    - `displayGeneriRequest(QVBoxLayout)`: emesso per caricare la lista dei generi nella sezione.
     """
 
     nuovaOperaRequest = pyqtSignal()
@@ -34,19 +38,25 @@ class InfoSectionView(AbstractSectionView):
     displayOpereRequest = pyqtSignal(QVBoxLayout)
     displayGeneriRequest = pyqtSignal(QVBoxLayout)
 
+    def __init__(self, auth: AuthenticationService):
+
+        self.is_admin = auth.is_admin()
+
+        super().__init__()
+
     # ------------------------- SETUP INIT -------------------------
 
     @override
     def _setup_ui(self) -> None:
         super()._setup_ui()
 
+        if not self.is_admin:
+            self._btn_sezione_account.hide()
+
         # Opere
         header_opere = QLabel("Opere")
         header_opere.setProperty(QssStyle.HEADER1, True)
         header_opere.setAlignment(Qt.AlignmentFlag.AlignLeft)
-
-        self._btn_nuova_opera = QPushButton("Nuova opera")
-        self._btn_nuova_opera.setProperty(QssStyle.WHITE_BUTTON, True)
 
         self.filtro_ricerca: str = ""
 
@@ -71,7 +81,10 @@ class InfoSectionView(AbstractSectionView):
         layout_header_opere = QHBoxLayout(widget_header_opere)
         layout_header_opere.setContentsMargins(0, 0, 0, 0)
         layout_header_opere.addWidget(header_opere)
-        layout_header_opere.addWidget(self._btn_nuova_opera)
+        if self.is_admin:
+            self._btn_nuova_opera = QPushButton("Nuova opera")
+            self._btn_nuova_opera.setProperty(QssStyle.WHITE_BUTTON, True)
+            layout_header_opere.addWidget(self._btn_nuova_opera)
         layout_header_opere.addWidget(widget_ricerca)
 
         # Non è necessario salvare questa label come attributo perché il suo funzionamento
@@ -94,14 +107,14 @@ class InfoSectionView(AbstractSectionView):
         header_generi.setProperty(QssStyle.HEADER1, True)
         header_generi.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        self._btn_nuovo_genere = QPushButton("Nuovo genere")
-        self._btn_nuovo_genere.setProperty(QssStyle.WHITE_BUTTON, True)
-
         widget_header_generi = QWidget()
         layout_header_generi = QHBoxLayout(widget_header_generi)
         layout_header_generi.setContentsMargins(0, 0, 0, 0)
         layout_header_generi.addWidget(header_generi)
-        layout_header_generi.addWidget(self._btn_nuovo_genere)
+        if self.is_admin:
+            self._btn_nuovo_genere = QPushButton("Nuovo genere")
+            self._btn_nuovo_genere.setProperty(QssStyle.WHITE_BUTTON, True)
+            layout_header_generi.addWidget(self._btn_nuovo_genere)
         layout_header_generi.addStretch()
 
         label_lista_generi_vuota = EmptyStateLabel("Non vi sono generi disponibili.")
@@ -157,16 +170,16 @@ class InfoSectionView(AbstractSectionView):
 
         self._btn_sezione_info.setEnabled(False)
 
-        self._btn_nuova_opera.clicked.connect(  # type:ignore
-            self.nuovaOperaRequest.emit
-        )
+        if self.is_admin:
+            self._btn_nuova_opera.clicked.connect(  # type:ignore
+                self.nuovaOperaRequest.emit
+            )
+            self._btn_nuovo_genere.clicked.connect(  # type:ignore
+                self.nuovoGenereRequest.emit
+            )
 
         self._btn_ricerca.clicked.connect(  # type:ignore
             lambda: self.__filtra_opere(self.ricerca_bar.text())
-        )
-
-        self._btn_nuovo_genere.clicked.connect(  # type:ignore
-            self.nuovoGenereRequest.emit
         )
 
         self.displayOpereRequest.emit(self.layout_lista_opere)

@@ -6,6 +6,7 @@ from model.pianificazione.spettacolo import Spettacolo
 from model.pianificazione.regia import Regia  # - TESTING
 
 from view.utils.list_widgets import ItemDisplay
+from view.utils.hyphenate_text import HyphenatedLabel
 from view.style import QssStyle
 
 
@@ -24,8 +25,10 @@ class SpettacoloDisplay(ItemDisplay):
     modificaRequest = pyqtSignal(int)
     eliminaConfermata = pyqtSignal(int)
 
-    def __init__(self, s: Spettacolo, dati: tuple[str, ...] = ()) -> None:
+    def __init__(self, s: Spettacolo, editable: bool, dati: tuple[str, ...] = ()):
         super().__init__()
+
+        self.__editable = editable
 
         self.__setup_ui(s, dati)
         self.__connect_signals(s)
@@ -34,7 +37,7 @@ class SpettacoloDisplay(ItemDisplay):
 
     def __setup_ui(self, s: Spettacolo, dati: tuple[str, ...] = ()) -> None:
         # Labels
-        titolo = QLabel(s.get_titolo())
+        titolo = HyphenatedLabel(s.get_titolo())
         titolo.setProperty(QssStyle.HEADER2, True)
 
         # Pulsanti
@@ -44,38 +47,11 @@ class SpettacoloDisplay(ItemDisplay):
         self.__btn_scegli_posti = QPushButton("Scegli posti")
         self.__btn_scegli_posti.setProperty(QssStyle.WHITE_BUTTON, True)
 
-        self.__btn_modifica = QPushButton("Modifica")
-        self.__btn_modifica.setProperty(QssStyle.MODIFY_BUTTON, True)
-
-        self.__btn_elimina = QPushButton("Elimina")
-        self.__btn_elimina.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
-
         self.__pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.__pulsanti)
         layout_pulsanti.setContentsMargins(1, 1, 1, 1)
         layout_pulsanti.addWidget(self.__btn_visualizza)
         layout_pulsanti.addWidget(self.__btn_scegli_posti)
-        layout_pulsanti.addWidget(self.__btn_modifica)
-        layout_pulsanti.addWidget(self.__btn_elimina)
-        layout_pulsanti.addStretch()
-
-        # Pannello di eliminazione
-        domanda = QLabel("<b>Sicuro di eliminare?</b>")
-        domanda.setProperty(QssStyle.PARAGRAPH, True)
-
-        self.__btn_no = QPushButton("No")
-        self.__btn_no.setProperty(QssStyle.WHITE_BUTTON, True)
-
-        self.__btn_si = QPushButton("Sì")
-        self.__btn_si.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
-
-        self.__conferma_elimina = QWidget()
-        layout_conferma = QHBoxLayout(self.__conferma_elimina)
-        layout_conferma.setContentsMargins(1, 1, 1, 1)
-        layout_conferma.addWidget(domanda)
-        layout_conferma.addWidget(self.__btn_no)
-        layout_conferma.addWidget(self.__btn_si)
-        self.__conferma_elimina.hide()
 
         # Layout
         self.__layout = QVBoxLayout(self)
@@ -88,7 +64,38 @@ class SpettacoloDisplay(ItemDisplay):
             ...  # Nel caso ci siano altri sottoclassi di Spettacolo
 
         self.__layout.addWidget(self.__pulsanti)
-        self.__layout.addWidget(self.__conferma_elimina)
+
+        if self.__editable:
+            self.__btn_modifica = QPushButton("Modifica")
+            self.__btn_modifica.setProperty(QssStyle.MODIFY_BUTTON, True)
+
+            self.__btn_elimina = QPushButton("Elimina")
+            self.__btn_elimina.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
+
+            layout_pulsanti.addWidget(self.__btn_modifica)
+            layout_pulsanti.addWidget(self.__btn_elimina)
+
+            # Pannello di eliminazione
+            domanda = QLabel("<b>Sicuro di eliminare?</b>")
+            domanda.setProperty(QssStyle.PARAGRAPH, True)
+
+            self.__btn_no = QPushButton("No")
+            self.__btn_no.setProperty(QssStyle.WHITE_BUTTON, True)
+
+            self.__btn_si = QPushButton("Sì")
+            self.__btn_si.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
+
+            self.__conferma_elimina = QWidget()
+            layout_conferma = QHBoxLayout(self.__conferma_elimina)
+            layout_conferma.setContentsMargins(1, 1, 1, 1)
+            layout_conferma.addWidget(domanda)
+            layout_conferma.addWidget(self.__btn_no)
+            layout_conferma.addWidget(self.__btn_si)
+            self.__conferma_elimina.hide()
+
+            self.__layout.addWidget(self.__conferma_elimina)
+
+        layout_pulsanti.addStretch()
 
     def __connect_signals(self, s: Spettacolo) -> None:
         self.__id = s.get_id()
@@ -101,21 +108,22 @@ class SpettacoloDisplay(ItemDisplay):
             partial(self.scegliPostoRequest.emit, self.__id)
         )
 
-        self.__btn_modifica.clicked.connect(  # type:ignore
-            partial(self.modificaRequest.emit, self.__id)
-        )
+        if self.__editable:
+            self.__btn_modifica.clicked.connect(  # type:ignore
+                partial(self.modificaRequest.emit, self.__id)
+            )
 
-        self.__btn_elimina.clicked.connect(  # type:ignore
-            self.__on_elimina
-        )
+            self.__btn_elimina.clicked.connect(  # type:ignore
+                self.__on_elimina
+            )
 
-        self.__btn_si.clicked.connect(  # type:ignore
-            partial(self.eliminaConfermata.emit, self.__id)
-        )
+            self.__btn_si.clicked.connect(  # type:ignore
+                partial(self.eliminaConfermata.emit, self.__id)
+            )
 
-        self.__btn_no.clicked.connect(  # type:ignore
-            self.annulla_elimina
-        )
+            self.__btn_no.clicked.connect(  # type:ignore
+                self.annulla_elimina
+            )
 
     # ------------------------- METODI DI VIEW -------------------------
 
@@ -135,10 +143,10 @@ class SpettacoloDisplay(ItemDisplay):
         if not (len(dati) == 2):
             raise ValueError("dati deve essere un tuple di 2 string")
 
-        compositore = QLabel(f"Direttore d'orchestra: {dati[0]}")
+        compositore = HyphenatedLabel(f"Direttore d'orchestra: {dati[0]}")
         compositore.setProperty(QssStyle.PARAGRAPH, True)
         self.__layout.addWidget(compositore)
 
-        regista = QLabel(f"Regista: {dati[1]}")
+        regista = HyphenatedLabel(f"Regista: {dati[1]}")
         regista.setProperty(QssStyle.PARAGRAPH, True)
         self.__layout.addWidget(regista)

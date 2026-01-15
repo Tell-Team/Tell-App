@@ -19,19 +19,17 @@ class CUOperaController(AbstractCUController):
     """Gestisce il salvataggio delle opere create e modificate.
 
     Segnali:
-    - goBackRequest(): emesso per tornare alla pagina `InfoSectionView`.
+    - `goBackRequest()`: emesso per tornare alla pagina `InfoSectionView`.
     """
 
     _view_nuova: NuovaOperaView
     _view_modifica: ModificaOperaView
 
-    @override
     def __init__(
         self, model: Model, n_opera_v: NuovaOperaView, m_opera_v: ModificaOperaView
-    ) -> None:
+    ):
         if type(n_opera_v) is not NuovaOperaView:
             raise TypeError("Atteso NuovaOperaView per n_opera_v.")
-
         if type(m_opera_v) is not ModificaOperaView:
             raise TypeError("Atteso ModificaOperaView per m_regia_v.")
 
@@ -49,7 +47,7 @@ class CUOperaController(AbstractCUController):
         self._model.modifica_opera(opera_modificata)
 
     @override
-    def _inizia_salvataggio(self, is_new: bool = True) -> None:
+    def _inizia_salvataggio(self, is_new: bool) -> None:
         """Salva l'opera creata o modificata nel `GestoreOpere`.
 
         :param is_new: verifica se si deve creare un'opera o modificare una esistente
@@ -65,7 +63,7 @@ class CUOperaController(AbstractCUController):
             # Ottieni l'input inserito
             nome = cur_pagina.nome.text()
             trama = cur_pagina.trama.toPlainText()
-            id_genere: int = cur_pagina.genere.currentData()
+            id_genere = cur_pagina.genere.currentData()
             compositore = cur_pagina.compositore.text()
             librettista = cur_pagina.librettista.text()
             atti = cur_pagina.atti.value()
@@ -108,7 +106,7 @@ class CUOperaController(AbstractCUController):
             cur_pagina = self._view_modifica
 
             # Crea una copia dell'opera originale
-            copia_opera: Optional[Opera] = self.__get_opera(cur_pagina.cur_id_opera)
+            copia_opera = self.__get_opera(cur_pagina.cur_id_opera)
             if not isinstance(copia_opera, Opera):
                 # Non esiste opera con l'id salvata nella pagina
                 PopupMessage.mostra_errore(
@@ -122,7 +120,7 @@ class CUOperaController(AbstractCUController):
             # Ottieni l'input inserito
             nome = cur_pagina.nome.text()
             trama = cur_pagina.trama.toPlainText()
-            id_genere: int = cur_pagina.genere.currentData()
+            id_genere = cur_pagina.genere.currentData()
             compositore = cur_pagina.compositore.text()
             librettista = cur_pagina.librettista.text()
             atti = cur_pagina.atti.value()

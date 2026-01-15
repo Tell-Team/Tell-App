@@ -5,7 +5,9 @@ from view.info.utils import RegiaPageData
 
 
 class ModificaRegiaView(NuovaRegiaView):
-    """Sottoclasse di `NuovaRegiaView`. Modifica alcune label della pagina ed aggiunge
+    """Pagina per la modifica di regie.
+
+    Sottoclasse di `NuovaRegiaView`. Modifica alcune label della pagina ed aggiunge
     un'attributo `cur_id_regia` per indicare l'id della regia da modificare."""
 
     # ------------------------- SETUP INIT -------------------------

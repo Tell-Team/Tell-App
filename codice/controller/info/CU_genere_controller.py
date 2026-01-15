@@ -19,19 +19,17 @@ class CUGenereController(AbstractCUController):
     """Gestisce il salvataggio dei generi creati e modificati.
 
     Segnali:
-    - goBackRequest(): emesso per tornare alla pagina `InfoSectionView`.
+    - `goBackRequest()`: emesso per tornare alla pagina `InfoSectionView`.
     """
 
     _view_nuova: NuovoGenereView
     _view_modifica: ModificaGenereView
 
-    @override
     def __init__(
         self, model: Model, n_genere_v: NuovoGenereView, m_genere_v: ModificaGenereView
-    ) -> None:
+    ):
         if type(n_genere_v) is not NuovoGenereView:
             raise TypeError("Atteso NuovoGenereView per n_genere_v.")
-
         if type(m_genere_v) is not ModificaGenereView:
             raise TypeError("Atteso ModificaGenereView per m_genere_v.")
 
@@ -94,7 +92,7 @@ class CUGenereController(AbstractCUController):
             cur_pagina = self._view_modifica
 
             # Crea una copia del genere originale
-            copia_genere: Optional[Genere] = self.__get_genere(cur_pagina.cur_id_genere)
+            copia_genere = self.__get_genere(cur_pagina.cur_id_genere)
             if not isinstance(copia_genere, Genere):
                 # Non esiste genere con l'id salvata nella pagina
                 PopupMessage.mostra_errore(

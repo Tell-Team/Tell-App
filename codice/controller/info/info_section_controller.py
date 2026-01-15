@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import pyqtSignal, QObject
-from typing import Optional
 from functools import partial
+from typing import Optional
 
 from controller.navigation import Pagina
 
@@ -24,19 +24,19 @@ class InfoSectionController(QObject):
     """Gestice la sezione Info (`InfoSectionView`) dell'app.
 
     Segnali:
-    - logoutRequest(): emesso per eseguire la funzione di logout dall'`AppContext`;
-    - goToPageRequest(Pagina, bool): emesso per visualizzare un'altra pagina;
-    - goToSectionRequest(Pagina): emesso per visualizzare un'altra pagina, senza salvarla
+    - `logoutRequest()`: emesso per eseguire la funzione di logout dall'`AppContext`;
+    - `goToPageRequest(Pagina, bool)`: emesso per visualizzare un'altra pagina;
+    - `goToSectionRequest(Pagina)`: emesso per visualizzare un'altra pagina, senza salvarla
     nell'history del `NavigationController`;
-    - getNavPageRequest(Pagina, dict): emesso per ottenere la pagina che vendrà visualizzata.
+    - `getPageRequest(Pagina, dict)`: emesso per ottenere la pagina che vendrà visualizzata.
     """
 
     logoutRequest: pyqtSignal = pyqtSignal()
     goToPageRequest: pyqtSignal = pyqtSignal(Pagina, bool)
     goToSectionRequest: pyqtSignal = pyqtSignal(Pagina)
-    getNavPageRequest: pyqtSignal = pyqtSignal(Pagina, dict)
+    getPageRequest: pyqtSignal = pyqtSignal(Pagina, dict)
 
-    def __init__(self, model: Model, info_s: InfoSectionView) -> None:
+    def __init__(self, model: Model, info_s: InfoSectionView):
         super().__init__()
         self.__model = model
         self.__info_section = info_s
@@ -48,32 +48,30 @@ class InfoSectionController(QObject):
     def __connect_signals(self) -> None:
         # Logout
         self.__info_section.logoutRequest.connect(  # type:ignore
-            self.logoutRequest.emit  # - CORRIGGERE: Account ancora non implementato
+            self.logoutRequest.emit
         )
-        # Visualizza Sezione Spettacoli
+
+        # Navigazione tra sezioni
         self.__info_section.goToSpettacoli.connect(  # type:ignore
             partial(self.goToSectionRequest.emit, Pagina.SEZIONE_SPETTACOLI)
         )
-        # Visualizza Sezione Account
         self.__info_section.goToAccount.connect(  # type:ignore
             partial(self.goToSectionRequest.emit, Pagina.SEZIONE_ACCOUNT)
             # - CORRIGGERE: Account ancora non implementato
         )
 
-        # Display della Lista Opere
+        # Display delle istanze del model
         self.__info_section.displayOpereRequest.connect(  # type:ignore
             self.__display_opere
         )
-        # Display della Lista Generi
         self.__info_section.displayGeneriRequest.connect(  # type:ignore
             self.__display_generi
         )
 
-        # Setup della pagina di creazione di opere
+        # Setup delle pagine di creazione
         self.__info_section.nuovaOperaRequest.connect(  # type:ignore
             self.__nuova_opera
         )
-        # Setup della pagina di creazione di generi
         self.__info_section.nuovoGenereRequest.connect(  # type:ignore
             self.__nuovo_genere
         )
@@ -105,7 +103,7 @@ class InfoSectionController(QObject):
         return self.__model.get_regie_by_opera(id_)
 
     def __display_opere(self, layout_opere: ListLayout) -> None:
-        """Visualizza a schermo alcune informazioni delle opere salvate ed assegna a
+        """Mostra a schermo alcune informazioni delle opere salvate ed assegna a
         ciascuna pulsanti per visualizzarle in dettaglio, modificarle o eliminarle.
 
         :param layout: layout dove saranno caricate tutte le opere
@@ -124,7 +122,9 @@ class InfoSectionController(QObject):
 
         # Mostra tutte le opere della lista a schermo
         for opera in lista_opere:
-            cur_opera = OperaDisplay(opera)
+            cur_opera = OperaDisplay(
+                opera, editable=self.__info_section.is_admin
+            )  # - Esta vaina mejor que la guarde el controller y no las misma página
 
             # Setup della pagina di visualizzazione delle opere
             cur_opera.visualizzaRequest.connect(  # type:ignore
@@ -162,7 +162,7 @@ class InfoSectionController(QObject):
             )
 
     def __display_generi(self, layout_generi: ListLayout) -> None:
-        """Visualizza a schermo le informazioni dei generi salvati ed assegna a
+        """Mostra a schermo le informazioni dei generi salvati ed assegna a
         ciascuno pulsanti per modificarli o eliminarli.
 
         :param layout: layout dove saranno caricate tutti i generi
@@ -176,7 +176,7 @@ class InfoSectionController(QObject):
 
         # Mostra tutti i generi salvati a schermo
         for genere in lista_generi:
-            cur_genere = GenereDisplay(genere)
+            cur_genere = GenereDisplay(genere, editable=self.__info_section.is_admin)
 
             # Setup della pagina di modifica dei generi
             cur_genere.modificaRequest.connect(  # type:ignore
@@ -229,7 +229,7 @@ class InfoSectionController(QObject):
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.VISUALIZZA_OPERA
-        self.getNavPageRequest.emit(pagina_nome, cur_pagina_dict)
+        self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(cur_pagina) is not VisualizzaOperaView:
@@ -278,7 +278,7 @@ class InfoSectionController(QObject):
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.NUOVA_OPERA
-        self.getNavPageRequest.emit(pagina_nome, cur_pagina_dict)
+        self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(cur_pagina) is not NuovaOperaView:
@@ -318,7 +318,7 @@ class InfoSectionController(QObject):
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.MODIFICA_OPERA
-        self.getNavPageRequest.emit(pagina_nome, cur_pagina_dict)
+        self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(cur_pagina) is not ModificaOperaView:
@@ -358,7 +358,7 @@ class InfoSectionController(QObject):
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.NUOVO_GENERE
-        self.getNavPageRequest.emit(pagina_nome, cur_pagina_dict)
+        self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(cur_pagina) is not NuovoGenereView:
@@ -397,7 +397,7 @@ class InfoSectionController(QObject):
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.MODIFICA_GENERE
-        self.getNavPageRequest.emit(pagina_nome, cur_pagina_dict)
+        self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(cur_pagina) is not ModificaGenereView:

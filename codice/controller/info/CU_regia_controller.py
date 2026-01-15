@@ -20,19 +20,17 @@ class CURegiaController(AbstractCUController):
     """Gestisce il salvataggio delle regie create e modificate.
 
     Segnali:
-    - goBackRequest(): emesso per tornare alla pagina `VisualizzaOperaView`.
+    - `goBackRequest()`: emesso per tornare alla pagina `VisualizzaOperaView`.
     """
 
     _view_nuova: NuovaRegiaView
     _view_modifica: ModificaRegiaView
 
-    @override
     def __init__(
         self, model: Model, n_regia_v: NuovaRegiaView, m_regia_v: ModificaRegiaView
-    ) -> None:
+    ):
         if type(n_regia_v) is not NuovaRegiaView:
             raise TypeError("Atteso NuovaRegiaView per n_regia_v.")
-
         if type(m_regia_v) is not ModificaRegiaView:
             raise TypeError("Atteso ModificaRegiaView per m_regia_v.")
 
@@ -44,36 +42,30 @@ class CURegiaController(AbstractCUController):
     def _connect_signals(self) -> None:
         super()._connect_signals()
 
-        # Aggiungi un interprete alla pagina NuovaRegiaView
+        # Segnali di NuovaRegiaView
         self._view_nuova.aggiungiInterprete.connect(  # type:ignore
             self.__aggiungi_interprete
         )
-        # Aggiungi un tecnico alla pagina NuovaRegiaView
         self._view_nuova.aggiungiTecnico.connect(  # type:ignore
             self.__aggiungi_tecnico
         )
-        # Display interpreti nella pagina NuovaRegiaView
         self._view_nuova.displayInterpreti.connect(  # type:ignore
             self.__display_interpreti
         )
-        # # Display tecnici nella pagina NuovaRegiaView
         self._view_nuova.displayTecnici.connect(  # type:ignore
             self.__display_tecnici
         )
 
-        # Aggiungi un interprete alla pagina ModificaRegiaView
+        # Segnali di ModificaRegiaView
         self._view_modifica.aggiungiInterprete.connect(  # type:ignore
             self.__aggiungi_interprete
         )
-        # Aggiungi un tecnico alla pagina ModificaRegiaView
         self._view_modifica.aggiungiTecnico.connect(  # type:ignore
             self.__aggiungi_tecnico
         )
-        # Display interpreti nella pagina ModificaRegiaView
         self._view_modifica.displayInterpreti.connect(  # type:ignore
             self.__display_interpreti
         )
-        # # Display tecnici nella pagina ModificaRegiaView
         self._view_modifica.displayTecnici.connect(  # type:ignore
             self.__display_tecnici
         )
@@ -92,7 +84,7 @@ class CURegiaController(AbstractCUController):
     def __aggiungi_interprete(
         self, pagina: NuovaRegiaView, nome: str, ruolo: str
     ) -> None:
-        """Aggiunge un interprete alla lista_interpreti della pagina.
+        """Aggiunge un interprete alla `lista_interpreti` della pagina.
 
         :param pagina: pagina dove l'interprete sarà aggiunto
         :param nome: nome dell'interprete
@@ -111,7 +103,7 @@ class CURegiaController(AbstractCUController):
         pagina.aggiorna_pagina()
 
     def __aggiungi_tecnico(self, pagina: NuovaRegiaView, nome: str, posto: str) -> None:
-        """Aggiunge un tecnico alla lista_tecnici della pagina.
+        """Aggiunge un tecnico alla `lista_tecnici` della pagina.
 
         :param pagina: pagina dove il tecnico sarà aggiunto
         :param nome: nome del tecnico
@@ -130,8 +122,8 @@ class CURegiaController(AbstractCUController):
         pagina.aggiorna_pagina()
 
     def __display_interpreti(self, pagina: NuovaRegiaView) -> None:
-        """Visualizza a schermo le informazioni degli interpreti salvati nella
-        lista_interpreti della pagina ed assegna a ciascuno un pulsante di elimina.
+        """Mostra a schermo le informazioni degli interpreti salvati nella
+        `lista_interpreti` della pagina ed assegna a ciascuno un pulsante di elimina.
 
         :param pagina: pagina dove saranno caricati gli interpreti
         """
@@ -144,8 +136,8 @@ class CURegiaController(AbstractCUController):
             return
 
         # Mostra tutti gli interpreti salvati a schermo
-        for k, v in interpreti.items():
-            cur_interprete = PersonaleDisplay(k, v)
+        for nome, ruolo in interpreti.items():
+            cur_interprete = PersonaleDisplay(nome, ruolo)
 
             def elimina_interprete(nome: str) -> None:
                 pagina.lista_interpreti.pop(nome)
@@ -158,8 +150,8 @@ class CURegiaController(AbstractCUController):
             pagina.layout_lista_interpreti.aggiungi_list_item(cur_interprete)
 
     def __display_tecnici(self, pagina: NuovaRegiaView) -> None:
-        """Visualizza a schermo le informazioni dei tecnici salvati nella
-        lista_tecnici della pagina ed assegna a ciascuno un pulsante di elimina.
+        """Mostra a schermo le informazioni dei tecnici salvati nella
+        `lista_tecnici` della pagina ed assegna a ciascuno un pulsante di elimina.
 
         :param pagina: pagina dove saranno caricati i tecnici
         """
@@ -172,8 +164,8 @@ class CURegiaController(AbstractCUController):
             return
 
         # Mostra tutti i tecnici salvati a schermo
-        for k, v in tecnici.items():
-            cur_tecnico = PersonaleDisplay(k, v)
+        for nome, posto in tecnici.items():
+            cur_tecnico = PersonaleDisplay(nome, posto)
 
             def elimina_interprete(nome: str) -> None:
                 pagina.lista_tecnici.pop(nome)
@@ -236,9 +228,7 @@ class CURegiaController(AbstractCUController):
             cur_pagina = self._view_modifica
 
             # Crea una copia della regia originale
-            copia_regia: Optional[Spettacolo] = self.__get_spettacolo(
-                cur_pagina.cur_id_regia
-            )
+            copia_regia = self.__get_spettacolo(cur_pagina.cur_id_regia)
             if not isinstance(copia_regia, Regia):
                 # Non esiste regia con l'id salvata nella pagina
                 PopupMessage.mostra_errore(

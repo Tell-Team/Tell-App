@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QApplication
 import sys
 
-from controller.context import AppContext
+from controller.app_context import AppContext
 
 from model.exceptions import DatoIncongruenteException
 
@@ -28,7 +28,7 @@ def main():
             )
             exit(1)
 
-        context.start()
+            _ = context
 
         sys.exit(app.exec())
     except DatoIncongruenteException as exc:

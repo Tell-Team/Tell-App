@@ -1,8 +1,9 @@
-from PyQt6.QtWidgets import QLabel, QPushButton, QGridLayout
+from PyQt6.QtWidgets import QLabel, QPushButton, QHBoxLayout
 from PyQt6.QtCore import Qt, pyqtSignal
 from functools import partial
 
 from view.utils.list_widgets import ItemDisplay
+from view.utils.horizontal_scroll import HorizontalWheelScrollArea
 from view.utils import make_vline
 from view.style import QssStyle
 
@@ -16,7 +17,7 @@ class PersonaleDisplay(ItemDisplay):
 
     eliminaRequest = pyqtSignal(str)
 
-    def __init__(self, key: str, value: str) -> None:
+    def __init__(self, key: str, value: str):
         super().__init__()
 
         self.__setup_ui(key, value)
@@ -27,22 +28,38 @@ class PersonaleDisplay(ItemDisplay):
 
         widget_key = QLabel(self.__key)
         widget_key.setProperty(QssStyle.PARAGRAPH, True)
+        scroll_key = HorizontalWheelScrollArea()
+        scroll_key.setWidget(widget_key)
+        scroll_key.setMinimumWidth(250)  # - DA CORRIGERE
 
         widget_value = QLabel(value)
         widget_value.setProperty(QssStyle.PARAGRAPH, True)
+        scroll_value = HorizontalWheelScrollArea()
+        scroll_value.setWidget(widget_value)
+        scroll_value.setMinimumWidth(200)  # - DA CORRIGERE
 
         self.__btn_rimuovi = QPushButton("X")
         # - Quitar el texto del botón para cuando pueda usar icons
         self.__btn_rimuovi.setFixedSize(32, 32)
         self.__btn_rimuovi.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
 
-        layout = QGridLayout(self)
-        layout.setContentsMargins(5, 5, 5, 5)
-        layout.addWidget(widget_key, 0, 0, alignment=Qt.AlignmentFlag.AlignLeft)
-        layout.addWidget(make_vline(), 0, 1)
-        layout.addWidget(widget_value, 0, 2, alignment=Qt.AlignmentFlag.AlignLeft)
-        layout.addWidget(make_vline(), 0, 3)
-        layout.addWidget(self.__btn_rimuovi, 0, 4)
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 5, 0)
+        layout.addWidget(
+            scroll_key,
+            alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+        )
+        layout.addWidget(make_vline())
+        layout.addWidget(
+            scroll_value,
+            alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+        )
+        layout.addWidget(make_vline())
+        layout.addWidget(self.__btn_rimuovi)
+
+        layout.setStretch(0, 1)
+        layout.setStretch(2, 2)
+        layout.setStretch(4, 0)
 
     def __connect_signals(self) -> None:
         self.__btn_rimuovi.clicked.connect(  # type:ignore

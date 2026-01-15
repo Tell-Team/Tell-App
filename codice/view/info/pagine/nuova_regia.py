@@ -14,17 +14,17 @@ from view.style import QssStyle
 
 
 class NuovaRegiaView(NuovoSpettacoloView):
-    """View per la creazione di una nuova regia.
+    """Pagina per la creazione di una nuova regia.
 
     Segnali:
-    - displayInterpreti(CreaAbstractView): emesso per mostrare la lista interpreti a schermo;
-    - displayTecnici(CreaAbstractView): emesso per mostrare la lista tecnici a schermo;
-    - aggiungiInterprete(CreaAbstractView, str, str): emesso quando si clicca il pulsante
+    - `displayInterpreti(CreaAbstractView)`: emesso per mostrare la lista interpreti a schermo;
+    - `displayTecnici(CreaAbstractView)`: emesso per mostrare la lista tecnici a schermo;
+    - `aggiungiInterprete(CreaAbstractView, str, str)`: emesso quando si clicca il pulsante
     Aggiungi degli interpreti;
-    - aggiungiTecnico(CreaAbstractView, str, str): emesso quando si clicca il pulsante Aggiungi
+    - `aggiungiTecnico(CreaAbstractView, str, str)`: emesso quando si clicca il pulsante Aggiungi
     dei tecnici;
-    - annullaRequest(QWidget): emesso quando si clicca il pulsante Annulla;
-    - salvaRequest(): emesso quando si clicca il pulsante Crea.
+    - `annullaRequest(QWidget)`: emesso quando si clicca il pulsante Annulla;
+    - `salvaRequest()`: emesso quando si clicca il pulsante Salva.
     """
 
     # ------------------------- SETUP INIT -------------------------

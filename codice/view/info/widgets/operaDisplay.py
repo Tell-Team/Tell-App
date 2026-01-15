@@ -5,6 +5,7 @@ from functools import partial
 from model.pianificazione.opera import Opera
 
 from view.utils.list_widgets import ItemDisplay
+from view.utils.hyphenate_text import HyphenatedLabel
 from view.style import QssStyle
 
 
@@ -21,8 +22,10 @@ class OperaDisplay(ItemDisplay):
     modificaRequest = pyqtSignal(int)
     eliminaConfermata = pyqtSignal(int)
 
-    def __init__(self, o: Opera) -> None:
+    def __init__(self, o: Opera, editable: bool):
         super().__init__()
+
+        self.__editable = editable
 
         self.__setup_ui(o)
         self.__connect_signals(o)
@@ -31,50 +34,23 @@ class OperaDisplay(ItemDisplay):
 
     def __setup_ui(self, o: Opera) -> None:
         # Labels
-        nome = QLabel(o.get_nome())
+        nome = HyphenatedLabel(o.get_nome())
         nome.setProperty(QssStyle.HEADER2, True)
 
-        librettista = QLabel(f"Librettista: {o.get_librettista()}")
+        librettista = HyphenatedLabel(f"Librettista: {o.get_librettista()}")
         librettista.setProperty(QssStyle.PARAGRAPH, True)
 
-        compositore = QLabel(f"Direttore d'orchestra: {o.get_compositore()}")
+        compositore = HyphenatedLabel(f"Direttore d'orchestra: {o.get_compositore()}")
         compositore.setProperty(QssStyle.PARAGRAPH, True)
 
         # Pulsanti
         self.__btn_visualizza = QPushButton("Maggior info")
         self.__btn_visualizza.setProperty(QssStyle.WHITE_BUTTON, True)
 
-        self.__btn_modifica = QPushButton("Modifica")
-        self.__btn_modifica.setProperty(QssStyle.MODIFY_BUTTON, True)
-
-        self.__btn_elimina = QPushButton("Elimina")
-        self.__btn_elimina.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
-
         self.__pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.__pulsanti)
         layout_pulsanti.setContentsMargins(1, 1, 1, 1)
         layout_pulsanti.addWidget(self.__btn_visualizza)
-        layout_pulsanti.addWidget(self.__btn_modifica)
-        layout_pulsanti.addWidget(self.__btn_elimina)
-        layout_pulsanti.addStretch()
-
-        # Pannello di eliminazione
-        domanda = QLabel("<b>Sicuro di eliminare?</b>")
-        domanda.setProperty(QssStyle.PARAGRAPH, True)
-
-        self.__btn_no = QPushButton("No")
-        self.__btn_no.setProperty(QssStyle.WHITE_BUTTON, True)
-
-        self.__btn_si = QPushButton("Sì")
-        self.__btn_si.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
-
-        self.__conferma_elimina = QWidget()
-        layout_conferma = QHBoxLayout(self.__conferma_elimina)
-        layout_conferma.setContentsMargins(1, 1, 1, 1)
-        layout_conferma.addWidget(domanda)
-        layout_conferma.addWidget(self.__btn_no)
-        layout_conferma.addWidget(self.__btn_si)
-        self.__conferma_elimina.hide()
 
         # Layout
         layout = QVBoxLayout(self)
@@ -82,8 +58,40 @@ class OperaDisplay(ItemDisplay):
         layout.addWidget(nome)
         layout.addWidget(librettista)
         layout.addWidget(compositore)
+
         layout.addWidget(self.__pulsanti)
-        layout.addWidget(self.__conferma_elimina)
+
+        if self.__editable:
+            self.__btn_modifica = QPushButton("Modifica")
+            self.__btn_modifica.setProperty(QssStyle.MODIFY_BUTTON, True)
+
+            self.__btn_elimina = QPushButton("Elimina")
+            self.__btn_elimina.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
+
+            layout_pulsanti.addWidget(self.__btn_modifica)
+            layout_pulsanti.addWidget(self.__btn_elimina)
+
+            # Pannello di eliminazione
+            domanda = QLabel("<b>Sicuro di eliminare?</b>")
+            domanda.setProperty(QssStyle.PARAGRAPH, True)
+
+            self.__btn_no = QPushButton("No")
+            self.__btn_no.setProperty(QssStyle.WHITE_BUTTON, True)
+
+            self.__btn_si = QPushButton("Sì")
+            self.__btn_si.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
+
+            self.__conferma_elimina = QWidget()
+            layout_conferma = QHBoxLayout(self.__conferma_elimina)
+            layout_conferma.setContentsMargins(1, 1, 1, 1)
+            layout_conferma.addWidget(domanda)
+            layout_conferma.addWidget(self.__btn_no)
+            layout_conferma.addWidget(self.__btn_si)
+            self.__conferma_elimina.hide()
+
+            layout.addWidget(self.__conferma_elimina)
+
+        layout_pulsanti.addStretch()
 
     def __connect_signals(self, o: Opera) -> None:
         self.__id = o.get_id()
@@ -92,21 +100,22 @@ class OperaDisplay(ItemDisplay):
             partial(self.visualizzaRequest.emit, self.__id)
         )
 
-        self.__btn_modifica.clicked.connect(  # type:ignore
-            partial(self.modificaRequest.emit, self.__id)
-        )
+        if self.__editable:
+            self.__btn_modifica.clicked.connect(  # type:ignore
+                partial(self.modificaRequest.emit, self.__id)
+            )
 
-        self.__btn_elimina.clicked.connect(  # type:ignore
-            self.__on_elimina
-        )
+            self.__btn_elimina.clicked.connect(  # type:ignore
+                self.__on_elimina
+            )
 
-        self.__btn_si.clicked.connect(  # type:ignore
-            partial(self.eliminaConfermata.emit, self.__id)
-        )
+            self.__btn_si.clicked.connect(  # type:ignore
+                partial(self.eliminaConfermata.emit, self.__id)
+            )
 
-        self.__btn_no.clicked.connect(  # type:ignore
-            self.annulla_elimina
-        )
+            self.__btn_no.clicked.connect(  # type:ignore
+                self.annulla_elimina
+            )
 
     # ------------------------- METODI DI VIEW -------------------------
 

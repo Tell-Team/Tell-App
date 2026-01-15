@@ -15,20 +15,12 @@ class CredentialsPage(QWidget):
     """View per la autenticazione degli account `Biglietteria` e `Amministratore`.
 
     Permette di inserire un nome utente ed una password.
-
-    Segnali:
-    - tornaIndietroRequest(): emesso quando si clicca il pulsante Indietro;
-    - authRequest(str, str): emesso quando si clicca il pulsante Login.
     """
 
-    # annullaRequest = pyqtSignal()
-    # authRequest = pyqtSignal(str, str)
-
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__()
 
         self._setup_ui()
-        # self._connect_signals()
 
     # ------------------------- SETUP INIT -------------------------
 
@@ -82,15 +74,6 @@ class CredentialsPage(QWidget):
         main_layout.addWidget(pagina_header)
         main_layout.addWidget(pagina_content)
         main_layout.addStretch()
-
-    # def _connect_signals(self):
-    #     self.btn_indietro.clicked.connect(  # type:ignore
-    #         self.annullaRequest.emit
-    #     )
-
-    #     self.btn_login.clicked.connect(  # type:ignore
-    #         lambda: self.authRequest.emit(self.username.text(), self.password.text())
-    #     )
 
     # ------------------------- METODI DI VIEW -------------------------
 

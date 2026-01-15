@@ -13,18 +13,12 @@ from view.style import QssStyle
 #   la creazione. Nel caso di modifica, comunque, è abilitato per permettere aggiornare il
 #   ruolo di qualunque account.
 class NuovoAccountView(AbstractCreaView):
-    """View per la creazione di un nuovo account utente.
+    """Pagina per la creazione di un nuovo account utente.
 
     Segnali:
-    - annullaRequest(QWidget): emesso quando si clicca il pulsante Annulla;
-    - salvaRequest(): emesso quando si clicca il pulsante Crea.
+    - `annullaRequest(QWidget)`: emesso quando si clicca il pulsante Annulla;
+    - `salvaRequest()`: emesso quando si clicca il pulsante Crea.
     """
-
-    def __init__(self) -> None:
-        super().__init__()
-
-        self._setup_ui()
-        self._connect_signals()
 
     # ------------------------- SETUP INIT -------------------------
 
@@ -34,9 +28,6 @@ class NuovoAccountView(AbstractCreaView):
 
         # Header
         self._header.setText("Aggiungi nuovo account")
-
-        # Form
-        self._setup_form()
 
         # Layout
         self._main_layout.addWidget(self._header)

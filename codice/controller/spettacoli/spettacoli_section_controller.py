@@ -23,19 +23,19 @@ class SpettacoliSectionController(QObject):
     """Gestice la sezione Spettacoli (`SpettacoliSectionView`) dell'app.
 
     Segnali:
-    - logoutRequest(): emesso per eseguire la funzione di logout dall'`AppContext`;
-    - goToPageRequest(Pagina, bool): emesso per visualizzare un'altra pagina;
-    - goToSectionRequest(Pagina): emesso per visualizzare un'altra pagina, senza salvarla
+    - `logoutRequest()`: emesso per eseguire la funzione di logout dall'`AppContext`;
+    - `goToPageRequest(Pagina, bool)`: emesso per visualizzare un'altra pagina;
+    - `goToSectionRequest(Pagina)`: emesso per visualizzare un'altra pagina, senza salvarla
     nell'history del `NavigationController`;
-    - getNavPageRequest(Pagina, dict): emesso per ottenere la pagina che vendrà visualizzata.
+    - `getPageRequest(Pagina, dict)`: emesso per ottenere la pagina che vendrà visualizzata.
     """
 
     logoutRequest: pyqtSignal = pyqtSignal()
     goToPageRequest: pyqtSignal = pyqtSignal(Pagina, bool)
     goToSectionRequest: pyqtSignal = pyqtSignal(Pagina)
-    getNavPageRequest: pyqtSignal = pyqtSignal(Pagina, dict)
+    getPageRequest: pyqtSignal = pyqtSignal(Pagina, dict)
 
-    def __init__(self, model: Model, spettacoli_s: SpettacoliSectionView) -> None:
+    def __init__(self, model: Model, spettacoli_s: SpettacoliSectionView):
         super().__init__()
         self.__model = model
         self.__spettacoli_section = spettacoli_s
@@ -54,13 +54,14 @@ class SpettacoliSectionController(QObject):
         self.__spettacoli_section.logoutRequest.connect(  # type:ignore
             self.logoutRequest.emit  # - CORRIGGERE: Account ancora non implementato
         )
-        # Visualizza Sezione Info
+
+        # Navigazione tra sezioni
         self.__spettacoli_section.goToInfo.connect(  # type:ignore
             partial(self.goToSectionRequest.emit, Pagina.SEZIONE_INFO)
         )
-        # Visualizza Sezione Account
         self.__spettacoli_section.goToAccount.connect(  # type:ignore
             partial(self.goToSectionRequest.emit, Pagina.SEZIONE_ACCOUNT)
+            # - CORRIGGERE: Account ancora non implementato
         )
 
         # Display della Lista Spettacoli
@@ -89,8 +90,9 @@ class SpettacoliSectionController(QObject):
         # - self.__model.elimina_spettacolo(id_)
 
     def __display_spettacoli(self, layout_spettacoli: ListLayout) -> None:
-        """Visualizza a schermo alcune informazioni degli spettacoli salvati ed assegna a
-        ciascuno pulsanti per visualizzarli in dettaglio, scegliere posti, modificarli o eliminarli.
+        """Mostra a schermo alcune informazioni degli spettacoli salvati ed assegna a
+        ciascuno pulsanti per visualizzarli in dettaglio, scegliere posti, modificarli
+        o eliminarli.
 
         :param layout: layout dove saranno caricati tutti gli spettacoli
         """
@@ -116,18 +118,24 @@ class SpettacoliSectionController(QObject):
                 if cur_opera := self.__model.get_opera(spettacolo.get_id_opera()):
                     compositore = cur_opera.get_compositore()
                 dati = (compositore, spettacolo.get_regista())
-                cur_spettacolo = SpettacoloDisplay(spettacolo, dati)
+                cur_spettacolo = SpettacoloDisplay(
+                    spettacolo,
+                    editable=self.__spettacoli_section.is_biglietteria,
+                    dati=dati,
+                )
             else:
-                cur_spettacolo = SpettacoloDisplay(spettacolo)
+                cur_spettacolo = SpettacoloDisplay(
+                    spettacolo, editable=self.__spettacoli_section.is_biglietteria
+                )
 
             # Setup della pagina di visualizzazione delgli spettacoli
             cur_spettacolo.visualizzaRequest.connect(  # type:ignore
                 self.__visualizza_spettacolo
             )
 
-            cur_spettacolo.scegliPostoRequest.connect(  # type:ignore
-                self.__scegli_posti
-            )
+            # - cur_spettacolo.scegliPostoRequest.connect(  # type:ignore
+            #     self.__scegli_posti
+            # )
 
             # Setup della pagina di modifica degli spettacoli
             cur_spettacolo.modificaRequest.connect(  # type:ignore
@@ -161,7 +169,7 @@ class SpettacoliSectionController(QObject):
 
     def __visualizza_spettacolo(self, id_: int) -> None: ...
 
-    def __scegli_posti(self, id_: int) -> None: ...
+    # - def __scegli_posti(self, id_: int) -> None: ...
 
     def __nuovo_spettacolo(self) -> None:
         """Carica la pagina `NuovoSpettacoloView`, dove l'utente può inserire i dati
@@ -171,7 +179,7 @@ class SpettacoliSectionController(QObject):
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.NUOVO_SPETTACOLO
-        self.getNavPageRequest.emit(pagina_nome, cur_pagina_dict)
+        self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(cur_pagina) is not NuovoSpettacoloView:
@@ -207,7 +215,7 @@ class SpettacoliSectionController(QObject):
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.MODIFICA_SPETTACOLO
-        self.getNavPageRequest.emit(pagina_nome, cur_pagina_dict)
+        self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(cur_pagina) is not ModificaSpettacoloView:

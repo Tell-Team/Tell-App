@@ -18,18 +18,12 @@ from view.style import QssStyle
 
 
 class NuovaOperaView(AbstractCreaView):
-    """View per la creazione di una nuova opera.
+    """Pagina per la creazione di una nuova opera.
 
     Segnali:
-    - annullaRequest(QWidget): emesso quando si clicca il pulsante Annulla;
-    - salvaRequest(): emesso quando si clicca il pulsante Crea.
+    - `annullaRequest(QWidget)`: emesso quando si clicca il pulsante Annulla;
+    - `salvaRequest()`: emesso quando si clicca il pulsante Salva.
     """
-
-    def __init__(self) -> None:
-        super().__init__()
-
-        self._setup_ui()
-        self._connect_signals()
 
     # ------------------------- SETUP INIT -------------------------
 
@@ -39,9 +33,6 @@ class NuovaOperaView(AbstractCreaView):
 
         # Header
         self._header.setText("Aggiungi nuova opera")
-
-        # Form
-        self._setup_form()
 
         # Layout
         self._main_layout.addWidget(self._header)
@@ -118,10 +109,9 @@ class NuovaOperaView(AbstractCreaView):
         self.genere.clear()
 
         self.genere.insertItem(0, "Scegliere genere...", -1)
-        # Avevo pensato di fare la prima opzione di colore grigio per far carire che non
+        # Avevo pensato di fare la prima opzione di colore grigio per chiarire che non
         #   è una opzione valida, ma per quello dovrei creare un delegate e non ho voglia.
-        for i, g in enumerate(generi):
-            i += 1
+        for i, g in enumerate(generi, start=1):
             self.genere.insertItem(i, g.get_nome(), g.get_id())
 
     @override

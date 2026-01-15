@@ -8,30 +8,28 @@ from model.account.account import Ruolo
 
 from view.account.pagine import AccountSectionView
 
-# from view.utils import PopupMessage
-
 
 class AccountSectionController(QObject):
     """Gestice la sezione Account (`AccountSectionView`) dell'app.
 
     Segnali:
-    - logoutRequest(): emesso per eseguire la funzione di logout dall'`AppContext`;
-    - goToPageRequest(Pagina, bool): emesso per visualizzare un'altra pagina;
-    - goToSectionRequest(Pagina): emesso per visualizzare un'altra pagina, senza salvarla
+    - `logoutRequest()`: emesso per eseguire la funzione di logout dall'`AppContext`;
+    - `goToPageRequest(Pagina, bool)`: emesso per visualizzare un'altra pagina;
+    - `goToSectionRequest(Pagina)`: emesso per visualizzare un'altra pagina, senza salvarla
     nell'history del `NavigationController`;
-    - getNavPageRequest(Pagina, dict): emesso per ottenere la pagina che vendrà visualizzata.
+    - `getPageRequest(Pagina, dict)`: emesso per ottenere la pagina che vendrà visualizzata.
     """
 
     logoutRequest: pyqtSignal = pyqtSignal()
     goToPageRequest: pyqtSignal = pyqtSignal(Pagina, bool)
     goToSectionRequest: pyqtSignal = pyqtSignal(Pagina)
-    getNavPageRequest: pyqtSignal = pyqtSignal(Pagina, dict)
+    getPageRequest: pyqtSignal = pyqtSignal(Pagina, dict)
 
     def __init__(
         self,
         model: Model,
         account_s: AccountSectionView,
-    ) -> None:
+    ):
         super().__init__()
         self.__model = model
         self.__account_section = account_s
@@ -45,11 +43,11 @@ class AccountSectionController(QObject):
         self.__account_section.logoutRequest.connect(  # type:ignore
             self.logoutRequest.emit
         )
-        # Visualizza Sezione Spettacoli
+
+        # Navigazione tra sezioni
         self.__account_section.goToSpettacoli.connect(  # type:ignore
             partial(self.goToSectionRequest.emit, Pagina.SEZIONE_SPETTACOLI)
         )
-        # Visualizza Sezione Info
         self.__account_section.goToInfo.connect(  # type:ignore
             partial(self.goToSectionRequest.emit, Pagina.SEZIONE_INFO)
         )
@@ -62,7 +60,7 @@ class AccountSectionController(QObject):
             partial(self.__display_account, Ruolo.BIGLIETTERIA)
         )
 
-        # Setup della pagina di creazione di account
+        # Setup della pagina di creazione
         self.__account_section.nuovoAdminRequest.connect(  # type:ignore
             partial(self.__nuovo_account, Ruolo.AMMINISTRATORE)
         )

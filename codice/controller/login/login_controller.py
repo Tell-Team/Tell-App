@@ -1,8 +1,11 @@
 from PyQt6.QtCore import pyqtSignal, QObject
-from typing import Optional
+from functools import partial
+
+# from typing import Optional
 
 from model.model import Model
-from model.account.account import Account
+
+# from model.account import Account, UserSession
 from model.exceptions import CredenzialiErrateException, AccountInesistenteException
 
 from view.login import LoginDialog
@@ -11,17 +14,20 @@ from view.utils import PopupMessage
 
 
 class LoginController(QObject):
-    """Gestisce la funzione di login dell'app.
+    """Controller dedicato alla gestione del `LoginDialog`. Emette un segnale dopo verifica
+    la correttezza delle credenziali inserite durante un tentativo di login oppure dopo
+    ingressare all'app come Cliente.
 
     Segnali:
-    - loginSucceeded(): emesso quando viene verificato un login riuscito."""
+    - loginSucceeded(object): emesso quando viene verificato un login riuscito.
+    """
 
-    loginSucceeded = pyqtSignal()
+    loginSucceeded = pyqtSignal(object)
 
-    def __init__(self, model: Model, login_d: LoginDialog) -> None:
+    def __init__(self, model: Model):
         super().__init__()
         self.__model = model
-        self.__login_dialog = login_d
+        self.__login_dialog = LoginDialog()
 
         self._connect_signals()
 
@@ -29,7 +35,7 @@ class LoginController(QObject):
 
     def _connect_signals(self) -> None:
         self.__login_dialog.loginAsCliente.connect(  # type:ignore
-            self.loginSucceeded.emit  # - RUOLO ANCORA NON IMPLEMENTATO
+            partial(self.loginSucceeded.emit, None)
         )
 
         self.__login_dialog.authRequest.connect(  # type:ignore
@@ -38,10 +44,14 @@ class LoginController(QObject):
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
-    def __get_account(self, id_: int) -> Optional[Account]:
-        return self.__model.get_account(id_)
+    def get_dialog(self) -> LoginDialog:
+        return self.__login_dialog
+
+    # def __get_account(self, id_: int) -> Optional[Account]:
+    #     return self.__model.get_account(id_)
 
     def __login(self, username: str, password: str) -> None:
+        """Verifica la correttezza delle credenziali inserite durante un tentativo di login."""
         try:
             id_account = self.__model.login(username, password)
             # Non viene usato hashing
@@ -59,9 +69,12 @@ class LoginController(QObject):
                 f"Si è verificato un errore: {exc}",
             )
         else:
-            if user := self.__get_account(id_account):
-                ruolo = user.get_ruolo()
-                # - DOVREI USARE user COME PARAMETRO DI loginSucceeded
-            self.__login_dialog.reset_credentials_page()
-            self.loginSucceeded.emit()  # - RUOLO ANCORA NON IMPLEMENTATO
+            # if user := self.__get_account(id_account):
+            #     user_session = UserSession(
+            #         id=user.get_id(),
+            #         username=user.get_username(),
+            #         ruolo=user.get_ruolo(),
+            #     )
+            self.loginSucceeded.emit(id_account)
+            # self.loginSucceeded.emit(user_session)
             self.__login_dialog.reset_login_dialog()

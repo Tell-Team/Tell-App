@@ -27,3 +27,5 @@ class QssStyle(StrEnum):
     ITEM_LIST = "item-list"  # QWidget
 
     SEARCH_BAR = "search-bar"  # QLineEdit
+
+    INVISIBLE_H_SCROLL = "invisible-h-scroll"  # QScrollArea

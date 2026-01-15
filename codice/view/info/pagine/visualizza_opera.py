@@ -9,33 +9,38 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 
+from controller.login.auth_service import AuthenticationService
+
 from model.pianificazione.regia import Regia
 
 from view.info.utils import OperaPageData
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
+from view.utils.hyphenate_text import HyphenatedLabel
 from view.utils import make_vline
 from view.style import QssStyle
 
 
 class VisualizzaOperaView(QWidget):
-    """View per visualizzare le singole opere in dettaglio.
+    """Pagina per visualizzare le singole `Opera` in dettaglio.
 
-    Contiene le informazioni anagrafiche dell'opera ed una lista con tutte
-    le regie vinculate ad essa.
+    Contiene le tutte informazioni dell'`Opera` ed una lista con tutte le `Regia`
+    associate ad essa.
 
     Segnali:
-    - tornaIndietroRequest(): emesso quando si clicca il pulsante Indietro;
-    - displayRegieRequest(QVBoxLayout): emesso per mostrare la lista regie a schermo;
-    - nuovaRegiaRequest(): emesso quando si clicca il pulsante Nuova regia.
+    - `tornaIndietroRequest()`: emesso quando si clicca il pulsante Indietro;
+    - `displayRegieRequest(QVBoxLayout)`: emesso per mostrare la lista regie a schermo;
+    - `nuovaRegiaRequest()`: emesso quando si clicca il pulsante Nuova regia.
     """
 
     tornaIndietroRequest = pyqtSignal()
     displayRegieRequest = pyqtSignal(QVBoxLayout)
     nuovaRegiaRequest = pyqtSignal()
 
-    def __init__(self) -> None:
+    def __init__(self, auth: AuthenticationService):
         super().__init__()
+
+        self.can_cud_regie = auth.is_admin()
 
         self._setup_ui()
         self._connect_signals()
@@ -55,46 +60,46 @@ class VisualizzaOperaView(QWidget):
         layout_header.addStretch()
 
         # Labels
-        self.label_nome = QLabel("[Nome Opera]")
+        self.label_nome = HyphenatedLabel("[Nome Opera]")
         self.label_nome.setProperty(QssStyle.HEADER1, True)
         self.label_nome.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        self.label_librettista = QLabel("Libretto di [Librettista Opera].")
-        self.label_librettista.setWordWrap(True)
+        self.label_librettista = HyphenatedLabel("Libretto di [Librettista Opera].")
         self.label_librettista.setProperty(QssStyle.PARAGRAPH, True)
 
-        self.label_compositore = QLabel("Musica composta da [Compositore Opera].")
-        self.label_compositore.setWordWrap(True)
+        self.label_compositore = HyphenatedLabel(
+            "Musica composta da [Compositore Opera]."
+        )
         self.label_compositore.setProperty(QssStyle.PARAGRAPH, True)
 
-        self.label_genere = QLabel(f"Genere: [Genere Opera]")
+        self.label_genere = HyphenatedLabel(f"Genere: [Genere Opera]")
         self.label_genere.setProperty(QssStyle.PARAGRAPH, True)
 
         self.label_atti = QLabel(f"Numero di atti: [Atti Opera]")
         self.label_atti.setProperty(QssStyle.PARAGRAPH, True)
 
-        self.label_prima_rappresentazione = QLabel(
+        self.label_prima_rappresentazione = HyphenatedLabel(
             f"È stata rappresentata per prima volta il [Data Opera] nel teatro [Teatro Opera]."
         )
-        self.label_prima_rappresentazione.setWordWrap(True)
         self.label_prima_rappresentazione.setProperty(QssStyle.PARAGRAPH, True)
 
-        self.label_trama = QLabel("[Trama Opera]")
-        self.label_trama.setWordWrap(True)
+        self.label_trama = HyphenatedLabel("[Trama Opera]")
         self.label_trama.setProperty(QssStyle.PARAGRAPH, True)
 
         # Lista Regie
         label_lista_regie = QLabel("Lista regie")
         label_lista_regie.setProperty(QssStyle.HEADER2, True)
 
-        self.__btn_nuova_regia = QPushButton("Nuova regia")
-        self.__btn_nuova_regia.setProperty(QssStyle.WHITE_BUTTON, True)
-
         header_regie = QWidget()
         self.layout_header_regie = QHBoxLayout(header_regie)
         self.layout_header_regie.setContentsMargins(0, 0, 0, 0)
         self.layout_header_regie.addWidget(label_lista_regie)
-        self.layout_header_regie.addWidget(self.__btn_nuova_regia)
+
+        if self.can_cud_regie:
+            self.__btn_nuova_regia = QPushButton("Nuova regia")
+            self.__btn_nuova_regia.setProperty(QssStyle.WHITE_BUTTON, True)
+            self.layout_header_regie.addWidget(self.__btn_nuova_regia)
+
         self.layout_header_regie.addStretch()
 
         self.lista_regie: list[Regia] = []
@@ -127,10 +132,11 @@ class VisualizzaOperaView(QWidget):
         layout_header_lista_regie.addWidget(
             header_regista, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter
         )
-        layout_header_lista_regie.addWidget(make_vline(), 0, 3)
-        layout_header_lista_regie.addWidget(
-            header_opzioni, 0, 4, alignment=Qt.AlignmentFlag.AlignCenter
-        )
+        if self.can_cud_regie:
+            layout_header_lista_regie.addWidget(make_vline(), 0, 3)
+            layout_header_lista_regie.addWidget(
+                header_opzioni, 0, 4, alignment=Qt.AlignmentFlag.AlignCenter
+            )
 
         self.regie = QWidget()
         self.layout_regie = QVBoxLayout(self.regie)
@@ -161,14 +167,15 @@ class VisualizzaOperaView(QWidget):
         main_layout.addWidget(self.pagina_header)
         main_layout.addWidget(scroll_area)
 
-    def _connect_signals(self):
+    def _connect_signals(self) -> None:
         self.__btn_indietro.clicked.connect(  # type:ignore
             self.tornaIndietroRequest.emit
         )
 
-        self.__btn_nuova_regia.clicked.connect(  # type:ignore
-            self.nuovaRegiaRequest.emit
-        )
+        if self.can_cud_regie:
+            self.__btn_nuova_regia.clicked.connect(  # type:ignore
+                self.nuovaRegiaRequest.emit
+            )
 
     # ------------------------- METODI DI VIEW -------------------------
 

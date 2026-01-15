@@ -2,10 +2,10 @@ from abc import abstractmethod
 from PyQt6.QtCore import pyqtSignal, QObject
 from functools import partial
 
-from model.model import Model
-
 from core.metaclasses import ABCQObjectMeta
 from core.view import AbstractCreaView
+
+from model.model import Model
 
 
 class AbstractCUController(QObject, metaclass=ABCQObjectMeta):
@@ -13,14 +13,14 @@ class AbstractCUController(QObject, metaclass=ABCQObjectMeta):
     di oggetti del model.
 
     Segnali:
-    - goBackRequest(): emesso per tornare all'ultima pagina visualizzata.
+    - `goBackRequest()`: emesso per tornare all'ultima pagina visualizzata.
     """
 
     goBackRequest: pyqtSignal = pyqtSignal()
 
     def __init__(
         self, model: Model, nuova: AbstractCreaView, modifica: AbstractCreaView
-    ) -> None:
+    ):
         super().__init__()
 
         self._model = model
@@ -41,11 +41,11 @@ class AbstractCUController(QObject, metaclass=ABCQObjectMeta):
             partial(self._inizia_salvataggio, is_new=True)
         )
 
-        # Annulla modifica Regia
+        # Annulla modifica
         self._view_modifica.annullaRequest.connect(  # type:ignore
             self._annulla_salvataggio
         )
-        # Conferma modifica Regia
+        # Conferma modifica
         self._view_modifica.salvaRequest.connect(  # type:ignore
             partial(self._inizia_salvataggio, is_new=False)
         )
@@ -56,7 +56,7 @@ class AbstractCUController(QObject, metaclass=ABCQObjectMeta):
         """Annulla l'operazione di creazione o modifica.
 
         :param cur_pagina: pagina dove fare il reset dopo ritornare alla pagina dove
-        l'operazione (crea o modifica) è stata iniziata
+        l'operazione è stata iniziata
         """
         self.goBackRequest.emit()
         cur_pagina.reset_pagina()

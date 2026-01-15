@@ -22,12 +22,20 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
     e modifica di oggetti del model.
 
     Segnali:
-    - annullaRequest(QWidget): emesso quando si clicca il pulsante Annulla;
-    - salvaRequest(): emesso quando si clicca il pulsante Crea/Modifica.
+    - `annullaRequest(QWidget)`: emesso quando si clicca il pulsante Annulla;
+    - `salvaRequest()`: emesso quando si clicca il pulsante Salva.
     """
 
     annullaRequest = pyqtSignal(QWidget)
     salvaRequest = pyqtSignal()
+
+    def __init__(self):
+        super().__init__()
+
+        self._setup_ui()
+        self._connect_signals()
+
+    # ------------------------- SETUP INIT -------------------------
 
     def _setup_ui(self) -> None:
         # Setup Header
@@ -42,6 +50,8 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
         )
         self._form_layout = QFormLayout(self.__form_content)
         self._form_layout.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
+
+        self._setup_form()
 
         # Funzione di scroll
         self._scroll_area = QScrollArea()
@@ -81,6 +91,11 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
             self.salvaRequest.emit
         )
 
+    @abstractmethod
+    def _setup_form(self) -> None:
+        """Costruisce e dispone i widget della form."""
+        ...
+
     # ------------------------- METODI DI VIEW -------------------------
 
     @abstractmethod
@@ -88,13 +103,8 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
         """Resetta la pagina allo stato default."""
         ...
 
-    @abstractmethod
-    def _setup_form(self) -> None:
-        """Costruisce e dispone i widget della form."""
-        ...
-
     def show_input_error(self, message: str) -> None:
-        """Aggiorna il testo della label input_error.
+        """Aggiorna il testo della label `input_error`.
 
         :param message: testo inserito nel label"""
         self._input_error.setText(message)

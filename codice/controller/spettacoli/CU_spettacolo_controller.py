@@ -20,22 +20,20 @@ class CUSpettacoloController(AbstractCUController):
     """Gestisce il salvataggio degli spettacoli creati e modificati.
 
     Segnali:
-    - goBackRequest(): emesso per tornare alla pagina `SpettacoliSectionView`.
+    - `goBackRequest()`: emesso per tornare alla pagina `SpettacoliSectionView`.
     """
 
     _view_nuova: NuovoSpettacoloView
     _view_modifica: ModificaSpettacoloView
 
-    @override
     def __init__(
         self,
         model: Model,
         n_spettacolo_v: NuovoSpettacoloView,
         m_spettacolo_v: ModificaSpettacoloView,
-    ) -> None:
+    ):
         if type(n_spettacolo_v) is not NuovoSpettacoloView:
             raise TypeError("Atteso NuovoSpettacoloView per n_spettacolo_v.")
-
         if type(m_spettacolo_v) is not ModificaSpettacoloView:
             raise TypeError("Atteso ModificaSpettacoloView per m_spettacolo_v.")
 
@@ -47,36 +45,30 @@ class CUSpettacoloController(AbstractCUController):
     def _connect_signals(self) -> None:
         super()._connect_signals()
 
-        # Aggiungi un interprete alla pagina NuovoSpettacoloView
+        # Segnali di NuovoSpettacoloView
         self._view_nuova.aggiungiInterprete.connect(  # type:ignore
             self.__aggiungi_interprete
         )
-        # Aggiungi un tecnico alla pagina NuovoSpettacoloView
         self._view_nuova.aggiungiTecnico.connect(  # type:ignore
             self.__aggiungi_tecnico
         )
-        # Display interpreti nella pagina NuovoSpettacoloView
         self._view_nuova.displayInterpreti.connect(  # type:ignore
             self.__display_interpreti
         )
-        # # Display tecnici nella pagina NuovoSpettacoloView
         self._view_nuova.displayTecnici.connect(  # type:ignore
             self.__display_tecnici
         )
 
-        # Aggiungi un interprete alla pagina ModificaSpettacoloView
+        # Segnali di ModificaSpettacoloView
         self._view_modifica.aggiungiInterprete.connect(  # type:ignore
             self.__aggiungi_interprete
         )
-        # Aggiungi un tecnico alla pagina ModificaSpettacoloView
         self._view_modifica.aggiungiTecnico.connect(  # type:ignore
             self.__aggiungi_tecnico
         )
-        # Display interpreti nella pagina ModificaSpettacoloView
         self._view_modifica.displayInterpreti.connect(  # type:ignore
             self.__display_interpreti
         )
-        # # Display tecnici nella pagina ModificaSpettacoloView
         self._view_modifica.displayTecnici.connect(  # type:ignore
             self.__display_tecnici
         )
@@ -95,7 +87,7 @@ class CUSpettacoloController(AbstractCUController):
     def __aggiungi_interprete(
         self, pagina: NuovoSpettacoloView, nome: str, ruolo: str
     ) -> None:
-        """Aggiunge un interprete alla lista_interpreti della pagina.
+        """Aggiunge un interprete alla `lista_interpreti` della pagina.
 
         :param pagina: pagina dove l'interprete sarà aggiunto
         :param nome: nome dell'interprete
@@ -116,7 +108,7 @@ class CUSpettacoloController(AbstractCUController):
     def __aggiungi_tecnico(
         self, pagina: NuovoSpettacoloView, nome: str, posto: str
     ) -> None:
-        """Aggiunge un tecnico alla lista_tecnici della pagina.
+        """Aggiunge un tecnico alla `lista_tecnici` della pagina.
 
         :param pagina: pagina dove il tecnico sarà aggiunto
         :param nome: nome del tecnico
@@ -136,7 +128,7 @@ class CUSpettacoloController(AbstractCUController):
 
     def __display_interpreti(self, pagina: NuovoSpettacoloView) -> None:
         """Visualizza a schermo le informazioni degli interpreti salvati nella
-        lista_interpreti della pagina ed assegna a ciascuno un pulsante di elimina.
+        `lista_interpreti` della pagina ed assegna a ciascuno un pulsante di elimina.
 
         :param pagina: pagina dove saranno caricati gli interpreti
         """
@@ -149,8 +141,8 @@ class CUSpettacoloController(AbstractCUController):
             return
 
         # Mostra tutti gli interpreti salvati a schermo
-        for k, v in interpreti.items():
-            cur_interprete = PersonaleDisplay(k, v)
+        for nome, ruolo in interpreti.items():
+            cur_interprete = PersonaleDisplay(nome, ruolo)
 
             def elimina_interprete(nome: str) -> None:
                 pagina.lista_interpreti.pop(nome)
@@ -164,7 +156,7 @@ class CUSpettacoloController(AbstractCUController):
 
     def __display_tecnici(self, pagina: NuovoSpettacoloView) -> None:
         """Visualizza a schermo le informazioni dei tecnici salvati nella
-        lista_tecnici della pagina ed assegna a ciascuno un pulsante di elimina.
+        `lista_tecnici` della pagina ed assegna a ciascuno un pulsante di elimina.
 
         :param pagina: pagina dove saranno caricati i tecnici
         """
@@ -177,8 +169,8 @@ class CUSpettacoloController(AbstractCUController):
             return
 
         # Mostra tutti i tecnici salvati a schermo
-        for k, v in tecnici.items():
-            cur_tecnico = PersonaleDisplay(k, v)
+        for nome, posto in tecnici.items():
+            cur_tecnico = PersonaleDisplay(nome, posto)
 
             def elimina_interprete(nome: str) -> None:
                 pagina.lista_tecnici.pop(nome)
@@ -236,9 +228,7 @@ class CUSpettacoloController(AbstractCUController):
             cur_pagina = self._view_modifica
 
             # Crea una copia dello spettacolo originale
-            copia_spettacolo: Optional[Spettacolo] = self.__get_spettacolo(
-                cur_pagina.cur_id_spettacolo
-            )
+            copia_spettacolo = self.__get_spettacolo(cur_pagina.cur_id_spettacolo)
             if not isinstance(copia_spettacolo, Spettacolo):
                 # Non esiste spettacolo con l'id salvata nella pagina
                 PopupMessage.mostra_errore(

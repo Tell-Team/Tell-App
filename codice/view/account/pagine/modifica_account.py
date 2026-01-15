@@ -6,7 +6,9 @@ from view.account.pagine import NuovoAccountView
 
 
 class ModificaAccountView(NuovoAccountView):
-    """Sottoclasse di `NuovoAccountView`. Modifica alcune label della pagina, abilita
+    """Pagina per la modifica di account utente.
+
+    Sottoclasse di `NuovoAccountView`. Modifica alcune label della pagina, abilita
     il QComboBox per scegliere il ruolo ed aggiunge un'attributo `cur_id_account` per
     indicare l'id dell'account da modificare."""
 

@@ -28,21 +28,24 @@ class EmptyStateLabel(QLabel):
 class ListLayout(QVBoxLayout):
     """Layout per la visualizzazione delle istanze del model a schermo."""
 
-    def __init__(self, parent: Optional[QWidget], label: EmptyStateLabel) -> None:
+    def __init__(self, parent: Optional[QWidget], label: EmptyStateLabel):
         super().__init__(parent)
         # Asegna lo stesso margine a tutte le istanze
         self.setContentsMargins(1, 1, 1, 1)
 
-        self.__label = label  # Messagi di errore quando la lista è vuota
-
-        self.addWidget(self.__label)
-        self.__label.hide()  # La label viene nascosta dalla propria ListLayout.
+        # self.__error_msg = label
+        self.__box = QWidget()
+        dummy_layout = QVBoxLayout(self.__box)
+        dummy_layout.addWidget(label)
+        # self.addWidget(self.__error_msg)
+        self.addWidget(self.__box)
+        self.__box.hide()
 
     def svuota_layout(self, layout: Optional[QLayout] = None) -> None:
         """Aggiunge il `EmptyStateLabel` indicato nell'`__init__` dopo svuotare il layout."""
         # Non elimina il primo elemento: il EmptyStateLabel
         if self.count() <= 1:
-            self.__label.hide()
+            self.__box.hide()
             self.setContentsMargins(1, 1, 1, 1)
             return
 
@@ -59,18 +62,7 @@ class ListLayout(QVBoxLayout):
     def if_lista_vuota(self) -> None:
         """Mostra un messaggio indicando che la lista non ha istanze da visualizzare."""
         self.setContentsMargins(2, 2, 2, 2)
-        self.__label.show()
-        # Siccome la label non viene mai rimosso dal layout, usare direttamente
-        #   self.__label.show() è sicuro. Comunque, questa è la logica usata nel
-        #   caso in cui non è sicuro che il primo elemento (se c'è) sia EmptyStateLabel.
-        # item = self.itemAt(0)
-        # if not item:
-        #     return
-
-        # error_msg = item.widget()
-        # if isinstance(error_msg, EmptyStateLabel):
-        #     self.setContentsMargins(2, 2, 2, 2)
-        #     error_msg.show()
+        self.__box.show()
 
     def aggiungi_list_item(
         self, widget: ItemDisplay, style: Optional[QssStyle] = None

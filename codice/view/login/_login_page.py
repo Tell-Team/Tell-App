@@ -5,23 +5,12 @@ from view.style import QssStyle
 
 
 class LoginPage(QWidget):
-    """View della pagina per scegliere il tipo d'account con cui ingressare all'app.
+    """View della pagina per scegliere il tipo d'account con cui ingressare all'app."""
 
-    Segnali:
-    - loginAsCliente(): emesso quando si clicca il pulsante Cliente;
-    - loginAsBiglietteria(): emesso quando si clicca il pulsante Biglietteria;
-    - loginAsAdmin(): emesso quando si clicca il pulsante Amministratore.
-    """
-
-    # loginAsCliente = pyqtSignal()
-    # loginAsBiglietteria = pyqtSignal()
-    # loginAsAdmin = pyqtSignal()
-
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__()
 
         self._setup_ui()
-        # self._connect_signals()
 
     # ------------------------- SETUP INIT -------------------------
 
@@ -63,16 +52,3 @@ class LoginPage(QWidget):
         main_layout.addWidget(subheader)
         main_layout.addWidget(self.pulsanti_utente)
         main_layout.addStretch()
-
-    # def _connect_signals(self) -> None:
-    #     self.btn_cliente.clicked.connect(  # type:ignore
-    #         self.loginAsCliente.emit
-    #     )
-
-    #     self.btn_biglietteria.clicked.connect(  # type:ignore
-    #         self.loginAsBiglietteria.emit
-    #     )
-
-    #     self.btn_admin.clicked.connect(  # type:ignore
-    #         self.loginAsAdmin.emit
-    #     )

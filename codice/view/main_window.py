@@ -9,10 +9,9 @@ from typing import Optional
 class MainWindow(QMainWindow):
     """Widget in cui vengono caricate tutte le pagine dell'app nel suo `QStackedWidget`."""
 
-    def __init__(self) -> None:
-        """Throws: DatoIncongruenteException"""
+    def __init__(self):
         super().__init__()
-        self._geometry_initialized = False
+        self.__geometry_initialized = False
 
         # Setup finestra
         self.setWindowTitle("Tell")
@@ -23,7 +22,7 @@ class MainWindow(QMainWindow):
     def showEvent(self, a0: Optional[QShowEvent]) -> None:
         super().showEvent(a0)
 
-        if self._geometry_initialized:
+        if self.__geometry_initialized:
             return
 
         window = self.windowHandle()
@@ -42,7 +41,7 @@ class MainWindow(QMainWindow):
         fg.moveCenter(screen_geom.center())
         self.move(fg.topLeft())
 
-        self._geometry_initialized = True
+        self.__geometry_initialized = True
 
     def get_stack(self) -> QStackedWidget:
         return self.__stack

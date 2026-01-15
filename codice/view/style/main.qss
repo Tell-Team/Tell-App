@@ -268,6 +268,39 @@ QScrollBar::add-line, QScrollBar::sub-line { background: none; }
 QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0px; }
 QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal { width: 0px; }
 
+/*-- # - Devo riorganizzare la struttura di questa sezione sui QScrollArea --*/
+QScrollArea[invisible-h-scroll="true"] {
+    border: none;
+    background: transparent;
+}
+QScrollArea[invisible-scroll="true"] > QWidget > QWidget {
+    background: transparent;
+}
+QScrollArea[invisible-scroll="true"] QScrollBar:horizontal {
+    height: 0px;
+    background: transparent;
+    margin: 0px;
+}
+QScrollArea[invisible-scroll="true"] QScrollBar::handle:horizontal {
+    background: transparent;
+    min-width: 0px;
+}
+QScrollArea[invisible-scroll="true"]
+QScrollBar::add-line:horizontal,
+QScrollArea[invisible-scroll="true"]
+QScrollBar::sub-line:horizontal {
+    width: 0px;
+    height: 0px;
+}
+QScrollArea[invisible-scroll="true"]
+QScrollBar::add-page:horizontal,
+QScrollArea[invisible-scroll="true"]
+QScrollBar::sub-page:horizontal {
+    background: transparent;
+}
+
+/*-------------------------------------------------------------------*/
+
 /* --- QMessageBox --- */
 QMessageBox {
     /* # - Da scrivere */

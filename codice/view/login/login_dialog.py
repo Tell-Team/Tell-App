@@ -20,9 +20,9 @@ class LoginDialog(QDialog):
 
     authRequest = pyqtSignal(str, str)
 
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__()
-        self._geometry_initialized = False
+        self.__geometry_initialized = False
 
         self.__stack = QStackedWidget()
 
@@ -66,7 +66,7 @@ class LoginDialog(QDialog):
     def showEvent(self, a0: Optional[QShowEvent]) -> None:
         super().showEvent(a0)
 
-        if self._geometry_initialized:
+        if self.__geometry_initialized:
             return
 
         window = self.windowHandle()
@@ -85,7 +85,7 @@ class LoginDialog(QDialog):
         fg.moveCenter(screen_geom.center())
         self.move(fg.topLeft())
 
-        self._geometry_initialized = True
+        self.__geometry_initialized = True
 
     def reset_login_dialog(self):
         """Annulla il tentativo di login."""

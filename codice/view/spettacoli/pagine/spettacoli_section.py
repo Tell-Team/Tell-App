@@ -11,37 +11,50 @@ from typing import override
 
 from core.view import AbstractSectionView
 
+from controller.login.auth_service import AuthenticationService
+
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.style import QssStyle
 
 
 class SpettacoliSectionView(AbstractSectionView):
-    """View della sezione Spettacoli dell'app.
+    """Sezione Spettacoli dell'app.
+
+    Contiene le informazioni su tutti gli `Spettacolo` memorizzati.
 
     Segnali:
-    - logoutRequest(): emesso quando si clicca il pulsante Logout;
-    - goToInfo(): emesso quando si clicca il pulsante Info;
-    - goToAccount(): emesso quando si clicca il pulsante Account;
-    - nuovoSpettacoloRequest(): emesso quando si clicca il pulsante Nuovo spettacolo;
-    - displaySpettacoliRequest(QVBoxLayout): emesso per caricare la lista degli spettacoli
+    - `logoutRequest()`: emesso quando si clicca il pulsante Logout;
+    - `goToInfo()`: emesso quando si clicca il pulsante Info;
+    - `goToAccount()`: emesso quando si clicca il pulsante Account;
+    - `nuovoSpettacoloRequest()`: emesso quando si clicca il pulsante Nuovo spettacolo;
+    - `displaySpettacoliRequest(QVBoxLayout)`: emesso per caricare la lista degli spettacoli
     nella sezione Spettacoli.
     """
 
     nuovoSpettacoloRequest = pyqtSignal()
     displaySpettacoliRequest = pyqtSignal(QVBoxLayout)
 
+    def __init__(self, auth: AuthenticationService):
+        self.is_biglietteria = self.is_admin = False
+        if auth.is_admin():
+            self.is_biglietteria = self.is_admin = True
+        elif auth.is_biglietteria():
+            self.is_biglietteria = True
+
+        super().__init__()
+
     # ------------------------- SETUP INIT -------------------------
 
     def _setup_ui(self):
         super()._setup_ui()
 
+        if not self.is_admin:
+            self._btn_sezione_account.hide()
+
         # Spettacoli
         header_spettacoli = QLabel("Spettacoli")
         header_spettacoli.setProperty(QssStyle.HEADER1, True)
         header_spettacoli.setAlignment(Qt.AlignmentFlag.AlignLeft)
-
-        self.__btn_nuovo_spettacolo = QPushButton("Nuovo spettacolo")
-        self.__btn_nuovo_spettacolo.setProperty(QssStyle.WHITE_BUTTON, True)
 
         self.filtro_ricerca: str = ""
 
@@ -66,7 +79,10 @@ class SpettacoliSectionView(AbstractSectionView):
         layout_header_spettacoli = QHBoxLayout(widget_header_spettacoli)
         layout_header_spettacoli.setContentsMargins(0, 0, 0, 0)
         layout_header_spettacoli.addWidget(header_spettacoli)
-        layout_header_spettacoli.addWidget(self.__btn_nuovo_spettacolo)
+        if self.is_biglietteria:
+            self.__btn_nuovo_spettacolo = QPushButton("Nuovo spettacolo")
+            self.__btn_nuovo_spettacolo.setProperty(QssStyle.WHITE_BUTTON, True)
+            layout_header_spettacoli.addWidget(self.__btn_nuovo_spettacolo)
         layout_header_spettacoli.addWidget(widget_ricerca)
 
         label_lista_spettacoli_vuota = EmptyStateLabel(
@@ -94,9 +110,10 @@ class SpettacoliSectionView(AbstractSectionView):
 
         self._btn_sezione_spettacoli.setEnabled(False)
 
-        self.__btn_nuovo_spettacolo.clicked.connect(  # type:ignore
-            self.nuovoSpettacoloRequest.emit
-        )
+        if self.is_biglietteria:
+            self.__btn_nuovo_spettacolo.clicked.connect(  # type:ignore
+                self.nuovoSpettacoloRequest.emit
+            )
 
         self._btn_ricerca.clicked.connect(  # type:ignore
             lambda: self.__filtra_spettacoli(self.ricerca_bar.text())

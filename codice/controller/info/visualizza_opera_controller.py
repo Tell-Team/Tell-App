@@ -21,16 +21,16 @@ class VisualizzaOperaController(QObject):
     """Gestice la pagina `VisualizzaOperaView` dell'app.
 
     Segnali:
-    - goBackRequest(): emesso per tornare alla pagina `InfoSectionView`;
-    - goToPageRequest(Pagina, bool): emesso per visualizzare un'altra pagina;
-    - getNavPageRequest(Pagina, dict): emesso per ottenere la pagina che vendrà visualizzata.
+    - `goBackRequest()`: emesso per tornare alla pagina `InfoSectionView`;
+    - `goToPageRequest(Pagina, bool)`: emesso per visualizzare un'altra pagina;
+    - `getPageRequest(Pagina, dict)`: emesso per ottenere la pagina che vendrà visualizzata.
     """
 
     goBackRequest: pyqtSignal = pyqtSignal()
     goToPageRequest: pyqtSignal = pyqtSignal(Pagina, bool)
-    getNavPageRequest: pyqtSignal = pyqtSignal(Pagina, dict)
+    getPageRequest: pyqtSignal = pyqtSignal(Pagina, dict)
 
-    def __init__(self, model: Model, opera_v: VisualizzaOperaView) -> None:
+    def __init__(self, model: Model, opera_v: VisualizzaOperaView):
         super().__init__()
         self.__model = model
         self.__visualizza_opera_view = opera_v
@@ -71,7 +71,7 @@ class VisualizzaOperaController(QObject):
         # - self.__model.elimina_spettacolo(id_)
 
     def __display_regie(self, layout_regie: ListLayout) -> None:
-        """Visualizza a schermo le informazioni delle regie salvati e associate ad
+        """Mostra a schermo le informazioni delle regie salvati e associate ad
         un'opera ed assegna a ciascuna pulsanti per modificarli o eliminarli.
 
         :param layout: layout dove saranno caricate tutti le regie
@@ -87,7 +87,9 @@ class VisualizzaOperaController(QObject):
 
         # Mostra tutti le regie salvate a schermo
         for regia in lista_regie:
-            cur_regia = RegiaDisplay(regia)
+            cur_regia = RegiaDisplay(
+                regia, editable=self.__visualizza_opera_view.can_cud_regie
+            )
 
             # Setup della pagina di modifica delle regie
             cur_regia.modificaRequest.connect(  # type:ignore
@@ -129,7 +131,7 @@ class VisualizzaOperaController(QObject):
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.NUOVA_REGIA
-        self.getNavPageRequest.emit(pagina_nome, cur_pagina_dict)
+        self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(cur_pagina) is not NuovaRegiaView:
@@ -180,7 +182,7 @@ class VisualizzaOperaController(QObject):
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.MODIFICA_REGIA
-        self.getNavPageRequest.emit(pagina_nome, cur_pagina_dict)
+        self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
         cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(cur_pagina) is not ModificaRegiaView:
