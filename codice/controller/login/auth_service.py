@@ -3,7 +3,7 @@ from typing import Optional
 # from .session_context import SessionContext
 
 from model.model import Model
-from model.account import Ruolo  # , Permission, UserSession
+from model.account.account import Ruolo  # , Permission, UserSession
 
 
 class AuthenticationService:

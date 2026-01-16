@@ -7,7 +7,6 @@ secondo il tema scelto (chiaro/scuro). Rileva automaticamente il tema del sistem
 Compatibile: Windows, macOS, fallback Linux (light)
 """
 
-import sys
 import platform
 import subprocess
 from pathlib import Path
@@ -40,10 +39,10 @@ def __sostituisci_placeholder_qss(qss_template: str, palette: dict[str, str]) ->
 
 def rileva_tema_os() -> Literal["chiaro", "scuro"]:
     """Rileva automaticamente il tema del sistema operativo.
-    
+
     Returns:
         "chiaro" se il sistema è in light mode, "scuro" se in dark mode.
-    
+
     Throws: NotImplementedError, subprocess.CalledProcessError
     """
     sistema: str = platform.system()
@@ -52,9 +51,10 @@ def rileva_tema_os() -> Literal["chiaro", "scuro"]:
         # Windows 10/11: legge il registro
         try:
             import winreg
+
             chiave = winreg.OpenKey(
                 winreg.HKEY_CURRENT_USER,
-                r"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
+                r"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize",
             )
             valore, _ = winreg.QueryValueEx(chiave, "AppsUseLightTheme")
             winreg.CloseKey(chiave)
@@ -67,7 +67,8 @@ def rileva_tema_os() -> Literal["chiaro", "scuro"]:
         try:
             risultato = subprocess.run(
                 ["defaults", "read", "-g", "AppleInterfaceStyle"],
-                capture_output=True, text=True
+                capture_output=True,
+                text=True,
             )
             if "Dark" in risultato.stdout:
                 return "scuro"
@@ -81,18 +82,20 @@ def rileva_tema_os() -> Literal["chiaro", "scuro"]:
         return "chiaro"
 
     else:
-        raise NotImplementedError(f"Rilevamento tema non implementato per OS: {sistema}")
+        raise NotImplementedError(
+            f"Rilevamento tema non implementato per OS: {sistema}"
+        )
 
 
 def load_main_stylesheet(tema: Literal["chiaro", "scuro"] | None = None) -> str:
     """Carica il QSS principale e applica il tema selezionato o rilevato automaticamente.
-    
+
     Args:
         tema: stringa 'chiaro' o 'scuro'. Se None, rileva automaticamente il tema OS.
-    
+
     Returns:
         QSS completo come stringa pronta per QApplication.setStyleSheet()
-    
+
     Throws: FileNotFoundError, IOError, KeyError, ValueError
     """
     if tema is None:

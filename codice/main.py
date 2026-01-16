@@ -2,9 +2,14 @@ from PyQt6.QtWidgets import QApplication
 import sys
 
 from controller.app_context import AppContext
+
 from model.exceptions import DatoIncongruenteException
 
-from view.style.styleLoader import load_main_stylesheet, rileva_tema_os  # <- rilevamento automatico
+from view.style.styleLoader import (
+    load_main_stylesheet,
+    rileva_tema_os,
+)  # <- rilevamento automatico
+
 
 def main() -> None:
     app = QApplication(sys.argv)
@@ -12,8 +17,6 @@ def main() -> None:
     # Rileva automaticamente il tema dall'OS
     tema_corrente: str = rileva_tema_os()  # ritorna "chiaro" o "scuro"
     app.setStyleSheet(load_main_stylesheet(tema_corrente))
-
-    print (tema_corrente)
 
     try:
         context: AppContext
@@ -29,8 +32,8 @@ def main() -> None:
             )
             exit(1)
 
-            _=context    
-  
+        _ = context
+
         sys.exit(app.exec())
     except DatoIncongruenteException as exc:
         print(exc, file=sys.stderr)
