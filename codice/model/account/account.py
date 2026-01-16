@@ -27,6 +27,10 @@ class Account:
 
         self.__ruolo = ruolo
 
+    # Stato
+    def ha_permessi_amministratore(self) -> bool:
+        return self.__ruolo == Ruolo.AMMINISTRATORE
+
     # Getters
     def get_id(self) -> int:
         return self.__id

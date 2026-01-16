@@ -120,6 +120,10 @@ class Model:
             )
         )
 
+    def ha_permessi_amministratore(self, id_: int) -> bool:
+        """Throws: IdInesistenteException"""
+        return self.__gestore_accounts.ha_permessi_amministratore(id_)
+
     # Getters
     #   ACCOUNTS
     def get_account(self, id_: int) -> Optional[Account]:

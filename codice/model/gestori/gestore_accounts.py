@@ -16,6 +16,15 @@ class GestoreAccounts:
         self.__lista_accounts: list[Account] = []
         self.__lista_accounts.append(Account("admin", "00000000", Ruolo.AMMINISTRATORE))
 
+    # Stato
+    def ha_permessi_amministratore(self, id_: int) -> bool:
+        """Throws: IdInesistenteException"""
+        agent = self.get_account(id_)
+        if agent is None:
+            raise IdInesistenteException(f"Non è presente nessun account con id {id_}.")
+
+        return agent.ha_permessi_amministratore()
+
     # Getters
     def get_max_id(self) -> int:
         ids = map(lambda x: x.get_id(), self.__lista_accounts)

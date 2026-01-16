@@ -123,6 +123,11 @@ class TestTell(unittest.TestCase):
         )
         print("Passato AGGIUNGI UsernameOccupato")
 
+        # HA PERMESSI AMMINISTRATORE
+        self.assertTrue(self.__model.ha_permessi_amministratore(admin_id))
+        self.assertFalse(self.__model.ha_permessi_amministratore(a.get_id()))
+        print("Passato HA PERMESSI ADMIN")
+
         # GET
         a_ = self.__model.get_account(a.get_id())
         if a_ is None:
