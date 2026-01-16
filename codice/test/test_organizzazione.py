@@ -1,7 +1,10 @@
-from datetime import datetime
+from datetime import date, datetime
 import shutil
 import unittest
 
+from model.pianificazione.genere import Genere
+from model.pianificazione.opera import Opera
+from model.pianificazione.regia import Regia
 from model.exceptions import (
     DatoIncongruenteException,
     IdInesistenteException,
@@ -15,6 +18,7 @@ from model.model import Model
 DATA_ORA_FUTURO = datetime(2970, 1, 1, 0, 0, 0)
 ID_NON_ESISTENTE = 777
 STR_NON_VUOTA = "BCNRFF"
+DATA = date(2009, 4, 13)
 
 
 class TestTell(unittest.TestCase):
@@ -101,9 +105,77 @@ class TestTell(unittest.TestCase):
         self.assertNotEqual(e2.get_data_ora(), e2_.get_data_ora())
         print("Passato GET LISTA by spettacolo side effect")
         # TODO
-        self.__model._Model__gestore_eventi.elimina_evento(e3.get_id())  # type: ignore
-        # self.__model.elimina_evento(e3.get_id())
+        # self.__model._Model__gestore_eventi.elimina_evento(e3.get_id())  # type: ignore
+        self.__model.elimina_evento(e3.get_id())
         self.__model.elimina_spettacolo(s2.get_id())
+
+        # GET LISTA SPETTACOLI in programma
+        g = Genere(STR_NON_VUOTA, STR_NON_VUOTA)
+        self.__model.aggiungi_genere(g)
+        o = Opera(
+            STR_NON_VUOTA,
+            STR_NON_VUOTA,
+            STR_NON_VUOTA,
+            1,
+            DATA,
+            STR_NON_VUOTA,
+            STR_NON_VUOTA,
+            g.get_id(),
+        )
+        self.__model.aggiungi_opera(o)
+        r = Regia(
+            STR_NON_VUOTA,
+            0,
+            o.get_id(),
+            STR_NON_VUOTA,
+            STR_NON_VUOTA,
+            dict(),
+            dict(),
+        )
+        self.__model.aggiungi_spettacolo(r)
+        r2 = Regia(
+            STR_NON_VUOTA,
+            0,
+            o.get_id(),
+            STR_NON_VUOTA,
+            STR_NON_VUOTA,
+            dict(),
+            dict(),
+        )
+        self.__model.aggiungi_spettacolo(r2)
+        r3 = Regia(
+            STR_NON_VUOTA,
+            0,
+            o.get_id(),
+            STR_NON_VUOTA,
+            STR_NON_VUOTA,
+            dict(),
+            dict(),
+        )
+        self.__model.aggiungi_spettacolo(r3)
+        e4 = Evento(datetime.now(), r2.get_id())
+        self.__model.aggiungi_evento(e4)
+        e5 = Evento(DATA_ORA_FUTURO, r3.get_id())
+        self.__model.aggiungi_evento(e5)
+        self.assertEqual(self.__model.get_spettacoli_in_programma(), [r3])
+        print("Passato GET LISTA SPETTACOLI in programma")
+
+        r3_ = self.__model.get_spettacoli_in_programma()[0]
+        r3_.set_titolo(STR_NON_VUOTA + STR_NON_VUOTA)
+        r3 = self.__model.get_spettacoli_in_programma()[0]
+        self.assertEqual(r3.get_note(), r3_.get_note())
+        self.assertNotEqual(r3.get_titolo(), r3_.get_titolo())
+        print("Passato GET LISTA SPETTACOLI in programma side effect")
+        # TODO
+        # self.__model._Model__gestore_eventi.elimina_evento(e5.get_id())  # type: ignore
+        # self.__model._Model__gestore_eventi.elimina_evento(e4.get_id())  # type: ignore
+        self.__model.elimina_evento(e5.get_id())
+        self.__model.elimina_evento(e4.get_id())
+        self.__model.elimina_spettacolo(r3.get_id())
+        self.__model.elimina_spettacolo(r2.get_id())
+        self.__model.elimina_spettacolo(r.get_id())
+        self.__model.elimina_opera(o.get_id())
+        self.__model.elimina_genere(g.get_id())
 
         # MODIFICA
         e3 = Evento(datetime.now(), ID_NON_ESISTENTE)

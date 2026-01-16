@@ -112,6 +112,14 @@ class Model:
         with open(os.path.join(self.__db_path, "eventi.pkl"), "wb") as f:
             dump(self.__gestore_eventi, f)
 
+    # Stato
+    def __in_programma(self, spettacolo: Spettacolo) -> bool:
+        return any(
+            map(
+                lambda e: e.attivo(), self.get_eventi_by_spettacolo(spettacolo.get_id())
+            )
+        )
+
     # Getters
     #   ACCOUNTS
     def get_account(self, id_: int) -> Optional[Account]:
@@ -143,6 +151,14 @@ class Model:
 
     def get_spettacoli(self) -> list[Spettacolo]:
         return self.__gestore_spettacoli.get_spettacoli()
+
+    def get_spettacoli_in_programma(self) -> list[Spettacolo]:
+        return list(
+            filter(
+                lambda s: self.__in_programma(s),
+                self.get_spettacoli(),
+            )
+        )
 
     def get_spettacoli_by_titolo(self, titolo: str) -> list[Spettacolo]:
         return self.__gestore_spettacoli.get_spettacoli_by_titolo(titolo)

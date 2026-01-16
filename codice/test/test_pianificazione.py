@@ -710,8 +710,8 @@ class TestTell(unittest.TestCase):
         )
         print("Passato ELIMINA OggettoInUso")
         # TODO
-        self.__model._Model__gestore_eventi.elimina_evento(e.get_id())  # type: ignore
-        # self.__model.elimina_evento(e.get_id())
+        # self.__model._Model__gestore_eventi.elimina_evento(e.get_id())  # type: ignore
+        self.__model.elimina_evento(e.get_id())
 
         self.__model.elimina_spettacolo(r.get_id())
         self.assertEqual(self.__model.get_spettacoli(), [r2])

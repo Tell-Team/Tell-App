@@ -1,11 +1,10 @@
 from enum import Enum, auto
-from typing import Self
-
 from model.exceptions import (
     CredenzialiErrateException,
     DatoIncongruenteException,
     PermessiInsufficientiException,
 )
+from typing import Self
 
 LUNGHEZZA_MIN_PASSWORD = 8
 
