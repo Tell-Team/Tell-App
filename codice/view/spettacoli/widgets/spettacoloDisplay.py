@@ -7,7 +7,7 @@ from model.pianificazione.regia import Regia  # - TESTING
 
 from view.utils.list_widgets import ItemDisplay
 from view.utils.hyphenate_text import HyphenatedLabel
-from view.style import QssStyle
+from view.style import WidgetRole, WidgetColor
 
 
 class SpettacoloDisplay(ItemDisplay):
@@ -38,14 +38,14 @@ class SpettacoloDisplay(ItemDisplay):
     def __setup_ui(self, s: Spettacolo, dati: tuple[str, ...] = ()) -> None:
         # Labels
         titolo = HyphenatedLabel(s.get_titolo())
-        titolo.setProperty(QssStyle.HEADER2, True)
+        titolo.setProperty(WidgetRole.HEADER2, True)
 
         # Pulsanti
         self.__btn_visualizza = QPushButton("Maggior info")
-        self.__btn_visualizza.setProperty(QssStyle.WHITE_BUTTON, True)
+        self.__btn_visualizza.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
         self.__btn_scegli_posti = QPushButton("Scegli posti")
-        self.__btn_scegli_posti.setProperty(QssStyle.WHITE_BUTTON, True)
+        self.__btn_scegli_posti.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
         self.__pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.__pulsanti)
@@ -67,23 +67,24 @@ class SpettacoloDisplay(ItemDisplay):
 
         if self.__editable:
             self.__btn_modifica = QPushButton("Modifica")
-            self.__btn_modifica.setProperty(QssStyle.MODIFY_BUTTON, True)
+            self.__btn_modifica.setProperty(WidgetRole.MODIFY_BUTTON, True)
 
             self.__btn_elimina = QPushButton("Elimina")
-            self.__btn_elimina.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
+            self.__btn_elimina.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
 
             layout_pulsanti.addWidget(self.__btn_modifica)
             layout_pulsanti.addWidget(self.__btn_elimina)
 
             # Pannello di eliminazione
             domanda = QLabel("<b>Sicuro di eliminare?</b>")
-            domanda.setProperty(QssStyle.PARAGRAPH, True)
+            domanda.setProperty(WidgetRole.BODY_TEXT, True)
+            domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
             self.__btn_no = QPushButton("No")
-            self.__btn_no.setProperty(QssStyle.WHITE_BUTTON, True)
+            self.__btn_no.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
             self.__btn_si = QPushButton("Sì")
-            self.__btn_si.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
+            self.__btn_si.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
 
             self.__conferma_elimina = QWidget()
             layout_conferma = QHBoxLayout(self.__conferma_elimina)
@@ -144,9 +145,11 @@ class SpettacoloDisplay(ItemDisplay):
             raise ValueError("dati deve essere un tuple di 2 string")
 
         compositore = HyphenatedLabel(f"Direttore d'orchestra: {dati[0]}")
-        compositore.setProperty(QssStyle.PARAGRAPH, True)
+        compositore.setProperty(WidgetRole.BODY_TEXT, True)
+        compositore.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
         self.__layout.addWidget(compositore)
 
         regista = HyphenatedLabel(f"Regista: {dati[1]}")
-        regista.setProperty(QssStyle.PARAGRAPH, True)
+        regista.setProperty(WidgetRole.BODY_TEXT, True)
+        regista.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
         self.__layout.addWidget(regista)

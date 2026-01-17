@@ -5,7 +5,7 @@ from functools import partial
 from view.utils.list_widgets import ItemDisplay
 from view.utils.horizontal_scroll import HorizontalWheelScrollArea
 from view.utils import make_vline
-from view.style import QssStyle
+from view.style import WidgetRole, WidgetColor
 
 
 class PersonaleDisplay(ItemDisplay):
@@ -27,13 +27,15 @@ class PersonaleDisplay(ItemDisplay):
         self.__key = key
 
         widget_key = QLabel(self.__key)
-        widget_key.setProperty(QssStyle.PARAGRAPH, True)
+        widget_key.setProperty(WidgetRole.BODY_TEXT, True)
+        widget_key.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
         scroll_key = HorizontalWheelScrollArea()
         scroll_key.setWidget(widget_key)
         scroll_key.setMinimumWidth(250)  # - DA CORRIGERE
 
         widget_value = QLabel(value)
-        widget_value.setProperty(QssStyle.PARAGRAPH, True)
+        widget_value.setProperty(WidgetRole.BODY_TEXT, True)
+        widget_value.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
         scroll_value = HorizontalWheelScrollArea()
         scroll_value.setWidget(widget_value)
         scroll_value.setMinimumWidth(200)  # - DA CORRIGERE
@@ -41,7 +43,7 @@ class PersonaleDisplay(ItemDisplay):
         self.__btn_rimuovi = QPushButton("X")
         # - Quitar el texto del botón para cuando pueda usar icons
         self.__btn_rimuovi.setFixedSize(32, 32)
-        self.__btn_rimuovi.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
+        self.__btn_rimuovi.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
 
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 5, 0)

@@ -17,7 +17,7 @@ from view.info.utils import OperaPageData, GenerePageData
 
 from view.utils.list_widgets import ListLayout
 from view.utils import PopupMessage
-from view.style import QssStyle
+from view.style import WidgetRole
 
 
 class InfoSectionController(QObject):
@@ -137,7 +137,7 @@ class InfoSectionController(QObject):
             )
 
             # Aggiungi cur_opera al layout di ListaOpere
-            layout_opere.aggiungi_list_item(cur_opera, QssStyle.ITEM_CARD)
+            layout_opere.aggiungi_list_item(cur_opera, WidgetRole.ITEM_CARD)
 
             # Funzione di elimina per l'opera
             def on_si(id_: int) -> None:
@@ -184,7 +184,7 @@ class InfoSectionController(QObject):
             )
 
             # Aggiungi cur_genere al layout di ListaOpere
-            layout_generi.aggiungi_list_item(cur_genere, QssStyle.ITEM_CARD)
+            layout_generi.aggiungi_list_item(cur_genere, WidgetRole.ITEM_CARD)
 
             # Funzione di elimina per il genere
             def on_si(id_: int) -> None:

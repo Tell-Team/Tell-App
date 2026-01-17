@@ -4,7 +4,7 @@ from view.spettacoli.pagine import NuovoSpettacoloView
 from view.spettacoli.utils import SpettacoloPageData
 
 from view.utils.hyphenate_text import HyphenatedLabel
-from view.style.uiStyle import QssStyle
+from view.style import WidgetRole, WidgetColor
 
 
 class ModificaSpettacoloView(NuovoSpettacoloView):
@@ -27,7 +27,8 @@ class ModificaSpettacoloView(NuovoSpettacoloView):
         self._header.setText("Modifica spettacolo")
 
         self.__tipo_spettacolo = HyphenatedLabel()
-        self.__tipo_spettacolo.setProperty(QssStyle.SECONDARY_TEXT, True)
+        self.__tipo_spettacolo.setProperty(WidgetRole.BODY_TEXT, True)
+        self.__tipo_spettacolo.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
 
         self._form_layout.addWidget(self.__tipo_spettacolo)
 

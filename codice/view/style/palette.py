@@ -1,33 +1,53 @@
-# -*- coding: utf-8 -*-
 """
-Palette di colori centralizzata per i temi dell'app
+Palette di colori centralizzata per i temi dell'app.
 """
 
-# Colorazione comune
-COLORI_CHIARO: dict[str, str] = {
-    "sfondo": "#f3f3f3",
-    "testo": "#222222",
-    "testo_secondario": "#444444",
-    "primario": "#2b7cff",
-    "successo": "#2f5731",
-    "avviso": "#3182ce",
-    "errore": "#c3423f",
-    "bordo": "#b0b0b0",
-    "disabled_bg": "#cccccc",
-    "disabled_text": "#777777",
-    "bianco": "#ffffff",
-}
+from dataclasses import dataclass
 
-COLORI_SCURO: dict[str, str] = {
-    "sfondo": "#1e1e1e",
-    "testo": "#eeeeee",
-    "testo_secondario": "#aaaaaa",
-    "primario": "#2b7cff",
-    "successo": "#2f5731",
-    "avviso": "#3182ce",
-    "errore": "#c3423f",
-    "bordo": "#555555",
-    "disabled_bg": "#333333",
-    "disabled_text": "#777777",
-    "bianco": "#000000",
-}
+
+@dataclass(frozen=True)
+class Palette:
+    window_bg: str  # QMainWindow, QDialog, QWidget, QGroupBox
+    window_text: str  # QLabel, QGroupBox, static text
+    editable_bg: str  # QLineEdit, QTextEdit, QPlainTextEdit, QComboBox
+
+    editable_text: str  # QLineEdit, QTextEdit, item views
+    button_text: str  # QPushButton, QToolButton
+    placeholder_text: str  # QLineEdit, QTextEdit
+
+    button_bg: str  # All button widgets.
+
+    highlight: str  # Selected text, selected items, focused selections.
+    highlighted_text: str  # Selections.
+    accent: str  # Modern Qt styles, focus indicators
+
+    tooltip_text: str  # Tooltip text.
+
+
+LIGHT = Palette(
+    window_bg="#f3f3f3",
+    window_text="#222222",
+    editable_bg="#ffffff",
+    editable_text="#222222",
+    button_text="#222222",
+    placeholder_text="#909090",
+    button_bg="#ffffff",
+    highlight="#3182ce",
+    highlighted_text="#ffffff",
+    accent="#2b7cff",
+    tooltip_text="#909090",
+)
+
+DARK = Palette(
+    window_bg="#1e1e1e",
+    window_text="#eeeeee",
+    editable_bg="#000000",
+    editable_text="#eeeeee",
+    button_text="#eeeeee",
+    placeholder_text="#bbbbbb",
+    button_bg="#000000",
+    highlight="#4a90e2",
+    highlighted_text="#ffffff",
+    accent="#2b7cff",
+    tooltip_text="#bbbbbb",
+)

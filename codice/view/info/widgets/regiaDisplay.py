@@ -13,7 +13,7 @@ from model.pianificazione.regia import Regia
 from view.utils.list_widgets import ItemDisplay
 from view.utils.horizontal_scroll import HorizontalWheelScrollArea
 from view.utils import make_vline
-from view.style import QssStyle
+from view.style import WidgetRole, WidgetColor
 
 
 class RegiaDisplay(ItemDisplay):
@@ -42,12 +42,14 @@ class RegiaDisplay(ItemDisplay):
     def __setup_ui(self, r: Regia) -> None:
         # Labels
         titolo = QLabel(r.get_titolo())
-        titolo.setProperty(QssStyle.PARAGRAPH, True)
+        titolo.setProperty(WidgetRole.BODY_TEXT, True)
+        titolo.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
         scroll_titolo = HorizontalWheelScrollArea()
         scroll_titolo.setWidget(titolo)
 
         regista_anno = QLabel(f"{r.get_regista()} ({r.get_anno_produzione()})")
-        regista_anno.setProperty(QssStyle.PARAGRAPH, True)
+        regista_anno.setProperty(WidgetRole.BODY_TEXT, True)
+        regista_anno.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
         scroll_regista_anno = HorizontalWheelScrollArea()
         scroll_regista_anno.setWidget(regista_anno)
 
@@ -66,11 +68,11 @@ class RegiaDisplay(ItemDisplay):
         if self.__editable:
             # Pulsanti
             self.__btn_modifica = QPushButton("Modifica")
-            self.__btn_modifica.setProperty(QssStyle.MODIFY_BUTTON, True)
+            self.__btn_modifica.setProperty(WidgetRole.MODIFY_BUTTON, True)
             self.__btn_modifica.setMinimumHeight(32)
 
             self.__btn_elimina = QPushButton("Elimina")
-            self.__btn_elimina.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
+            self.__btn_elimina.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
             self.__btn_elimina.setMinimumHeight(32)
 
             self.__pulsanti = QWidget()
@@ -81,14 +83,15 @@ class RegiaDisplay(ItemDisplay):
 
             # Pannello di eliminazione
             domanda = QLabel("<b>Sicuro?</b>")
-            domanda.setProperty(QssStyle.PARAGRAPH, True)
+            domanda.setProperty(WidgetRole.BODY_TEXT, True)
+            domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
             self.__btn_no = QPushButton("No")
-            self.__btn_no.setProperty(QssStyle.WHITE_BUTTON, True)
+            self.__btn_no.setProperty(WidgetRole.DEFAULT_BUTTON, True)
             self.__btn_no.setMinimumSize(40, 32)
 
             self.__btn_si = QPushButton("Sì")
-            self.__btn_si.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
+            self.__btn_si.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
             self.__btn_si.setMinimumSize(40, 32)
 
             self.__conferma_elimina = QWidget()

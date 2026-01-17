@@ -16,7 +16,7 @@ from view.spettacoli.utils import SpettacoloPageData
 
 from view.utils.list_widgets import ListLayout
 from view.utils import PopupMessage
-from view.style import QssStyle
+from view.style import WidgetRole
 
 
 class SpettacoliSectionController(QObject):
@@ -143,7 +143,7 @@ class SpettacoliSectionController(QObject):
             )
 
             # Aggiungi cur_spettacolo al layout di ListaSpettacoli
-            layout_spettacoli.aggiungi_list_item(cur_spettacolo, QssStyle.ITEM_CARD)
+            layout_spettacoli.aggiungi_list_item(cur_spettacolo, WidgetRole.ITEM_CARD)
 
             # Funzione di elimina per lo spettacolo
             def on_si(id_: int) -> None:

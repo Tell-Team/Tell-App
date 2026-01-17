@@ -5,18 +5,19 @@ from controller.app_context import AppContext
 
 from model.exceptions import DatoIncongruenteException
 
-from view.style.styleLoader import (
-    load_main_stylesheet,
-    rileva_tema_os,
-)  # <- rilevamento automatico
+from view.style import rileva_tema_os, build_qpalette, load_stylesheet
 
 
 def main() -> None:
     app = QApplication(sys.argv)
 
-    # Rileva automaticamente il tema dall'OS
-    tema_corrente: str = rileva_tema_os()  # ritorna "chiaro" o "scuro"
-    app.setStyleSheet(load_main_stylesheet(tema_corrente))
+    try:
+        tema_corrente = rileva_tema_os()
+    except NotImplementedError as exc:
+        print(type(exc).__name__, exc)  # Indica l'errore nel Terminal e continua
+        tema_corrente = None  # L'app userà il tema chiaro per default
+    app.setPalette(build_qpalette(tema_corrente))
+    app.setStyleSheet(load_stylesheet(tema_corrente))
 
     try:
         context: AppContext

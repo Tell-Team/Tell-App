@@ -1,8 +1,10 @@
-# -*- coding: utf-8 -*-
 """
-Loader centrale per gli stili QSS dell'app
-Gestisce il caricamento del template QSS e la sostituzione dei colori
-secondo il tema scelto (chiaro/scuro). Rileva automaticamente il tema del sistema operativo.
+Loader centrale per gli stili dell'app.
+
+- Rileva automaticamente il tema del sistema operativo.
+- Crea la `QPalette` con colori per i `QWidget` secondo il tema dell'OS scelto.
+- Gestisce il caricamento dei QSS per il layout ed i colori dei `QWidget` secondo
+il tema dell'OS scelto.
 
 Compatibile: Windows, macOS, fallback Linux (light)
 """
@@ -10,40 +12,23 @@ Compatibile: Windows, macOS, fallback Linux (light)
 import platform
 import subprocess
 from pathlib import Path
-from typing import Literal
+from PyQt6.QtGui import QPalette, QColor
+from typing import Literal, Optional
 
-from view.style.palette import COLORI_CHIARO, COLORI_SCURO
+from view.style.palette import LIGHT, DARK
 
-# Percorso del QSS template
-MAIN_QSS_PATH: Path = Path(__file__).parent / "main.qss"
-
-
-def __carica_file_qss(percorso: Path) -> str:
-    """Carica il contenuto di un file QSS e lo ritorna come stringa.
-    Throws: FileNotFoundError, IOError
-    """
-    with open(percorso, "r", encoding="utf-8") as file:
-        return file.read()
+type OSTheme = Literal["light.qss", "dark.qss"]
 
 
-def __sostituisci_placeholder_qss(qss_template: str, palette: dict[str, str]) -> str:
-    """Sostituisce i placeholder del QSS con i colori della palette.
-    Placeholder nel QSS: {{nome_colore}}
-    Throws: KeyError
-    """
-    qss_finale: str = qss_template
-    for nome_colore, valore in palette.items():
-        qss_finale = qss_finale.replace(f"{{{{{nome_colore}}}}}", valore)
-    return qss_finale
-
-
-def rileva_tema_os() -> Literal["chiaro", "scuro"]:
+def rileva_tema_os() -> OSTheme:
     """Rileva automaticamente il tema del sistema operativo.
 
-    Returns:
-        "chiaro" se il sistema è in light mode, "scuro" se in dark mode.
+    Returns
+    ---
+        `"light.qss"` se il sistema è in light mode; `"dark.qss"`, se in dark mode.
 
-    Throws: NotImplementedError, subprocess.CalledProcessError
+    ---
+    Throws: NotImplementedError
     """
     sistema: str = platform.system()
 
@@ -58,10 +43,9 @@ def rileva_tema_os() -> Literal["chiaro", "scuro"]:
             )
             valore, _ = winreg.QueryValueEx(chiave, "AppsUseLightTheme")
             winreg.CloseKey(chiave)
-            return "chiaro" if valore == 1 else "scuro"
+            return "light.qss" if valore == 1 else "dark.qss"
         except Exception:
-            return "chiaro"  # fallback
-
+            return "light.qss"  # fallback
     elif sistema == "Darwin":
         # macOS: usa defaults read
         try:
@@ -71,43 +55,75 @@ def rileva_tema_os() -> Literal["chiaro", "scuro"]:
                 text=True,
             )
             if "Dark" in risultato.stdout:
-                return "scuro"
+                return "dark.qss"
             else:
-                return "chiaro"
+                return "light.qss"
         except Exception:
-            return "chiaro"  # fallback
-
+            return "light.qss"  # fallback
     elif sistema == "Linux":
         # Linux: fallback light (GNOME/KDE differiscono)
-        return "chiaro"
-
+        return "light.qss"
     else:
         raise NotImplementedError(
             f"Rilevamento tema non implementato per OS: {sistema}"
         )
 
 
-def load_main_stylesheet(tema: Literal["chiaro", "scuro"] | None = None) -> str:
-    """Carica il QSS principale e applica il tema selezionato o rilevato automaticamente.
+def build_qpalette(theme: Optional[OSTheme] = None) -> QPalette:
+    """Crea un `QPalette` che corrisponda al tema dell'OS selezionato. Se nessun
+    tema è selezionato, `light.qss` viene usato come default value.
 
-    Args:
-        tema: stringa 'chiaro' o 'scuro'. Se None, rileva automaticamente il tema OS.
-
-    Returns:
-        QSS completo come stringa pronta per QApplication.setStyleSheet()
-
-    Throws: FileNotFoundError, IOError, KeyError, ValueError
+    Returns
+    ---
+        `QPalette` pronta per `QApplication.setPalette`.
     """
-    if tema is None:
-        tema = rileva_tema_os()
+    qp = QPalette()
 
-    if tema == "chiaro":
-        palette: dict[str, str] = COLORI_CHIARO
-    elif tema == "scuro":
-        palette: dict[str, str] = COLORI_SCURO
-    else:
-        raise ValueError(f"Tema non valido: {tema}. Usare 'chiaro' o 'scuro'.")
+    if theme is None or theme == "light.qss":
+        palette = LIGHT
+    elif theme == "dark.qss":
+        palette = DARK
 
-    template_qss: str = __carica_file_qss(MAIN_QSS_PATH)
-    qss_finale: str = __sostituisci_placeholder_qss(template_qss, palette)
+    qp.setColor(QPalette.ColorRole.Window, QColor(palette.window_bg))
+    qp.setColor(QPalette.ColorRole.WindowText, QColor(palette.window_text))
+    qp.setColor(QPalette.ColorRole.Base, QColor(palette.editable_bg))
+
+    qp.setColor(QPalette.ColorRole.Text, QColor(palette.editable_text))
+    qp.setColor(QPalette.ColorRole.ButtonText, QColor(palette.button_text))
+    qp.setColor(QPalette.ColorRole.PlaceholderText, QColor(palette.placeholder_text))
+
+    qp.setColor(QPalette.ColorRole.Button, QColor(palette.button_bg))
+
+    qp.setColor(QPalette.ColorRole.Highlight, QColor(palette.highlight))
+    qp.setColor(QPalette.ColorRole.HighlightedText, QColor(palette.highlighted_text))
+    qp.setColor(QPalette.ColorRole.Accent, QColor(palette.accent))
+
+    qp.setColor(QPalette.ColorRole.ToolTipText, QColor(palette.tooltip_text))
+
+    return qp
+
+
+def load_stylesheet(theme: Optional[OSTheme] = None) -> str:
+    """Carica lo style QSS applicando il tema dell'OS selezionato. Se nessun
+    tema è selezionato, `light.qss` viene usato come default value.
+
+    Returns
+    ---
+        QSS completo come stringa pronta per `QApplication.setStyleSheet`.
+
+    ---
+    Throws: FileNotFoundError, IOError
+    """
+    if theme is None:
+        theme = "light.qss"
+
+    COLORS_QSS_PATH = Path(__file__).parent / "qss" / "themes" / theme
+    LAYOUT_QSS_PATH = Path(__file__).parent / "qss" / "layouts" / "layout.qss"
+
+    qss_finale: str
+    with open(COLORS_QSS_PATH, "r", encoding="utf-8") as f:
+        qss_finale = f.read()
+    with open(LAYOUT_QSS_PATH, "r", encoding="utf-8") as file:
+        qss_finale = qss_finale + file.read()
+
     return qss_finale

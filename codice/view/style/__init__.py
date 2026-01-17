@@ -1,4 +1,10 @@
-from .styleLoader import load_main_stylesheet
-from .uiStyle import QssStyle
+from .styleLoader import rileva_tema_os, build_qpalette, load_stylesheet
+from .uiStyle import WidgetRole, WidgetColor
 
-__all__ = ["load_main_stylesheet", "QssStyle"]
+__all__ = [
+    "rileva_tema_os",
+    "build_qpalette",
+    "load_stylesheet",
+    "WidgetRole",
+    "WidgetColor",
+]

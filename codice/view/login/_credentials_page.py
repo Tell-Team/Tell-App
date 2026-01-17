@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 
-from view.style import QssStyle
+from view.style import WidgetRole, WidgetColor
 
 
 class CredentialsPage(QWidget):
@@ -27,7 +27,7 @@ class CredentialsPage(QWidget):
     def _setup_ui(self) -> None:
         # Top widget
         self.btn_indietro = QPushButton("Indietro")
-        self.btn_indietro.setProperty(QssStyle.WHITE_BUTTON, True)
+        self.btn_indietro.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
         pagina_header = QWidget()
         layout_header = QHBoxLayout(pagina_header)
@@ -36,25 +36,27 @@ class CredentialsPage(QWidget):
 
         # Content
         label_header = QLabel("Login")
-        label_header.setProperty(QssStyle.HEADER1, True)
+        label_header.setProperty(WidgetRole.HEADER1, True)
         label_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         label_username = QLabel("Username")
-        label_username.setProperty(QssStyle.PARAGRAPH, True)
+        label_username.setProperty(WidgetRole.BODY_TEXT, True)
+        label_username.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
         label_username.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.username = QLineEdit()
         self.username.setPlaceholderText("Username")
 
         label_password = QLabel("Password")
-        label_password.setProperty(QssStyle.PARAGRAPH, True)
+        label_password.setProperty(WidgetRole.BODY_TEXT, True)
+        label_password.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
         label_password.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.password = QLineEdit()
         self.password.setPlaceholderText("Password")
         self.password.setEchoMode(QLineEdit.EchoMode.Password)
 
         self.btn_login = QPushButton("LOGIN")
-        self.btn_login.setProperty(QssStyle.BLUE_BUTTON, True)
-        self.btn_login.setProperty(QssStyle.MAIN_BUTTON, True)
+        self.btn_login.setProperty(WidgetColor.Button.BLUE_BUTTON, True)
+        self.btn_login.setProperty(WidgetRole.MAIN_BUTTON, True)
 
         pagina_content = QWidget()
         layout_content = QVBoxLayout(pagina_content)

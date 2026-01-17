@@ -10,7 +10,7 @@ from PyQt6.QtCore import pyqtSignal
 
 from core.metaclasses import ABCQObjectMeta
 
-from view.style import QssStyle
+from view.style import WidgetRole
 
 
 class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
@@ -36,7 +36,7 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
     def _setup_ui(self) -> None:
         # Logout
         self._btn_logout = QPushButton("Logout")
-        self._btn_logout.setProperty(QssStyle.WHITE_BUTTON, True)
+        self._btn_logout.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
         widget_logout = QWidget()
         layout_logout = QHBoxLayout(widget_logout)
@@ -45,13 +45,13 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
 
         # Sezioni dell'app
         self._btn_sezione_spettacoli = QPushButton("Spettacoli")
-        self._btn_sezione_spettacoli.setProperty(QssStyle.WHITE_BUTTON, True)
+        self._btn_sezione_spettacoli.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
         self._btn_sezione_info = QPushButton("Info")
-        self._btn_sezione_info.setProperty(QssStyle.WHITE_BUTTON, True)
+        self._btn_sezione_info.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
         self._btn_sezione_account = QPushButton("Account")
-        self._btn_sezione_account.setProperty(QssStyle.WHITE_BUTTON, True)
+        self._btn_sezione_account.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
         sezioni_app = QWidget()
         layout_sezioni = QHBoxLayout(sezioni_app)

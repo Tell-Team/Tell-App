@@ -6,7 +6,7 @@ from model.pianificazione.opera import Opera
 
 from view.utils.list_widgets import ItemDisplay
 from view.utils.hyphenate_text import HyphenatedLabel
-from view.style import QssStyle
+from view.style import WidgetRole, WidgetColor
 
 
 class OperaDisplay(ItemDisplay):
@@ -35,17 +35,19 @@ class OperaDisplay(ItemDisplay):
     def __setup_ui(self, o: Opera) -> None:
         # Labels
         nome = HyphenatedLabel(o.get_nome())
-        nome.setProperty(QssStyle.HEADER2, True)
+        nome.setProperty(WidgetRole.HEADER2, True)
 
         librettista = HyphenatedLabel(f"Librettista: {o.get_librettista()}")
-        librettista.setProperty(QssStyle.PARAGRAPH, True)
+        librettista.setProperty(WidgetRole.BODY_TEXT, True)
+        librettista.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
         compositore = HyphenatedLabel(f"Direttore d'orchestra: {o.get_compositore()}")
-        compositore.setProperty(QssStyle.PARAGRAPH, True)
+        compositore.setProperty(WidgetRole.BODY_TEXT, True)
+        compositore.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
         # Pulsanti
         self.__btn_visualizza = QPushButton("Maggior info")
-        self.__btn_visualizza.setProperty(QssStyle.WHITE_BUTTON, True)
+        self.__btn_visualizza.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
         self.__pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.__pulsanti)
@@ -63,23 +65,24 @@ class OperaDisplay(ItemDisplay):
 
         if self.__editable:
             self.__btn_modifica = QPushButton("Modifica")
-            self.__btn_modifica.setProperty(QssStyle.MODIFY_BUTTON, True)
+            self.__btn_modifica.setProperty(WidgetRole.MODIFY_BUTTON, True)
 
             self.__btn_elimina = QPushButton("Elimina")
-            self.__btn_elimina.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
+            self.__btn_elimina.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
 
             layout_pulsanti.addWidget(self.__btn_modifica)
             layout_pulsanti.addWidget(self.__btn_elimina)
 
             # Pannello di eliminazione
             domanda = QLabel("<b>Sicuro di eliminare?</b>")
-            domanda.setProperty(QssStyle.PARAGRAPH, True)
+            domanda.setProperty(WidgetRole.BODY_TEXT, True)
+            domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
             self.__btn_no = QPushButton("No")
-            self.__btn_no.setProperty(QssStyle.WHITE_BUTTON, True)
+            self.__btn_no.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
             self.__btn_si = QPushButton("Sì")
-            self.__btn_si.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
+            self.__btn_si.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
 
             self.__conferma_elimina = QWidget()
             layout_conferma = QHBoxLayout(self.__conferma_elimina)

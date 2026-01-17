@@ -5,7 +5,7 @@ from typing import override
 from core.view import AbstractSectionView
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
-from view.style import QssStyle
+from view.style import WidgetRole, WidgetColor
 
 
 class AccountSectionView(AbstractSectionView):
@@ -39,7 +39,7 @@ class AccountSectionView(AbstractSectionView):
 
         # Account Header
         header_account = QLabel("Account")
-        header_account.setProperty(QssStyle.HEADER1, True)
+        header_account.setProperty(WidgetRole.HEADER1, True)
         header_account.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         # - Questo blocco posiziona il header Account della pagina all'altura degli header
@@ -57,11 +57,11 @@ class AccountSectionView(AbstractSectionView):
 
         # Amministratore
         header_admin = QLabel("Amministratore")
-        header_admin.setProperty(QssStyle.HEADER2, True)
+        header_admin.setProperty(WidgetRole.HEADER2, True)
         header_admin.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self._btn_nuovo_admin = QPushButton("Nuovo Amministratore")
-        self._btn_nuovo_admin.setProperty(QssStyle.WHITE_BUTTON, True)
+        self._btn_nuovo_admin.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
         widget_header_admin = QWidget()
         layout_header_admin = QHBoxLayout(widget_header_admin)
@@ -74,7 +74,8 @@ class AccountSectionView(AbstractSectionView):
         label_lista_admin_vuota = EmptyStateLabel(
             "Non vi sono account Amministratore registrati."
         )
-        label_lista_admin_vuota.setProperty(QssStyle.SECONDARY_TEXT, True)
+        label_lista_admin_vuota.setProperty(WidgetRole.BODY_TEXT, True)
+        label_lista_admin_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
 
         # Si usa 'admin' nei nomi delle variabili e 'amministratore' nei testi della UI.
         widget_lista_admin = QWidget()
@@ -88,11 +89,11 @@ class AccountSectionView(AbstractSectionView):
 
         # Biglietteria
         header_biglietteria = QLabel("Biglietteria")
-        header_biglietteria.setProperty(QssStyle.HEADER2, True)
+        header_biglietteria.setProperty(WidgetRole.HEADER2, True)
         header_biglietteria.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self._btn_nuovo_biglietteria = QPushButton("Nuovo Biglietteria")
-        self._btn_nuovo_biglietteria.setProperty(QssStyle.WHITE_BUTTON, True)
+        self._btn_nuovo_biglietteria.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
         widget_header_biglietteria = QWidget()
         layout_header_biglietteria = QHBoxLayout(widget_header_biglietteria)
@@ -103,7 +104,10 @@ class AccountSectionView(AbstractSectionView):
         label_lista_biglietteria_vuota = EmptyStateLabel(
             "Non vi sono account Biglietteria registrati."
         )
-        label_lista_biglietteria_vuota.setProperty(QssStyle.SECONDARY_TEXT, True)
+        label_lista_biglietteria_vuota.setProperty(WidgetRole.BODY_TEXT, True)
+        label_lista_biglietteria_vuota.setProperty(
+            WidgetColor.Text.SECONDARY_TEXT, True
+        )
 
         # Viene usato 'biglietteria' in singolare per le variabili perché è il tipo di account.
         #   Quindi, è un nome proprio.

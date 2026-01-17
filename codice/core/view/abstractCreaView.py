@@ -14,7 +14,7 @@ from functools import partial
 
 from core.metaclasses import ABCQObjectMeta
 
-from view.style import QssStyle
+from view.style import WidgetRole, WidgetColor
 
 
 class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
@@ -40,7 +40,7 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
     def _setup_ui(self) -> None:
         # Setup Header
         self._header = QLabel("")
-        self._header.setProperty(QssStyle.HEADER1, True)
+        self._header.setProperty(WidgetRole.HEADER1, True)
         self._header.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         # Setup QFormLayout
@@ -64,10 +64,10 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
 
         # Setup Pulsanti
         self._btn_annulla = QPushButton("Annulla")
-        self._btn_annulla.setProperty(QssStyle.WHITE_BUTTON, True)
+        self._btn_annulla.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
         self._btn_conferma = QPushButton("Salva")
-        self._btn_conferma.setProperty(QssStyle.SAVE_BUTTON, True)
+        self._btn_conferma.setProperty(WidgetRole.SAVE_BUTTON, True)
 
         self._pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self._pulsanti)
@@ -77,7 +77,8 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
 
         # Label input_error
         self._input_error = QLabel("")
-        self._input_error.setProperty(QssStyle.ERROR_MESSAGE, True)
+        self._input_error.setProperty(WidgetRole.BODY_TEXT, True)
+        self._input_error.setProperty(WidgetColor.Text.ERROR_MESSAGE, True)
 
         # Setup main layout
         self._main_layout = QVBoxLayout(self)

@@ -6,7 +6,7 @@ from model.pianificazione.genere import Genere
 
 from view.utils.list_widgets import ItemDisplay
 from view.utils.hyphenate_text import HyphenatedLabel
-from view.style import QssStyle
+from view.style import WidgetRole, WidgetColor
 
 
 class GenereDisplay(ItemDisplay):
@@ -33,10 +33,11 @@ class GenereDisplay(ItemDisplay):
     def __setup_ui(self, g: Genere) -> None:
         # Labels
         nome = HyphenatedLabel(g.get_nome())
-        nome.setProperty(QssStyle.HEADER2, True)
+        nome.setProperty(WidgetRole.HEADER2, True)
 
         descrizione = HyphenatedLabel(g.get_descrizione())
-        descrizione.setProperty(QssStyle.PARAGRAPH, True)
+        descrizione.setProperty(WidgetRole.BODY_TEXT, True)
+        descrizione.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
         # Layout
         layout = QVBoxLayout(self)
@@ -47,10 +48,10 @@ class GenereDisplay(ItemDisplay):
         if self.__editable:
             # Pulsanti Modifica-Elimina
             self.__btn_modifica = QPushButton("Modifica")
-            self.__btn_modifica.setProperty(QssStyle.MODIFY_BUTTON, True)
+            self.__btn_modifica.setProperty(WidgetRole.MODIFY_BUTTON, True)
 
             self.__btn_elimina = QPushButton("Elimina")
-            self.__btn_elimina.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
+            self.__btn_elimina.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
 
             self.__pulsanti = QWidget()
             layout_pulsanti = QHBoxLayout(self.__pulsanti)
@@ -61,13 +62,14 @@ class GenereDisplay(ItemDisplay):
 
             # Pannello di eliminazione
             domanda = QLabel("<b>Sicuro di eliminare?</b>")
-            domanda.setProperty(QssStyle.PARAGRAPH, True)
+            domanda.setProperty(WidgetRole.BODY_TEXT, True)
+            domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
             self.__btn_no = QPushButton("No")
-            self.__btn_no.setProperty(QssStyle.WHITE_BUTTON, True)
+            self.__btn_no.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
             self.__btn_si = QPushButton("Sì")
-            self.__btn_si.setProperty(QssStyle.DESTRUCTIVE_BUTTON, True)
+            self.__btn_si.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
 
             self.__conferma_elimina = QWidget()
             layout_conferma = QHBoxLayout(self.__conferma_elimina)

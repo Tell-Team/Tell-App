@@ -14,7 +14,7 @@ from core.view import AbstractSectionView
 from controller.login.auth_service import AuthenticationService
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
-from view.style import QssStyle
+from view.style import WidgetRole, WidgetColor
 
 
 class SpettacoliSectionView(AbstractSectionView):
@@ -53,7 +53,7 @@ class SpettacoliSectionView(AbstractSectionView):
 
         # Spettacoli
         header_spettacoli = QLabel("Spettacoli")
-        header_spettacoli.setProperty(QssStyle.HEADER1, True)
+        header_spettacoli.setProperty(WidgetRole.HEADER1, True)
         header_spettacoli.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self.filtro_ricerca: str = ""
@@ -61,11 +61,11 @@ class SpettacoliSectionView(AbstractSectionView):
         self.ricerca_bar = QLineEdit()
         self.ricerca_bar.setPlaceholderText("Inserire titolo...")
         self.ricerca_bar.setClearButtonEnabled(True)
-        self.ricerca_bar.setProperty(QssStyle.SEARCH_BAR, True)
+        self.ricerca_bar.setProperty(WidgetRole.SEARCH_BAR, True)
 
         self._btn_ricerca = QPushButton()
-        self._btn_ricerca.setProperty(QssStyle.SEARCH_BUTTON, True)
-        self._btn_ricerca.setProperty(QssStyle.BLUE_BUTTON, True)
+        self._btn_ricerca.setProperty(WidgetRole.SEARCH_BUTTON, True)
+        self._btn_ricerca.setProperty(WidgetColor.Button.BLUE_BUTTON, True)
         self._btn_ricerca.setFixedHeight(self.ricerca_bar.sizeHint().height())
 
         widget_ricerca = QWidget()
@@ -81,14 +81,15 @@ class SpettacoliSectionView(AbstractSectionView):
         layout_header_spettacoli.addWidget(header_spettacoli)
         if self.is_biglietteria:
             self.__btn_nuovo_spettacolo = QPushButton("Nuovo spettacolo")
-            self.__btn_nuovo_spettacolo.setProperty(QssStyle.WHITE_BUTTON, True)
+            self.__btn_nuovo_spettacolo.setProperty(WidgetRole.DEFAULT_BUTTON, True)
             layout_header_spettacoli.addWidget(self.__btn_nuovo_spettacolo)
         layout_header_spettacoli.addWidget(widget_ricerca)
 
         label_lista_spettacoli_vuota = EmptyStateLabel(
             "Non vi sono spettacoli registrati."
         )
-        label_lista_spettacoli_vuota.setProperty(QssStyle.SECONDARY_TEXT, True)
+        label_lista_spettacoli_vuota.setProperty(WidgetRole.BODY_TEXT, True)
+        label_lista_spettacoli_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
 
         widget_lista_spettacoli = QWidget()
         self.layout_lista_spettacoli = ListLayout(

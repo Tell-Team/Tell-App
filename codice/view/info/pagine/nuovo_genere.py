@@ -3,7 +3,7 @@ from typing import override
 
 from core.view import AbstractCreaView
 
-from view.style import QssStyle
+from view.style import WidgetRole, WidgetColor
 
 
 class NuovoGenereView(AbstractCreaView):
@@ -32,12 +32,14 @@ class NuovoGenereView(AbstractCreaView):
     @override
     def _setup_form(self) -> None:
         label_nome = QLabel('Nome<span style="color:red;">*</span> :')
-        label_nome.setProperty(QssStyle.SECONDARY_TEXT, True)
+        label_nome.setProperty(WidgetRole.BODY_TEXT, True)
+        label_nome.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.nome = QLineEdit()
         self.nome.setPlaceholderText("Inserire nome")
 
         label_descrizione = QLabel('Descrizione<span style="color:red;">*</span> :')
-        label_descrizione.setProperty(QssStyle.SECONDARY_TEXT, True)
+        label_descrizione.setProperty(WidgetRole.BODY_TEXT, True)
+        label_descrizione.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.descrizione = QTextEdit()
         self.descrizione.setPlaceholderText("Inserire descrizione")
         self.descrizione.setFixedHeight(80)

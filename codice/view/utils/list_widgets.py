@@ -9,7 +9,7 @@ item.
 from PyQt6.QtWidgets import QWidget, QLabel, QLayout, QVBoxLayout
 from typing import Optional
 
-from view.style import QssStyle
+from view.style import WidgetRole
 
 
 # Queste classi vuote servono per evitare possibili errori al chiamare i metodi di ListLayout.
@@ -65,7 +65,7 @@ class ListLayout(QVBoxLayout):
         self.__box.show()
 
     def aggiungi_list_item(
-        self, widget: ItemDisplay, style: Optional[QssStyle] = None
+        self, widget: ItemDisplay, style: Optional[WidgetRole] = None
     ) -> None:
         """Aggiunge un widget creato per il display delle istanze del model.
 

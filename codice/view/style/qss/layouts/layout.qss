@@ -1,0 +1,231 @@
+/* ------------------------ QLabel ------------------------ */
+QLabel[header1="true"], QLabel[header2="true"], QLabel[header3="true"] {
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+}
+QLabel[header1="true"] { font-size: 28px; }
+QLabel[header2="true"] { font-size: 20px; }
+QLabel[header3="true"] { font-size: 16px; }
+
+QLabel[body-text="true"] {
+    font-size: 14px;
+    margin-top: 4px;
+    padding: 0;
+}
+
+/* ------------------------ QPushButton ------------------------ */
+QPushButton[main-button="true"] {
+    padding: 10px 16px;
+    font-size: 14px;
+}
+
+QPushButton[search-button="true"] {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 6px;
+}
+
+QPushButton[blue-button="true"] {
+    color: white;
+    background-color: hsl(217, 100.0%, 58.0%); /* #2b7cff */
+}
+QPushButton[blue-button="true"]:hover { background-color: hsl(217, 92.0%, 63.0%); }
+QPushButton[blue-button="true"]:pressed { background-color: hsl(217, 100.0%, 50.0%); }
+
+/* Logica condivisa dei pulsanti con colore */
+QPushButton[save-button="true"], QPushButton[modify-button="true"],
+QPushButton[destructive-button="true"] {
+    color: white;
+    font-weight: bold;
+}
+
+/* Pulsante Salva */
+QPushButton[save-button="true"] { background-color: hsl(123, 46.0%, 34.0%); } /* #2f5731 */
+QPushButton[save-button="true"]:hover { background-color: hsl(123, 42.0%, 38.0%); }
+QPushButton[save-button="true"]:pressed { background-color: hsl(123, 50.0%, 28.0%); }
+
+/* Pulsante Modifica */
+QPushButton[modify-button="true"] { background-color: hsl(209, 61.6%, 50%); } /* #3182ce */
+QPushButton[modify-button="true"]:hover { background-color: hsl(209, 58.0%, 55.0%); }
+QPushButton[modify-button="true"]:pressed { background-color: hsl(209, 66.0%, 42.0%); }
+
+/* Pulsante Elimina */
+QPushButton[destructive-button="true"] { background-color: hsl(349, 100%, 34.5%) ; } /* #b00020: Material Design "Error" */
+QPushButton[destructive-button="true"]:hover { background-color: hsl(349, 92.0%, 40.0%); }
+QPushButton[destructive-button="true"]:pressed { background-color: hsl(349, 100.0%, 28.0%); }
+
+/* Pulsante default */
+QPushButton {
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+
+/* ------------------------ QWidget speciali ------------------------ */
+QWidget[item-card="true"] {
+    border-radius: 15px;
+    padding: 10px;
+}
+
+QWidget[item-list="true"] {
+    border-radius: 5px;
+}
+
+/* ------------------------ Campi d'input ------------------------ */
+QLineEdit, QTextEdit, QComboBox, QSpinBox, QDateEdit {
+    border-radius: 6px;
+    padding: 6px;
+    font-size: 14px;
+}
+
+QLineEdit[search-bar="true"] {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+QLineEdit:hover, QTextEdit:hover, QComboBox:hover, QSpinBox:hover, QDateEdit:hover {
+    border: 1px solid #818181;
+}
+
+QLineEdit:focus, QTextEdit:focus, QComboBox:focus, QSpinBox:focus, QDateEdit:focus {
+    border: 1px solid #2b7cff;
+}
+
+/* ------------------------ ComboBox & QDateEdit Dropdown ------------------------ */
+QComboBox::drop-down, QDateEdit::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+QComboBox QAbstractItemView {
+    border: 1px solid #b0b0b0;
+    selection-background-color: #2b7cff;
+}
+
+QComboBox::down-arrow {
+    image: url(down_arrow.png); /* # - Si deve aggiungere nella view */
+    width: 10px;
+    height: 10px;
+}
+
+/* ------------------------ QSpinBox & QDateEdit Buttons ------------------------ */
+QSpinBox::up-button, QDateEdit::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: right top;
+    width: 20px;
+    border-top-right-radius: 6px;
+    padding: 0;
+}
+
+QSpinBox::down-button, QDateEdit::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: right bottom;
+    width: 20px;
+    border-bottom-right-radius: 6px;
+    padding: 0;
+}
+
+QSpinBox::up-arrow, QDateEdit::up-arrow {
+    image: url(up_arrow.png); /* # - Si deve aggiungere nella view */
+    width: 10px;
+    height: 10px;
+}
+
+QSpinBox::down-arrow {
+    image: url(down_arrow.png); /* # - Si deve aggiungere nella view */
+    width: 10px;
+    height: 10px;
+}
+
+QDateEdit::down-arrow {
+    image: url(calendar_icon.png); /* # - Si deve aggiungere nella view */
+    width: 12px;
+    height: 12px;
+}
+
+/* # - DE AQUÍ EN ADELANTE CORREGIR */
+/* ------------------------ QDateEdit Calendar Popup ------------------------ */
+QCalendarWidget { font-size: 14px; }
+
+QCalendarWidget QWidget#qt_calendar_prevmonth,
+QCalendarWidget QWidget#qt_calendar_nextmonth,
+QCalendarWidget QWidget#qt_calendar_monthheader {
+    background-color: #f3f3f3;
+}
+
+QCalendarWidget QToolButton {
+    height: 30px;
+    icon-size: 16px;
+    background-color: transparent;
+    color: #222;
+    border: none;
+    margin: 5px;
+}
+
+QCalendarWidget QToolButton:hover { background-color: #d1d1d1; border-radius: 4px; }
+QCalendarWidget QToolButton:pressed { background-color: #9a9a9a; }
+
+QCalendarWidget QAbstractItemView {
+    border: 1px solid #b0b0b0;
+    selection-background-color: #2b7cff;
+    selection-color: white;
+    outline: 0;
+}
+
+QCalendarWidget QAbstractItemView:disabled { color: #777; }
+
+/* # - DE AQUÍ PATRÁS CORREGIR */
+/* ------------------------ ScrollArea ------------------------ */
+QScrollArea {
+    background-color: none;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+QScrollBar { border-radius: 6px; }
+QScrollBar:vertical { width: 12px; }
+QScrollBar:horizontal { height: 12px; }
+
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+    border-radius: 3px;
+}
+
+QScrollBar::add-line, QScrollBar::sub-line { background: none; }
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0px; }
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal { width: 0px; }
+
+/* ------------------------ ScrollArea invisibile ------------------------ */
+QScrollArea[invisible-h-scroll="true"] {
+    border: none;
+}
+QScrollArea[invisible-h-scroll="true"] > QWidget > QWidget {
+    background: transparent;
+}
+QScrollArea[invisible-h-scroll="true"] QScrollBar:horizontal {
+    height: 0px;
+    margin: 0px;
+}
+QScrollArea[invisible-h-scroll="true"] QScrollBar::handle:horizontal {
+    min-width: 0px;
+}
+QScrollArea[invisible-h-scroll="true"]
+QScrollBar::add-line:horizontal,
+QScrollArea[invisible-h-scroll="true"]
+QScrollBar::sub-line:horizontal {
+    width: 0px;
+    height: 0px;
+}
+QScrollArea[invisible-h-scroll="true"]
+QScrollBar::add-page:horizontal,
+QScrollArea[invisible-h-scroll="true"]
+QScrollBar::sub-page:horizontal {
+    background: transparent;
+}

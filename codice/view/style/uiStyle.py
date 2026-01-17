@@ -2,23 +2,19 @@ from enum import StrEnum, verify, UNIQUE
 
 
 @verify(UNIQUE)
-class QssStyle(StrEnum):
-    """Enum con i ruoli (style) da assegnare ai widget."""
+class WidgetRole(StrEnum):
+    """Enum con i ruoli per assegnare un layout particulare ai widget.
 
-    # Usare .setProperty(QssStyle.NOME_RUOLO, True) per assegnare uno style.
+    Modo di uso: `my_widget.setProperty(WidgetRole.NOME_RUOLO, True)`"""
+
     HEADER1 = "header1"  # QLabel
     HEADER2 = "header2"  # QLabel
     HEADER3 = "header3"  # QLabel
-    PARAGRAPH = "paragraph"  # QLabel
-    SECONDARY_TEXT = "secondary-text"  # QLabel
-    ERROR_MESSAGE = "error-message"  # QLabel
+    BODY_TEXT = "body-text"  # QLabel
 
     MAIN_BUTTON = "main-button"  # QPushButton
+    DEFAULT_BUTTON = "default-button"  # QPushButton
     SEARCH_BUTTON = "search-button"  # QPushButton
-
-    BLUE_BUTTON = "blue-button"  # QPushButton
-    WHITE_BUTTON = "white-button"  # QPushButton
-
     SAVE_BUTTON = "save-button"  # QPushButton
     MODIFY_BUTTON = "modify-button"  # QPushButton
     DESTRUCTIVE_BUTTON = "destructive-button"  # QPushButton
@@ -29,3 +25,17 @@ class QssStyle(StrEnum):
     SEARCH_BAR = "search-bar"  # QLineEdit
 
     INVISIBLE_H_SCROLL = "invisible-h-scroll"  # QScrollArea
+
+
+class WidgetColor:
+    """Enum con i ruoli per assegnare un colore ai widget."""
+
+    @verify(UNIQUE)
+    class Text(StrEnum):
+        PRIMARY_TEXT = "primary-text"  # QLabel
+        SECONDARY_TEXT = "secondary-text"  # QLabel
+        ERROR_MESSAGE = "error-message"  # QLabel
+
+    @verify(UNIQUE)
+    class Button(StrEnum):
+        BLUE_BUTTON = "blue-button"  # QPushButton

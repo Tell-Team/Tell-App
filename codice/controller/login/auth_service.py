@@ -43,6 +43,8 @@ class AuthenticationService:
         return self.__id_account
 
     def is_biglietteria(self) -> bool:
+        if self.__ruolo is Ruolo.AMMINISTRATORE:
+            return True
         return self.__ruolo is Ruolo.BIGLIETTERIA
 
     def is_admin(self) -> bool:

@@ -10,7 +10,7 @@ from typing import override
 from model.pianificazione.opera import Opera
 
 from view.spettacoli.pagine import NuovoSpettacoloView
-from view.style import QssStyle
+from view.style import WidgetRole, WidgetColor
 
 
 class NuovaRegiaView(NuovoSpettacoloView):
@@ -41,18 +41,21 @@ class NuovaRegiaView(NuovoSpettacoloView):
         super()._setup_form()
 
         label_regista = QLabel('Regista<span style="color:red;">*</span> :')
-        label_regista.setProperty(QssStyle.SECONDARY_TEXT, True)
+        label_regista.setProperty(WidgetRole.BODY_TEXT, True)
+        label_regista.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.regista = QLineEdit()
         self.regista.setPlaceholderText("Inserire regista")
 
         label_anno = QLabel('Anno di produzione<span style="color:red;">*</span> :')
-        label_anno.setProperty(QssStyle.SECONDARY_TEXT, True)
+        label_anno.setProperty(WidgetRole.BODY_TEXT, True)
+        label_anno.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.anno = QSpinBox()
         self.anno.setRange(1597, QDate().currentDate().year())
         # - Serve un rango in particolare?
 
         label_opera = QLabel('Opera<span style="color:red;">*</span> :')
-        label_opera.setProperty(QssStyle.SECONDARY_TEXT, True)
+        label_opera.setProperty(WidgetRole.BODY_TEXT, True)
+        label_opera.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.opera = QComboBox()
         self.opera.setEnabled(False)
         # - Questa pagina sarà esclusiva della sezione Info?
