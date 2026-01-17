@@ -12,9 +12,10 @@ from view.style import WidgetRole, WidgetColor
 class GenereDisplay(ItemDisplay):
     """View dei singoli generi della Lista Generi.
 
-    Segnali:
-    - modificaRequest(int): emesso quando si clicca il pulsante Modifica;
-    - eliminaConfermata(int): emesso quando si clicca il pulsante Sì.
+    Segnali
+    ---
+    - `modificaRequest(int)`: emesso quando si clicca il pulsante Modifica;
+    - `eliminaConfermata(int)`: emesso quando si clicca il pulsante Sì.
     """
 
     modificaRequest = pyqtSignal(int)

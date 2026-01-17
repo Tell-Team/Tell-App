@@ -21,7 +21,8 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
     """Classe astratta per la creazione di pagine dell'app dedicate alla creazione
     e modifica di oggetti del model.
 
-    Segnali:
+    Segnali
+    ---
     - `annullaRequest(QWidget)`: emesso quando si clicca il pulsante Annulla;
     - `salvaRequest()`: emesso quando si clicca il pulsante Salva.
     """

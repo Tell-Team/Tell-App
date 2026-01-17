@@ -14,10 +14,8 @@ class AccountSectionView(AbstractSectionView):
     Contiene le informazioni di tutti gli `Account` memorizzati. Non permette di modificare
     l'`Account` della sessione utente corrente.
 
-    Segnali:
-    - `logoutRequest()`: emesso quando si clicca il pulsante Logout;
-    - `goToSpettacoli()`: emesso quando si clicca il pulsante Spettacoli;
-    - `goToInfo()`: emesso quando si clicca il pulsante Info;
+    Segnali
+    ---
     - `nuovoAdminReques()`: emesso quando si clicca il pulsante Nuovo Amministratore;
     - `nuovoBiglietteriaRequest()`: emesso quando si clicca il pulsante Nuovo Biglietteria;
     - `displayAdminRequest(QVBoxLayout)`: emesso per caricare la lista di account

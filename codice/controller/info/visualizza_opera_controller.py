@@ -20,7 +20,8 @@ from view.utils import PopupMessage
 class VisualizzaOperaController(QObject):
     """Gestice la pagina `VisualizzaOperaView` dell'app.
 
-    Segnali:
+    Segnali
+    ---
     - `goBackRequest()`: emesso per tornare alla pagina `InfoSectionView`;
     - `goToPageRequest(Pagina, bool)`: emesso per visualizzare un'altra pagina;
     - `getPageRequest(Pagina, dict)`: emesso per ottenere la pagina che vendrà visualizzata.

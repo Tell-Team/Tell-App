@@ -27,7 +27,8 @@ class VisualizzaOperaView(QWidget):
     Contiene le tutte informazioni dell'`Opera` ed una lista con tutte le `Regia`
     associate ad essa.
 
-    Segnali:
+    Segnali
+    ---
     - `tornaIndietroRequest()`: emesso quando si clicca il pulsante Indietro;
     - `displayRegieRequest(QVBoxLayout)`: emesso per mostrare la lista regie a schermo;
     - `nuovaRegiaRequest()`: emesso quando si clicca il pulsante Nuova regia.

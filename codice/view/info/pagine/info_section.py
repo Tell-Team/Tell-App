@@ -23,10 +23,8 @@ class InfoSectionView(AbstractSectionView):
 
     Contiene le informazioni sulle `Opera` e `Genere` memorizzati.
 
-    Segnali:
-    - `logoutRequest()`: emesso quando si clicca il pulsante Logout;
-    - `goToSpettacoli()`: emesso quando si clicca il pulsante Spettacoli;
-    - `goToAccount()`: emesso quando si clicca il pulsante Account;
+    Segnali
+    ---
     - `nuovaOperaRequest()`: emesso quando si clicca il pulsante Nuova opera;
     - `nuovoGenereRequest()`: emesso quando si clicca il pulsante Nuovo genere;
     - `displayOpereRequest(QVBoxLayout)`: emesso per caricare la lista delle opere nella sezione;
@@ -39,8 +37,11 @@ class InfoSectionView(AbstractSectionView):
     displayGeneriRequest = pyqtSignal(QVBoxLayout)
 
     def __init__(self, auth: AuthenticationService):
-
-        self.is_admin = auth.is_admin()
+        self.is_biglietteria = self.is_admin = False
+        if auth.is_admin():
+            self.is_biglietteria = self.is_admin = True
+        elif auth.is_biglietteria():
+            self.is_biglietteria = True
 
         super().__init__()
 
@@ -50,6 +51,8 @@ class InfoSectionView(AbstractSectionView):
     def _setup_ui(self) -> None:
         super()._setup_ui()
 
+        if not self.is_biglietteria:
+            self._btn_sezione_spettacoli.hide()
         if not self.is_admin:
             self._btn_sezione_account.hide()
 

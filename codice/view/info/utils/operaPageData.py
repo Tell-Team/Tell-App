@@ -4,7 +4,7 @@ from datetime import date
 
 @dataclass(frozen=True)
 class OperaPageData:
-    """Container immutabile per le pagine di Opera."""
+    """Container immutabile per le pagine di `Opera`."""
 
     id: int
     nome: str

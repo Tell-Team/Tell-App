@@ -18,7 +18,8 @@ from view.utils import PopupMessage
 class CUOperaController(AbstractCUController):
     """Gestisce il salvataggio delle opere create e modificate.
 
-    Segnali:
+    Segnali
+    ---
     - `goBackRequest()`: emesso per tornare alla pagina `InfoSectionView`.
     """
 

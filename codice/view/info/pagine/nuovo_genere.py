@@ -7,12 +7,7 @@ from view.style import WidgetRole, WidgetColor
 
 
 class NuovoGenereView(AbstractCreaView):
-    """Pagina per la creazione di un nuovo genere.
-
-    Segnali:
-    - `annullaRequest(QWidget)`: emesso quando si clicca il pulsante Annulla;
-    - `salvaRequest()`: emesso quando si clicca il pulsante Salva.
-    """
+    """Pagina per la creazione di un nuovo genere."""
 
     # ------------------------- SETUP INIT -------------------------
 

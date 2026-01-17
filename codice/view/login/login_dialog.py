@@ -11,9 +11,10 @@ from ._credentials_page import CredentialsPage
 class LoginDialog(QDialog):
     """Gestice la view della funzione di login dell'app.
 
-    Segnali:
-    - loginAsCliente(): Emesso quando l'utente ingressa all'app come Cliente;
-    - authRequest(str, str): Emesso dopo inserire le credenziali richieste.
+    Segnali
+    ---
+    - `loginAsCliente()`: Emesso quando l'utente ingressa all'app come Cliente;
+    - `authRequest(str, str)`: Emesso dopo inserire le credenziali richieste.
     """
 
     loginAsCliente = pyqtSignal()

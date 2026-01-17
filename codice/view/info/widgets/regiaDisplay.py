@@ -19,9 +19,10 @@ from view.style import WidgetRole, WidgetColor
 class RegiaDisplay(ItemDisplay):
     """View delle singole regia della Lista Regie dentro della pagina `VisualizzaOperaView`.
 
-    Segnali:
-    - modificaRequest(int): emesso quando si clicca il pulsante Modifica;
-    - eliminaConfermata(int): emesso quando si clicca il pulsante Sì.
+    Segnali
+    ---
+    - `modificaRequest(int)`: emesso quando si clicca il pulsante Modifica;
+    - `eliminaConfermata(int)`: emesso quando si clicca il pulsante Sì.
     """
 
     # In prattica, questo QWidget pottrebe essere nella pagina NuovaRegiaView stessa, ma per

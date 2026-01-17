@@ -12,7 +12,8 @@ class AbstractCUController(QObject, metaclass=ABCQObjectMeta):
     """Classe astratta per la creazione di controller per la creazione o modifica
     di oggetti del model.
 
-    Segnali:
+    Segnali
+    ---
     - `goBackRequest()`: emesso per tornare all'ultima pagina visualizzata.
     """
 

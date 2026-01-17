@@ -14,18 +14,7 @@ from view.style import WidgetRole, WidgetColor
 
 
 class NuovaRegiaView(NuovoSpettacoloView):
-    """Pagina per la creazione di una nuova regia.
-
-    Segnali:
-    - `displayInterpreti(CreaAbstractView)`: emesso per mostrare la lista interpreti a schermo;
-    - `displayTecnici(CreaAbstractView)`: emesso per mostrare la lista tecnici a schermo;
-    - `aggiungiInterprete(CreaAbstractView, str, str)`: emesso quando si clicca il pulsante
-    Aggiungi degli interpreti;
-    - `aggiungiTecnico(CreaAbstractView, str, str)`: emesso quando si clicca il pulsante Aggiungi
-    dei tecnici;
-    - `annullaRequest(QWidget)`: emesso quando si clicca il pulsante Annulla;
-    - `salvaRequest()`: emesso quando si clicca il pulsante Salva.
-    """
+    """Pagina per la creazione di una nuova regia."""
 
     # ------------------------- SETUP INIT -------------------------
 

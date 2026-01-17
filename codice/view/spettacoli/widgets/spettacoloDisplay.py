@@ -11,24 +11,21 @@ from view.style import WidgetRole, WidgetColor
 
 
 class SpettacoloDisplay(ItemDisplay):
-    """View delle singole opere della Lista Opere.
+    """View dei singoli spettacoli della Lista Spettacoli per la sezione Spettacoli.
 
-    Segnali:
+    Segnali
+    ---
     - visualizzaRequest(int): emesso quando si clicca il pulsante Maggior info;
-    - ScegliPostoRequest(int): emesso quando si clicca il pulsante Scegli posti;
     - modificaRequest(int): emesso quando si clicca il pulsante Modifica;
     - eliminaConfermata(int): emesso quando si clicca il pulsante Sì.
     """
 
     visualizzaRequest = pyqtSignal(int)
-    scegliPostoRequest = pyqtSignal(int)
     modificaRequest = pyqtSignal(int)
     eliminaConfermata = pyqtSignal(int)
 
-    def __init__(self, s: Spettacolo, editable: bool, dati: tuple[str, ...] = ()):
+    def __init__(self, s: Spettacolo, dati: tuple[str, ...] = ()):
         super().__init__()
-
-        self.__editable = editable
 
         self.__setup_ui(s, dati)
         self.__connect_signals(s)
@@ -44,14 +41,10 @@ class SpettacoloDisplay(ItemDisplay):
         self.__btn_visualizza = QPushButton("Maggior info")
         self.__btn_visualizza.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
-        self.__btn_scegli_posti = QPushButton("Scegli posti")
-        self.__btn_scegli_posti.setProperty(WidgetRole.DEFAULT_BUTTON, True)
-
         self.__pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.__pulsanti)
         layout_pulsanti.setContentsMargins(1, 1, 1, 1)
         layout_pulsanti.addWidget(self.__btn_visualizza)
-        layout_pulsanti.addWidget(self.__btn_scegli_posti)
 
         # Layout
         self.__layout = QVBoxLayout(self)
@@ -65,36 +58,35 @@ class SpettacoloDisplay(ItemDisplay):
 
         self.__layout.addWidget(self.__pulsanti)
 
-        if self.__editable:
-            self.__btn_modifica = QPushButton("Modifica")
-            self.__btn_modifica.setProperty(WidgetRole.MODIFY_BUTTON, True)
+        self.__btn_modifica = QPushButton("Modifica")
+        self.__btn_modifica.setProperty(WidgetRole.MODIFY_BUTTON, True)
 
-            self.__btn_elimina = QPushButton("Elimina")
-            self.__btn_elimina.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
+        self.__btn_elimina = QPushButton("Elimina")
+        self.__btn_elimina.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
 
-            layout_pulsanti.addWidget(self.__btn_modifica)
-            layout_pulsanti.addWidget(self.__btn_elimina)
+        layout_pulsanti.addWidget(self.__btn_modifica)
+        layout_pulsanti.addWidget(self.__btn_elimina)
 
-            # Pannello di eliminazione
-            domanda = QLabel("<b>Sicuro di eliminare?</b>")
-            domanda.setProperty(WidgetRole.BODY_TEXT, True)
-            domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        # Pannello di eliminazione
+        domanda = QLabel("<b>Sicuro di eliminare?</b>")
+        domanda.setProperty(WidgetRole.BODY_TEXT, True)
+        domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
-            self.__btn_no = QPushButton("No")
-            self.__btn_no.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+        self.__btn_no = QPushButton("No")
+        self.__btn_no.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
-            self.__btn_si = QPushButton("Sì")
-            self.__btn_si.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
+        self.__btn_si = QPushButton("Sì")
+        self.__btn_si.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
 
-            self.__conferma_elimina = QWidget()
-            layout_conferma = QHBoxLayout(self.__conferma_elimina)
-            layout_conferma.setContentsMargins(1, 1, 1, 1)
-            layout_conferma.addWidget(domanda)
-            layout_conferma.addWidget(self.__btn_no)
-            layout_conferma.addWidget(self.__btn_si)
-            self.__conferma_elimina.hide()
+        self.__conferma_elimina = QWidget()
+        layout_conferma = QHBoxLayout(self.__conferma_elimina)
+        layout_conferma.setContentsMargins(1, 1, 1, 1)
+        layout_conferma.addWidget(domanda)
+        layout_conferma.addWidget(self.__btn_no)
+        layout_conferma.addWidget(self.__btn_si)
+        self.__conferma_elimina.hide()
 
-            self.__layout.addWidget(self.__conferma_elimina)
+        self.__layout.addWidget(self.__conferma_elimina)
 
         layout_pulsanti.addStretch()
 
@@ -105,26 +97,21 @@ class SpettacoloDisplay(ItemDisplay):
             partial(self.visualizzaRequest.emit, self.__id)
         )
 
-        self.__btn_scegli_posti.clicked.connect(  # type:ignore
-            partial(self.scegliPostoRequest.emit, self.__id)
+        self.__btn_modifica.clicked.connect(  # type:ignore
+            partial(self.modificaRequest.emit, self.__id)
         )
 
-        if self.__editable:
-            self.__btn_modifica.clicked.connect(  # type:ignore
-                partial(self.modificaRequest.emit, self.__id)
-            )
+        self.__btn_elimina.clicked.connect(  # type:ignore
+            self.__on_elimina
+        )
 
-            self.__btn_elimina.clicked.connect(  # type:ignore
-                self.__on_elimina
-            )
+        self.__btn_si.clicked.connect(  # type:ignore
+            partial(self.eliminaConfermata.emit, self.__id)
+        )
 
-            self.__btn_si.clicked.connect(  # type:ignore
-                partial(self.eliminaConfermata.emit, self.__id)
-            )
-
-            self.__btn_no.clicked.connect(  # type:ignore
-                self.annulla_elimina
-            )
+        self.__btn_no.clicked.connect(  # type:ignore
+            self.annulla_elimina
+        )
 
     # ------------------------- METODI DI VIEW -------------------------
 

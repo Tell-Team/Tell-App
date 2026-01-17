@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QWidget
-from PyQt6.QtCore import pyqtSignal, QObject
-from functools import partial
 from typing import Optional
+
+from core.controller import AbstractSectionController
 
 from controller.navigation import Pagina
 
@@ -20,87 +20,63 @@ from view.utils import PopupMessage
 from view.style import WidgetRole
 
 
-class InfoSectionController(QObject):
-    """Gestice la sezione Info (`InfoSectionView`) dell'app.
+class InfoSectionController(AbstractSectionController):
+    """Gestice la sezione Info (`InfoSectionView`) dell'app."""
 
-    Segnali:
-    - `logoutRequest()`: emesso per eseguire la funzione di logout dall'`AppContext`;
-    - `goToPageRequest(Pagina, bool)`: emesso per visualizzare un'altra pagina;
-    - `goToSectionRequest(Pagina)`: emesso per visualizzare un'altra pagina, senza salvarla
-    nell'history del `NavigationController`;
-    - `getPageRequest(Pagina, dict)`: emesso per ottenere la pagina che vendrà visualizzata.
-    """
-
-    logoutRequest: pyqtSignal = pyqtSignal()
-    goToPageRequest: pyqtSignal = pyqtSignal(Pagina, bool)
-    goToSectionRequest: pyqtSignal = pyqtSignal(Pagina)
-    getPageRequest: pyqtSignal = pyqtSignal(Pagina, dict)
+    _view_section: InfoSectionView
 
     def __init__(self, model: Model, info_s: InfoSectionView):
-        super().__init__()
-        self.__model = model
-        self.__info_section = info_s
+        if type(info_s) is not InfoSectionView:
+            raise TypeError("Atteso InfoSectionView per info_s.")
 
-        self.__connect_signals()
+        super().__init__(model, info_s)
 
     # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
 
-    def __connect_signals(self) -> None:
-        # Logout
-        self.__info_section.logoutRequest.connect(  # type:ignore
-            self.logoutRequest.emit
-        )
-
-        # Navigazione tra sezioni
-        self.__info_section.goToSpettacoli.connect(  # type:ignore
-            partial(self.goToSectionRequest.emit, Pagina.SEZIONE_SPETTACOLI)
-        )
-        self.__info_section.goToAccount.connect(  # type:ignore
-            partial(self.goToSectionRequest.emit, Pagina.SEZIONE_ACCOUNT)
-            # - CORRIGGERE: Account ancora non implementato
-        )
+    def _connect_signals(self) -> None:
+        super()._connect_signals()
 
         # Display delle istanze del model
-        self.__info_section.displayOpereRequest.connect(  # type:ignore
+        self._view_section.displayOpereRequest.connect(  # type:ignore
             self.__display_opere
         )
-        self.__info_section.displayGeneriRequest.connect(  # type:ignore
+        self._view_section.displayGeneriRequest.connect(  # type:ignore
             self.__display_generi
         )
 
         # Setup delle pagine di creazione
-        self.__info_section.nuovaOperaRequest.connect(  # type:ignore
+        self._view_section.nuovaOperaRequest.connect(  # type:ignore
             self.__nuova_opera
         )
-        self.__info_section.nuovoGenereRequest.connect(  # type:ignore
+        self._view_section.nuovoGenereRequest.connect(  # type:ignore
             self.__nuovo_genere
         )
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
     def __get_opera(self, id_: int) -> Optional[Opera]:
-        return self.__model.get_opera(id_)
+        return self._model.get_opera(id_)
 
     def __get_opere(self) -> list[Opera]:
-        return self.__model.get_opere()
+        return self._model.get_opere()
 
     def __get_opere_by_nome(self, nome: str) -> list[Opera]:
-        return self.__model.get_opere_by_nome(nome)
+        return self._model.get_opere_by_nome(nome)
 
     def __elimina_opera(self, id_: int) -> None:
-        self.__model.elimina_opera(id_)
+        self._model.elimina_opera(id_)
 
     def __get_genere(self, id_: int) -> Optional[Genere]:
-        return self.__model.get_genere(id_)
+        return self._model.get_genere(id_)
 
     def __get_generi(self) -> list[Genere]:
-        return self.__model.get_generi()
+        return self._model.get_generi()
 
     def __elimina_genere(self, id_: int) -> None:
-        self.__model.elimina_genere(id_)
+        self._model.elimina_genere(id_)
 
     def __get_regie_by_opera(self, id_: int) -> list[Regia]:
-        return self.__model.get_regie_by_opera(id_)
+        return self._model.get_regie_by_opera(id_)
 
     def __display_opere(self, layout_opere: ListLayout) -> None:
         """Mostra a schermo alcune informazioni delle opere salvate ed assegna a
@@ -109,7 +85,7 @@ class InfoSectionController(QObject):
         :param layout: layout dove saranno caricate tutte le opere
         """
         # Verifica se c'è un filtro di ricerca
-        filtro = self.__info_section.filtro_ricerca
+        filtro = self._view_section.filtro_ricerca
 
         lista_opere = (
             self.__get_opere() if not filtro else self.__get_opere_by_nome(filtro)
@@ -123,7 +99,7 @@ class InfoSectionController(QObject):
         # Mostra tutte le opere della lista a schermo
         for opera in lista_opere:
             cur_opera = OperaDisplay(
-                opera, editable=self.__info_section.is_admin
+                opera, editable=self._view_section.is_admin
             )  # - Esta vaina mejor que la guarde el controller y no las misma página
 
             # Setup della pagina di visualizzazione delle opere
@@ -150,12 +126,12 @@ class InfoSectionController(QObject):
                 except OggettoInUsoException as exc:
                     cur_opera.annulla_elimina()
                     PopupMessage.mostra_errore(
-                        self.__info_section,
+                        self._view_section,
                         "Opera in uso",
                         f"Si è verificato un errore: {exc}",
                     )
                 else:
-                    self.__info_section.aggiorna_pagina()
+                    self._view_section.aggiorna_pagina()
 
             cur_opera.eliminaConfermata.connect(  # type:ignore
                 on_si
@@ -176,7 +152,7 @@ class InfoSectionController(QObject):
 
         # Mostra tutti i generi salvati a schermo
         for genere in lista_generi:
-            cur_genere = GenereDisplay(genere, editable=self.__info_section.is_admin)
+            cur_genere = GenereDisplay(genere, editable=self._view_section.is_admin)
 
             # Setup della pagina di modifica dei generi
             cur_genere.modificaRequest.connect(  # type:ignore
@@ -197,12 +173,12 @@ class InfoSectionController(QObject):
                 except OggettoInUsoException as exc:
                     cur_genere.annulla_elimina()
                     PopupMessage.mostra_errore(
-                        self.__info_section,
+                        self._view_section,
                         "Genere in uso",
                         f"Si è verificato un errore: {exc}",
                     )
                 else:
-                    self.__info_section.aggiorna_pagina()
+                    self._view_section.aggiorna_pagina()
 
             cur_genere.eliminaConfermata.connect(  # type:ignore
                 on_si
@@ -218,7 +194,7 @@ class InfoSectionController(QObject):
         cur_opera = self.__get_opera(id_)
         if not cur_opera:
             PopupMessage.mostra_errore(
-                self.__info_section,
+                self._view_section,
                 "Opera inesistente",
                 f"Non è presente nessuna opera con id {id_}.",
             )
@@ -234,7 +210,7 @@ class InfoSectionController(QObject):
 
         if type(cur_pagina) is not VisualizzaOperaView:
             PopupMessage.mostra_errore(
-                self.__info_section,
+                self._view_section,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
                 + f"Type trovato: {type(cur_pagina)}",
@@ -245,7 +221,7 @@ class InfoSectionController(QObject):
         cur_genere = self.__get_genere(cur_opera.get_id_genere())
         if not cur_genere:
             PopupMessage.mostra_errore(
-                self.__info_section,
+                self._view_section,
                 "Genere inesistente",
                 f"Non è presente nessun genere con id {cur_opera.get_id_genere()}.",
             )
@@ -283,7 +259,7 @@ class InfoSectionController(QObject):
 
         if type(cur_pagina) is not NuovaOperaView:
             PopupMessage.mostra_errore(
-                self.__info_section,
+                self._view_section,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
                 + f"Type trovato: {type(cur_pagina)}",
@@ -307,7 +283,7 @@ class InfoSectionController(QObject):
         cur_opera = self.__get_opera(id_)
         if not cur_opera:
             PopupMessage.mostra_errore(
-                self.__info_section,
+                self._view_section,
                 "Opera inesistente",
                 f"Non è presente nessuna opera con id {id_}.",
             )
@@ -323,7 +299,7 @@ class InfoSectionController(QObject):
 
         if type(cur_pagina) is not ModificaOperaView:
             PopupMessage.mostra_errore(
-                self.__info_section,
+                self._view_section,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
                 + f"Type trovato: {type(cur_pagina)}",
@@ -363,7 +339,7 @@ class InfoSectionController(QObject):
 
         if type(cur_pagina) is not NuovoGenereView:
             PopupMessage.mostra_errore(
-                self.__info_section,
+                self._view_section,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
                 + f"Type trovato: {type(cur_pagina)}",
@@ -386,7 +362,7 @@ class InfoSectionController(QObject):
         cur_genere = self.__get_genere(id_)
         if not cur_genere:
             PopupMessage.mostra_errore(
-                self.__info_section,
+                self._view_section,
                 "Genere inesistente",
                 f"Non è presente nessun genere con id {id_}.",
             )
@@ -402,7 +378,7 @@ class InfoSectionController(QObject):
 
         if type(cur_pagina) is not ModificaGenereView:
             PopupMessage.mostra_errore(
-                self.__info_section,
+                self._view_section,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
                 + f"Type trovato: {type(cur_pagina)}",

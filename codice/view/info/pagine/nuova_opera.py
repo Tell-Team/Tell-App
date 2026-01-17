@@ -18,12 +18,7 @@ from view.style import WidgetRole, WidgetColor
 
 
 class NuovaOperaView(AbstractCreaView):
-    """Pagina per la creazione di una nuova opera.
-
-    Segnali:
-    - `annullaRequest(QWidget)`: emesso quando si clicca il pulsante Annulla;
-    - `salvaRequest()`: emesso quando si clicca il pulsante Salva.
-    """
+    """Pagina per la creazione di una nuova opera."""
 
     # ------------------------- SETUP INIT -------------------------
 

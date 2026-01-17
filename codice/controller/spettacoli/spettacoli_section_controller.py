@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QWidget
-from PyQt6.QtCore import pyqtSignal, QObject
-from functools import partial
 from typing import Optional
+
+from core.controller import AbstractSectionController
 
 from controller.navigation import Pagina
 
@@ -19,71 +19,42 @@ from view.utils import PopupMessage
 from view.style import WidgetRole
 
 
-class SpettacoliSectionController(QObject):
-    """Gestice la sezione Spettacoli (`SpettacoliSectionView`) dell'app.
+class SpettacoliSectionController(AbstractSectionController):
+    """Gestice la sezione Spettacoli (`SpettacoliSectionView`) dell'app."""
 
-    Segnali:
-    - `logoutRequest()`: emesso per eseguire la funzione di logout dall'`AppContext`;
-    - `goToPageRequest(Pagina, bool)`: emesso per visualizzare un'altra pagina;
-    - `goToSectionRequest(Pagina)`: emesso per visualizzare un'altra pagina, senza salvarla
-    nell'history del `NavigationController`;
-    - `getPageRequest(Pagina, dict)`: emesso per ottenere la pagina che vendrà visualizzata.
-    """
-
-    logoutRequest: pyqtSignal = pyqtSignal()
-    goToPageRequest: pyqtSignal = pyqtSignal(Pagina, bool)
-    goToSectionRequest: pyqtSignal = pyqtSignal(Pagina)
-    getPageRequest: pyqtSignal = pyqtSignal(Pagina, dict)
+    _view_section: SpettacoliSectionView
 
     def __init__(self, model: Model, spettacoli_s: SpettacoliSectionView):
-        super().__init__()
-        self.__model = model
-        self.__spettacoli_section = spettacoli_s
+        if type(spettacoli_s) is not SpettacoliSectionView:
+            raise TypeError("Atteso AcquistoSectionView per spettacoli_s.")
 
-        self.__connect_signals()
-
-        self.__spettacoli_section.aggiorna_pagina()
-        # Serve per aggiornare la pagina con i dati del model. Siccome questa è la prima pagina
-        #   caricata nella MainWindow, non si chiama nessun metodo del NavigationController al
-        #   momento di visualizzarla e non viene aggiornata.
+        super().__init__(model, spettacoli_s)
 
     # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
 
-    def __connect_signals(self) -> None:
-        # Logout
-        self.__spettacoli_section.logoutRequest.connect(  # type:ignore
-            self.logoutRequest.emit  # - CORRIGGERE: Account ancora non implementato
-        )
-
-        # Navigazione tra sezioni
-        self.__spettacoli_section.goToInfo.connect(  # type:ignore
-            partial(self.goToSectionRequest.emit, Pagina.SEZIONE_INFO)
-        )
-        self.__spettacoli_section.goToAccount.connect(  # type:ignore
-            partial(self.goToSectionRequest.emit, Pagina.SEZIONE_ACCOUNT)
-            # - CORRIGGERE: Account ancora non implementato
-        )
+    def _connect_signals(self) -> None:
+        super()._connect_signals()
 
         # Display della Lista Spettacoli
-        self.__spettacoli_section.displaySpettacoliRequest.connect(  # type:ignore
+        self._view_section.displaySpettacoliRequest.connect(  # type:ignore
             self.__display_spettacoli
         )
 
         # Setup della pagina di creazione di spettacoli
-        self.__spettacoli_section.nuovoSpettacoloRequest.connect(  # type:ignore
+        self._view_section.nuovoSpettacoloRequest.connect(  # type:ignore
             self.__nuovo_spettacolo
         )
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
     def __get_spettacolo(self, id_: int) -> Optional[Spettacolo]:
-        return self.__model.get_spettacolo(id_)
+        return self._model.get_spettacolo(id_)
 
     def __get_spettacoli(self) -> list[Spettacolo]:
-        return self.__model.get_spettacoli()
+        return self._model.get_spettacoli()
 
     def __get_spettacoli_by_titolo(self, titolo: str) -> list[Spettacolo]:
-        return self.__model.get_spettacoli_by_titolo(titolo)
+        return self._model.get_spettacoli_by_titolo(titolo)
 
     def __elimina_spettacolo(self, id_: int) -> None:
         ...
@@ -97,7 +68,7 @@ class SpettacoliSectionController(QObject):
         :param layout: layout dove saranno caricati tutti gli spettacoli
         """
         # Verifica se c'è un filtro di ricerca
-        filtro = self.__spettacoli_section.filtro_ricerca
+        filtro = self._view_section.filtro_ricerca
 
         lista_spettacoli = (
             self.__get_spettacoli()
@@ -115,27 +86,20 @@ class SpettacoliSectionController(QObject):
             # Verifica che classe di Spettacolo è l'istanza
             if isinstance(spettacolo, Regia):
                 compositore: str = ""
-                if cur_opera := self.__model.get_opera(spettacolo.get_id_opera()):
+                if cur_opera := self._model.get_opera(spettacolo.get_id_opera()):
                     compositore = cur_opera.get_compositore()
                 dati = (compositore, spettacolo.get_regista())
                 cur_spettacolo = SpettacoloDisplay(
                     spettacolo,
-                    editable=self.__spettacoli_section.is_biglietteria,
                     dati=dati,
                 )
             else:
-                cur_spettacolo = SpettacoloDisplay(
-                    spettacolo, editable=self.__spettacoli_section.is_biglietteria
-                )
+                cur_spettacolo = SpettacoloDisplay(spettacolo)
 
             # Setup della pagina di visualizzazione delgli spettacoli
             cur_spettacolo.visualizzaRequest.connect(  # type:ignore
                 self.__visualizza_spettacolo
             )
-
-            # - cur_spettacolo.scegliPostoRequest.connect(  # type:ignore
-            #     self.__scegli_posti
-            # )
 
             # Setup della pagina di modifica degli spettacoli
             cur_spettacolo.modificaRequest.connect(  # type:ignore
@@ -156,20 +120,18 @@ class SpettacoliSectionController(QObject):
                 except OggettoInUsoException as exc:
                     cur_spettacolo.annulla_elimina()
                     PopupMessage.mostra_errore(
-                        self.__spettacoli_section,
+                        self._view_section,
                         "Spettacolo in uso",
                         f"Si è verificato un errore: {exc}",
                     )
                 else:
-                    self.__spettacoli_section.aggiorna_pagina()
+                    self._view_section.aggiorna_pagina()
 
             cur_spettacolo.eliminaConfermata.connect(  # type:ignore
                 on_si
             )
 
     def __visualizza_spettacolo(self, id_: int) -> None: ...
-
-    # - def __scegli_posti(self, id_: int) -> None: ...
 
     def __nuovo_spettacolo(self) -> None:
         """Carica la pagina `NuovoSpettacoloView`, dove l'utente può inserire i dati
@@ -184,7 +146,7 @@ class SpettacoliSectionController(QObject):
 
         if type(cur_pagina) is not NuovoSpettacoloView:
             PopupMessage.mostra_errore(
-                self.__spettacoli_section,
+                self._view_section,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
                 + f"Type trovato: {type(cur_pagina)}",
@@ -204,7 +166,7 @@ class SpettacoliSectionController(QObject):
         cur_spettacolo = self.__get_spettacolo(id_)
         if not cur_spettacolo:
             PopupMessage.mostra_errore(
-                self.__spettacoli_section,
+                self._view_section,
                 "Spettacolo inesistente",
                 f"Non è presente nessuno spettacolo con id {id_}.",
             )
@@ -220,7 +182,7 @@ class SpettacoliSectionController(QObject):
 
         if type(cur_pagina) is not ModificaSpettacoloView:
             PopupMessage.mostra_errore(
-                self.__spettacoli_section,
+                self._view_section,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
                 + f"Type trovato: {type(cur_pagina)}",
@@ -239,7 +201,7 @@ class SpettacoliSectionController(QObject):
         # Setup pagina con i data dello spettacolo
         if isinstance(cur_spettacolo, Regia):
             tipo_spettacolo: str = ""
-            if cur_opera := self.__model.get_opera(cur_spettacolo.get_id_opera()):
+            if cur_opera := self._model.get_opera(cur_spettacolo.get_id_opera()):
                 tipo_spettacolo = (
                     "**Questo spettacolo è una Regia associata "
                     + f'all\'opera "{cur_opera.get_nome()}".**'

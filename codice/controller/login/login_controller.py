@@ -18,8 +18,9 @@ class LoginController(QObject):
     la correttezza delle credenziali inserite durante un tentativo di login oppure dopo
     ingressare all'app come Cliente.
 
-    Segnali:
-    - loginSucceeded(object): emesso quando viene verificato un login riuscito.
+    Segnali
+    ---
+    - `loginSucceeded(object)`: emesso quando viene verificato un login riuscito.
     """
 
     loginSucceeded = pyqtSignal(object)

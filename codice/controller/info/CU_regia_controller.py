@@ -19,7 +19,8 @@ from view.utils import PopupMessage
 class CURegiaController(AbstractCUController):
     """Gestisce il salvataggio delle regie create e modificate.
 
-    Segnali:
+    Segnali
+    ---
     - `goBackRequest()`: emesso per tornare alla pagina `VisualizzaOperaView`.
     """
 

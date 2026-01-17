@@ -17,25 +17,26 @@ from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.style import WidgetRole, WidgetColor
 
 
-class SpettacoliSectionView(AbstractSectionView):
-    """Sezione Spettacoli dell'app.
+class AcquistoSectionView(AbstractSectionView):
+    """Sezione Acquisto dell'app.
 
-    Contiene le informazioni su tutti gli `Spettacolo` memorizzati.
+    Contiene le informazioni su tutti gli `Spettacolo` memorizzati con almeno un `Evento`
+    non scaduto (detto "evento corrente").
 
     Segnali
     ---
-    - `nuovoSpettacoloRequest()`: emesso quando si clicca il pulsante Nuovo spettacolo;
     - `displaySpettacoliRequest(QVBoxLayout)`: emesso per caricare la lista degli spettacoli
     nella sezione Spettacoli.
     """
 
-    nuovoSpettacoloRequest = pyqtSignal()
     displaySpettacoliRequest = pyqtSignal(QVBoxLayout)
 
     def __init__(self, auth: AuthenticationService):
-        self.is_admin = False
+        self.is_biglietteria = self.is_admin = False
         if auth.is_admin():
-            self.is_admin = True
+            self.is_biglietteria = self.is_admin = True
+        elif auth.is_biglietteria():
+            self.is_biglietteria = True
 
         super().__init__()
 
@@ -44,11 +45,13 @@ class SpettacoliSectionView(AbstractSectionView):
     def _setup_ui(self):
         super()._setup_ui()
 
+        if not self.is_biglietteria:
+            self._btn_sezione_spettacoli.hide()
         if not self.is_admin:
             self._btn_sezione_account.hide()
 
-        # Spettacoli
-        header_spettacoli = QLabel("Spettacoli")
+        # Acquisto
+        header_spettacoli = QLabel("Acquisto")
         header_spettacoli.setProperty(WidgetRole.HEADER1, True)
         header_spettacoli.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
@@ -75,13 +78,11 @@ class SpettacoliSectionView(AbstractSectionView):
         layout_header_spettacoli = QHBoxLayout(widget_header_spettacoli)
         layout_header_spettacoli.setContentsMargins(0, 0, 0, 0)
         layout_header_spettacoli.addWidget(header_spettacoli)
-        self.__btn_nuovo_spettacolo = QPushButton("Nuovo spettacolo")
-        self.__btn_nuovo_spettacolo.setProperty(WidgetRole.DEFAULT_BUTTON, True)
-        layout_header_spettacoli.addWidget(self.__btn_nuovo_spettacolo)
+
         layout_header_spettacoli.addWidget(widget_ricerca)
 
         label_lista_spettacoli_vuota = EmptyStateLabel(
-            "Non vi sono spettacoli registrati."
+            "Non vi sono spettacoli disponibili."
         )
         label_lista_spettacoli_vuota.setProperty(WidgetRole.BODY_TEXT, True)
         label_lista_spettacoli_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
@@ -104,11 +105,7 @@ class SpettacoliSectionView(AbstractSectionView):
     def _connect_signals(self) -> None:
         super()._connect_signals()
 
-        self._btn_sezione_spettacoli.setEnabled(False)
-
-        self.__btn_nuovo_spettacolo.clicked.connect(  # type:ignore
-            self.nuovoSpettacoloRequest.emit
-        )
+        self._btn_sezione_acquisto.setEnabled(False)
 
         self._btn_ricerca.clicked.connect(  # type:ignore
             lambda: self.__filtra_spettacoli(self.ricerca_bar.text())

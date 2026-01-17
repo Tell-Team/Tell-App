@@ -12,10 +12,11 @@ from view.style import WidgetRole, WidgetColor
 class OperaDisplay(ItemDisplay):
     """View delle singole opere della Lista Opere.
 
-    Segnali:
-    - visualizzaRequest(int): emesso quando si clicca il pulsante Maggior info;
-    - modificaRequest(int): emesso quando si clicca il pulsante Modifica;
-    - eliminaConfermata(int): emesso quando si clicca il pulsante Sì.
+    Segnali
+    ---
+    - `visualizzaRequest(int)`: emesso quando si clicca il pulsante Maggior info;
+    - `modificaRequest(int)`: emesso quando si clicca il pulsante Modifica;
+    - `eliminaConfermata(int)`: emesso quando si clicca il pulsante Sì.
     """
 
     visualizzaRequest = pyqtSignal(int)

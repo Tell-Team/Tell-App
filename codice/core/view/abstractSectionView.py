@@ -14,15 +14,21 @@ from view.style import WidgetRole
 
 
 class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
-    """Classe astratta per la creazione di pagine di sezione dell'app: Spettacoli, Info ed Account.
+    """Classe astratta per la creazione di pagine di sezione dell'app: Acquisto,
+    Spettacoli, Info ed Account.
 
-    - logoutRequest(): emesso quando si clicca il pulsante Logout;
-    - goToSpettacoli(): emesso quando si clicca il pulsante Spettacoli;
-    - goToInfo(): emesso quando si clicca il pulsante Info;
-    - goToAccount(): emesso quando si clicca il pulsante Account.
+    Segnali
+    ---
+    - `logoutRequest()`: emesso quando si clicca il pulsante Logout;
+    - `goToAcquisto()`: emesso quando si clicca il pulsante Acquisto;
+    - `goToSpettacoli()`: emesso quando si clicca il pulsante Spettacoli;
+    - `goToInfo()`: emesso quando si clicca il pulsante Info;
+    - `goToAccount()`: emesso quando si clicca il pulsante Account.
     """
 
     logoutRequest = pyqtSignal()
+
+    goToAcquisto = pyqtSignal()
     goToSpettacoli = pyqtSignal()
     goToInfo = pyqtSignal()
     goToAccount = pyqtSignal()
@@ -44,6 +50,9 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
         layout_logout.addStretch()
 
         # Sezioni dell'app
+        self._btn_sezione_acquisto = QPushButton("Acquisto")
+        self._btn_sezione_acquisto.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+
         self._btn_sezione_spettacoli = QPushButton("Spettacoli")
         self._btn_sezione_spettacoli.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
@@ -55,6 +64,7 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
 
         sezioni_app = QWidget()
         layout_sezioni = QHBoxLayout(sezioni_app)
+        layout_sezioni.addWidget(self._btn_sezione_acquisto)
         layout_sezioni.addWidget(self._btn_sezione_spettacoli)
         layout_sezioni.addWidget(self._btn_sezione_info)
         layout_sezioni.addWidget(self._btn_sezione_account)
@@ -83,6 +93,10 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
     def _connect_signals(self) -> None:
         self._btn_logout.clicked.connect(  # type:ignore
             self.logoutRequest.emit
+        )
+
+        self._btn_sezione_acquisto.clicked.connect(  # type:ignore
+            self.goToAcquisto
         )
 
         self._btn_sezione_spettacoli.clicked.connect(  # type:ignore

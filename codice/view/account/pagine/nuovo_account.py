@@ -15,7 +15,8 @@ from view.style import WidgetRole, WidgetColor
 class NuovoAccountView(AbstractCreaView):
     """Pagina per la creazione di un nuovo account utente.
 
-    Segnali:
+    Segnali
+    ---
     - `annullaRequest(QWidget)`: emesso quando si clicca il pulsante Annulla;
     - `salvaRequest()`: emesso quando si clicca il pulsante Crea.
     """

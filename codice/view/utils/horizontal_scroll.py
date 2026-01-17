@@ -14,6 +14,10 @@ from view.style import WidgetRole
 
 
 class HorizontalWheelScrollArea(QScrollArea):
+    """Scroll area speciale per la visualizzazione di label con testo potenzialmente lungo.
+
+    Permette all'utente di scorrere il suo contenuto con la rotellina."""
+
     def __init__(self):
         super().__init__()
 

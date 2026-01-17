@@ -11,8 +11,9 @@ from view.style import WidgetRole, WidgetColor
 class PersonaleDisplay(ItemDisplay):
     """View degli interpreti e tecnici degli spettacoli.
 
-    Segnali:
-    - eliminaRequest(str): emesso quando si clicca il pulsante di elimina [X].
+    Segnali
+    ---
+    - `eliminaRequest(str)`: emesso quando si clicca il pulsante di elimina [X].
     """
 
     eliminaRequest = pyqtSignal(str)

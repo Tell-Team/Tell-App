@@ -1,7 +1,4 @@
-from PyQt6.QtWidgets import (
-    QMainWindow,
-    QStackedWidget,
-)
+from PyQt6.QtWidgets import QMainWindow, QStackedWidget
 from PyQt6.QtGui import QShowEvent
 from typing import Optional
 

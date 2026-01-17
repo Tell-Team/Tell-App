@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class RegiaPageData:
-    """Container immutabile per le pagine di Regia."""
+    """Container immutabile per i widget di `Regia`."""
 
     id: int
     regista: str

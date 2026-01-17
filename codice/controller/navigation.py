@@ -17,6 +17,9 @@ class Pagina(Enum):
 
     # I valori indicano il nome del file dove si trova la classe della pagina.
     # Non hanno uno scopo funzionale dentro del codice.
+    SEZIONE_ACQUISTO = "acquisto_section"
+    SCEGLI_POSTI = "scegli_posti"
+
     SEZIONE_SPETTACOLI = "spettacoli_section"
     NUOVO_SPETTACOLO = "nuovo_spettacolo"
     MODIFICA_SPETTACOLO = "modifica_spettacolo"
@@ -147,17 +150,21 @@ class NavigationController(QObject):
     # ------------------------- CREAZIONE DELLE PAGINE -------------------------
 
     def __carica_pagine(self) -> None:
+        # Acquisto
+        from view.acquisto.pagine import AcquistoSectionView, ScegliPostiView
+
+        self.__acquisto_section = AcquistoSectionView(self.__auth)
+        self.__scegli_posti_view = ScegliPostiView()
+
         # Spettacoli
-        from view.spettacoli.pagine import SpettacoliSectionView
-
-        self.__spettacoli_section = SpettacoliSectionView(self.__auth)
-
         if self.__auth.is_biglietteria():
             from view.spettacoli.pagine import (
+                SpettacoliSectionView,
                 NuovoSpettacoloView,
                 ModificaSpettacoloView,
             )
 
+            self.__spettacoli_section = SpettacoliSectionView(self.__auth)
             self.__nuovo_spettacolo_view = NuovoSpettacoloView()
             self.__modifica_spettacolo_view = ModificaSpettacoloView()
 
@@ -168,7 +175,6 @@ class NavigationController(QObject):
         self.__visualizza_opera_view = VisualizzaOperaView(self.__auth)
 
         if self.__auth.is_admin():
-
             from view.info.pagine import NuovaOperaView, ModificaOperaView
 
             self.__nuova_opera_view = NuovaOperaView()
@@ -198,9 +204,12 @@ class NavigationController(QObject):
     # ------------------------- REGISTRAZIONE DELLE PAGINE -------------------------
 
     def __registra_pagine(self) -> None:
+        # Acquisto
+        self.__registra_pagina(Pagina.SEZIONE_ACQUISTO, self.__acquisto_section)
+        self.__registra_pagina(Pagina.SCEGLI_POSTI, self.__scegli_posti_view)
         # Spettacoli
-        self.__registra_pagina(Pagina.SEZIONE_SPETTACOLI, self.__spettacoli_section)
         if self.__auth.is_biglietteria():
+            self.__registra_pagina(Pagina.SEZIONE_SPETTACOLI, self.__spettacoli_section)
             self.__registra_pagina(
                 Pagina.NUOVO_SPETTACOLO, self.__nuovo_spettacolo_view
             )
@@ -224,21 +233,21 @@ class NavigationController(QObject):
                 Pagina.MODIFICA_ACCOUNT, self.__modifica_account_view
             )
 
-        self.__get_stack().setCurrentWidget(self.__spettacoli_section)
+        self.__get_stack().setCurrentWidget(self.__acquisto_section)
 
     # ------------------------- CONTROLLER DELLA VIEW -------------------------
 
     def __carica_controllers(self, model: Model) -> list[QObject]:
         # Controller necessario per gli utenti Cliente
-        from controller.spettacoli import SpettacoliSectionController
+        from controller.acquisto import AcquistoSectionController
         from controller.info import InfoSectionController, VisualizzaOperaController
 
         # Definizioni dei controller come attributi privati
         controller_defs: list[tuple[str, Type[QObject], Tuple[Any, ...]]] = [
             (
-                "__spettacoli_controller",
-                SpettacoliSectionController,
-                (model, self.__spettacoli_section),
+                "__acquisto_controller",
+                AcquistoSectionController,
+                (model, self.__acquisto_section),
             ),
             (
                 "__info_controller",
@@ -254,8 +263,16 @@ class NavigationController(QObject):
 
         # Spettacoli
         if self.__auth.is_biglietteria():
+            from controller.spettacoli import SpettacoliSectionController
             from controller.spettacoli import CUSpettacoloController
 
+            controller_defs.append(
+                (
+                    "__spettacoli_controller",
+                    SpettacoliSectionController,
+                    (model, self.__spettacoli_section),
+                ),
+            )
             controller_defs.append(
                 (
                     "__cu_spettacolo_controller",

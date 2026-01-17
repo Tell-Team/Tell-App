@@ -18,7 +18,8 @@ from view.utils import PopupMessage
 class CUGenereController(AbstractCUController):
     """Gestisce il salvataggio dei generi creati e modificati.
 
-    Segnali:
+    Segnali
+    ---
     - `goBackRequest()`: emesso per tornare alla pagina `InfoSectionView`.
     """
 

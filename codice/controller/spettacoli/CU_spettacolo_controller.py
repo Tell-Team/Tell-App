@@ -19,7 +19,8 @@ from view.utils import PopupMessage
 class CUSpettacoloController(AbstractCUController):
     """Gestisce il salvataggio degli spettacoli creati e modificati.
 
-    Segnali:
+    Segnali
+    ---
     - `goBackRequest()`: emesso per tornare alla pagina `SpettacoliSectionView`.
     """
 
