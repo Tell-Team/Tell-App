@@ -4,6 +4,7 @@ from typing import Optional
 
 from model.model import Model
 from model.account.account import Ruolo  # , Permission, UserSession
+from model.exceptions import AccountInesistenteException
 
 
 class AuthenticationService:
@@ -26,8 +27,7 @@ class AuthenticationService:
             self.__id_account = id_account
             self.__ruolo = account.get_ruolo()
             return
-        self.__id_account = None
-        self.__ruolo = None
+        raise AccountInesistenteException("Impossibile effetuare login.")
 
     def login_as_cliente(self) -> None:
         self.__id_account = None
@@ -49,36 +49,3 @@ class AuthenticationService:
 
     def is_admin(self) -> bool:
         return self.__ruolo is Ruolo.AMMINISTRATORE
-
-    # def can_cud_spettacoli(self) -> bool:
-    #     return self.__has_permission(Permission.CUD_SPETTACOLI)
-
-    # def can_cud_eventi(self) -> bool:
-    #     return self.__has_permission(Permission.CUD_EVENTI)
-
-    # def can_gestire_prenotazioni(self) -> bool:
-    #     return self.__has_permission(Permission.GESTIRE_PRENOTAZIONI)
-
-    # def can_cud_opere(self) -> bool:
-    #     return self.__has_permission(Permission.CUD_OPERE)
-
-    # def can_cud_generi(self) -> bool:
-    #     return self.__has_permission(Permission.CUD_GENERI)
-
-    # def can_cud_regie(self) -> bool:
-    #     return self.__has_permission(Permission.CUD_REGIE)
-
-    # def can_cud_sezioni(self) -> bool:
-    #     return self.__has_permission(Permission.CUD_SEZIONI)
-
-    # def can_cud_posti(self) -> bool:
-    #     return self.__has_permission(Permission.CUD_POSTI)
-
-    # def can_crud_account(self) -> bool:
-    #     return self.__has_permission(Permission.CRUD_ACCOUNT)
-
-    # def __has_permission(self, permission: Permission) -> bool:
-    #     user = self.__session.get_user()
-    #     if user is None:
-    #         return False
-    #     return permission in user.get_permissions()

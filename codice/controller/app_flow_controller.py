@@ -4,10 +4,13 @@ from controller.login import LoginController, AuthenticationService
 from controller.navigation import NavigationController
 
 from model.model import Model
+from model.exceptions import AccountInesistenteException
 
 # from model.account import UserSession
 
 from view.main_window import MainWindow
+
+from view.utils import PopupMessage
 
 
 class AppFlowController:
@@ -42,7 +45,15 @@ class AppFlowController:
         # def __start_session(self, user: Optional[UserSession]) -> None:
         """Effettua un login dopo aver ricevuto credenziali valide."""
         if id_account is not None:
-            self.__auth.login(id_account, self.__model)
+            try:
+                self.__auth.login(id_account, self.__model)
+            except AccountInesistenteException as exc:
+                PopupMessage.mostra_errore(
+                    self.__login_dialog.focusWidget(),  # type:ignore
+                    "Errore durante login",
+                    f"Si è verificato un errore: {exc}",
+                )
+                return
         else:
             self.__auth.login_as_cliente()
 
