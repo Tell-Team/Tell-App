@@ -2,6 +2,7 @@ from datetime import date, datetime
 import shutil
 import unittest
 
+from model.organizzazione.sezione import Sezione
 from model.pianificazione.genere import Genere
 from model.pianificazione.opera import Opera
 from model.pianificazione.regia import Regia
@@ -217,6 +218,103 @@ class TestTell(unittest.TestCase):
 
         # self.__model.elimina_spettacolo(r.get_id())
         # self.assertEqual(self.__model.get_spettacoli(), [r2])
+        # print("Passato ELIMINA")
+
+    # ### SEZIONI ###
+    def test_sezione(self):
+        print("\n### SEZIONE ###")
+
+        # CONGRUENZA nome
+        self.assertRaises(DatoIncongruenteException, Sezione, " ", STR_NON_VUOTA)
+        print("Passato CONGRUENZA nome")
+
+        # CONGRUENZA descrizione
+        self.assertRaises(DatoIncongruenteException, Sezione, STR_NON_VUOTA, " ")
+        print("Passato CONGRUENZA descrizione")
+
+    def test_model_sezioni(self):
+        print("\n### MODEL SEZIONI ###")
+
+        # AGGIUNGI
+        s = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(s)
+        self.assertRaises(IdOccupatoException, self.__model.aggiungi_sezione, s)
+        print("Passato AGGIUNGI IdOccupato")
+
+        # GET
+        s_ = self.__model.get_sezione(s.get_id())
+        if s_ is None:
+            raise Exception()
+        self.assertEqual(s_, s)
+        print("Passato GET")
+
+        s_.set_nome(STR_NON_VUOTA + STR_NON_VUOTA)
+        s = self.__model.get_sezione(s.get_id())
+        if s is None:
+            raise Exception()
+        self.assertEqual(s.get_descrizione(), s_.get_descrizione())
+        self.assertNotEqual(s.get_nome(), s_.get_nome())
+        print("Passato GET side effect")
+
+        # GET LISTA
+        s2 = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(s2)
+        self.assertEqual(self.__model.get_sezioni(), [s, s2])
+        print("Passato GET LISTA")
+
+        s2_ = self.__model.get_sezioni()[1]
+        s2_.set_nome(STR_NON_VUOTA + STR_NON_VUOTA)
+        s2 = self.__model.get_sezioni()[1]
+        self.assertEqual(s2.get_descrizione(), s2_.get_descrizione())
+        self.assertNotEqual(s2.get_nome(), s2_.get_nome())
+        print("Passato GET LISTA side effect")
+
+        # MODIFICA
+        s3 = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
+        self.assertRaises(IdInesistenteException, self.__model.modifica_sezione, s3)
+        print("Passato MODIFICA IdInesistente")
+
+        s = self.__model.get_sezione(s.get_id())
+        if s is None:
+            raise Exception()
+        s.set_nome(STR_NON_VUOTA + STR_NON_VUOTA)
+        self.__model.modifica_sezione(s)
+        s_ = self.__model.get_sezione(s.get_id())
+        if s_ is None:
+            raise Exception()
+        self.assertEqual(s_, s)
+        print("Passato MODIFICA")
+
+        # CARICA
+        self.__model._Model__carica_sezioni()  # type: ignore
+        self.assertEqual(self.__model.get_sezioni(), [s, s2])
+        print("Passato CARICA")
+
+        # # ELIMINA
+        # self.assertRaises(
+        #     IdInesistenteException, self.__model.elimina_genere, ID_NON_ESISTENTE
+        # )
+        # print("Passato ELIMINA IdInesistente")
+
+        # o = Opera(
+        #     STR_NON_VUOTA,
+        #     STR_NON_VUOTA,
+        #     STR_NON_VUOTA,
+        #     1,
+        #     DATA,
+        #     STR_NON_VUOTA,
+        #     STR_NON_VUOTA,
+        #     g.get_id(),
+        # )
+        # self.__model.aggiungi_opera(o)
+        # self.assertRaises(
+        #     OggettoInUsoException, self.__model.elimina_genere, g.get_id()
+        # )
+        # print("Passato ELIMINA OggettoInUso")
+        # self.__model.elimina_opera(o.get_id())
+
+        # self.__model.elimina_genere(g.get_id())
+        # self.assertEqual(self.__model.get_generi(), [g2])
         # print("Passato ELIMINA")
 
     def tearDown(self) -> None:

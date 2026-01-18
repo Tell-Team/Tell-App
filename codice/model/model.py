@@ -1,3 +1,5 @@
+from model.gestori.gestore_sezioni import GestoreSezioni
+from model.organizzazione.sezione import Sezione
 from model.gestori.gestore_eventi import GestoreEventi
 from model.organizzazione.evento import Evento
 from model.gestori.gestore_accounts import GestoreAccounts
@@ -57,6 +59,12 @@ class Model:
         except FileNotFoundError:
             self.__gestore_eventi = GestoreEventi()
 
+        try:
+            self.__carica_sezioni()
+            Sezione.set_next_id(self.__gestore_sezioni.get_max_id() + 1)
+        except FileNotFoundError:
+            self.__gestore_sezioni = GestoreSezioni()
+
     # DB Path
     def set_db_path(self, db_path: str):
         """Throws: DatoIncongruenteException"""
@@ -91,6 +99,10 @@ class Model:
         with open(os.path.join(self.__db_path, "eventi.pkl"), "rb") as f:
             self.__gestore_eventi: GestoreEventi = load(f)
 
+    def __carica_sezioni(self):
+        with open(os.path.join(self.__db_path, "sezioni.pkl"), "rb") as f:
+            self.__gestore_sezioni: GestoreSezioni = load(f)
+
     # Salvataggi
     def __salva_accounts(self):
         with open(os.path.join(self.__db_path, "accounts.pkl"), "wb") as f:
@@ -111,6 +123,10 @@ class Model:
     def __salva_eventi(self):
         with open(os.path.join(self.__db_path, "eventi.pkl"), "wb") as f:
             dump(self.__gestore_eventi, f)
+
+    def __salva_sezioni(self):
+        with open(os.path.join(self.__db_path, "sezioni.pkl"), "wb") as f:
+            dump(self.__gestore_sezioni, f)
 
     # Stato
     def __in_programma(self, spettacolo: Spettacolo) -> bool:
@@ -180,6 +196,13 @@ class Model:
 
     def get_eventi_by_spettacolo(self, id_: int) -> list[Evento]:
         return self.__gestore_eventi.get_eventi_by_spettacolo(id_)
+
+    #   SEZIONI
+    def get_sezione(self, id_: int) -> Optional[Sezione]:
+        return self.__gestore_sezioni.get_sezione(id_)
+
+    def get_sezioni(self) -> list[Sezione]:
+        return self.__gestore_sezioni.get_sezioni()
 
     # Validazione
     def __valida_opera(self, opera: Opera):
@@ -325,3 +348,24 @@ class Model:
 
         self.__gestore_eventi.modifica_evento(evento_modificato)
         self.__salva_eventi()
+
+    #   SPETTACOLI
+    def aggiungi_sezione(self, sezione: Sezione):
+        """Throws: IdOccupatoException"""
+        self.__gestore_sezioni.aggiungi_sezione(sezione)
+        self.__salva_sezioni()
+
+    # def elimina_sezione(self, id_: int):
+    #     """Throws: OggettoInUsoException, IdInesistenteException"""
+    #     if self.__gestore_eventi.sezione_in_uso(id_):
+    #         raise OggettoInUsoException(
+    #             "Lo sezione è ancora legato ad uno o più eventi."
+    #         )
+
+    #     self.__gestore_sezioni.elimina_sezione(id_)
+    #     self.__salva_sezioni()
+
+    def modifica_sezione(self, sezione_modificata: Sezione):
+        """Throws: IdInesistenteException"""
+        self.__gestore_sezioni.modifica_sezione(sezione_modificata)
+        self.__salva_sezioni()
