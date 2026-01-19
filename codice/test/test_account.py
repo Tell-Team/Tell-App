@@ -9,7 +9,7 @@ from model.exceptions import (
     IdInesistenteException,
     IdOccupatoException,
     PermessiInsufficientiException,
-    UsernameOccupatoException,
+    OccupatoException,
 )
 from model.model import Model
 
@@ -116,7 +116,7 @@ class TestTell(unittest.TestCase):
         print("Passato AGGIUNGI PermessiInsufficienti")
         a3 = Account(STR_NON_VUOTA, PASSWORD_CONFORME, Ruolo.BIGLIETTERIA)
         self.assertRaises(
-            UsernameOccupatoException,
+            OccupatoException,
             self.__model.aggiungi_account,
             a3,
             admin_id,
@@ -135,7 +135,7 @@ class TestTell(unittest.TestCase):
         self.assertEqual(a_, a)
         print("Passato GET")
 
-        a_.set_username(STR_NON_VUOTA + STR_NON_VUOTA)
+        a_.set_username(a_.get_username() + STR_NON_VUOTA)
         a = self.__model.get_account(a.get_id())
         if a is None:
             raise Exception()
@@ -161,7 +161,7 @@ class TestTell(unittest.TestCase):
         print("Passato GET LISTA")
 
         a2_ = self.__model.get_accounts()[2]
-        a2_.set_username(STR_NON_VUOTA + STR_NON_VUOTA + STR_NON_VUOTA)
+        a2_.set_username(a2_.get_username() + STR_NON_VUOTA)
         a2 = self.__model.get_accounts()[2]
         self.assertTrue(a2.controlla_password(a2_._Account__password))  # type: ignore
         self.assertNotEqual(a2.get_username(), a2_.get_username())

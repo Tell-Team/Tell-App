@@ -9,19 +9,12 @@ class GestoreSezioni:
         self.__lista_sezioni: list[Sezione] = []
 
     # Stato
-    # def opera_in_uso(self, id_: int) -> bool:
-    #     for s in self.__lista_spettacoli:
-    #         if type(s) is Regia and s.get_id_opera() == id_:
-    #             return True
+    def ha_sezione(self, id_: int) -> bool:
+        for s in self.__lista_sezioni:
+            if s.get_id() == id_:
+                return True
 
-    #     return False
-
-    # def ha_spettacolo(self, id_: int) -> bool:
-    #     for s in self.__lista_spettacoli:
-    #         if s.get_id() == id_:
-    #             return True
-
-    #     return False
+        return False
 
     # Getters
     def get_max_id(self) -> int:
@@ -53,14 +46,14 @@ class GestoreSezioni:
 
         self.__lista_sezioni.append(sezione)
 
-    # def elimina_spettacolo(self, id_: int):
-    #     """Throws: IdInesistenteException"""
-    #     for i, s in enumerate(self.__lista_spettacoli):
-    #         if s.get_id() == id_:
-    #             self.__lista_spettacoli.pop(i)
-    #             return
+    def elimina_sezione(self, id_: int):
+        """Throws: IdInesistenteException"""
+        for i, s in enumerate(self.__lista_sezioni):
+            if s.get_id() == id_:
+                self.__lista_sezioni.pop(i)
+                return
 
-    #     raise IdInesistenteException(f"Non è presente nessuno spettacolo con id {id_}.")
+        raise IdInesistenteException(f"Non è presente nessuna sezione con id {id_}.")
 
     def modifica_sezione(self, sezione_modificata: Sezione):
         """Throws: IdInesistenteException"""

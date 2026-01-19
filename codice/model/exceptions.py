@@ -40,7 +40,7 @@ class CredenzialiErrateException(Exception):
     pass
 
 
-class UsernameOccupatoException(Exception):
-    """L'username è già in uso da parte di un altro account"""
+class OccupatoException(Exception):
+    """Il valore o la combinazione di valori forniti è già in uso da parte di un altro oggetto"""
 
     pass

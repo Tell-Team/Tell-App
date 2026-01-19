@@ -1,3 +1,5 @@
+from model.gestori.gestore_posti import GestorePosti
+from model.organizzazione.posto import Posto
 from model.gestori.gestore_sezioni import GestoreSezioni
 from model.organizzazione.sezione import Sezione
 from model.gestori.gestore_eventi import GestoreEventi
@@ -65,6 +67,12 @@ class Model:
         except FileNotFoundError:
             self.__gestore_sezioni = GestoreSezioni()
 
+        try:
+            self.__carica_posti()
+            Posto.set_next_id(self.__gestore_posti.get_max_id() + 1)
+        except FileNotFoundError:
+            self.__gestore_posti = GestorePosti()
+
     # DB Path
     def set_db_path(self, db_path: str):
         """Throws: DatoIncongruenteException"""
@@ -103,6 +111,10 @@ class Model:
         with open(os.path.join(self.__db_path, "sezioni.pkl"), "rb") as f:
             self.__gestore_sezioni: GestoreSezioni = load(f)
 
+    def __carica_posti(self):
+        with open(os.path.join(self.__db_path, "posti.pkl"), "rb") as f:
+            self.__gestore_posti: GestorePosti = load(f)
+
     # Salvataggi
     def __salva_accounts(self):
         with open(os.path.join(self.__db_path, "accounts.pkl"), "wb") as f:
@@ -127,6 +139,10 @@ class Model:
     def __salva_sezioni(self):
         with open(os.path.join(self.__db_path, "sezioni.pkl"), "wb") as f:
             dump(self.__gestore_sezioni, f)
+
+    def __salva_posti(self):
+        with open(os.path.join(self.__db_path, "posti.pkl"), "wb") as f:
+            dump(self.__gestore_posti, f)
 
     # Stato
     def __in_programma(self, spettacolo: Spettacolo) -> bool:
@@ -204,6 +220,16 @@ class Model:
     def get_sezioni(self) -> list[Sezione]:
         return self.__gestore_sezioni.get_sezioni()
 
+    #   POSTI
+    def get_posto(self, id_: int) -> Optional[Posto]:
+        return self.__gestore_posti.get_posto(id_)
+
+    def get_posti(self) -> list[Posto]:
+        return self.__gestore_posti.get_posti()
+
+    def get_posti_by_sezione(self, id_: int) -> list[Posto]:
+        return self.__gestore_posti.get_posti_by_sezione(id_)
+
     # Validazione
     def __valida_opera(self, opera: Opera):
         """Throws: IdInesistenteException"""
@@ -226,6 +252,13 @@ class Model:
                 f"Non è presente nessuno spettacolo con id {evento.get_id_spettacolo()}."
             )
 
+    def __valida_posto(self, posto: Posto):
+        """Throws: IdInesistenteException"""
+        if not self.__gestore_sezioni.ha_sezione(posto.get_id_sezione()):
+            raise IdInesistenteException(
+                f"Non è presente nessuna sezione con id {posto.get_id_sezione()}."
+            )
+
     # Login
     def login(self, username: str, password: str) -> int:
         """Throws: CredenzialiErrateException, AccountInesistenteException"""
@@ -234,7 +267,7 @@ class Model:
     # Modificatori
     #   ACCOUNTS
     def aggiungi_account(self, account: Account, agent_id: int):
-        """Throws: UsernameOccupatoException, PermessiInsufficientiException, IdOccupatoException, IdInesistenteException"""
+        """Throws: OccupatoException, PermessiInsufficientiException, IdOccupatoException, IdInesistenteException"""
         self.__gestore_accounts.aggiungi_account(account, agent_id)
         self.__salva_accounts()
 
@@ -349,7 +382,7 @@ class Model:
         self.__gestore_eventi.modifica_evento(evento_modificato)
         self.__salva_eventi()
 
-    #   SPETTACOLI
+    #   SEZIONI
     def aggiungi_sezione(self, sezione: Sezione):
         """Throws: IdOccupatoException"""
         self.__gestore_sezioni.aggiungi_sezione(sezione)
@@ -369,3 +402,26 @@ class Model:
         """Throws: IdInesistenteException"""
         self.__gestore_sezioni.modifica_sezione(sezione_modificata)
         self.__salva_sezioni()
+
+    #   POSTI
+    def aggiungi_posto(self, posto: Posto):
+        """Throws: IdInesistenteException, IdOccupatoException, OccupatoException"""
+        self.__valida_posto(posto)
+
+        self.__gestore_posti.aggiungi_posto(posto)
+        self.__salva_posti()
+
+    # def elimina_opera(self, id_: int):
+    #     """Throws: OggettoInUsoException, IdInesistenteException"""
+    #     if self.__gestore_spettacoli.opera_in_uso(id_):
+    #         raise OggettoInUsoException("L'opera è ancora legata ad una o più regie.")
+
+    #     self.__gestore_opere.elimina_opera(id_)
+    #     self.__salva_opere()
+
+    def modifica_posto(self, posto_modificato: Posto):
+        """Throws: IdInesistenteException, OccupatoException"""
+        self.__valida_posto(posto_modificato)
+
+        self.__gestore_posti.modifica_posto(posto_modificato)
+        self.__salva_posti()

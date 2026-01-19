@@ -5,7 +5,7 @@ from model.exceptions import (
     PermessiInsufficientiException,
     AccountInesistenteException,
     CredenzialiErrateException,
-    UsernameOccupatoException,
+    OccupatoException,
 )
 from typing import Optional
 import copy
@@ -60,7 +60,7 @@ class GestoreAccounts:
 
     # Modificatori
     def aggiungi_account(self, account: Account, agent_id: int):
-        """Throws: UsernameOccupatoException, PermessiInsufficientiException, IdOccupatoException, IdInesistenteException"""
+        """Throws: OccupatoException, PermessiInsufficientiException, IdOccupatoException, IdInesistenteException"""
         self.__controlla_permessi_amministratore(agent_id, "creare nuovi accounts")
 
         for a in self.__lista_accounts:
@@ -70,7 +70,7 @@ class GestoreAccounts:
                 )
 
             if a.get_username() == account.get_username():
-                raise UsernameOccupatoException(
+                raise OccupatoException(
                     f'E\' già presente un account con username "{a.get_username()}".'
                 )
 

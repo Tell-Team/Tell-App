@@ -54,7 +54,7 @@ class TestTell(unittest.TestCase):
         self.assertEqual(g_, g)
         print("Passato GET")
 
-        g_.set_nome(STR_NON_VUOTA + STR_NON_VUOTA)
+        g_.set_nome(g_.get_nome() + STR_NON_VUOTA)
         g = self.__model.get_genere(g.get_id())
         if g is None:
             raise Exception()
@@ -69,7 +69,7 @@ class TestTell(unittest.TestCase):
         print("Passato GET LISTA")
 
         g2_ = self.__model.get_generi()[1]
-        g2_.set_nome(STR_NON_VUOTA + STR_NON_VUOTA)
+        g2_.set_nome(g2_.get_nome() + STR_NON_VUOTA)
         g2 = self.__model.get_generi()[1]
         self.assertEqual(g2.get_descrizione(), g2_.get_descrizione())
         self.assertNotEqual(g2.get_nome(), g2_.get_nome())
@@ -83,7 +83,7 @@ class TestTell(unittest.TestCase):
         g = self.__model.get_genere(g.get_id())
         if g is None:
             raise Exception()
-        g.set_nome(STR_NON_VUOTA + STR_NON_VUOTA)
+        g.set_nome(g.get_nome() + STR_NON_VUOTA * 3)
         self.__model.modifica_genere(g)
         g_ = self.__model.get_genere(g.get_id())
         if g_ is None:
@@ -284,7 +284,7 @@ class TestTell(unittest.TestCase):
         self.assertEqual(o_, o)
         print("Passato GET")
 
-        o_.set_nome(STR_NON_VUOTA + STR_NON_VUOTA)
+        o_.set_nome(o_.get_nome() + STR_NON_VUOTA)
         o = self.__model.get_opera(o.get_id())
         if o is None:
             raise Exception()
@@ -308,7 +308,7 @@ class TestTell(unittest.TestCase):
         print("Passato GET LISTA")
 
         o2_ = self.__model.get_opere()[1]
-        o2_.set_nome(STR_NON_VUOTA + STR_NON_VUOTA)
+        o2_.set_nome(o2_.get_nome() + STR_NON_VUOTA)
         o2 = self.__model.get_opere()[1]
         self.assertEqual(o2.get_compositore(), o2_.get_compositore())
         self.assertNotEqual(o2.get_nome(), o2_.get_nome())
@@ -341,7 +341,7 @@ class TestTell(unittest.TestCase):
         print("Passato GET LISTA by nome")
 
         o2_ = self.__model.get_opere_by_nome(STR_NON_VUOTA)[1]
-        o2_.set_nome(STR_NON_VUOTA + STR_NON_VUOTA)
+        o2_.set_nome(o2_.get_nome() + STR_NON_VUOTA)
         o2 = self.__model.get_opere_by_nome(STR_NON_VUOTA)[1]
         self.assertEqual(o2.get_compositore(), o2_.get_compositore())
         self.assertNotEqual(o2.get_nome(), o2_.get_nome())
@@ -366,7 +366,7 @@ class TestTell(unittest.TestCase):
         o = self.__model.get_opera(o.get_id())
         if o is None:
             raise Exception()
-        o.set_nome(STR_NON_VUOTA + STR_NON_VUOTA)
+        o.set_nome(o.get_nome() + STR_NON_VUOTA * 3)
         self.__model.modifica_opera(o)
         o_ = self.__model.get_opera(o.get_id())
         if o_ is None:
@@ -570,7 +570,7 @@ class TestTell(unittest.TestCase):
         self.assertEqual(r_, r)
         print("Passato GET")
 
-        r_.set_titolo(STR_NON_VUOTA + STR_NON_VUOTA)
+        r_.set_titolo(r_.get_titolo() + STR_NON_VUOTA)
         r: Regia | None = self.__model.get_spettacolo(r.get_id())  # type: ignore
         if r is None:
             raise Exception()
@@ -593,7 +593,7 @@ class TestTell(unittest.TestCase):
         print("Passato GET LISTA")
 
         r2_ = self.__model.get_spettacoli()[1]
-        r2_.set_titolo(STR_NON_VUOTA + STR_NON_VUOTA)
+        r2_.set_titolo(r2_.get_titolo() + STR_NON_VUOTA)
         r2 = self.__model.get_spettacoli()[1]
         self.assertEqual(r2.get_note(), r2_.get_note())
         self.assertNotEqual(r2.get_titolo(), r2_.get_titolo())
@@ -626,7 +626,7 @@ class TestTell(unittest.TestCase):
         print("Passato GET LISTA by titolo")
 
         r2_ = self.__model.get_spettacoli_by_titolo(STR_NON_VUOTA)[1]
-        r2_.set_titolo(STR_NON_VUOTA + STR_NON_VUOTA)
+        r2_.set_titolo(r2_.get_titolo() + STR_NON_VUOTA)
         r2 = self.__model.get_spettacoli_by_titolo(STR_NON_VUOTA)[1]
         self.assertEqual(r2.get_note(), r2_.get_note())
         self.assertNotEqual(r2.get_titolo(), r2_.get_titolo())
@@ -660,7 +660,7 @@ class TestTell(unittest.TestCase):
         print("Passato GET LISTA by opera")
 
         r2_ = self.__model.get_regie_by_opera(o.get_id())[1]
-        r2_.set_titolo(STR_NON_VUOTA + STR_NON_VUOTA)
+        r2_.set_titolo(r2_.get_titolo() + STR_NON_VUOTA)
         r2 = self.__model.get_regie_by_opera(o.get_id())[1]
         self.assertEqual(r2.get_note(), r2_.get_note())
         self.assertNotEqual(r2.get_titolo(), r2_.get_titolo())
@@ -684,7 +684,7 @@ class TestTell(unittest.TestCase):
         r: Regia | None = self.__model.get_spettacolo(r.get_id())  # type: ignore
         if r is None:
             raise Exception()
-        r.set_titolo(STR_NON_VUOTA + STR_NON_VUOTA)
+        r.set_titolo(r.get_titolo() + STR_NON_VUOTA * 3)
         self.__model.modifica_spettacolo(r)
         r_: Regia | None = self.__model.get_spettacolo(r.get_id())  # type: ignore
         if r_ is None:
