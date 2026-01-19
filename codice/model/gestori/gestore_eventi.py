@@ -66,7 +66,7 @@ class GestoreEventi:
                 f"E' già presente un evento con id {evento.get_id()}."
             )
 
-        self.__lista_eventi.append(evento)
+        self.__lista_eventi.append(copy.copy(evento))
 
     def elimina_evento(self, id_: int):
         """Throws: IdInesistenteException"""
@@ -81,7 +81,7 @@ class GestoreEventi:
         """Throws: IdInesistenteException"""
         for i, e in enumerate(self.__lista_eventi):
             if e.get_id() == evento_modificato.get_id():
-                self.__lista_eventi[i] = evento_modificato
+                self.__lista_eventi[i] = copy.copy(evento_modificato)
                 return
 
         raise IdInesistenteException(

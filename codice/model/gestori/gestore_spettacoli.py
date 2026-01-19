@@ -69,7 +69,7 @@ class GestoreSpettacoli:
                     f"E' già presente uno spettacolo con id {s.get_id()}."
                 )
 
-        self.__lista_spettacoli.append(spettacolo)
+        self.__lista_spettacoli.append(copy.copy(spettacolo))
 
     def elimina_spettacolo(self, id_: int):
         """Throws: IdInesistenteException"""
@@ -84,7 +84,7 @@ class GestoreSpettacoli:
         """Throws: IdInesistenteException"""
         for i, s in enumerate(self.__lista_spettacoli):
             if s.get_id() == spettacolo_modificato.get_id():
-                self.__lista_spettacoli[i] = spettacolo_modificato
+                self.__lista_spettacoli[i] = copy.copy(spettacolo_modificato)
                 return
 
         raise IdInesistenteException(

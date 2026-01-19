@@ -44,7 +44,7 @@ class GestoreSezioni:
                     f"E' già presente una sezione con id {s.get_id()}."
                 )
 
-        self.__lista_sezioni.append(sezione)
+        self.__lista_sezioni.append(copy.copy(sezione))
 
     def elimina_sezione(self, id_: int):
         """Throws: IdInesistenteException"""
@@ -59,7 +59,7 @@ class GestoreSezioni:
         """Throws: IdInesistenteException"""
         for i, s in enumerate(self.__lista_sezioni):
             if s.get_id() == sezione_modificata.get_id():
-                self.__lista_sezioni[i] = sezione_modificata
+                self.__lista_sezioni[i] = copy.copy(sezione_modificata)
                 return
 
         raise IdInesistenteException(

@@ -43,7 +43,7 @@ class GestoreGeneri:
                 f"E' già presente un genere con id {genere.get_id()}."
             )
 
-        self.__lista_generi.append(genere)
+        self.__lista_generi.append(copy.copy(genere))
 
     def elimina_genere(self, id_: int):
         """Throws: IdInesistenteException"""
@@ -58,7 +58,7 @@ class GestoreGeneri:
         """Throws: IdInesistenteException"""
         for i, g in enumerate(self.__lista_generi):
             if g.get_id() == genere_modificato.get_id():
-                self.__lista_generi[i] = genere_modificato
+                self.__lista_generi[i] = copy.copy(genere_modificato)
                 return
 
         raise IdInesistenteException(

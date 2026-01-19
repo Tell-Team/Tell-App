@@ -58,7 +58,7 @@ class GestoreOpere:
                 f"E' già presente un'opera con id {opera.get_id()}."
             )
 
-        self.__lista_opere.append(opera)
+        self.__lista_opere.append(copy.copy(opera))
 
     def elimina_opera(self, id_: int):
         """Throws: IdInesistenteException"""
@@ -73,7 +73,7 @@ class GestoreOpere:
         """Throws: IdInesistenteException"""
         for i, o in enumerate(self.__lista_opere):
             if o.get_id() == opera_modificata.get_id():
-                self.__lista_opere[i] = opera_modificata
+                self.__lista_opere[i] = copy.copy(opera_modificata)
                 return
 
         raise IdInesistenteException(

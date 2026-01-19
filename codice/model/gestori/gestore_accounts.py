@@ -74,7 +74,7 @@ class GestoreAccounts:
                     f'E\' già presente un account con username "{a.get_username()}".'
                 )
 
-        self.__lista_accounts.append(account)
+        self.__lista_accounts.append(copy.copy(account))
 
     def elimina_account(self, id_: int, agent_id: int):
         """Throws: PermessiInsufficientiException, IdInesistenteException"""
