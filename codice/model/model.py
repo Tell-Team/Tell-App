@@ -292,7 +292,7 @@ class Model:
 
     #   GENERI
     def aggiungi_genere(self, genere: Genere):
-        """Throws: IdOccupatoException"""
+        """Throws: IdOccupatoException, OccupatoException"""
         self.__gestore_generi.aggiungi_genere(genere)
         self.__salva_generi()
 
@@ -305,13 +305,13 @@ class Model:
         self.__salva_generi()
 
     def modifica_genere(self, genere_modificato: Genere):
-        """Throws: IdInesistenteException"""
+        """Throws: IdInesistenteException, OccupatoException"""
         self.__gestore_generi.modifica_genere(genere_modificato)
         self.__salva_generi()
 
     #   OPERE
     def aggiungi_opera(self, opera: Opera):
-        """Throws: IdInesistenteException, IdOccupatoException"""
+        """Throws: IdInesistenteException, IdOccupatoException, OccupatoException"""
         self.__valida_opera(opera)
 
         self.__gestore_opere.aggiungi_opera(opera)
@@ -326,7 +326,7 @@ class Model:
         self.__salva_opere()
 
     def modifica_opera(self, opera_modificata: Opera):
-        """Throws: IdInesistenteException"""
+        """Throws: IdInesistenteException, OccupatoException"""
         self.__valida_opera(opera_modificata)
 
         self.__gestore_opere.modifica_opera(opera_modificata)
@@ -361,7 +361,7 @@ class Model:
 
     #   EVENTI
     def aggiungi_evento(self, evento: Evento):
-        """Throws: IdInesistenteException, IdOccupatoException"""
+        """Throws: IdInesistenteException, IdOccupatoException, OccupatoException"""
         self.__valida_evento(evento)
 
         self.__gestore_eventi.aggiungi_evento(evento)
@@ -376,7 +376,7 @@ class Model:
     #     self.__salva_opere()
 
     def modifica_evento(self, evento_modificato: Evento):
-        """Throws: IdInesistenteException"""
+        """Throws: IdInesistenteException, OccupatoException"""
         self.__valida_evento(evento_modificato)
 
         self.__gestore_eventi.modifica_evento(evento_modificato)
@@ -384,7 +384,7 @@ class Model:
 
     #   SEZIONI
     def aggiungi_sezione(self, sezione: Sezione):
-        """Throws: IdOccupatoException"""
+        """Throws: IdOccupatoException, OccupatoException"""
         self.__gestore_sezioni.aggiungi_sezione(sezione)
         self.__salva_sezioni()
 
@@ -399,7 +399,7 @@ class Model:
     #     self.__salva_sezioni()
 
     def modifica_sezione(self, sezione_modificata: Sezione):
-        """Throws: IdInesistenteException"""
+        """Throws: IdInesistenteException, OccupatoException"""
         self.__gestore_sezioni.modifica_sezione(sezione_modificata)
         self.__salva_sezioni()
 

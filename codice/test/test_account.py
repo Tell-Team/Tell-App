@@ -97,9 +97,7 @@ class TestTell(unittest.TestCase):
             IdOccupatoException, self.__model.aggiungi_account, a, admin_id
         )
         print("Passato AGGIUNGI IdOccupato")
-        a2 = Account(
-            STR_NON_VUOTA + STR_NON_VUOTA, PASSWORD_CONFORME, Ruolo.BIGLIETTERIA
-        )
+        a2 = Account(STR_NON_VUOTA * 2, PASSWORD_CONFORME, Ruolo.BIGLIETTERIA)
         self.assertRaises(
             IdInesistenteException,
             self.__model.aggiungi_account,
@@ -153,9 +151,7 @@ class TestTell(unittest.TestCase):
         print("Passato PRESENZA ADMIN")
 
         # GET LISTA
-        a2 = Account(
-            STR_NON_VUOTA + STR_NON_VUOTA, PASSWORD_CONFORME, Ruolo.BIGLIETTERIA
-        )
+        a2 = Account(STR_NON_VUOTA * 2, PASSWORD_CONFORME, Ruolo.BIGLIETTERIA)
         self.__model.aggiungi_account(a2, admin_id)
         self.assertEqual(self.__model.get_accounts(), [admin, a, a2])
         print("Passato GET LISTA")

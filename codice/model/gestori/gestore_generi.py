@@ -1,5 +1,9 @@
 from model.pianificazione.genere import Genere
-from model.exceptions import IdOccupatoException, IdInesistenteException
+from model.exceptions import (
+    IdOccupatoException,
+    IdInesistenteException,
+    OccupatoException,
+)
 from typing import Optional
 import copy
 
@@ -35,13 +39,24 @@ class GestoreGeneri:
     def get_generi(self) -> list[Genere]:
         return copy.deepcopy(self.__lista_generi)
 
+    # Validazione
+    def __controllo_unique_key(self, primo: Genere, secondo: Genere):
+        """Throws: OccupatoException"""
+        if primo.get_nome() == secondo.get_nome():
+            raise OccupatoException(
+                f'E\' già presente un genere di nome "{primo.get_nome()}".'
+            )
+
     # Modificatori
     def aggiungi_genere(self, genere: Genere):
-        """Throws: IdOccupatoException"""
-        if self.ha_genere(genere.get_id()):
-            raise IdOccupatoException(
-                f"E' già presente un genere con id {genere.get_id()}."
-            )
+        """Throws: IdOccupatoException, OccupatoException"""
+        for g in self.__lista_generi:
+            if g.get_id() == genere.get_id():
+                raise IdOccupatoException(
+                    f"E' già presente un genere con id {genere.get_id()}."
+                )
+
+            self.__controllo_unique_key(g, genere)
 
         self.__lista_generi.append(copy.copy(genere))
 
@@ -55,7 +70,11 @@ class GestoreGeneri:
         raise IdInesistenteException(f"Non è presente nessun genere con id {id_}.")
 
     def modifica_genere(self, genere_modificato: Genere):
-        """Throws: IdInesistenteException"""
+        """Throws: IdInesistenteException, OccupatoException"""
+        for g in self.__lista_generi:
+            if g.get_id() != genere_modificato.get_id():
+                self.__controllo_unique_key(g, genere_modificato)
+
         for i, g in enumerate(self.__lista_generi):
             if g.get_id() == genere_modificato.get_id():
                 self.__lista_generi[i] = copy.copy(genere_modificato)

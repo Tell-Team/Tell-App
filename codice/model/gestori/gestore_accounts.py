@@ -58,6 +58,14 @@ class GestoreAccounts:
                 f"Solo un AMMINISTRATORE può {azione}."
             )
 
+    # Validazione
+    def __controllo_unique_key(self, primo: Account, secondo: Account):
+        """Throws: OccupatoException"""
+        if primo.get_username() == secondo.get_username():
+            raise OccupatoException(
+                f'E\' già presente un account con username "{primo.get_username()}".'
+            )
+
     # Modificatori
     def aggiungi_account(self, account: Account, agent_id: int):
         """Throws: OccupatoException, PermessiInsufficientiException, IdOccupatoException, IdInesistenteException"""
@@ -69,10 +77,7 @@ class GestoreAccounts:
                     f"E' già presente un account con id {a.get_id()}."
                 )
 
-            if a.get_username() == account.get_username():
-                raise OccupatoException(
-                    f'E\' già presente un account con username "{a.get_username()}".'
-                )
+            self.__controllo_unique_key(a, account)
 
         self.__lista_accounts.append(copy.copy(account))
 

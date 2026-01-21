@@ -46,6 +46,17 @@ class GestorePosti:
                 posti.append(p)
         return copy.deepcopy(posti)
 
+    # Validazione
+    def __controllo_unique_key(self, primo: Posto, secondo: Posto):
+        """Throws: OccupatoException"""
+        if (
+            primo.get_numero() == secondo.get_numero()
+            and primo.get_id_sezione() == secondo.get_id_sezione()
+        ):
+            raise OccupatoException(
+                f"E' già presente un posto di numero {secondo.get_numero()} nella sezione con id {secondo.get_id_sezione()}."
+            )
+
     # Modificatori
     def aggiungi_posto(self, posto: Posto):
         """Throws: IdOccupatoException, OccupatoException"""
@@ -55,10 +66,7 @@ class GestorePosti:
                     f"E' già presente un posto con id {posto.get_id()}."
                 )
 
-            if p == posto:
-                raise OccupatoException(
-                    f"E' già presente un posto di numero {posto.get_numero()} nella sezione {posto.get_id_sezione}."
-                )
+            self.__controllo_unique_key(p, posto)
 
         self.__lista_posti.append(copy.copy(posto))
 
@@ -74,10 +82,8 @@ class GestorePosti:
     def modifica_posto(self, posto_modificato: Posto):
         """Throws: IdInesistenteException, OccupatoException"""
         for p in self.__lista_posti:
-            if p == posto_modificato:
-                raise OccupatoException(
-                    f"E' già presente un posto di numero {posto_modificato.get_numero()} nella sezione {posto_modificato.get_id_sezione}."
-                )
+            if p.get_id() != posto_modificato.get_id():
+                self.__controllo_unique_key(p, posto_modificato)
 
         for i, p in enumerate(self.__lista_posti):
             if p.get_id() == posto_modificato.get_id():

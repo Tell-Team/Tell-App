@@ -65,6 +65,10 @@ class TestTell(unittest.TestCase):
         self.assertRaises(IdOccupatoException, self.__model.aggiungi_evento, e)
         print("Passato AGGIUNGI IdOccupato")
 
+        e2 = Evento(e.get_data_ora(), s.get_id())
+        self.assertRaises(OccupatoException, self.__model.aggiungi_evento, e2)
+        print("Passato AGGIUNGI Occupato")
+
         # GET
         e_ = self.__model.get_evento(e.get_id())
         if e_ is None:
@@ -188,6 +192,10 @@ class TestTell(unittest.TestCase):
         e = self.__model.get_evento(e.get_id())
         if e is None:
             raise Exception()
+        e.set_data_ora(e2.get_data_ora())
+        self.assertRaises(OccupatoException, self.__model.modifica_evento, e)
+        print("Passato MODIFICA Occupato")
+
         e.set_data_ora(DATA_ORA_FUTURO)
         self.__model.modifica_evento(e)
         e_ = self.__model.get_evento(e.get_id())
@@ -243,6 +251,10 @@ class TestTell(unittest.TestCase):
         self.assertRaises(IdOccupatoException, self.__model.aggiungi_sezione, s)
         print("Passato AGGIUNGI IdOccupato")
 
+        s2 = Sezione(s.get_nome(), STR_NON_VUOTA)
+        self.assertRaises(OccupatoException, self.__model.aggiungi_sezione, s2)
+        print("Passato AGGIUNGI Occupato")
+
         # GET
         s_ = self.__model.get_sezione(s.get_id())
         if s_ is None:
@@ -259,7 +271,7 @@ class TestTell(unittest.TestCase):
         print("Passato GET side effect")
 
         # GET LISTA
-        s2 = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
+        s2 = Sezione(STR_NON_VUOTA * 2, STR_NON_VUOTA)
         self.__model.aggiungi_sezione(s2)
         self.assertEqual(self.__model.get_sezioni(), [s, s2])
         print("Passato GET LISTA")
@@ -272,13 +284,17 @@ class TestTell(unittest.TestCase):
         print("Passato GET LISTA side effect")
 
         # MODIFICA
-        s3 = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
+        s3 = Sezione(STR_NON_VUOTA * 3, STR_NON_VUOTA)
         self.assertRaises(IdInesistenteException, self.__model.modifica_sezione, s3)
         print("Passato MODIFICA IdInesistente")
 
         s = self.__model.get_sezione(s.get_id())
         if s is None:
             raise Exception()
+        s.set_nome(s2.get_nome())
+        self.assertRaises(OccupatoException, self.__model.modifica_sezione, s)
+        print("Passato MODIFICA Occupato")
+
         s.set_nome(s.get_nome() + STR_NON_VUOTA * 3)
         self.__model.modifica_sezione(s)
         s_ = self.__model.get_sezione(s.get_id())
@@ -360,7 +376,7 @@ class TestTell(unittest.TestCase):
 
         p2 = Posto(p.get_numero(), s.get_id())
         self.assertRaises(OccupatoException, self.__model.aggiungi_posto, p2)
-        print("Passato AGGIUNGI OccupatoException")
+        print("Passato AGGIUNGI Occupato")
 
         # GET
         p_ = self.__model.get_posto(p.get_id())
@@ -391,7 +407,7 @@ class TestTell(unittest.TestCase):
         print("Passato GET LISTA side effect")
 
         # GET LISTA by sezione
-        s2 = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
+        s2 = Sezione(STR_NON_VUOTA * 4, STR_NON_VUOTA)
         self.__model.aggiungi_sezione(s2)
         p3 = Posto(3, s2.get_id())
         self.__model.aggiungi_posto(p3)
@@ -418,6 +434,10 @@ class TestTell(unittest.TestCase):
         p = self.__model.get_posto(p.get_id())
         if p is None:
             raise Exception()
+        p.set_numero(p2.get_numero())
+        self.assertRaises(OccupatoException, self.__model.modifica_posto, p)
+        print("Passato MODIFICA Occupato")
+
         p.set_numero(p.get_numero() + 3)
         self.__model.modifica_posto(p)
         p_ = self.__model.get_posto(p.get_id())

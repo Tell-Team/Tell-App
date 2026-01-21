@@ -6,6 +6,7 @@ from model.exceptions import (
     DatoIncongruenteException,
     IdInesistenteException,
     IdOccupatoException,
+    OccupatoException,
     OggettoInUsoException,
 )
 from model.organizzazione.evento import Evento
@@ -47,6 +48,10 @@ class TestTell(unittest.TestCase):
         self.assertRaises(IdOccupatoException, self.__model.aggiungi_genere, g)
         print("Passato AGGIUNGI IdOccupato")
 
+        g2 = Genere(g.get_nome(), STR_NON_VUOTA)
+        self.assertRaises(OccupatoException, self.__model.aggiungi_genere, g2)
+        print("Passato AGGIUNGI Occupato")
+
         # GET
         g_ = self.__model.get_genere(g.get_id())
         if g_ is None:
@@ -63,7 +68,7 @@ class TestTell(unittest.TestCase):
         print("Passato GET side effect")
 
         # GET LISTA
-        g2 = Genere(STR_NON_VUOTA, STR_NON_VUOTA)
+        g2 = Genere(STR_NON_VUOTA * 2, STR_NON_VUOTA)
         self.__model.aggiungi_genere(g2)
         self.assertEqual(self.__model.get_generi(), [g, g2])
         print("Passato GET LISTA")
@@ -76,13 +81,17 @@ class TestTell(unittest.TestCase):
         print("Passato GET LISTA side effect")
 
         # MODIFICA
-        g3 = Genere(STR_NON_VUOTA, STR_NON_VUOTA)
+        g3 = Genere(STR_NON_VUOTA * 3, STR_NON_VUOTA)
         self.assertRaises(IdInesistenteException, self.__model.modifica_genere, g3)
         print("Passato MODIFICA IdInesistente")
 
         g = self.__model.get_genere(g.get_id())
         if g is None:
             raise Exception()
+        g.set_nome(g2.get_nome())
+        self.assertRaises(OccupatoException, self.__model.modifica_genere, g)
+        print("Passato MODIFICA Occupato")
+
         g.set_nome(g.get_nome() + STR_NON_VUOTA * 3)
         self.__model.modifica_genere(g)
         g_ = self.__model.get_genere(g.get_id())
@@ -277,6 +286,19 @@ class TestTell(unittest.TestCase):
         self.assertRaises(IdOccupatoException, self.__model.aggiungi_opera, o)
         print("Passato AGGIUNGI IdOccupato")
 
+        o2 = Opera(
+            o.get_nome(),
+            o.get_compositore(),
+            STR_NON_VUOTA,
+            1,
+            DATA,
+            STR_NON_VUOTA,
+            STR_NON_VUOTA,
+            g.get_id(),
+        )
+        self.assertRaises(OccupatoException, self.__model.aggiungi_opera, o2)
+        print("Passato AGGIUNGI Occupato")
+
         # GET
         o_ = self.__model.get_opera(o.get_id())
         if o_ is None:
@@ -294,7 +316,7 @@ class TestTell(unittest.TestCase):
 
         # GET LISTA
         o2 = Opera(
-            STR_NON_VUOTA,
+            STR_NON_VUOTA * 2,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
             1,
@@ -316,7 +338,7 @@ class TestTell(unittest.TestCase):
 
         # GET LISTA by nome
         o3 = Opera(
-            STR_NON_VUOTA + STR_NON_VUOTA,
+            STR_NON_VUOTA * 3,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
             1,
@@ -351,7 +373,7 @@ class TestTell(unittest.TestCase):
 
         # MODIFICA
         o3 = Opera(
-            STR_NON_VUOTA,
+            STR_NON_VUOTA * 3,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
             1,
@@ -366,6 +388,10 @@ class TestTell(unittest.TestCase):
         o = self.__model.get_opera(o.get_id())
         if o is None:
             raise Exception()
+        o.set_nome(o2.get_nome())
+        self.assertRaises(OccupatoException, self.__model.modifica_opera, o)
+        print("Passato MODIFICA Occupato")
+
         o.set_nome(o.get_nome() + STR_NON_VUOTA * 3)
         self.__model.modifica_opera(o)
         o_ = self.__model.get_opera(o.get_id())
@@ -604,7 +630,7 @@ class TestTell(unittest.TestCase):
             STR_NON_VUOTA,
             0,
             o.get_id(),
-            STR_NON_VUOTA + STR_NON_VUOTA,
+            STR_NON_VUOTA * 3,
             STR_NON_VUOTA,
             dict(),
             dict(),
@@ -636,7 +662,7 @@ class TestTell(unittest.TestCase):
 
         # GET LISTA by opera
         o2 = Opera(
-            STR_NON_VUOTA,
+            STR_NON_VUOTA * 2,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
             1,

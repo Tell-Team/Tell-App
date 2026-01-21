@@ -1,5 +1,9 @@
 from model.organizzazione.evento import Evento
-from model.exceptions import IdOccupatoException, IdInesistenteException
+from model.exceptions import (
+    IdOccupatoException,
+    IdInesistenteException,
+    OccupatoException,
+)
 from typing import Optional
 import copy
 
@@ -49,7 +53,7 @@ class GestoreEventi:
                 eventi.append(e)
         return copy.deepcopy(eventi)
 
-    # State
+    # Stato
     def attivo(self, id_: int) -> bool:
         """Throws: IdInesistenteException"""
         e = self.get_evento(id_)
@@ -58,13 +62,27 @@ class GestoreEventi:
 
         return e.attivo()
 
+    # Validazione
+    def __controllo_unique_key(self, primo: Evento, secondo: Evento):
+        """Throws: OccupatoException"""
+        if (
+            primo.get_data_ora() == secondo.get_data_ora()
+            and primo.get_id_spettacolo() == secondo.get_id_spettacolo()
+        ):
+            raise OccupatoException(
+                f"E' già presente un evento in data {secondo.get_data_ora()} per lo spettacolo con id {secondo.get_id_spettacolo()}."
+            )
+
     # Modificatori
     def aggiungi_evento(self, evento: Evento):
-        """Throws: IdOccupatoException"""
-        if self.ha_evento(evento.get_id()):
-            raise IdOccupatoException(
-                f"E' già presente un evento con id {evento.get_id()}."
-            )
+        """Throws: IdOccupatoException, OccupatoException"""
+        for e in self.__lista_eventi:
+            if e.get_id() == evento.get_id():
+                raise IdOccupatoException(
+                    f"E' già presente un evento con id {evento.get_id()}."
+                )
+
+            self.__controllo_unique_key(e, evento)
 
         self.__lista_eventi.append(copy.copy(evento))
 
@@ -79,6 +97,10 @@ class GestoreEventi:
 
     def modifica_evento(self, evento_modificato: Evento):
         """Throws: IdInesistenteException"""
+        for e in self.__lista_eventi:
+            if e.get_id() != evento_modificato.get_id():
+                self.__controllo_unique_key(e, evento_modificato)
+
         for i, e in enumerate(self.__lista_eventi):
             if e.get_id() == evento_modificato.get_id():
                 self.__lista_eventi[i] = copy.copy(evento_modificato)

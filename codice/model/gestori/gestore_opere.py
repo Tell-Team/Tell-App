@@ -1,5 +1,9 @@
 from model.pianificazione.opera import Opera
-from model.exceptions import IdOccupatoException, IdInesistenteException
+from model.exceptions import (
+    IdOccupatoException,
+    IdInesistenteException,
+    OccupatoException,
+)
 from typing import Optional
 import copy
 
@@ -50,13 +54,27 @@ class GestoreOpere:
             )
         )
 
+    # Validazione
+    def __controllo_unique_key(self, prima: Opera, seconda: Opera):
+        """Throws: OccupatoException"""
+        if (
+            prima.get_nome() == seconda.get_nome()
+            and prima.get_compositore() == seconda.get_compositore()
+        ):
+            raise OccupatoException(
+                f'E\' già presente un opera di nome "{seconda.get_nome()}" composta da "{seconda.get_compositore()}".'
+            )
+
     # Modificatori
     def aggiungi_opera(self, opera: Opera):
-        """Throws: IdOccupatoException"""
-        if self.ha_opera(opera.get_id()):
-            raise IdOccupatoException(
-                f"E' già presente un'opera con id {opera.get_id()}."
-            )
+        """Throws: IdOccupatoException, OccupatoException"""
+        for o in self.__lista_opere:
+            if o.get_id() == opera.get_id():
+                raise IdOccupatoException(
+                    f"E' già presente un'opera con id {opera.get_id()}."
+                )
+
+            self.__controllo_unique_key(o, opera)
 
         self.__lista_opere.append(copy.copy(opera))
 
@@ -70,7 +88,11 @@ class GestoreOpere:
         raise IdInesistenteException(f"Non è presente nessuna opera con id {id_}.")
 
     def modifica_opera(self, opera_modificata: Opera):
-        """Throws: IdInesistenteException"""
+        """Throws: IdInesistenteException, OccupatoException"""
+        for o in self.__lista_opere:
+            if o.get_id() != opera_modificata.get_id():
+                self.__controllo_unique_key(o, opera_modificata)
+
         for i, o in enumerate(self.__lista_opere):
             if o.get_id() == opera_modificata.get_id():
                 self.__lista_opere[i] = copy.copy(opera_modificata)
