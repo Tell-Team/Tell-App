@@ -15,7 +15,7 @@ from view.spettacoli.utils import SpettacoloPageData
 
 from view.utils.list_widgets import ListLayout
 from view.utils import PopupMessage
-from view.style import WidgetRole
+from view.style.ui_style import WidgetRole
 
 import copy  # - DA TOGLIERE: C'è una definizione che dovrebbe stare nel model
 

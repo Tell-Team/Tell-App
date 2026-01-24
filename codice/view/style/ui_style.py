@@ -1,4 +1,5 @@
 from enum import StrEnum, verify, UNIQUE
+from typing import TypeAlias, Union
 
 
 @verify(UNIQUE)
@@ -39,3 +40,13 @@ class WidgetColor:
     @verify(UNIQUE)
     class Button(StrEnum):
         BLUE_BUTTON = "blue-button"  # QPushButton
+
+    @verify(UNIQUE)
+    class Item(StrEnum):
+        RED_ITEM = "red-item"  # QWidget
+        BLUE_ITEM = "blue-item"  # QWidget
+
+
+WidgetColorAlias: TypeAlias = Union[
+    WidgetColor.Text, WidgetColor.Button, WidgetColor.Item
+]

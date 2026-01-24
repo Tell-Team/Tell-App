@@ -13,7 +13,7 @@ from core.view import AbstractSectionView
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
-from view.style import WidgetRole, WidgetColor
+from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class InfoSectionView(AbstractSectionView):
@@ -201,7 +201,5 @@ class InfoSectionView(AbstractSectionView):
         self.layout_lista_generi.svuota_layout()
         self.displayGeneriRequest.emit(self.layout_lista_generi)
 
-        vertical_scroll = self._scroll_area.verticalScrollBar()
-        if not vertical_scroll:
-            return
-        vertical_scroll.setValue(0)
+        if vertical_scroll := self._scroll_area.verticalScrollBar():
+            vertical_scroll.setValue(0)

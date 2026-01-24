@@ -10,7 +10,7 @@ from PyQt6.QtGui import (
 )
 from typing import Optional
 
-from view.style import WidgetRole
+from view.style.ui_style import WidgetRole
 
 
 class HorizontalWheelScrollArea(QScrollArea):

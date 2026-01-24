@@ -7,9 +7,9 @@ item.
 """
 
 from PyQt6.QtWidgets import QWidget, QLabel, QLayout, QVBoxLayout
-from typing import Optional
+from typing import Optional, Union
 
-from view.style import WidgetRole
+from view.style.ui_style import WidgetRole, WidgetColorAlias
 
 
 # Queste classi vuote servono per evitare possibili errori al chiamare i metodi di ListLayout.
@@ -65,7 +65,7 @@ class ListLayout(QVBoxLayout):
         self.__box.show()
 
     def aggiungi_list_item(
-        self, widget: ItemDisplay, style: Optional[WidgetRole] = None
+        self, widget: ItemDisplay, *styles: Union[WidgetRole, WidgetColorAlias]
     ) -> None:
         """Aggiunge un widget creato per il display delle istanze del model.
 
@@ -74,11 +74,12 @@ class ListLayout(QVBoxLayout):
         # C'è un errore al utilizzare widget.setProperty() direttamente:
         #   lo style non veniva asegnato per qualche motivo. Quindi ho decisso
         #   di aggiungere questo dummy_widget per farlo funzionare.
-        if style is None:
+        if not styles:
             self.addWidget(widget)
             return
         dummy_widget = QWidget()
-        dummy_widget.setProperty(style, True)
+        for style in styles:
+            dummy_widget.setProperty(style, True)
         l = QVBoxLayout(dummy_widget)
         l.addWidget(widget)
         self.addWidget(dummy_widget)

@@ -10,7 +10,7 @@ from typing import override
 from model.pianificazione.opera import Opera
 
 from view.spettacoli.pagine import NuovoSpettacoloView
-from view.style import WidgetRole, WidgetColor
+from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class NuovaRegiaView(NuovoSpettacoloView):

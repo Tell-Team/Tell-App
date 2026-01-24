@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import pyqtSignal, QObject
+from functools import partial
 from typing import Optional
 
 from controller.navigation import Pagina
@@ -86,6 +87,24 @@ class VisualizzaOperaController(QObject):
             layout_regie.if_lista_vuota()
             return
 
+        # Funzione di elimina per le regie
+        def on_conferma(widget_regia: RegiaDisplay, id_: int) -> None:
+            """Prova di eliminare l'istanza di regia.
+
+            :param id_: id della regia da eliminare
+            """
+            try:
+                self.__elimina_regia(id_)
+            except OggettoInUsoException as exc:
+                widget_regia.annulla_elimina()
+                PopupMessage.mostra_errore(
+                    self.__visualizza_opera_view,
+                    "Regia in uso",
+                    f"Si è verificato un errore: {exc}",
+                )
+            else:
+                self.__visualizza_opera_view.aggiorna_pagina()
+
         # Mostra tutti le regie salvate a schermo
         for regia in lista_regie:
             cur_regia = RegiaDisplay(
@@ -97,31 +116,13 @@ class VisualizzaOperaController(QObject):
                 self.__modifica_regia
             )
 
+            cur_regia.eliminaConfermata.connect(  # type:ignore
+                partial(on_conferma, cur_regia, regia.get_id())
+            )
+
             # Aggiungi cur_regia al layout di ListaRegie
             self.__visualizza_opera_view.aggiungi_widget_a_layout(
                 cur_regia, layout_regie
-            )
-
-            # Funzione di elimina per la regia
-            def on_si(id_: int) -> None:
-                """Prova di eliminare l'istanza di regia.
-
-                :param id_: id della regia da elimina
-                """
-                try:
-                    self.__elimina_regia(id_)
-                except OggettoInUsoException as exc:
-                    cur_regia.annulla_elimina()
-                    PopupMessage.mostra_errore(
-                        self.__visualizza_opera_view,
-                        "Regia in uso",
-                        f"Si è verificato un errore: {exc}",
-                    )
-                else:
-                    self.__visualizza_opera_view.aggiorna_pagina()
-
-            cur_regia.eliminaConfermata.connect(  # type:ignore
-                on_si
             )
 
     def __nuova_regia(self) -> None:

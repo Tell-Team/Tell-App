@@ -10,7 +10,7 @@ from PyQt6.QtCore import pyqtSignal
 
 from core.metaclasses import ABCQObjectMeta
 
-from view.style import WidgetRole
+from view.style.ui_style import WidgetRole
 
 
 class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):

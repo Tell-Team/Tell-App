@@ -4,7 +4,7 @@ from view.spettacoli.pagine import NuovoSpettacoloView
 from view.spettacoli.utils import SpettacoloPageData
 
 from view.utils.hyphenate_text import HyphenatedLabel
-from view.style import WidgetRole, WidgetColor
+from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class ModificaSpettacoloView(NuovoSpettacoloView):

@@ -6,7 +6,7 @@ from model.pianificazione.genere import Genere
 
 from view.utils.list_widgets import ItemDisplay
 from view.utils.hyphenate_text import HyphenatedLabel
-from view.style import WidgetRole, WidgetColor
+from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class GenereDisplay(ItemDisplay):
@@ -15,11 +15,11 @@ class GenereDisplay(ItemDisplay):
     Segnali
     ---
     - `modificaRequest(int)`: emesso quando si clicca il pulsante Modifica;
-    - `eliminaConfermata(int)`: emesso quando si clicca il pulsante Sì.
+    - `eliminaConfermata()`: emesso quando si clicca il pulsante Sì.
     """
 
     modificaRequest = pyqtSignal(int)
-    eliminaConfermata = pyqtSignal(int)
+    eliminaConfermata = pyqtSignal()
 
     def __init__(self, g: Genere, editable: bool):
         super().__init__()
@@ -96,7 +96,7 @@ class GenereDisplay(ItemDisplay):
             )
 
             self.__btn_si.clicked.connect(  # type:ignore
-                partial(self.eliminaConfermata.emit, self.__id)
+                self.eliminaConfermata.emit
             )
 
             self.__btn_no.clicked.connect(  # type:ignore

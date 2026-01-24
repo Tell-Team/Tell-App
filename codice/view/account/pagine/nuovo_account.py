@@ -5,21 +5,11 @@ from core.view import AbstractCreaView
 
 from model.account.account import Ruolo
 
-from view.style import WidgetRole, WidgetColor
+from view.style.ui_style import WidgetRole, WidgetColor
 
 
-# Si usa la stessa pagina per creare sia un account Amministratore che un Biglietteria.
-#   Solo si modifica un QComboBox disabilitato per indicare il ruolo dell'account durante
-#   la creazione. Nel caso di modifica, comunque, è abilitato per permettere aggiornare il
-#   ruolo di qualunque account.
 class NuovoAccountView(AbstractCreaView):
-    """Pagina per la creazione di un nuovo account utente.
-
-    Segnali
-    ---
-    - `annullaRequest(QWidget)`: emesso quando si clicca il pulsante Annulla;
-    - `salvaRequest()`: emesso quando si clicca il pulsante Crea.
-    """
+    """Pagina per la creazione di un nuovo account utente."""
 
     # ------------------------- SETUP INIT -------------------------
 
@@ -39,24 +29,6 @@ class NuovoAccountView(AbstractCreaView):
 
     @override
     def _setup_form(self) -> None:
-        label_anagrafica_header = QLabel("Anagrafica")
-        label_anagrafica_header.setProperty(WidgetRole.HEADER2, True)
-
-        label_nome = QLabel('Nome<span style="color:red;">*</span> :')
-        label_nome.setProperty(WidgetRole.BODY_TEXT, True)
-        label_nome.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
-        self.nome = QLineEdit()
-        self.nome.setPlaceholderText("Inserire nome")
-
-        label_cognome = QLabel('Cognome<span style="color:red;">*</span> :')
-        label_cognome.setProperty(WidgetRole.BODY_TEXT, True)
-        label_cognome.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
-        self.cognome = QLineEdit()
-        self.cognome.setPlaceholderText("Inserire cognome")
-
-        label_account_header = QLabel("Accesso e Ruolo")
-        label_account_header.setProperty(WidgetRole.HEADER2, True)
-
         label_username = QLabel('Username<span style="color:red;">*</span> :')
         label_username.setProperty(WidgetRole.BODY_TEXT, True)
         label_username.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
@@ -70,6 +42,16 @@ class NuovoAccountView(AbstractCreaView):
         self.password.setPlaceholderText("Inserire password")
         self.password.setEchoMode(QLineEdit.EchoMode.Password)
 
+        # - DEBERÍA HABER 3 QLineEdit para la contraseña en modifica:
+        #   original, nuova, confirma nueva
+
+        label_conferma = QLabel('Conferma password<span style="color:red;">*</span> :')
+        label_conferma.setProperty(WidgetRole.BODY_TEXT, True)
+        label_conferma.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        self.conferma = QLineEdit()
+        self.conferma.setPlaceholderText("Inserire password")
+        self.conferma.setEchoMode(QLineEdit.EchoMode.Password)
+
         label_ruolo = QLabel('Ruolo<span style="color:red;">*</span> : ')
         label_ruolo.setProperty(WidgetRole.BODY_TEXT, True)
         label_ruolo.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
@@ -77,13 +59,7 @@ class NuovoAccountView(AbstractCreaView):
         self.ruolo.insertItem(0, "Scegli ruolo", None)
         self.ruolo.insertItem(1, "Biglietteria", Ruolo.BIGLIETTERIA)
         self.ruolo.insertItem(2, "Amministratore", Ruolo.AMMINISTRATORE)
-        self.ruolo.setEnabled(False)
 
-        self._form_layout.addRow(label_anagrafica_header)
-        self._form_layout.addRow(label_nome, self.nome)
-        self._form_layout.addRow(label_cognome, self.cognome)
-        self._form_layout.addRow(QLabel('<hr style="background-color:#b0b0b0;">'))
-        self._form_layout.addRow(label_account_header)
         self._form_layout.addRow(label_username, self.username)
         self._form_layout.addRow(label_password, self.password)
         self._form_layout.addRow(label_ruolo, self.ruolo)
@@ -92,5 +68,7 @@ class NuovoAccountView(AbstractCreaView):
 
     @override
     def reset_pagina(self) -> None:
-        self.nome.setText("")
+        self.username.setText("")
         self.password.setText("")
+        self.conferma.setText("")
+        self.ruolo.setCurrentIndex(0)

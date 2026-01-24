@@ -14,7 +14,7 @@ from functools import partial
 
 from core.metaclasses import ABCQObjectMeta
 
-from view.style import WidgetRole, WidgetColor
+from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):

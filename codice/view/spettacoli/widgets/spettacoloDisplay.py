@@ -7,7 +7,7 @@ from model.pianificazione.regia import Regia  # - TESTING
 
 from view.utils.list_widgets import ItemDisplay
 from view.utils.hyphenate_text import HyphenatedLabel
-from view.style import WidgetRole, WidgetColor
+from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class SpettacoloDisplay(ItemDisplay):
@@ -17,12 +17,12 @@ class SpettacoloDisplay(ItemDisplay):
     ---
     - visualizzaRequest(int): emesso quando si clicca il pulsante Maggior info;
     - modificaRequest(int): emesso quando si clicca il pulsante Modifica;
-    - eliminaConfermata(int): emesso quando si clicca il pulsante Sì.
+    - eliminaConfermata(): emesso quando si clicca il pulsante Sì.
     """
 
     visualizzaRequest = pyqtSignal(int)
     modificaRequest = pyqtSignal(int)
-    eliminaConfermata = pyqtSignal(int)
+    eliminaConfermata = pyqtSignal()
 
     def __init__(self, s: Spettacolo, dati: tuple[str, ...] = ()):
         super().__init__()
@@ -106,7 +106,7 @@ class SpettacoloDisplay(ItemDisplay):
         )
 
         self.__btn_si.clicked.connect(  # type:ignore
-            partial(self.eliminaConfermata.emit, self.__id)
+            self.eliminaConfermata.emit
         )
 
         self.__btn_no.clicked.connect(  # type:ignore

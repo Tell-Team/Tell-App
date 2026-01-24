@@ -13,7 +13,7 @@ from typing import override
 from core.view import AbstractCreaView
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
-from view.style import WidgetRole, WidgetColor
+from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class NuovoSpettacoloView(AbstractCreaView):

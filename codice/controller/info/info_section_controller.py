@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QWidget
+from functools import partial
 from typing import Optional
 
 from core.controller import AbstractSectionController
@@ -17,7 +18,7 @@ from view.info.utils import OperaPageData, GenerePageData
 
 from view.utils.list_widgets import ListLayout
 from view.utils import PopupMessage
-from view.style import WidgetRole
+from view.style.ui_style import WidgetRole
 
 
 class InfoSectionController(AbstractSectionController):
@@ -96,6 +97,24 @@ class InfoSectionController(AbstractSectionController):
             layout_opere.if_lista_vuota()
             return
 
+        # Funzione di elimina per le opere
+        def on_conferma(widget_opera: OperaDisplay, id_: int) -> None:
+            """Prova di eliminare l'istanza d'opera.
+
+            :param id_: id dell'opera da eliminare
+            """
+            try:
+                self.__elimina_opera(id_)
+            except OggettoInUsoException as exc:
+                widget_opera.annulla_elimina()
+                PopupMessage.mostra_errore(
+                    self._view_section,
+                    "Opera in uso",
+                    f"Si è verificato un errore: {exc}",
+                )
+            else:
+                self._view_section.aggiorna_pagina()
+
         # Mostra tutte le opere della lista a schermo
         for opera in lista_opere:
             cur_opera = OperaDisplay(
@@ -112,30 +131,12 @@ class InfoSectionController(AbstractSectionController):
                 self.__modifica_opera
             )
 
+            cur_opera.eliminaConfermata.connect(  # type:ignore
+                partial(on_conferma, cur_opera, opera.get_id())
+            )
+
             # Aggiungi cur_opera al layout di ListaOpere
             layout_opere.aggiungi_list_item(cur_opera, WidgetRole.ITEM_CARD)
-
-            # Funzione di elimina per l'opera
-            def on_si(id_: int) -> None:
-                """Prova di eliminare l'istanza d'opera.
-
-                :param id_: id dell'opera da elimina
-                """
-                try:
-                    self.__elimina_opera(id_)
-                except OggettoInUsoException as exc:
-                    cur_opera.annulla_elimina()
-                    PopupMessage.mostra_errore(
-                        self._view_section,
-                        "Opera in uso",
-                        f"Si è verificato un errore: {exc}",
-                    )
-                else:
-                    self._view_section.aggiorna_pagina()
-
-            cur_opera.eliminaConfermata.connect(  # type:ignore
-                on_si
-            )
 
     def __display_generi(self, layout_generi: ListLayout) -> None:
         """Mostra a schermo le informazioni dei generi salvati ed assegna a
@@ -150,6 +151,24 @@ class InfoSectionController(AbstractSectionController):
             layout_generi.if_lista_vuota()
             return
 
+        # Funzione di elimina per i generi
+        def on_conferma(widget_genere: GenereDisplay, id_: int) -> None:
+            """Prova di eliminare l'istanza d'opera.
+
+            :param id_: id dell'opera da eliminare
+            """
+            try:
+                self.__elimina_genere(id_)
+            except OggettoInUsoException as exc:
+                widget_genere.annulla_elimina()
+                PopupMessage.mostra_errore(
+                    self._view_section,
+                    "Genere in uso",
+                    f"Si è verificato un errore: {exc}",
+                )
+            else:
+                self._view_section.aggiorna_pagina()
+
         # Mostra tutti i generi salvati a schermo
         for genere in lista_generi:
             cur_genere = GenereDisplay(genere, editable=self._view_section.is_admin)
@@ -159,30 +178,12 @@ class InfoSectionController(AbstractSectionController):
                 self.__modifica_genere
             )
 
+            cur_genere.eliminaConfermata.connect(  # type:ignore
+                partial(on_conferma, cur_genere, genere.get_id())
+            )
+
             # Aggiungi cur_genere al layout di ListaOpere
             layout_generi.aggiungi_list_item(cur_genere, WidgetRole.ITEM_CARD)
-
-            # Funzione di elimina per il genere
-            def on_si(id_: int) -> None:
-                """Prova di eliminare l'istanza d'opera.
-
-                :param id_: id dell'opera da elimina
-                """
-                try:
-                    self.__elimina_genere(id_)
-                except OggettoInUsoException as exc:
-                    cur_genere.annulla_elimina()
-                    PopupMessage.mostra_errore(
-                        self._view_section,
-                        "Genere in uso",
-                        f"Si è verificato un errore: {exc}",
-                    )
-                else:
-                    self._view_section.aggiorna_pagina()
-
-            cur_genere.eliminaConfermata.connect(  # type:ignore
-                on_si
-            )
 
     def __visualizza_opera(self, id_: int) -> None:
         """Carica la pagina `VisualizzaOperaView` con i dati relativi all'opera

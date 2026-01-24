@@ -13,7 +13,7 @@ from model.pianificazione.regia import Regia
 from view.utils.list_widgets import ItemDisplay
 from view.utils.horizontal_scroll import HorizontalWheelScrollArea
 from view.utils import make_vline
-from view.style import WidgetRole, WidgetColor
+from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class RegiaDisplay(ItemDisplay):
@@ -22,13 +22,13 @@ class RegiaDisplay(ItemDisplay):
     Segnali
     ---
     - `modificaRequest(int)`: emesso quando si clicca il pulsante Modifica;
-    - `eliminaConfermata(int)`: emesso quando si clicca il pulsante Sì.
+    - `eliminaConfermata()`: emesso quando si clicca il pulsante Sì.
     """
 
     # In prattica, questo QWidget pottrebe essere nella pagina NuovaRegiaView stessa, ma per
     #   tener il codice pulito preferisco creare un file dedicato a questa classe.
     modificaRequest = pyqtSignal(int)
-    eliminaConfermata = pyqtSignal(int)
+    eliminaConfermata = pyqtSignal()
 
     def __init__(self, r: Regia, editable: bool):
         super().__init__()
@@ -126,7 +126,7 @@ class RegiaDisplay(ItemDisplay):
             )
 
             self.__btn_si.clicked.connect(  # type:ignore
-                partial(self.eliminaConfermata.emit, self.__id)
+                self.eliminaConfermata.emit
             )
 
             self.__btn_no.clicked.connect(  # type:ignore

@@ -5,7 +5,7 @@ from functools import partial
 from view.utils.list_widgets import ItemDisplay
 from view.utils.horizontal_scroll import HorizontalWheelScrollArea
 from view.utils import make_vline
-from view.style import WidgetRole, WidgetColor
+from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class PersonaleDisplay(ItemDisplay):

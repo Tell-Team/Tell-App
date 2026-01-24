@@ -7,7 +7,7 @@ from model.pianificazione.regia import Regia  # - TESTING
 
 from view.utils.list_widgets import ItemDisplay
 from view.utils.hyphenate_text import HyphenatedLabel
-from view.style import WidgetRole, WidgetColor
+from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class AcquistoDisplay(ItemDisplay):

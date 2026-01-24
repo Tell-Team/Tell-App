@@ -14,7 +14,7 @@ from core.view import AbstractCreaView
 
 from model.pianificazione.genere import Genere
 
-from view.style import WidgetRole, WidgetColor
+from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class NuovaOperaView(AbstractCreaView):

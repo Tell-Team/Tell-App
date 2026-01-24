@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QWidget
+from functools import partial
 from typing import Optional
 
 from core.controller import AbstractSectionController
@@ -16,7 +17,7 @@ from view.spettacoli.utils import SpettacoloPageData
 
 from view.utils.list_widgets import ListLayout
 from view.utils import PopupMessage
-from view.style import WidgetRole
+from view.style.ui_style import WidgetRole
 
 
 class SpettacoliSectionController(AbstractSectionController):
@@ -81,6 +82,24 @@ class SpettacoliSectionController(AbstractSectionController):
             layout_spettacoli.if_lista_vuota()
             return
 
+        # Funzione di elimina per gli spettacoli
+        def on_conferma(widget_spettacolo: SpettacoloDisplay, id_: int) -> None:
+            """Prova di eliminare l'istanza di spettacolo.
+
+            :param id_: id dello spettacolo da eliminare
+            """
+            try:
+                self.__elimina_spettacolo(id_)
+            except OggettoInUsoException as exc:
+                widget_spettacolo.annulla_elimina()
+                PopupMessage.mostra_errore(
+                    self._view_section,
+                    "Spettacolo in uso",
+                    f"Si è verificato un errore: {exc}",
+                )
+            else:
+                self._view_section.aggiorna_pagina()
+
         # Mostra tutti gli spettacoli della lista a schermo
         for spettacolo in lista_spettacoli:
             # Verifica che classe di Spettacolo è l'istanza
@@ -106,30 +125,12 @@ class SpettacoliSectionController(AbstractSectionController):
                 self.__modifica_spettacolo
             )
 
+            cur_spettacolo.eliminaConfermata.connect(  # type:ignore
+                partial(on_conferma, cur_spettacolo, spettacolo.get_id())
+            )
+
             # Aggiungi cur_spettacolo al layout di ListaSpettacoli
             layout_spettacoli.aggiungi_list_item(cur_spettacolo, WidgetRole.ITEM_CARD)
-
-            # Funzione di elimina per lo spettacolo
-            def on_si(id_: int) -> None:
-                """Prova di eliminare l'istanza di spettacolo.
-
-                :param id_: id dello spettacolo da elimina
-                """
-                try:
-                    self.__elimina_spettacolo(id_)
-                except OggettoInUsoException as exc:
-                    cur_spettacolo.annulla_elimina()
-                    PopupMessage.mostra_errore(
-                        self._view_section,
-                        "Spettacolo in uso",
-                        f"Si è verificato un errore: {exc}",
-                    )
-                else:
-                    self._view_section.aggiorna_pagina()
-
-            cur_spettacolo.eliminaConfermata.connect(  # type:ignore
-                on_si
-            )
 
     def __visualizza_spettacolo(self, id_: int) -> None: ...
 

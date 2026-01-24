@@ -5,7 +5,7 @@ from typing import override
 from core.view import AbstractSectionView
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
-from view.style import WidgetRole, WidgetColor
+from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class AccountSectionView(AbstractSectionView):
@@ -16,18 +16,18 @@ class AccountSectionView(AbstractSectionView):
 
     Segnali
     ---
-    - `nuovoAdminReques()`: emesso quando si clicca il pulsante Nuovo Amministratore;
-    - `nuovoBiglietteriaRequest()`: emesso quando si clicca il pulsante Nuovo Biglietteria;
-    - `displayAdminRequest(QVBoxLayout)`: emesso per caricare la lista di account
-    Amministratore nella sezione Account;
-    - `displayBiglietteriaRequest(QVBoxLayout)`: emesso per caricare la lista di
-    account Biglietteria nella sezione Account.
+    - `nuovoAccountRequest()`: emesso quando si clicca il pulsante Nuovo Account;
+    - `displayAccountRequest(QVBoxLayout)`: emesso per caricare la lista di account
+    nella sezione Account;
     """
 
-    nuovoAdminRequest = pyqtSignal()
-    nuovoBiglietteriaRequest = pyqtSignal()
-    displayAdminRequest = pyqtSignal(QVBoxLayout)
-    displayBiglietteriaRequest = pyqtSignal(QVBoxLayout)
+    # Si usa 'admin' nei nomi delle variabili e 'amministratore' nei testi della UI.
+
+    # Viene usato 'biglietteria' in singolare per le variabili perché è il tipo di account.
+    #   Quindi, è un nome proprio.
+
+    nuovoAccountRequest = pyqtSignal()
+    displayAccountRequest = pyqtSignal(QVBoxLayout)
 
     # ------------------------- SETUP INIT -------------------------
 
@@ -40,89 +40,33 @@ class AccountSectionView(AbstractSectionView):
         header_account.setProperty(WidgetRole.HEADER1, True)
         header_account.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        # - Questo blocco posiziona il header Account della pagina all'altura degli header
-        #   delle altre sezioni (Opere e Spettacoli). È una soluzione temporanea mentre non
-        #   ci sia model per gli Account per testare la view.
+        self._btn_nuovo_account = QPushButton("Nuovo Account")
+        self._btn_nuovo_account.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+
         widget_header_account = QWidget()
         layout_header_account = QHBoxLayout(widget_header_account)
         layout_header_account.setContentsMargins(0, 0, 0, 0)
         layout_header_account.addWidget(header_account)
-
-        top_header = QWidget()
-        top_layout = QVBoxLayout(top_header)
-        top_layout.addWidget(widget_header_account)
-        # - END
-
-        # Amministratore
-        header_admin = QLabel("Amministratore")
-        header_admin.setProperty(WidgetRole.HEADER2, True)
-        header_admin.setAlignment(Qt.AlignmentFlag.AlignLeft)
-
-        self._btn_nuovo_admin = QPushButton("Nuovo Amministratore")
-        self._btn_nuovo_admin.setProperty(WidgetRole.DEFAULT_BUTTON, True)
-
-        widget_header_admin = QWidget()
-        layout_header_admin = QHBoxLayout(widget_header_admin)
-        layout_header_admin.addWidget(header_admin)
-        layout_header_admin.addWidget(self._btn_nuovo_admin)
-        layout_header_admin.addStretch()
+        layout_header_account.addWidget(self._btn_nuovo_account)
+        layout_header_account.addStretch()
 
         # Non è necessario, perché in prattica non vendrà mai visualizzato. Comunque
         #   lo lascio, in caso sia utile.
-        label_lista_admin_vuota = EmptyStateLabel(
-            "Non vi sono account Amministratore registrati."
+        label_lista_account_vuota = EmptyStateLabel("Non vi sono account registrati.")
+        label_lista_account_vuota.setProperty(WidgetRole.BODY_TEXT, True)
+        label_lista_account_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+
+        widget_lista_account = QWidget()
+        self.layout_lista_account = ListLayout(
+            widget_lista_account, label_lista_account_vuota
         )
-        label_lista_admin_vuota.setProperty(WidgetRole.BODY_TEXT, True)
-        label_lista_admin_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
-
-        # Si usa 'admin' nei nomi delle variabili e 'amministratore' nei testi della UI.
-        widget_lista_admin = QWidget()
-        self.layout_lista_admin = ListLayout(
-            widget_lista_admin, label_lista_admin_vuota
-        )
-        container_admin = QWidget()
-        layout_admin = QVBoxLayout(container_admin)
-        layout_admin.addWidget(widget_header_admin)
-        layout_admin.addWidget(widget_lista_admin)
-
-        # Biglietteria
-        header_biglietteria = QLabel("Biglietteria")
-        header_biglietteria.setProperty(WidgetRole.HEADER2, True)
-        header_biglietteria.setAlignment(Qt.AlignmentFlag.AlignLeft)
-
-        self._btn_nuovo_biglietteria = QPushButton("Nuovo Biglietteria")
-        self._btn_nuovo_biglietteria.setProperty(WidgetRole.DEFAULT_BUTTON, True)
-
-        widget_header_biglietteria = QWidget()
-        layout_header_biglietteria = QHBoxLayout(widget_header_biglietteria)
-        layout_header_biglietteria.addWidget(header_biglietteria)
-        layout_header_biglietteria.addWidget(self._btn_nuovo_biglietteria)
-        layout_header_biglietteria.addStretch()
-
-        label_lista_biglietteria_vuota = EmptyStateLabel(
-            "Non vi sono account Biglietteria registrati."
-        )
-        label_lista_biglietteria_vuota.setProperty(WidgetRole.BODY_TEXT, True)
-        label_lista_biglietteria_vuota.setProperty(
-            WidgetColor.Text.SECONDARY_TEXT, True
-        )
-
-        # Viene usato 'biglietteria' in singolare per le variabili perché è il tipo di account.
-        #   Quindi, è un nome proprio.
-        widget_lista_biglietteria = QWidget()
-        self.layout_lista_biglietteria = ListLayout(
-            widget_lista_biglietteria, label_lista_biglietteria_vuota
-        )
-
-        container_biglietteria = QWidget()
-        layout_biglietterie = QVBoxLayout(container_biglietteria)
-        layout_biglietterie.addWidget(widget_header_biglietteria)
-        layout_biglietterie.addWidget(widget_lista_biglietteria)
+        container_account = QWidget()
+        layout_account = QVBoxLayout(container_account)
+        layout_account.addWidget(widget_header_account)
+        layout_account.addWidget(widget_lista_account)
 
         # Scroll layout
-        self.scroll_layout.addWidget(top_header)  # - DA CORRIGERE
-        self.scroll_layout.addWidget(container_admin)
-        self.scroll_layout.addWidget(container_biglietteria)
+        self.scroll_layout.addWidget(container_account)
         self.scroll_layout.addStretch()
 
     @override
@@ -131,29 +75,18 @@ class AccountSectionView(AbstractSectionView):
 
         self._btn_sezione_account.setEnabled(False)
 
-        self._btn_nuovo_admin.clicked.connect(  # type:ignore
-            self.nuovoAdminRequest.emit
+        self._btn_nuovo_account.clicked.connect(  # type:ignore
+            self.nuovoAccountRequest.emit
         )
 
-        self._btn_nuovo_biglietteria.clicked.connect(  # type:ignore
-            self.nuovoBiglietteriaRequest.emit
-        )
-
-        self.displayAdminRequest.emit(self.layout_lista_admin)
-
-        self.displayBiglietteriaRequest.emit(self.layout_lista_biglietteria)
+        self.displayAccountRequest.emit(self.layout_lista_account)
 
     # ------------------------- METODI DI VIEW -------------------------
 
     @override
     def aggiorna_pagina(self) -> None:
-        self.layout_lista_admin.svuota_layout()
-        self.displayAdminRequest.emit(self.layout_lista_admin)
+        self.layout_lista_account.svuota_layout()
+        self.displayAccountRequest.emit(self.layout_lista_account)
 
-        self.layout_lista_biglietteria.svuota_layout()
-        self.displayBiglietteriaRequest.emit(self.layout_lista_biglietteria)
-
-        vertical_scroll = self._scroll_area.verticalScrollBar()
-        if not vertical_scroll:
-            return
-        vertical_scroll.setValue(0)
+        if vertical_scroll := self._scroll_area.verticalScrollBar():
+            vertical_scroll.setValue(0)

@@ -12,7 +12,7 @@ from typing import override
 from core.view import AbstractSectionView
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
-from view.style import WidgetRole, WidgetColor
+from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class AcquistoSectionView(AbstractSectionView):
@@ -119,7 +119,5 @@ class AcquistoSectionView(AbstractSectionView):
         self.layout_lista_spettacoli.svuota_layout()
         self.displaySpettacoliRequest.emit(self.layout_lista_spettacoli)
 
-        vertical_scroll = self._scroll_area.verticalScrollBar()
-        if not vertical_scroll:
-            return
-        vertical_scroll.setValue(0)
+        if vertical_scroll := self._scroll_area.verticalScrollBar():
+            vertical_scroll.setValue(0)

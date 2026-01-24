@@ -3,7 +3,7 @@ from typing import override
 
 from core.view import AbstractCreaView
 
-from view.style import WidgetRole, WidgetColor
+from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class NuovoGenereView(AbstractCreaView):

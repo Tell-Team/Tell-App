@@ -1,8 +1,9 @@
 from typing import override
 
-from view.account.pagine import NuovoAccountView
+from model.account.account import Ruolo
 
-# - from view.account.utils.accountPageData import AccountPageData
+from view.account.pagine import NuovoAccountView
+from view.account.utils import AccountPageData
 
 
 class ModificaAccountView(NuovoAccountView):
@@ -24,23 +25,26 @@ class ModificaAccountView(NuovoAccountView):
         # Aggiorna header
         self._header.setText("Modifica account")
 
-        # - Una volta creato l'account, il nome e cognome vincolati all'account potrano esser modificati?
-
         # Abilita il QComboBox del ruolo
         self.ruolo.setEnabled(True)
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    # def set_data(self, data: AccountPageData) -> None:
-    #     """Carica i dati di un'account nella pagina.
+    def set_data(self, data: AccountPageData) -> None:
+        """Carica i dati di un'account nella pagina.
 
-    #     :param data: data salvata in una classe immutabile"""
-    #     self.cur_id_account = data.id
-    #
-    #     self.nome.setText(data.nome)
-    #     self.cognome.setText(data.cognome)
-    #     self.username.setText(data.username)
-    #     self.password.setText(data.password) # - Fare il testo di self.password vissibile(?)
+        :param data: data salvata in una classe immutabile"""
+        self.cur_id_account = data.id
+
+        self.username.setText(data.username)
+
+        index = 0
+        match data.ruolo:
+            case Ruolo.BIGLIETTERIA:
+                index = 1
+            case Ruolo.AMMINISTRATORE:
+                index = 2
+        self.ruolo.setCurrentIndex(index)
 
     @override
     def reset_pagina(self) -> None:
