@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QApplication
+import logging
 import sys
 
 from controller.app_context import AppContext
@@ -14,7 +15,7 @@ def main() -> None:
     try:
         tema_corrente = rileva_tema_os()
     except NotImplementedError as exc:
-        print(type(exc).__name__, exc)  # Indica l'errore nel Terminal e continua
+        logging.error("%s: %s", type(exc).__name__, exc)
         tema_corrente = None  # L'app userà il tema chiaro per default
     app.setPalette(build_qpalette(tema_corrente))
     app.setStyleSheet(load_stylesheet(tema_corrente))

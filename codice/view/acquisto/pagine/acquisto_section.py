@@ -11,8 +11,6 @@ from typing import override
 
 from core.view import AbstractSectionView
 
-from controller.login.auth_service import AuthenticationService
-
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.style import WidgetRole, WidgetColor
 
@@ -31,12 +29,9 @@ class AcquistoSectionView(AbstractSectionView):
 
     displaySpettacoliRequest = pyqtSignal(QVBoxLayout)
 
-    def __init__(self, auth: AuthenticationService):
-        self.is_biglietteria = self.is_admin = False
-        if auth.is_admin():
-            self.is_biglietteria = self.is_admin = True
-        elif auth.is_biglietteria():
-            self.is_biglietteria = True
+    def __init__(self, permessi_biglietteria: bool, permessi_admin: bool):
+        self.is_biglietteria = permessi_biglietteria
+        self.is_admin = permessi_admin
 
         super().__init__()
 

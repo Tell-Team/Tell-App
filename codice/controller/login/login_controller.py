@@ -1,12 +1,11 @@
 from PyQt6.QtCore import pyqtSignal, QObject
 from functools import partial
-
-# from typing import Optional
+from typing import Optional
 
 from model.model import Model
+from model.account.account import Account
 
-# from model.account import Account, UserSession
-from model.exceptions import CredenzialiErrateException, AccountInesistenteException
+from model.exceptions import CredenzialiErrateException
 
 from view.login import LoginDialog
 
@@ -48,8 +47,8 @@ class LoginController(QObject):
     def get_dialog(self) -> LoginDialog:
         return self.__login_dialog
 
-    # def __get_account(self, id_: int) -> Optional[Account]:
-    #     return self.__model.get_account(id_)
+    def get_account(self, id_: int) -> Optional[Account]:
+        return self.__model.get_account(id_)
 
     def __login(self, username: str, password: str) -> None:
         """Verifica la correttezza delle credenziali inserite durante un tentativo di login."""
@@ -63,19 +62,6 @@ class LoginController(QObject):
                 f"Si è verificato un errore: {exc}",
             )
             return
-        except AccountInesistenteException as exc:
-            PopupMessage.mostra_errore(
-                self.__login_dialog,
-                "Account inesistente",
-                f"Si è verificato un errore: {exc}",
-            )
         else:
-            # if user := self.__get_account(id_account):
-            #     user_session = UserSession(
-            #         id=user.get_id(),
-            #         username=user.get_username(),
-            #         ruolo=user.get_ruolo(),
-            #     )
             self.loginSucceeded.emit(id_account)
-            # self.loginSucceeded.emit(user_session)
             self.__login_dialog.reset_login_dialog()

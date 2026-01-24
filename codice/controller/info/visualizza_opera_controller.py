@@ -89,7 +89,7 @@ class VisualizzaOperaController(QObject):
         # Mostra tutti le regie salvate a schermo
         for regia in lista_regie:
             cur_regia = RegiaDisplay(
-                regia, editable=self.__visualizza_opera_view.can_cud_regie
+                regia, editable=self.__visualizza_opera_view.is_admin
             )
 
             # Setup della pagina di modifica delle regie

@@ -1,16 +1,11 @@
 from typing import Optional
 
-from controller.login import LoginController, AuthenticationService
+from controller.login import LoginController
 from controller.navigation import NavigationController
 
 from model.model import Model
-from model.exceptions import AccountInesistenteException
-
-# from model.account import UserSession
 
 from view.main_window import MainWindow
-
-from view.utils import PopupMessage
 
 
 class AppFlowController:
@@ -19,15 +14,15 @@ class AppFlowController:
     due istanze vengono eliminate e il dialog viene nuovamente visualizzato.
     """
 
+    __session_id: Optional[int]
+
     def __init__(
         self,
         model: Model,
         login_controller: LoginController,
-        auth: AuthenticationService,
     ):
         self.__model = model
         self.__login_controller = login_controller
-        self.__auth = auth
 
         self.__show_login_dialog()
 
@@ -42,25 +37,13 @@ class AppFlowController:
         dialog.show()
 
     def __start_session(self, id_account: Optional[int]) -> None:
-        # def __start_session(self, user: Optional[UserSession]) -> None:
         """Effettua un login dopo aver ricevuto credenziali valide."""
-        if id_account is not None:
-            try:
-                self.__auth.login(id_account, self.__model)
-            except AccountInesistenteException as exc:
-                PopupMessage.mostra_errore(
-                    self.__login_dialog.focusWidget(),  # type:ignore
-                    "Errore durante login",
-                    f"Si è verificato un errore: {exc}",
-                )
-                return
-        else:
-            self.__auth.login_as_cliente()
+        self.__session_id = id_account  # Se l'utente è Cliente, vale None
 
         self.__main_window = MainWindow()
 
         self.__navigation = NavigationController(
-            self.__model, self.__main_window, self.__auth
+            self.__model, self.__main_window, self.__session_id
         )
 
         self.__navigation.logoutRequest.connect(  # type:ignore
@@ -75,5 +58,5 @@ class AppFlowController:
             self.__main_window.close()
             self.__main_window = None
             self.__navigation = None
-        self.__auth.logout()
+        self.__session_id = None
         self.__login_dialog.show()

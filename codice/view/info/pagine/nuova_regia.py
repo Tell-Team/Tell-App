@@ -39,8 +39,7 @@ class NuovaRegiaView(NuovoSpettacoloView):
         label_anno.setProperty(WidgetRole.BODY_TEXT, True)
         label_anno.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.anno = QSpinBox()
-        self.anno.setRange(1597, QDate().currentDate().year())
-        # - Serve un rango in particolare?
+        self.anno.setRange(0, QDate().currentDate().year())
 
         label_opera = QLabel('Opera<span style="color:red;">*</span> :')
         label_opera.setProperty(WidgetRole.BODY_TEXT, True)

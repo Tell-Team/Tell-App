@@ -1,5 +1,8 @@
 from typing import Optional
 
+from controller.app_flow_controller import AppFlowController
+from controller.login import LoginController
+
 from model.model import Model
 
 
@@ -13,18 +16,7 @@ class AppContext:
     """
 
     def __init__(self, db_path: Optional[str]):
-        # Crea un Model unici per tutta l'app
-        self.__model = Model(db_path)
-
-        from controller.login import LoginController, AuthenticationService
-
-        # SessionContext,
-
-        from controller.app_flow_controller import AppFlowController
-
-        # session = SessionContext()
-        self.__auth = AuthenticationService()
+        self.__model = Model(db_path)  # Crea un Model unico per tutta l'app
 
         login_controller = LoginController(self.__model)
-
-        self.__app_flow = AppFlowController(self.__model, login_controller, self.__auth)
+        self.__app_flow = AppFlowController(self.__model, login_controller)

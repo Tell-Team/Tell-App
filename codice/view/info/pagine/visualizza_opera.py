@@ -9,8 +9,6 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 
-from controller.login.auth_service import AuthenticationService
-
 from model.pianificazione.regia import Regia
 
 from view.info.utils import OperaPageData
@@ -38,10 +36,10 @@ class VisualizzaOperaView(QWidget):
     displayRegieRequest = pyqtSignal(QVBoxLayout)
     nuovaRegiaRequest = pyqtSignal()
 
-    def __init__(self, auth: AuthenticationService):
+    def __init__(self, permessi_admin: bool):
         super().__init__()
 
-        self.can_cud_regie = auth.is_admin()
+        self.is_admin = permessi_admin
 
         self._setup_ui()
         self._connect_signals()
@@ -104,7 +102,7 @@ class VisualizzaOperaView(QWidget):
         self.layout_header_regie.setContentsMargins(0, 0, 0, 0)
         self.layout_header_regie.addWidget(label_lista_regie)
 
-        if self.can_cud_regie:
+        if self.is_admin:
             self.__btn_nuova_regia = QPushButton("Nuova regia")
             self.__btn_nuova_regia.setProperty(WidgetRole.DEFAULT_BUTTON, True)
             self.layout_header_regie.addWidget(self.__btn_nuova_regia)
@@ -142,7 +140,7 @@ class VisualizzaOperaView(QWidget):
         layout_header_lista_regie.addWidget(
             header_regista, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter
         )
-        if self.can_cud_regie:
+        if self.is_admin:
             layout_header_lista_regie.addWidget(make_vline(), 0, 3)
             layout_header_lista_regie.addWidget(
                 header_opzioni, 0, 4, alignment=Qt.AlignmentFlag.AlignCenter
@@ -182,7 +180,7 @@ class VisualizzaOperaView(QWidget):
             self.tornaIndietroRequest.emit
         )
 
-        if self.can_cud_regie:
+        if self.is_admin:
             self.__btn_nuova_regia.clicked.connect(  # type:ignore
                 self.nuovaRegiaRequest.emit
             )

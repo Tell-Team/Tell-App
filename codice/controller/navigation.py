@@ -3,8 +3,6 @@ from PyQt6.QtWidgets import QWidget, QStackedWidget
 from PyQt6.QtCore import QObject, pyqtSignal
 from typing import Optional, Callable, Tuple, Type, Any
 
-from controller.login import AuthenticationService
-
 from model.model import Model
 
 from view.main_window import MainWindow
@@ -49,12 +47,20 @@ class NavigationController(QObject):
         self,
         model: Model,
         main_window: MainWindow,
-        auth: AuthenticationService,
+        session_id: Optional[int],
     ):
         super().__init__()
 
         self.__main_window = main_window
-        self.__auth = auth
+
+        self.__session_id = session_id
+        self.__ha_permessi_biglietteria = self.__ha_permessi_admin = False
+        if self.__session_id is not None:
+            self.__ha_permessi_biglietteria = True
+            self.__ha_permessi_admin = model.ha_permessi_amministratore(
+                self.__session_id
+            )
+
         self.__history: list[QWidget] = []  # Pile di widget per tornare dietro
         self.__pagine: dict[Pagina, QWidget] = {}  # Registro delle pagine
 
@@ -87,7 +93,7 @@ class NavigationController(QObject):
         self.__pagine[nome] = widget
         self.__get_stack().addWidget(widget)
 
-    def get_pagina(self, nome: Pagina) -> Optional[QWidget]:
+    def esiste_pagina(self, nome: Pagina) -> Optional[QWidget]:
         """Ritorna una pagina registrata nell'history.
 
         :param nome: key usata per cercare la pagina nel dict"""
@@ -145,7 +151,7 @@ class NavigationController(QObject):
 
     # Questo metodo è chiamato per ottenere l'istanza di pagina nei controller della view
     def __get_page(self, nome: Pagina, container: dict[str, Optional[QWidget]]) -> None:
-        container["value"] = self.get_pagina(nome)
+        container["value"] = self.esiste_pagina(nome)
 
     # ------------------------- CREAZIONE DELLE PAGINE -------------------------
 
@@ -153,28 +159,32 @@ class NavigationController(QObject):
         # Acquisto
         from view.acquisto.pagine import AcquistoSectionView, ScegliPostiView
 
-        self.__acquisto_section = AcquistoSectionView(self.__auth)
+        self.__acquisto_section = AcquistoSectionView(
+            self.__ha_permessi_biglietteria, self.__ha_permessi_admin
+        )
         self.__scegli_posti_view = ScegliPostiView()
 
         # Spettacoli
-        if self.__auth.is_biglietteria():
+        if self.__ha_permessi_biglietteria:
             from view.spettacoli.pagine import (
                 SpettacoliSectionView,
                 NuovoSpettacoloView,
                 ModificaSpettacoloView,
             )
 
-            self.__spettacoli_section = SpettacoliSectionView(self.__auth)
+            self.__spettacoli_section = SpettacoliSectionView(self.__ha_permessi_admin)
             self.__nuovo_spettacolo_view = NuovoSpettacoloView()
             self.__modifica_spettacolo_view = ModificaSpettacoloView()
 
         # Info
         from view.info.pagine import InfoSectionView, VisualizzaOperaView
 
-        self.__info_section = InfoSectionView(self.__auth)
-        self.__visualizza_opera_view = VisualizzaOperaView(self.__auth)
+        self.__info_section = InfoSectionView(
+            self.__ha_permessi_biglietteria, self.__ha_permessi_admin
+        )
+        self.__visualizza_opera_view = VisualizzaOperaView(self.__ha_permessi_admin)
 
-        if self.__auth.is_admin():
+        if self.__ha_permessi_admin:
             from view.info.pagine import NuovaOperaView, ModificaOperaView
 
             self.__nuova_opera_view = NuovaOperaView()
@@ -208,7 +218,7 @@ class NavigationController(QObject):
         self.__registra_pagina(Pagina.SEZIONE_ACQUISTO, self.__acquisto_section)
         self.__registra_pagina(Pagina.SCEGLI_POSTI, self.__scegli_posti_view)
         # Spettacoli
-        if self.__auth.is_biglietteria():
+        if self.__ha_permessi_biglietteria:
             self.__registra_pagina(Pagina.SEZIONE_SPETTACOLI, self.__spettacoli_section)
             self.__registra_pagina(
                 Pagina.NUOVO_SPETTACOLO, self.__nuovo_spettacolo_view
@@ -219,7 +229,7 @@ class NavigationController(QObject):
         # Info
         self.__registra_pagina(Pagina.SEZIONE_INFO, self.__info_section)
         self.__registra_pagina(Pagina.VISUALIZZA_OPERA, self.__visualizza_opera_view)
-        if self.__auth.is_admin():
+        if self.__ha_permessi_admin:
             self.__registra_pagina(Pagina.NUOVA_OPERA, self.__nuova_opera_view)
             self.__registra_pagina(Pagina.MODIFICA_OPERA, self.__modifica_opera_view)
             self.__registra_pagina(Pagina.NUOVO_GENERE, self.__nuovo_genere_view)
@@ -262,7 +272,7 @@ class NavigationController(QObject):
         ]
 
         # Spettacoli
-        if self.__auth.is_biglietteria():
+        if self.__ha_permessi_biglietteria:
             from controller.spettacoli import SpettacoliSectionController
             from controller.spettacoli import CUSpettacoloController
 
@@ -285,7 +295,7 @@ class NavigationController(QObject):
                 ),
             )
         # Info
-        if self.__auth.is_admin():
+        if self.__ha_permessi_admin:
             from controller.info import CUOperaController
 
             controller_defs.append(
