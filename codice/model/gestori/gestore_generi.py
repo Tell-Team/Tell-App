@@ -71,15 +71,17 @@ class GestoreGeneri:
 
     def modifica_genere(self, genere_modificato: Genere):
         """Throws: IdInesistenteException, OccupatoException"""
-        for g in self.__lista_generi:
-            if g.get_id() != genere_modificato.get_id():
-                self.__controllo_unique_key(g, genere_modificato)
+        posizione_da_modificare: Optional[int] = None
 
         for i, g in enumerate(self.__lista_generi):
-            if g.get_id() == genere_modificato.get_id():
-                self.__lista_generi[i] = copy.copy(genere_modificato)
-                return
+            if g.get_id() != genere_modificato.get_id():
+                self.__controllo_unique_key(g, genere_modificato)
+            else:
+                posizione_da_modificare = i
 
-        raise IdInesistenteException(
-            f"Non è presente nessun genere con id {genere_modificato.get_id()}."
-        )
+        if posizione_da_modificare is None:
+            raise IdInesistenteException(
+                f"Non è presente nessun genere con id {genere_modificato.get_id()}."
+            )
+
+        self.__lista_generi[posizione_da_modificare] = copy.copy(genere_modificato)

@@ -84,36 +84,30 @@ class GestorePrezzi:
         raise IdInesistenteException(f"Non è presente nessun prezzo con id {id_}.")
 
     def elimina_prezzi_by_spettacolo(self, id_spettacolo: int):
-        i = 0
-
-        while i < len(self.__lista_prezzi):
-            if self.__lista_prezzi[i].get_id_spettacolo() == id_spettacolo:
-                self.__lista_prezzi.pop(i)
-                i -= 1
-
-            i += 1
+        self.__lista_prezzi = list(
+            filter(
+                lambda p: p.get_id_spettacolo() != id_spettacolo, self.__lista_prezzi
+            )
+        )
 
     def elimina_prezzi_by_sezione(self, id_sezione: int):
-        i = 0
-
-        while i < len(self.__lista_prezzi):
-            if self.__lista_prezzi[i].get_id_sezione() == id_sezione:
-                self.__lista_prezzi.pop(i)
-                i -= 1
-
-            i += 1
+        self.__lista_prezzi = list(
+            filter(lambda p: p.get_id_sezione() != id_sezione, self.__lista_prezzi)
+        )
 
     def modifica_prezzo(self, prezzo_modificato: Prezzo):
         """Throws: IdInesistenteException, OccupatoException"""
-        for p in self.__lista_prezzi:
-            if p.get_id() != prezzo_modificato.get_id():
-                self.__controllo_unique_key(p, prezzo_modificato)
+        posizione_da_modificare: Optional[int] = None
 
         for i, p in enumerate(self.__lista_prezzi):
-            if p.get_id() == prezzo_modificato.get_id():
-                self.__lista_prezzi[i] = copy.copy(prezzo_modificato)
-                return
+            if p.get_id() != prezzo_modificato.get_id():
+                self.__controllo_unique_key(p, prezzo_modificato)
+            else:
+                posizione_da_modificare = i
 
-        raise IdInesistenteException(
-            f"Non è presente nessun prezzo con id {prezzo_modificato.get_id()}."
-        )
+        if posizione_da_modificare is None:
+            raise IdInesistenteException(
+                f"Non è presente nessun prezzo con id {prezzo_modificato.get_id()}."
+            )
+
+        self.__lista_prezzi[posizione_da_modificare] = copy.copy(prezzo_modificato)

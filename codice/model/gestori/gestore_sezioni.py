@@ -71,15 +71,17 @@ class GestoreSezioni:
 
     def modifica_sezione(self, sezione_modificata: Sezione):
         """Throws: IdInesistenteException, OccupatoException"""
-        for s in self.__lista_sezioni:
-            if s.get_id() != sezione_modificata.get_id():
-                self.__controllo_unique_key(s, sezione_modificata)
+        posizione_da_modificare: Optional[int] = None
 
         for i, s in enumerate(self.__lista_sezioni):
-            if s.get_id() == sezione_modificata.get_id():
-                self.__lista_sezioni[i] = copy.copy(sezione_modificata)
-                return
+            if s.get_id() != sezione_modificata.get_id():
+                self.__controllo_unique_key(s, sezione_modificata)
+            else:
+                posizione_da_modificare = i
 
-        raise IdInesistenteException(
-            f"Non è presente nessuna sezione con id {sezione_modificata.get_id()}."
-        )
+        if posizione_da_modificare is None:
+            raise IdInesistenteException(
+                f"Non è presente nessuna sezione con id {sezione_modificata.get_id()}."
+            )
+
+        self.__lista_sezioni[posizione_da_modificare] = copy.copy(sezione_modificata)

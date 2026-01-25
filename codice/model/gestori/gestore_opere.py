@@ -89,15 +89,17 @@ class GestoreOpere:
 
     def modifica_opera(self, opera_modificata: Opera):
         """Throws: IdInesistenteException, OccupatoException"""
-        for o in self.__lista_opere:
-            if o.get_id() != opera_modificata.get_id():
-                self.__controllo_unique_key(o, opera_modificata)
+        posizione_da_modificare: Optional[int] = None
 
         for i, o in enumerate(self.__lista_opere):
-            if o.get_id() == opera_modificata.get_id():
-                self.__lista_opere[i] = copy.copy(opera_modificata)
-                return
+            if o.get_id() != opera_modificata.get_id():
+                self.__controllo_unique_key(o, opera_modificata)
+            else:
+                posizione_da_modificare = i
 
-        raise IdInesistenteException(
-            f"Non è presente nessuna opera con id {opera_modificata.get_id()}."
-        )
+        if posizione_da_modificare is None:
+            raise IdInesistenteException(
+                f"Non è presente nessuna opera con id {opera_modificata.get_id()}."
+            )
+
+        self.__lista_opere[posizione_da_modificare] = copy.copy(opera_modificata)

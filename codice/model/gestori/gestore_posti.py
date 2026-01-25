@@ -81,15 +81,17 @@ class GestorePosti:
 
     def modifica_posto(self, posto_modificato: Posto):
         """Throws: IdInesistenteException, OccupatoException"""
-        for p in self.__lista_posti:
-            if p.get_id() != posto_modificato.get_id():
-                self.__controllo_unique_key(p, posto_modificato)
+        posizione_da_modificare: Optional[int] = None
 
         for i, p in enumerate(self.__lista_posti):
-            if p.get_id() == posto_modificato.get_id():
-                self.__lista_posti[i] = copy.copy(posto_modificato)
-                return
+            if p.get_id() != posto_modificato.get_id():
+                self.__controllo_unique_key(p, posto_modificato)
+            else:
+                posizione_da_modificare = i
 
-        raise IdInesistenteException(
-            f"Non è presente nessun posto con id {posto_modificato.get_id()}."
-        )
+        if posizione_da_modificare is None:
+            raise IdInesistenteException(
+                f"Non è presente nessun posto con id {posto_modificato.get_id()}."
+            )
+
+        self.__lista_posti[posizione_da_modificare] = copy.copy(posto_modificato)

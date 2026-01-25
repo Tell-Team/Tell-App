@@ -324,8 +324,8 @@ class TestTell(unittest.TestCase):
         )
         print("Passato ELIMINA OggettoInUso")
         # TODO
-        self.__model._Model__gestore_posti.elimina_posto(p.get_id())  # type: ignore
-        # self.__model.elimina_posto(p.get_id())
+        # self.__model._Model__gestore_posti.elimina_posto(p.get_id())  # type: ignore
+        self.__model.elimina_posto(p.get_id())
 
         self.__model.elimina_sezione(s.get_id())
         self.assertEqual(self.__model.get_sezioni(), [s2])

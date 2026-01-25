@@ -96,16 +96,18 @@ class GestoreEventi:
         raise IdInesistenteException(f"Non è presente nessun evento con id {id_}.")
 
     def modifica_evento(self, evento_modificato: Evento):
-        """Throws: IdInesistenteException"""
-        for e in self.__lista_eventi:
-            if e.get_id() != evento_modificato.get_id():
-                self.__controllo_unique_key(e, evento_modificato)
+        """Throws: IdInesistenteException, OccupatoException"""
+        posizione_da_modificare: Optional[int] = None
 
         for i, e in enumerate(self.__lista_eventi):
-            if e.get_id() == evento_modificato.get_id():
-                self.__lista_eventi[i] = copy.copy(evento_modificato)
-                return
+            if e.get_id() != evento_modificato.get_id():
+                self.__controllo_unique_key(e, evento_modificato)
+            else:
+                posizione_da_modificare = i
 
-        raise IdInesistenteException(
-            f"Non è presente nessun evento con id {evento_modificato.get_id()}."
-        )
+        if posizione_da_modificare is None:
+            raise IdInesistenteException(
+                f"Non è presente nessun evento con id {evento_modificato.get_id()}."
+            )
+
+        self.__lista_eventi[posizione_da_modificare] = copy.copy(evento_modificato)
