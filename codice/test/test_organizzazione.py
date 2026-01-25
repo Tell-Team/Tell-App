@@ -2,6 +2,7 @@ from datetime import date, datetime
 import shutil
 import unittest
 
+from model.organizzazione.prezzo import Prezzo
 from model.organizzazione.posto import Posto
 from model.organizzazione.sezione import Sezione
 from model.pianificazione.genere import Genere
@@ -12,6 +13,7 @@ from model.exceptions import (
     IdInesistenteException,
     IdOccupatoException,
     OccupatoException,
+    OggettoInUsoException,
 )
 from model.organizzazione.evento import Evento
 from model.pianificazione.spettacolo import Spettacolo
@@ -22,6 +24,7 @@ DATA_ORA_FUTURO = datetime(2970, 1, 1, 0, 0, 0)
 ID_NON_ESISTENTE = 777
 STR_NON_VUOTA = "BCNRFF"
 DATA = date(2009, 4, 13)
+FLOAT_NONZERO = 1.30
 
 
 class TestTell(unittest.TestCase):
@@ -308,32 +311,25 @@ class TestTell(unittest.TestCase):
         self.assertEqual(self.__model.get_sezioni(), [s, s2])
         print("Passato CARICA")
 
-        # # ELIMINA
-        # self.assertRaises(
-        #     IdInesistenteException, self.__model.elimina_genere, ID_NON_ESISTENTE
-        # )
-        # print("Passato ELIMINA IdInesistente")
+        # ELIMINA
+        self.assertRaises(
+            IdInesistenteException, self.__model.elimina_sezione, ID_NON_ESISTENTE
+        )
+        print("Passato ELIMINA IdInesistente")
 
-        # o = Opera(
-        #     STR_NON_VUOTA,
-        #     STR_NON_VUOTA,
-        #     STR_NON_VUOTA,
-        #     1,
-        #     DATA,
-        #     STR_NON_VUOTA,
-        #     STR_NON_VUOTA,
-        #     g.get_id(),
-        # )
-        # self.__model.aggiungi_opera(o)
-        # self.assertRaises(
-        #     OggettoInUsoException, self.__model.elimina_genere, g.get_id()
-        # )
-        # print("Passato ELIMINA OggettoInUso")
-        # self.__model.elimina_opera(o.get_id())
+        p = Posto(1, s.get_id())
+        self.__model.aggiungi_posto(p)
+        self.assertRaises(
+            OggettoInUsoException, self.__model.elimina_sezione, s.get_id()
+        )
+        print("Passato ELIMINA OggettoInUso")
+        # TODO
+        self.__model._Model__gestore_posti.elimina_posto(p.get_id())  # type: ignore
+        # self.__model.elimina_posto(p.get_id())
 
-        # self.__model.elimina_genere(g.get_id())
-        # self.assertEqual(self.__model.get_generi(), [g2])
-        # print("Passato ELIMINA")
+        self.__model.elimina_sezione(s.get_id())
+        self.assertEqual(self.__model.get_sezioni(), [s2])
+        print("Passato ELIMINA")
 
     # ### POSTI ###
     def test_posto(self):
@@ -422,7 +418,6 @@ class TestTell(unittest.TestCase):
         print("Passato GET LISTA by sezione side effect")
         # TODO
         # self.__model._Model__gestore_posti.elimina_posto(p3.get_id())  # type: ignore
-        # self.__model._Model__gestore_sezioni.elimina_sezione(s2.get_id())  # type: ignore
         self.__model.elimina_posto(p3.get_id())
         self.__model.elimina_sezione(s2.get_id())
 
@@ -471,6 +466,177 @@ class TestTell(unittest.TestCase):
         # self.__model.elimina_spettacolo(r.get_id())
         # self.assertEqual(self.__model.get_spettacoli(), [r2])
         # print("Passato ELIMINA")
+
+    # ### PREZZI ###
+    def test_prezzo(self):
+        print("\n### PREZZO ###")
+
+        # CONGRUENZA ammontare
+        self.assertRaises(
+            DatoIncongruenteException,
+            Prezzo,
+            -0.01,
+            0,
+            0,
+        )
+        print("Passato CONGRUENZA ammontare")
+
+        # CONGRUENZA id_spettacolo
+        self.assertRaises(
+            DatoIncongruenteException,
+            Prezzo,
+            0.0,
+            -1,
+            0,
+        )
+        print("Passato CONGRUENZA id_spettacolo")
+
+        # CONGRUENZA id_sezione
+        self.assertRaises(
+            DatoIncongruenteException,
+            Prezzo,
+            0.0,
+            0,
+            -1,
+        )
+        print("Passato CONGRUENZA id_sezione")
+
+    def test_model_prezzi(self):
+        print("\n### MODEL PREZZI ###")
+
+        # AGGIUNGI
+        sp = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(([])), dict(([])))
+        self.__model.aggiungi_spettacolo(sp)
+        se = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(se)
+
+        p = Prezzo(FLOAT_NONZERO, ID_NON_ESISTENTE, se.get_id())
+        self.assertRaises(IdInesistenteException, self.__model.aggiungi_prezzo, p)
+        print("Passato AGGIUNGI IdInesistente spettacolo")
+
+        p = Prezzo(FLOAT_NONZERO, sp.get_id(), ID_NON_ESISTENTE)
+        self.assertRaises(IdInesistenteException, self.__model.aggiungi_prezzo, p)
+        print("Passato AGGIUNGI IdInesistente sezione")
+
+        p = Prezzo(FLOAT_NONZERO, sp.get_id(), se.get_id())
+        self.__model.aggiungi_prezzo(p)
+        self.assertRaises(IdOccupatoException, self.__model.aggiungi_prezzo, p)
+        print("Passato AGGIUNGI IdOccupato")
+
+        p2 = Prezzo(FLOAT_NONZERO, sp.get_id(), se.get_id())
+        self.assertRaises(OccupatoException, self.__model.aggiungi_prezzo, p2)
+        print("Passato AGGIUNGI Occupato")
+
+        # GET
+        p_ = self.__model.get_prezzo(p.get_id())
+        if p_ is None:
+            raise Exception()
+        self.assertEqual(p_, p)
+        print("Passato GET")
+
+        p_.set_ammontare(p_.get_ammontare() + FLOAT_NONZERO)
+        p = self.__model.get_prezzo(p.get_id())
+        if p is None:
+            raise Exception()
+        self.assertEqual(p.get_id_spettacolo(), p_.get_id_spettacolo())
+        self.assertNotEqual(p.get_ammontare(), p_.get_ammontare())
+        print("Passato GET side effect")
+
+        # GET BY SPETTACOLO E SEZIONE
+        sp2 = Spettacolo(STR_NON_VUOTA * 2, STR_NON_VUOTA, dict(([])), dict(([])))
+        self.__model.aggiungi_spettacolo(sp2)
+        se2 = Sezione(STR_NON_VUOTA * 2, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(se2)
+        p2 = Prezzo(FLOAT_NONZERO, sp2.get_id(), se.get_id())
+        self.__model.aggiungi_prezzo(p2)
+        p3 = Prezzo(FLOAT_NONZERO, sp.get_id(), se2.get_id())
+        self.__model.aggiungi_prezzo(p3)
+        p_ = self.__model.get_prezzo_by_spettacolo_e_sezione(
+            p.get_id_spettacolo(), p.get_id_sezione()
+        )
+        if p_ is None:
+            raise Exception()
+        self.assertEqual(p_, p)
+        print("Passato GET BY SPETTACOLO E SEZIONE")
+
+        p_.set_ammontare(p_.get_ammontare() + FLOAT_NONZERO)
+        p = self.__model.get_prezzo_by_spettacolo_e_sezione(
+            p.get_id_spettacolo(), p.get_id_sezione()
+        )
+        if p is None:
+            raise Exception()
+        self.assertEqual(p.get_id_spettacolo(), p_.get_id_spettacolo())
+        self.assertNotEqual(p.get_ammontare(), p_.get_ammontare())
+        print("Passato GET BY SPETTACOLO E SEZIONE side effect")
+
+        # GET LISTA BY SPETTACOLO
+        self.assertEqual(self.__model.get_prezzi_by_spettacolo(sp.get_id()), [p, p3])
+        print("Passato GET LISTA BY SPETTACOLO")
+
+        p3_ = self.__model.get_prezzi_by_spettacolo(sp.get_id())[1]
+        p3_.set_ammontare(p3_.get_ammontare() + FLOAT_NONZERO)
+        p3 = self.__model.get_prezzi_by_spettacolo(sp.get_id())[1]
+        self.assertEqual(p3.get_id_spettacolo(), p3_.get_id_spettacolo())
+        self.assertNotEqual(p3.get_ammontare(), p3_.get_ammontare())
+        print("Passato GET LISTA BY SPETTACOLO side effect")
+
+        # MODIFICA
+        p4 = Prezzo(FLOAT_NONZERO, sp2.get_id(), se2.get_id())
+        self.assertRaises(IdInesistenteException, self.__model.modifica_prezzo, p4)
+        print("Passato MODIFICA IdInesistente")
+
+        p = self.__model.get_prezzo(p.get_id())
+        if p is None:
+            raise Exception()
+        p.set_id_sezione(p3.get_id_sezione())
+        self.assertRaises(OccupatoException, self.__model.modifica_prezzo, p)
+        print("Passato MODIFICA Occupato")
+
+        p.set_id_sezione(se.get_id())
+        p.set_ammontare(p.get_ammontare() + FLOAT_NONZERO)
+        self.__model.modifica_prezzo(p)
+        p_ = self.__model.get_prezzo(p.get_id())
+        if p_ is None:
+            raise Exception()
+        self.assertEqual(p_, p)
+        print("Passato MODIFICA")
+
+        # CARICA
+        self.__model._Model__carica_prezzi()  # type: ignore
+        self.assertEqual(
+            self.__model._Model__gestore_prezzi._GestorePrezzi__lista_prezzi,  # type: ignore
+            [p, p2, p3],
+        )
+        print("Passato CARICA")
+
+        # ELIMINA
+        self.assertRaises(
+            IdInesistenteException, self.__model.elimina_prezzo, ID_NON_ESISTENTE
+        )
+        print("Passato ELIMINA IdInesistente")
+
+        self.__model.elimina_prezzo(p.get_id())
+        self.assertEqual(self.__model._Model__gestore_prezzi._GestorePrezzi__lista_prezzi, [p2, p3])  # type: ignore
+        print("Passato ELIMINA")
+
+        # ELIMINA BY SPETTACOLO
+        p = Prezzo(FLOAT_NONZERO, sp.get_id(), se.get_id())
+        self.__model.aggiungi_prezzo(p)
+        p4 = Prezzo(FLOAT_NONZERO, sp2.get_id(), se2.get_id())
+        self.__model.aggiungi_prezzo(p4)
+        self.__model.elimina_spettacolo(sp.get_id())
+        self.assertEqual(self.__model._Model__gestore_prezzi._GestorePrezzi__lista_prezzi, [p2, p4])  # type: ignore
+        print("Passato ELIMINA BY SPETTACOLO")
+
+        # ELIMINA BY SEZIONE
+        self.__model.aggiungi_spettacolo(sp)
+        p = Prezzo(FLOAT_NONZERO, sp.get_id(), se.get_id())
+        self.__model.aggiungi_prezzo(p)
+        p3 = Prezzo(FLOAT_NONZERO, sp.get_id(), se2.get_id())
+        self.__model.aggiungi_prezzo(p3)
+        self.__model.elimina_sezione(se.get_id())
+        self.assertEqual(self.__model._Model__gestore_prezzi._GestorePrezzi__lista_prezzi, [p4, p3])  # type: ignore
+        print("Passato ELIMINA BY SEZIONE")
 
     def tearDown(self) -> None:
         super().tearDown()

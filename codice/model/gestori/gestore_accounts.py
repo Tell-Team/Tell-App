@@ -3,7 +3,6 @@ from model.exceptions import (
     IdOccupatoException,
     IdInesistenteException,
     PermessiInsufficientiException,
-    AccountInesistenteException,
     CredenzialiErrateException,
     OccupatoException,
 )
@@ -122,7 +121,7 @@ class GestoreAccounts:
 
     # Login
     def login(self, username: str, password: str) -> int:
-        """Throws: CredenzialiErrateException, AccountInesistenteException"""
+        """Throws: CredenzialiErrateException"""
         for a in self.__lista_accounts:
             if a.get_username() == username:
                 if not a.controlla_password(password):
@@ -132,6 +131,4 @@ class GestoreAccounts:
 
                 return a.get_id()
 
-        raise AccountInesistenteException(
-            f'Non esiste nessun account con username "{username}".'
-        )
+        raise CredenzialiErrateException("Le credenziali fornite sono errate.")

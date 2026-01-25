@@ -3,7 +3,6 @@ import unittest
 
 from model.account.account import Account, Ruolo
 from model.exceptions import (
-    AccountInesistenteException,
     CredenzialiErrateException,
     DatoIncongruenteException,
     IdInesistenteException,
@@ -167,12 +166,12 @@ class TestTell(unittest.TestCase):
         self.assertRaises(
             CredenzialiErrateException, self.__model.login, a.get_username(), "12345678"
         )
-        print("Passato LOGIN CredenzialiErrate")
+        print("Passato LOGIN password errata")
 
         self.assertRaises(
-            AccountInesistenteException, self.__model.login, "user", "12345678"
+            CredenzialiErrateException, self.__model.login, "user", "12345678"
         )
-        print("Passato LOGIN AccountInesistente")
+        print("Passato LOGIN username inesistente")
 
         self.assertEqual(self.__model.login("admin", "00000000"), admin_id)
         print("Passato LOGIN")

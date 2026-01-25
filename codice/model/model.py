@@ -1,3 +1,5 @@
+from model.organizzazione.prezzo import Prezzo
+from model.gestori.gestore_prezzi import GestorePrezzi
 from model.gestori.gestore_posti import GestorePosti
 from model.organizzazione.posto import Posto
 from model.gestori.gestore_sezioni import GestoreSezioni
@@ -73,6 +75,12 @@ class Model:
         except FileNotFoundError:
             self.__gestore_posti = GestorePosti()
 
+        try:
+            self.__carica_prezzi()
+            Posto.set_next_id(self.__gestore_prezzi.get_max_id() + 1)
+        except FileNotFoundError:
+            self.__gestore_prezzi = GestorePrezzi()
+
     # DB Path
     def set_db_path(self, db_path: str):
         """Throws: DatoIncongruenteException"""
@@ -115,6 +123,10 @@ class Model:
         with open(os.path.join(self.__db_path, "posti.pkl"), "rb") as f:
             self.__gestore_posti: GestorePosti = load(f)
 
+    def __carica_prezzi(self):
+        with open(os.path.join(self.__db_path, "prezzi.pkl"), "rb") as f:
+            self.__gestore_prezzi: GestorePrezzi = load(f)
+
     # Salvataggi
     def __salva_accounts(self):
         with open(os.path.join(self.__db_path, "accounts.pkl"), "wb") as f:
@@ -143,6 +155,10 @@ class Model:
     def __salva_posti(self):
         with open(os.path.join(self.__db_path, "posti.pkl"), "wb") as f:
             dump(self.__gestore_posti, f)
+
+    def __salva_prezzi(self):
+        with open(os.path.join(self.__db_path, "prezzi.pkl"), "wb") as f:
+            dump(self.__gestore_prezzi, f)
 
     # Stato
     def __in_programma(self, spettacolo: Spettacolo) -> bool:
@@ -230,6 +246,20 @@ class Model:
     def get_posti_by_sezione(self, id_: int) -> list[Posto]:
         return self.__gestore_posti.get_posti_by_sezione(id_)
 
+    #   PREZZI
+    def get_prezzo(self, id_: int) -> Optional[Prezzo]:
+        return self.__gestore_prezzi.get_prezzo(id_)
+
+    def get_prezzo_by_spettacolo_e_sezione(
+        self, id_spettacolo: int, id_sezione: int
+    ) -> Optional[Prezzo]:
+        return self.__gestore_prezzi.get_prezzo_by_spettacolo_e_sezione(
+            id_spettacolo, id_sezione
+        )
+
+    def get_prezzi_by_spettacolo(self, id_spettacolo: int) -> list[Prezzo]:
+        return self.__gestore_prezzi.get_prezzi_by_spettacolo(id_spettacolo)
+
     # Validazione
     def __valida_opera(self, opera: Opera):
         """Throws: IdInesistenteException"""
@@ -259,9 +289,21 @@ class Model:
                 f"Non è presente nessuna sezione con id {posto.get_id_sezione()}."
             )
 
+    def __valida_prezzo(self, prezzo: Prezzo):
+        """Throws: IdInesistenteException"""
+        if not self.__gestore_spettacoli.ha_spettacolo(prezzo.get_id_spettacolo()):
+            raise IdInesistenteException(
+                f"Non è presente nessuno spettacolo con id {prezzo.get_id_spettacolo()}."
+            )
+
+        if not self.__gestore_sezioni.ha_sezione(prezzo.get_id_sezione()):
+            raise IdInesistenteException(
+                f"Non è presente nessuna sezione con id {prezzo.get_id_sezione()}."
+            )
+
     # Login
     def login(self, username: str, password: str) -> int:
-        """Throws: CredenzialiErrateException, AccountInesistenteException"""
+        """Throws: CredenzialiErrateException"""
         return self.__gestore_accounts.login(username, password)
 
     # Modificatori
@@ -348,6 +390,7 @@ class Model:
                 "Lo spettacolo è ancora legato ad uno o più eventi."
             )
 
+        self.__elimina_prezzi_by_spettacolo(id_)
         self.__gestore_spettacoli.elimina_spettacolo(id_)
         self.__salva_spettacoli()
 
@@ -388,15 +431,16 @@ class Model:
         self.__gestore_sezioni.aggiungi_sezione(sezione)
         self.__salva_sezioni()
 
-    # def elimina_sezione(self, id_: int):
-    #     """Throws: OggettoInUsoException, IdInesistenteException"""
-    #     if self.__gestore_eventi.sezione_in_uso(id_):
-    #         raise OggettoInUsoException(
-    #             "Lo sezione è ancora legato ad uno o più eventi."
-    #         )
+    def elimina_sezione(self, id_: int):
+        """Throws: OggettoInUsoException, IdInesistenteException"""
+        if self.__gestore_posti.sezione_in_uso(id_):
+            raise OggettoInUsoException(
+                "La sezione è ancora legata ad uno o più posti."
+            )
 
-    #     self.__gestore_sezioni.elimina_sezione(id_)
-    #     self.__salva_sezioni()
+        self.__elimina_prezzi_by_sezione(id_)
+        self.__gestore_sezioni.elimina_sezione(id_)
+        self.__salva_sezioni()
 
     def modifica_sezione(self, sezione_modificata: Sezione):
         """Throws: IdInesistenteException, OccupatoException"""
@@ -425,3 +469,31 @@ class Model:
 
         self.__gestore_posti.modifica_posto(posto_modificato)
         self.__salva_posti()
+
+    #   PREZZI
+    def aggiungi_prezzo(self, prezzo: Prezzo):
+        """Throws: IdInesistenteException, IdOccupatoException, OccupatoException"""
+        self.__valida_prezzo(prezzo)
+
+        self.__gestore_prezzi.aggiungi_prezzo(prezzo)
+        self.__salva_prezzi()
+
+    def elimina_prezzo(self, id_: int):
+        """Throws: IdInesistenteException"""
+        self.__gestore_prezzi.elimina_prezzo(id_)
+        self.__salva_prezzi()
+
+    def __elimina_prezzi_by_spettacolo(self, id_spettacolo: int):
+        self.__gestore_prezzi.elimina_prezzi_by_spettacolo(id_spettacolo)
+        self.__salva_prezzi()
+
+    def __elimina_prezzi_by_sezione(self, id_sezione: int):
+        self.__gestore_prezzi.elimina_prezzi_by_sezione(id_sezione)
+        self.__salva_prezzi()
+
+    def modifica_prezzo(self, prezzo_modificato: Prezzo):
+        """Throws: IdInesistenteException, OccupatoException"""
+        self.__valida_prezzo(prezzo_modificato)
+
+        self.__gestore_prezzi.modifica_prezzo(prezzo_modificato)
+        self.__salva_prezzi()
