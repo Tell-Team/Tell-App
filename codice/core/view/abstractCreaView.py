@@ -108,7 +108,8 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
     def show_input_error(self, message: str) -> None:
         """Aggiorna il testo della label `input_error`.
 
-        :param message: testo inserito nel label"""
+        :param message: testo inserito nel label
+        """
         self._input_error.setText(message)
         self._input_error.show()  # Si assicura che la label sia visualizzata.
 

@@ -1,6 +1,5 @@
-from typing import Optional
-
 from controller.login import LoginController
+from controller.login.user_session import UserSession
 from controller.navigation import NavigationController
 
 from model.model import Model
@@ -13,8 +12,6 @@ class AppFlowController:
     la `MainWindow` ed il `NavigationController` dopo un login riuscito. Dopo il logout, queste
     due istanze vengono eliminate e il dialog viene nuovamente visualizzato.
     """
-
-    __session_id: Optional[int]
 
     def __init__(
         self,
@@ -36,14 +33,14 @@ class AppFlowController:
 
         dialog.show()
 
-    def __start_session(self, id_account: Optional[int]) -> None:
+    def __start_session(self, user_session: UserSession) -> None:
         """Effettua un login dopo aver ricevuto credenziali valide."""
-        self.__session_id = id_account  # Se l'utente è Cliente, vale None
+        self.__user_session = user_session
 
         self.__main_window = MainWindow()
 
         self.__navigation = NavigationController(
-            self.__model, self.__main_window, self.__session_id
+            self.__model, self.__main_window, self.__user_session
         )
 
         self.__navigation.logoutRequest.connect(  # type:ignore
@@ -58,5 +55,5 @@ class AppFlowController:
             self.__main_window.close()
             self.__main_window = None
             self.__navigation = None
-        self.__session_id = None
+        self.__user_session = None
         self.__login_dialog.show()

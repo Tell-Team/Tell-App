@@ -43,33 +43,19 @@ class CURegiaController(AbstractCUController):
     def _connect_signals(self) -> None:
         super()._connect_signals()
 
-        # Segnali di NuovaRegiaView
-        self._view_nuova.aggiungiInterprete.connect(  # type:ignore
-            self.__aggiungi_interprete
-        )
-        self._view_nuova.aggiungiTecnico.connect(  # type:ignore
-            self.__aggiungi_tecnico
-        )
-        self._view_nuova.displayInterpreti.connect(  # type:ignore
-            self.__display_interpreti
-        )
-        self._view_nuova.displayTecnici.connect(  # type:ignore
-            self.__display_tecnici
-        )
-
-        # Segnali di ModificaRegiaView
-        self._view_modifica.aggiungiInterprete.connect(  # type:ignore
-            self.__aggiungi_interprete
-        )
-        self._view_modifica.aggiungiTecnico.connect(  # type:ignore
-            self.__aggiungi_tecnico
-        )
-        self._view_modifica.displayInterpreti.connect(  # type:ignore
-            self.__display_interpreti
-        )
-        self._view_modifica.displayTecnici.connect(  # type:ignore
-            self.__display_tecnici
-        )
+        for pagina in (self._view_nuova, self._view_modifica):
+            pagina.aggiungiInterprete.connect(  # type:ignore
+                self.__aggiungi_interprete
+            )
+            pagina.aggiungiTecnico.connect(  # type:ignore
+                self.__aggiungi_tecnico
+            )
+            pagina.displayInterpreti.connect(  # type:ignore
+                self.__display_interpreti
+            )
+            pagina.displayTecnici.connect(  # type:ignore
+                self.__display_tecnici
+            )
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
@@ -89,7 +75,8 @@ class CURegiaController(AbstractCUController):
 
         :param pagina: pagina dove l'interprete sarà aggiunto
         :param nome: nome dell'interprete
-        :param ruolo: ruolo dell'interprete"""
+        :param ruolo: ruolo dell'interprete
+        """
         # Verifiche che ci sia input
         if not nome or not ruolo:
             pagina.label_lista_interpreti_error.setText("Input non valido")

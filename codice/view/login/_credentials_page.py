@@ -14,8 +14,7 @@ from view.style.ui_style import WidgetRole, WidgetColor
 class CredentialsPage(QWidget):
     """View per la autenticazione degli account `Biglietteria` ed `Amministratore`.
 
-    Permette di inserire un nome utente ed una password.
-    """
+    Permette di inserire un nome utente ed una password."""
 
     def __init__(self):
         super().__init__()

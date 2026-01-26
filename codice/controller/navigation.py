@@ -3,6 +3,8 @@ from PyQt6.QtWidgets import QWidget, QStackedWidget
 from PyQt6.QtCore import QObject, pyqtSignal
 from typing import Optional, Callable, Tuple, Type, Any
 
+from controller.login.user_session import UserSession
+
 from model.model import Model
 
 from view.main_window import MainWindow
@@ -19,8 +21,11 @@ class Pagina(Enum):
     SCEGLI_POSTI = "scegli_posti"
 
     SEZIONE_SPETTACOLI = "spettacoli_section"
+    VISUALIZZA_SPETTACOLO = "visualizza_spettacolo"
     NUOVO_SPETTACOLO = "nuovo_spettacolo"
     MODIFICA_SPETTACOLO = "modifica_spettacolo"
+    NUOVO_EVENTO = "nuovo_evento"
+    MODIFICA_EVENTO = "modifica_evento"
 
     SEZIONE_INFO = "info_section"
     VISUALIZZA_OPERA = "visualizza_opera"
@@ -47,25 +52,17 @@ class NavigationController(QObject):
         self,
         model: Model,
         main_window: MainWindow,
-        session_id: Optional[int],
+        user_session: UserSession,
     ):
         super().__init__()
 
         self.__main_window = main_window
-
-        self.__session_id = session_id
-        self.__ha_permessi_biglietteria = self.__ha_permessi_admin = False
-        if self.__session_id is not None:
-            self.__ha_permessi_biglietteria = True
-            self.__ha_permessi_admin = model.ha_permessi_amministratore(
-                self.__session_id
-            )
-
+        self.__user_session = user_session
         self.__history: list[QWidget] = []  # Pile di widget per tornare dietro
         self.__pagine: dict[Pagina, QWidget] = {}  # Registro delle pagine
 
         self.__carica_pagine()
-        self.__registra_pagine()
+        self.__registra_pagine_in_stack()
         controllers = self.__carica_controllers(model)
         self.__collega_controllers(controllers)
 
@@ -77,7 +74,8 @@ class NavigationController(QObject):
     def __get_cur_central_page(self) -> QWidget:
         """Ritorna la pagina visualizzata dall'utente.
 
-        :raise RuntimeError: non c'è un central widget asegnato alla `QMainWindow`"""
+        :raise RuntimeError: non c'è un central widget asegnato alla `QMainWindow`
+        """
         # È sempre chiamato con un centralWidget definito. Quindi, lanciare
         #   un RuntimeError è segno di un bug.
         widget = self.__main_window.centralWidget()
@@ -89,14 +87,16 @@ class NavigationController(QObject):
         """Registra una pagina nell'history.
 
         :param nome: key usata per salvare la pagina nel dict
-        :param widget: pagina da salvare nel dict"""
+        :param widget: pagina da salvare nel dict
+        """
         self.__pagine[nome] = widget
         self.__get_stack().addWidget(widget)
 
     def esiste_pagina(self, nome: Pagina) -> Optional[QWidget]:
         """Ritorna una pagina registrata nell'history.
 
-        :param nome: key usata per cercare la pagina nel dict"""
+        :param nome: key usata per cercare la pagina nel dict
+        """
         for key in self.__pagine:
             if key == nome:
                 return self.__pagine.get(key)
@@ -146,7 +146,8 @@ class NavigationController(QObject):
     def __go_to_section(self, nome: Pagina) -> None:
         """Visualizza una pagina senza salvare la pagina corrente nell'history.
 
-        :param nome: key usata per trovare la pagina"""
+        :param nome: key usata per trovare la pagina
+        """
         self.__go_to_page(nome, save_history=False)
 
     # Questo metodo è chiamato per ottenere l'istanza di pagina nei controller della view
@@ -159,32 +160,36 @@ class NavigationController(QObject):
         # Acquisto
         from view.acquisto.pagine import AcquistoSectionView, ScegliPostiView
 
-        self.__acquisto_section = AcquistoSectionView(
-            self.__ha_permessi_biglietteria, self.__ha_permessi_admin
-        )
+        self.__acquisto_section = AcquistoSectionView(self.__user_session)
         self.__scegli_posti_view = ScegliPostiView()
 
         # Spettacoli
-        if self.__ha_permessi_biglietteria:
+        if self.__user_session.ha_permessi_biglietteria():
             from view.spettacoli.pagine import (
                 SpettacoliSectionView,
+                VisualizzaSpettacoloView,
                 NuovoSpettacoloView,
                 ModificaSpettacoloView,
+                NuovoEventoView,
+                ModificaEventoView,
             )
 
-            self.__spettacoli_section = SpettacoliSectionView(self.__ha_permessi_admin)
+            self.__spettacoli_section = SpettacoliSectionView(self.__user_session)
+            self.__visualizza_spettacolo_view = VisualizzaSpettacoloView(
+                self.__user_session
+            )
             self.__nuovo_spettacolo_view = NuovoSpettacoloView()
             self.__modifica_spettacolo_view = ModificaSpettacoloView()
+            self.__nuovo_evento_view = NuovoEventoView()
+            self.__modifica_evento_view = ModificaEventoView()
 
         # Info
         from view.info.pagine import InfoSectionView, VisualizzaOperaView
 
-        self.__info_section = InfoSectionView(
-            self.__ha_permessi_biglietteria, self.__ha_permessi_admin
-        )
-        self.__visualizza_opera_view = VisualizzaOperaView(self.__ha_permessi_admin)
+        self.__info_section = InfoSectionView(self.__user_session)
+        self.__visualizza_opera_view = VisualizzaOperaView(self.__user_session)
 
-        if self.__ha_permessi_admin:
+        if self.__user_session.ha_permessi_admin():
             from view.info.pagine import NuovaOperaView, ModificaOperaView
 
             self.__nuova_opera_view = NuovaOperaView()
@@ -207,29 +212,34 @@ class NavigationController(QObject):
                 ModificaAccountView,
             )
 
-            self.__account_section = AccountSectionView()
+            self.__account_section = AccountSectionView(self.__user_session)
             self.__nuovo_account_view = NuovoAccountView()
             self.__modifica_account_view = ModificaAccountView()
 
     # ------------------------- REGISTRAZIONE DELLE PAGINE -------------------------
 
-    def __registra_pagine(self) -> None:
+    def __registra_pagine_in_stack(self) -> None:
         # Acquisto
         self.__registra_pagina(Pagina.SEZIONE_ACQUISTO, self.__acquisto_section)
         self.__registra_pagina(Pagina.SCEGLI_POSTI, self.__scegli_posti_view)
         # Spettacoli
-        if self.__ha_permessi_biglietteria:
+        if self.__user_session.ha_permessi_biglietteria():
             self.__registra_pagina(Pagina.SEZIONE_SPETTACOLI, self.__spettacoli_section)
+            self.__registra_pagina(
+                Pagina.VISUALIZZA_SPETTACOLO, self.__visualizza_spettacolo_view
+            )
             self.__registra_pagina(
                 Pagina.NUOVO_SPETTACOLO, self.__nuovo_spettacolo_view
             )
             self.__registra_pagina(
                 Pagina.MODIFICA_SPETTACOLO, self.__modifica_spettacolo_view
             )
+            self.__registra_pagina(Pagina.NUOVO_EVENTO, self.__nuovo_evento_view)
+            self.__registra_pagina(Pagina.MODIFICA_EVENTO, self.__modifica_evento_view)
         # Info
         self.__registra_pagina(Pagina.SEZIONE_INFO, self.__info_section)
         self.__registra_pagina(Pagina.VISUALIZZA_OPERA, self.__visualizza_opera_view)
-        if self.__ha_permessi_admin:
+        if self.__user_session.ha_permessi_admin():
             self.__registra_pagina(Pagina.NUOVA_OPERA, self.__nuova_opera_view)
             self.__registra_pagina(Pagina.MODIFICA_OPERA, self.__modifica_opera_view)
             self.__registra_pagina(Pagina.NUOVO_GENERE, self.__nuovo_genere_view)
@@ -272,9 +282,13 @@ class NavigationController(QObject):
         ]
 
         # Spettacoli
-        if self.__ha_permessi_biglietteria:
-            from controller.spettacoli import SpettacoliSectionController
-            from controller.spettacoli import CUSpettacoloController
+        if self.__user_session.ha_permessi_biglietteria():
+            from controller.spettacoli import (
+                SpettacoliSectionController,
+                VisualizzaSpettacoloController,
+                CUSpettacoloController,
+                CUEventoController,
+            )
 
             controller_defs.append(
                 (
@@ -282,6 +296,13 @@ class NavigationController(QObject):
                     SpettacoliSectionController,
                     (model, self.__spettacoli_section),
                 ),
+            )
+            controller_defs.append(
+                (
+                    "__visualizza_spettacolo_controller",
+                    VisualizzaSpettacoloController,
+                    (model, self.__visualizza_spettacolo_view),
+                )
             )
             controller_defs.append(
                 (
@@ -294,8 +315,19 @@ class NavigationController(QObject):
                     ),
                 ),
             )
+            controller_defs.append(
+                (
+                    "__cu_evento_controller",
+                    CUEventoController,
+                    (
+                        model,
+                        self.__nuovo_evento_view,
+                        self.__modifica_evento_view,
+                    ),
+                ),
+            )
         # Info
-        if self.__ha_permessi_admin:
+        if self.__user_session.ha_permessi_admin():
             from controller.info import CUOperaController
 
             controller_defs.append(
@@ -339,7 +371,12 @@ class NavigationController(QObject):
                 (
                     "__cu_account_controller",
                     CUAccountController,
-                    (model, self.__nuovo_account_view, self.__modifica_account_view),
+                    (
+                        model,
+                        self.__nuovo_account_view,
+                        self.__modifica_account_view,
+                        self.__user_session,
+                    ),
                 ),
             )
 
@@ -373,7 +410,8 @@ class NavigationController(QObject):
 
             :param controller: controller da cui sarano collegati i segnali
             :param sig_name: nome del segnale da cercare
-            :param handler: slot da collegare al segnale se trovato"""
+            :param handler: slot da collegare al segnale se trovato
+            """
             sig = getattr(controller, sig_name, None)
             if sig and hasattr(sig, "connect"):
                 sig.connect(handler)

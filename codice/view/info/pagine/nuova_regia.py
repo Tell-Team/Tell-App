@@ -46,7 +46,6 @@ class NuovaRegiaView(NuovoSpettacoloView):
         label_opera.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.opera = QComboBox()
         self.opera.setEnabled(False)
-        # - Questa pagina sarà esclusiva della sezione Info?
 
         self._form_layout.addRow(QLabel('<hr style="background-color:#b0b0b0;">'))
         self._form_layout.addRow(label_regista, self.regista)
@@ -57,13 +56,10 @@ class NuovaRegiaView(NuovoSpettacoloView):
 
     def setup_opera_combobox(self, o: Opera) -> None:
         """Riempisce il `QComboBox` delle opere."""
-        # - Solo inserisce l'opera da dove si chiama il Crea/Modifica Regia
         self.opera.clear()
 
         self.opera.insertItem(0, "Scegliere genere...", -1)
         self.opera.insertItem(1, o.get_nome(), o.get_id())
-        # - Se questa pagina sarà usata anche dalla sezione Spettacoli, devo carica tutte le opere
-        #   nel QComboBox e abilitarlo.
 
     @override
     def reset_pagina(self) -> None:

@@ -9,6 +9,8 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 
+from controller.login.user_session import UserSession
+
 from model.pianificazione.regia import Regia
 
 from view.info.utils import OperaPageData
@@ -36,10 +38,10 @@ class VisualizzaOperaView(QWidget):
     displayRegieRequest = pyqtSignal(QVBoxLayout)
     nuovaRegiaRequest = pyqtSignal()
 
-    def __init__(self, permessi_admin: bool):
+    def __init__(self, user_session: UserSession):
         super().__init__()
 
-        self.is_admin = permessi_admin
+        self.is_admin = user_session.ha_permessi_admin()
 
         self._setup_ui()
         self._connect_signals()

@@ -35,21 +35,20 @@ class NuovoAccountView(AbstractCreaView):
         self.username = QLineEdit()
         self.username.setPlaceholderText("Inserire username")
 
-        label_password = QLabel('Password<span style="color:red;">*</span> :')
-        label_password.setProperty(WidgetRole.BODY_TEXT, True)
-        label_password.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        self._label_password = QLabel('Password<span style="color:red;">*</span> :')
+        self._label_password.setProperty(WidgetRole.BODY_TEXT, True)
+        self._label_password.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.password = QLineEdit()
         self.password.setPlaceholderText("Inserire password")
         self.password.setEchoMode(QLineEdit.EchoMode.Password)
 
-        # - DEBERÍA HABER 3 QLineEdit para la contraseña en modifica:
-        #   original, nuova, confirma nueva
-
-        label_conferma = QLabel('Conferma password<span style="color:red;">*</span> :')
-        label_conferma.setProperty(WidgetRole.BODY_TEXT, True)
-        label_conferma.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        self._label_conferma = QLabel(
+            'Conferma password<span style="color:red;">*</span> :'
+        )
+        self._label_conferma.setProperty(WidgetRole.BODY_TEXT, True)
+        self._label_conferma.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.conferma = QLineEdit()
-        self.conferma.setPlaceholderText("Inserire password")
+        self.conferma.setPlaceholderText("Confermare password")
         self.conferma.setEchoMode(QLineEdit.EchoMode.Password)
 
         label_ruolo = QLabel('Ruolo<span style="color:red;">*</span> : ')
@@ -61,7 +60,8 @@ class NuovoAccountView(AbstractCreaView):
         self.ruolo.insertItem(2, "Amministratore", Ruolo.AMMINISTRATORE)
 
         self._form_layout.addRow(label_username, self.username)
-        self._form_layout.addRow(label_password, self.password)
+        self._form_layout.addRow(self._label_password, self.password)
+        self._form_layout.addRow(self._label_conferma, self.conferma)
         self._form_layout.addRow(label_ruolo, self.ruolo)
 
     # ------------------------- METODI DI VIEW -------------------------

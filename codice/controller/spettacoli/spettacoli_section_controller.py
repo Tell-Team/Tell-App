@@ -9,6 +9,7 @@ from controller.navigation import Pagina
 from model.model import Model
 from model.pianificazione.spettacolo import Spettacolo
 from model.pianificazione.regia import Regia
+from model.organizzazione.evento import Evento
 from model.exceptions import OggettoInUsoException
 
 from view.spettacoli.pagine import SpettacoliSectionView
@@ -57,9 +58,11 @@ class SpettacoliSectionController(AbstractSectionController):
     def __get_spettacoli_by_titolo(self, titolo: str) -> list[Spettacolo]:
         return self._model.get_spettacoli_by_titolo(titolo)
 
+    def __get_eventi_by_spettacolo(self, id_: int) -> list[Evento]:
+        return self._model.get_eventi_by_spettacolo(id_)
+
     def __elimina_spettacolo(self, id_: int) -> None:
-        ...
-        # - self.__model.elimina_spettacolo(id_)
+        self._model.elimina_spettacolo(id_)
 
     def __display_spettacoli(self, layout_spettacoli: ListLayout) -> None:
         """Mostra a schermo alcune informazioni degli spettacoli salvati ed assegna a
@@ -132,7 +135,55 @@ class SpettacoliSectionController(AbstractSectionController):
             # Aggiungi cur_spettacolo al layout di ListaSpettacoli
             layout_spettacoli.aggiungi_list_item(cur_spettacolo, WidgetRole.ITEM_CARD)
 
-    def __visualizza_spettacolo(self, id_: int) -> None: ...
+    def __visualizza_spettacolo(self, id_: int) -> None:
+        """Carica la pagina `VisualizzaSpettacoloView` con i dati relativi allo spettacolo
+        indicato.
+
+        :param id_: id dello spettacolo da visualizzare
+        """
+        # Copia dello spettacolo da visualizzare
+        cur_spettacolo = self.__get_spettacolo(id_)
+        if not cur_spettacolo:
+            PopupMessage.mostra_errore(
+                self._view_section,
+                "Spettacolo inesistente",
+                f"Non è presente nessuno spettacolo con id {id_}.",
+            )
+            return
+
+        # Ottieni la pagina VisualizzaSpettacoloView
+        from view.spettacoli.pagine import VisualizzaSpettacoloView
+
+        cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
+        pagina_nome = Pagina.VISUALIZZA_SPETTACOLO
+        self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
+        cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
+
+        if type(cur_pagina) is not VisualizzaSpettacoloView:
+            PopupMessage.mostra_errore(
+                self._view_section,
+                "Pagina non trovata",
+                f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
+                + f"Type trovato: {type(cur_pagina)}",
+            )
+            return
+
+        spettacolo_data = SpettacoloPageData(
+            id=cur_spettacolo.get_id(),
+            titolo=cur_spettacolo.get_titolo(),
+            note=cur_spettacolo.get_note(),
+            interpreti=cur_spettacolo.get_interpreti(),
+            tecnici=cur_spettacolo.get_tecnici(),
+        )
+
+        lista_eventi = self.__get_eventi_by_spettacolo(cur_spettacolo.get_id())
+
+        # - Aggiungere un modo di verificare che è una Regia
+
+        cur_pagina.set_data(spettacolo_data, lista_eventi)
+
+        # Apri la pagina
+        self.goToPageRequest.emit(pagina_nome, True)
 
     def __nuovo_spettacolo(self) -> None:
         """Carica la pagina `NuovoSpettacoloView`, dove l'utente può inserire i dati

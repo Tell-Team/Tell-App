@@ -34,10 +34,11 @@ class ListLayout(QVBoxLayout):
         self.setContentsMargins(1, 1, 1, 1)
 
         # self.__error_msg = label
+        # self.addWidget(self.__error_msg)
+        # self.__error_msg.hide()
         self.__box = QWidget()
         dummy_layout = QVBoxLayout(self.__box)
         dummy_layout.addWidget(label)
-        # self.addWidget(self.__error_msg)
         self.addWidget(self.__box)
         self.__box.hide()
 
@@ -70,7 +71,8 @@ class ListLayout(QVBoxLayout):
         """Aggiunge un widget creato per il display delle istanze del model.
 
         :param widget: widget speciale per visualizzare una instanza del model
-        :param style: style opzionale da assegnare al widget"""
+        :param styles: style opzionale da assegnare al widget (0...*)
+        """
         # C'è un errore al utilizzare widget.setProperty() direttamente:
         #   lo style non veniva asegnato per qualche motivo. Quindi ho decisso
         #   di aggiungere questo dummy_widget per farlo funzionare.

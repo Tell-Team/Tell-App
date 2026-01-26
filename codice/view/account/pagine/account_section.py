@@ -2,6 +2,8 @@ from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayo
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import override
 
+from controller.login.user_session import UserSession
+
 from core.view import AbstractSectionView
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
@@ -28,6 +30,11 @@ class AccountSectionView(AbstractSectionView):
 
     nuovoAccountRequest = pyqtSignal()
     displayAccountRequest = pyqtSignal(QVBoxLayout)
+
+    def __init__(self, user_session: UserSession):
+        self.user_session_id = user_session.id
+
+        super().__init__()
 
     # ------------------------- SETUP INIT -------------------------
 

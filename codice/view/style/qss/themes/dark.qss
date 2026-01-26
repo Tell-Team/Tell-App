@@ -42,13 +42,14 @@ QWidget[red-item="true"] {
 }
 
 /* ------------------------ Campi d'input ------------------------ */
-QLineEdit, QTextEdit, QComboBox, QSpinBox, QDateEdit {
+QLineEdit, QTextEdit, QComboBox, QSpinBox, QDateEdit, QTimeEdit {
     border: 1px solid #b0b0b0; 
     background-color: black; 
     color: #eeeeee; 
 }
 
-QLineEdit:disabled, QTextEdit:disabled, QComboBox:disabled, QSpinBox:disabled, QDateEdit:disabled {
+QLineEdit:disabled, QTextEdit:disabled, QComboBox:disabled,
+QSpinBox:disabled, QDateEdit:disabled, QTimeEdit:disabled {
     background-color: #2b2b2b; 
     color: #888888;
     border: 1px solid #444444;
@@ -67,20 +68,22 @@ QComboBox QAbstractItemView {
 }
 
 /* ------------------------ QSpinBox & QDateEdit Buttons ------------------------ */
-QSpinBox::up-button, QDateEdit::up-button {
+QSpinBox::up-button, QDateEdit::up-button, QTimeEdit::up-button {
     border-left: 1px solid #b0b0b0;
     border-bottom: 1px solid #b0b0b0;
 }
 
-QSpinBox::down-button, QDateEdit::down-button {
+QSpinBox::down-button, QDateEdit::down-button, QTimeEdit::down-button {
     border-left: 1px solid #b0b0b0;
 }
 
 QSpinBox::up-button:hover, QSpinBox::down-button:hover,
-QDateEdit::up-button:hover, QDateEdit::down-button:hover { background-color: #3a3a3a; }
+QDateEdit::up-button:hover, QDateEdit::down-button:hover,
+QTimeEdit::up-button:hover, QTimeEdit::down-button:hover { background-color: #3a3a3a; }
 
 QSpinBox::up-button:pressed, QSpinBox::down-button:pressed,
-QDateEdit::up-button:pressed, QDateEdit::down-button:pressed { background-color: #1f1f1f; }
+QDateEdit::up-button:pressed, QDateEdit::down-button:pressed,
+QTimeEdit::up-button:pressed, QTimeEdit::down-button:pressed { background-color: #1f1f1f; }
 
 /* # - OMITÍ EL CALENDAR */
 

@@ -19,11 +19,15 @@ class ModificaAccountView(NuovoAccountView):
     def _setup_ui(self) -> None:
         super()._setup_ui()
 
-        # Il valore è assegnato quando si chiama AccountSectionController.modifica_account(id_account)
+        # Il valore è assegnato quando si chiama AccountSectionController.modifica_account
         self.cur_id_account: int = -1
 
         # Aggiorna header
         self._header.setText("Modifica account")
+
+        self.username.setEnabled(False)
+        self._label_password.setText("Nuovo password :")
+        self._label_conferma.setText("Password originale :")
 
         # Abilita il QComboBox del ruolo
         self.ruolo.setEnabled(True)

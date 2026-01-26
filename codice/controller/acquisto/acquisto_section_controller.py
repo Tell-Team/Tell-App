@@ -66,8 +66,7 @@ class AcquistoSectionController(AbstractSectionController):
 
     def __display_spettacoli(self, layout_spettacoli: ListLayout) -> None:
         """Mostra a schermo alcune informazioni degli spettacoli salvati ed assegna a
-        ciascuno pulsanti per visualizzarli in dettaglio, scegliere posti, modificarli
-        o eliminarli.
+        ciascuno pulsanti per scegliere posti.
 
         :param layout: layout dove saranno caricati tutti gli spettacoli
         """

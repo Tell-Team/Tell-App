@@ -75,7 +75,7 @@ QWidget[item-list="true"] {
 }
 
 /* ------------------------ Campi d'input ------------------------ */
-QLineEdit, QTextEdit, QComboBox, QSpinBox, QDateEdit {
+QLineEdit, QTextEdit, QComboBox, QSpinBox, QDateEdit, QTimeEdit {
     border-radius: 6px;
     padding: 6px;
     font-size: 14px;
@@ -88,11 +88,13 @@ QLineEdit[search-bar="true"] {
     border-bottom-right-radius: 0px;
 }
 
-QLineEdit:hover, QTextEdit:hover, QComboBox:hover, QSpinBox:hover, QDateEdit:hover {
+QLineEdit:hover, QTextEdit:hover, QComboBox:hover,
+QSpinBox:hover, QDateEdit:hover, QTimeEdit:hover {
     border: 1px solid #818181;
 }
 
-QLineEdit:focus, QTextEdit:focus, QComboBox:focus, QSpinBox:focus, QDateEdit:focus {
+QLineEdit:focus, QTextEdit:focus, QComboBox:focus,
+QSpinBox:focus, QDateEdit:focus, QTimeEdit:focus {
     border: 1px solid #2b7cff;
 }
 
@@ -117,7 +119,7 @@ QComboBox::down-arrow {
 }
 
 /* ------------------------ QSpinBox & QDateEdit Buttons ------------------------ */
-QSpinBox::up-button, QDateEdit::up-button {
+QSpinBox::up-button, QDateEdit::up-button, QTimeEdit::up-button {
     subcontrol-origin: border;
     subcontrol-position: right top;
     width: 20px;
@@ -125,7 +127,7 @@ QSpinBox::up-button, QDateEdit::up-button {
     padding: 0;
 }
 
-QSpinBox::down-button, QDateEdit::down-button {
+QSpinBox::down-button, QDateEdit::down-button, QTimeEdit::down-button {
     subcontrol-origin: border;
     subcontrol-position: right bottom;
     width: 20px;
@@ -133,7 +135,7 @@ QSpinBox::down-button, QDateEdit::down-button {
     padding: 0;
 }
 
-QSpinBox::up-arrow, QDateEdit::up-arrow {
+QSpinBox::up-arrow, QDateEdit::up-arrow, QTimeEdit::up-arrow {
     image: url(up_arrow.png); /* # - Si deve aggiungere nella view */
     width: 10px;
     height: 10px;
@@ -145,7 +147,7 @@ QSpinBox::down-arrow {
     height: 10px;
 }
 
-QDateEdit::down-arrow {
+QDateEdit::down-arrow, QTimeEdit::down-arrow {
     image: url(calendar_icon.png); /* # - Si deve aggiungere nella view */
     width: 12px;
     height: 12px;

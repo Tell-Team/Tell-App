@@ -2,6 +2,8 @@ from PyQt6.QtCore import pyqtSignal, QObject
 from functools import partial
 from typing import Optional
 
+from controller.login.user_session import UserSession  # - TESTING
+
 from model.model import Model
 from model.account.account import Account
 
@@ -15,14 +17,14 @@ from view.utils import PopupMessage
 class LoginController(QObject):
     """Controller dedicato alla gestione del `LoginDialog`. Emette un segnale dopo verifica
     la correttezza delle credenziali inserite durante un tentativo di login oppure dopo
-    ingressare all'app come Cliente.
+    accedere all'app come Cliente.
 
     Segnali
     ---
-    - `loginSucceeded(object)`: emesso quando viene verificato un login riuscito.
+    - `loginSucceeded(UserSession)`: emesso quando viene verificato un login riuscito.
     """
 
-    loginSucceeded = pyqtSignal(object)
+    loginSucceeded = pyqtSignal(UserSession)
 
     def __init__(self, model: Model):
         super().__init__()
@@ -35,7 +37,7 @@ class LoginController(QObject):
 
     def _connect_signals(self) -> None:
         self.__login_dialog.loginAsCliente.connect(  # type:ignore
-            partial(self.loginSucceeded.emit, None)
+            partial(self.loginSucceeded.emit, UserSession.guest())
         )
 
         self.__login_dialog.authRequest.connect(  # type:ignore
@@ -63,5 +65,11 @@ class LoginController(QObject):
             )
             return
         else:
-            self.loginSucceeded.emit(id_account)
+            if account := self.__model.get_account(id_account):
+                user_session = UserSession(
+                    id=account.get_id(),
+                    username=account.get_username(),
+                    ruolo=account.get_ruolo(),
+                )
+                self.loginSucceeded.emit(user_session)
             self.__login_dialog.reset_login_dialog()

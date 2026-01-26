@@ -96,11 +96,11 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
         )
 
         self._btn_sezione_acquisto.clicked.connect(  # type:ignore
-            self.goToAcquisto
+            self.goToAcquisto.emit
         )
 
         self._btn_sezione_spettacoli.clicked.connect(  # type:ignore
-            self.goToSpettacoli
+            self.goToSpettacoli.emit
         )
 
         self._btn_sezione_info.clicked.connect(  # type:ignore

@@ -65,7 +65,7 @@ class CUGenereController(AbstractCUController):
             nome = cur_pagina.nome.text()
             descrizione = cur_pagina.descrizione.toPlainText()
 
-            # Tenta di creare la nuova opera
+            # Tenta di creare il nuovo genere
             try:
                 nuovo_genere = Genere(nome, descrizione)
             except DatoIncongruenteException as exc:

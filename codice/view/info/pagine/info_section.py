@@ -11,6 +11,8 @@ from typing import override
 
 from core.view import AbstractSectionView
 
+from controller.login.user_session import UserSession
+
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
 from view.style.ui_style import WidgetRole, WidgetColor
@@ -34,9 +36,9 @@ class InfoSectionView(AbstractSectionView):
     displayOpereRequest = pyqtSignal(QVBoxLayout)
     displayGeneriRequest = pyqtSignal(QVBoxLayout)
 
-    def __init__(self, permessi_biglietteria: bool, permessi_admin: bool):
-        self.is_biglietteria = permessi_biglietteria
-        self.is_admin = permessi_admin
+    def __init__(self, user_session: UserSession):
+        self.is_biglietteria = user_session.ha_permessi_biglietteria()
+        self.is_admin = user_session.ha_permessi_admin()
 
         super().__init__()
 

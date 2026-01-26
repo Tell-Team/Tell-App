@@ -11,6 +11,8 @@ from typing import override
 
 from core.view import AbstractSectionView
 
+from controller.login.user_session import UserSession
+
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.style.ui_style import WidgetRole, WidgetColor
 
@@ -30,8 +32,8 @@ class SpettacoliSectionView(AbstractSectionView):
     nuovoSpettacoloRequest = pyqtSignal()
     displaySpettacoliRequest = pyqtSignal(QVBoxLayout)
 
-    def __init__(self, permessi_admin: bool):
-        self.is_admin = permessi_admin
+    def __init__(self, user_session: UserSession):
+        self.is_admin = user_session.ha_permessi_admin()
 
         super().__init__()
 
