@@ -116,6 +116,15 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
     def _svuota_form_layout(self, form_layout: QFormLayout) -> None:
         """Rimuove tutte le righe di un `QFormLayout` senza eliminare i widget. Serve per
         ricaricare un form."""
-        # - Non è stato ancora implementato, ma potrebbe essere utile per future pagine.
-        while form_layout.rowCount() > 0:
-            form_layout.removeRow(0)
+        while form_layout.rowCount():
+            row = form_layout.takeRow(0)
+
+            label_item, field_item = row.labelItem, row.fieldItem
+
+            widget = label_item.widget()
+            if widget is not None:
+                widget.setParent(None)
+
+            widget = field_item.widget()
+            if widget is not None:
+                widget.setParent(None)

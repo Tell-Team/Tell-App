@@ -29,9 +29,9 @@ class NuovoAccountView(AbstractCreaView):
 
     @override
     def _setup_form(self) -> None:
-        label_username = QLabel('Username<span style="color:red;">*</span> :')
-        label_username.setProperty(WidgetRole.BODY_TEXT, True)
-        label_username.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        self._label_username = QLabel('Username<span style="color:red;">*</span> :')
+        self._label_username.setProperty(WidgetRole.BODY_TEXT, True)
+        self._label_username.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.username = QLineEdit()
         self.username.setPlaceholderText("Inserire username")
 
@@ -51,18 +51,18 @@ class NuovoAccountView(AbstractCreaView):
         self.conferma.setPlaceholderText("Confermare password")
         self.conferma.setEchoMode(QLineEdit.EchoMode.Password)
 
-        label_ruolo = QLabel('Ruolo<span style="color:red;">*</span> : ')
-        label_ruolo.setProperty(WidgetRole.BODY_TEXT, True)
-        label_ruolo.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        self._label_ruolo = QLabel('Ruolo<span style="color:red;">*</span> : ')
+        self._label_ruolo.setProperty(WidgetRole.BODY_TEXT, True)
+        self._label_ruolo.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.ruolo = QComboBox()
         self.ruolo.insertItem(0, "Scegli ruolo", None)
         self.ruolo.insertItem(1, "Biglietteria", Ruolo.BIGLIETTERIA)
         self.ruolo.insertItem(2, "Amministratore", Ruolo.AMMINISTRATORE)
 
-        self._form_layout.addRow(label_username, self.username)
+        self._form_layout.addRow(self._label_username, self.username)
         self._form_layout.addRow(self._label_password, self.password)
         self._form_layout.addRow(self._label_conferma, self.conferma)
-        self._form_layout.addRow(label_ruolo, self.ruolo)
+        self._form_layout.addRow(self._label_ruolo, self.ruolo)
 
     # ------------------------- METODI DI VIEW -------------------------
 
