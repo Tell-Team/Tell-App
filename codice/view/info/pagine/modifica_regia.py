@@ -5,10 +5,13 @@ from view.info.utils import RegiaPageData
 
 
 class ModificaRegiaView(NuovaRegiaView):
-    """Pagina per la modifica di regie.
+    """Pagina per la modifica di regie. Sottoclasse di `NuovaRegiaView`."""
 
-    Sottoclasse di `NuovaRegiaView`. Modifica alcune label della pagina ed aggiunge
-    un'attributo `cur_id_regia` per indicare l'id della regia da modificare."""
+    def __init__(self):
+        super().__init__()
+
+        # Valore assegnato quando si chiama VisualizzaOperaController.modifica_regia
+        self.id_current_regia: int = -1
 
     # ------------------------- SETUP INIT -------------------------
 
@@ -16,10 +19,6 @@ class ModificaRegiaView(NuovaRegiaView):
     def _setup_ui(self) -> None:
         super()._setup_ui()
 
-        # Il valore è assegnato quando si chiama VisualizzaOperaController.modifica_regia
-        self.cur_id_regia: int = -1
-
-        # Aggiorna header
         self._header.setText("Modifica regia")
 
     # ------------------------- METODI DI VIEW -------------------------
@@ -28,7 +27,7 @@ class ModificaRegiaView(NuovaRegiaView):
         """Carica i dati di una regia nella pagina.
 
         :param data: data salvata in una classe immutabile"""
-        self.cur_id_regia = data.id
+        self.id_current_regia = data.id
 
         self.titolo.setText(data.titolo)
         self.note.setText(data.note)
@@ -37,12 +36,12 @@ class ModificaRegiaView(NuovaRegiaView):
         self.regista.setText(data.regista)
         self.anno.setValue(data.anno_produzione)
 
-        cur_id_opera = data.id_opera
-        index = self.opera.findData(cur_id_opera)
+        current_id_opera = data.id_opera
+        index = self.opera.findData(current_id_opera)
         if index >= 0:
             self.opera.setCurrentIndex(index)
 
     @override
     def reset_pagina(self) -> None:
         super().reset_pagina()
-        self.cur_id_regia = -1
+        self.id_current_regia = -1

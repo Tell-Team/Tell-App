@@ -1,4 +1,3 @@
-from PyQt6.QtWidgets import QWidget
 from typing import Optional
 
 from core.controller import AbstractSectionController
@@ -68,7 +67,7 @@ class AcquistoSectionController(AbstractSectionController):
         """Mostra a schermo alcune informazioni degli spettacoli salvati ed assegna a
         ciascuno pulsanti per scegliere posti.
 
-        :param layout: layout dove saranno caricati tutti gli spettacoli
+        :param layout_spettacoli: layout dove saranno caricati tutti gli spettacoli
         """
         # Verifica se c'è un filtro di ricerca
         filtro = self._view_section.filtro_ricerca
@@ -81,7 +80,7 @@ class AcquistoSectionController(AbstractSectionController):
 
         # Verifica che la lista non sia vuota
         if not lista_spettacoli:
-            layout_spettacoli.if_lista_vuota()
+            layout_spettacoli.mostra_msg_lista_vuota()
             return
 
         # Mostra tutti gli spettacoli della lista a schermo
@@ -89,31 +88,32 @@ class AcquistoSectionController(AbstractSectionController):
             # Verifica che classe di Spettacolo è l'istanza
             if isinstance(spettacolo, Regia):
                 compositore: str = ""
-                if cur_opera := self._model.get_opera(spettacolo.get_id_opera()):
-                    compositore = cur_opera.get_compositore()
+                if opera_associata := self._model.get_opera(spettacolo.get_id_opera()):
+                    compositore = opera_associata.get_compositore()
                 dati = (compositore, spettacolo.get_regista())
-                cur_spettacolo = AcquistoDisplay(
+                current_spettacolo = AcquistoDisplay(
                     spettacolo,
                     dati=dati,
                 )
             else:
-                cur_spettacolo = AcquistoDisplay(spettacolo)
+                current_spettacolo = AcquistoDisplay(spettacolo)
 
-            cur_spettacolo.scegliPostoRequest.connect(  # type:ignore
+            current_spettacolo.scegliPostoRequest.connect(  # type:ignore
                 self.__scegli_posti
             )
 
             # - CREA UN DISPLAY PARA SPETTACOLI DISPONIBILI
 
-            # Aggiungi cur_spettacolo al layout di ListaSpettacoli
-            layout_spettacoli.aggiungi_list_item(cur_spettacolo, WidgetRole.ITEM_CARD)
+            layout_spettacoli.aggiungi_list_item(
+                current_spettacolo, WidgetRole.ITEM_CARD
+            )
 
     def __scegli_posti(self, id_: int) -> None:
         """Carica la pagina `ScegliPostiView`, dove l'utente può inserire i dati
         necessari per creare una prenotazione."""
         # Copia dello spettacolo per iniziare la prenotazione
-        cur_spettacolo = self.__get_spettacolo(id_)
-        if not cur_spettacolo:
+        current_spettacolo = self.__get_spettacolo(id_)
+        if not current_spettacolo:
             PopupMessage.mostra_errore(
                 self._view_section,
                 "Spettacolo inesistente",
@@ -121,42 +121,36 @@ class AcquistoSectionController(AbstractSectionController):
             )
             return
 
-        # Ottieni la pagina ModificaSpettacoloView
+        # Ottieni la pagina ScegliPostiView
         from view.acquisto.pagine import ScegliPostiView
 
-        cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.SCEGLI_POSTI
-        self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
-        cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
-
-        if type(cur_pagina) is not ScegliPostiView:
-            PopupMessage.mostra_errore(
-                self._view_section,
-                "Pagina non trovata",
-                f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
-                + f"Type trovato: {type(cur_pagina)}",
-            )
+        current_pagina = self._ottieni_pagina(pagina_nome)
+        if type(current_pagina) is not ScegliPostiView:
+            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
             return
 
         # Salva i dati dentro di un container
         spettacolo_data = SpettacoloPageData(
-            id=cur_spettacolo.get_id(),
-            titolo=cur_spettacolo.get_titolo(),
-            note=cur_spettacolo.get_note(),
-            interpreti=cur_spettacolo.get_interpreti(),
-            tecnici=cur_spettacolo.get_tecnici(),
+            id=current_spettacolo.get_id(),
+            titolo=current_spettacolo.get_titolo(),
+            note=current_spettacolo.get_note(),
+            interpreti=current_spettacolo.get_interpreti(),
+            tecnici=current_spettacolo.get_tecnici(),
         )
 
         # Setup pagina con i data dello spettacolo
-        if isinstance(cur_spettacolo, Regia):
+        if isinstance(current_spettacolo, Regia):
             tipo_spettacolo: tuple[str, str] = ("", "")
-            if cur_opera := self._model.get_opera(cur_spettacolo.get_id_opera()):
-                compositore = cur_opera.get_compositore()
-                regista = cur_spettacolo.get_regista()
+            if opera_associata := self._model.get_opera(
+                current_spettacolo.get_id_opera()
+            ):
+                compositore = opera_associata.get_compositore()
+                regista = current_spettacolo.get_regista()
                 tipo_spettacolo = (compositore, regista)
-            cur_pagina.set_data(spettacolo_data, tipo_spettacolo)
+            current_pagina.set_data(spettacolo_data, tipo_spettacolo)
         else:
-            cur_pagina.set_data(spettacolo_data)
+            current_pagina.set_data(spettacolo_data)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

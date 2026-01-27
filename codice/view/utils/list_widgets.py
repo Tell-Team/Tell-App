@@ -60,7 +60,7 @@ class ListLayout(QVBoxLayout):
             elif child_layout := item.layout():
                 self.svuota_layout(child_layout)
 
-    def if_lista_vuota(self) -> None:
+    def mostra_msg_lista_vuota(self) -> None:
         """Mostra un messaggio indicando che la lista non ha istanze da visualizzare."""
         self.setContentsMargins(2, 2, 2, 2)
         self.__box.show()

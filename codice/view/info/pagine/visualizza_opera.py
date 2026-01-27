@@ -42,6 +42,7 @@ class VisualizzaOperaView(QWidget):
         super().__init__()
 
         self.is_admin = user_session.ha_permessi_admin()
+        self.id_current_opera: int = -1
 
         self._setup_ui()
         self._connect_signals()
@@ -49,8 +50,6 @@ class VisualizzaOperaView(QWidget):
     # ------------------------- SETUP INIT -------------------------
 
     def _setup_ui(self) -> None:
-        self.id_cur_opera: int = -1
-
         # Top widget
         self.__btn_indietro = QPushButton("Indietro")
         self.__btn_indietro.setProperty(WidgetRole.DEFAULT_BUTTON, True)
@@ -201,7 +200,7 @@ class VisualizzaOperaView(QWidget):
         self.layout_lista_regie.svuota_layout()
 
         # Salva dati dell'opera nella pagina
-        self.id_cur_opera = data.id
+        self.id_current_opera = data.id
         self.lista_regie = lista_regie
 
         # Carica dati dell'opera
@@ -219,7 +218,7 @@ class VisualizzaOperaView(QWidget):
 
         # Carica lista regie
         if not self.lista_regie:
-            self.layout_lista_regie.if_lista_vuota()
+            self.layout_lista_regie.mostra_msg_lista_vuota()
         else:
             self.displayRegieRequest.emit(self.layout_lista_regie)
 

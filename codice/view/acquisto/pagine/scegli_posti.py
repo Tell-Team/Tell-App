@@ -38,14 +38,14 @@ class ScegliPostiView(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.id_current_spettacolo: int = -1
+
         self._setup_ui()
         self._connect_signals()
 
     # ------------------------- SETUP INIT -------------------------
 
     def _setup_ui(self) -> None:
-        self.id_cur_opera: int = -1
-
         # Top widget
         self.__btn_indietro = QPushButton("Indietro")
         self.__btn_indietro.setProperty(WidgetRole.DEFAULT_BUTTON, True)
@@ -191,7 +191,7 @@ class ScegliPostiView(QWidget):
         # self.layout_lista_regie.svuota_layout()
 
         # # Salva dati dell'opera nella pagina
-        # self.id_cur_opera = data.id
+        # self.id_current_opera = data.id
         # self.lista_regie = lista_regie
 
         # # Carica dati dell'opera

@@ -8,11 +8,13 @@ from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class ModificaSpettacoloView(NuovoSpettacoloView):
-    """Pagina per la modifica di spettacoli.
+    """Pagina per la modifica di spettacoli. Sottoclasse di `NuovoSpettacoloView`."""
 
-    Sottoclasse di `NuovoSpettacoloView`. Modifica alcune label della pagina ed aggiunge
-    un'attributo `cur_id_spettacolo` per indicare l'id dello spettacolo da modificare.
-    """
+    def __init__(self):
+        super().__init__()
+
+        # Valore assegnato quando si chiama SpettacoliSectionController.modifica_spettacolo
+        self.id_current_spettacolo: int = -1
 
     # ------------------------- SETUP INIT -------------------------
 
@@ -20,10 +22,6 @@ class ModificaSpettacoloView(NuovoSpettacoloView):
     def _setup_ui(self) -> None:
         super()._setup_ui()
 
-        # Il valore è assegnato quando si chiama SpettacoliSectionController.modifica_spettacolo
-        self.cur_id_spettacolo: int = -1
-
-        # Aggiorna header
         self._header.setText("Modifica spettacolo")
 
         self.__tipo_spettacolo = HyphenatedLabel()
@@ -37,8 +35,11 @@ class ModificaSpettacoloView(NuovoSpettacoloView):
     def set_data(self, data: SpettacoloPageData, tipo_spettacolo: str = "") -> None:
         """Carica i dati di una regia nella pagina.
 
-        :param data: data salvata in una classe immutabile"""
-        self.cur_id_spettacolo = data.id
+        :param data: data salvata in una classe immutabile
+        :param tipo_spettacolo: testo che chiarisce il tipo specifico dello `Spettacolo` e
+        più informazioni rilevanti
+        """
+        self.id_current_spettacolo = data.id
 
         self.titolo.setText(data.titolo)
         self.note.setText(data.note)
@@ -51,5 +52,5 @@ class ModificaSpettacoloView(NuovoSpettacoloView):
     @override
     def reset_pagina(self) -> None:
         super().reset_pagina()
-        self.cur_id_spettacolo = -1
+        self.id_current_spettacolo = -1
         self.__tipo_spettacolo.setText("")

@@ -5,10 +5,13 @@ from view.spettacoli.utils import EventoPageData
 
 
 class ModificaEventoView(NuovoEventoView):
-    """Pagina per la modifica di eventi.
+    """Pagina per la modifica di eventi. Sottoclasse di `NuovoEventoView`."""
 
-    Sottoclasse di `NuovoEventoView`. Modifica alcune label della pagina ed aggiunge
-    un'attributo `cur_id_evento` per indicare l'id del evento da modificare."""
+    def __init__(self):
+        super().__init__()
+
+        # Valore assegnato quando si chiama VisualizzaSpettacoloController.modifica_evento
+        self.id_current_evento: int = -1
 
     # ------------------------- SETUP INIT -------------------------
 
@@ -16,10 +19,6 @@ class ModificaEventoView(NuovoEventoView):
     def _setup_ui(self) -> None:
         super()._setup_ui()
 
-        # Il valore è assegnato quando si chiama VisualizzaSpettacoloController.modifica_evento
-        self.cur_id_evento: int = -1
-
-        # Aggiorna header
         self._header.setText("Modifica evento")
 
     # ------------------------- METODI DI VIEW -------------------------
@@ -28,7 +27,7 @@ class ModificaEventoView(NuovoEventoView):
         """Carica i dati di un evento nella pagina.
 
         :param data: data salvata in una classe immutabile"""
-        self.cur_id_evento = data.id
+        self.id_current_evento = data.id
 
         self.data.setDate(data.data_ora.date())
         self.ora.setTime(data.data_ora.time())
@@ -38,4 +37,4 @@ class ModificaEventoView(NuovoEventoView):
     @override
     def reset_pagina(self) -> None:
         super().reset_pagina()
-        self.cur_id_evento = -1
+        self.id_current_evento = -1

@@ -42,6 +42,7 @@ class VisualizzaSpettacoloView(QWidget):
         super().__init__()
 
         self.is_biglietteria = user_session.ha_permessi_biglietteria()
+        self.id_current_spettacolo: int = -1
 
         self._setup_ui()
         self._connect_signals()
@@ -49,8 +50,6 @@ class VisualizzaSpettacoloView(QWidget):
     # ------------------------- SETUP INIT -------------------------
 
     def _setup_ui(self) -> None:
-        self.id_cur_spettacolo: int = -1
-
         # Top widget
         self.__btn_indietro = QPushButton("Indietro")
         self.__btn_indietro.setProperty(WidgetRole.DEFAULT_BUTTON, True)
@@ -198,7 +197,7 @@ class VisualizzaSpettacoloView(QWidget):
         self.layout_lista_eventi.svuota_layout()
 
         # Salva dati dello spettacolo nella pagina
-        self.id_cur_spettacolo = data.id
+        self.id_current_spettacolo = data.id
         self.lista_eventi = lista_eventi
 
         # Carica dati dello spettacolo
@@ -216,7 +215,7 @@ class VisualizzaSpettacoloView(QWidget):
 
         # Carica lista regie
         if not self.lista_eventi:
-            self.layout_lista_eventi.if_lista_vuota()
+            self.layout_lista_eventi.mostra_msg_lista_vuota()
         else:
             self.displayEventiRequest.emit(self.layout_lista_eventi)
 

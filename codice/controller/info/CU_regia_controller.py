@@ -120,22 +120,22 @@ class CURegiaController(AbstractCUController):
 
         # Verifica che il dict non sia vuoto
         if len(interpreti) == 0:
-            pagina.layout_lista_interpreti.if_lista_vuota()
+            pagina.layout_lista_interpreti.mostra_msg_lista_vuota()
             return
 
         # Mostra tutti gli interpreti salvati a schermo
         for nome, ruolo in interpreti.items():
-            cur_interprete = PersonaleDisplay(nome, ruolo)
+            current_interprete = PersonaleDisplay(nome, ruolo)
 
             def elimina_interprete(nome: str) -> None:
                 pagina.lista_interpreti.pop(nome)
                 pagina.aggiorna_pagina()
 
-            cur_interprete.eliminaRequest.connect(  # type:ignore
+            current_interprete.eliminaRequest.connect(  # type:ignore
                 elimina_interprete
             )
 
-            pagina.layout_lista_interpreti.aggiungi_list_item(cur_interprete)
+            pagina.layout_lista_interpreti.aggiungi_list_item(current_interprete)
 
     def __display_tecnici(self, pagina: NuovaRegiaView) -> None:
         """Mostra a schermo le informazioni dei tecnici salvati nella
@@ -148,22 +148,22 @@ class CURegiaController(AbstractCUController):
 
         # Verifica che il dict non sia vuoto
         if len(tecnici) == 0:
-            pagina.layout_lista_tecnici.if_lista_vuota()
+            pagina.layout_lista_tecnici.mostra_msg_lista_vuota()
             return
 
         # Mostra tutti i tecnici salvati a schermo
         for nome, posto in tecnici.items():
-            cur_tecnico = PersonaleDisplay(nome, posto)
+            current_tecnico = PersonaleDisplay(nome, posto)
 
             def elimina_interprete(nome: str) -> None:
                 pagina.lista_tecnici.pop(nome)
                 pagina.aggiorna_pagina()
 
-            cur_tecnico.eliminaRequest.connect(  # type:ignore
+            current_tecnico.eliminaRequest.connect(  # type:ignore
                 elimina_interprete
             )
 
-            pagina.layout_lista_tecnici.aggiungi_list_item(cur_tecnico)
+            pagina.layout_lista_tecnici.aggiungi_list_item(current_tecnico)
 
     @override
     def _inizia_salvataggio(self, is_new: bool) -> None:
@@ -174,17 +174,16 @@ class CURegiaController(AbstractCUController):
         CAMPI_NECESSARI = "<b>ATTENZIONE</b>: È necessario compilare i campi di input contrassegnati con *."
 
         if is_new:
-            # Ottieni la pagina NuovaRegiaView
-            cur_pagina = self._view_nuova
+            current_pagina = self._view_nuova
 
             # Ottieni l'input inserito
-            titolo = cur_pagina.titolo.text()
-            note = cur_pagina.note.toPlainText()
-            interpreti = cur_pagina.lista_interpreti
-            tecnici = cur_pagina.lista_tecnici
-            regista = cur_pagina.regista.text()
-            anno = cur_pagina.anno.value()
-            id_opera = cur_pagina.opera.currentData()
+            titolo = current_pagina.titolo.text()
+            note = current_pagina.note.toPlainText()
+            interpreti = current_pagina.lista_interpreti
+            tecnici = current_pagina.lista_tecnici
+            regista = current_pagina.regista.text()
+            anno = current_pagina.anno.value()
+            id_opera = current_pagina.opera.currentData()
 
             # Tenta di creare la nuova regia
             try:
@@ -193,48 +192,49 @@ class CURegiaController(AbstractCUController):
                 )
             except DatoIncongruenteException as exc:
                 # È stato trovato un campo con input non valido
-                cur_pagina.show_input_error(CAMPI_NECESSARI)
+                current_pagina.show_input_error(CAMPI_NECESSARI)
                 PopupMessage.mostra_errore(
-                    cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
+                    current_pagina,
+                    "Input non valido",
+                    f"Si è verificato un errore: {exc}",
                 )
             else:
-                cur_pagina.show_input_error("")
+                current_pagina.show_input_error("")
 
                 try:
                     self.__aggiungi_regia(nuova_regia)
                 except IdOccupatoException as exc:
                     # Esiste già una regia con quell'id
                     PopupMessage.mostra_errore(
-                        cur_pagina,
+                        current_pagina,
                         "ID Regia occupata",
                         f"Si è verificato un errore: {exc}",
                     )
                 else:
                     self.goBackRequest.emit()
         elif not is_new:
-            # Ottieni la pagina ModificaRegiaView
-            cur_pagina = self._view_modifica
+            current_pagina = self._view_modifica
 
             # Crea una copia della regia originale
-            copia_regia = self.__get_spettacolo(cur_pagina.cur_id_regia)
+            copia_regia = self.__get_spettacolo(current_pagina.id_current_regia)
             if not isinstance(copia_regia, Regia):
                 # Non esiste regia con l'id salvata nella pagina
                 PopupMessage.mostra_errore(
-                    cur_pagina,
+                    current_pagina,
                     "Errore nel salvataggio",
-                    f"Non è presente nessuna regia con id {cur_pagina.cur_id_regia}. "
+                    f"Non è presente nessuna regia con id {current_pagina.id_current_regia}. "
                     + "Impossibile effettuare le modifiche.",
                 )
                 return
 
             # Ottieni l'input inserito
-            titolo = cur_pagina.titolo.text()
-            note = cur_pagina.note.toPlainText()
-            interpreti = cur_pagina.lista_interpreti
-            tecnici = cur_pagina.lista_tecnici
-            regista = cur_pagina.regista.text()
-            anno = cur_pagina.anno.value()
-            id_opera = cur_pagina.opera.currentData()
+            titolo = current_pagina.titolo.text()
+            note = current_pagina.note.toPlainText()
+            interpreti = current_pagina.lista_interpreti
+            tecnici = current_pagina.lista_tecnici
+            regista = current_pagina.regista.text()
+            anno = current_pagina.anno.value()
+            id_opera = current_pagina.opera.currentData()
 
             # Tenta di modificare la regia
             try:
@@ -246,19 +246,21 @@ class CURegiaController(AbstractCUController):
                 copia_regia.set_anno_produzione(anno)
                 copia_regia.set_id_opera(id_opera)
             except DatoIncongruenteException as exc:
-                cur_pagina.show_input_error(CAMPI_NECESSARI)
+                current_pagina.show_input_error(CAMPI_NECESSARI)
                 PopupMessage.mostra_errore(
-                    cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
+                    current_pagina,
+                    "Input non valido",
+                    f"Si è verificato un errore: {exc}",
                 )
             else:
-                cur_pagina.show_input_error("")
+                current_pagina.show_input_error("")
 
                 try:
                     self.__modifica_regia(copia_regia)
                 except IdInesistenteException as exc:
                     # Non esiste una regia con quell'id
                     PopupMessage.mostra_errore(
-                        cur_pagina,
+                        current_pagina,
                         "ID Regia insesistente",
                         f"Si è verificato un errore: {exc}",
                     )

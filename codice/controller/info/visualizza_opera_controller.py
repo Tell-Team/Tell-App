@@ -42,17 +42,14 @@ class VisualizzaOperaController(QObject):
     # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
 
     def __connect_signals(self) -> None:
-        # Torna indietro dalla pagina VisualizzaOperaView
         self.__visualizza_opera_view.tornaIndietroRequest.connect(  # type:ignore
             self.goBackRequest.emit
         )
 
-        # Display della Lista Regie
         self.__visualizza_opera_view.displayRegieRequest.connect(  # type:ignore
             self.__display_regie
         )
 
-        # Setup della pagina di creazione di regie
         self.__visualizza_opera_view.nuovaRegiaRequest.connect(  # type:ignore
             self.__nuova_regia
         )
@@ -75,21 +72,21 @@ class VisualizzaOperaController(QObject):
         """Mostra a schermo le informazioni delle regie salvate e associate ad
         un'opera ed assegna a ciascuna pulsanti per modificarli o eliminarli.
 
-        :param layout: layout dove saranno caricate tutti le regie
+        :param layout_regie: layout dove saranno caricate tutti le regie
         """
         lista_regie = self.__get_regie_by_opera(
-            self.__visualizza_opera_view.id_cur_opera
+            self.__visualizza_opera_view.id_current_opera
         )
 
-        # Verifica che la lista non sia vuota
         if not lista_regie:
-            layout_regie.if_lista_vuota()
+            layout_regie.mostra_msg_lista_vuota()
             return
 
         # Funzione di elimina per le regie
         def on_conferma(widget_regia: RegiaDisplay, id_: int) -> None:
             """Prova di eliminare l'istanza di regia.
 
+            :param widget_regia: widget associato alla `Regia` da eliminare
             :param id_: id della regia da eliminare
             """
             try:
@@ -104,24 +101,21 @@ class VisualizzaOperaController(QObject):
             else:
                 self.__visualizza_opera_view.aggiorna_pagina()
 
-        # Mostra tutti le regie salvate a schermo
         for regia in lista_regie:
-            cur_regia = RegiaDisplay(
+            current_regia = RegiaDisplay(
                 regia, editable=self.__visualizza_opera_view.is_admin
             )
 
-            # Setup della pagina di modifica delle regie
-            cur_regia.modificaRequest.connect(  # type:ignore
+            current_regia.modificaRequest.connect(  # type:ignore
                 self.__modifica_regia
             )
 
-            cur_regia.eliminaConfermata.connect(  # type:ignore
-                partial(on_conferma, cur_regia, regia.get_id())
+            current_regia.eliminaConfermata.connect(  # type:ignore
+                partial(on_conferma, current_regia, regia.get_id())
             )
 
-            # Aggiungi cur_regia al layout di ListaRegie
             self.__visualizza_opera_view.aggiungi_widget_a_layout(
-                cur_regia, layout_regie
+                current_regia, layout_regie
             )
 
     def __nuova_regia(self) -> None:
@@ -133,31 +127,31 @@ class VisualizzaOperaController(QObject):
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.NUOVA_REGIA
         self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
-        cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
+        current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
-        if type(cur_pagina) is not NuovaRegiaView:
+        if type(current_pagina) is not NuovaRegiaView:
             PopupMessage.mostra_errore(
                 self.__visualizza_opera_view,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
-                + f"Type trovato: {type(cur_pagina)}",
+                + f"Type trovato: {type(current_pagina)}",
             )
             return
 
         # Setup pagina pulendo i campi
-        cur_id_opera = self.__visualizza_opera_view.id_cur_opera
-        cur_opera = self.__get_opera(cur_id_opera)
+        id_current_opera = self.__visualizza_opera_view.id_current_opera
+        current_opera = self.__get_opera(id_current_opera)
 
-        if not isinstance(cur_opera, Opera):
+        if not isinstance(current_opera, Opera):
             PopupMessage.mostra_errore(
                 self.__visualizza_opera_view,
                 "Opera inesistente",
-                f"Non è presente nessuna opera con id {cur_id_opera}.",
+                f"Non è presente nessuna opera con id {id_current_opera}.",
             )
             return
 
-        cur_pagina.setup_opera_combobox(cur_opera)
-        cur_pagina.reset_pagina()
+        current_pagina.setup_opera_combobox(current_opera)
+        current_pagina.reset_pagina()
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
@@ -169,8 +163,8 @@ class VisualizzaOperaController(QObject):
         :param id_: id della regia da modificare
         """
         # Copia della regia da modificare
-        cur_regia = self.__get_spettacolo(id_)
-        if not isinstance(cur_regia, Regia):
+        current_regia = self.__get_spettacolo(id_)
+        if not isinstance(current_regia, Regia):
             PopupMessage.mostra_errore(
                 self.__visualizza_opera_view,
                 "Regia inesistente",
@@ -184,41 +178,41 @@ class VisualizzaOperaController(QObject):
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.MODIFICA_REGIA
         self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
-        cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
+        current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
-        if type(cur_pagina) is not ModificaRegiaView:
+        if type(current_pagina) is not ModificaRegiaView:
             PopupMessage.mostra_errore(
                 self.__visualizza_opera_view,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
-                + f"Type trovato: {type(cur_pagina)}",
+                + f"Type trovato: {type(current_pagina)}",
             )
             return
 
         # Salva i dati dentro di un container
         regia_data = RegiaPageData(
-            id=cur_regia.get_id(),
-            regista=cur_regia.get_regista(),
-            anno_produzione=cur_regia.get_anno_produzione(),
-            id_opera=cur_regia.get_id_opera(),
-            titolo=cur_regia.get_titolo(),
-            note=cur_regia.get_note(),
-            interpreti=cur_regia.get_interpreti(),
-            tecnici=cur_regia.get_tecnici(),
+            id=current_regia.get_id(),
+            regista=current_regia.get_regista(),
+            anno_produzione=current_regia.get_anno_produzione(),
+            id_opera=current_regia.get_id_opera(),
+            titolo=current_regia.get_titolo(),
+            note=current_regia.get_note(),
+            interpreti=current_regia.get_interpreti(),
+            tecnici=current_regia.get_tecnici(),
         )
 
-        cur_opera = self.__get_opera(cur_regia.get_id_opera())
-        if not isinstance(cur_opera, Opera):
+        opera_associata = self.__get_opera(current_regia.get_id_opera())
+        if not isinstance(opera_associata, Opera):
             PopupMessage.mostra_errore(
                 self.__visualizza_opera_view,
                 "Opera inesistente",
-                f"Non è presente nessuna opera con id '{cur_regia.get_id_opera()}'.",
+                f"Non è presente nessuna opera con id '{current_regia.get_id_opera()}'.",
             )
             return
 
         # Setup pagina con i data del genere
-        cur_pagina.setup_opera_combobox(cur_opera)
-        cur_pagina.set_data(regia_data)
+        current_pagina.setup_opera_combobox(opera_associata)
+        current_pagina.set_data(regia_data)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

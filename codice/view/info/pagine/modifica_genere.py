@@ -5,10 +5,13 @@ from view.info.utils import GenerePageData
 
 
 class ModificaGenereView(NuovoGenereView):
-    """Pagina per la modifica di generi.
+    """Pagina per la modifica di generi. Sottoclasse di `NuovoGenereView`."""
 
-    Sottoclasse di `NuovoGenereView`. Modifica alcune label della pagina ed aggiunge
-    un'attributo `cur_id_genere` per indicare l'id del genere da modificare."""
+    def __init__(self):
+        super().__init__()
+
+        # Valore assegnato quando si chiama InfoSectionController.modifica_genere
+        self.id_current_genere: int = -1
 
     # ------------------------- SETUP INIT -------------------------
 
@@ -16,10 +19,6 @@ class ModificaGenereView(NuovoGenereView):
     def _setup_ui(self) -> None:
         super()._setup_ui()
 
-        # Il valore è assegnato quando si chiama InfoSectionController.modifica_genere
-        self.cur_id_genere: int = -1
-
-        # Aggiorna header
         self._header.setText("Modifica genere")
 
     # ------------------------- METODI DI VIEW -------------------------
@@ -28,7 +27,7 @@ class ModificaGenereView(NuovoGenereView):
         """Carica i dati di un genere nella pagina.
 
         :param data: data salvata in una classe immutabile"""
-        self.cur_id_genere = data.id
+        self.id_current_genere = data.id
 
         self.nome.setText(data.nome)
         self.descrizione.setText(data.descrizione)
@@ -36,4 +35,4 @@ class ModificaGenereView(NuovoGenereView):
     @override
     def reset_pagina(self) -> None:
         super().reset_pagina()
-        self.cur_id_genere = -1
+        self.id_current_genere = -1

@@ -1,4 +1,3 @@
-from PyQt6.QtWidgets import QWidget
 from functools import partial
 from typing import Optional
 
@@ -83,7 +82,7 @@ class InfoSectionController(AbstractSectionController):
         """Mostra a schermo alcune informazioni delle opere salvate ed assegna a
         ciascuna pulsanti per visualizzarle in dettaglio, modificarle o eliminarle.
 
-        :param layout: layout dove saranno caricate tutte le opere
+        :param layout_opere: layout dove saranno caricate tutte le opere
         """
         # Verifica se c'è un filtro di ricerca
         filtro = self._view_section.filtro_ricerca
@@ -92,15 +91,15 @@ class InfoSectionController(AbstractSectionController):
             self.__get_opere() if not filtro else self.__get_opere_by_nome(filtro)
         )
 
-        # Verifica che la lista non sia vuota
         if not lista_opere:
-            layout_opere.if_lista_vuota()
+            layout_opere.mostra_msg_lista_vuota()
             return
 
         # Funzione di elimina per le opere
         def on_conferma(widget_opera: OperaDisplay, id_: int) -> None:
             """Prova di eliminare l'istanza d'opera.
 
+            :param widget_opera: widget associato all'`Opera` da eliminare
             :param id_: id dell'opera da eliminare
             """
             try:
@@ -115,46 +114,43 @@ class InfoSectionController(AbstractSectionController):
             else:
                 self._view_section.aggiorna_pagina()
 
-        # Mostra tutte le opere della lista a schermo
         for opera in lista_opere:
-            cur_opera = OperaDisplay(
+            current_opera = OperaDisplay(
                 opera, editable=self._view_section.is_admin
             )  # - Esta vaina mejor que la guarde el controller y no las misma página
 
-            # Setup della pagina di visualizzazione delle opere
-            cur_opera.visualizzaRequest.connect(  # type:ignore
+            current_opera.visualizzaRequest.connect(  # type:ignore
                 self.__visualizza_opera
             )
 
-            # Setup della pagina di modifica delle opere
-            cur_opera.modificaRequest.connect(  # type:ignore
+            current_opera.modificaRequest.connect(  # type:ignore
                 self.__modifica_opera
             )
 
-            cur_opera.eliminaConfermata.connect(  # type:ignore
-                partial(on_conferma, cur_opera, opera.get_id())
+            current_opera.eliminaConfermata.connect(  # type:ignore
+                partial(on_conferma, current_opera, opera.get_id())
             )
 
-            # Aggiungi cur_opera al layout di ListaOpere
-            layout_opere.aggiungi_list_item(cur_opera, WidgetRole.ITEM_CARD)
+            layout_opere.aggiungi_list_item(current_opera, WidgetRole.ITEM_CARD)
 
     def __display_generi(self, layout_generi: ListLayout) -> None:
         """Mostra a schermo le informazioni dei generi salvati ed assegna a
         ciascuno pulsanti per modificarli o eliminarli.
 
-        :param layout: layout dove saranno caricate tutti i generi
+        :param layout_generi: layout dove saranno caricate tutti i generi
         """
         lista_generi = self.__get_generi()
 
         # Verifica che la lista non sia vuota
         if not lista_generi:
-            layout_generi.if_lista_vuota()
+            layout_generi.mostra_msg_lista_vuota()
             return
 
         # Funzione di elimina per i generi
         def on_conferma(widget_genere: GenereDisplay, id_: int) -> None:
             """Prova di eliminare l'istanza d'opera.
 
+            :param widget_genere: widget associato al `Genere` da eliminare
             :param id_: id dell'opera da eliminare
             """
             try:
@@ -171,19 +167,18 @@ class InfoSectionController(AbstractSectionController):
 
         # Mostra tutti i generi salvati a schermo
         for genere in lista_generi:
-            cur_genere = GenereDisplay(genere, editable=self._view_section.is_admin)
+            current_genere = GenereDisplay(genere, editable=self._view_section.is_admin)
 
             # Setup della pagina di modifica dei generi
-            cur_genere.modificaRequest.connect(  # type:ignore
+            current_genere.modificaRequest.connect(  # type:ignore
                 self.__modifica_genere
             )
 
-            cur_genere.eliminaConfermata.connect(  # type:ignore
-                partial(on_conferma, cur_genere, genere.get_id())
+            current_genere.eliminaConfermata.connect(  # type:ignore
+                partial(on_conferma, current_genere, genere.get_id())
             )
 
-            # Aggiungi cur_genere al layout di ListaOpere
-            layout_generi.aggiungi_list_item(cur_genere, WidgetRole.ITEM_CARD)
+            layout_generi.aggiungi_list_item(current_genere, WidgetRole.ITEM_CARD)
 
     def __visualizza_opera(self, id_: int) -> None:
         """Carica la pagina `VisualizzaOperaView` con i dati relativi all'opera
@@ -192,8 +187,8 @@ class InfoSectionController(AbstractSectionController):
         :param id_: id dell'opera da visualizzare
         """
         # Copia dell'opera da visualizzare
-        cur_opera = self.__get_opera(id_)
-        if not cur_opera:
+        current_opera = self.__get_opera(id_)
+        if not current_opera:
             PopupMessage.mostra_errore(
                 self._view_section,
                 "Opera inesistente",
@@ -204,45 +199,37 @@ class InfoSectionController(AbstractSectionController):
         # Ottieni la pagina VisualizzaOperaView
         from view.info.pagine import VisualizzaOperaView
 
-        cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.VISUALIZZA_OPERA
-        self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
-        cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
-
-        if type(cur_pagina) is not VisualizzaOperaView:
-            PopupMessage.mostra_errore(
-                self._view_section,
-                "Pagina non trovata",
-                f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
-                + f"Type trovato: {type(cur_pagina)}",
-            )
+        current_pagina = self._ottieni_pagina(pagina_nome)
+        if type(current_pagina) is not VisualizzaOperaView:
+            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
             return
 
         # Setup pagina con i dati dell'opera
-        cur_genere = self.__get_genere(cur_opera.get_id_genere())
-        if not cur_genere:
+        genere_associato = self.__get_genere(current_opera.get_id_genere())
+        if not genere_associato:
             PopupMessage.mostra_errore(
                 self._view_section,
                 "Genere inesistente",
-                f"Non è presente nessun genere con id {cur_opera.get_id_genere()}.",
+                f"Non è presente nessun genere con id {current_opera.get_id_genere()}.",
             )
             return
 
         opera_data = OperaPageData(
-            id=cur_opera.get_id(),
-            nome=cur_opera.get_nome(),
-            trama=cur_opera.get_trama(),
-            id_genere=cur_opera.get_id_genere(),
-            compositore=cur_opera.get_compositore(),
-            librettista=cur_opera.get_librettista(),
-            atti=cur_opera.get_numero_atti(),
-            data_rappresentazione=cur_opera.get_data_prima_rappresentazione(),
-            teatro_rappresentazione=cur_opera.get_teatro_prima_rappresentazione(),
+            id=current_opera.get_id(),
+            nome=current_opera.get_nome(),
+            trama=current_opera.get_trama(),
+            id_genere=current_opera.get_id_genere(),
+            compositore=current_opera.get_compositore(),
+            librettista=current_opera.get_librettista(),
+            atti=current_opera.get_numero_atti(),
+            data_rappresentazione=current_opera.get_data_prima_rappresentazione(),
+            teatro_rappresentazione=current_opera.get_teatro_prima_rappresentazione(),
         )
 
-        lista_regie = self.__get_regie_by_opera(cur_opera.get_id())
+        lista_regie = self.__get_regie_by_opera(current_opera.get_id())
 
-        cur_pagina.set_data(opera_data, cur_genere.get_nome(), lista_regie)
+        current_pagina.set_data(opera_data, genere_associato.get_nome(), lista_regie)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
@@ -253,23 +240,15 @@ class InfoSectionController(AbstractSectionController):
         # Ottieni la pagina NuovaOperaView
         from view.info.pagine import NuovaOperaView
 
-        cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.NUOVA_OPERA
-        self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
-        cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
-
-        if type(cur_pagina) is not NuovaOperaView:
-            PopupMessage.mostra_errore(
-                self._view_section,
-                "Pagina non trovata",
-                f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
-                + f"Type trovato: {type(cur_pagina)}",
-            )
+        current_pagina = self._ottieni_pagina(pagina_nome)
+        if type(current_pagina) is not NuovaOperaView:
+            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
             return
 
         # Setup pagina pulendo i campi
-        cur_pagina.setup_genere_combobox(self.__get_generi())
-        cur_pagina.reset_pagina()
+        current_pagina.setup_genere_combobox(self.__get_generi())
+        current_pagina.reset_pagina()
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
@@ -281,8 +260,8 @@ class InfoSectionController(AbstractSectionController):
         :param id_: id dell'opera da modificare
         """
         # Copia dell'opera da modificare
-        cur_opera = self.__get_opera(id_)
-        if not cur_opera:
+        current_opera = self.__get_opera(id_)
+        if not current_opera:
             PopupMessage.mostra_errore(
                 self._view_section,
                 "Opera inesistente",
@@ -293,36 +272,28 @@ class InfoSectionController(AbstractSectionController):
         # Ottieni la pagina ModificaOperaView
         from view.info.pagine import ModificaOperaView
 
-        cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.MODIFICA_OPERA
-        self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
-        cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
-
-        if type(cur_pagina) is not ModificaOperaView:
-            PopupMessage.mostra_errore(
-                self._view_section,
-                "Pagina non trovata",
-                f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
-                + f"Type trovato: {type(cur_pagina)}",
-            )
+        current_pagina = self._ottieni_pagina(pagina_nome)
+        if type(current_pagina) is not ModificaOperaView:
+            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
             return
 
         # Salva i dati dentro di un container
         opera_data = OperaPageData(
-            id=cur_opera.get_id(),
-            nome=cur_opera.get_nome(),
-            trama=cur_opera.get_trama(),
-            id_genere=cur_opera.get_id_genere(),
-            compositore=cur_opera.get_compositore(),
-            librettista=cur_opera.get_librettista(),
-            atti=cur_opera.get_numero_atti(),
-            data_rappresentazione=cur_opera.get_data_prima_rappresentazione(),
-            teatro_rappresentazione=cur_opera.get_teatro_prima_rappresentazione(),
+            id=current_opera.get_id(),
+            nome=current_opera.get_nome(),
+            trama=current_opera.get_trama(),
+            id_genere=current_opera.get_id_genere(),
+            compositore=current_opera.get_compositore(),
+            librettista=current_opera.get_librettista(),
+            atti=current_opera.get_numero_atti(),
+            data_rappresentazione=current_opera.get_data_prima_rappresentazione(),
+            teatro_rappresentazione=current_opera.get_teatro_prima_rappresentazione(),
         )
 
         # Setup pagina con i data dell'opera
-        cur_pagina.setup_genere_combobox(self.__get_generi())
-        cur_pagina.set_data(opera_data)
+        current_pagina.setup_genere_combobox(self.__get_generi())
+        current_pagina.set_data(opera_data)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
@@ -333,22 +304,14 @@ class InfoSectionController(AbstractSectionController):
         # Ottieni la pagina NuovoGenereView
         from view.info.pagine import NuovoGenereView
 
-        cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.NUOVO_GENERE
-        self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
-        cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
-
-        if type(cur_pagina) is not NuovoGenereView:
-            PopupMessage.mostra_errore(
-                self._view_section,
-                "Pagina non trovata",
-                f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
-                + f"Type trovato: {type(cur_pagina)}",
-            )
+        current_pagina = self._ottieni_pagina(pagina_nome)
+        if type(current_pagina) is not NuovoGenereView:
+            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
             return
 
         # Setup pagina pulendo i campi
-        cur_pagina.reset_pagina()
+        current_pagina.reset_pagina()
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
@@ -360,8 +323,8 @@ class InfoSectionController(AbstractSectionController):
         :param id_: id del genere da modificare
         """
         # Copia del genere da modificare
-        cur_genere = self.__get_genere(id_)
-        if not cur_genere:
+        current_genere = self.__get_genere(id_)
+        if not current_genere:
             PopupMessage.mostra_errore(
                 self._view_section,
                 "Genere inesistente",
@@ -372,29 +335,21 @@ class InfoSectionController(AbstractSectionController):
         # Ottieni la pagina ModificaGenereView
         from view.info.pagine import ModificaGenereView
 
-        cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.MODIFICA_GENERE
-        self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
-        cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
-
-        if type(cur_pagina) is not ModificaGenereView:
-            PopupMessage.mostra_errore(
-                self._view_section,
-                "Pagina non trovata",
-                f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
-                + f"Type trovato: {type(cur_pagina)}",
-            )
+        current_pagina = self._ottieni_pagina(pagina_nome)
+        if type(current_pagina) is not ModificaGenereView:
+            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
             return
 
         # Salva i dati dentro di un container
         genere_data = GenerePageData(
-            id=cur_genere.get_id(),
-            nome=cur_genere.get_nome(),
-            descrizione=cur_genere.get_descrizione(),
+            id=current_genere.get_id(),
+            nome=current_genere.get_nome(),
+            descrizione=current_genere.get_descrizione(),
         )
 
         # Setup pagina con i data del genere
-        cur_pagina.set_data(genere_data)
+        current_pagina.set_data(genere_data)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

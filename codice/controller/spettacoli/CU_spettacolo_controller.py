@@ -126,22 +126,22 @@ class CUSpettacoloController(AbstractCUController):
 
         # Verifica che il dict non sia vuoto
         if len(interpreti) == 0:
-            pagina.layout_lista_interpreti.if_lista_vuota()
+            pagina.layout_lista_interpreti.mostra_msg_lista_vuota()
             return
 
         # Mostra tutti gli interpreti salvati a schermo
         for nome, ruolo in interpreti.items():
-            cur_interprete = PersonaleDisplay(nome, ruolo)
+            current_interprete = PersonaleDisplay(nome, ruolo)
 
             def elimina_interprete(nome: str) -> None:
                 pagina.lista_interpreti.pop(nome)
                 pagina.aggiorna_pagina()
 
-            cur_interprete.eliminaRequest.connect(  # type:ignore
+            current_interprete.eliminaRequest.connect(  # type:ignore
                 elimina_interprete
             )
 
-            pagina.layout_lista_interpreti.aggiungi_list_item(cur_interprete)
+            pagina.layout_lista_interpreti.aggiungi_list_item(current_interprete)
 
     def __display_tecnici(self, pagina: NuovoSpettacoloView) -> None:
         """Visualizza a schermo le informazioni dei tecnici salvati nella
@@ -154,22 +154,22 @@ class CUSpettacoloController(AbstractCUController):
 
         # Verifica che il dict non sia vuoto
         if len(tecnici) == 0:
-            pagina.layout_lista_tecnici.if_lista_vuota()
+            pagina.layout_lista_tecnici.mostra_msg_lista_vuota()
             return
 
         # Mostra tutti i tecnici salvati a schermo
         for nome, posto in tecnici.items():
-            cur_tecnico = PersonaleDisplay(nome, posto)
+            current_tecnico = PersonaleDisplay(nome, posto)
 
             def elimina_interprete(nome: str) -> None:
                 pagina.lista_tecnici.pop(nome)
                 pagina.aggiorna_pagina()
 
-            cur_tecnico.eliminaRequest.connect(  # type:ignore
+            current_tecnico.eliminaRequest.connect(  # type:ignore
                 elimina_interprete
             )
 
-            pagina.layout_lista_tecnici.aggiungi_list_item(cur_tecnico)
+            pagina.layout_lista_tecnici.aggiungi_list_item(current_tecnico)
 
     @override
     def _inizia_salvataggio(self, is_new: bool) -> None:
@@ -180,59 +180,61 @@ class CUSpettacoloController(AbstractCUController):
         CAMPI_NECESSARI = "<b>ATTENZIONE</b>: È necessario compilare i campi di input contrassegnati con *."
 
         if is_new:
-            # Ottieni la pagina NuovoSpettacoloView
-            cur_pagina = self._view_nuova
+            current_pagina = self._view_nuova
 
             # Ottieni l'input inserito
-            titolo = cur_pagina.titolo.text()
-            note = cur_pagina.note.toPlainText()
-            interpreti = cur_pagina.lista_interpreti
-            tecnici = cur_pagina.lista_tecnici
+            titolo = current_pagina.titolo.text()
+            note = current_pagina.note.toPlainText()
+            interpreti = current_pagina.lista_interpreti
+            tecnici = current_pagina.lista_tecnici
 
             # Tenta di creare il nuovo spettacolo
             try:
                 nuovo_spettacolo = Spettacolo(titolo, note, interpreti, tecnici)
             except DatoIncongruenteException as exc:
                 # È stato trovato un campo con input non valido
-                cur_pagina.show_input_error(CAMPI_NECESSARI)
+                current_pagina.show_input_error(CAMPI_NECESSARI)
                 PopupMessage.mostra_errore(
-                    cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
+                    current_pagina,
+                    "Input non valido",
+                    f"Si è verificato un errore: {exc}",
                 )
             else:
-                cur_pagina.show_input_error("")
+                current_pagina.show_input_error("")
 
                 try:
                     self.__aggiungi_spettacolo(nuovo_spettacolo)
                 except IdOccupatoException as exc:
                     # Esiste già uno spettacolo con quell'id
                     PopupMessage.mostra_errore(
-                        cur_pagina,
+                        current_pagina,
                         "ID Spettacolo occupata",
                         f"Si è verificato un errore: {exc}",
                     )
                 else:
                     self.goBackRequest.emit()
         elif not is_new:
-            # Ottieni la pagina ModificaSpettacoloView
-            cur_pagina = self._view_modifica
+            current_pagina = self._view_modifica
 
             # Crea una copia dello spettacolo originale
-            copia_spettacolo = self.__get_spettacolo(cur_pagina.cur_id_spettacolo)
+            copia_spettacolo = self.__get_spettacolo(
+                current_pagina.id_current_spettacolo
+            )
             if not isinstance(copia_spettacolo, Spettacolo):
                 # Non esiste spettacolo con l'id salvata nella pagina
                 PopupMessage.mostra_errore(
-                    cur_pagina,
+                    current_pagina,
                     "Errore nel salvataggio",
-                    f"Non è presente nessuno spettacolo con id {cur_pagina.cur_id_spettacolo}. "
+                    f"Non è presente nessuno spettacolo con id {current_pagina.id_current_spettacolo}. "
                     + "Impossibile effettuare le modifiche.",
                 )
                 return
 
             # Ottieni l'input inserito
-            titolo = cur_pagina.titolo.text()
-            note = cur_pagina.note.toPlainText()
-            interpreti = cur_pagina.lista_interpreti
-            tecnici = cur_pagina.lista_tecnici
+            titolo = current_pagina.titolo.text()
+            note = current_pagina.note.toPlainText()
+            interpreti = current_pagina.lista_interpreti
+            tecnici = current_pagina.lista_tecnici
 
             # Tenta di modificare lo spettacolo
             try:
@@ -241,19 +243,21 @@ class CUSpettacoloController(AbstractCUController):
                 copia_spettacolo.set_interpreti(interpreti)
                 copia_spettacolo.set_tecnici(tecnici)
             except DatoIncongruenteException as exc:
-                cur_pagina.show_input_error(CAMPI_NECESSARI)
+                current_pagina.show_input_error(CAMPI_NECESSARI)
                 PopupMessage.mostra_errore(
-                    cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
+                    current_pagina,
+                    "Input non valido",
+                    f"Si è verificato un errore: {exc}",
                 )
             else:
-                cur_pagina.show_input_error("")
+                current_pagina.show_input_error("")
 
                 try:
                     self.__modifica_spettacolo(copia_spettacolo)
                 except IdInesistenteException as exc:
                     # Non esiste uno spettacolo con quell'id
                     PopupMessage.mostra_errore(
-                        cur_pagina,
+                        current_pagina,
                         "ID Spettacolo insesistente",
                         f"Si è verificato un errore: {exc}",
                     )

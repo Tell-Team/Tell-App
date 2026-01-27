@@ -11,11 +11,13 @@ from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class ModificaAccountView(NuovoAccountView):
-    """Pagina per la modifica di account utente.
+    """Pagina per la modifica di account utente. Sottoclasse di `NuovoAccountView`."""
 
-    Sottoclasse di `NuovoAccountView`. Modifica alcune label della pagina, abilita
-    il QComboBox per scegliere il ruolo ed aggiunge un'attributo `cur_id_account` per
-    indicare l'id dell'account da modificare."""
+    def __init__(self):
+        super().__init__()
+
+        # Valore assegnato quando si chiama AccountSectionController.modifica_account
+        self.id_current_account: int = -1
 
     # ------------------------- SETUP INIT -------------------------
 
@@ -23,10 +25,6 @@ class ModificaAccountView(NuovoAccountView):
     def _setup_ui(self) -> None:
         super()._setup_ui()
 
-        # Il valore è assegnato quando si chiama AccountSectionController.modifica_account
-        self.cur_id_account: int = -1
-
-        # Aggiorna ui della pagina
         self._header.setText("Modifica account")
 
         self.username.setEnabled(False)
@@ -56,7 +54,7 @@ class ModificaAccountView(NuovoAccountView):
         """Carica i dati di un'account nella pagina.
 
         :param data: data salvata in una classe immutabile"""
-        self.cur_id_account = data.id
+        self.id_current_account = data.id
 
         self.username.setText(data.username)
 
@@ -71,5 +69,5 @@ class ModificaAccountView(NuovoAccountView):
     @override
     def reset_pagina(self) -> None:
         super().reset_pagina()
+        self.id_current_account = -1
         self.nuova_password.setText("")
-        self.cur_id_account = -1

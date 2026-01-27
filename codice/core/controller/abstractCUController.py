@@ -53,14 +53,14 @@ class AbstractCUController(QObject, metaclass=ABCQObjectMeta):
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
-    def _annulla_salvataggio(self, cur_pagina: AbstractCreaView) -> None:
+    def _annulla_salvataggio(self, current_pagina: AbstractCreaView) -> None:
         """Annulla l'operazione di creazione o modifica.
 
-        :param cur_pagina: pagina dove fare il reset dopo ritornare alla pagina dove
+        :param current_pagina: pagina dove fare il reset dopo ritornare alla pagina dove
         l'operazione è stata iniziata
         """
         self.goBackRequest.emit()
-        cur_pagina.reset_pagina()
+        current_pagina.reset_pagina()
 
     @abstractmethod
     def _inizia_salvataggio(self, is_new: bool) -> None:

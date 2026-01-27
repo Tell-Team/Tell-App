@@ -58,18 +58,17 @@ class CUOperaController(AbstractCUController):
         )
 
         if is_new:
-            # Ottieni la pagina NuovaOperaView
-            cur_pagina = self._view_nuova
+            current_pagina = self._view_nuova
 
             # Ottieni l'input inserito
-            nome = cur_pagina.nome.text()
-            trama = cur_pagina.trama.toPlainText()
-            id_genere = cur_pagina.genere.currentData()
-            compositore = cur_pagina.compositore.text()
-            librettista = cur_pagina.librettista.text()
-            atti = cur_pagina.atti.value()
-            data = cur_pagina.data.date().toPyDate()
-            teatro = cur_pagina.teatro.text()
+            nome = current_pagina.nome.text()
+            trama = current_pagina.trama.toPlainText()
+            id_genere = current_pagina.genere.currentData()
+            compositore = current_pagina.compositore.text()
+            librettista = current_pagina.librettista.text()
+            atti = current_pagina.atti.value()
+            data = current_pagina.data.date().toPyDate()
+            teatro = current_pagina.teatro.text()
 
             # Tenta di creare la nuova opera
             try:
@@ -78,55 +77,56 @@ class CUOperaController(AbstractCUController):
                 )
             except DatoIncongruenteException as exc:
                 # È stato trovato un campo con input non valido
-                cur_pagina.show_input_error(CAMPI_NECESSARI)
+                current_pagina.show_input_error(CAMPI_NECESSARI)
                 PopupMessage.mostra_errore(
-                    cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
+                    current_pagina,
+                    "Input non valido",
+                    f"Si è verificato un errore: {exc}",
                 )
             else:
-                cur_pagina.show_input_error("")
+                current_pagina.show_input_error("")
                 try:
                     self.__aggiungi_opera(nuova_opera)
                 except IdInesistenteException as exc:
                     # L'opera è collegata ad un genere che non esiste
                     PopupMessage.mostra_errore(
-                        cur_pagina,
+                        current_pagina,
                         "Genere inesistente",
                         f"Si è verificato un errore: {exc}",
                     )
                 except IdOccupatoException as exc:
                     # Esiste già un'opera con quell'id
                     PopupMessage.mostra_errore(
-                        cur_pagina,
+                        current_pagina,
                         "ID Opera occupato",
                         f"Si è verificato un errore: {exc}",
                     )
                 else:
                     self.goBackRequest.emit()
         elif not is_new:
-            # Ottieni la pagina ModificaOperaView
-            cur_pagina = self._view_modifica
+            current_pagina = self._view_modifica
 
             # Crea una copia dell'opera originale
-            copia_opera = self.__get_opera(cur_pagina.cur_id_opera)
+            copia_opera = self.__get_opera(current_pagina.id_current_opera)
             if not isinstance(copia_opera, Opera):
                 # Non esiste opera con l'id salvata nella pagina
                 PopupMessage.mostra_errore(
-                    cur_pagina,
+                    current_pagina,
                     "Errore nel salvataggio",
-                    f"Non è presente nessuna opera con id {cur_pagina.cur_id_opera}. "
+                    f"Non è presente nessuna opera con id {current_pagina.id_current_opera}. "
                     + "Impossibile effettuare le modifiche.",
                 )
                 return
 
             # Ottieni l'input inserito
-            nome = cur_pagina.nome.text()
-            trama = cur_pagina.trama.toPlainText()
-            id_genere = cur_pagina.genere.currentData()
-            compositore = cur_pagina.compositore.text()
-            librettista = cur_pagina.librettista.text()
-            atti = cur_pagina.atti.value()
-            data = cur_pagina.data.date().toPyDate()
-            teatro = cur_pagina.teatro.text()
+            nome = current_pagina.nome.text()
+            trama = current_pagina.trama.toPlainText()
+            id_genere = current_pagina.genere.currentData()
+            compositore = current_pagina.compositore.text()
+            librettista = current_pagina.librettista.text()
+            atti = current_pagina.atti.value()
+            data = current_pagina.data.date().toPyDate()
+            teatro = current_pagina.teatro.text()
 
             # Tenta di modificare l'opera
             try:
@@ -140,19 +140,21 @@ class CUOperaController(AbstractCUController):
                 copia_opera.set_teatro_prima_rappresentazione(teatro)
             except DatoIncongruenteException as exc:
                 # È stato trovato un campo con input non valido
-                cur_pagina.show_input_error(CAMPI_NECESSARI)
+                current_pagina.show_input_error(CAMPI_NECESSARI)
                 PopupMessage.mostra_errore(
-                    cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
+                    current_pagina,
+                    "Input non valido",
+                    f"Si è verificato un errore: {exc}",
                 )
             else:
-                cur_pagina.show_input_error("")
+                current_pagina.show_input_error("")
 
                 try:
                     self.__modifica_opera(copia_opera)
                 except IdInesistenteException as exc:
                     # Non esiste un'opera con quell'id
                     PopupMessage.mostra_errore(
-                        cur_pagina,
+                        current_pagina,
                         "ID Opera inesistente",
                         f"Si è verificato un errore: {exc}",
                     )

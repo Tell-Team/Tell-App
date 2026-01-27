@@ -58,74 +58,76 @@ class CUGenereController(AbstractCUController):
         )
 
         if is_new:
-            # Ottieni la pagina NuovoGenereView
-            cur_pagina = self._view_nuova
+            current_pagina = self._view_nuova
 
             # Ottieni l'input inserito
-            nome = cur_pagina.nome.text()
-            descrizione = cur_pagina.descrizione.toPlainText()
+            nome = current_pagina.nome.text()
+            descrizione = current_pagina.descrizione.toPlainText()
 
             # Tenta di creare il nuovo genere
             try:
                 nuovo_genere = Genere(nome, descrizione)
             except DatoIncongruenteException as exc:
                 # È stato trovato un campo con input non valido
-                cur_pagina.show_input_error(CAMPI_NECESSARI)
+                current_pagina.show_input_error(CAMPI_NECESSARI)
                 PopupMessage.mostra_errore(
-                    cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
+                    current_pagina,
+                    "Input non valido",
+                    f"Si è verificato un errore: {exc}",
                 )
             else:
-                cur_pagina.show_input_error("")
+                current_pagina.show_input_error("")
 
                 try:
                     self.__aggiungi_genere(nuovo_genere)
                 except IdOccupatoException as exc:
                     # Esiste già un genere con quell'id
                     PopupMessage.mostra_errore(
-                        cur_pagina,
+                        current_pagina,
                         "ID Genere occupato",
                         f"Si è verificato un errore: {exc}",
                     )
                 else:
                     self.goBackRequest.emit()
         elif not is_new:
-            # Ottieni la pagina ModificaGenereView
-            cur_pagina = self._view_modifica
+            current_pagina = self._view_modifica
 
             # Crea una copia del genere originale
-            copia_genere = self.__get_genere(cur_pagina.cur_id_genere)
+            copia_genere = self.__get_genere(current_pagina.id_current_genere)
             if not isinstance(copia_genere, Genere):
                 # Non esiste genere con l'id salvata nella pagina
                 PopupMessage.mostra_errore(
-                    cur_pagina,
+                    current_pagina,
                     "Errore nel salvataggio",
-                    f"Non è presente nessun genere con id {cur_pagina.cur_id_genere}. "
+                    f"Non è presente nessun genere con id {current_pagina.id_current_genere}. "
                     + "Impossibile effettuare le modifiche.",
                 )
                 return
 
             # Ottieni l'input inserito
-            nome = cur_pagina.nome.text()
-            descrizione = cur_pagina.descrizione.toPlainText()
+            nome = current_pagina.nome.text()
+            descrizione = current_pagina.descrizione.toPlainText()
 
             # Tenta di modificare il genere
             try:
                 copia_genere.set_nome(nome)
                 copia_genere.set_descrizione(descrizione)
             except DatoIncongruenteException as exc:
-                cur_pagina.show_input_error(CAMPI_NECESSARI)
+                current_pagina.show_input_error(CAMPI_NECESSARI)
                 PopupMessage.mostra_errore(
-                    cur_pagina, "Input non valido", f"Si è verificato un errore: {exc}"
+                    current_pagina,
+                    "Input non valido",
+                    f"Si è verificato un errore: {exc}",
                 )
             else:
-                cur_pagina.show_input_error("")
+                current_pagina.show_input_error("")
 
                 try:
                     self.__modifica_genere(copia_genere)
                 except IdInesistenteException as exc:
                     # Non esiste un genere con quell'id
                     PopupMessage.mostra_errore(
-                        cur_pagina,
+                        current_pagina,
                         "ID Generi insesistente",
                         f"Si è verificato un errore: {exc}",
                     )

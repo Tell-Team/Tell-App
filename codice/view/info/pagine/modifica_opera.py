@@ -5,10 +5,13 @@ from view.info.utils import OperaPageData
 
 
 class ModificaOperaView(NuovaOperaView):
-    """Pagina per la modifica di opere.
+    """Pagina per la modifica di opere. Sottoclasse di `NuovaOperaView`."""
 
-    Sottoclasse di `NuovaOperaView`. Modifica alcune label della pagina ed aggiunge
-    un'attributo `cur_id_opera` per indicare l'id dell'opera da modificare."""
+    def __init__(self):
+        super().__init__()
+
+        # Valore assegnato quando si chiama InfoSectionController.modifica_opera
+        self.id_current_opera: int = -1
 
     # ------------------------- SETUP INIT -------------------------
 
@@ -16,10 +19,6 @@ class ModificaOperaView(NuovaOperaView):
     def _setup_ui(self) -> None:
         super()._setup_ui()
 
-        # Il valore è assegnato quando si chiama InfoSectionController.modifica_opera
-        self.cur_id_opera: int = -1
-
-        # Aggiorna header
         self._header.setText("Modifica opera")
 
     # ------------------------- METODI DI VIEW -------------------------
@@ -28,13 +27,13 @@ class ModificaOperaView(NuovaOperaView):
         """Carica i dati di un'opera nella pagina.
 
         :param data: data salvata in una classe immutabile"""
-        self.cur_id_opera = data.id
+        self.id_current_opera = data.id
 
         self.nome.setText(data.nome)
         self.trama.setText(data.trama)
 
-        cur_id_genere = data.id_genere
-        index = self.genere.findData(cur_id_genere)
+        current_id_genere = data.id_genere
+        index = self.genere.findData(current_id_genere)
         if index >= 0:
             self.genere.setCurrentIndex(index)
 
@@ -47,4 +46,4 @@ class ModificaOperaView(NuovaOperaView):
     @override
     def reset_pagina(self) -> None:
         super().reset_pagina()
-        self.cur_id_genere = -1
+        self.id_current_opera = -1

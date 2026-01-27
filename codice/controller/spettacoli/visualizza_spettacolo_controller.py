@@ -22,7 +22,7 @@ class VisualizzaSpettacoloController(QObject):
 
     Segnali
     ---
-    - `goBackRequest()`: emesso per tornare alla pagina `InfoSectionView`;
+    - `goBackRequest()`: emesso per tornare alla pagina `SpettacoliSectionView`;
     - `goToPageRequest(Pagina, bool)`: emesso per visualizzare un'altra pagina;
     - `getPageRequest(Pagina, dict)`: emesso per ottenere la pagina che vendrà visualizzata.
     """
@@ -72,21 +72,22 @@ class VisualizzaSpettacoloController(QObject):
         """Mostra a schermo le informazioni degli eventi salvati e associati ad
         uno spettacolo ed assegna a ciascuno pulsanti per modificarli o eliminarli.
 
-        :param layout: layout dove saranno caricate tutti le regie
+        :param layout_eventi: layout dove saranno caricate tutti le regie
         """
         lista_eventi = self.__get_eventi_by_spettacolo(
-            self.__visualizza_spettacolo_view.id_cur_spettacolo
+            self.__visualizza_spettacolo_view.id_current_spettacolo
         )
 
         # Verifica che la lista non sia vuota
         if not lista_eventi:
-            layout_eventi.if_lista_vuota()
+            layout_eventi.mostra_msg_lista_vuota()
             return
 
         # Funzione di elimina per gli eventi
         def on_conferma(widget_evento: EventoDisplay, id_: int) -> None:
             """Prova di eliminare l'istanza di `Evento`.
 
+            :param widget_evento: widget associato all'Evento` da eliminare
             :param id_: id dell'evento da eliminare
             """
             try:
@@ -102,19 +103,18 @@ class VisualizzaSpettacoloController(QObject):
                 self.__visualizza_spettacolo_view.aggiorna_pagina()
 
         for evento in lista_eventi:
-            cur_evento = EventoDisplay(evento)
+            current_evento = EventoDisplay(evento)
 
-            cur_evento.modificaRequest.connect(  # type:ignore
+            current_evento.modificaRequest.connect(  # type:ignore
                 self.__modifica_evento
             )
 
-            cur_evento.eliminaConfermata.connect(  # type:ignore
-                partial(on_conferma, cur_evento, evento.get_id())
+            current_evento.eliminaConfermata.connect(  # type:ignore
+                partial(on_conferma, current_evento, evento.get_id())
             )
 
-            # Aggiungi cur_regia al layout di ListaRegie
             self.__visualizza_spettacolo_view.aggiungi_widget_a_layout(
-                cur_evento, layout_eventi
+                current_evento, layout_eventi
             )
 
     def __nuovo_evento(self) -> None:
@@ -126,20 +126,22 @@ class VisualizzaSpettacoloController(QObject):
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.NUOVO_EVENTO
         self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
-        cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
+        current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
-        if type(cur_pagina) is not NuovoEventoView:
+        if type(current_pagina) is not NuovoEventoView:
             PopupMessage.mostra_errore(
                 self.__visualizza_spettacolo_view,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
-                + f"Type trovato: {type(cur_pagina)}",
+                + f"Type trovato: {type(current_pagina)}",
             )
             return
 
         # Setup pagina pulendo i campi
-        cur_pagina.reset_pagina()
-        cur_pagina.id_spettacolo = self.__visualizza_spettacolo_view.id_cur_spettacolo
+        current_pagina.reset_pagina()
+        current_pagina.id_spettacolo = (
+            self.__visualizza_spettacolo_view.id_current_spettacolo
+        )
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
@@ -151,8 +153,8 @@ class VisualizzaSpettacoloController(QObject):
         :param id_: id del evento da modificare
         """
         # Copia del evento da modificare
-        cur_evento = self.__get_evento(id_)
-        if not cur_evento:
+        current_evento = self.__get_evento(id_)
+        if not current_evento:
             PopupMessage.mostra_errore(
                 self.__visualizza_spettacolo_view,
                 "Evento inesistente",
@@ -166,26 +168,26 @@ class VisualizzaSpettacoloController(QObject):
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.MODIFICA_EVENTO
         self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
-        cur_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
+        current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
-        if type(cur_pagina) is not ModificaEventoView:
+        if type(current_pagina) is not ModificaEventoView:
             PopupMessage.mostra_errore(
                 self.__visualizza_spettacolo_view,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
-                + f"Type trovato: {type(cur_pagina)}",
+                + f"Type trovato: {type(current_pagina)}",
             )
             return
 
         # Salva i dati dentro di un container
         evento_data = EventoPageData(
-            id=cur_evento.get_id(),
-            data_ora=cur_evento.get_data_ora(),
-            id_spettacolo=cur_evento.get_id_spettacolo(),
+            id=current_evento.get_id(),
+            data_ora=current_evento.get_data_ora(),
+            id_spettacolo=current_evento.get_id_spettacolo(),
         )
 
         # Setup pagina con i data del genere
-        cur_pagina.set_data(evento_data)
+        current_pagina.set_data(evento_data)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
