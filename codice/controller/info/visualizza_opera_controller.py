@@ -114,9 +114,7 @@ class VisualizzaOperaController(QObject):
                 partial(on_conferma, current_regia, regia.get_id())
             )
 
-            self.__visualizza_opera_view.aggiungi_widget_a_layout(
-                current_regia, layout_regie
-            )
+            layout_regie.aggiungi_list_item(current_regia)
 
     def __nuova_regia(self) -> None:
         """Carica la pagina `NuovaRegiaView`, dove l'utente può inserire i dati

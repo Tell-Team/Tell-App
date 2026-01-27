@@ -113,9 +113,7 @@ class VisualizzaSpettacoloController(QObject):
                 partial(on_conferma, current_evento, evento.get_id())
             )
 
-            self.__visualizza_spettacolo_view.aggiungi_widget_a_layout(
-                current_evento, layout_eventi
-            )
+            layout_eventi.aggiungi_list_item(current_evento)
 
     def __nuovo_evento(self) -> None:
         """Carica la pagina `NuovoEventoView`, dove l'utente può inserire i dati

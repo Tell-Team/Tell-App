@@ -219,13 +219,6 @@ class VisualizzaSpettacoloView(QWidget):
         else:
             self.displayEventiRequest.emit(self.layout_lista_eventi)
 
-    def aggiungi_widget_a_layout(self, widget: QWidget, layout: ListLayout):
-        """Aggiunge un widget creato per il display delle istanze del model.
-
-        :param widget: widget speciale per visualizzare una instanza del model
-        :param layout: layout dove sarà inserito il widget"""
-        layout.addWidget(widget)
-
     def aggiorna_pagina(self) -> None:
         """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
         self.layout_lista_eventi.svuota_layout()

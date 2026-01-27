@@ -34,7 +34,7 @@ class NuovoEventoView(AbstractCreaView):
         label_data.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.data = QDateEdit()
         self.data.setDate(QDate.currentDate())
-        self.data.setMinimumDate(QDate.currentDate())  # - DA CORRIGERE
+        self.data.setMinimumDate(QDate.currentDate())
 
         label_ora = QLabel('Ora<span style="color:red;">*</span> :')
         label_ora.setProperty(WidgetRole.BODY_TEXT, True)

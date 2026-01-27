@@ -106,17 +106,13 @@ class SpettacoliSectionController(AbstractSectionController):
         # Mostra tutti gli spettacoli della lista a schermo
         for spettacolo in lista_spettacoli:
             # Verifica che classe di Spettacolo è l'istanza
+            dati: tuple[str, ...] = ()
             if isinstance(spettacolo, Regia):
-                compositore: str = ""
                 if opera_associata := self._model.get_opera(spettacolo.get_id_opera()):
-                    compositore = opera_associata.get_compositore()
-                dati = (compositore, spettacolo.get_regista())
-                current_spettacolo = SpettacoloDisplay(
-                    spettacolo,
-                    dati=dati,
-                )
+                    dati = (opera_associata.get_compositore(), spettacolo.get_regista())
             else:
-                current_spettacolo = SpettacoloDisplay(spettacolo)
+                ...  # Nel caso ci siano altri sottoclassi di Spettacolo
+            current_spettacolo = SpettacoloDisplay(spettacolo, dati)
 
             current_spettacolo.visualizzaRequest.connect(  # type:ignore
                 self.__visualizza_spettacolo

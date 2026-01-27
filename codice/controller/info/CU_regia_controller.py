@@ -192,14 +192,14 @@ class CURegiaController(AbstractCUController):
                 )
             except DatoIncongruenteException as exc:
                 # È stato trovato un campo con input non valido
-                current_pagina.show_input_error(CAMPI_NECESSARI)
+                current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
                 PopupMessage.mostra_errore(
                     current_pagina,
                     "Input non valido",
                     f"Si è verificato un errore: {exc}",
                 )
             else:
-                current_pagina.show_input_error("")
+                current_pagina.mostra_msg_input_error("")
 
                 try:
                     self.__aggiungi_regia(nuova_regia)
@@ -246,14 +246,14 @@ class CURegiaController(AbstractCUController):
                 copia_regia.set_anno_produzione(anno)
                 copia_regia.set_id_opera(id_opera)
             except DatoIncongruenteException as exc:
-                current_pagina.show_input_error(CAMPI_NECESSARI)
+                current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
                 PopupMessage.mostra_errore(
                     current_pagina,
                     "Input non valido",
                     f"Si è verificato un errore: {exc}",
                 )
             else:
-                current_pagina.show_input_error("")
+                current_pagina.mostra_msg_input_error("")
 
                 try:
                     self.__modifica_regia(copia_regia)

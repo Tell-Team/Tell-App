@@ -69,14 +69,14 @@ class CUGenereController(AbstractCUController):
                 nuovo_genere = Genere(nome, descrizione)
             except DatoIncongruenteException as exc:
                 # È stato trovato un campo con input non valido
-                current_pagina.show_input_error(CAMPI_NECESSARI)
+                current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
                 PopupMessage.mostra_errore(
                     current_pagina,
                     "Input non valido",
                     f"Si è verificato un errore: {exc}",
                 )
             else:
-                current_pagina.show_input_error("")
+                current_pagina.mostra_msg_input_error("")
 
                 try:
                     self.__aggiungi_genere(nuovo_genere)
@@ -113,14 +113,14 @@ class CUGenereController(AbstractCUController):
                 copia_genere.set_nome(nome)
                 copia_genere.set_descrizione(descrizione)
             except DatoIncongruenteException as exc:
-                current_pagina.show_input_error(CAMPI_NECESSARI)
+                current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
                 PopupMessage.mostra_errore(
                     current_pagina,
                     "Input non valido",
                     f"Si è verificato un errore: {exc}",
                 )
             else:
-                current_pagina.show_input_error("")
+                current_pagina.mostra_msg_input_error("")
 
                 try:
                     self.__modifica_genere(copia_genere)

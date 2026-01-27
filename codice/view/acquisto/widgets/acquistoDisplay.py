@@ -15,7 +15,7 @@ class AcquistoDisplay(ItemDisplay):
 
     Segnali
     ---
-    - scegliPostoRequest(int): emesso quando si clicca il pulsante Scegli posti.
+    - `scegliPostoRequest(int)`: emesso quando si clicca il pulsante Scegli posti.
     """
 
     scegliPostoRequest = pyqtSignal(int)

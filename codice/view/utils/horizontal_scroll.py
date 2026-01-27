@@ -11,6 +11,7 @@ from PyQt6.QtGui import (
 from typing import Optional
 
 from view.style.ui_style import WidgetRole
+from view.style import rileva_tema_os
 
 
 class HorizontalWheelScrollArea(QScrollArea):
@@ -52,6 +53,13 @@ class HorizontalWheelScrollArea(QScrollArea):
 
 
 class ScrollFadeOverlay(QWidget):
+
+    __colored = (
+        QColor(192, 192, 192, 125)
+        if rileva_tema_os() == "dark.qss"
+        else QColor(128, 128, 128, 125)
+    )
+
     def __init__(self, scroll_area: HorizontalWheelScrollArea, fade_width: int = 40):
         super().__init__(scroll_area.viewport())
 
@@ -82,8 +90,7 @@ class ScrollFadeOverlay(QWidget):
         h = self.height()
         w = self.width()
 
-        # - Cercare modo di definirlo secondo il OS Theme
-        colored = QColor(128, 128, 128, 125)
+        colored = self.__colored
         empty = QColor(0, 0, 0, 0)
 
         # Fade sinistra

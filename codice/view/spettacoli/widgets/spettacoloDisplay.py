@@ -15,9 +15,9 @@ class SpettacoloDisplay(ItemDisplay):
 
     Segnali
     ---
-    - visualizzaRequest(int): emesso quando si clicca il pulsante Maggior info;
-    - modificaRequest(int): emesso quando si clicca il pulsante Modifica;
-    - eliminaConfermata(): emesso quando si clicca il pulsante Sì.
+    - `visualizzaRequest(int)`: emesso quando si clicca il pulsante Maggior info;
+    - `modificaRequest(int)`: emesso quando si clicca il pulsante Modifica;
+    - `eliminaConfermata()`: emesso quando si clicca il pulsante Sì.
     """
 
     visualizzaRequest = pyqtSignal(int)
@@ -51,6 +51,7 @@ class SpettacoloDisplay(ItemDisplay):
         self.__layout.setContentsMargins(1, 1, 1, 1)
         self.__layout.addWidget(titolo)
 
+        # Verifica che classe di Spettacolo è l'istanza
         if isinstance(s, Regia):
             self.carica_dati_regia(dati)
         else:

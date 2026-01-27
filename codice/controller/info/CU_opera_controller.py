@@ -77,14 +77,14 @@ class CUOperaController(AbstractCUController):
                 )
             except DatoIncongruenteException as exc:
                 # È stato trovato un campo con input non valido
-                current_pagina.show_input_error(CAMPI_NECESSARI)
+                current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
                 PopupMessage.mostra_errore(
                     current_pagina,
                     "Input non valido",
                     f"Si è verificato un errore: {exc}",
                 )
             else:
-                current_pagina.show_input_error("")
+                current_pagina.mostra_msg_input_error("")
                 try:
                     self.__aggiungi_opera(nuova_opera)
                 except IdInesistenteException as exc:
@@ -140,14 +140,14 @@ class CUOperaController(AbstractCUController):
                 copia_opera.set_teatro_prima_rappresentazione(teatro)
             except DatoIncongruenteException as exc:
                 # È stato trovato un campo con input non valido
-                current_pagina.show_input_error(CAMPI_NECESSARI)
+                current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
                 PopupMessage.mostra_errore(
                     current_pagina,
                     "Input non valido",
                     f"Si è verificato un errore: {exc}",
                 )
             else:
-                current_pagina.show_input_error("")
+                current_pagina.mostra_msg_input_error("")
 
                 try:
                     self.__modifica_opera(copia_opera)

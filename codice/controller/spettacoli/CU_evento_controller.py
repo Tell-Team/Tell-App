@@ -74,14 +74,14 @@ class CUEventoController(AbstractCUController):
                 nuovo_evento = Evento(py_date, current_pagina.id_spettacolo)
             except DatoIncongruenteException as exc:
                 # È stato trovato un campo con input non valido
-                current_pagina.show_input_error(DATI_INCONGRUENTI)
+                current_pagina.mostra_msg_input_error(DATI_INCONGRUENTI)
                 PopupMessage.mostra_errore(
                     current_pagina,
                     "Input non valido",
                     f"Si è verificato un errore: {exc}",
                 )
             else:
-                current_pagina.show_input_error("")
+                current_pagina.mostra_msg_input_error("")
 
                 try:
                     self.__aggiungi_evento(nuovo_evento)
@@ -119,14 +119,14 @@ class CUEventoController(AbstractCUController):
             try:
                 copia_evento.set_data_ora(py_date)
             except DatoIncongruenteException as exc:
-                current_pagina.show_input_error(DATI_INCONGRUENTI)
+                current_pagina.mostra_msg_input_error(DATI_INCONGRUENTI)
                 PopupMessage.mostra_errore(
                     current_pagina,
                     "Input non valido",
                     f"Si è verificato un errore: {exc}",
                 )
             else:
-                current_pagina.show_input_error("")
+                current_pagina.mostra_msg_input_error("")
 
                 try:
                     self.__modifica_evento(copia_evento)

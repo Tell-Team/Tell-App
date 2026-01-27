@@ -105,7 +105,7 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
         """Resetta la pagina allo stato default."""
         ...
 
-    def show_input_error(self, message: str) -> None:
+    def mostra_msg_input_error(self, message: str) -> None:
         """Aggiorna il testo della label `input_error`.
 
         :param message: testo inserito nel label
