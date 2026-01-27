@@ -65,7 +65,7 @@ class SpettacoliSectionController(AbstractSectionController):
 
     def __display_spettacoli(self, layout_spettacoli: ListLayout) -> None:
         """Mostra a schermo alcune informazioni degli spettacoli salvati ed assegna a
-        ciascuno pulsanti per visualizzarli in dettaglio, scegliere posti, modificarli
+        ciascuno dei pulsanti per visualizzarli in dettaglio, scegliere posti, modificarli
         o eliminarli.
 
         :param layout_spettacoli: layout dove saranno caricati tutti gli spettacoli
@@ -84,9 +84,9 @@ class SpettacoliSectionController(AbstractSectionController):
             layout_spettacoli.mostra_msg_lista_vuota()
             return
 
-        # Funzione di elimina per gli spettacoli
+        # Funzione di eliminazione per gli spettacoli
         def on_conferma(widget_spettacolo: SpettacoloDisplay, id_: int) -> None:
-            """Prova di eliminare l'istanza di spettacolo.
+            """Prova ad eliminare l'istanza di Spettacolo.
 
             :param widget_spettacolo: widget associato allo `Spettacolo` da eliminare
             :param id_: id dello spettacolo da eliminare

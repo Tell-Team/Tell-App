@@ -364,7 +364,7 @@ class NavigationController(QObject):
                 (
                     "__account_controller",
                     AccountSectionController,
-                    (model, self.__account_section),
+                    (model, self.__account_section, self.__user_session),
                 ),
             )
             controller_defs.append(

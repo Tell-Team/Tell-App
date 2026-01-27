@@ -100,7 +100,7 @@ class CUEventoController(AbstractCUController):
             # Crea una copia del evento originale
             copia_evento = self.__get_evento(current_pagina.id_current_evento)
             if not isinstance(copia_evento, Evento):
-                # Non esiste evento con l'id salvata nella pagina
+                # Non esiste evento con l'id salvato nella pagina
                 PopupMessage.mostra_errore(
                     current_pagina,
                     "Errore nel salvataggio",

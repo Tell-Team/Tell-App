@@ -70,7 +70,7 @@ class VisualizzaSpettacoloController(QObject):
 
     def __display_eventi(self, layout_eventi: ListLayout) -> None:
         """Mostra a schermo le informazioni degli eventi salvati e associati ad
-        uno spettacolo ed assegna a ciascuno pulsanti per modificarli o eliminarli.
+        uno spettacolo ed assegna a ciascuno dei pulsanti per modificarli o eliminarli.
 
         :param layout_eventi: layout dove saranno caricate tutti le regie
         """
@@ -83,9 +83,9 @@ class VisualizzaSpettacoloController(QObject):
             layout_eventi.mostra_msg_lista_vuota()
             return
 
-        # Funzione di elimina per gli eventi
+        # Funzione di eliminazione per gli eventi
         def on_conferma(widget_evento: EventoDisplay, id_: int) -> None:
-            """Prova di eliminare l'istanza di `Evento`.
+            """Prova ad eliminare l'istanza di Evento.
 
             :param widget_evento: widget associato all'Evento` da eliminare
             :param id_: id dell'evento da eliminare

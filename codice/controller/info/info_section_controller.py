@@ -95,9 +95,9 @@ class InfoSectionController(AbstractSectionController):
             layout_opere.mostra_msg_lista_vuota()
             return
 
-        # Funzione di elimina per le opere
+        # Funzione di eliminazione per le opere
         def on_conferma(widget_opera: OperaDisplay, id_: int) -> None:
-            """Prova di eliminare l'istanza d'opera.
+            """Prova ad eliminare l'istanza di Opera.
 
             :param widget_opera: widget associato all'`Opera` da eliminare
             :param id_: id dell'opera da eliminare
@@ -135,9 +135,9 @@ class InfoSectionController(AbstractSectionController):
 
     def __display_generi(self, layout_generi: ListLayout) -> None:
         """Mostra a schermo le informazioni dei generi salvati ed assegna a
-        ciascuno pulsanti per modificarli o eliminarli.
+        ciascuno dei pulsanti per modificarli o eliminarli.
 
-        :param layout_generi: layout dove saranno caricate tutti i generi
+        :param layout_generi: layout dove saranno caricati tutti i generi
         """
         lista_generi = self.__get_generi()
 
@@ -146,9 +146,9 @@ class InfoSectionController(AbstractSectionController):
             layout_generi.mostra_msg_lista_vuota()
             return
 
-        # Funzione di elimina per i generi
+        # Funzione di eliminazione per i generi
         def on_conferma(widget_genere: GenereDisplay, id_: int) -> None:
-            """Prova di eliminare l'istanza d'opera.
+            """Prova ad eliminare l'istanza di Opera.
 
             :param widget_genere: widget associato al `Genere` da eliminare
             :param id_: id dell'opera da eliminare

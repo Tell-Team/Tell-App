@@ -51,7 +51,7 @@ class CUGenereController(AbstractCUController):
     def _inizia_salvataggio(self, is_new: bool) -> None:
         """Salva il genere creato o modificato nel `GestoreGeneri`.
 
-        :param is_new: verifica se si deve creare un genere o modificare una esistente
+        :param is_new: verifica se si deve creare un genere o modificarne uno esistente
         """
         CAMPI_NECESSARI = (
             "<b>ATTENZIONE</b>: È necessario compilare tutti i campi d'input."
@@ -95,7 +95,7 @@ class CUGenereController(AbstractCUController):
             # Crea una copia del genere originale
             copia_genere = self.__get_genere(current_pagina.id_current_genere)
             if not isinstance(copia_genere, Genere):
-                # Non esiste genere con l'id salvata nella pagina
+                # Non esiste genere con l'id salvato nella pagina
                 PopupMessage.mostra_errore(
                     current_pagina,
                     "Errore nel salvataggio",
@@ -104,7 +104,7 @@ class CUGenereController(AbstractCUController):
                 )
                 return
 
-            # Ottieni l'input inserito
+            # Ottiene l'input inserito
             nome = current_pagina.nome.text()
             descrizione = current_pagina.descrizione.toPlainText()
 

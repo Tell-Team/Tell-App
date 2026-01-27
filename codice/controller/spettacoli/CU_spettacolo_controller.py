@@ -221,7 +221,7 @@ class CUSpettacoloController(AbstractCUController):
                 current_pagina.id_current_spettacolo
             )
             if not isinstance(copia_spettacolo, Spettacolo):
-                # Non esiste spettacolo con l'id salvata nella pagina
+                # Non esiste spettacolo con l'id salvato nella pagina
                 PopupMessage.mostra_errore(
                     current_pagina,
                     "Errore nel salvataggio",

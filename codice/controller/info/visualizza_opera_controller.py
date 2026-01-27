@@ -82,9 +82,9 @@ class VisualizzaOperaController(QObject):
             layout_regie.mostra_msg_lista_vuota()
             return
 
-        # Funzione di elimina per le regie
+        # Funzione di eliminazione per le regie
         def on_conferma(widget_regia: RegiaDisplay, id_: int) -> None:
-            """Prova di eliminare l'istanza di regia.
+            """Prova ad eliminare l'istanza di Regia.
 
             :param widget_regia: widget associato alla `Regia` da eliminare
             :param id_: id della regia da eliminare
