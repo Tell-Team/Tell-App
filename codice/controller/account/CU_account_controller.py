@@ -93,7 +93,7 @@ class CUAccountController(AbstractCUController):
 
             except DatoIncongruenteException as e:
                 # È stato trovato un campo con input non valido
-                current_pagina.show_input_error(CAMPI_NECESSARI)
+                current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
                 PopupMessage.mostra_errore(
                     current_pagina,
                     "Input non valido",
@@ -101,21 +101,21 @@ class CUAccountController(AbstractCUController):
                 )
 
             else:
-                current_pagina.show_input_error("")
+                current_pagina.mostra_msg_input_error("")
 
                 # Tenta di creare il nuovo account
                 try:
                     nuovo_account = Account(username, password, ruolo)
                 except DatoIncongruenteException as e:
                     # È stato trovato un campo con input non valido
-                    current_pagina.show_input_error(CAMPI_NECESSARI)
+                    current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
                     PopupMessage.mostra_errore(
                         current_pagina,
                         "Input non valido",
                         f"Si è verificato un errore: {e}",
                     )
                 else:
-                    current_pagina.show_input_error("")
+                    current_pagina.mostra_msg_input_error("")
 
                     try:
                         self.__aggiungi_account(nuovo_account, self.__user_session_id)
@@ -188,7 +188,7 @@ class CUAccountController(AbstractCUController):
 
                 except DatoIncongruenteException as e:
                     # È stato trovato un campo con input non valido
-                    current_pagina.show_input_error(CAMPI_NECESSARI)
+                    current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
                     PopupMessage.mostra_errore(
                         current_pagina,
                         "Input non valido",
@@ -212,7 +212,7 @@ class CUAccountController(AbstractCUController):
                     )
 
                 else:
-                    current_pagina.show_input_error("")
+                    current_pagina.mostra_msg_input_error("")
 
                     try:
                         self.__modifica_account(copia_account)
