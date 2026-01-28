@@ -17,6 +17,7 @@ from model.model import Model
 
 
 STR_NON_VUOTA = "BCNRFF"
+DATA_ORA_PASSATO = datetime(1904, 6, 16, 8)
 ID_NON_ESISTENTE = 777
 DATA = date(2009, 4, 13)
 
@@ -423,7 +424,7 @@ class TestTell(unittest.TestCase):
         self.assertEqual(self.__model.get_opere(), [o2])
         print("Passato ELIMINA")
 
-    # ### REGIE & SPETTACOLI ###
+    # ### SPETTACOLI E REGIE ###
     def test_regia(self):
         print("\n### REGIA ###")
 
@@ -547,8 +548,8 @@ class TestTell(unittest.TestCase):
         )
         print("Passato CONGRUENZA tecnici")
 
-    def test_model_regie(self):
-        print("\n### MODEL REGIE ###")
+    def test_model_spettacoli_e_regie(self):
+        print("\n### MODEL SPETTEACOLI E REGIE ###")
 
         # AGGIUNGI
         r = Regia(
@@ -729,14 +730,12 @@ class TestTell(unittest.TestCase):
         )
         print("Passato ELIMINA IdInesistente")
 
-        e = Evento(datetime.now(), r.get_id())
+        e = Evento(DATA_ORA_PASSATO, r.get_id())
         self.__model.aggiungi_evento(e)
         self.assertRaises(
             OggettoInUsoException, self.__model.elimina_spettacolo, r.get_id()
         )
         print("Passato ELIMINA OggettoInUso")
-        # TODO
-        # self.__model._Model__gestore_eventi.elimina_evento(e.get_id())  # type: ignore
         self.__model.elimina_evento(e.get_id())
 
         self.__model.elimina_spettacolo(r.get_id())

@@ -13,6 +13,13 @@ class GestorePosti:
         self.__lista_posti: list[Posto] = []
 
     # Stato
+    def ha_posto(self, id_: int) -> bool:
+        for p in self.__lista_posti:
+            if p.get_id() == id_:
+                return True
+
+        return False
+
     def sezione_in_uso(self, id_: int) -> bool:
         for p in self.__lista_posti:
             if p.get_id_sezione() == id_:
