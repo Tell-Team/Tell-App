@@ -42,13 +42,20 @@ class ModificaAccountView(NuovoAccountView):
         self.nuova_password.setPlaceholderText("Inserire nuova password")
         self.nuova_password.setEchoMode(QLineEdit.EchoMode.Password)
 
+        self.conferma.setEnabled(False)
+        self.password.setEnabled(False)
+
         self._form_layout.addRow(self._label_username, self.username)
-        self._form_layout.addRow(self._label_password, self.password)
         self._form_layout.addRow(label_nuova_password, self.nuova_password)
         self._form_layout.addRow(self._label_conferma, self.conferma)
+        self._form_layout.addRow(self._label_password, self.password)
         self._form_layout.addRow(self._label_ruolo, self.ruolo)
 
     # ------------------------- METODI DI VIEW -------------------------
+
+    def set_modifica_password_enabled(self, enabled: bool):
+        self.conferma.setEnabled(enabled)
+        self.password.setEnabled(enabled)
 
     def set_data(self, data: AccountPageData) -> None:
         """Carica i dati di un'account nella pagina.
@@ -71,3 +78,5 @@ class ModificaAccountView(NuovoAccountView):
         super().reset_pagina()
         self.id_current_account = -1
         self.nuova_password.setText("")
+        self.conferma.setEnabled(False)
+        self.password.setEnabled(False)

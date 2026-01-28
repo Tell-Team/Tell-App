@@ -85,6 +85,7 @@ class CUOperaController(AbstractCUController):
                 )
             else:
                 current_pagina.mostra_msg_input_error("")
+
                 try:
                     self.__aggiungi_opera(nuova_opera)
                 except IdInesistenteException as exc:

@@ -1,36 +1,36 @@
 from functools import partial
-from PyQt6.QtWidgets import QWidget
 from typing import Optional
+
+from core.controller import AbstractSectionController
 
 from controller.login.user_session import UserSession
 from controller.navigation import Pagina
-from core.controller import AbstractSectionController
 
-from model.account.account import Account
-from model.exceptions import OggettoInUsoException
 from model.model import Model
+from model.account.account import Account, Ruolo
+from model.exceptions import OggettoInUsoException
 
 from view.account.pagine import AccountSectionView
-from view.account.utils.accountPageData import AccountPageData
-from view.account.widgets.accountDisplay import AccountDisplay
-from view.style.ui_style import WidgetRole
+from view.account.utils import AccountPageData
+from view.account.widgets import AccountDisplay
+
 from view.utils.list_widgets import ListLayout
-from view.utils.popupView import PopupMessage
+from view.utils import PopupMessage
+from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class AccountSectionController(AbstractSectionController):
     """Gestice la sezione Account ('AccountSectionView') dell'app."""
 
     _view_section: AccountSectionView
-    __user_session: int
 
     def __init__(
         self, model: Model, account_s: AccountSectionView, session: UserSession
     ):
-
-        self.__user_session = session.id
         if type(account_s) is not AccountSectionView:
             raise TypeError("Atteso AccountSectionView per account_s.")
+
+        self.__user_session_id = session.id
 
         super().__init__(model, account_s)
 
@@ -54,6 +54,9 @@ class AccountSectionController(AbstractSectionController):
     def __get_account(self, id_: int) -> Optional[Account]:
         return self._model.get_account(id_)
 
+    def __elimina_account(self, id_: int) -> None:
+        self._model.elimina_account(id_, self.__user_session_id)
+
     def __display_account(self, layout_accounts: ListLayout) -> None:
         """Mostra a schermo la lista degli account salvati
         e assegna a ciascuno dei pulsanti per modificarli o eliminarli
@@ -65,6 +68,7 @@ class AccountSectionController(AbstractSectionController):
         # Verifica che la lista non sia vuota
         if not accounts:
             layout_accounts.mostra_msg_lista_vuota()
+            return
 
         # Funzione di eliminazione per gli account
         def on_conferma(id_: int) -> None:
@@ -86,7 +90,9 @@ class AccountSectionController(AbstractSectionController):
 
         # Mostra tutti gli account salvati a schermo
         for acc in accounts:
-            current_account = AccountDisplay(acc, (acc.get_id() != self.__user_session))
+            current_account = AccountDisplay(
+                acc, (acc.get_id() != self.__user_session_id)
+            )
 
             # Setup della pagina di modifica degli account
             current_account.modificaRequest.connect(  # type: ignore
@@ -97,27 +103,25 @@ class AccountSectionController(AbstractSectionController):
                 partial(on_conferma, acc.get_id())
             )
 
-            layout_accounts.aggiungi_list_item(current_account, WidgetRole.ITEM_LIST)
+            COLORE = (
+                WidgetColor.Item.RED_ITEM
+                if acc.get_ruolo() == Ruolo.AMMINISTRATORE
+                else WidgetColor.Item.BLUE_ITEM
+            )
+            layout_accounts.aggiungi_list_item(
+                current_account, WidgetRole.ITEM_LIST, COLORE
+            )
 
     def __nuovo_account(self) -> None:
         """Carica la pagina 'NuovoAccountView',
         dove l'utente può inserire i dati necessari per creare un account."""
-
         # Ottieni la pagina NuovoAccountView
         from view.account.pagine import NuovoAccountView
 
-        current_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.NUOVO_ACCOUNT
-        self.getPageRequest.emit(pagina_nome, current_pagina_dict)
-        current_pagina: Optional[QWidget] = current_pagina_dict.get("value")
-
+        current_pagina = self._ottieni_pagina(pagina_nome)
         if type(current_pagina) is not NuovoAccountView:
-            PopupMessage.mostra_errore(
-                self._view_section,
-                "Pagina non trovata",
-                f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
-                + f"Type trovato: {type(current_pagina)}",
-            )
+            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
             return
 
         # Setup pagina pulendo i campi
@@ -125,9 +129,6 @@ class AccountSectionController(AbstractSectionController):
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
-
-    def __elimina_account(self, id_: int) -> None:
-        self._model.elimina_account(id_, self.__user_session)
 
     def __modifica_account(self, id_: int) -> None:
         """Carica la pagina 'ModificaAccountView',
@@ -151,7 +152,6 @@ class AccountSectionController(AbstractSectionController):
 
         pagina_nome = Pagina.MODIFICA_ACCOUNT
         current_pagina = self._ottieni_pagina(pagina_nome)
-
         if type(current_pagina) is not ModificaAccountView:
             self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
             return
