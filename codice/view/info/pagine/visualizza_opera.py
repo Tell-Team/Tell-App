@@ -211,7 +211,7 @@ class VisualizzaOperaView(QWidget):
         self.label_atti.setText(f"Numero di atti: {data.atti}")
         self.label_prima_rappresentazione.setText(
             "È stata rappresentata per prima volta il "
-            + f"{data.data_rappresentazione.strftime("%d/%m/%y")} "
+            + f"{data.data_rappresentazione.strftime("%d/%m/%Y")} "
             + f"nel teatro {data.teatro_rappresentazione}"
         )
         self.label_trama.setText(f"{data.trama}")

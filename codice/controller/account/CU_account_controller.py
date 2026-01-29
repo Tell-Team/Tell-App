@@ -15,7 +15,7 @@ from model.account.account import Account
 
 from view.account.pagine import NuovoAccountView, ModificaAccountView
 
-from typing import Optional, override
+from typing import override
 
 from view.utils.popupView import PopupMessage
 
@@ -49,13 +49,8 @@ class CUAccountController(AbstractCUController):
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
-    def __get_account(self, id_: int) -> Optional[Account]:
-        return self._model.get_account(id_)
-
     def __aggiungi_account(self, account: Account, agent_id: int) -> None:
         self._model.aggiungi_account(account, agent_id)
-
-    def __modifica_account(self, account: Account) -> None: ...
 
     @override
     def _inizia_salvataggio(self, is_new: bool = True) -> None:
@@ -97,72 +92,45 @@ class CUAccountController(AbstractCUController):
                 PopupMessage.mostra_errore(
                     current_pagina,
                     "Input non valido",
-                    f"{e}",
+                    f"Si è verificato un errore: {e}",
                 )
-
             else:
                 current_pagina.mostra_msg_input_error("")
 
-                # Tenta di creare il nuovo account
                 try:
-                    nuovo_account = Account(username, password, ruolo)
-                except DatoIncongruenteException as e:
-                    # È stato trovato un campo con input non valido
-                    current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
+                    self.__aggiungi_account(nuovo_account, self.__user_session_id)
+                except IdInesistenteException as e:
+                    # Non esiste un account (agent) con quell'id
                     PopupMessage.mostra_errore(
                         current_pagina,
-                        "Input non valido",
+                        "ID Account inesistente",
                         f"Si è verificato un errore: {e}",
                     )
+                except IdOccupatoException as e:
+                    # Esiste già un account con quell'id
+                    PopupMessage.mostra_errore(
+                        current_pagina,
+                        "ID Account occupato",
+                        f"Si è verificato un errore: {e}",
+                    )
+                except OccupatoException as e:
+                    # L'account è in uso
+                    PopupMessage.mostra_errore(
+                        current_pagina,
+                        "Account occupato",
+                        f"Si è verificato un errore: {e}",
+                    )
+                except PermessiInsufficientiException as e:
+                    # L'account richiedente non ha i permessi necessari
+                    PopupMessage.mostra_errore(
+                        current_pagina,
+                        "Privilegi insufficienti",
+                        f"Si è verificato un errore {e}",
+                    )
                 else:
-                    current_pagina.mostra_msg_input_error("")
-
-                    try:
-                        self.__aggiungi_account(nuovo_account, self.__user_session_id)
-                    except IdInesistenteException as e:
-                        # Non esiste un account (agent) con quell'id
-                        PopupMessage.mostra_errore(
-                            current_pagina,
-                            "ID Account inesistente",
-                            f"Si è verificato un errore: {e}",
-                        )
-                    except IdOccupatoException as e:
-                        # Esiste già un account con quell'id
-                        PopupMessage.mostra_errore(
-                            current_pagina,
-                            "ID Account occupato",
-                            f"Si è verificato un errore: {e}",
-                        )
-                    except OccupatoException as e:
-                        # L'account è in uso
-                        PopupMessage.mostra_errore(
-                            current_pagina,
-                            "Account occupato",
-                            f"Si è verificato un errore: {e}",
-                        )
-                    except PermessiInsufficientiException as e:
-                        # L'account richiedente non ha i permessi necessari
-                        PopupMessage.mostra_errore(
-                            current_pagina,
-                            "Privilegi insufficienti",
-                            f"Si è verificato un errore {e}",
-                        )
-                    else:
-                        self.goBackRequest.emit()
+                    self.goBackRequest.emit()
         elif not is_new:
             current_pagina: ModificaAccountView = self._view_modifica  # type: ignore
-
-            # Crea una copia dell'account originale
-            copia_account = self.__get_account(current_pagina.id_current_account)
-            if not isinstance(copia_account, Account):
-                PopupMessage.mostra_errore(
-                    # Non esiste account con l'id salvato nella pagina
-                    current_pagina,
-                    "Errore nel salvataggio",
-                    f"Non è presente nessun account con id {current_pagina.id_current_account}. "
-                    + "Impossibile effettuare le modifiche.",
-                )
-                return
 
             # Ottiene l'input inserito
             id_account = current_pagina.id_current_account
@@ -181,10 +149,9 @@ class CUAccountController(AbstractCUController):
             else:
                 # Tenta di modificare l'account
                 try:
-                    copia_account.set_username(username)
                     if password_new:
                         self._model.cambia_password(id_account, password, password_new)
-                        self._model.cambia_ruolo(id_account, ruolo, UserSession.id)
+                    self._model.cambia_ruolo(id_account, ruolo, self.__user_session_id)
 
                 except DatoIncongruenteException as e:
                     # È stato trovato un campo con input non valido
@@ -211,17 +178,14 @@ class CUAccountController(AbstractCUController):
                         f"Si è verificato un errore {e}",
                     )
 
+                except IdInesistenteException as e:
+                    # L'ID non esiste
+                    PopupMessage.mostra_errore(
+                        current_pagina,
+                        "ID inesistente",
+                        f"Si è verificato un errore {e}",
+                    )
+
                 else:
                     current_pagina.mostra_msg_input_error("")
-
-                    try:
-                        self.__modifica_account(copia_account)
-                    except IdInesistenteException as e:
-                        # Non esiste un account con quell'id
-                        PopupMessage.mostra_errore(
-                            current_pagina,
-                            "ID Account inesistente",
-                            f"Si è verificato un errore: {e}",
-                        )
-                    else:
-                        self.goBackRequest.emit()
+                    self.goBackRequest.emit()

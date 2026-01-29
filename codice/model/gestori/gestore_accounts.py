@@ -105,19 +105,20 @@ class GestoreAccounts:
 
     def cambia_ruolo(self, account_id: int, nuovo_ruolo: Ruolo, agent_id: int):
         """Throws: PermessiInsufficientiException, IdInesistenteException"""
-        account = self.get_account(account_id)
-        if account is None:
-            raise IdInesistenteException(
-                f"Non è presente nessun account con id {account_id}."
-            )
-
         agent = self.get_account(agent_id)
         if agent is None:
             raise IdInesistenteException(
                 f"Non è presente nessun account con id {agent_id}."
             )
 
-        account.cambia_ruolo(nuovo_ruolo, agent)
+        for i, a in enumerate(self.__lista_accounts):
+            if a.get_id() == account_id:
+                self.__lista_accounts[i].cambia_ruolo(nuovo_ruolo, agent)
+                return
+
+        raise IdInesistenteException(
+            f"Non è presente nessun account con id {account_id}."
+        )
 
     # Login
     def login(self, username: str, password: str) -> int:
