@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import (
     QLabel,
     QPushButton,
     QVBoxLayout,
+    QLayout,
     QHBoxLayout,
     QGridLayout,
     QScrollArea,
@@ -14,6 +15,7 @@ from controller.login.user_session import UserSession
 from model.organizzazione.evento import Evento
 
 from view.spettacoli.utils import SpettacoloPageData
+from view.info.utils import RegiaPageData
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
@@ -30,7 +32,7 @@ class VisualizzaSpettacoloView(QWidget):
     Segnali
     ---
     - `tornaIndietroRequest()`: emesso quando si clicca il pulsante Indietro;
-    - `displayEventiRequest(QVBoxLayout)`: emesso per mostrare la lista eventi a schermo;
+    - `displayEventiRequest(QVBoxLayout)`: emesso per mostrare a schermo la lista eventi;
     - `nuovoEventoRequest()`: emesso quando si clicca il pulsante Nuovo evento.
     """
 
@@ -64,35 +66,13 @@ class VisualizzaSpettacoloView(QWidget):
         self.label_titolo.setProperty(WidgetRole.HEADER1, True)
         self.label_titolo.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        # self.label_librettista = HyphenatedLabel("Libretto di [Librettista Opera].")
-        # self.label_librettista.setProperty(WidgetRole.BODY_TEXT, True)
-        # self.label_librettista.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.label_note = HyphenatedLabel("[Note Spettacolo]")
+        self.label_note.setProperty(WidgetRole.BODY_TEXT, True)
+        self.label_note.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
-        # self.label_compositore = HyphenatedLabel(
-        #     "Musica composta da [Compositore Opera]."
-        # )
-        # self.label_compositore.setProperty(WidgetRole.BODY_TEXT, True)
-        # self.label_compositore.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
-
-        # self.label_genere = HyphenatedLabel(f"Genere: [Genere Opera]")
-        # self.label_genere.setProperty(WidgetRole.BODY_TEXT, True)
-        # self.label_genere.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
-
-        # self.label_atti = QLabel(f"Numero di atti: [Atti Opera]")
-        # self.label_atti.setProperty(WidgetRole.BODY_TEXT, True)
-        # self.label_atti.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
-
-        # self.label_prima_rappresentazione = HyphenatedLabel(
-        #     f"È stata rappresentata per prima volta il [Data Opera] nel teatro [Teatro Opera]."
-        # )
-        # self.label_prima_rappresentazione.setProperty(WidgetRole.BODY_TEXT, True)
-        # self.label_prima_rappresentazione.setProperty(
-        #     WidgetColor.Text.PRIMARY_TEXT, True
-        # )
-
-        # self.label_trama = HyphenatedLabel("[Trama Opera]")
-        # self.label_trama.setProperty(WidgetRole.BODY_TEXT, True)
-        # self.label_trama.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        container_dati_speciali = QWidget()
+        self.layout_dati_speciali = QVBoxLayout(container_dati_speciali)
+        self.layout_dati_speciali.setContentsMargins(0, 0, 0, 0)
 
         # Lista Eventi
         label_lista_eventi = QLabel("Lista eventi")
@@ -157,12 +137,8 @@ class VisualizzaSpettacoloView(QWidget):
         pagina_content = QWidget()
         layout_content = QVBoxLayout(pagina_content)
         layout_content.addWidget(self.label_titolo)
-        # layout_content.addWidget(self.label_librettista)
-        # layout_content.addWidget(self.label_compositore)
-        # layout_content.addWidget(self.label_genere)
-        # layout_content.addWidget(self.label_atti)
-        # layout_content.addWidget(self.label_prima_rappresentazione)
-        # layout_content.addWidget(self.label_trama)
+        layout_content.addWidget(self.label_note)
+        layout_content.addWidget(container_dati_speciali)
         layout_content.addWidget(self.eventi)
         layout_content.addStretch()
 
@@ -188,7 +164,11 @@ class VisualizzaSpettacoloView(QWidget):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def set_data(self, data: SpettacoloPageData, lista_eventi: list[Evento]) -> None:
+    def set_data(
+        self,
+        data: SpettacoloPageData,
+        lista_eventi: list[Evento],
+    ) -> None:
         """Carica i dati dello spettacolo nella pagina.
 
         :param data: data salvata in una classe immutabile
@@ -202,16 +182,20 @@ class VisualizzaSpettacoloView(QWidget):
 
         # Carica dati dello spettacolo
         self.label_titolo.setText(f"{data.titolo}")
-        # self.label_librettista.setText(f"Libretto di {data.librettista}")
-        # self.label_compositore.setText(f"Musica composta da {data.compositore}")
-        # self.label_genere.setText(f"Genere: {genere_nome}")
-        # self.label_atti.setText(f"Numero di atti: {data.atti}")
-        # self.label_prima_rappresentazione.setText(
-        #     "È stata rappresentata per prima volta il "
-        #     + f"{data.data_rappresentazione.strftime("%d/%m/%y")} "
-        #     + f"nel teatro {data.teatro_rappresentazione}"
-        # )
-        # self.label_trama.setText(f"{data.trama}")
+        self.label_note.setText(f"{data.note}")
+        self.__svuota_layout_generico(self.layout_dati_speciali)
+        if type(data) is RegiaPageData:
+            label_regista = QLabel(f"<b>Regista:</b> {data.regista}")
+            label_regista.setProperty(WidgetRole.BODY_TEXT, True)
+            label_regista.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+            self.layout_dati_speciali.addWidget(label_regista)
+
+            label_anno = QLabel(f"<b>Anno di produzione:</b> {data.anno_produzione}")
+            label_anno.setProperty(WidgetRole.BODY_TEXT, True)
+            label_anno.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+            self.layout_dati_speciali.addWidget(label_anno)
+        else:  # Caso Spettacolo generico
+            ...
 
         # Carica lista regie
         if not self.lista_eventi:
@@ -223,3 +207,13 @@ class VisualizzaSpettacoloView(QWidget):
         """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
         self.layout_lista_eventi.svuota_layout()
         self.displayEventiRequest.emit(self.layout_lista_eventi)
+
+    def __svuota_layout_generico(self, layout: QLayout):
+        while layout.count() > 0:
+            item = layout.takeAt(0)
+            if item is None:
+                raise ValueError("Expected item at index 0")
+            if widget := item.widget():
+                widget.setParent(None)
+            elif child_layout := item.layout():
+                self.__svuota_layout_generico(child_layout)

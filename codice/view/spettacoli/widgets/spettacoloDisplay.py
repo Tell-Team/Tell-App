@@ -3,7 +3,7 @@ from PyQt6.QtCore import pyqtSignal
 from functools import partial
 
 from model.pianificazione.spettacolo import Spettacolo
-from model.pianificazione.regia import Regia  # - TESTING
+from model.pianificazione.regia import Regia
 
 from view.utils.list_widgets import ItemDisplay
 from view.utils.hyphenate_text import HyphenatedLabel
@@ -54,8 +54,8 @@ class SpettacoloDisplay(ItemDisplay):
         # Verifica che classe di Spettacolo è l'istanza
         if isinstance(s, Regia):
             self.carica_dati_regia(dati)
-        else:
-            ...  # Nel caso ci siano altri sottoclassi di Spettacolo
+        else:  # Caso Spettacolo generico
+            ...
 
         self.__layout.addWidget(self.__pulsanti)
 

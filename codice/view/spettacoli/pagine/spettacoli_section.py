@@ -25,8 +25,7 @@ class SpettacoliSectionView(AbstractSectionView):
     Segnali
     ---
     - `nuovoSpettacoloRequest()`: emesso quando si clicca il pulsante Nuovo spettacolo;
-    - `displaySpettacoliRequest(QVBoxLayout)`: emesso per caricare la lista degli spettacoli
-    nella sezione Spettacoli.
+    - `displaySpettacoliRequest(QVBoxLayout)`: emesso per mostrare a schermo la lista spettacoli.
     """
 
     nuovoSpettacoloRequest = pyqtSignal()
@@ -43,6 +42,7 @@ class SpettacoliSectionView(AbstractSectionView):
         super()._setup_ui()
 
         if not self.is_admin:
+            self._btn_sezione_teatro.hide()
             self._btn_sezione_account.hide()
 
         # Spettacoli

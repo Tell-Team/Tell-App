@@ -25,8 +25,8 @@ class AcquistoSectionView(AbstractSectionView):
 
     Segnali
     ---
-    - `displaySpettacoliRequest(QVBoxLayout)`: emesso per caricare la lista degli spettacoli
-    nella sezione Spettacoli.
+    - `displaySpettacoliRequest(QVBoxLayout)`: emesso per mostrare a schermo la lista spettacoli,
+    tale che tutti gli `Spettacolo` ottenuti hanno almeno un evento corrente associato.
     """
 
     displaySpettacoliRequest = pyqtSignal(QVBoxLayout)
@@ -45,6 +45,7 @@ class AcquistoSectionView(AbstractSectionView):
         if not self.is_biglietteria:
             self._btn_sezione_spettacoli.hide()
         if not self.is_admin:
+            self._btn_sezione_teatro.hide()
             self._btn_sezione_account.hide()
 
         # Acquisto

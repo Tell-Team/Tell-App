@@ -15,7 +15,7 @@ from view.style.ui_style import WidgetRole
 
 class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
     """Classe astratta per la creazione di pagine di sezione dell'app: Acquisto,
-    Spettacoli, Info ed Account.
+    Spettacoli, Info, Teatro ed Account.
 
     Segnali
     ---
@@ -23,6 +23,7 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
     - `goToAcquisto()`: emesso quando si clicca il pulsante Acquisto;
     - `goToSpettacoli()`: emesso quando si clicca il pulsante Spettacoli;
     - `goToInfo()`: emesso quando si clicca il pulsante Info;
+    - `goToTeatro()`: emesso quando si clicca il pulsante Teatro;
     - `goToAccount()`: emesso quando si clicca il pulsante Account.
     """
 
@@ -31,6 +32,7 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
     goToAcquisto = pyqtSignal()
     goToSpettacoli = pyqtSignal()
     goToInfo = pyqtSignal()
+    goToTeatro = pyqtSignal()
     goToAccount = pyqtSignal()
 
     def __init__(self):
@@ -59,6 +61,9 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
         self._btn_sezione_info = QPushButton("Info")
         self._btn_sezione_info.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
+        self._btn_sezione_teatro = QPushButton("Teatro")
+        self._btn_sezione_teatro.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+
         self._btn_sezione_account = QPushButton("Account")
         self._btn_sezione_account.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
@@ -67,6 +72,7 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
         layout_sezioni.addWidget(self._btn_sezione_acquisto)
         layout_sezioni.addWidget(self._btn_sezione_spettacoli)
         layout_sezioni.addWidget(self._btn_sezione_info)
+        layout_sezioni.addWidget(self._btn_sezione_teatro)
         layout_sezioni.addWidget(self._btn_sezione_account)
         layout_sezioni.addStretch()
 
@@ -105,6 +111,10 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
 
         self._btn_sezione_info.clicked.connect(  # type:ignore
             self.goToInfo.emit
+        )
+
+        self._btn_sezione_teatro.clicked.connect(  # type:ignore
+            self.goToTeatro.emit
         )
 
         self._btn_sezione_account.clicked.connect(  # type:ignore

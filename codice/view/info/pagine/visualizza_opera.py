@@ -30,7 +30,7 @@ class VisualizzaOperaView(QWidget):
     Segnali
     ---
     - `tornaIndietroRequest()`: emesso quando si clicca il pulsante Indietro;
-    - `displayRegieRequest(QVBoxLayout)`: emesso per mostrare la lista regie a schermo;
+    - `displayRegieRequest(QVBoxLayout)`: emesso per mostrare a schermo la lista regie;
     - `nuovaRegiaRequest()`: emesso quando si clicca il pulsante Nuova regia.
     """
 

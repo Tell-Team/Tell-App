@@ -39,7 +39,7 @@ class AbstractCUController(QObject, metaclass=ABCQObjectMeta):
         )
         # Conferma creazione
         self._view_nuova.salvaRequest.connect(  # type:ignore
-            partial(self._inizia_salvataggio, is_new=True)
+            partial(self.__inizia_salvataggio, is_new=True)
         )
 
         # Annulla modifica
@@ -48,7 +48,7 @@ class AbstractCUController(QObject, metaclass=ABCQObjectMeta):
         )
         # Conferma modifica
         self._view_modifica.salvaRequest.connect(  # type:ignore
-            partial(self._inizia_salvataggio, is_new=False)
+            partial(self.__inizia_salvataggio, is_new=False)
         )
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
@@ -62,10 +62,18 @@ class AbstractCUController(QObject, metaclass=ABCQObjectMeta):
         self.goBackRequest.emit()
         current_pagina.reset_pagina()
 
-    @abstractmethod
-    def _inizia_salvataggio(self, is_new: bool) -> None:
+    def __inizia_salvataggio(self, is_new: bool) -> None:
         """Salva l'istanza creata o modificata nel gestore dedicato.
 
         :param is_new: verifica se si deve creare un'instanza o modificare una esistente
         """
-        ...
+        if is_new:
+            self._richiesta_nuovo()
+        elif not is_new:
+            self._richiesta_modifica()
+
+    @abstractmethod
+    def _richiesta_nuovo(self) -> None: ...
+
+    @abstractmethod
+    def _richiesta_modifica(self) -> None: ...

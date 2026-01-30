@@ -58,6 +58,9 @@ class AbstractSectionController(QObject, metaclass=ABCQObjectMeta):
         self._view_section.goToAccount.connect(  # type:ignore
             partial(self.goToSectionRequest.emit, Pagina.SEZIONE_ACCOUNT)
         )
+        self._view_section.goToTeatro.connect(  # type:ignore
+            partial(self.goToSectionRequest.emit, Pagina.SEZIONE_TEATRO)
+        )
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 

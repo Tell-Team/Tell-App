@@ -3,7 +3,7 @@ from PyQt6.QtCore import pyqtSignal
 from functools import partial
 
 from model.pianificazione.spettacolo import Spettacolo
-from model.pianificazione.regia import Regia  # - TESTING
+from model.pianificazione.regia import Regia
 
 from view.utils.list_widgets import ItemDisplay
 from view.utils.hyphenate_text import HyphenatedLabel

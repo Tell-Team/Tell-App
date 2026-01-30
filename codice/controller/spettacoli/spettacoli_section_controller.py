@@ -14,6 +14,7 @@ from model.exceptions import OggettoInUsoException
 from view.spettacoli.pagine import SpettacoliSectionView
 from view.spettacoli.widgets import SpettacoloDisplay
 from view.spettacoli.utils import SpettacoloPageData
+from view.info.utils import RegiaPageData
 
 from view.utils.list_widgets import ListLayout
 from view.utils import PopupMessage
@@ -155,17 +156,27 @@ class SpettacoliSectionController(AbstractSectionController):
             self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
             return
 
-        spettacolo_data = SpettacoloPageData(
-            id=current_spettacolo.get_id(),
-            titolo=current_spettacolo.get_titolo(),
-            note=current_spettacolo.get_note(),
-            interpreti=current_spettacolo.get_interpreti(),
-            tecnici=current_spettacolo.get_tecnici(),
-        )
+        if isinstance(current_spettacolo, Regia):
+            spettacolo_data = RegiaPageData(
+                id=current_spettacolo.get_id(),
+                titolo=current_spettacolo.get_titolo(),
+                note=current_spettacolo.get_note(),
+                interpreti=current_spettacolo.get_interpreti(),
+                tecnici=current_spettacolo.get_tecnici(),
+                regista=current_spettacolo.get_regista(),
+                anno_produzione=current_spettacolo.get_anno_produzione(),
+                id_opera=current_spettacolo.get_id_opera(),
+            )
+        else:  # Caso Spettacolo generico
+            spettacolo_data = SpettacoloPageData(
+                id=current_spettacolo.get_id(),
+                titolo=current_spettacolo.get_titolo(),
+                note=current_spettacolo.get_note(),
+                interpreti=current_spettacolo.get_interpreti(),
+                tecnici=current_spettacolo.get_tecnici(),
+            )
 
         lista_eventi = self.__get_eventi_by_spettacolo(current_spettacolo.get_id())
-
-        # - Aggiungere un modo di verificare che è una Regia
 
         current_pagina.set_data(spettacolo_data, lista_eventi)
 
@@ -223,17 +234,16 @@ class SpettacoliSectionController(AbstractSectionController):
 
         # Setup pagina con i data dello spettacolo
         if isinstance(current_spettacolo, Regia):
-            tipo_spettacolo: str = ""
-            if opera_associata := self._model.get_opera(
-                current_spettacolo.get_id_opera()
-            ):
-                tipo_spettacolo = (
-                    "**Questo spettacolo è una Regia associata "
-                    + f'all\'opera "{opera_associata.get_nome()}".**'
-                )
-            current_pagina.set_data(spettacolo_data, tipo_spettacolo)
-        else:
-            current_pagina.set_data(spettacolo_data)
+            opera_associata = self._model.get_opera(current_spettacolo.get_id_opera())
+            assert opera_associata is not None
+            msg_tipo_spettacolo = (
+                "**Questo spettacolo è una Regia associata "
+                + f'all\'opera "{opera_associata.get_nome()}".**'
+            )
+        else:  # Caso Spettacolo generico
+            msg_tipo_spettacolo = ""
+
+        current_pagina.set_data(spettacolo_data, msg_tipo_spettacolo)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

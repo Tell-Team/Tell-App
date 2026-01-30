@@ -16,6 +16,11 @@ from view.spettacoli.widgets import PersonaleDisplay
 from view.utils import PopupMessage
 
 
+CAMPI_NECESSARI = (
+    "<b>ATTENZIONE</b>: È necessario compilare i campi di input contrassegnati con *."
+)
+
+
 class CUSpettacoloController(AbstractCUController):
     """Gestisce il salvataggio degli spettacoli creati e modificati.
 
@@ -172,94 +177,87 @@ class CUSpettacoloController(AbstractCUController):
             pagina.layout_lista_tecnici.aggiungi_list_item(current_tecnico)
 
     @override
-    def _inizia_salvataggio(self, is_new: bool) -> None:
-        """Salva lo spettacolo creato o modificato nel `GestoreSpettacoli`.
+    def _richiesta_nuovo(self) -> None:
+        current_pagina = self._view_nuova
 
-        :param is_new: verifica se si deve creare uno spettacolo o modificare uno esistente
-        """
-        CAMPI_NECESSARI = "<b>ATTENZIONE</b>: È necessario compilare i campi di input contrassegnati con *."
+        # Ottieni l'input inserito
+        titolo = current_pagina.titolo.text()
+        note = current_pagina.note.toPlainText()
+        interpreti = current_pagina.lista_interpreti
+        tecnici = current_pagina.lista_tecnici
 
-        if is_new:
-            current_pagina = self._view_nuova
-
-            # Ottieni l'input inserito
-            titolo = current_pagina.titolo.text()
-            note = current_pagina.note.toPlainText()
-            interpreti = current_pagina.lista_interpreti
-            tecnici = current_pagina.lista_tecnici
-
-            # Tenta di creare il nuovo spettacolo
-            try:
-                nuovo_spettacolo = Spettacolo(titolo, note, interpreti, tecnici)
-            except DatoIncongruenteException as exc:
-                # È stato trovato un campo con input non valido
-                current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "Input non valido",
-                    f"Si è verificato un errore: {exc}",
-                )
-            else:
-                current_pagina.mostra_msg_input_error("")
-
-                try:
-                    self.__aggiungi_spettacolo(nuovo_spettacolo)
-                except IdOccupatoException as exc:
-                    # Esiste già uno spettacolo con quell'id
-                    PopupMessage.mostra_errore(
-                        current_pagina,
-                        "ID Spettacolo occupata",
-                        f"Si è verificato un errore: {exc}",
-                    )
-                else:
-                    self.goBackRequest.emit()
-        elif not is_new:
-            current_pagina = self._view_modifica
-
-            # Crea una copia dello spettacolo originale
-            copia_spettacolo = self.__get_spettacolo(
-                current_pagina.id_current_spettacolo
+        # Tenta di creare il nuovo spettacolo
+        try:
+            nuovo_spettacolo = Spettacolo(titolo, note, interpreti, tecnici)
+        except DatoIncongruenteException as exc:
+            # È stato trovato un campo con input non valido
+            current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
+            PopupMessage.mostra_errore(
+                current_pagina,
+                "Input non valido",
+                f"Si è verificato un errore: {exc}",
             )
-            if not isinstance(copia_spettacolo, Spettacolo):
-                # Non esiste spettacolo con l'id salvato nella pagina
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "Errore nel salvataggio",
-                    f"Non è presente nessuno spettacolo con id {current_pagina.id_current_spettacolo}. "
-                    + "Impossibile effettuare le modifiche.",
-                )
-                return
+        else:
+            current_pagina.mostra_msg_input_error("")
 
-            # Ottieni l'input inserito
-            titolo = current_pagina.titolo.text()
-            note = current_pagina.note.toPlainText()
-            interpreti = current_pagina.lista_interpreti
-            tecnici = current_pagina.lista_tecnici
-
-            # Tenta di modificare lo spettacolo
             try:
-                copia_spettacolo.set_titolo(titolo)
-                copia_spettacolo.set_note(note)
-                copia_spettacolo.set_interpreti(interpreti)
-                copia_spettacolo.set_tecnici(tecnici)
-            except DatoIncongruenteException as exc:
-                current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
+                self.__aggiungi_spettacolo(nuovo_spettacolo)
+            except IdOccupatoException as exc:
+                # Esiste già uno spettacolo con quell'id
                 PopupMessage.mostra_errore(
                     current_pagina,
-                    "Input non valido",
+                    "ID Spettacolo occupata",
                     f"Si è verificato un errore: {exc}",
                 )
             else:
-                current_pagina.mostra_msg_input_error("")
+                self.goBackRequest.emit()
 
-                try:
-                    self.__modifica_spettacolo(copia_spettacolo)
-                except IdInesistenteException as exc:
-                    # Non esiste uno spettacolo con quell'id
-                    PopupMessage.mostra_errore(
-                        current_pagina,
-                        "ID Spettacolo insesistente",
-                        f"Si è verificato un errore: {exc}",
-                    )
-                else:
-                    self.goBackRequest.emit()
+    @override
+    def _richiesta_modifica(self) -> None:
+        current_pagina = self._view_modifica
+
+        # Crea una copia dello spettacolo originale
+        copia_spettacolo = self.__get_spettacolo(current_pagina.id_current_spettacolo)
+        if not isinstance(copia_spettacolo, Spettacolo):
+            # Non esiste spettacolo con l'id salvato nella pagina
+            PopupMessage.mostra_errore(
+                current_pagina,
+                "Errore nel salvataggio",
+                f"Non è presente nessuno spettacolo con id {current_pagina.id_current_spettacolo}. "
+                + "Impossibile effettuare le modifiche.",
+            )
+            return
+
+        # Ottieni l'input inserito
+        titolo = current_pagina.titolo.text()
+        note = current_pagina.note.toPlainText()
+        interpreti = current_pagina.lista_interpreti
+        tecnici = current_pagina.lista_tecnici
+
+        # Tenta di modificare lo spettacolo
+        try:
+            copia_spettacolo.set_titolo(titolo)
+            copia_spettacolo.set_note(note)
+            copia_spettacolo.set_interpreti(interpreti)
+            copia_spettacolo.set_tecnici(tecnici)
+        except DatoIncongruenteException as exc:
+            current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
+            PopupMessage.mostra_errore(
+                current_pagina,
+                "Input non valido",
+                f"Si è verificato un errore: {exc}",
+            )
+        else:
+            current_pagina.mostra_msg_input_error("")
+
+            try:
+                self.__modifica_spettacolo(copia_spettacolo)
+            except IdInesistenteException as exc:
+                # Non esiste uno spettacolo con quell'id
+                PopupMessage.mostra_errore(
+                    current_pagina,
+                    "ID Spettacolo insesistente",
+                    f"Si è verificato un errore: {exc}",
+                )
+            else:
+                self.goBackRequest.emit()

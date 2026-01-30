@@ -36,6 +36,8 @@ class Pagina(Enum):
     NUOVA_REGIA = "nuova_regia"
     MODIFICA_REGIA = "modifica_regia"
 
+    SEZIONE_TEATRO = "teatro_section"
+
     SEZIONE_ACCOUNT = "account_section"
     NUOVO_ACCOUNT = "nuovo_account"
     MODIFICA_ACCOUNT = "modifica_account"
@@ -163,8 +165,14 @@ class NavigationController(QObject):
         self.__acquisto_section = AcquistoSectionView(self.__user_session)
         self.__scegli_posti_view = ScegliPostiView()
 
-        # Spettacoli
+        # Info
+        from view.info.pagine import InfoSectionView, VisualizzaOperaView
+
+        self.__info_section = InfoSectionView(self.__user_session)
+        self.__visualizza_opera_view = VisualizzaOperaView(self.__user_session)
+
         if self.__user_session.ha_permessi_biglietteria():
+            # Spettacoli
             from view.spettacoli.pagine import (
                 SpettacoliSectionView,
                 VisualizzaSpettacoloView,
@@ -183,27 +191,28 @@ class NavigationController(QObject):
             self.__nuovo_evento_view = NuovoEventoView()
             self.__modifica_evento_view = ModificaEventoView()
 
-        # Info
-        from view.info.pagine import InfoSectionView, VisualizzaOperaView
-
-        self.__info_section = InfoSectionView(self.__user_session)
-        self.__visualizza_opera_view = VisualizzaOperaView(self.__user_session)
-
         if self.__user_session.ha_permessi_admin():
-            from view.info.pagine import NuovaOperaView, ModificaOperaView
+            # Info
+            from view.info.pagine import (
+                NuovaOperaView,
+                ModificaOperaView,
+                NuovoGenereView,
+                ModificaGenereView,
+                NuovaRegiaView,
+                ModificaRegiaView,
+            )
 
             self.__nuova_opera_view = NuovaOperaView()
             self.__modifica_opera_view = ModificaOperaView()
-
-            from view.info.pagine import NuovoGenereView, ModificaGenereView
-
             self.__nuovo_genere_view = NuovoGenereView()
             self.__modifica_genere_view = ModificaGenereView()
-
-            from view.info.pagine import NuovaRegiaView, ModificaRegiaView
-
             self.__nuova_regia_view = NuovaRegiaView()
             self.__modifica_regia_view = ModificaRegiaView()
+
+            # Teatro
+            from view.teatro.pagine import TeatroSectionView
+
+            self.__teatro_section = TeatroSectionView()
 
             # Account
             from view.account.pagine import (
@@ -222,8 +231,12 @@ class NavigationController(QObject):
         # Acquisto
         self.__registra_pagina(Pagina.SEZIONE_ACQUISTO, self.__acquisto_section)
         self.__registra_pagina(Pagina.SCEGLI_POSTI, self.__scegli_posti_view)
-        # Spettacoli
+        # Info
+        self.__registra_pagina(Pagina.SEZIONE_INFO, self.__info_section)
+        self.__registra_pagina(Pagina.VISUALIZZA_OPERA, self.__visualizza_opera_view)
+
         if self.__user_session.ha_permessi_biglietteria():
+            # Spettacoli
             self.__registra_pagina(Pagina.SEZIONE_SPETTACOLI, self.__spettacoli_section)
             self.__registra_pagina(
                 Pagina.VISUALIZZA_SPETTACOLO, self.__visualizza_spettacolo_view
@@ -236,16 +249,17 @@ class NavigationController(QObject):
             )
             self.__registra_pagina(Pagina.NUOVO_EVENTO, self.__nuovo_evento_view)
             self.__registra_pagina(Pagina.MODIFICA_EVENTO, self.__modifica_evento_view)
-        # Info
-        self.__registra_pagina(Pagina.SEZIONE_INFO, self.__info_section)
-        self.__registra_pagina(Pagina.VISUALIZZA_OPERA, self.__visualizza_opera_view)
+
         if self.__user_session.ha_permessi_admin():
+            # Info
             self.__registra_pagina(Pagina.NUOVA_OPERA, self.__nuova_opera_view)
             self.__registra_pagina(Pagina.MODIFICA_OPERA, self.__modifica_opera_view)
             self.__registra_pagina(Pagina.NUOVO_GENERE, self.__nuovo_genere_view)
             self.__registra_pagina(Pagina.MODIFICA_GENERE, self.__modifica_genere_view)
             self.__registra_pagina(Pagina.NUOVA_REGIA, self.__nuova_regia_view)
             self.__registra_pagina(Pagina.MODIFICA_REGIA, self.__modifica_regia_view)
+            # Teatro
+            self.__registra_pagina(Pagina.SEZIONE_TEATRO, self.__teatro_section)
             # Account
             self.__registra_pagina(Pagina.SEZIONE_ACCOUNT, self.__account_section)
             self.__registra_pagina(Pagina.NUOVO_ACCOUNT, self.__nuovo_account_view)
@@ -281,8 +295,8 @@ class NavigationController(QObject):
             ),
         ]
 
-        # Spettacoli
         if self.__user_session.ha_permessi_biglietteria():
+            # Spettacoli
             from controller.spettacoli import (
                 SpettacoliSectionController,
                 VisualizzaSpettacoloController,
@@ -326,9 +340,14 @@ class NavigationController(QObject):
                     ),
                 ),
             )
-        # Info
+
         if self.__user_session.ha_permessi_admin():
-            from controller.info import CUOperaController
+            # Info
+            from controller.info import (
+                CUOperaController,
+                CUGenereController,
+                CURegiaController,
+            )
 
             controller_defs.append(
                 (
@@ -337,9 +356,6 @@ class NavigationController(QObject):
                     (model, self.__nuova_opera_view, self.__modifica_opera_view),
                 ),
             )
-
-            from controller.info import CUGenereController
-
             controller_defs.append(
                 (
                     "__cu_genere_controller",
@@ -347,15 +363,22 @@ class NavigationController(QObject):
                     (model, self.__nuovo_genere_view, self.__modifica_genere_view),
                 ),
             )
-
-            from controller.info import CURegiaController
-
             controller_defs.append(
                 (
                     "__cu_regia_controller",
                     CURegiaController,
                     (model, self.__nuova_regia_view, self.__modifica_regia_view),
                 ),
+            )
+            # Teatro
+            from controller.teatro import TeatroSectionController
+
+            controller_defs.append(
+                (
+                    "__teatro_controller",
+                    TeatroSectionController,
+                    (model, self.__teatro_section),
+                )
             )
             # Account
             from controller.account import AccountSectionController, CUAccountController
@@ -403,18 +426,18 @@ class NavigationController(QObject):
         }
 
         def safe_connect(
-            controller: QObject, sig_name: str, handler: Callable[..., None]
+            controller: QObject, signal_name: str, handler: Callable[..., None]
         ) -> None:
             """Verifica che il controller abbia un segnale con un nome specifice
             e lo collega con lo slot corrispondente.
 
             :param controller: controller da cui sarano collegati i segnali
-            :param sig_name: nome del segnale da cercare
+            :param signal_name: nome del segnale da cercare
             :param handler: slot da collegare al segnale se trovato
             """
-            sig = getattr(controller, sig_name, None)
-            if sig and hasattr(sig, "connect"):
-                sig.connect(handler)
+            signal = getattr(controller, signal_name, None)
+            if signal and hasattr(signal, "connect"):
+                signal.connect(handler)
             # else:
             #     print(f" - {sig_name} non trovato o non è un segnale di {controller}")
 

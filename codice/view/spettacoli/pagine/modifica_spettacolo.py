@@ -32,7 +32,7 @@ class ModificaSpettacoloView(NuovoSpettacoloView):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def set_data(self, data: SpettacoloPageData, tipo_spettacolo: str = "") -> None:
+    def set_data(self, data: SpettacoloPageData, msg_tipo_spettacolo: str = "") -> None:
         """Carica i dati di una regia nella pagina.
 
         :param data: data salvata in una classe immutabile
@@ -45,9 +45,7 @@ class ModificaSpettacoloView(NuovoSpettacoloView):
         self.note.setText(data.note)
         self.lista_interpreti = data.interpreti
         self.lista_tecnici = data.tecnici
-
-        if tipo_spettacolo:
-            self.__tipo_spettacolo.setText(tipo_spettacolo)
+        self.__tipo_spettacolo.setText(msg_tipo_spettacolo)
 
     @override
     def reset_pagina(self) -> None:

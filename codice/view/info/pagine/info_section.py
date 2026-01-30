@@ -14,7 +14,6 @@ from core.view import AbstractSectionView
 from controller.login.user_session import UserSession
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
-from view.utils.hyphenate_text import HyphenatedLabel
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
@@ -27,8 +26,8 @@ class InfoSectionView(AbstractSectionView):
     ---
     - `nuovaOperaRequest()`: emesso quando si clicca il pulsante Nuova opera;
     - `nuovoGenereRequest()`: emesso quando si clicca il pulsante Nuovo genere;
-    - `displayOpereRequest(QVBoxLayout)`: emesso per caricare la lista delle opere nella sezione;
-    - `displayGeneriRequest(QVBoxLayout)`: emesso per caricare la lista dei generi nella sezione.
+    - `displayOpereRequest(QVBoxLayout)`: emesso per mostrare a schermo la lista opere;
+    - `displayGeneriRequest(QVBoxLayout)`: emesso per mostrare a schermo la lista generi.
     """
 
     nuovaOperaRequest = pyqtSignal()
@@ -51,6 +50,7 @@ class InfoSectionView(AbstractSectionView):
         if not self.is_biglietteria:
             self._btn_sezione_spettacoli.hide()
         if not self.is_admin:
+            self._btn_sezione_teatro.hide()
             self._btn_sezione_account.hide()
 
         # Opere
@@ -132,39 +132,39 @@ class InfoSectionView(AbstractSectionView):
         layout_generi.addWidget(widget_header_generi)
         layout_generi.addWidget(widget_lista_generi)
 
-        # Teatro
-        header_teatro = QLabel("Teatro")
-        header_teatro.setProperty(WidgetRole.HEADER1, True)
-        header_teatro.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        # # Teatro
+        # header_teatro = QLabel("Teatro")
+        # header_teatro.setProperty(WidgetRole.HEADER1, True)
+        # header_teatro.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        teatro_nome = QLabel("Vitrifrigo Arena")
-        teatro_nome.setProperty(WidgetRole.HEADER2, True)
+        # teatro_nome = QLabel("Vitrifrigo Arena")
+        # teatro_nome.setProperty(WidgetRole.HEADER2, True)
 
-        teatro_desc = HyphenatedLabel(
-            "Inaugurato nel 1996\nVia R. Ripa, 1\nLa Vitrifrigo Arena è un'ampio "
-            + "palazzetto che ospita numerosi eventi sportivi e musicali di "
-            + "rilevanza mondiale. In occasione dello Rossini Opera Festival, "
-            + "viene allestita una struttura in legno al suo interno per ricreare "
-            + "l'esperienza acustica di un teatro tradizionale."
-        )
-        teatro_desc.setProperty(WidgetRole.BODY_TEXT, True)
-        teatro_desc.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        # teatro_desc = HyphenatedLabel(
+        #     "Inaugurato nel 1996\nVia R. Ripa, 1\nLa Vitrifrigo Arena è un'ampio "
+        #     + "palazzetto che ospita numerosi eventi sportivi e musicali di "
+        #     + "rilevanza mondiale. In occasione dello Rossini Opera Festival, "
+        #     + "viene allestita una struttura in legno al suo interno per ricreare "
+        #     + "l'esperienza acustica di un teatro tradizionale."
+        # )
+        # teatro_desc.setProperty(WidgetRole.BODY_TEXT, True)
+        # teatro_desc.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
-        info_teatro = QWidget()
-        info_teatro.setProperty(WidgetRole.ITEM_CARD, True)
-        layout_info_teatro = QVBoxLayout(info_teatro)
-        layout_info_teatro.addWidget(teatro_nome)
-        layout_info_teatro.addWidget(teatro_desc)
+        # info_teatro = QWidget()
+        # info_teatro.setProperty(WidgetRole.ITEM_CARD, True)
+        # layout_info_teatro = QVBoxLayout(info_teatro)
+        # layout_info_teatro.addWidget(teatro_nome)
+        # layout_info_teatro.addWidget(teatro_desc)
 
-        container_teatro = QWidget()
-        layout_teatro = QVBoxLayout(container_teatro)
-        layout_teatro.addWidget(header_teatro)
-        layout_teatro.addWidget(info_teatro)
+        # container_teatro = QWidget()
+        # layout_teatro = QVBoxLayout(container_teatro)
+        # layout_teatro.addWidget(header_teatro)
+        # layout_teatro.addWidget(info_teatro)
 
         # Scroll layout
         self.scroll_layout.addWidget(container_opere)
         self.scroll_layout.addWidget(container_generi)
-        self.scroll_layout.addWidget(container_teatro)
+        # self.scroll_layout.addWidget(container_teatro)
         self.scroll_layout.addStretch()
 
     @override

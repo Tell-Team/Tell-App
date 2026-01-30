@@ -190,13 +190,13 @@ class VisualizzaOperaController(QObject):
         # Salva i dati dentro di un container
         regia_data = RegiaPageData(
             id=current_regia.get_id(),
-            regista=current_regia.get_regista(),
-            anno_produzione=current_regia.get_anno_produzione(),
-            id_opera=current_regia.get_id_opera(),
             titolo=current_regia.get_titolo(),
             note=current_regia.get_note(),
             interpreti=current_regia.get_interpreti(),
             tecnici=current_regia.get_tecnici(),
+            regista=current_regia.get_regista(),
+            anno_produzione=current_regia.get_anno_produzione(),
+            id_opera=current_regia.get_id_opera(),
         )
 
         opera_associata = self.__get_opera(current_regia.get_id_opera())

@@ -158,7 +158,7 @@ class AccountSectionController(AbstractSectionController):
 
         # Salva i dati dentro di un container
         account_dato = AccountPageData(
-            id=id_,
+            id=current_account.get_id(),
             username=current_account.get_username(),
             ruolo=current_account.get_ruolo(),
         )

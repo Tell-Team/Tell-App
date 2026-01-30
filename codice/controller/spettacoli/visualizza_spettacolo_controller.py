@@ -58,15 +58,11 @@ class VisualizzaSpettacoloController(QObject):
     def __get_evento(self, id_: int) -> Optional[Evento]:
         return self.__model.get_evento(id_)
 
-    # def __get_spettacolo(self, id_: int) -> Optional[Spettacolo]:
-    #     return self.__model.get_spettacolo(id_)
-
     def __get_eventi_by_spettacolo(self, id_: int) -> list[Evento]:
         return self.__model.get_eventi_by_spettacolo(id_)
 
     def __elimina_evento(self, id_: int) -> None:
-        ...
-        # - self.__model.elimina_evento(id_)
+        self.__model.elimina_evento(id_)
 
     def __display_eventi(self, layout_eventi: ListLayout) -> None:
         """Mostra a schermo le informazioni degli eventi salvati e associati ad

@@ -61,6 +61,8 @@ class ModificaAccountView(NuovoAccountView):
         """Carica i dati di un'account nella pagina.
 
         :param data: data salvata in una classe immutabile"""
+        self.reset_pagina()
+
         self.id_current_account = data.id
 
         self.username.setText(data.username)
@@ -78,5 +80,4 @@ class ModificaAccountView(NuovoAccountView):
         super().reset_pagina()
         self.id_current_account = -1
         self.nuova_password.setText("")
-        self.conferma.setEnabled(False)
-        self.password.setEnabled(False)
+        self.set_modifica_password_enabled(False)

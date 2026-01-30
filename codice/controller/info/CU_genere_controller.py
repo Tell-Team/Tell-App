@@ -15,6 +15,9 @@ from view.info.pagine import ModificaGenereView, NuovoGenereView
 from view.utils import PopupMessage
 
 
+CAMPI_NECESSARI = "<b>ATTENZIONE</b>: È necessario compilare tutti i campi d'input."
+
+
 class CUGenereController(AbstractCUController):
     """Gestisce il salvataggio dei generi creati e modificati.
 
@@ -48,88 +51,81 @@ class CUGenereController(AbstractCUController):
         self._model.modifica_genere(genere_modificato)
 
     @override
-    def _inizia_salvataggio(self, is_new: bool) -> None:
-        """Salva il genere creato o modificato nel `GestoreGeneri`.
+    def _richiesta_nuovo(self) -> None:
+        current_pagina = self._view_nuova
 
-        :param is_new: verifica se si deve creare un genere o modificarne uno esistente
-        """
-        CAMPI_NECESSARI = (
-            "<b>ATTENZIONE</b>: È necessario compilare tutti i campi d'input."
-        )
+        # Ottieni l'input inserito
+        nome = current_pagina.nome.text()
+        descrizione = current_pagina.descrizione.toPlainText()
 
-        if is_new:
-            current_pagina = self._view_nuova
+        # Tenta di creare il nuovo genere
+        try:
+            nuovo_genere = Genere(nome, descrizione)
+        except DatoIncongruenteException as exc:
+            # È stato trovato un campo con input non valido
+            current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
+            PopupMessage.mostra_errore(
+                current_pagina,
+                "Input non valido",
+                f"Si è verificato un errore: {exc}",
+            )
+        else:
+            current_pagina.mostra_msg_input_error("")
 
-            # Ottieni l'input inserito
-            nome = current_pagina.nome.text()
-            descrizione = current_pagina.descrizione.toPlainText()
-
-            # Tenta di creare il nuovo genere
             try:
-                nuovo_genere = Genere(nome, descrizione)
-            except DatoIncongruenteException as exc:
-                # È stato trovato un campo con input non valido
-                current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
+                self.__aggiungi_genere(nuovo_genere)
+            except IdOccupatoException as exc:
+                # Esiste già un genere con quell'id
                 PopupMessage.mostra_errore(
                     current_pagina,
-                    "Input non valido",
+                    "ID Genere occupato",
                     f"Si è verificato un errore: {exc}",
                 )
             else:
-                current_pagina.mostra_msg_input_error("")
+                self.goBackRequest.emit()
 
-                try:
-                    self.__aggiungi_genere(nuovo_genere)
-                except IdOccupatoException as exc:
-                    # Esiste già un genere con quell'id
-                    PopupMessage.mostra_errore(
-                        current_pagina,
-                        "ID Genere occupato",
-                        f"Si è verificato un errore: {exc}",
-                    )
-                else:
-                    self.goBackRequest.emit()
-        elif not is_new:
-            current_pagina = self._view_modifica
+    @override
+    def _richiesta_modifica(self) -> None:
+        current_pagina = self._view_modifica
 
-            # Crea una copia del genere originale
-            copia_genere = self.__get_genere(current_pagina.id_current_genere)
-            if not isinstance(copia_genere, Genere):
-                # Non esiste genere con l'id salvato nella pagina
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "Errore nel salvataggio",
-                    f"Non è presente nessun genere con id {current_pagina.id_current_genere}. "
-                    + "Impossibile effettuare le modifiche.",
-                )
-                return
+        # Crea una copia del genere originale
+        copia_genere = self.__get_genere(current_pagina.id_current_genere)
+        if not isinstance(copia_genere, Genere):
+            # Non esiste genere con l'id salvato nella pagina
+            PopupMessage.mostra_errore(
+                current_pagina,
+                "Errore nel salvataggio",
+                f"Non è presente nessun genere con id {current_pagina.id_current_genere}. "
+                + "Impossibile effettuare le modifiche.",
+            )
+            return
 
-            # Ottiene l'input inserito
-            nome = current_pagina.nome.text()
-            descrizione = current_pagina.descrizione.toPlainText()
+        # Ottiene l'input inserito
+        nome = current_pagina.nome.text()
+        descrizione = current_pagina.descrizione.toPlainText()
 
-            # Tenta di modificare il genere
+        # Tenta di modificare il genere
+        try:
+            copia_genere.set_nome(nome)
+            copia_genere.set_descrizione(descrizione)
+        except DatoIncongruenteException as exc:
+            current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
+            PopupMessage.mostra_errore(
+                current_pagina,
+                "Input non valido",
+                f"Si è verificato un errore: {exc}",
+            )
+        else:
+            current_pagina.mostra_msg_input_error("")
+
             try:
-                copia_genere.set_nome(nome)
-                copia_genere.set_descrizione(descrizione)
-            except DatoIncongruenteException as exc:
-                current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
+                self.__modifica_genere(copia_genere)
+            except IdInesistenteException as exc:
+                # Non esiste un genere con quell'id
                 PopupMessage.mostra_errore(
                     current_pagina,
-                    "Input non valido",
+                    "ID Generi insesistente",
                     f"Si è verificato un errore: {exc}",
                 )
             else:
-                current_pagina.mostra_msg_input_error("")
-
-                try:
-                    self.__modifica_genere(copia_genere)
-                except IdInesistenteException as exc:
-                    # Non esiste un genere con quell'id
-                    PopupMessage.mostra_errore(
-                        current_pagina,
-                        "ID Generi insesistente",
-                        f"Si è verificato un errore: {exc}",
-                    )
-                else:
-                    self.goBackRequest.emit()
+                self.goBackRequest.emit()

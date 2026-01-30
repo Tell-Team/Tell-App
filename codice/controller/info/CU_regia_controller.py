@@ -16,6 +16,11 @@ from view.spettacoli.widgets import PersonaleDisplay
 from view.utils import PopupMessage
 
 
+CAMPI_NECESSARI = (
+    "<b>ATTENZIONE</b>: È necessario compilare i campi di input contrassegnati con *."
+)
+
+
 class CURegiaController(AbstractCUController):
     """Gestisce il salvataggio delle regie create e modificate.
 
@@ -166,103 +171,98 @@ class CURegiaController(AbstractCUController):
             pagina.layout_lista_tecnici.aggiungi_list_item(current_tecnico)
 
     @override
-    def _inizia_salvataggio(self, is_new: bool) -> None:
-        """Salva la regia creata o modificata nel `GestoreSpettacoli`.
+    def _richiesta_nuovo(self) -> None:
+        current_pagina = self._view_nuova
 
-        :param is_new: verifica se si deve creare una regia o modificare una esistente
-        """
-        CAMPI_NECESSARI = "<b>ATTENZIONE</b>: È necessario compilare i campi di input contrassegnati con *."
+        # Ottieni l'input inserito
+        titolo = current_pagina.titolo.text()
+        note = current_pagina.note.toPlainText()
+        interpreti = current_pagina.lista_interpreti
+        tecnici = current_pagina.lista_tecnici
+        regista = current_pagina.regista.text()
+        anno = current_pagina.anno.value()
+        id_opera = current_pagina.opera.currentData()
 
-        if is_new:
-            current_pagina = self._view_nuova
+        # Tenta di creare la nuova regia
+        try:
+            nuova_regia = Regia(
+                regista, anno, id_opera, titolo, note, interpreti, tecnici
+            )
+        except DatoIncongruenteException as exc:
+            # È stato trovato un campo con input non valido
+            current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
+            PopupMessage.mostra_errore(
+                current_pagina,
+                "Input non valido",
+                f"Si è verificato un errore: {exc}",
+            )
+        else:
+            current_pagina.mostra_msg_input_error("")
 
-            # Ottieni l'input inserito
-            titolo = current_pagina.titolo.text()
-            note = current_pagina.note.toPlainText()
-            interpreti = current_pagina.lista_interpreti
-            tecnici = current_pagina.lista_tecnici
-            regista = current_pagina.regista.text()
-            anno = current_pagina.anno.value()
-            id_opera = current_pagina.opera.currentData()
-
-            # Tenta di creare la nuova regia
             try:
-                nuova_regia = Regia(
-                    regista, anno, id_opera, titolo, note, interpreti, tecnici
-                )
-            except DatoIncongruenteException as exc:
-                # È stato trovato un campo con input non valido
-                current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
+                self.__aggiungi_regia(nuova_regia)
+            except IdOccupatoException as exc:
+                # Esiste già una regia con quell'id
                 PopupMessage.mostra_errore(
                     current_pagina,
-                    "Input non valido",
+                    "ID Regia occupata",
                     f"Si è verificato un errore: {exc}",
                 )
             else:
-                current_pagina.mostra_msg_input_error("")
+                self.goBackRequest.emit()
 
-                try:
-                    self.__aggiungi_regia(nuova_regia)
-                except IdOccupatoException as exc:
-                    # Esiste già una regia con quell'id
-                    PopupMessage.mostra_errore(
-                        current_pagina,
-                        "ID Regia occupata",
-                        f"Si è verificato un errore: {exc}",
-                    )
-                else:
-                    self.goBackRequest.emit()
-        elif not is_new:
-            current_pagina = self._view_modifica
+    @override
+    def _richiesta_modifica(self):
+        current_pagina = self._view_modifica
 
-            # Crea una copia della regia originale
-            copia_regia = self.__get_spettacolo(current_pagina.id_current_regia)
-            if not isinstance(copia_regia, Regia):
-                # Non esiste regia con l'id salvata nella pagina
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "Errore nel salvataggio",
-                    f"Non è presente nessuna regia con id {current_pagina.id_current_regia}. "
-                    + "Impossibile effettuare le modifiche.",
-                )
-                return
+        # Crea una copia della regia originale
+        copia_regia = self.__get_spettacolo(current_pagina.id_current_regia)
+        if not isinstance(copia_regia, Regia):
+            # Non esiste regia con l'id salvata nella pagina
+            PopupMessage.mostra_errore(
+                current_pagina,
+                "Errore nel salvataggio",
+                f"Non è presente nessuna regia con id {current_pagina.id_current_regia}. "
+                + "Impossibile effettuare le modifiche.",
+            )
+            return
 
-            # Ottieni l'input inserito
-            titolo = current_pagina.titolo.text()
-            note = current_pagina.note.toPlainText()
-            interpreti = current_pagina.lista_interpreti
-            tecnici = current_pagina.lista_tecnici
-            regista = current_pagina.regista.text()
-            anno = current_pagina.anno.value()
-            id_opera = current_pagina.opera.currentData()
+        # Ottieni l'input inserito
+        titolo = current_pagina.titolo.text()
+        note = current_pagina.note.toPlainText()
+        interpreti = current_pagina.lista_interpreti
+        tecnici = current_pagina.lista_tecnici
+        regista = current_pagina.regista.text()
+        anno = current_pagina.anno.value()
+        id_opera = current_pagina.opera.currentData()
 
-            # Tenta di modificare la regia
+        # Tenta di modificare la regia
+        try:
+            copia_regia.set_titolo(titolo)
+            copia_regia.set_note(note)
+            copia_regia.set_interpreti(interpreti)
+            copia_regia.set_tecnici(tecnici)
+            copia_regia.set_regista(regista)
+            copia_regia.set_anno_produzione(anno)
+            copia_regia.set_id_opera(id_opera)
+        except DatoIncongruenteException as exc:
+            current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
+            PopupMessage.mostra_errore(
+                current_pagina,
+                "Input non valido",
+                f"Si è verificato un errore: {exc}",
+            )
+        else:
+            current_pagina.mostra_msg_input_error("")
+
             try:
-                copia_regia.set_titolo(titolo)
-                copia_regia.set_note(note)
-                copia_regia.set_interpreti(interpreti)
-                copia_regia.set_tecnici(tecnici)
-                copia_regia.set_regista(regista)
-                copia_regia.set_anno_produzione(anno)
-                copia_regia.set_id_opera(id_opera)
-            except DatoIncongruenteException as exc:
-                current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
+                self.__modifica_regia(copia_regia)
+            except IdInesistenteException as exc:
+                # Non esiste una regia con quell'id
                 PopupMessage.mostra_errore(
                     current_pagina,
-                    "Input non valido",
+                    "ID Regia insesistente",
                     f"Si è verificato un errore: {exc}",
                 )
             else:
-                current_pagina.mostra_msg_input_error("")
-
-                try:
-                    self.__modifica_regia(copia_regia)
-                except IdInesistenteException as exc:
-                    # Non esiste una regia con quell'id
-                    PopupMessage.mostra_errore(
-                        current_pagina,
-                        "ID Regia insesistente",
-                        f"Si è verificato un errore: {exc}",
-                    )
-                else:
-                    self.goBackRequest.emit()
+                self.goBackRequest.emit()
