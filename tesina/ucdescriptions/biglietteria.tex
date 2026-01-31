@@ -1,9 +1,9 @@
 % UC: Crea Spettacolo			[X]
 % UC ext: Modifica Spettacolo		[X]
-% UC ext: Elimina Spettacolo		[] <- C'è UI per facilitare la descrizione
-% UC ext: Crea Evento			[]
-% UC ext: Modifica Evento		[]
-% UC ext: Elimina Evento		[]
+% UC ext: Elimina Spettacolo		[X]
+% UC ext: Crea Evento			[X]
+% UC ext: Modifica Evento		[X]
+% UC ext: Elimina Evento		[X]
 % UC: Lista Prenotazioni		[]
 % UC ext: Ricerca Prenotazione		[]
 % UC ext: Segna Prenotazione come pagata	[X]
@@ -98,24 +98,22 @@
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente visualizza i dettagli di uno spettacolo.
-        \item L'utente ha premuto il pulsante di elimina.
+        \item L'utente si trova nella sezione Spettacoli.
+        % "si trova"(5)
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item Il Sistema richiede conferma dell'operazione.
-        \item L'utente conferma l'eliminazione.
-        \item \textbf{For} ogni evento dello spettacolo
-        \begin{enumerate}
-            \item \textbf{include}(Elimina Evento)
-        \end{enumerate}
-        \item Il Sistema elimina lo spettacolo.
+        \item L'utente avvia il caso d'uso selezionando il comando "Elimina" associato ad uno spettacolo.
+        \item Il sistema richiede all'utente di confermare l'intenzione di eliminare lo spettacolo.
+        \item L'utente conferma l'elimina.
+        \item Il sistema verifica che non ci siano eventi associati allo spettacolo e lo elimina permanentemente.
+        % "e la elimina permanentemente"(10)
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item L'utente effettua l'elimina di uno spettacolo.
+        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
     \end{enumerate}
 	
 } }
@@ -128,28 +126,28 @@
 	20
 	
 }{	% Breve descrizione
-	L'utente crea un nuovo evento associato a uno spettacolo esistente.
+	L'utente crea un evento per uno spettacolo.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item Lo spettacolo a cui associare l'evento è già presente nel Sistema. %/""
-        \item L'utente seleziona l'opzione per aggiungere un nuovo evento.
+        \item L'utente sta visualizzando uno spettacolo.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item Il Sistema mostra un modulo per l'inserimento dei dati dell'evento (data, ora, sala, disponibilità posti).
-        \item L'utente compila i campi richiesti.
+        \item L'utente avvia il caso d'uso selezionando il comando "Crea Evento".
+        \item Il sistema mostra una interfaccia per inserire la data e ora dell'evento.
+        \item L'utente inserisce le informazioni dell'evento.
         \item L'utente conferma la creazione.
-        \item Il Sistema verifica i dati e registra il nuovo evento.
+        \item Il sistema verifica i dati e li salva in memoria.
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item Il nuovo evento risulta associato allo spettacolo selezionato.
+        \item Il nuovo evento è memorizzato e immediatamente visibile a tutti gli utenti.
     \end{enumerate}
 	
 } }
@@ -162,28 +160,27 @@
 	21
 	
 }{	% Breve descrizione
-	L'utente modifica i dettagli di un evento programmato.
+	L'utente modifica le informazioni di un'evento.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'evento da modificare è presente nel Sistema. %/""
-        \item L'utente ha premuto il pulsante di modifica relativo all'evento.
+        \item L'utente sta visualizzando un'opera.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item Il Sistema mostra un modulo precompilato con i dati correnti dell'evento.
-        \item L'utente aggiorna le informazioni desiderate. % Data, ora, sala, disponibilità posti
-        \item L'utente conferma la modifica.
-        \item Il Sistema verifica i dati e salva le modifiche.
+        \item L'utente avvia il caso d'uso selezionando il comando "Modifica" associato ad un'evento.
+        \item Il sistema consente all'utente di modificare la data e ora dell'evento.
+        \item L'utente inserisce le modifiche desiderate e le conferma.
+        \item Il sistema verifica i dati e li salva in memoria.
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item L'evento risulta aggiornato nel Sistema.
+        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
     \end{enumerate}
 	
 } }
@@ -196,27 +193,28 @@
 	22
 	
 }{	% Breve descrizione
-	L'utente elimina un evento associato a uno spettacolo.
+	L'utente elimina un'evento dalla lista di eventi associati allo spettacolo.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'evento da eliminare è già stato creato e visibile nel Sistema. %/""
-        \item L'utente preme il pulsante di elimina relativo all'evento.
+        \item L'utente sta visualizzando un'opera.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item Il Sistema mostra un messaggio di conferma
-        \item L'utente conferma l'eliminazione dell'evento.
-        \item Il Sistema effettua l'eliminazione.
+        \item L'utente avvia il caso d'uso selezionando il comando "Elimina" associato ad un'evento.
+        \item Il sistema richiede all'utente di confermare l'intenzione di eliminare l'evento.
+        \item L'utente conferma l'elimina.
+        \item Il sistema verifica che non ci siano prenotazioni associate all'evento e lo elimina permanentemente.
+        % "e la elimina permanentemente"(10)
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item L'utente effettua l'eliminazione di un evento.
+        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
     \end{enumerate}
 	
 } }
