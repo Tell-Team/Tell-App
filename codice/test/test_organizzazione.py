@@ -65,7 +65,7 @@ class TestTell(unittest.TestCase):
         self.assertRaises(IdInesistenteException, self.__model.aggiungi_evento, e)
         print("Passato AGGIUNGI IdInesistente")
 
-        s = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(()), dict(()))
+        s = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
         self.__model.aggiungi_spettacolo(s)
         e = Evento(DATA_ORA_PASSATO, s.get_id())
         self.__model.aggiungi_evento(e)
@@ -105,7 +105,7 @@ class TestTell(unittest.TestCase):
         print("Passato GET LISTA side effect")
 
         # GET LISTA by spettacolo
-        s2 = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(()), dict(()))
+        s2 = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
         self.__model.aggiungi_spettacolo(s2)
         e3 = Evento(DATA_ORA_PASSATO, s2.get_id())
         self.__model.aggiungi_evento(e3)
@@ -288,6 +288,110 @@ class TestTell(unittest.TestCase):
         self.assertNotEqual(s2.get_nome(), s2_.get_nome())
         print("Passato GET LISTA side effect")
 
+        # GET SEZIONI E POSTI DISPONIBILI
+        sp = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
+        self.__model.aggiungi_spettacolo(sp)
+        sp2 = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
+        self.__model.aggiungi_spettacolo(sp2)
+
+        e = Evento(DATA_ORA_PASSATO, sp.get_id())
+        self.__model.aggiungi_evento(e)
+        e2 = Evento(DATA_ORA_PASSATO, sp2.get_id())
+        self.__model.aggiungi_evento(e2)
+
+        pr = Prenotazione(STR_NON_VUOTA, DATA_ORA_PASSATO)
+        self.__model.aggiungi_prenotazione(pr)
+
+        # s: sezione senza prezzi
+        p11 = Posto(1, s.get_id())
+        self.__model.aggiungi_posto(p11)
+
+        # s2: sezione con prezzo per un altro spettacolo
+        self.__model.aggiungi_prezzo(Prezzo(FLOAT_NONZERO, sp2.get_id(), s2.get_id()))
+
+        p21 = Posto(1, s2.get_id())
+        self.__model.aggiungi_posto(p21)
+
+        # s3: sezione disponibile
+        s3 = Sezione(STR_NON_VUOTA * 3, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(s3)
+        self.__model.aggiungi_prezzo(Prezzo(FLOAT_NONZERO, sp.get_id(), s3.get_id()))
+
+        #   p31: posto disponibile
+        p31 = Posto(1, s3.get_id())
+        self.__model.aggiungi_posto(p31)
+        #   p32: posto occupato per un altro evento
+        p32 = Posto(2, s3.get_id())
+        self.__model.aggiungi_posto(p32)
+        o32 = Occupazione(e2.get_id(), p32.get_id(), pr.get_id())
+        self.__model.aggiungi_occupazione(o32)
+        #   p33: posto occupato per questo evento
+        p33 = Posto(3, s3.get_id())
+        self.__model.aggiungi_posto(p33)
+        o33 = Occupazione(e.get_id(), p33.get_id(), pr.get_id())
+        self.__model.aggiungi_occupazione(o33)
+
+        # s4: sezione vuota
+        s4 = Sezione(STR_NON_VUOTA * 4, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(s4)
+        self.__model.aggiungi_prezzo(Prezzo(FLOAT_NONZERO, sp.get_id(), s4.get_id()))
+
+        # s5: sezione occupata
+        s5 = Sezione(STR_NON_VUOTA * 5, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(s5)
+        self.__model.aggiungi_prezzo(Prezzo(FLOAT_NONZERO, sp.get_id(), s5.get_id()))
+
+        #   p51: posto occupato per questo evento
+        p51 = Posto(1, s5.get_id())
+        self.__model.aggiungi_posto(p51)
+        o51 = Occupazione(e.get_id(), p51.get_id(), pr.get_id())
+        self.__model.aggiungi_occupazione(o51)
+
+        #   p52: posto occupato per questo evento
+        p52 = Posto(2, s5.get_id())
+        self.__model.aggiungi_posto(p52)
+        o52 = Occupazione(e.get_id(), p52.get_id(), pr.get_id())
+        self.__model.aggiungi_occupazione(o52)
+
+        self.assertRaises(
+            IdInesistenteException,
+            self.__model.get_sezioni_e_posti_disponibili,
+            ID_NON_ESISTENTE,
+        )
+        print("Passato GET SEZIONI E POSTI DISPONIBILI IdInesistente")
+
+        self.assertEqual(
+            self.__model.get_sezioni_e_posti_disponibili(e.get_id()), [(s3, [p31, p32])]
+        )
+        print("Passato GET SEZIONI E POSTI DISPONIBILI")
+
+        s3_ = self.__model.get_sezioni_e_posti_disponibili(e.get_id())[0][0]
+        s3_.set_nome(s3_.get_nome() + STR_NON_VUOTA)
+        s3 = self.__model.get_sezioni_e_posti_disponibili(e.get_id())[0][0]
+        self.assertEqual(s3.get_descrizione(), s3_.get_descrizione())
+        self.assertNotEqual(s3.get_nome(), s3_.get_nome())
+        print("Passato GET SEZIONI E POSTI DISPONIBILI side effect sezione")
+
+        p31_ = self.__model.get_sezioni_e_posti_disponibili(e.get_id())[0][1][0]
+        p31_.set_numero(p31_.get_numero() + 1)
+        p31 = self.__model.get_sezioni_e_posti_disponibili(e.get_id())[0][1][0]
+        self.assertEqual(p31.get_id_sezione(), p31_.get_id_sezione())
+        self.assertNotEqual(p31.get_numero(), p31_.get_numero())
+        print("Passato GET SEZIONI E POSTI DISPONIBILI side effect posto")
+        self.__model.elimina_occupazione(o32.get_id())
+        self.__model.elimina_occupazione(o33.get_id())
+        self.__model.elimina_occupazione(o51.get_id())
+        self.__model.elimina_occupazione(o52.get_id())
+        self.__model.elimina_posto(p11.get_id())
+        self.__model.elimina_posto(p31.get_id())
+        self.__model.elimina_posto(p32.get_id())
+        self.__model.elimina_posto(p33.get_id())
+        self.__model.elimina_posto(p51.get_id())
+        self.__model.elimina_posto(p52.get_id())
+        self.__model.elimina_sezione(s3.get_id())
+        self.__model.elimina_sezione(s4.get_id())
+        self.__model.elimina_sezione(s5.get_id())
+
         # MODIFICA
         s3 = Sezione(STR_NON_VUOTA * 3, STR_NON_VUOTA)
         self.assertRaises(IdInesistenteException, self.__model.modifica_sezione, s3)
@@ -300,7 +404,7 @@ class TestTell(unittest.TestCase):
         self.assertRaises(OccupatoException, self.__model.modifica_sezione, s)
         print("Passato MODIFICA Occupato")
 
-        s.set_nome(s.get_nome() + STR_NON_VUOTA * 3)
+        s.set_nome(s.get_nome() + STR_NON_VUOTA * 6)
         self.__model.modifica_sezione(s)
         s_ = self.__model.get_sezione(s.get_id())
         if s_ is None:
@@ -450,7 +554,7 @@ class TestTell(unittest.TestCase):
         )
         print("Passato ELIMINA IdInesistente")
 
-        sp = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(()), dict(()))
+        sp = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
         self.__model.aggiungi_spettacolo(sp)
         e = Evento(DATA_ORA_PASSATO, sp.get_id())
         self.__model.aggiungi_evento(e)
@@ -728,23 +832,6 @@ class TestTell(unittest.TestCase):
         self.assertEqual(p_, p)
         print("Passato MODIFICA")
 
-        # GET LISTA PAGATE E NON PAGATE
-        p.segna_come_pagata()
-        self.__model.modifica_prenotazione(p)
-        self.assertEqual(
-            self.__model.get_prenotazioni_pagate_e_non_pagate(), ([p], [p2])
-        )
-        print("Passato GET LISTA PAGATE E NON PAGATE")
-
-        p2_ = self.__model.get_prenotazioni_pagate_e_non_pagate()[1][0]
-        p2_.set_nominativo(p2_.get_nominativo() + STR_NON_VUOTA)
-        p2 = self.__model.get_prenotazioni_pagate_e_non_pagate()[1][0]
-        self.assertEqual(
-            p2.get_data_ora_registrazione(), p2_.get_data_ora_registrazione()
-        )
-        self.assertNotEqual(p2.get_nominativo(), p2_.get_nominativo())
-        print("Passato GET LISTA PAGATE E NON PAGATE side effect")
-
         # CARICA
         self.__model._Model__carica_prenotazioni()  # type: ignore
         self.assertEqual(self.__model.get_prenotazioni(), [p, p2])
@@ -756,7 +843,7 @@ class TestTell(unittest.TestCase):
         )
         print("Passato ELIMINA IdInesistente")
 
-        sp = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(()), dict(()))
+        sp = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
         self.__model.aggiungi_spettacolo(sp)
         e = Evento(DATA_ORA_PASSATO, sp.get_id())
         self.__model.aggiungi_evento(e)

@@ -55,15 +55,24 @@ class TestTell(unittest.TestCase):
 
         # CAMBIO PASSWORD
         self.assertRaises(
-            DatoIncongruenteException, a.cambia_password, PASSWORD_CONFORME, "1234567"
+            DatoIncongruenteException,
+            a.cambia_password,
+            PASSWORD_CONFORME,
+            "1234567",
+            Account(STR_NON_VUOTA, PASSWORD_CONFORME, Ruolo.AMMINISTRATORE),
         )
         self.assertRaises(
             CredenzialiErrateException,
             a.cambia_password,
             "12345678",
             PASSWORD_CONFORME,
+            Account(STR_NON_VUOTA, PASSWORD_CONFORME, Ruolo.AMMINISTRATORE),
         )
-        a.cambia_password(PASSWORD_CONFORME, "12345678")
+        a.cambia_password(
+            PASSWORD_CONFORME,
+            "12345678",
+            Account(STR_NON_VUOTA, PASSWORD_CONFORME, Ruolo.AMMINISTRATORE),
+        )
         self.assertFalse(a.controlla_password(PASSWORD_CONFORME))
         self.assertTrue(a.controlla_password("12345678"))
         print("Passato CAMBIO PASSWORD")
@@ -119,11 +128,6 @@ class TestTell(unittest.TestCase):
             admin_id,
         )
         print("Passato AGGIUNGI UsernameOccupato")
-
-        # HA PERMESSI AMMINISTRATORE
-        self.assertTrue(self.__model.ha_permessi_amministratore(admin_id))
-        self.assertFalse(self.__model.ha_permessi_amministratore(a.get_id()))
-        print("Passato HA PERMESSI ADMIN")
 
         # GET
         a_ = self.__model.get_account(a.get_id())
@@ -183,6 +187,7 @@ class TestTell(unittest.TestCase):
             ID_NON_ESISTENTE,
             PASSWORD_CONFORME,
             PASSWORD_CONFORME,
+            admin_id,
         )
         print("Passato CAMBIO PASSWORD IdInesistente")
 

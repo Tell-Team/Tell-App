@@ -50,24 +50,14 @@ class GestoreOccupazioni:
 
         return None
 
-    # def get_occupazione_by_evento_e_posto(
-    #     self, id_evento: int, id_posto: int
-    # ) -> Optional[Occupazione]:
-    #     for o in self.__lista_occupazioni:
-    #         if o.get_id_evento() == id_evento and o.get_id_posto() == id_posto:
-    #             return copy.copy(o)
-
-    #     return None
-
-    # def get_occupazioni_by_evento(self, id_evento: int) -> list[Prezzo]:
-    #     return copy.deepcopy(
-    #         list(
-    #             filter(
-    #                 lambda p: p.get_id_evento() == id_evento,
-    #                 self.__lista_occupazioni,
-    #             )
-    #         )
-    #     )
+    def get_occupazioni_per_evento(self, id_evento: int) -> list[Occupazione]:
+        return copy.deepcopy(
+            list(
+                filter(
+                    lambda o: o.get_id_evento() == id_evento, self.__lista_occupazioni
+                )
+            )
+        )
 
     # Validazione
     def __controllo_unique_key(self, primo: Occupazione, secondo: Occupazione):

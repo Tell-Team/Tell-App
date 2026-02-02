@@ -27,10 +27,6 @@ class Account:
 
         self.__ruolo = ruolo
 
-    # Stato
-    def ha_permessi_amministratore(self) -> bool:
-        return self.__ruolo == Ruolo.AMMINISTRATORE
-
     # Getters
     def get_id(self) -> int:
         return self.__id
@@ -78,8 +74,13 @@ class Account:
         return True
 
     # Modifiche
-    def cambia_password(self, password_corrente: str, nuova_password: str):
-        """Throws: CredenzialiErrateException, DatoIncongruenteException"""
+    def cambia_password(self, password_corrente: str, nuova_password: str, agent: Self):
+        """Throws: PermessiInsufficientiException, CredenzialiErrateException, DatoIncongruenteException"""
+        if agent.get_ruolo() != Ruolo.AMMINISTRATORE:
+            raise PermessiInsufficientiException(
+                "Solo un AMMINISTRATORE può modificare i ruoli di un account."
+            )
+
         if not self.controlla_password(password_corrente):
             raise CredenzialiErrateException("La password corrente inserita è errata.")
 

@@ -1,3 +1,4 @@
+import itertools
 from model.organizzazione.occupazione import Occupazione
 from model.gestori.gestore_occupazioni import GestoreOccupazioni
 from model.organizzazione.prenotazione import Prenotazione
@@ -193,16 +194,12 @@ class Model:
             dump(self.__gestore_occupazioni, f)
 
     # Stato
-    def __in_programma(self, spettacolo: Spettacolo) -> bool:
+    def __spettacolo_in_programma(self, spettacolo: Spettacolo) -> bool:
         return any(
             map(
                 lambda e: e.attivo(), self.get_eventi_by_spettacolo(spettacolo.get_id())
             )
         )
-
-    def ha_permessi_amministratore(self, id_: int) -> bool:
-        """Throws: IdInesistenteException"""
-        return self.__gestore_accounts.ha_permessi_amministratore(id_)
 
     # Getters
     #   ACCOUNTS
@@ -239,7 +236,7 @@ class Model:
     def get_spettacoli_in_programma(self) -> list[Spettacolo]:
         return list(
             filter(
-                lambda s: self.__in_programma(s),
+                lambda s: self.__spettacolo_in_programma(s),
                 self.get_spettacoli(),
             )
         )
@@ -267,6 +264,48 @@ class Model:
 
     def get_sezioni(self) -> list[Sezione]:
         return self.__gestore_sezioni.get_sezioni()
+
+    def get_sezioni_e_posti_disponibili(
+        self, id_evento: int
+    ) -> list[tuple[Sezione, list[Posto]]]:
+        """Throws: IdInesistenteException"""
+        evento = self.get_evento(id_evento)
+        if evento is None:
+            raise IdInesistenteException(
+                f"Non esiste nessun evento con id {id_evento}."
+            )
+        id_spettacolo = evento.get_id_spettacolo()
+
+        ids_sezioni_con_prezzo = list(
+            map(
+                lambda p: p.get_id_sezione(),
+                self.__gestore_prezzi.get_prezzi_by_spettacolo(id_spettacolo),
+            )
+        )
+        ids_posti_occupati = list(
+            map(
+                lambda o: o.get_id_posto(),
+                self.__gestore_occupazioni.get_occupazioni_per_evento(id_evento),
+            )
+        )
+
+        posti_disponibili = list(
+            filter(
+                lambda p: p.get_id_sezione() in ids_sezioni_con_prezzo
+                and p.get_id() not in ids_posti_occupati,
+                self.get_posti(),
+            )
+        )
+
+        sezioni_e_posti_disponibili: list[tuple[Sezione, list[Posto]]] = list()
+
+        for id_sezione, lista_posti in itertools.groupby(
+            posti_disponibili, lambda p: p.get_id_sezione()
+        ):
+            sezione: Sezione = self.get_sezione(id_sezione)  # type: ignore
+            sezioni_e_posti_disponibili.append((sezione, list(lista_posti)))
+
+        return sezioni_e_posti_disponibili
 
     #   POSTI
     def get_posto(self, id_: int) -> Optional[Posto]:
@@ -301,11 +340,6 @@ class Model:
 
     def get_prenotazioni_by_nominativo(self, nominativo: str) -> list[Prenotazione]:
         return self.__gestore_prenotazioni.get_prenotazioni_by_nominativo(nominativo)
-
-    def get_prenotazioni_pagate_e_non_pagate(
-        self,
-    ) -> tuple[list[Prenotazione], list[Prenotazione]]:
-        return self.__gestore_prenotazioni.get_prenotazioni_pagate_e_non_pagate()
 
     #   OCCUPAZIONI
     def get_occupazione(self, id_: int) -> Optional[Occupazione]:
@@ -389,11 +423,15 @@ class Model:
         self.__salva_accounts()
 
     def cambia_password(
-        self, account_id: int, password_corrente: str, nuova_password: str
+        self,
+        account_id: int,
+        password_corrente: str,
+        nuova_password: str,
+        agent_id: int,
     ):
-        """Throws: CredenzialiErrateException, DatoIncongruenteException, IdInesistenteException"""
+        """Throws: PermessiInsufficientiException, CredenzialiErrateException, DatoIncongruenteException, IdInesistenteException"""
         self.__gestore_accounts.cambia_password(
-            account_id, password_corrente, nuova_password
+            account_id, password_corrente, nuova_password, agent_id
         )
         self.__salva_accounts()
 

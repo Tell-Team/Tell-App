@@ -151,7 +151,9 @@ class CUAccountController(AbstractCUController):
                     raise DatoIncongruenteException(
                         "La nuova password non coincide con la sua conferma."
                     )
-                self._model.cambia_password(id_account, password, password_new)
+                self._model.cambia_password(
+                    id_account, password, password_new, self.__user_session_id
+                )
             if ruolo is None:
                 # Non è stato specificato un ruolo
                 raise DatoIncongruenteException("Selezionare un ruolo.")

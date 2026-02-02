@@ -49,20 +49,6 @@ class GestorePrenotazioni:
             )
         )
 
-    def get_prenotazioni_pagate_e_non_pagate(
-        self,
-    ) -> tuple[list[Prenotazione], list[Prenotazione]]:
-        pagate: list[Prenotazione] = []
-        non_pagate: list[Prenotazione] = []
-
-        for p in self.__lista_prenotazioni:
-            if p.pagata():
-                pagate.append(copy.copy(p))
-            else:
-                non_pagate.append(copy.copy(p))
-
-        return (pagate, non_pagate)
-
     # Modificatori
     def aggiungi_prenotazione(self, prenotazione: Prenotazione):
         """Throws: IdOccupatoException"""
