@@ -17,7 +17,7 @@ from model.exceptions import (
 
 from view.account.pagine import NuovoAccountView, ModificaAccountView
 
-from view.utils.popupView import PopupMessage
+from view.utils import PopupMessage
 
 
 CAMPI_NECESSARI = "<b>ATTENZIONE</b>: È necessario compilare tutti i campi di input."

@@ -14,6 +14,8 @@ from core.view import AbstractSectionView
 from controller.login.user_session import UserSession
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
+from view.utils.custom_button import RicercaButton
+
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
@@ -57,17 +59,15 @@ class SpettacoliSectionView(AbstractSectionView):
         self.ricerca_bar.setClearButtonEnabled(True)
         self.ricerca_bar.setProperty(WidgetRole.SEARCH_BAR, True)
 
-        self._btn_ricerca = QPushButton()
-        self._btn_ricerca.setProperty(WidgetRole.SEARCH_BUTTON, True)
-        self._btn_ricerca.setProperty(WidgetColor.Button.BLUE_BUTTON, True)
-        self._btn_ricerca.setFixedHeight(self.ricerca_bar.sizeHint().height())
+        self.__btn_ricerca = RicercaButton()
+        self.__btn_ricerca.setFixedHeight(self.ricerca_bar.sizeHint().height())
 
         widget_ricerca = QWidget()
         layout_ricerca = QHBoxLayout(widget_ricerca)
         layout_ricerca.setSpacing(0)
         layout_ricerca.setContentsMargins(0, 0, 0, 0)
         layout_ricerca.addWidget(self.ricerca_bar)
-        layout_ricerca.addWidget(self._btn_ricerca)
+        layout_ricerca.addWidget(self.__btn_ricerca)
 
         widget_header_spettacoli = QWidget()
         layout_header_spettacoli = QHBoxLayout(widget_header_spettacoli)
@@ -108,7 +108,7 @@ class SpettacoliSectionView(AbstractSectionView):
             self.nuovoSpettacoloRequest.emit
         )
 
-        self._btn_ricerca.clicked.connect(  # type:ignore
+        self.__btn_ricerca.clicked.connect(  # type:ignore
             lambda: self.__filtra_spettacoli(self.ricerca_bar.text())
         )
 

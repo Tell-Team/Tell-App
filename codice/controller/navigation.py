@@ -37,6 +37,8 @@ class Pagina(Enum):
     MODIFICA_REGIA = "modifica_regia"
 
     SEZIONE_TEATRO = "teatro_section"
+    NUOVA_SEZIONE = "nuova_sezione"
+    MODIFICA_SEZIONE = "modifica_sezione"
 
     SEZIONE_ACCOUNT = "account_section"
     NUOVO_ACCOUNT = "nuovo_account"
@@ -210,9 +212,15 @@ class NavigationController(QObject):
             self.__modifica_regia_view = ModificaRegiaView()
 
             # Teatro
-            from view.teatro.pagine import TeatroSectionView
+            from view.teatro.pagine import (
+                TeatroSectionView,
+                NuovaSezioneView,
+                ModificaSezioneView,
+            )
 
             self.__teatro_section = TeatroSectionView()
+            self.__nuova_sezione_view = NuovaSezioneView()
+            self.__modifica_sezione_view = ModificaSezioneView()
 
             # Account
             from view.account.pagine import (
@@ -260,6 +268,10 @@ class NavigationController(QObject):
             self.__registra_pagina(Pagina.MODIFICA_REGIA, self.__modifica_regia_view)
             # Teatro
             self.__registra_pagina(Pagina.SEZIONE_TEATRO, self.__teatro_section)
+            self.__registra_pagina(Pagina.NUOVA_SEZIONE, self.__nuova_sezione_view)
+            self.__registra_pagina(
+                Pagina.MODIFICA_SEZIONE, self.__modifica_sezione_view
+            )
             # Account
             self.__registra_pagina(Pagina.SEZIONE_ACCOUNT, self.__account_section)
             self.__registra_pagina(Pagina.NUOVO_ACCOUNT, self.__nuovo_account_view)
@@ -273,7 +285,7 @@ class NavigationController(QObject):
 
     def __carica_controllers(self, model: Model) -> list[QObject]:
         # Controller necessario per gli utenti Cliente
-        from controller.acquisto import AcquistoSectionController
+        from controller.acquisto import AcquistoSectionController, ScegliPostiController
         from controller.info import InfoSectionController, VisualizzaOperaController
 
         # Definizioni dei controller come attributi privati
@@ -282,6 +294,11 @@ class NavigationController(QObject):
                 "__acquisto_controller",
                 AcquistoSectionController,
                 (model, self.__acquisto_section),
+            ),
+            (
+                "__scegli_posti_controller",
+                ScegliPostiController,
+                (model, self.__scegli_posti_view),
             ),
             (
                 "__info_controller",
@@ -371,13 +388,20 @@ class NavigationController(QObject):
                 ),
             )
             # Teatro
-            from controller.teatro import TeatroSectionController
+            from controller.teatro import TeatroSectionController, CUSezioneController
 
             controller_defs.append(
                 (
                     "__teatro_controller",
                     TeatroSectionController,
                     (model, self.__teatro_section),
+                )
+            )
+            controller_defs.append(
+                (
+                    "__cu_sezione_controller",
+                    CUSezioneController,
+                    (model, self.__nuova_sezione_view, self.__modifica_sezione_view),
                 )
             )
             # Account

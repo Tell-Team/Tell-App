@@ -30,12 +30,12 @@ class VisualizzaOperaView(QWidget):
     Segnali
     ---
     - `tornaIndietroRequest()`: emesso quando si clicca il pulsante Indietro;
-    - `displayRegieRequest(QVBoxLayout)`: emesso per mostrare a schermo la lista regie;
+    - `displayRegieRequest(ListLayout)`: emesso per mostrare a schermo la lista regie;
     - `nuovaRegiaRequest()`: emesso quando si clicca il pulsante Nuova regia.
     """
 
     tornaIndietroRequest = pyqtSignal()
-    displayRegieRequest = pyqtSignal(QVBoxLayout)
+    displayRegieRequest = pyqtSignal(ListLayout)
     nuovaRegiaRequest = pyqtSignal()
 
     def __init__(self, user_session: UserSession):

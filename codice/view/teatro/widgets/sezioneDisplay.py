@@ -1,114 +1,88 @@
-from PyQt6.QtWidgets import (
-    QWidget,
-    QLabel,
-    QPushButton,
-    QHBoxLayout,
-    QGridLayout,
-)
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout
+from PyQt6.QtCore import pyqtSignal
 from functools import partial
 
-from model.organizzazione.evento import Evento
+from model.organizzazione.sezione import Sezione
 
 from view.utils.list_widgets import ItemDisplay
+from view.utils.hyphenate_text import HyphenatedLabel
 from view.utils.custom_button import ModificaButton, EliminaButton
-from view.utils import make_vline
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class EventoDisplay(ItemDisplay):
-    """View dei singoli eventi della Lista Eventi dentro della pagina
-    `VisualizzaSpettacoloView`.
+class SezioneDisplay(ItemDisplay):
+    """View delle singole sezioni della Lista Sezioni.
 
     Segnali
     ---
-    - `scegliPostiRequest(int)`: emesso quando si clicca il pulsante Scegli posti;
     - `modificaRequest(int)`: emesso quando si clicca il pulsante Modifica;
     - `eliminaConfermata()`: emesso quando si clicca il pulsante Sì.
     """
 
-    scegliPostiRequest = pyqtSignal(int)
     modificaRequest = pyqtSignal(int)
     eliminaConfermata = pyqtSignal()
 
-    def __init__(self, ev: Evento):
+    def __init__(self, s: Sezione):
         super().__init__()
 
-        self.__setup_ui(ev)
-        self.__connect_signals(ev)
+        self.__setup_ui(s)
+        self.__connect_signals(s)
 
     # ------------------------- SETUP INIT -------------------------
 
-    def __setup_ui(self, ev: Evento) -> None:
+    def __setup_ui(self, s: Sezione) -> None:
         # Labels
-        data = QLabel(ev.get_data_ora().strftime("%d-%m-%Y"))
-        data.setProperty(WidgetRole.BODY_TEXT, True)
-        data.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        nome = HyphenatedLabel(s.get_nome())
+        nome.setProperty(WidgetRole.HEADER2, True)
 
-        ora = QLabel(ev.get_data_ora().strftime("%H:%M"))
-        ora.setProperty(WidgetRole.BODY_TEXT, True)
-        ora.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        descrizione = HyphenatedLabel(s.get_descrizione())
+        descrizione.setProperty(WidgetRole.BODY_TEXT, True)
+        descrizione.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
         # Layout
-        layout = QGridLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(data, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(make_vline(), 0, 1)
-        layout.addWidget(ora, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter)
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(1, 1, 1, 1)
+        layout.addWidget(nome)
+        layout.addWidget(descrizione)
 
-        layout.setColumnStretch(0, 1)
-        layout.setColumnStretch(2, 1)
-
-        # if self.__editable:
-        # Pulsanti
+        # Pulsanti Modifica-Elimina
         self.__btn_modifica = ModificaButton("Modifica")
-        self.__btn_modifica.setMinimumHeight(32)
 
         self.__btn_elimina = EliminaButton("Elimina")
-        self.__btn_elimina.setMinimumHeight(32)
 
         self.__pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.__pulsanti)
         layout_pulsanti.setContentsMargins(1, 1, 1, 1)
         layout_pulsanti.addWidget(self.__btn_modifica)
         layout_pulsanti.addWidget(self.__btn_elimina)
+        layout_pulsanti.addStretch()
 
         # Pannello di eliminazione
-        domanda = QLabel("<b>Sicuro?</b>")
+        domanda = QLabel("<b>Sicuro di eliminare?</b>")
         domanda.setProperty(WidgetRole.BODY_TEXT, True)
         domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
-        self.__btn_si = QPushButton("Sì")
-        self.__btn_si.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
-        self.__btn_si.setMinimumSize(40, 32)
-
         self.__btn_no = QPushButton("No")
         self.__btn_no.setProperty(WidgetRole.DEFAULT_BUTTON, True)
-        self.__btn_no.setMinimumSize(40, 32)
+
+        self.__btn_si = QPushButton("Sì")
+        self.__btn_si.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
 
         self.__conferma_elimina = QWidget()
         layout_conferma = QHBoxLayout(self.__conferma_elimina)
         layout_conferma.setContentsMargins(1, 1, 1, 1)
         layout_conferma.addWidget(domanda)
-        layout_conferma.addWidget(self.__btn_si)
         layout_conferma.addWidget(self.__btn_no)
+        layout_conferma.addWidget(self.__btn_si)
         self.__conferma_elimina.hide()
 
-        dummy = QWidget()
-        dummy_layout = QHBoxLayout(dummy)
-        dummy_layout.addWidget(self.__pulsanti)
-        dummy_layout.addWidget(self.__conferma_elimina)
+        layout.addWidget(self.__pulsanti)
+        layout.addWidget(self.__conferma_elimina)
 
-        layout.addWidget(make_vline(), 0, 3)
-        layout.addWidget(dummy, 0, 4, alignment=Qt.AlignmentFlag.AlignCenter)
+    def __connect_signals(self, s: Sezione) -> None:
+        self.__id = s.get_id()
 
-        layout.setColumnStretch(4, 1)
-
-    def __connect_signals(self, ev: Evento) -> None:
-        self.__id = ev.get_id()
-
-        # if self.__editable:
         self.__btn_modifica.clicked.connect(  # type:ignore
             partial(self.modificaRequest.emit, self.__id)
         )
@@ -128,7 +102,7 @@ class EventoDisplay(ItemDisplay):
     # ------------------------- METODI DI VIEW -------------------------
 
     def __on_elimina(self) -> None:
-        """Mostra una richiesta di conferma per eliminare la regia."""
+        """Mostra una richiesta di conferma per eliminare la sezione."""
         self.__pulsanti.hide()
         self.__conferma_elimina.show()
 

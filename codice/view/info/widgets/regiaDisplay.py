@@ -12,7 +12,9 @@ from model.pianificazione.regia import Regia
 
 from view.utils.list_widgets import ItemDisplay
 from view.utils.horizontal_scroll import HorizontalWheelScrollArea
+from view.utils.custom_button import ModificaButton, EliminaButton
 from view.utils import make_vline
+
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
@@ -68,12 +70,10 @@ class RegiaDisplay(ItemDisplay):
 
         if self.__editable:
             # Pulsanti
-            self.__btn_modifica = QPushButton("Modifica")
-            self.__btn_modifica.setProperty(WidgetRole.MODIFY_BUTTON, True)
+            self.__btn_modifica = ModificaButton("Modifica")
             self.__btn_modifica.setMinimumHeight(32)
 
-            self.__btn_elimina = QPushButton("Elimina")
-            self.__btn_elimina.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
+            self.__btn_elimina = EliminaButton("Elimina")
             self.__btn_elimina.setMinimumHeight(32)
 
             self.__pulsanti = QWidget()
@@ -87,20 +87,20 @@ class RegiaDisplay(ItemDisplay):
             domanda.setProperty(WidgetRole.BODY_TEXT, True)
             domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
-            self.__btn_no = QPushButton("No")
-            self.__btn_no.setProperty(WidgetRole.DEFAULT_BUTTON, True)
-            self.__btn_no.setMinimumSize(40, 32)
-
             self.__btn_si = QPushButton("Sì")
             self.__btn_si.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
             self.__btn_si.setMinimumSize(40, 32)
+
+            self.__btn_no = QPushButton("No")
+            self.__btn_no.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+            self.__btn_no.setMinimumSize(40, 32)
 
             self.__conferma_elimina = QWidget()
             layout_conferma = QHBoxLayout(self.__conferma_elimina)
             layout_conferma.setContentsMargins(1, 1, 1, 1)
             layout_conferma.addWidget(domanda)
-            layout_conferma.addWidget(self.__btn_no)
             layout_conferma.addWidget(self.__btn_si)
+            layout_conferma.addWidget(self.__btn_no)
             self.__conferma_elimina.hide()
 
             dummy = QWidget()

@@ -1,27 +1,26 @@
-from PyQt6.QtWidgets import QWidget
-
-
 from PyQt6.QtWidgets import (
-    #     QWidget,
-    #     QLabel,
+    QWidget,
+    QLabel,
     QPushButton,
     QVBoxLayout,
     QHBoxLayout,
+    QComboBox,
+    QFormLayout,
+    QSizePolicy,
     #     QGridLayout,
-    #     QScrollArea,
+    QScrollArea,
 )
-from PyQt6.QtCore import pyqtSignal  # Qt, pyqtSignal
+from PyQt6.QtCore import Qt, pyqtSignal
 
-# from controller.login.auth_service import AuthenticationService
-
-# from model.pianificazione.regia import Regia
+from model.organizzazione.evento import Evento
+from model.organizzazione.sezione import Sezione
+from model.organizzazione.posto import Posto
 
 from view.spettacoli.utils import SpettacoloPageData
 
-# from view.utils.list_widgets import ListLayout, EmptyStateLabel
-# from view.utils.hyphenate_text import HyphenatedLabel
-# from view.utils import make_vline
-from view.style.ui_style import WidgetRole  # , WidgetColor
+from view.utils.list_widgets import ListLayout, EmptyStateLabel
+from view.utils.hyphenate_text import HyphenatedLabel
+from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class ScegliPostiView(QWidget):
@@ -34,6 +33,8 @@ class ScegliPostiView(QWidget):
     """
 
     tornaIndietroRequest = pyqtSignal()
+    getSezioniPostiRequest = pyqtSignal(int)
+    displayPostiSceltiRequest = pyqtSignal(ListLayout)
 
     def __init__(self):
         super().__init__()
@@ -55,165 +56,162 @@ class ScegliPostiView(QWidget):
         layout_header.addWidget(self.__btn_indietro)
         layout_header.addStretch()
 
-        # # Labels
-        # self.label_nome = HyphenatedLabel("[Nome Opera]")
-        # self.label_nome.setProperty(WidgetRole.HEADER1, True)
-        # self.label_nome.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        self.label_titolo = QLabel("[Titolo Spettacolo]")
+        self.label_titolo.setProperty(WidgetRole.HEADER1, True)
+        self.label_titolo.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        # self.label_librettista = HyphenatedLabel("Libretto di [Librettista Opera].")
-        # self.label_librettista.setProperty(WidgetRole.BODY_TEXT, True)
-        # self.label_librettista.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.label_note = HyphenatedLabel("[Note Spettacolo]")
+        self.label_note.setProperty(WidgetRole.BODY_TEXT, True)
+        self.label_note.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
-        # self.label_compositore = HyphenatedLabel(
-        #     "Musica composta da [Compositore Opera]."
-        # )
-        # self.label_compositore.setProperty(WidgetRole.BODY_TEXT, True)
-        # self.label_compositore.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        # Form
+        form_content = QWidget()
+        form_content.setSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding
+        )
+        self.__form_layout = QFormLayout(form_content)
+        self.__form_layout.setLabelAlignment(Qt.AlignmentFlag.AlignRight)
 
-        # self.label_genere = HyphenatedLabel(f"Genere: [Genere Opera]")
-        # self.label_genere.setProperty(WidgetRole.BODY_TEXT, True)
-        # self.label_genere.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.__setup_form()
+        # end-Form
 
-        # self.label_atti = QLabel(f"Numero di atti: [Atti Opera]")
-        # self.label_atti.setProperty(WidgetRole.BODY_TEXT, True)
-        # self.label_atti.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        # Lista Posti prenotati
+        header_posti_scelti = QLabel("Posti scelti")
+        header_posti_scelti.setProperty(WidgetRole.HEADER2, True)
 
-        # self.label_prima_rappresentazione = HyphenatedLabel(
-        #     f"È stata rappresentata per prima volta il [Data Opera] nel teatro [Teatro Opera]."
-        # )
-        # self.label_prima_rappresentazione.setProperty(WidgetRole.BODY_TEXT, True)
-        # self.label_prima_rappresentazione.setProperty(
-        #     WidgetColor.Text.PRIMARY_TEXT, True
-        # )
+        self.lista_posti_scelti: list[tuple[Sezione, Posto]] = []
 
-        # self.label_trama = HyphenatedLabel("[Trama Opera]")
-        # self.label_trama.setProperty(WidgetRole.BODY_TEXT, True)
-        # self.label_trama.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        label_nessun_posto_scelto = EmptyStateLabel("Nessun posto scelto.")
+        label_nessun_posto_scelto.setProperty(WidgetRole.BODY_TEXT, True)
+        label_nessun_posto_scelto.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
 
-        # # Lista Regie
-        # label_lista_regie = QLabel("Lista regie")
-        # label_lista_regie.setProperty(WidgetRole.HEADER2, True)
+        content_lista_posti_scelti = QWidget()
+        content_lista_posti_scelti.setProperty(WidgetRole.ITEM_LIST, True)
+        self.layout_lista_posti_scelti = ListLayout(
+            content_lista_posti_scelti, label_nessun_posto_scelto
+        )
 
-        # header_regie = QWidget()
-        # self.layout_header_regie = QHBoxLayout(header_regie)
-        # self.layout_header_regie.setContentsMargins(0, 0, 0, 0)
-        # self.layout_header_regie.addWidget(label_lista_regie)
+        self.posti_scelti = QWidget()
+        self.layout_posti_scelti = QVBoxLayout(self.posti_scelti)
+        self.layout_posti_scelti.addWidget(header_posti_scelti)
+        self.layout_posti_scelti.addWidget(content_lista_posti_scelti)
+        # end-Lista Posti prenotati
 
-        # if self.can_cud_regie:
-        #     self.__btn_nuova_regia = QPushButton("Nuova regia")
-        #     self.__btn_nuova_regia.setProperty(WidgetRole.DEFAULT_BUTTON, True)
-        #     self.layout_header_regie.addWidget(self.__btn_nuova_regia)
+        pagina_content = QWidget()
+        layout_content = QVBoxLayout(pagina_content)
+        layout_content.addWidget(self.label_titolo)
+        layout_content.addWidget(self.label_note)
+        layout_content.addWidget(form_content)
+        layout_content.addWidget(self.posti_scelti)
+        layout_content.addStretch()
 
-        # self.layout_header_regie.addStretch()
-
-        # self.lista_regie: list[Regia] = []
-
-        # label_lista_regie_vuota = EmptyStateLabel(
-        #     "Al momento, non vi sono regie per questa opera."
-        # )
-        # label_lista_regie_vuota.setProperty(WidgetRole.BODY_TEXT, True)
-        # label_lista_regie_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
-
-        # content_lista_regie = QWidget()
-        # content_lista_regie.setProperty(WidgetRole.ITEM_LIST, True)
-        # self.layout_lista_regie = ListLayout(
-        #     content_lista_regie, label_lista_regie_vuota
-        # )
-
-        # header_titolo = QLabel("Titolo")
-        # header_titolo.setProperty(WidgetRole.HEADER3, True)
-        # header_regista = QLabel("Regista")
-        # header_regista.setProperty(WidgetRole.HEADER3, True)
-        # header_opzioni = QLabel("Opzioni")
-        # header_opzioni.setProperty(WidgetRole.HEADER3, True)
-
-        # header_lista_regie = QWidget()
-        # layout_header_lista_regie = QGridLayout(header_lista_regie)
-        # layout_header_lista_regie.setContentsMargins(1, 1, 1, 1)
-        # layout_header_lista_regie.addWidget(
-        #     header_titolo, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter
-        # )
-        # layout_header_lista_regie.addWidget(make_vline(), 0, 1)
-        # layout_header_lista_regie.addWidget(
-        #     header_regista, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter
-        # )
-        # if self.can_cud_regie:
-        #     layout_header_lista_regie.addWidget(make_vline(), 0, 3)
-        #     layout_header_lista_regie.addWidget(
-        #         header_opzioni, 0, 4, alignment=Qt.AlignmentFlag.AlignCenter
-        #     )
-
-        # self.regie = QWidget()
-        # self.layout_regie = QVBoxLayout(self.regie)
-        # self.layout_regie.addWidget(header_regie)
-        # self.layout_regie.addWidget(header_lista_regie)
-        # self.layout_regie.addWidget(content_lista_regie)
-        # # end-Lista Regie
-
-        # pagina_content = QWidget()
-        # layout_content = QVBoxLayout(pagina_content)
-        # layout_content.addWidget(self.label_nome)
-        # layout_content.addWidget(self.label_librettista)
-        # layout_content.addWidget(self.label_compositore)
-        # layout_content.addWidget(self.label_genere)
-        # layout_content.addWidget(self.label_atti)
-        # layout_content.addWidget(self.label_prima_rappresentazione)
-        # layout_content.addWidget(self.label_trama)
-        # layout_content.addWidget(self.regie)
-        # layout_content.addStretch()
-
-        # # Funzione di scroll
-        # scroll_area = QScrollArea()
-        # scroll_area.setWidgetResizable(True)
-        # scroll_area.setWidget(pagina_content)
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setWidget(pagina_content)
+        scroll_area.setSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding
+        )
 
         # Layout
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.pagina_header)
-        # main_layout.addWidget(scroll_area)
+        main_layout.addWidget(scroll_area)
+
+    def __setup_form(self):
+        label_evento = QLabel('Data evento<span style="color:red;">*</span> :')
+        label_evento.setProperty(WidgetRole.BODY_TEXT, True)
+        label_evento.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        self.evento = QComboBox()
+
+        label_sezione = QLabel('Sezione<span style="color:red;">*</span> :')
+        label_sezione.setProperty(WidgetRole.BODY_TEXT, True)
+        label_sezione.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        self.sezione = QComboBox()
+
+        label_posto = QLabel('Posto<span style="color:red;">*</span> :')
+        label_posto.setProperty(WidgetRole.BODY_TEXT, True)
+        label_posto.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        self.posto = QComboBox()
+
+        self.__btn_aggiungi = QPushButton("Aggiungi")
+        self.__btn_aggiungi.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+
+        self.__form_layout.addRow(label_evento, self.evento)
+        self.__form_layout.addRow(QLabel("<hr>"))
+        self.__form_layout.addRow(label_sezione, self.sezione)
+        self.__form_layout.addRow(label_posto, self.posto)
+        self.__form_layout.addRow(self.__btn_aggiungi)
 
     def _connect_signals(self) -> None:
         self.__btn_indietro.clicked.connect(  # type:ignore
             self.tornaIndietroRequest.emit
         )
 
+        self.evento.currentIndexChanged.connect(  # type:ignore
+            lambda: self.getSezioniPostiRequest.emit(self.evento.currentData())
+        )
+
+        self.sezione.currentIndexChanged.connect(  # type:ignore
+            lambda: self.__setup_posto_combobox(self.sezione.currentData())
+        )
+
     # ------------------------- METODI DI VIEW -------------------------
 
-    def set_data(
-        self, data: SpettacoloPageData, dati_speciali: tuple[str, ...] = ()
+    def __setup_evento_combobox(self, eventi: list[Evento]) -> None:
+        """Riempisce il `QComboBox` degli eventi."""
+        self.evento.clear()
+
+        self.evento.insertItem(0, "Scegliere evento...", -1)
+        for i, e in enumerate(eventi, start=1):
+            self.evento.insertItem(
+                i, e.get_data_ora().strftime("%d/%m/%y - %H:%M"), e.get_id()
+            )
+
+    def setup_sezione_combobox(
+        self, lista_sezioni_posti: list[tuple[Sezione, list[Posto]]]
     ) -> None:
-        """Carica i dati dell'opera nella pagina.
+        self.__lista_sezioni_posti = lista_sezioni_posti
+
+        self.sezione.clear()
+
+        if not self.__lista_sezioni_posti:
+            return
+        self.sezione.insertItem(0, "Scegliere sezione...", -1)
+        for i, couple in enumerate(self.__lista_sezioni_posti, start=1):
+            s, lista_p = couple
+            self.sezione.insertItem(i, s.get_nome(), s.get_id())
+
+    def __setup_posto_combobox(self, id_sezione: int) -> None:
+        self.posto.clear()
+
+        if id_sezione == -1:
+            return
+
+        posti = []
+        for s, lista_p in self.__lista_sezioni_posti:
+            if s.get_id() == id_sezione:
+                posti = lista_p
+
+        self.sezione.insertItem(0, "Scegliere posto...", -1)
+        for i, p in enumerate(posti, start=1):
+            self.sezione.insertItem(i, str(p.get_numero()), p.get_id())
+
+    def set_data(self, data: SpettacoloPageData, lista_eventi: list[Evento]) -> None:
+        """Carica i dati dello spettacolo nella pagina.
 
         :param data: data salvata in una classe immutabile
-        :param genere_nome: nome del genere scelto per l'opera
-        :param lista_regie: lista delle regie associate all'opera"""
-        # # Reset layout lista regie
-        # self.layout_lista_regie.svuota_layout()
+        :param lista_eventi: lista degli eventi associati allo spettacolo"""
+        self.layout_lista_posti_scelti.svuota_layout()
 
-        # # Salva dati dell'opera nella pagina
-        # self.id_current_opera = data.id
-        # self.lista_regie = lista_regie
+        # Salva dati dello spettacolo nella pagina
+        self.id_current_spettacolo = data.id
 
-        # # Carica dati dell'opera
-        # self.label_nome.setText(f"{data.nome}")
-        # self.label_librettista.setText(f"Libretto di {data.librettista}")
-        # self.label_compositore.setText(f"Musica composta da {data.compositore}")
-        # self.label_genere.setText(f"Genere: {genere_nome}")
-        # self.label_atti.setText(f"Numero di atti: {data.atti}")
-        # self.label_prima_rappresentazione.setText(
-        #     "È stata rappresentata per prima volta il "
-        #     + f"{data.data_rappresentazione.strftime("%d/%m/%y")} "
-        #     + f"nel teatro {data.teatro_rappresentazione}"
-        # )
-        # self.label_trama.setText(f"{data.trama}")
+        # # Carica dati dello spettacolo
+        self.label_titolo.setText(data.titolo)
+        self.label_note.setText(data.note)
+        self.__setup_evento_combobox(lista_eventi)
 
-        # # Carica lista regie
-        # if not self.lista_regie:
-        #     self.layout_lista_regie.if_lista_vuota()
-        # else:
-        #     self.displayRegieRequest.emit(self.layout_lista_regie)
-
-    # def aggiorna_pagina(self) -> None:
-    #     """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
-    #     self.layout_lista_regie.svuota_layout()
-    #     self.displayRegieRequest.emit(self.layout_lista_regie)
+    def aggiorna_pagina(self) -> None:
+        """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
+        self.layout_lista_posti_scelti.svuota_layout()
+        self.displayPostiSceltiRequest.emit(self.layout_lista_posti_scelti)

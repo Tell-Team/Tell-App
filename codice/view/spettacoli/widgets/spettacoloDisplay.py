@@ -7,6 +7,8 @@ from model.pianificazione.regia import Regia
 
 from view.utils.list_widgets import ItemDisplay
 from view.utils.hyphenate_text import HyphenatedLabel
+from view.utils.custom_button import ModificaButton, EliminaButton
+
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
@@ -59,11 +61,9 @@ class SpettacoloDisplay(ItemDisplay):
 
         self.__layout.addWidget(self.__pulsanti)
 
-        self.__btn_modifica = QPushButton("Modifica")
-        self.__btn_modifica.setProperty(WidgetRole.MODIFY_BUTTON, True)
+        self.__btn_modifica = ModificaButton("Modifica")
 
-        self.__btn_elimina = QPushButton("Elimina")
-        self.__btn_elimina.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
+        self.__btn_elimina = EliminaButton("Elimina")
 
         layout_pulsanti.addWidget(self.__btn_modifica)
         layout_pulsanti.addWidget(self.__btn_elimina)

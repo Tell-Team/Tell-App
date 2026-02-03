@@ -23,17 +23,13 @@ class TeatroSectionView(AbstractSectionView):
     Segnali
     ---
     - `nuovaSezioneRequest()`: emesso quando si clicca il pulsante Nuova sezione;
-    - `nuovoPostoRequest()`: emesso quando si clicca il pulsante Nuovo posto;
-    - `displaySezioniRequest(QVBoxLayout)`: emesso per mostrare a schermo la lista sezioni;
-    - `displayPostiRequest(QVBoxLayout)`: emesso per mostrare a schermo la lista posti.
+    - `displaySezioniRequest(QVBoxLayout)`: emesso per mostrare a schermo la lista sezioni.
     """
 
     nuovaSezioneRequest = pyqtSignal()
-    nuovoPostoRequest = pyqtSignal()
+    # nuovoPostoRequest = pyqtSignal()
     displaySezioniRequest = pyqtSignal(QVBoxLayout)
-    displayPostiRequest = pyqtSignal(
-        QVBoxLayout
-    )  # - QUE MIERDA SE SUPONE QUE HAGA ESTO
+    # displayPostiRequest = pyqtSignal(QVBoxLayout)
 
     # ------------------------- SETUP INIT -------------------------
 
@@ -70,38 +66,38 @@ class TeatroSectionView(AbstractSectionView):
         layout_sezioni.addWidget(widget_header_sezioni)
         layout_sezioni.addWidget(widget_lista_sezioni)
 
-        # Posti
-        header_posti = QLabel("Posti")
-        header_posti.setProperty(WidgetRole.HEADER1, True)
-        header_posti.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        # # Posti
+        # header_posti = QLabel("Posti")
+        # header_posti.setProperty(WidgetRole.HEADER1, True)
+        # header_posti.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        self._btn_nuovo_posto = QPushButton("Nuovo posto")
-        self._btn_nuovo_posto.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+        # self._btn_nuovo_posto = QPushButton("Nuovo posto")
+        # self._btn_nuovo_posto.setProperty(WidgetRole.DEFAULT_BUTTON, True)
 
-        widget_header_posti = QWidget()
-        layout_header_posti = QHBoxLayout(widget_header_posti)
-        layout_header_posti.setContentsMargins(0, 0, 0, 0)
-        layout_header_posti.addWidget(header_posti)
-        layout_header_posti.addWidget(self._btn_nuovo_posto)
-        layout_header_posti.addStretch()
+        # widget_header_posti = QWidget()
+        # layout_header_posti = QHBoxLayout(widget_header_posti)
+        # layout_header_posti.setContentsMargins(0, 0, 0, 0)
+        # layout_header_posti.addWidget(header_posti)
+        # layout_header_posti.addWidget(self._btn_nuovo_posto)
+        # layout_header_posti.addStretch()
 
-        label_lista_posti_vuota = EmptyStateLabel("Non vi sono posti disponibili.")
-        label_lista_posti_vuota.setProperty(WidgetRole.BODY_TEXT, True)
-        label_lista_posti_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        # label_lista_posti_vuota = EmptyStateLabel("Non vi sono posti disponibili.")
+        # label_lista_posti_vuota.setProperty(WidgetRole.BODY_TEXT, True)
+        # label_lista_posti_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
 
-        widget_lista_posti = QWidget()
-        self.layout_lista_posti = ListLayout(
-            widget_lista_posti, label_lista_posti_vuota
-        )
+        # widget_lista_posti = QWidget()
+        # self.layout_lista_posti = ListLayout(
+        #     widget_lista_posti, label_lista_posti_vuota
+        # )
 
-        container_posti = QWidget()
-        layout_posti = QVBoxLayout(container_posti)
-        layout_posti.addWidget(widget_header_posti)
-        layout_posti.addWidget(widget_lista_posti)
+        # container_posti = QWidget()
+        # layout_posti = QVBoxLayout(container_posti)
+        # layout_posti.addWidget(widget_header_posti)
+        # layout_posti.addWidget(widget_lista_posti)
 
         # Scroll layout
         self.scroll_layout.addWidget(container_sezioni)
-        self.scroll_layout.addWidget(container_posti)
+        # self.scroll_layout.addWidget(container_posti)
         self.scroll_layout.addStretch()
 
     @override
@@ -113,13 +109,13 @@ class TeatroSectionView(AbstractSectionView):
         self._btn_nuova_sezione.clicked.connect(  # type:ignore
             self.nuovaSezioneRequest.emit
         )
-        self._btn_nuovo_posto.clicked.connect(  # type:ignore
-            self.nuovoPostoRequest.emit
-        )
+        # self._btn_nuovo_posto.clicked.connect(  # type:ignore
+        #     self.nuovoPostoRequest.emit
+        # )
 
         self.displaySezioniRequest.emit(self.layout_lista_sezioni)
 
-        self.displayPostiRequest.emit(self.layout_lista_posti)
+        # self.displayPostiRequest.emit(self.layout_lista_posti)
 
     # ------------------------- METODI DI VIEW -------------------------
 
@@ -128,8 +124,8 @@ class TeatroSectionView(AbstractSectionView):
         self.layout_lista_sezioni.svuota_layout()
         self.displaySezioniRequest.emit(self.layout_lista_sezioni)
 
-        self.layout_lista_posti.svuota_layout()
-        self.displayPostiRequest.emit(self.layout_lista_posti)
+        # self.layout_lista_posti.svuota_layout()
+        # self.displayPostiRequest.emit(self.layout_lista_posti)
 
         if vertical_scroll := self._scroll_area.verticalScrollBar():
             vertical_scroll.setValue(0)

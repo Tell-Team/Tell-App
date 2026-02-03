@@ -29,7 +29,7 @@ QPushButton[search-button="true"] {
 }
 
 QPushButton[blue-button="true"] {
-    color: white;
+    color: #ffffff;
     background-color: hsl(217, 100.0%, 58.0%); /* #2b7cff */
 }
 QPushButton[blue-button="true"]:hover { background-color: hsl(217, 92.0%, 63.0%); }
@@ -38,7 +38,7 @@ QPushButton[blue-button="true"]:pressed { background-color: hsl(217, 100.0%, 50.
 /* Logica condivisa dei pulsanti con colore */
 QPushButton[save-button="true"], QPushButton[modify-button="true"],
 QPushButton[destructive-button="true"] {
-    color: white;
+    color: #ffffff;
     font-weight: bold;
 }
 

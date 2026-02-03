@@ -139,18 +139,20 @@ class AcquistoSectionController(AbstractSectionController):
             tecnici=current_spettacolo.get_tecnici(),
         )
 
-        # Setup pagina con i data dello spettacolo
-        if isinstance(current_spettacolo, Regia):
-            tipo_spettacolo: tuple[str, str] = ("", "")
-            if opera_associata := self._model.get_opera(
-                current_spettacolo.get_id_opera()
-            ):
-                compositore = opera_associata.get_compositore()
-                regista = current_spettacolo.get_regista()
-                tipo_spettacolo = (compositore, regista)
-            current_pagina.set_data(spettacolo_data, tipo_spettacolo)
-        else:
-            current_pagina.set_data(spettacolo_data)
+        lista_eventi = self._model.get_eventi_by_spettacolo(current_spettacolo.get_id())
+
+        # # Setup pagina con i data dello spettacolo
+        # if isinstance(current_spettacolo, Regia):
+        #     tipo_spettacolo: tuple[str, str] = ("", "")
+        #     if opera_associata := self._model.get_opera(
+        #         current_spettacolo.get_id_opera()
+        #     ):
+        #         compositore = opera_associata.get_compositore()
+        #         regista = current_spettacolo.get_regista()
+        #         tipo_spettacolo = (compositore, regista)
+        #     current_pagina.set_data(spettacolo_data, lista_eventi, tipo_spettacolo)
+        # else:
+        current_pagina.set_data(spettacolo_data, lista_eventi)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

@@ -1,10 +1,12 @@
-from PyQt6.QtWidgets import QLabel, QPushButton, QHBoxLayout
+from PyQt6.QtWidgets import QLabel, QHBoxLayout
 from PyQt6.QtCore import Qt, pyqtSignal
 from functools import partial
 
 from view.utils.list_widgets import ItemDisplay
 from view.utils.horizontal_scroll import HorizontalWheelScrollArea
+from view.utils.custom_button import EliminaButton
 from view.utils import make_vline
+
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
@@ -41,10 +43,8 @@ class PersonaleDisplay(ItemDisplay):
         scroll_value.setWidget(widget_value)
         scroll_value.setMinimumWidth(200)  # - DA CORRIGERE
 
-        self.__btn_rimuovi = QPushButton("X")
-        # - Quitar el texto del botón para cuando pueda usar icons
+        self.__btn_rimuovi = EliminaButton()
         self.__btn_rimuovi.setFixedSize(32, 32)
-        self.__btn_rimuovi.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
 
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 5, 0)

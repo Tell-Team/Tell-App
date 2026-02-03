@@ -58,7 +58,6 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
         self._scroll_area = QScrollArea()
         self._scroll_area.setWidgetResizable(True)
         self._scroll_area.setWidget(self.__form_content)
-        self._scroll_area.setWidgetResizable(True)
         self._scroll_area.setSizePolicy(
             QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding
         )

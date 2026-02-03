@@ -148,7 +148,7 @@ class InfoSectionController(AbstractSectionController):
 
         # Funzione di eliminazione per i generi
         def on_conferma(widget_genere: GenereDisplay, id_: int) -> None:
-            """Prova ad eliminare l'istanza di Opera.
+            """Prova ad eliminare l'istanza di Genere.
 
             :param widget_genere: widget associato al `Genere` da eliminare
             :param id_: id dell'opera da eliminare

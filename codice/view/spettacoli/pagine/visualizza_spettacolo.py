@@ -32,12 +32,12 @@ class VisualizzaSpettacoloView(QWidget):
     Segnali
     ---
     - `tornaIndietroRequest()`: emesso quando si clicca il pulsante Indietro;
-    - `displayEventiRequest(QVBoxLayout)`: emesso per mostrare a schermo la lista eventi;
+    - `displayEventiRequest(ListLayout)`: emesso per mostrare a schermo la lista eventi;
     - `nuovoEventoRequest()`: emesso quando si clicca il pulsante Nuovo evento.
     """
 
     tornaIndietroRequest = pyqtSignal()
-    displayEventiRequest = pyqtSignal(QVBoxLayout)
+    displayEventiRequest = pyqtSignal(ListLayout)
     nuovoEventoRequest = pyqtSignal()
 
     def __init__(self, user_session: UserSession):
