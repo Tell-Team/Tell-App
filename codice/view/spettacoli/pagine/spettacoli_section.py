@@ -27,11 +27,11 @@ class SpettacoliSectionView(AbstractSectionView):
     Segnali
     ---
     - `nuovoSpettacoloRequest()`: emesso quando si clicca il pulsante Nuovo spettacolo;
-    - `displaySpettacoliRequest(QVBoxLayout)`: emesso per mostrare a schermo la lista spettacoli.
+    - `displaySpettacoliRequest(ListLayout)`: emesso per mostrare a schermo la lista spettacoli.
     """
 
     nuovoSpettacoloRequest = pyqtSignal()
-    displaySpettacoliRequest = pyqtSignal(QVBoxLayout)
+    displaySpettacoliRequest = pyqtSignal(ListLayout)
 
     def __init__(self, user_session: UserSession):
         self.is_admin = user_session.ha_permessi_admin()

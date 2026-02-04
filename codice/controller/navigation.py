@@ -37,6 +37,7 @@ class Pagina(Enum):
     MODIFICA_REGIA = "modifica_regia"
 
     SEZIONE_TEATRO = "teatro_section"
+    VISUALIZZA_SEZIONE = "visualizza_sezione"
     NUOVA_SEZIONE = "nuova_sezione"
     MODIFICA_SEZIONE = "modifica_sezione"
 
@@ -211,11 +212,13 @@ class NavigationController(QObject):
             # Teatro
             from view.teatro.pagine import (
                 TeatroSectionView,
+                VisualizzaSezioneView,
                 NuovaSezioneView,
                 ModificaSezioneView,
             )
 
             self.__teatro_section = TeatroSectionView()
+            self.__visualizza_sezione_view = VisualizzaSezioneView()
             self.__nuova_sezione_view = NuovaSezioneView()
             self.__modifica_sezione_view = ModificaSezioneView()
 
@@ -265,6 +268,9 @@ class NavigationController(QObject):
             self.__registra_pagina(Pagina.MODIFICA_REGIA, self.__modifica_regia_view)
             # Teatro
             self.__registra_pagina(Pagina.SEZIONE_TEATRO, self.__teatro_section)
+            self.__registra_pagina(
+                Pagina.VISUALIZZA_SEZIONE, self.__visualizza_sezione_view
+            )
             self.__registra_pagina(Pagina.NUOVA_SEZIONE, self.__nuova_sezione_view)
             self.__registra_pagina(
                 Pagina.MODIFICA_SEZIONE, self.__modifica_sezione_view
@@ -318,41 +324,37 @@ class NavigationController(QObject):
                 CUEventoController,
             )
 
-            controller_defs.append(
-                (
-                    "__spettacoli_controller",
-                    SpettacoliSectionController,
-                    (model, self.__spettacoli_section),
-                ),
-            )
-            controller_defs.append(
-                (
-                    "__visualizza_spettacolo_controller",
-                    VisualizzaSpettacoloController,
-                    (model, self.__visualizza_spettacolo_view),
-                )
-            )
-            controller_defs.append(
-                (
-                    "__cu_spettacolo_controller",
-                    CUSpettacoloController,
+            controller_defs.extend(
+                [
                     (
-                        model,
-                        self.__nuovo_spettacolo_view,
-                        self.__modifica_spettacolo_view,
+                        "__spettacoli_controller",
+                        SpettacoliSectionController,
+                        (model, self.__spettacoli_section),
                     ),
-                ),
-            )
-            controller_defs.append(
-                (
-                    "__cu_evento_controller",
-                    CUEventoController,
                     (
-                        model,
-                        self.__nuovo_evento_view,
-                        self.__modifica_evento_view,
+                        "__visualizza_spettacolo_controller",
+                        VisualizzaSpettacoloController,
+                        (model, self.__visualizza_spettacolo_view),
                     ),
-                ),
+                    (
+                        "__cu_spettacolo_controller",
+                        CUSpettacoloController,
+                        (
+                            model,
+                            self.__nuovo_spettacolo_view,
+                            self.__modifica_spettacolo_view,
+                        ),
+                    ),
+                    (
+                        "__cu_evento_controller",
+                        CUEventoController,
+                        (
+                            model,
+                            self.__nuovo_evento_view,
+                            self.__modifica_evento_view,
+                        ),
+                    ),
+                ]
             )
 
         if self.__user_session.ha_permessi_admin():
@@ -363,65 +365,76 @@ class NavigationController(QObject):
                 CURegiaController,
             )
 
-            controller_defs.append(
-                (
-                    "__cu_opera_controller",
-                    CUOperaController,
-                    (model, self.__nuova_opera_view, self.__modifica_opera_view),
-                ),
-            )
-            controller_defs.append(
-                (
-                    "__cu_genere_controller",
-                    CUGenereController,
-                    (model, self.__nuovo_genere_view, self.__modifica_genere_view),
-                ),
-            )
-            controller_defs.append(
-                (
-                    "__cu_regia_controller",
-                    CURegiaController,
-                    (model, self.__nuova_regia_view, self.__modifica_regia_view),
-                ),
+            controller_defs.extend(
+                [
+                    (
+                        "__cu_opera_controller",
+                        CUOperaController,
+                        (model, self.__nuova_opera_view, self.__modifica_opera_view),
+                    ),
+                    (
+                        "__cu_genere_controller",
+                        CUGenereController,
+                        (model, self.__nuovo_genere_view, self.__modifica_genere_view),
+                    ),
+                    (
+                        "__cu_regia_controller",
+                        CURegiaController,
+                        (model, self.__nuova_regia_view, self.__modifica_regia_view),
+                    ),
+                ]
             )
             # Teatro
-            from controller.teatro import TeatroSectionController, CUSezioneController
-
-            controller_defs.append(
-                (
-                    "__teatro_controller",
-                    TeatroSectionController,
-                    (model, self.__teatro_section),
-                )
+            from controller.teatro import (
+                TeatroSectionController,
+                VisualizzaSezioneController,
+                CUSezioneController,
             )
-            controller_defs.append(
-                (
-                    "__cu_sezione_controller",
-                    CUSezioneController,
-                    (model, self.__nuova_sezione_view, self.__modifica_sezione_view),
-                )
+
+            controller_defs.extend(
+                [
+                    (
+                        "__teatro_controller",
+                        TeatroSectionController,
+                        (model, self.__teatro_section),
+                    ),
+                    (
+                        "__visualizza_sezione_controller",
+                        VisualizzaSezioneController,
+                        (model, self.__visualizza_sezione_view),
+                    ),
+                    (
+                        "__cu_sezione_controller",
+                        CUSezioneController,
+                        (
+                            model,
+                            self.__nuova_sezione_view,
+                            self.__modifica_sezione_view,
+                        ),
+                    ),
+                ]
             )
             # Account
             from controller.account import AccountSectionController, CUAccountController
 
-            controller_defs.append(
-                (
-                    "__account_controller",
-                    AccountSectionController,
-                    (model, self.__account_section, self.__user_session),
-                ),
-            )
-            controller_defs.append(
-                (
-                    "__cu_account_controller",
-                    CUAccountController,
+            controller_defs.extend(
+                [
                     (
-                        model,
-                        self.__nuovo_account_view,
-                        self.__modifica_account_view,
-                        self.__user_session,
+                        "__account_controller",
+                        AccountSectionController,
+                        (model, self.__account_section, self.__user_session),
                     ),
-                ),
+                    (
+                        "__cu_account_controller",
+                        CUAccountController,
+                        (
+                            model,
+                            self.__nuovo_account_view,
+                            self.__modifica_account_view,
+                            self.__user_session,
+                        ),
+                    ),
+                ]
             )
 
         controllers: list[QObject] = []

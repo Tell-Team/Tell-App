@@ -26,11 +26,11 @@ class AcquistoSectionView(AbstractSectionView):
 
     Segnali
     ---
-    - `displaySpettacoliRequest(QVBoxLayout)`: emesso per mostrare a schermo la lista spettacoli,
+    - `displaySpettacoliRequest(ListLayout)`: emesso per mostrare a schermo la lista spettacoli,
     tale che tutti gli `Spettacolo` ottenuti hanno almeno un evento corrente associato.
     """
 
-    displaySpettacoliRequest = pyqtSignal(QVBoxLayout)
+    displaySpettacoliRequest = pyqtSignal(ListLayout)
 
     def __init__(self, user_session: UserSession):
         self.is_biglietteria = user_session.ha_permessi_biglietteria()

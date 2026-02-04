@@ -100,7 +100,7 @@ class InfoSectionController(AbstractSectionController):
             """Prova ad eliminare l'istanza di Opera.
 
             :param widget_opera: widget associato all'`Opera` da eliminare
-            :param id_: id dell'opera da eliminare
+            :param id\\_: id dell'opera da eliminare
             """
             try:
                 self.__elimina_opera(id_)
@@ -151,7 +151,7 @@ class InfoSectionController(AbstractSectionController):
             """Prova ad eliminare l'istanza di Genere.
 
             :param widget_genere: widget associato al `Genere` da eliminare
-            :param id_: id dell'opera da eliminare
+            :param id\\_: id del genere da eliminare
             """
             try:
                 self.__elimina_genere(id_)

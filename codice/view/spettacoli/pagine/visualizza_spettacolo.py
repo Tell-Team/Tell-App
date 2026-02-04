@@ -24,9 +24,9 @@ from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class VisualizzaSpettacoloView(QWidget):
-    """Pagina per visualizzare i singoli `Spettacoli` in dettaglio.
+    """Pagina per visualizzare i singoli `Spettacolo` in dettaglio.
 
-    Contiene le tutte informazioni dello `Spettacolo` ed una lista con tutti gli `Eventi`
+    Contiene le tutte informazioni dello `Spettacolo` ed una lista con tutti gli `Evento`
     associati ad essa.
 
     Segnali

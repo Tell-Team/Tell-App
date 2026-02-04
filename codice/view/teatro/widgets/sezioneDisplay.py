@@ -16,10 +16,12 @@ class SezioneDisplay(ItemDisplay):
 
     Segnali
     ---
+    - `visualizzaRequest(int)`: emesso quando si clicca il pulsante Lista posti;
     - `modificaRequest(int)`: emesso quando si clicca il pulsante Modifica;
     - `eliminaConfermata()`: emesso quando si clicca il pulsante Sì.
     """
 
+    visualizzaRequest = pyqtSignal(int)
     modificaRequest = pyqtSignal(int)
     eliminaConfermata = pyqtSignal()
 
@@ -46,7 +48,10 @@ class SezioneDisplay(ItemDisplay):
         layout.addWidget(nome)
         layout.addWidget(descrizione)
 
-        # Pulsanti Modifica-Elimina
+        # Pulsanti
+        self.__btn_visualizza = QPushButton("Lista posti")
+        self.__btn_visualizza.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+
         self.__btn_modifica = ModificaButton("Modifica")
 
         self.__btn_elimina = EliminaButton("Elimina")
@@ -54,6 +59,7 @@ class SezioneDisplay(ItemDisplay):
         self.__pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.__pulsanti)
         layout_pulsanti.setContentsMargins(1, 1, 1, 1)
+        layout_pulsanti.addWidget(self.__btn_visualizza)
         layout_pulsanti.addWidget(self.__btn_modifica)
         layout_pulsanti.addWidget(self.__btn_elimina)
         layout_pulsanti.addStretch()
@@ -82,6 +88,10 @@ class SezioneDisplay(ItemDisplay):
 
     def __connect_signals(self, s: Sezione) -> None:
         self.__id = s.get_id()
+
+        self.__btn_visualizza.clicked.connect(  # type:ignore
+            partial(self.visualizzaRequest.emit, self.__id)
+        )
 
         self.__btn_modifica.clicked.connect(  # type:ignore
             partial(self.modificaRequest.emit, self.__id)

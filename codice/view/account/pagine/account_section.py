@@ -19,7 +19,7 @@ class AccountSectionView(AbstractSectionView):
     Segnali
     ---
     - `nuovoAccountRequest()`: emesso quando si clicca il pulsante Nuovo Account;
-    - `displayAccountRequest(QVBoxLayout)`: emesso per caricare la lista di account
+    - `displayAccountRequest(ListLayout)`: emesso per caricare la lista di account
     nella sezione Account;
     """
 
@@ -29,7 +29,7 @@ class AccountSectionView(AbstractSectionView):
     #   Quindi, è un nome proprio.
 
     nuovoAccountRequest = pyqtSignal()
-    displayAccountRequest = pyqtSignal(QVBoxLayout)
+    displayAccountRequest = pyqtSignal(ListLayout)
 
     def __init__(self, user_session: UserSession):
         self.user_session_id = user_session.id

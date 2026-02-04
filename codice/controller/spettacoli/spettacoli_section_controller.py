@@ -90,7 +90,7 @@ class SpettacoliSectionController(AbstractSectionController):
             """Prova ad eliminare l'istanza di Spettacolo.
 
             :param widget_spettacolo: widget associato allo `Spettacolo` da eliminare
-            :param id_: id dello spettacolo da eliminare
+            :param id\\_: id dello spettacolo da eliminare
             """
             try:
                 self.__elimina_spettacolo(id_)
@@ -135,7 +135,7 @@ class SpettacoliSectionController(AbstractSectionController):
         """Carica la pagina `VisualizzaSpettacoloView` con i dati relativi allo spettacolo
         indicato.
 
-        :param id_: id dello spettacolo da visualizzare
+        :param id\\_: id dello spettacolo da visualizzare
         """
         # Copia dello spettacolo da visualizzare
         current_spettacolo = self.__get_spettacolo(id_)

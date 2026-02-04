@@ -70,7 +70,7 @@ class VisualizzaOperaController(QObject):
 
     def __display_regie(self, layout_regie: ListLayout) -> None:
         """Mostra a schermo le informazioni delle regie salvate e associate ad
-        un'opera ed assegna a ciascuna pulsanti per modificarli o eliminarli.
+        un'opera ed assegna a ciascuna pulsanti per modificarle o eliminarle.
 
         :param layout_regie: layout dove saranno caricate tutti le regie
         """
@@ -84,10 +84,10 @@ class VisualizzaOperaController(QObject):
 
         # Funzione di eliminazione per le regie
         def on_conferma(widget_regia: RegiaDisplay, id_: int) -> None:
-            """Prova ad eliminare l'istanza di Regia.
+            """Prova ad eliminare l'istanza di `Regia`.
 
             :param widget_regia: widget associato alla `Regia` da eliminare
-            :param id_: id della regia da eliminare
+            :param id\\_: id della regia da eliminare
             """
             try:
                 self.__elimina_regia(id_)

@@ -7,6 +7,7 @@ from controller.navigation import Pagina
 
 from model.model import Model
 from model.organizzazione.sezione import Sezione
+from model.organizzazione.posto import Posto
 from model.exceptions import OggettoInUsoException
 
 from view.teatro.pagine import TeatroSectionView
@@ -25,7 +26,7 @@ class TeatroSectionController(AbstractSectionController):
 
     def __init__(self, model: Model, teatro_s: TeatroSectionView):
         if type(teatro_s) is not TeatroSectionView:
-            raise TypeError("Atteso TeatroSectionView per info_s.")
+            raise TypeError("Atteso TeatroSectionView per teatro_s.")
 
         super().__init__(model, teatro_s)
 
@@ -34,21 +35,13 @@ class TeatroSectionController(AbstractSectionController):
     def _connect_signals(self) -> None:
         super()._connect_signals()
 
-        # Display delle istanze del model
         self._view_section.displaySezioniRequest.connect(  # type:ignore
             self.__display_sezioni
         )
-        # self._view_section.displayPostiRequest.connect(  # type:ignore
-        #     self.__display_posti
-        # )
 
-        # Setup delle pagine di creazione
         self._view_section.nuovaSezioneRequest.connect(  # type:ignore
             self.__nuova_sezione
         )
-        # self._view_section.nuovoPostoRequest.connect(  # type:ignore
-        #     self.__nuovo_posto
-        # )
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
@@ -58,12 +51,15 @@ class TeatroSectionController(AbstractSectionController):
     def __get_sezioni(self) -> list[Sezione]:
         return self._model.get_sezioni()
 
+    def __get_posti_by_sezione(self, id_: int) -> list[Posto]:
+        return self._model.get_posti_by_sezione(id_)
+
     def __elimina_sezione(self, id_: int) -> None:
         self._model.elimina_sezione(id_)
 
     def __display_sezioni(self, layout_sezioni: ListLayout) -> None:
         """Mostra a schermo le informazioni delle sezioni salvate ed assegna a
-        ciascuna dei pulsanti per modificarle o eliminarle.
+        ciascuna dei pulsanti per accedere alle loro liste posti, modificarle o eliminarle.
 
         :param layout_sezioni: layout dove saranno caricati tutte le sezioni
         """
@@ -76,10 +72,10 @@ class TeatroSectionController(AbstractSectionController):
 
         # Funzione di eliminazione per le sezioni
         def on_conferma(widget_sezione: SezioneDisplay, id_: int) -> None:
-            """Prova ad eliminare l'istanza di Sezione.
+            """Prova ad eliminare l'istanza di `Sezione`.
 
             :param widget_sezione: widget associato alla `Sezione` da eliminare
-            :param id_: id dell'opera da eliminare
+            :param id\\_: id della sezione da eliminare
             """
             try:
                 self.__elimina_sezione(id_)
@@ -97,7 +93,10 @@ class TeatroSectionController(AbstractSectionController):
         for sezione in lista_sezioni:
             current_sezione = SezioneDisplay(sezione)
 
-            # Setup della pagina di modifica delle sezioni
+            current_sezione.visualizzaRequest.connect(  # type:ignore
+                self.__visualizza_sezione
+            )
+
             current_sezione.modificaRequest.connect(  # type:ignore
                 self.__modifica_sezione
             )
@@ -108,7 +107,38 @@ class TeatroSectionController(AbstractSectionController):
 
             layout_sezioni.aggiungi_list_item(current_sezione, WidgetRole.ITEM_CARD)
 
-    # def __display_posti(self, layout_posti: ListLayout) -> None: ...
+    def __visualizza_sezione(self, id_: int) -> None:
+        # Copia della sezione da visualizzare
+        current_sezione = self.__get_sezione(id_)
+        if not current_sezione:
+            PopupMessage.mostra_errore(
+                self._view_section,
+                "Sezione inesistente",
+                f"Non è presente nessuna sezione con id {id_}.",
+            )
+            return
+
+        # Ottieni la pagina ListaPostiView
+        from view.teatro.pagine import VisualizzaSezioneView
+
+        pagina_nome = Pagina.VISUALIZZA_SEZIONE
+        current_pagina = self._ottieni_pagina(pagina_nome)
+        if type(current_pagina) is not VisualizzaSezioneView:
+            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+            return
+
+        sezione_data = SezionePageData(
+            id=current_sezione.get_id(),
+            nome=current_sezione.get_nome(),
+            descrizione=current_sezione.get_descrizione(),
+        )
+
+        lista_posti = self.__get_posti_by_sezione(current_sezione.get_id())
+
+        current_pagina.set_data(sezione_data, lista_posti)
+
+        # Apri la pagina
+        self.goToPageRequest.emit(pagina_nome, True)
 
     def __nuova_sezione(self) -> None:
         """Carica la pagina `NuovaSezioneView`, dove l'utente può inserire i dati
@@ -165,5 +195,3 @@ class TeatroSectionController(AbstractSectionController):
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
-
-    # def __nuovo_posto(self) -> None: ...

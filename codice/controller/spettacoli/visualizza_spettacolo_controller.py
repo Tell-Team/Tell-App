@@ -84,7 +84,7 @@ class VisualizzaSpettacoloController(QObject):
             """Prova ad eliminare l'istanza di Evento.
 
             :param widget_evento: widget associato all'Evento` da eliminare
-            :param id_: id dell'evento da eliminare
+            :param id\\_: id dell'evento da eliminare
             """
             try:
                 self.__elimina_evento(id_)

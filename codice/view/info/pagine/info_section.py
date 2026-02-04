@@ -28,14 +28,14 @@ class InfoSectionView(AbstractSectionView):
     ---
     - `nuovaOperaRequest()`: emesso quando si clicca il pulsante Nuova opera;
     - `nuovoGenereRequest()`: emesso quando si clicca il pulsante Nuovo genere;
-    - `displayOpereRequest(QVBoxLayout)`: emesso per mostrare a schermo la lista opere;
-    - `displayGeneriRequest(QVBoxLayout)`: emesso per mostrare a schermo la lista generi.
+    - `displayOpereRequest(ListLayout)`: emesso per mostrare a schermo la lista opere;
+    - `displayGeneriRequest(ListLayout)`: emesso per mostrare a schermo la lista generi.
     """
 
     nuovaOperaRequest = pyqtSignal()
     nuovoGenereRequest = pyqtSignal()
-    displayOpereRequest = pyqtSignal(QVBoxLayout)
-    displayGeneriRequest = pyqtSignal(QVBoxLayout)
+    displayOpereRequest = pyqtSignal(ListLayout)
+    displayGeneriRequest = pyqtSignal(ListLayout)
 
     def __init__(self, user_session: UserSession):
         self.is_biglietteria = user_session.ha_permessi_biglietteria()
