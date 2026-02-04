@@ -117,10 +117,9 @@ def load_stylesheet(theme: Optional[OSTheme] = None) -> str:
     if theme is None:
         theme = "light.qss"
 
-    COLORS_QSS_PATH = Path(__file__).parent / "qss" / "themes" / theme
-    LAYOUT_QSS_PATH = Path(__file__).parent / "qss" / "layouts" / "layout.qss"
+    COLORS_QSS_PATH = Path(__file__).parent.joinpath("qss", "themes", theme)
+    LAYOUT_QSS_PATH = Path(__file__).parent.joinpath("qss", "layouts", "layout.qss")
 
-    qss_finale: str
     with open(COLORS_QSS_PATH, "r", encoding="utf-8") as f:
         qss_finale = f.read()
     with open(LAYOUT_QSS_PATH, "r", encoding="utf-8") as file:

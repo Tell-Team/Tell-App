@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QDialog, QStackedWidget, QVBoxLayout
-from PyQt6.QtGui import QShowEvent
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtGui import QShowEvent, QKeyEvent
+from PyQt6.QtCore import Qt, pyqtSignal
 from functools import partial
 from typing import Optional
 
@@ -18,7 +18,6 @@ class LoginDialog(QDialog):
     """
 
     loginAsCliente = pyqtSignal()
-
     authRequest = pyqtSignal(str, str)
 
     def __init__(self):
@@ -41,15 +40,11 @@ class LoginDialog(QDialog):
         self._connect_signals()
 
     def _connect_signals(self) -> None:
-        self.__login_page.btn_cliente.clicked.connect(  # type:ignore
+        self.__login_page.btn_login_as_cliente.clicked.connect(  # type:ignore
             self.loginAsCliente.emit
         )
 
-        self.__login_page.btn_biglietteria.clicked.connect(  # type:ignore
-            partial(self.__stack.setCurrentWidget, self.__credentials_page)
-        )
-
-        self.__login_page.btn_admin.clicked.connect(  # type:ignore
+        self.__login_page.btn_login_with_credentials.clicked.connect(  # type:ignore
             partial(self.__stack.setCurrentWidget, self.__credentials_page)
         )
 
@@ -63,6 +58,8 @@ class LoginDialog(QDialog):
                 self.__credentials_page.password.text(),
             )
         )
+
+    # ------------------------- SETUP QDialog -------------------------
 
     def showEvent(self, a0: Optional[QShowEvent]) -> None:
         super().showEvent(a0)
@@ -88,10 +85,19 @@ class LoginDialog(QDialog):
 
         self.__geometry_initialized = True
 
-    def reset_login_dialog(self):
+    def keyPressEvent(self, a0: Optional[QKeyEvent]) -> None:
+        assert isinstance(a0, QKeyEvent)
+        if a0.key() == Qt.Key.Key_Escape:
+            a0.ignore()
+        else:
+            super().keyPressEvent(a0)
+
+    # ------------------------- METODI DELLA VIEW -------------------------
+
+    def reset_login_dialog(self) -> None:
         """Annulla il tentativo di login."""
         self.__stack.setCurrentWidget(self.__login_page)
         self.reset_credentials_page()
 
-    def reset_credentials_page(self):
+    def reset_credentials_page(self) -> None:
         self.__credentials_page.reset_pagina()

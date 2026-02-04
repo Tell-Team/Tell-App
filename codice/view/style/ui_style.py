@@ -8,11 +8,13 @@ class WidgetRole(StrEnum):
 
     Modo di uso: `my_widget.setProperty(WidgetRole.NOME_RUOLO, True)`"""
 
+    TITLE = "title"  # QLabel
     HEADER1 = "header1"  # QLabel
     HEADER2 = "header2"  # QLabel
     HEADER3 = "header3"  # QLabel
     BODY_TEXT = "body-text"  # QLabel
 
+    TRASPARENT_BUTTON = "transparent-button"  # QPushButton
     MAIN_BUTTON = "main-button"  # QPushButton
     DEFAULT_BUTTON = "default-button"  # QPushButton
     SEARCH_BUTTON = "search-button"  # QPushButton

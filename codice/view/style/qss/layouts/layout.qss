@@ -1,9 +1,12 @@
 /* ------------------------ QLabel ------------------------ */
-QLabel[header1="true"], QLabel[header2="true"], QLabel[header3="true"] {
+QLabel[title="true"], QLabel[header1="true"],
+QLabel[header2="true"], QLabel[header3="true"] {
     font-weight: 700;
     margin: 0;
     padding: 0;
 }
+
+QLabel[title="true"] { font-size: 56px; }
 QLabel[header1="true"] { font-size: 28px; }
 QLabel[header2="true"] { font-size: 20px; }
 QLabel[header3="true"] { font-size: 16px; }

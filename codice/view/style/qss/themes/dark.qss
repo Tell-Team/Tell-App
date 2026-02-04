@@ -4,6 +4,9 @@ QLabel[secondary-text="true"] { color: #cccccc; }
 QLabel[error-message="true"] { color:#e57373; }
 
 /* ------------------------ QPushButton ------------------------ */
+QPushButton[transparent-button="true"]:hover { color: "#a0c2fc"; }
+QPushButton[transparent-button="true"]:pressed { color: "#9891dc"; }
+
 QPushButton[search-button="true"] {
     border: 1px solid #b0b0b0;
 }

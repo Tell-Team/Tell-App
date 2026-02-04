@@ -53,10 +53,7 @@ class NavigationController(QObject):
     logoutRequest: pyqtSignal = pyqtSignal()
 
     def __init__(
-        self,
-        model: Model,
-        main_window: MainWindow,
-        user_session: UserSession,
+        self, model: Model, main_window: MainWindow, user_session: UserSession
     ):
         super().__init__()
 
