@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QPushButton, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal
 from functools import partial
 
@@ -7,6 +7,8 @@ from model.pianificazione.regia import Regia
 
 from view.utils.list_widgets import ItemDisplay
 from view.utils.hyphenate_text import HyphenatedLabel
+from view.utils.custom_button import DefaultButton
+
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
@@ -33,8 +35,7 @@ class AcquistoDisplay(ItemDisplay):
         titolo = HyphenatedLabel(s.get_titolo())
         titolo.setProperty(WidgetRole.HEADER2, True)
 
-        self.__btn_scegli_posti = QPushButton("Scegli posti")
-        self.__btn_scegli_posti.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+        self.__btn_scegli_posti = DefaultButton("Scegli posti")
 
         self.__pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.__pulsanti)

@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
-    QPushButton,
     QVBoxLayout,
     QHBoxLayout,
     QGridLayout,
@@ -17,7 +16,9 @@ from view.info.utils import OperaPageData
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
+from view.utils.custom_button import DefaultButton
 from view.utils import make_vline
+
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
@@ -51,8 +52,7 @@ class VisualizzaOperaView(QWidget):
 
     def _setup_ui(self) -> None:
         # Top widget
-        self.__btn_indietro = QPushButton("Indietro")
-        self.__btn_indietro.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+        self.__btn_indietro = DefaultButton("Indietro")
 
         self.pagina_header = QWidget()
         layout_header = QHBoxLayout(self.pagina_header)
@@ -104,8 +104,7 @@ class VisualizzaOperaView(QWidget):
         self.layout_header_regie.addWidget(label_lista_regie)
 
         if self.is_admin:
-            self.__btn_nuova_regia = QPushButton("Nuova regia")
-            self.__btn_nuova_regia.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+            self.__btn_nuova_regia = DefaultButton("Nuova regia")
             self.layout_header_regie.addWidget(self.__btn_nuova_regia)
 
         self.layout_header_regie.addStretch()
@@ -124,8 +123,8 @@ class VisualizzaOperaView(QWidget):
             content_lista_regie, label_lista_regie_vuota
         )
 
-        header_titolo = QLabel("Titolo")
-        header_titolo.setProperty(WidgetRole.HEADER3, True)
+        # header_titolo = QLabel("Titolo")
+        # header_titolo.setProperty(WidgetRole.HEADER3, True)
         header_regista = QLabel("Regista")
         header_regista.setProperty(WidgetRole.HEADER3, True)
         header_opzioni = QLabel("Opzioni")
@@ -134,17 +133,17 @@ class VisualizzaOperaView(QWidget):
         header_lista_regie = QWidget()
         layout_header_lista_regie = QGridLayout(header_lista_regie)
         layout_header_lista_regie.setContentsMargins(1, 1, 1, 1)
+        # layout_header_lista_regie.addWidget(
+        #     header_titolo, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter
+        # )
+        # layout_header_lista_regie.addWidget(make_vline(), 0, 1)
         layout_header_lista_regie.addWidget(
-            header_titolo, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter
-        )
-        layout_header_lista_regie.addWidget(make_vline(), 0, 1)
-        layout_header_lista_regie.addWidget(
-            header_regista, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter
+            header_regista, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter
         )
         if self.is_admin:
-            layout_header_lista_regie.addWidget(make_vline(), 0, 3)
+            layout_header_lista_regie.addWidget(make_vline(), 0, 1)
             layout_header_lista_regie.addWidget(
-                header_opzioni, 0, 4, alignment=Qt.AlignmentFlag.AlignCenter
+                header_opzioni, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter
             )
 
         self.regie = QWidget()

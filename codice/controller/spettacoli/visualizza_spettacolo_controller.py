@@ -180,7 +180,7 @@ class VisualizzaSpettacoloController(QObject):
             id_spettacolo=current_evento.get_id_spettacolo(),
         )
 
-        # Setup pagina con i data del genere
+        # Setup pagina con i data dell'evento
         current_pagina.set_data(evento_data)
 
         # Apri la pagina

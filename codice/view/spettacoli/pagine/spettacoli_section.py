@@ -2,7 +2,6 @@ from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
     QLineEdit,
-    QPushButton,
     QVBoxLayout,
     QHBoxLayout,
 )
@@ -14,7 +13,7 @@ from core.view import AbstractSectionView
 from controller.login.user_session import UserSession
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
-from view.utils.custom_button import RicercaButton
+from view.utils.custom_button import DefaultButton, RicercaButton
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
@@ -73,8 +72,7 @@ class SpettacoliSectionView(AbstractSectionView):
         layout_header_spettacoli = QHBoxLayout(widget_header_spettacoli)
         layout_header_spettacoli.setContentsMargins(0, 0, 0, 0)
         layout_header_spettacoli.addWidget(header_spettacoli)
-        self.__btn_nuovo_spettacolo = QPushButton("Nuovo spettacolo")
-        self.__btn_nuovo_spettacolo.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+        self.__btn_nuovo_spettacolo = DefaultButton("Nuovo spettacolo")
         layout_header_spettacoli.addWidget(self.__btn_nuovo_spettacolo)
         layout_header_spettacoli.addWidget(widget_ricerca)
 

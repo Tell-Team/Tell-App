@@ -175,7 +175,6 @@ class CURegiaController(AbstractCUController):
         current_pagina = self._view_nuova
 
         # Ottieni l'input inserito
-        titolo = current_pagina.titolo.text()
         note = current_pagina.note.toPlainText()
         interpreti = current_pagina.lista_interpreti
         tecnici = current_pagina.lista_tecnici
@@ -185,9 +184,7 @@ class CURegiaController(AbstractCUController):
 
         # Tenta di creare la nuova regia
         try:
-            nuova_regia = Regia(
-                regista, anno, id_opera, titolo, note, interpreti, tecnici
-            )
+            nuova_regia = Regia(regista, anno, id_opera, note, interpreti, tecnici)
         except DatoIncongruenteException as exc:
             # È stato trovato un campo con input non valido
             current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
@@ -228,7 +225,6 @@ class CURegiaController(AbstractCUController):
             return
 
         # Ottieni l'input inserito
-        titolo = current_pagina.titolo.text()
         note = current_pagina.note.toPlainText()
         interpreti = current_pagina.lista_interpreti
         tecnici = current_pagina.lista_tecnici
@@ -238,7 +234,7 @@ class CURegiaController(AbstractCUController):
 
         # Tenta di modificare la regia
         try:
-            copia_regia.set_titolo(titolo)
+            # copia_regia.set_titolo(titolo)
             copia_regia.set_note(note)
             copia_regia.set_interpreti(interpreti)
             copia_regia.set_tecnici(tecnici)

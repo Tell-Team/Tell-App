@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
-    QPushButton,
     QHBoxLayout,
     QGridLayout,
 )
@@ -12,7 +11,7 @@ from model.pianificazione.regia import Regia
 
 from view.utils.list_widgets import ItemDisplay
 from view.utils.horizontal_scroll import HorizontalWheelScrollArea
-from view.utils.custom_button import ModificaButton, EliminaButton
+from view.utils.custom_button import DefaultButton, ModificaButton, EliminaButton
 from view.utils import make_vline
 
 from view.style.ui_style import WidgetRole, WidgetColor
@@ -44,11 +43,11 @@ class RegiaDisplay(ItemDisplay):
 
     def __setup_ui(self, r: Regia) -> None:
         # Labels
-        titolo = QLabel(r.get_titolo())
-        titolo.setProperty(WidgetRole.BODY_TEXT, True)
-        titolo.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
-        scroll_titolo = HorizontalWheelScrollArea()
-        scroll_titolo.setWidget(titolo)
+        # titolo = QLabel(r.get_titolo())
+        # titolo.setProperty(WidgetRole.BODY_TEXT, True)
+        # titolo.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        # scroll_titolo = HorizontalWheelScrollArea()
+        # scroll_titolo.setWidget(titolo)
 
         regista_anno = QLabel(f"{r.get_regista()} ({r.get_anno_produzione()})")
         regista_anno.setProperty(WidgetRole.BODY_TEXT, True)
@@ -59,14 +58,14 @@ class RegiaDisplay(ItemDisplay):
         # Layout
         layout = QGridLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(scroll_titolo, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(make_vline(), 0, 1)
+        # layout.addWidget(scroll_titolo, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
+        # layout.addWidget(make_vline(), 0, 0)
         layout.addWidget(
-            scroll_regista_anno, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter
+            scroll_regista_anno, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter
         )
 
         layout.setColumnStretch(0, 1)
-        layout.setColumnStretch(2, 1)
+        # layout.setColumnStretch(2, 1)
 
         if self.__editable:
             # Pulsanti
@@ -87,12 +86,10 @@ class RegiaDisplay(ItemDisplay):
             domanda.setProperty(WidgetRole.BODY_TEXT, True)
             domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
-            self.__btn_si = QPushButton("Sì")
-            self.__btn_si.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
+            self.__btn_si = EliminaButton("Sì", has_icon=False)
             self.__btn_si.setMinimumSize(40, 32)
 
-            self.__btn_no = QPushButton("No")
-            self.__btn_no.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+            self.__btn_no = DefaultButton("No")
             self.__btn_no.setMinimumSize(40, 32)
 
             self.__conferma_elimina = QWidget()
@@ -108,10 +105,10 @@ class RegiaDisplay(ItemDisplay):
             dummy_layout.addWidget(self.__pulsanti)
             dummy_layout.addWidget(self.__conferma_elimina)
 
-            layout.addWidget(make_vline(), 0, 3)
-            layout.addWidget(dummy, 0, 4, alignment=Qt.AlignmentFlag.AlignCenter)
+            layout.addWidget(make_vline(), 0, 1)
+            layout.addWidget(dummy, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 
-            layout.setColumnStretch(4, 1)
+            layout.setColumnStretch(2, 1)
 
     def __connect_signals(self, r: Regia) -> None:
         if self.__editable:

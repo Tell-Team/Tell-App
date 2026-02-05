@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal
 from functools import partial
 
@@ -7,7 +7,7 @@ from model.pianificazione.regia import Regia
 
 from view.utils.list_widgets import ItemDisplay
 from view.utils.hyphenate_text import HyphenatedLabel
-from view.utils.custom_button import ModificaButton, EliminaButton
+from view.utils.custom_button import DefaultButton, ModificaButton, EliminaButton
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
@@ -40,8 +40,7 @@ class SpettacoloDisplay(ItemDisplay):
         titolo.setProperty(WidgetRole.HEADER2, True)
 
         # Pulsanti
-        self.__btn_visualizza = QPushButton("Maggior info")
-        self.__btn_visualizza.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+        self.__btn_visualizza = DefaultButton("Maggior info")
 
         self.__pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.__pulsanti)
@@ -73,11 +72,8 @@ class SpettacoloDisplay(ItemDisplay):
         domanda.setProperty(WidgetRole.BODY_TEXT, True)
         domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
-        self.__btn_no = QPushButton("No")
-        self.__btn_no.setProperty(WidgetRole.DEFAULT_BUTTON, True)
-
-        self.__btn_si = QPushButton("Sì")
-        self.__btn_si.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
+        self.__btn_no = DefaultButton("No")
+        self.__btn_si = EliminaButton("Sì", has_icon=False)
 
         self.__conferma_elimina = QWidget()
         layout_conferma = QHBoxLayout(self.__conferma_elimina)

@@ -40,6 +40,7 @@ class Pagina(Enum):
     VISUALIZZA_SEZIONE = "visualizza_sezione"
     NUOVA_SEZIONE = "nuova_sezione"
     MODIFICA_SEZIONE = "modifica_sezione"
+    MODIFICA_POSTO = "modifica_posto"
 
     SEZIONE_ACCOUNT = "account_section"
     NUOVO_ACCOUNT = "nuovo_account"
@@ -215,12 +216,14 @@ class NavigationController(QObject):
                 VisualizzaSezioneView,
                 NuovaSezioneView,
                 ModificaSezioneView,
+                ModificaPostoView,
             )
 
             self.__teatro_section = TeatroSectionView()
             self.__visualizza_sezione_view = VisualizzaSezioneView()
             self.__nuova_sezione_view = NuovaSezioneView()
             self.__modifica_sezione_view = ModificaSezioneView()
+            self.__modifica_posto_view = ModificaPostoView()
 
             # Account
             from view.account.pagine import (
@@ -275,6 +278,7 @@ class NavigationController(QObject):
             self.__registra_pagina(
                 Pagina.MODIFICA_SEZIONE, self.__modifica_sezione_view
             )
+            self.__registra_pagina(Pagina.MODIFICA_POSTO, self.__modifica_posto_view)
             # Account
             self.__registra_pagina(Pagina.SEZIONE_ACCOUNT, self.__account_section)
             self.__registra_pagina(Pagina.NUOVO_ACCOUNT, self.__nuovo_account_view)
@@ -389,6 +393,7 @@ class NavigationController(QObject):
                 TeatroSectionController,
                 VisualizzaSezioneController,
                 CUSezioneController,
+                ModificaPostoController,
             )
 
             controller_defs.extend(
@@ -411,6 +416,11 @@ class NavigationController(QObject):
                             self.__nuova_sezione_view,
                             self.__modifica_sezione_view,
                         ),
+                    ),
+                    (
+                        "__modifica_posto_controller",
+                        ModificaPostoController,
+                        (model, self.__modifica_posto_view),
                     ),
                 ]
             )

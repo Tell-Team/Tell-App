@@ -224,26 +224,27 @@ class SpettacoliSectionController(AbstractSectionController):
             return
 
         # Salva i dati dentro di un container
-        spettacolo_data = SpettacoloPageData(
-            id=current_spettacolo.get_id(),
-            titolo=current_spettacolo.get_titolo(),
-            note=current_spettacolo.get_note(),
-            interpreti=current_spettacolo.get_interpreti(),
-            tecnici=current_spettacolo.get_tecnici(),
-        )
-
-        # Setup pagina con i data dello spettacolo
         if isinstance(current_spettacolo, Regia):
-            opera_associata = self._model.get_opera(current_spettacolo.get_id_opera())
-            assert opera_associata is not None
-            msg_tipo_spettacolo = (
-                "**Questo spettacolo è una Regia associata "
-                + f'all\'opera "{opera_associata.get_nome()}".**'
+            spettacolo_data = RegiaPageData(
+                id=current_spettacolo.get_id(),
+                titolo=current_spettacolo.get_titolo(),
+                note=current_spettacolo.get_note(),
+                interpreti=current_spettacolo.get_interpreti(),
+                tecnici=current_spettacolo.get_tecnici(),
+                regista=current_spettacolo.get_regista(),
+                anno_produzione=current_spettacolo.get_anno_produzione(),
+                id_opera=current_spettacolo.get_id_opera(),
             )
-        else:  # Caso Spettacolo generico
-            msg_tipo_spettacolo = ""
+        else:
+            spettacolo_data = SpettacoloPageData(
+                id=current_spettacolo.get_id(),
+                titolo=current_spettacolo.get_titolo(),
+                note=current_spettacolo.get_note(),
+                interpreti=current_spettacolo.get_interpreti(),
+                tecnici=current_spettacolo.get_tecnici(),
+            )
 
-        current_pagina.set_data(spettacolo_data, msg_tipo_spettacolo)
+        current_pagina.set_data(spettacolo_data)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

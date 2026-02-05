@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
-    QPushButton,
     QVBoxLayout,
     QHBoxLayout,
     QComboBox,
@@ -20,6 +19,8 @@ from view.spettacoli.utils import SpettacoloPageData
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
+from view.utils.custom_button import DefaultButton
+
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
@@ -48,8 +49,7 @@ class ScegliPostiView(QWidget):
 
     def _setup_ui(self) -> None:
         # Top widget
-        self.__btn_indietro = QPushButton("Indietro")
-        self.__btn_indietro.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+        self.__btn_indietro = DefaultButton("Indietro")
 
         self.pagina_header = QWidget()
         layout_header = QHBoxLayout(self.pagina_header)
@@ -133,8 +133,7 @@ class ScegliPostiView(QWidget):
         label_posto.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.posto = QComboBox()
 
-        self.__btn_aggiungi = QPushButton("Aggiungi")
-        self.__btn_aggiungi.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+        self.__btn_aggiungi = DefaultButton("Aggiungi")
 
         self.__form_layout.addRow(label_evento, self.evento)
         self.__form_layout.addRow(QLabel("<hr>"))

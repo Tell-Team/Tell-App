@@ -38,9 +38,9 @@ class PostoDisplay(ItemDisplay):
 
     def __setup_ui(self, p: Posto) -> None:
         # Labels
-        data = QLabel(str(p.get_numero()))
-        data.setProperty(WidgetRole.BODY_TEXT, True)
-        data.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        fila_numero = QLabel(f"{p.get_fila()}{p.get_numero()}")
+        fila_numero.setProperty(WidgetRole.BODY_TEXT, True)
+        fila_numero.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
         # Pulsanti
         self.__btn_modifica = ModificaButton("")
@@ -62,7 +62,7 @@ class PostoDisplay(ItemDisplay):
         # Layout
         layout = QGridLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(data, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(fila_numero, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(make_vline(), 0, 1)
         layout.addWidget(dummy, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter)
 

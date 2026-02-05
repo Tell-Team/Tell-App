@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import override
 
@@ -7,6 +7,8 @@ from controller.login.user_session import UserSession
 from core.view import AbstractSectionView
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
+from view.utils.custom_button import DefaultButton
+
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
@@ -47,8 +49,7 @@ class AccountSectionView(AbstractSectionView):
         header_account.setProperty(WidgetRole.HEADER1, True)
         header_account.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        self._btn_nuovo_account = QPushButton("Nuovo Account")
-        self._btn_nuovo_account.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+        self._btn_nuovo_account = DefaultButton("Nuovo Account")
 
         widget_header_account = QWidget()
         layout_header_account = QHBoxLayout(widget_header_account)

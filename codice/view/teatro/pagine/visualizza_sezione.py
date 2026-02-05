@@ -12,7 +12,8 @@ from PyQt6.QtWidgets import (
     QCheckBox,
     QStackedWidget,
 )
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtCore import Qt, pyqtSignal, QRegularExpression
+from PyQt6.QtGui import QRegularExpressionValidator
 
 from model.organizzazione.posto import Posto
 
@@ -20,12 +21,10 @@ from view.teatro.utils import SezionePageData
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
+from view.utils.custom_button import DefaultButton
 from view.utils import make_vline
+
 from view.style.ui_style import WidgetRole, WidgetColor
-
-
-from PyQt6.QtGui import QRegularExpressionValidator
-from PyQt6.QtCore import QRegularExpression
 
 
 class VisualizzaSezioneView(QWidget):
@@ -57,8 +56,7 @@ class VisualizzaSezioneView(QWidget):
 
     def _setup_ui(self) -> None:
         # Top widget
-        self.__btn_indietro = QPushButton("Indietro")
-        self.__btn_indietro.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+        self.__btn_indietro = DefaultButton("Indietro")
 
         self.pagina_header = QWidget()
         layout_header = QHBoxLayout(self.pagina_header)
@@ -183,18 +181,28 @@ class VisualizzaSezioneView(QWidget):
         layout_content.addStretch()
 
         # Funzione di scroll
-        scroll_area = QScrollArea()
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setWidget(pagina_content)
+        self.__scroll_area = QScrollArea()
+        self.__scroll_area.setWidgetResizable(True)
+        self.__scroll_area.setWidget(pagina_content)
 
         # Layout
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.pagina_header)
-        main_layout.addWidget(scroll_area)
+        main_layout.addWidget(self.__scroll_area)
 
     def _connect_signals(self) -> None:
         self.__btn_indietro.clicked.connect(  # type:ignore
             self.tornaIndietroRequest.emit
+        )
+
+        # La QLineEdit per la fila solo mostra maiuscole
+        def to_upper(text: str) -> None:
+            self.fila.blockSignals(True)
+            self.fila.setText(text.upper())
+            self.fila.blockSignals(False)
+
+        self.fila.textChanged.connect(  # type:ignore
+            to_upper
         )
 
         self.checkbox_numeri.toggled.connect(  # type:ignore
@@ -236,8 +244,16 @@ class VisualizzaSezioneView(QWidget):
 
     def aggiorna_pagina(self) -> None:
         """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
+        self.fila.setText("")
+        self.single_numero.setValue(0)
+        self.range_numeri.setText("")
+        self.checkbox_numeri.setChecked(False)
+
         self.layout_lista_posti.svuota_layout()
         self.displayPostiRequest.emit(self.layout_lista_posti)
+
+        if vertical_scroll := self.__scroll_area.verticalScrollBar():
+            vertical_scroll.setValue(0)
 
     def __svuota_layout_generico(self, layout: QLayout):
         while layout.count() > 0:

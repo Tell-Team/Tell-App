@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
-    QPushButton,
     QVBoxLayout,
     QLayout,
     QHBoxLayout,
@@ -19,7 +18,9 @@ from view.info.utils import RegiaPageData
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
+from view.utils.custom_button import DefaultButton
 from view.utils import make_vline
+
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
@@ -53,8 +54,7 @@ class VisualizzaSpettacoloView(QWidget):
 
     def _setup_ui(self) -> None:
         # Top widget
-        self.__btn_indietro = QPushButton("Indietro")
-        self.__btn_indietro.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+        self.__btn_indietro = DefaultButton("Indietro")
 
         self.pagina_header = QWidget()
         layout_header = QHBoxLayout(self.pagina_header)
@@ -84,8 +84,7 @@ class VisualizzaSpettacoloView(QWidget):
         self.layout_header_eventi.addWidget(label_lista_eventi)
 
         if self.is_biglietteria:
-            self.__btn_nuovo_evento = QPushButton("Nuovo evento")
-            self.__btn_nuovo_evento.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+            self.__btn_nuovo_evento = DefaultButton("Nuovo evento")
             self.layout_header_eventi.addWidget(self.__btn_nuovo_evento)
 
         self.layout_header_eventi.addStretch()

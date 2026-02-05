@@ -2,7 +2,6 @@ from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
     QLineEdit,
-    QPushButton,
     QVBoxLayout,
     QHBoxLayout,
 )
@@ -14,7 +13,7 @@ from core.view import AbstractSectionView
 from controller.login.user_session import UserSession
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
-from view.utils.custom_button import RicercaButton
+from view.utils.custom_button import DefaultButton, RicercaButton
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
@@ -82,8 +81,7 @@ class InfoSectionView(AbstractSectionView):
         layout_header_opere.setContentsMargins(0, 0, 0, 0)
         layout_header_opere.addWidget(header_opere)
         if self.is_admin:
-            self._btn_nuova_opera = QPushButton("Nuova opera")
-            self._btn_nuova_opera.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+            self._btn_nuova_opera = DefaultButton("Nuova opera")
             layout_header_opere.addWidget(self._btn_nuova_opera)
         layout_header_opere.addWidget(widget_ricerca)
 
@@ -113,8 +111,7 @@ class InfoSectionView(AbstractSectionView):
         layout_header_generi.setContentsMargins(0, 0, 0, 0)
         layout_header_generi.addWidget(header_generi)
         if self.is_admin:
-            self._btn_nuovo_genere = QPushButton("Nuovo genere")
-            self._btn_nuovo_genere.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+            self._btn_nuovo_genere = DefaultButton("Nuovo genere")
             layout_header_generi.addWidget(self._btn_nuovo_genere)
         layout_header_generi.addStretch()
 

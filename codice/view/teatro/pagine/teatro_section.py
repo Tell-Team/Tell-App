@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
-    QPushButton,
     QVBoxLayout,
     QHBoxLayout,
 )
@@ -11,6 +10,8 @@ from typing import override
 from core.view import AbstractSectionView
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
+from view.utils.custom_button import DefaultButton
+
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
@@ -40,8 +41,7 @@ class TeatroSectionView(AbstractSectionView):
         header_sezioni.setProperty(WidgetRole.HEADER1, True)
         header_sezioni.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        self._btn_nuova_sezione = QPushButton("Nuova sezione")
-        self._btn_nuova_sezione.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+        self._btn_nuova_sezione = DefaultButton("Nuova sezione")
 
         widget_header_sezioni = QWidget()
         layout_header_sezioni = QHBoxLayout(widget_header_sezioni)

@@ -1,10 +1,10 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QLabel, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal
 from functools import partial
 
 from model.account.account import Account
 
-from view.utils.custom_button import ModificaButton, EliminaButton
+from view.utils.custom_button import DefaultButton, ModificaButton, EliminaButton
 from view.utils.list_widgets import ItemDisplay
 from view.utils.hyphenate_text import HyphenatedLabel
 
@@ -60,11 +60,8 @@ class AccountDisplay(ItemDisplay):
             domanda.setProperty(WidgetRole.HEADER3, True)
             domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
-            self.__btn_si = QPushButton("Sì")
-            self.__btn_si.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
-
-            self.__btn_no = QPushButton("No")
-            self.__btn_no.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+            self.__btn_si = EliminaButton("Sì", has_icon=False)
+            self.__btn_no = DefaultButton("No")
 
             self.__conferma_elimina = QWidget()
             layout_conferma = QHBoxLayout(self.__conferma_elimina)

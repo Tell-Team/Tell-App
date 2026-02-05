@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import (
     QLabel,
     QLineEdit,
     QTextEdit,
-    QPushButton,
     QVBoxLayout,
     QHBoxLayout,
 )
@@ -13,6 +12,8 @@ from typing import override
 from core.view import AbstractCreaView
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
+from view.utils.custom_button import DefaultButton
+
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
@@ -57,7 +58,7 @@ class NuovoSpettacoloView(AbstractCreaView):
         self.titolo = QLineEdit()
         self.titolo.setPlaceholderText("Inserire titolo")
 
-        label_note = QLabel('Note<span style="color:red;">*</span> :')
+        label_note = QLabel("Note :")
         label_note.setProperty(WidgetRole.BODY_TEXT, True)
         label_note.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.note = QTextEdit()
@@ -73,8 +74,7 @@ class NuovoSpettacoloView(AbstractCreaView):
         self.interprete_ruolo = QLineEdit()
         self.interprete_ruolo.setPlaceholderText("Inserire ruolo")
 
-        self._btn_aggiungi_interprete = QPushButton("Aggiungi")
-        self._btn_aggiungi_interprete.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+        self._btn_aggiungi_interprete = DefaultButton("Aggiungi")
 
         interprete = QWidget()
         layout_interprete = QHBoxLayout(interprete)
@@ -114,8 +114,7 @@ class NuovoSpettacoloView(AbstractCreaView):
         self.tecnico_posto = QLineEdit()
         self.tecnico_posto.setPlaceholderText("Inserire posto")
 
-        self._btn_aggiungi_tecnico = QPushButton("Aggiungi")
-        self._btn_aggiungi_tecnico.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+        self._btn_aggiungi_tecnico = DefaultButton("Aggiungi")
 
         tecnico = QWidget()
         layout_tecnico = QHBoxLayout(tecnico)

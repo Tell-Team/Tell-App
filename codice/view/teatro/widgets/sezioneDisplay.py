@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal
 from functools import partial
 
@@ -6,7 +6,7 @@ from model.organizzazione.sezione import Sezione
 
 from view.utils.list_widgets import ItemDisplay
 from view.utils.hyphenate_text import HyphenatedLabel
-from view.utils.custom_button import ModificaButton, EliminaButton
+from view.utils.custom_button import DefaultButton, ModificaButton, EliminaButton
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
@@ -49,11 +49,8 @@ class SezioneDisplay(ItemDisplay):
         layout.addWidget(descrizione)
 
         # Pulsanti
-        self.__btn_visualizza = QPushButton("Lista posti")
-        self.__btn_visualizza.setProperty(WidgetRole.DEFAULT_BUTTON, True)
-
+        self.__btn_visualizza = DefaultButton("Lista posti")
         self.__btn_modifica = ModificaButton("Modifica")
-
         self.__btn_elimina = EliminaButton("Elimina")
 
         self.__pulsanti = QWidget()
@@ -69,11 +66,8 @@ class SezioneDisplay(ItemDisplay):
         domanda.setProperty(WidgetRole.BODY_TEXT, True)
         domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
-        self.__btn_no = QPushButton("No")
-        self.__btn_no.setProperty(WidgetRole.DEFAULT_BUTTON, True)
-
-        self.__btn_si = QPushButton("Sì")
-        self.__btn_si.setProperty(WidgetRole.DESTRUCTIVE_BUTTON, True)
+        self.__btn_no = DefaultButton("No")
+        self.__btn_si = EliminaButton("Sì", has_icon=False)
 
         self.__conferma_elimina = QWidget()
         layout_conferma = QHBoxLayout(self.__conferma_elimina)

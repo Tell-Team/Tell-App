@@ -8,6 +8,8 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 
+from view.utils.custom_button import DefaultButton
+
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
@@ -25,8 +27,7 @@ class CredentialsPage(QWidget):
 
     def _setup_ui(self) -> None:
         # Top widget
-        self.btn_indietro = QPushButton("Indietro")
-        self.btn_indietro.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+        self.btn_indietro = DefaultButton("Indietro")
 
         pagina_header = QWidget()
         layout_header = QHBoxLayout(pagina_header)

@@ -14,6 +14,8 @@ from functools import partial
 
 from core.metaclasses import ABCQObjectMeta
 
+from view.utils.custom_button import DefaultButton
+
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
@@ -63,8 +65,7 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
         )
 
         # Setup Pulsanti
-        self._btn_annulla = QPushButton("Annulla")
-        self._btn_annulla.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+        self._btn_annulla = DefaultButton("Annulla")
 
         self._btn_conferma = QPushButton("Salva")
         self._btn_conferma.setProperty(WidgetRole.SAVE_BUTTON, True)

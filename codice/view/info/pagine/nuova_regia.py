@@ -52,6 +52,9 @@ class NuovaRegiaView(NuovoSpettacoloView):
         self._form_layout.addRow(label_anno, self.anno)
         self._form_layout.addRow(label_opera, self.opera)
 
+        self.titolo.setEnabled(False)
+        self.titolo.setText("Viene assegnato dopo la creazione.")
+
     # ------------------------- METODI DI VIEW -------------------------
 
     def setup_opera_combobox(self, o: Opera) -> None:
@@ -65,6 +68,7 @@ class NuovaRegiaView(NuovoSpettacoloView):
     def reset_pagina(self) -> None:
         """Reset della pagina allo stato default (con solo l'opera scelta)."""
         super().reset_pagina()
+        self.titolo.setText("Viene assegnato dopo la creazione.")
 
         self.regista.setText("")
         self.anno.setValue(QDate().currentDate().year())

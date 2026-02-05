@@ -1,16 +1,10 @@
 from abc import abstractmethod
-from PyQt6.QtWidgets import (
-    QWidget,
-    QPushButton,
-    QVBoxLayout,
-    QHBoxLayout,
-    QScrollArea,
-)
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QScrollArea
 from PyQt6.QtCore import pyqtSignal
 
 from core.metaclasses import ABCQObjectMeta
 
-from view.style.ui_style import WidgetRole
+from view.utils.custom_button import DefaultButton
 
 
 class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
@@ -43,8 +37,7 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
 
     def _setup_ui(self) -> None:
         # Logout
-        self._btn_logout = QPushButton("Logout")
-        self._btn_logout.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+        self._btn_logout = DefaultButton("Logout")
 
         widget_logout = QWidget()
         layout_logout = QHBoxLayout(widget_logout)
@@ -52,20 +45,11 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
         layout_logout.addStretch()
 
         # Sezioni dell'app
-        self._btn_sezione_acquisto = QPushButton("Acquisto")
-        self._btn_sezione_acquisto.setProperty(WidgetRole.DEFAULT_BUTTON, True)
-
-        self._btn_sezione_spettacoli = QPushButton("Spettacoli")
-        self._btn_sezione_spettacoli.setProperty(WidgetRole.DEFAULT_BUTTON, True)
-
-        self._btn_sezione_info = QPushButton("Info")
-        self._btn_sezione_info.setProperty(WidgetRole.DEFAULT_BUTTON, True)
-
-        self._btn_sezione_teatro = QPushButton("Teatro")
-        self._btn_sezione_teatro.setProperty(WidgetRole.DEFAULT_BUTTON, True)
-
-        self._btn_sezione_account = QPushButton("Account")
-        self._btn_sezione_account.setProperty(WidgetRole.DEFAULT_BUTTON, True)
+        self._btn_sezione_acquisto = DefaultButton("Acquisto")
+        self._btn_sezione_spettacoli = DefaultButton("Spettacoli")
+        self._btn_sezione_info = DefaultButton("Info")
+        self._btn_sezione_teatro = DefaultButton("Teatro")
+        self._btn_sezione_account = DefaultButton("Account")
 
         sezioni_app = QWidget()
         layout_sezioni = QHBoxLayout(sezioni_app)

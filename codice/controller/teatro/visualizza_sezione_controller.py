@@ -1,5 +1,7 @@
+from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import pyqtSignal, QObject
 from functools import partial
+from typing import Optional
 
 from controller.navigation import Pagina
 
@@ -13,6 +15,7 @@ from model.exceptions import (
 )
 
 from view.teatro.pagine import VisualizzaSezioneView
+from view.teatro.utils import PostoPageData
 from view.teatro.widgets import PostoDisplay
 
 from view.utils.list_widgets import ListLayout
@@ -63,6 +66,9 @@ class VisualizzaSezioneController(QObject):
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
+    def __get_posto(self, id_: int) -> Optional[Posto]:
+        return self.__model.get_posto(id_)
+
     def __get_posti_by_sezione(self, id_: int) -> list[Posto]:
         return self.__model.get_posti_by_sezione(id_)
 
@@ -85,6 +91,9 @@ class VisualizzaSezioneController(QObject):
         if not lista_posti:
             layout_posti.mostra_msg_lista_vuota()
             return
+
+        # Ordina la lista per renderla più chiara nella UI
+        lista_posti = sorted(lista_posti, key=lambda x: (x.get_fila(), x.get_numero()))
 
         # Funzione di eliminazione per le regie
         def on_conferma(id_: int) -> None:
@@ -129,11 +138,12 @@ class VisualizzaSezioneController(QObject):
     def __salva_singolo_posto(self) -> None:
         pagina = self.__visualizza_sezione_view
 
+        fila = pagina.fila.text()
         numero = pagina.single_numero.value()
         id_sezione = pagina.id_current_sezione
 
         try:
-            nuovo_posto = Posto(numero, id_sezione)
+            nuovo_posto = Posto(fila, numero, id_sezione)
         except DatoIncongruenteException as exc:
             pagina.mostra_msg_input_error(CAMPI_NECESSARI)
             PopupMessage.mostra_errore(
@@ -200,12 +210,14 @@ class VisualizzaSezioneController(QObject):
                 f"Si è verificato un errore: {exc}",
             )
             return
+
+        fila = pagina.fila.text()
         id_sezione = pagina.id_current_sezione
 
         lista_posti: list[Posto] = []
         for num in numeri:
             try:
-                nuovo_posto = Posto(num, id_sezione)
+                nuovo_posto = Posto(fila, num, id_sezione)
             except DatoIncongruenteException as exc:
                 pagina.mostra_msg_input_error(CAMPI_NECESSARI)
                 PopupMessage.mostra_errore(
@@ -222,10 +234,10 @@ class VisualizzaSezioneController(QObject):
         for posto in lista_posti:
             try:
                 self.__aggiungi_posto(posto)
-            except IdOccupatoException as exc:
-                posti_errati.append(f"Posto {posto.get_numero()}: {exc}")
-            except OccupatoException as exc:
-                posti_errati.append(f"Posto {posto.get_numero()}: {exc}")
+            except (IdOccupatoException, OccupatoException) as exc:
+                posti_errati.append(
+                    f"Posto {posto.get_fila()}{posto.get_numero()}: {exc}"
+                )
 
         pagina.aggiorna_pagina()
 
@@ -240,4 +252,49 @@ class VisualizzaSezioneController(QObject):
             )
 
     # - COMPLETAR
-    def __modifica_posto(self, id_: int) -> None: ...
+    def __modifica_posto(self, id_: int) -> None:
+        """Carica la pagina `ModificaPostoView`, con i dati del posto indicato
+        inseriti nei campo di input.
+
+        :param id_: id del posto da modificare
+        """
+        # Copia del posto da modificare
+        current_posto = self.__get_posto(id_)
+        if not current_posto:
+            PopupMessage.mostra_errore(
+                self.__visualizza_sezione_view,
+                "Posto inesistente",
+                f"Non è presente nessun posto con id {id_}.",
+            )
+            return
+
+        # Ottieni la pagina ModificaPostoView
+        from view.teatro.pagine import ModificaPostoView
+
+        cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
+        pagina_nome = Pagina.MODIFICA_POSTO
+        self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
+        current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
+
+        if type(current_pagina) is not ModificaPostoView:
+            PopupMessage.mostra_errore(
+                self.__visualizza_sezione_view,
+                "Pagina non trovata",
+                f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
+                + f"Type trovato: {type(current_pagina)}",
+            )
+            return
+
+        # Salva i dati dentro di un container
+        posto_data = PostoPageData(
+            id=current_posto.get_id(),
+            fila=current_posto.get_fila(),
+            numero=current_posto.get_numero(),
+            id_sezione=current_posto.get_id_sezione(),
+        )
+
+        # Setup pagina con i data del posto
+        current_pagina.set_data(posto_data)
+
+        # Apri la pagina
+        self.goToPageRequest.emit(pagina_nome, True)
