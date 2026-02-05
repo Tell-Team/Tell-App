@@ -57,7 +57,8 @@ class GestorePosti:
     def __controllo_unique_key(self, primo: Posto, secondo: Posto):
         """Throws: OccupatoException"""
         if (
-            primo.get_numero() == secondo.get_numero()
+            primo.get_fila() == secondo.get_fila()
+            and primo.get_numero() == secondo.get_numero()
             and primo.get_id_sezione() == secondo.get_id_sezione()
         ):
             raise OccupatoException(

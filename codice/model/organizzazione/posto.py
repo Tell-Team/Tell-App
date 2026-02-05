@@ -6,6 +6,7 @@ class Posto:
 
     def __init__(
         self,
+        fila: str,
         numero: int,
         id_sezione: int,
     ):
@@ -13,12 +14,16 @@ class Posto:
         self.__id = Posto.__next_id
         Posto.__next_id += 1
 
+        self.set_fila(fila)
         self.set_numero(numero)
         self.set_id_sezione(id_sezione)
 
     # Getters
     def get_id(self) -> int:
         return self.__id
+
+    def get_fila(self) -> str:
+        return self.__fila
 
     def get_numero(self) -> int:
         return self.__numero
@@ -34,6 +39,14 @@ class Posto:
             raise DatoIncongruenteException("Il next_id non può essere minore di 0.")
 
         Posto.__next_id = next_id
+
+    def set_fila(self, fila: str):
+        """Throws: DatoIncongruenteException"""
+        fila_stripped = fila.strip()
+        if fila_stripped == "":
+            raise DatoIncongruenteException("La fila non può essere vuota.")
+
+        self.__fila = fila_stripped
 
     def set_numero(self, numero: int):
         """Throws: DatoIncongruenteException"""
@@ -52,7 +65,8 @@ class Posto:
     # Magics
     def __eq__(self, other: object) -> bool:
         if (
-            self.get_numero() == other.get_numero()  # type: ignore
+            self.get_fila() == other.get_fila()  # type: ignore
+            and self.get_numero() == other.get_numero()  # type: ignore
             and self.get_id_sezione() == other.get_id_sezione()  # type: ignore
         ):
             return True

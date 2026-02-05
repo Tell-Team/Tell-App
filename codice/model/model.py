@@ -82,19 +82,19 @@ class Model:
 
         try:
             self.__carica_prezzi()
-            Posto.set_next_id(self.__gestore_prezzi.get_max_id() + 1)
+            Prezzo.set_next_id(self.__gestore_prezzi.get_max_id() + 1)
         except FileNotFoundError:
             self.__gestore_prezzi = GestorePrezzi()
 
         try:
             self.__carica_prenotazioni()
-            Posto.set_next_id(self.__gestore_prenotazioni.get_max_id() + 1)
+            Prenotazione.set_next_id(self.__gestore_prenotazioni.get_max_id() + 1)
         except FileNotFoundError:
             self.__gestore_prenotazioni = GestorePrenotazioni()
 
         try:
             self.__carica_occupazioni()
-            Posto.set_next_id(self.__gestore_occupazioni.get_max_id() + 1)
+            Occupazione.set_next_id(self.__gestore_occupazioni.get_max_id() + 1)
         except FileNotFoundError:
             self.__gestore_occupazioni = GestoreOccupazioni()
 
@@ -265,9 +265,9 @@ class Model:
     def get_sezioni(self) -> list[Sezione]:
         return self.__gestore_sezioni.get_sezioni()
 
-    def get_sezioni_e_posti_disponibili(
+    def get_sezioni_e_file_e_posti_disponibili(
         self, id_evento: int
-    ) -> list[tuple[Sezione, list[Posto]]]:
+    ) -> list[tuple[Sezione, list[tuple[str, list[Posto]]]]]:
         """Throws: IdInesistenteException"""
         evento = self.get_evento(id_evento)
         if evento is None:
@@ -276,7 +276,7 @@ class Model:
             )
         id_spettacolo = evento.get_id_spettacolo()
 
-        ids_sezioni_con_prezzo = list(
+        ids_sezioni_con_prezzo = set(
             map(
                 lambda p: p.get_id_sezione(),
                 self.__gestore_prezzi.get_prezzi_by_spettacolo(id_spettacolo),
@@ -297,15 +297,27 @@ class Model:
             )
         )
 
-        sezioni_e_posti_disponibili: list[tuple[Sezione, list[Posto]]] = list()
+        sezioni_e_file_e_posti_disponibili: list[
+            tuple[Sezione, list[tuple[str, list[Posto]]]]
+        ] = list()
 
-        for id_sezione, lista_posti in itertools.groupby(
+        for id_sezione, lista_posti_sezione in itertools.groupby(
             posti_disponibili, lambda p: p.get_id_sezione()
         ):
             sezione: Sezione = self.get_sezione(id_sezione)  # type: ignore
-            sezioni_e_posti_disponibili.append((sezione, list(lista_posti)))
 
-        return sezioni_e_posti_disponibili
+            file_e_posti_disponibili: list[tuple[str, list[Posto]]] = list()
+
+            for fila, lista_posti_fila in itertools.groupby(
+                lista_posti_sezione, lambda p: p.get_fila()
+            ):
+                file_e_posti_disponibili.append((fila, list(lista_posti_fila)))
+
+            sezioni_e_file_e_posti_disponibili.append(
+                (sezione, file_e_posti_disponibili)
+            )
+
+        return sezioni_e_file_e_posti_disponibili
 
     #   POSTI
     def get_posto(self, id_: int) -> Optional[Posto]:
@@ -353,12 +365,15 @@ class Model:
                 f"Non è presente nessun genere con id {opera.get_id_genere()}."
             )
 
-    def __valida_regia(self, regia: Regia):
+    def __valida_regia(self, regia: Regia) -> Opera:
         """Throws: IdInesistenteException"""
-        if not self.__gestore_opere.ha_opera(regia.get_id_opera()):
+        opera = self.get_opera(regia.get_id_opera())
+        if opera is None:
             raise IdInesistenteException(
                 f"Non è presente nessun'opera con id {regia.get_id_opera()}."
             )
+
+        return opera
 
     def __valida_evento(self, evento: Evento):
         """Throws: IdInesistenteException"""
@@ -486,7 +501,8 @@ class Model:
     def aggiungi_spettacolo(self, spettacolo: Spettacolo):
         """Throws: IdInesistenteException, IdOccupatoException"""
         if type(spettacolo) is Regia:
-            self.__valida_regia(spettacolo)
+            opera = self.__valida_regia(spettacolo)
+            spettacolo.set_titolo(opera.get_nome())
 
         self.__gestore_spettacoli.aggiungi_spettacolo(spettacolo)
         self.__salva_spettacoli()

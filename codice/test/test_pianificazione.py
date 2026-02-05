@@ -2,6 +2,7 @@ from datetime import date, datetime
 import shutil
 import unittest
 
+from model.pianificazione.spettacolo import Spettacolo
 from model.exceptions import (
     DatoIncongruenteException,
     IdInesistenteException,
@@ -412,9 +413,7 @@ class TestTell(unittest.TestCase):
         )
         print("Passato ELIMINA IdInesistente")
 
-        r = Regia(
-            STR_NON_VUOTA, 0, o.get_id(), STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict()
-        )
+        r = Regia(STR_NON_VUOTA, 0, o.get_id(), STR_NON_VUOTA, dict(), dict())
         self.__model.aggiungi_spettacolo(r)
         self.assertRaises(OggettoInUsoException, self.__model.elimina_opera, o.get_id())
         print("Passato ELIMINA OggettoInUso")
@@ -436,7 +435,6 @@ class TestTell(unittest.TestCase):
             0,
             0,
             STR_NON_VUOTA,
-            STR_NON_VUOTA,
             dict(),
             dict(),
         )
@@ -449,7 +447,6 @@ class TestTell(unittest.TestCase):
             STR_NON_VUOTA,
             -1,
             0,
-            STR_NON_VUOTA,
             STR_NON_VUOTA,
             dict(),
             dict(),
@@ -464,39 +461,10 @@ class TestTell(unittest.TestCase):
             0,
             -1,
             STR_NON_VUOTA,
-            STR_NON_VUOTA,
             dict(),
             dict(),
         )
         print("Passato CONGRUENZA id_opera")
-
-        # CONGRUENZA titolo
-        self.assertRaises(
-            DatoIncongruenteException,
-            Regia,
-            STR_NON_VUOTA,
-            0,
-            0,
-            " ",
-            STR_NON_VUOTA,
-            dict(),
-            dict(),
-        )
-        print("Passato CONGRUENZA titolo")
-
-        # CONGRUENZA note
-        self.assertRaises(
-            DatoIncongruenteException,
-            Regia,
-            STR_NON_VUOTA,
-            0,
-            0,
-            STR_NON_VUOTA,
-            " ",
-            dict(),
-            dict(),
-        )
-        print("Passato CONGRUENZA note")
 
         # CONGRUENZA interpreti
         self.assertRaises(
@@ -505,7 +473,6 @@ class TestTell(unittest.TestCase):
             STR_NON_VUOTA,
             0,
             0,
-            STR_NON_VUOTA,
             STR_NON_VUOTA,
             dict([(" ", STR_NON_VUOTA)]),
             dict(),
@@ -516,7 +483,6 @@ class TestTell(unittest.TestCase):
             STR_NON_VUOTA,
             0,
             0,
-            STR_NON_VUOTA,
             STR_NON_VUOTA,
             dict([(STR_NON_VUOTA, " ")]),
             dict(),
@@ -531,7 +497,6 @@ class TestTell(unittest.TestCase):
             0,
             0,
             STR_NON_VUOTA,
-            STR_NON_VUOTA,
             dict(),
             dict([(" ", STR_NON_VUOTA)]),
         )
@@ -541,7 +506,6 @@ class TestTell(unittest.TestCase):
             STR_NON_VUOTA,
             0,
             0,
-            STR_NON_VUOTA,
             STR_NON_VUOTA,
             dict(),
             dict([(STR_NON_VUOTA, " ")]),
@@ -556,7 +520,6 @@ class TestTell(unittest.TestCase):
             STR_NON_VUOTA,
             0,
             ID_NON_ESISTENTE,
-            STR_NON_VUOTA,
             STR_NON_VUOTA,
             dict(),
             dict(),
@@ -581,7 +544,6 @@ class TestTell(unittest.TestCase):
             STR_NON_VUOTA,
             0,
             o.get_id(),
-            STR_NON_VUOTA,
             STR_NON_VUOTA,
             dict(),
             dict(),
@@ -611,7 +573,6 @@ class TestTell(unittest.TestCase):
             0,
             o.get_id(),
             STR_NON_VUOTA,
-            STR_NON_VUOTA,
             dict(),
             dict(),
         )
@@ -627,39 +588,21 @@ class TestTell(unittest.TestCase):
         print("Passato GET LISTA side effect")
 
         # GET LISTA by titolo
-        r3 = Regia(
-            STR_NON_VUOTA,
-            0,
-            o.get_id(),
-            STR_NON_VUOTA * 3,
-            STR_NON_VUOTA,
-            dict(),
-            dict(),
-        )
-        self.__model.aggiungi_spettacolo(r3)
-        r4 = Regia(
-            STR_NON_VUOTA,
-            0,
-            o.get_id(),
-            "other",
-            STR_NON_VUOTA,
-            dict(),
-            dict(),
-        )
-        self.__model.aggiungi_spettacolo(r4)
-        self.assertEqual(
-            self.__model.get_spettacoli_by_titolo(STR_NON_VUOTA), [r, r2, r3]
-        )
+        s = Spettacolo("other", "", dict(), dict())
+        self.__model.aggiungi_spettacolo(s)
+        s2 = Spettacolo("other", "", dict(), dict())
+        self.__model.aggiungi_spettacolo(s2)
+        self.assertEqual(self.__model.get_spettacoli_by_titolo("other"), [s, s2])
         print("Passato GET LISTA by titolo")
 
-        r2_ = self.__model.get_spettacoli_by_titolo(STR_NON_VUOTA)[1]
-        r2_.set_titolo(r2_.get_titolo() + STR_NON_VUOTA)
-        r2 = self.__model.get_spettacoli_by_titolo(STR_NON_VUOTA)[1]
-        self.assertEqual(r2.get_note(), r2_.get_note())
-        self.assertNotEqual(r2.get_titolo(), r2_.get_titolo())
+        s2_ = self.__model.get_spettacoli_by_titolo("other")[1]
+        s2_.set_titolo(s2_.get_titolo() + STR_NON_VUOTA)
+        s2 = self.__model.get_spettacoli_by_titolo("other")[1]
+        self.assertEqual(s2.get_note(), s2_.get_note())
+        self.assertNotEqual(s2.get_titolo(), s2_.get_titolo())
         print("Passato GET LISTA by titolo side effect")
-        self.__model.elimina_spettacolo(r3.get_id())
-        self.__model.elimina_spettacolo(r4.get_id())
+        self.__model.elimina_spettacolo(s.get_id())
+        self.__model.elimina_spettacolo(s2.get_id())
 
         # GET LISTA by opera
         o2 = Opera(
@@ -677,7 +620,6 @@ class TestTell(unittest.TestCase):
             STR_NON_VUOTA,
             0,
             o2.get_id(),
-            STR_NON_VUOTA,
             STR_NON_VUOTA,
             dict(),
             dict(),
@@ -700,7 +642,6 @@ class TestTell(unittest.TestCase):
             STR_NON_VUOTA,
             0,
             ID_NON_ESISTENTE,
-            STR_NON_VUOTA,
             STR_NON_VUOTA,
             dict(),
             dict(),

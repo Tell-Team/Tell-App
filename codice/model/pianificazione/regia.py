@@ -8,13 +8,12 @@ class Regia(Spettacolo):
         regista: str,
         anno_produzione: int,
         id_opera: int,
-        titolo: str,
         note: str,
         interpreti: dict[str, str],
         tecnici: dict[str, str],
     ):
         """Throws: DatoIncongruenteException"""
-        super().__init__(titolo, note, interpreti, tecnici)
+        super().__init__(f"{regista} ({anno_produzione})", note, interpreti, tecnici)
 
         self.set_regista(regista)
         self.set_anno_produzione(anno_produzione)

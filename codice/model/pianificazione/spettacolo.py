@@ -55,12 +55,7 @@ class Spettacolo:
         self.__titolo = titolo_stripped
 
     def set_note(self, note: str):
-        """Throws: DatoIncongruenteException"""
-        note_stripped = note.strip()
-        if note_stripped == "":
-            raise DatoIncongruenteException("Le note non possono essere vuote.")
-
-        self.__note = note_stripped
+        self.__note = note
 
     def set_interpreti(self, interpreti: dict[str, str]):
         """Throws: DatoIncongruenteException"""
@@ -99,3 +94,15 @@ class Spettacolo:
             raise DatoIncongruenteException("Il nome del tecnico non può essere vuoto.")
 
         self.__tecnici = tecnici_stripped
+
+    # Magics
+    def __eq__(self, other: object) -> bool:
+        if (
+            self.get_titolo() == other.get_titolo()  # type: ignore
+            and self.get_note() == other.get_note()  # type: ignore
+            and self.get_interpreti() == other.get_interpreti()  # type: ignore
+            and self.get_tecnici() == other.get_tecnici()  # type: ignore
+        ):
+            return True
+
+        return False
