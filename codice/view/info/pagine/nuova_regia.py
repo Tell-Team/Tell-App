@@ -10,6 +10,9 @@ from typing import override
 from model.pianificazione.opera import Opera
 
 from view.spettacoli.pagine import NuovoSpettacoloView
+
+from view.utils import make_hline
+
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
@@ -47,7 +50,7 @@ class NuovaRegiaView(NuovoSpettacoloView):
         self.opera = QComboBox()
         self.opera.setEnabled(False)
 
-        self._form_layout.addRow(QLabel('<hr style="background-color:#b0b0b0;">'))
+        self._form_layout.addRow(make_hline())
         self._form_layout.addRow(label_regista, self.regista)
         self._form_layout.addRow(label_anno, self.anno)
         self._form_layout.addRow(label_opera, self.opera)

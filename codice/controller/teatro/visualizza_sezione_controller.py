@@ -251,7 +251,6 @@ class VisualizzaSezioneController(QObject):
                 f"Si sono verificati i seguenti errori:\n{error_msg}",
             )
 
-    # - COMPLETAR
     def __modifica_posto(self, id_: int) -> None:
         """Carica la pagina `ModificaPostoView`, con i dati del posto indicato
         inseriti nei campo di input.

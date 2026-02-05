@@ -79,6 +79,8 @@ class VisualizzaSpettacoloController(QObject):
             layout_eventi.mostra_msg_lista_vuota()
             return
 
+        lista_eventi = sorted(lista_eventi, key=lambda x: (x.get_data_ora()))
+
         # Funzione di eliminazione per gli eventi
         def on_conferma(widget_evento: EventoDisplay, id_: int) -> None:
             """Prova ad eliminare l'istanza di Evento.

@@ -244,11 +244,6 @@ class VisualizzaSezioneView(QWidget):
 
     def aggiorna_pagina(self) -> None:
         """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
-        self.fila.setText("")
-        self.single_numero.setValue(0)
-        self.range_numeri.setText("")
-        self.checkbox_numeri.setChecked(False)
-
         self.layout_lista_posti.svuota_layout()
         self.displayPostiRequest.emit(self.layout_lista_posti)
 
@@ -272,3 +267,9 @@ class VisualizzaSezioneView(QWidget):
         """
         self.__input_error.setText(message)
         self.__input_error.show()  # Si assicura che la label sia visualizzata.
+
+    def reset_pagina(self) -> None:
+        self.fila.setText("")
+        self.single_numero.setValue(0)
+        self.range_numeri.setText("")
+        self.checkbox_numeri.setChecked(False)

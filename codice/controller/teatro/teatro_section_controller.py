@@ -135,6 +135,7 @@ class TeatroSectionController(AbstractSectionController):
 
         lista_posti = self.__get_posti_by_sezione(current_sezione.get_id())
 
+        current_pagina.reset_pagina()
         current_pagina.set_data(sezione_data, lista_posti)
 
         # Apri la pagina

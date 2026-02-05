@@ -6,7 +6,6 @@ from PyQt6.QtWidgets import (
     QComboBox,
     QFormLayout,
     QSizePolicy,
-    #     QGridLayout,
     QScrollArea,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
@@ -21,6 +20,8 @@ from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
 from view.utils.custom_button import DefaultButton
 
+from view.utils import make_hline
+
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
@@ -30,6 +31,8 @@ class ScegliPostiView(QWidget):
     Segnali
     ---
     - `tornaIndietroRequest()`: emesso quando si clicca il pulsante Indietro;
+    - `getSezioniPostiRequest(int)`:
+    - `displayPostiSceltiRequest(ListLayout)`:
     # - POR COMPLETAR
     """
 
@@ -136,7 +139,7 @@ class ScegliPostiView(QWidget):
         self.__btn_aggiungi = DefaultButton("Aggiungi")
 
         self.__form_layout.addRow(label_evento, self.evento)
-        self.__form_layout.addRow(QLabel("<hr>"))
+        self.__form_layout.addRow(make_hline())
         self.__form_layout.addRow(label_sezione, self.sezione)
         self.__form_layout.addRow(label_posto, self.posto)
         self.__form_layout.addRow(self.__btn_aggiungi)

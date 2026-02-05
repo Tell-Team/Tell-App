@@ -82,6 +82,8 @@ class VisualizzaOperaController(QObject):
             layout_regie.mostra_msg_lista_vuota()
             return
 
+        lista_regie = sorted(lista_regie, key=lambda x: (x.get_anno_produzione()))
+
         # Funzione di eliminazione per le regie
         def on_conferma(widget_regia: RegiaDisplay, id_: int) -> None:
             """Prova ad eliminare l'istanza di `Regia`.

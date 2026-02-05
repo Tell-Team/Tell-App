@@ -14,6 +14,7 @@ from view.spettacoli.utils import SpettacoloPageData
 
 from view.utils.list_widgets import ListLayout
 from view.utils import PopupMessage
+
 from view.style.ui_style import WidgetRole
 
 import copy  # - DA TOGLIERE: C'è una definizione che dovrebbe stare nel model
@@ -86,23 +87,17 @@ class AcquistoSectionController(AbstractSectionController):
         # Mostra tutti gli spettacoli della lista a schermo
         for spettacolo in lista_spettacoli:
             # Verifica che classe di Spettacolo è l'istanza
+            dati: tuple[str, ...] = ()
             if isinstance(spettacolo, Regia):
-                compositore: str = ""
                 if opera_associata := self._model.get_opera(spettacolo.get_id_opera()):
-                    compositore = opera_associata.get_compositore()
-                dati = (compositore, spettacolo.get_regista())
-                current_spettacolo = AcquistoDisplay(
-                    spettacolo,
-                    dati=dati,
-                )
+                    dati = (opera_associata.get_compositore(), spettacolo.get_regista())
             else:
-                current_spettacolo = AcquistoDisplay(spettacolo)
+                ...  # Nel caso ci siano altri sottoclassi di Spettacolo
+            current_spettacolo = AcquistoDisplay(spettacolo, dati)
 
             current_spettacolo.scegliPostoRequest.connect(  # type:ignore
                 self.__scegli_posti
             )
-
-            # - CREA UN DISPLAY PARA SPETTACOLI DISPONIBILI
 
             layout_spettacoli.aggiungi_list_item(
                 current_spettacolo, WidgetRole.ITEM_CARD
@@ -141,17 +136,6 @@ class AcquistoSectionController(AbstractSectionController):
 
         lista_eventi = self._model.get_eventi_by_spettacolo(current_spettacolo.get_id())
 
-        # # Setup pagina con i data dello spettacolo
-        # if isinstance(current_spettacolo, Regia):
-        #     tipo_spettacolo: tuple[str, str] = ("", "")
-        #     if opera_associata := self._model.get_opera(
-        #         current_spettacolo.get_id_opera()
-        #     ):
-        #         compositore = opera_associata.get_compositore()
-        #         regista = current_spettacolo.get_regista()
-        #         tipo_spettacolo = (compositore, regista)
-        #     current_pagina.set_data(spettacolo_data, lista_eventi, tipo_spettacolo)
-        # else:
         current_pagina.set_data(spettacolo_data, lista_eventi)
 
         # Apri la pagina

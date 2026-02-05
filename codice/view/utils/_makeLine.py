@@ -7,3 +7,10 @@ def make_vline() -> QFrame:
     line.setFrameShape(QFrame.Shape.VLine)
     line.setFrameShadow(QFrame.Shadow.Sunken)
     return line
+
+
+def make_hline() -> QFrame:
+    """Crea una linea orizontale per dividere widget di un Layout verticale"""
+    line = QFrame()
+    line.setFrameShape(QFrame.Shape.HLine)
+    return line
