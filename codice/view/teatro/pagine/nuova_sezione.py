@@ -49,5 +49,7 @@ class NuovaSezioneView(AbstractCreaView):
 
     @override
     def reset_pagina(self) -> None:
+        super().reset_pagina()
+
         self.nome.setText("")
         self.descrizione.setText("")

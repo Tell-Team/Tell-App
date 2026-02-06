@@ -194,11 +194,10 @@ class InfoSectionView(AbstractSectionView):
 
     @override
     def aggiorna_pagina(self) -> None:
+        super().aggiorna_pagina()
+
         self.layout_lista_opere.svuota_layout()
         self.displayOpereRequest.emit(self.layout_lista_opere)
 
         self.layout_lista_generi.svuota_layout()
         self.displayGeneriRequest.emit(self.layout_lista_generi)
-
-        if vertical_scroll := self._scroll_area.verticalScrollBar():
-            vertical_scroll.setValue(0)

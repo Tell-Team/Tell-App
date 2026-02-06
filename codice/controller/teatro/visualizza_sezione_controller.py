@@ -1,7 +1,8 @@
 from PyQt6.QtWidgets import QWidget
-from PyQt6.QtCore import pyqtSignal, QObject
 from functools import partial
-from typing import Optional
+from typing import Optional, override
+
+from core.controller import AbstractVisualizzaController
 
 from controller.navigation import Pagina
 
@@ -28,55 +29,49 @@ FORMATO_SVAGLIATO = (
 )
 
 
-class VisualizzaSezioneController(QObject):
+class VisualizzaSezioneController(AbstractVisualizzaController):
     """Gestice la pagina `VisualizzaSezioneView` dell'app.
 
     Segnali
     ---
-    - `goBackRequest()`: emesso per tornare alla pagina `TeatroSectionView`;
-    - `goToPageRequest(Pagina, bool)`: emesso per visualizzare un'altra pagina;
-    - `getPageRequest(Pagina, dict)`: emesso per ottenere la pagina che vendrà visualizzata.
+    - `goBackRequest()`: emesso per tornare alla pagina `TeatroSectionView`.
     """
 
-    goBackRequest: pyqtSignal = pyqtSignal()
-    goToPageRequest: pyqtSignal = pyqtSignal(Pagina, bool)
-    getPageRequest: pyqtSignal = pyqtSignal(Pagina, dict)
+    _view_page: VisualizzaSezioneView
 
-    def __init__(self, model: Model, visualizza_sezione_v: VisualizzaSezioneView):
-        super().__init__()
-        self.__model = model
-        self.__visualizza_sezione_view = visualizza_sezione_v
+    def __init__(self, model: Model, sezione_v: VisualizzaSezioneView):
+        if type(sezione_v) is not VisualizzaSezioneView:
+            raise TypeError("Atteso VisualizzaSezioneView per sezione_v.")
 
-        self.__connect_signals()
+        super().__init__(model, sezione_v)
 
     # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
 
-    def __connect_signals(self) -> None:
-        self.__visualizza_sezione_view.tornaIndietroRequest.connect(  # type:ignore
-            self.goBackRequest.emit
-        )
+    @override
+    def _connect_signals(self) -> None:
+        super()._connect_signals()
 
-        self.__visualizza_sezione_view.displayPostiRequest.connect(  # type:ignore
+        self._view_page.displayPostiRequest.connect(  # type:ignore
             self.__display_posti
         )
 
-        self.__visualizza_sezione_view.aggiungiPostoRequest.connect(  # type:ignore
+        self._view_page.aggiungiPostoRequest.connect(  # type:ignore
             self.__inizia_salvataggio
         )
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
     def __get_posto(self, id_: int) -> Optional[Posto]:
-        return self.__model.get_posto(id_)
+        return self._model.get_posto(id_)
 
     def __get_posti_by_sezione(self, id_: int) -> list[Posto]:
-        return self.__model.get_posti_by_sezione(id_)
+        return self._model.get_posti_by_sezione(id_)
 
     def __aggiungi_posto(self, posto: Posto) -> None:
-        self.__model.aggiungi_posto(posto)
+        self._model.aggiungi_posto(posto)
 
     def __elimina_posto(self, id_: int) -> None:
-        self.__model.elimina_posto(id_)
+        self._model.elimina_posto(id_)
 
     def __display_posti(self, layout_posti: ListLayout) -> None:
         """Mostra a schermo il numero dei posti salvati e associati ad una sezione
@@ -84,9 +79,7 @@ class VisualizzaSezioneController(QObject):
 
         :param layout_posti: layout dove saranno caricate tutti i posti
         """
-        lista_posti = self.__get_posti_by_sezione(
-            self.__visualizza_sezione_view.id_current_sezione
-        )
+        lista_posti = self.__get_posti_by_sezione(self._view_page.id_current_sezione)
 
         if not lista_posti:
             layout_posti.mostra_msg_lista_vuota()
@@ -105,12 +98,12 @@ class VisualizzaSezioneController(QObject):
                 self.__elimina_posto(id_)
             except OggettoInUsoException as exc:
                 PopupMessage.mostra_errore(
-                    self.__visualizza_sezione_view,
+                    self._view_page,
                     "Posto in uso",
                     f"Si è verificato un errore: {exc}",
                 )
             else:
-                self.__visualizza_sezione_view.aggiorna_pagina()
+                self._view_page.aggiorna_pagina()
 
         for posto in lista_posti:
             current_posto = PostoDisplay(posto)
@@ -136,7 +129,7 @@ class VisualizzaSezioneController(QObject):
             self.__salva_multipli_posti()
 
     def __salva_singolo_posto(self) -> None:
-        pagina = self.__visualizza_sezione_view
+        pagina = self._view_page
 
         fila = pagina.fila.text()
         numero = pagina.single_numero.value()
@@ -174,7 +167,7 @@ class VisualizzaSezioneController(QObject):
                 pagina.aggiorna_pagina()
 
     def __salva_multipli_posti(self) -> None:
-        pagina = self.__visualizza_sezione_view
+        pagina = self._view_page
 
         def parse_ranges(text: str) -> list[int]:
             result: set[int] = set()
@@ -261,7 +254,7 @@ class VisualizzaSezioneController(QObject):
         current_posto = self.__get_posto(id_)
         if not current_posto:
             PopupMessage.mostra_errore(
-                self.__visualizza_sezione_view,
+                self._view_page,
                 "Posto inesistente",
                 f"Non è presente nessun posto con id {id_}.",
             )
@@ -277,7 +270,7 @@ class VisualizzaSezioneController(QObject):
 
         if type(current_pagina) is not ModificaPostoView:
             PopupMessage.mostra_errore(
-                self.__visualizza_sezione_view,
+                self._view_page,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
                 + f"Type trovato: {type(current_pagina)}",

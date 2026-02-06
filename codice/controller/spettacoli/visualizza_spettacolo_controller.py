@@ -1,7 +1,8 @@
 from PyQt6.QtWidgets import QWidget
-from PyQt6.QtCore import pyqtSignal, QObject
 from functools import partial
-from typing import Optional
+from typing import Optional, override
+
+from core.controller import AbstractVisualizzaController
 
 from controller.navigation import Pagina
 
@@ -17,52 +18,46 @@ from view.utils.list_widgets import ListLayout
 from view.utils import PopupMessage
 
 
-class VisualizzaSpettacoloController(QObject):
-    """Gestice la pagina `VisualizzaOperaView` dell'app.
+class VisualizzaSpettacoloController(AbstractVisualizzaController):
+    """Gestice la pagina `VisualizzaSpettacoloView` dell'app.
 
     Segnali
     ---
-    - `goBackRequest()`: emesso per tornare alla pagina `SpettacoliSectionView`;
-    - `goToPageRequest(Pagina, bool)`: emesso per visualizzare un'altra pagina;
-    - `getPageRequest(Pagina, dict)`: emesso per ottenere la pagina che vendrà visualizzata.
+    - `goBackRequest()`: emesso per tornare alla pagina `SpettacoliSectionView`.
     """
 
-    goBackRequest: pyqtSignal = pyqtSignal()
-    goToPageRequest: pyqtSignal = pyqtSignal(Pagina, bool)
-    getPageRequest: pyqtSignal = pyqtSignal(Pagina, dict)
+    _view_page: VisualizzaSpettacoloView
 
     def __init__(self, model: Model, spettacolo_v: VisualizzaSpettacoloView):
-        super().__init__()
-        self.__model = model
-        self.__visualizza_spettacolo_view = spettacolo_v
+        if type(spettacolo_v) is not VisualizzaSpettacoloView:
+            raise TypeError("Atteso VisualizzaSpettacoloView per spettacolo_v.")
 
-        self.__connect_signals()
+        super().__init__(model, spettacolo_v)
 
     # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
 
-    def __connect_signals(self) -> None:
-        self.__visualizza_spettacolo_view.tornaIndietroRequest.connect(  # type:ignore
-            self.goBackRequest.emit
-        )
+    @override
+    def _connect_signals(self) -> None:
+        super()._connect_signals()
 
-        self.__visualizza_spettacolo_view.displayEventiRequest.connect(  # type:ignore
+        self._view_page.displayEventiRequest.connect(  # type:ignore
             self.__display_eventi
         )
 
-        self.__visualizza_spettacolo_view.nuovoEventoRequest.connect(  # type:ignore
+        self._view_page.nuovoEventoRequest.connect(  # type:ignore
             self.__nuovo_evento
         )
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
     def __get_evento(self, id_: int) -> Optional[Evento]:
-        return self.__model.get_evento(id_)
+        return self._model.get_evento(id_)
 
     def __get_eventi_by_spettacolo(self, id_: int) -> list[Evento]:
-        return self.__model.get_eventi_by_spettacolo(id_)
+        return self._model.get_eventi_by_spettacolo(id_)
 
     def __elimina_evento(self, id_: int) -> None:
-        self.__model.elimina_evento(id_)
+        self._model.elimina_evento(id_)
 
     def __display_eventi(self, layout_eventi: ListLayout) -> None:
         """Mostra a schermo le informazioni degli eventi salvati e associati ad
@@ -71,7 +66,7 @@ class VisualizzaSpettacoloController(QObject):
         :param layout_eventi: layout dove saranno caricate tutti le regie
         """
         lista_eventi = self.__get_eventi_by_spettacolo(
-            self.__visualizza_spettacolo_view.id_current_spettacolo
+            self._view_page.id_current_spettacolo
         )
 
         # Verifica che la lista non sia vuota
@@ -93,12 +88,12 @@ class VisualizzaSpettacoloController(QObject):
             except OggettoInUsoException as exc:
                 widget_evento.annulla_elimina()
                 PopupMessage.mostra_errore(
-                    self.__visualizza_spettacolo_view,
+                    self._view_page,
                     "Evento in uso",
                     f"Si è verificato un errore: {exc}",
                 )
             else:
-                self.__visualizza_spettacolo_view.aggiorna_pagina()
+                self._view_page.aggiorna_pagina()
 
         for evento in lista_eventi:
             current_evento = EventoDisplay(evento)
@@ -126,7 +121,7 @@ class VisualizzaSpettacoloController(QObject):
 
         if type(current_pagina) is not NuovoEventoView:
             PopupMessage.mostra_errore(
-                self.__visualizza_spettacolo_view,
+                self._view_page,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
                 + f"Type trovato: {type(current_pagina)}",
@@ -135,9 +130,7 @@ class VisualizzaSpettacoloController(QObject):
 
         # Setup pagina pulendo i campi
         current_pagina.reset_pagina()
-        current_pagina.id_spettacolo = (
-            self.__visualizza_spettacolo_view.id_current_spettacolo
-        )
+        current_pagina.id_spettacolo = self._view_page.id_current_spettacolo
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
@@ -152,7 +145,7 @@ class VisualizzaSpettacoloController(QObject):
         current_evento = self.__get_evento(id_)
         if not current_evento:
             PopupMessage.mostra_errore(
-                self.__visualizza_spettacolo_view,
+                self._view_page,
                 "Evento inesistente",
                 f"Non è presente nessun evento con id {id_}.",
             )
@@ -168,7 +161,7 @@ class VisualizzaSpettacoloController(QObject):
 
         if type(current_pagina) is not ModificaEventoView:
             PopupMessage.mostra_errore(
-                self.__visualizza_spettacolo_view,
+                self._view_page,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
                 + f"Type trovato: {type(current_pagina)}",

@@ -37,7 +37,7 @@ class ModificaPostoView(AbstractCreaView):
         label_fila.setProperty(WidgetRole.BODY_TEXT, True)
         label_fila.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.fila = QLineEdit()
-        self.fila.setPlaceholderText("Inserire lettera")
+        self.fila.setPlaceholderText("Inserire nome")
 
         label_numero = QLabel('Numero<span style="color:red;">*</span> :')
         label_numero.setProperty(WidgetRole.BODY_TEXT, True)
@@ -72,6 +72,8 @@ class ModificaPostoView(AbstractCreaView):
 
     @override
     def reset_pagina(self) -> None:
+        super().reset_pagina()
+
         self.id_spettacolo = -1
         self.fila.setText("")
         self.numero.setValue(0)

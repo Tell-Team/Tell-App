@@ -50,6 +50,8 @@ class NuovoEventoView(AbstractCreaView):
 
     @override
     def reset_pagina(self) -> None:
+        super().reset_pagina()
+
         self.id_spettacolo = -1
         self.data.setDate(QDate.currentDate())
         self.ora.setTime(QTime.currentTime())

@@ -3,10 +3,8 @@ from PyQt6.QtWidgets import (
     QLabel,
     QPushButton,
     QVBoxLayout,
-    QLayout,
     QHBoxLayout,
     QGridLayout,
-    QScrollArea,
     QLineEdit,
     QSpinBox,
     QCheckBox,
@@ -14,6 +12,9 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, pyqtSignal, QRegularExpression
 from PyQt6.QtGui import QRegularExpressionValidator
+from typing import override
+
+from core.view import AbstractVisualizzaView
 
 from model.organizzazione.posto import Posto
 
@@ -21,13 +22,12 @@ from view.teatro.utils import SezionePageData
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
-from view.utils.custom_button import DefaultButton
 from view.utils import make_vline
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class VisualizzaSezioneView(QWidget):
+class VisualizzaSezioneView(AbstractVisualizzaView):
     """Pagina per visualizzare le signole `Sezione` in dettaglio.
 
     Contiene le tutte informazioni della `Sezione` ed una lista con tutti i `Posto`
@@ -35,33 +35,23 @@ class VisualizzaSezioneView(QWidget):
 
     Segnali
     ---
-    - `tornaIndietroRequest()`: emesso quando si clicca il pulsante Indietro;
     - `displayPostiRequest(ListLayout)`: emesso per mostrare a schermo la lista eventi;
     - `aggiungiPostoRequest(bool)`: emesso quando si clicca il pulsante Aggiungi.
     """
 
-    tornaIndietroRequest = pyqtSignal()
     displayPostiRequest = pyqtSignal(ListLayout)
     aggiungiPostoRequest = pyqtSignal(bool)
 
     def __init__(self):
-        super().__init__()
-
         self.id_current_sezione: int = -1
 
-        self._setup_ui()
-        self._connect_signals()
+        super().__init__()
 
     # ------------------------- SETUP INIT -------------------------
 
+    @override
     def _setup_ui(self) -> None:
-        # Top widget
-        self.__btn_indietro = DefaultButton("Indietro")
-
-        self.pagina_header = QWidget()
-        layout_header = QHBoxLayout(self.pagina_header)
-        layout_header.addWidget(self.__btn_indietro)
-        layout_header.addStretch()
+        super()._setup_ui()
 
         # Labels
         self.label_nome = HyphenatedLabel("[Nome Sezione]")
@@ -83,7 +73,7 @@ class VisualizzaSezioneView(QWidget):
         label_fila.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
 
         self.fila = QLineEdit()
-        self.fila.setPlaceholderText("Inserire lettera")
+        self.fila.setPlaceholderText("Inserire nome")
 
         label_numero = QLabel('Numero<span style="color:red;">*</span> :')
         label_numero.setProperty(WidgetRole.BODY_TEXT, True)
@@ -146,7 +136,7 @@ class VisualizzaSezioneView(QWidget):
             content_lista_posti, label_lista_posti_vuota
         )
 
-        header_numero = QLabel("Numero")
+        header_numero = QLabel("Fila | Numero")
         header_numero.setProperty(WidgetRole.HEADER3, True)
         header_opzioni = QLabel("Opzioni")
         header_opzioni.setProperty(WidgetRole.HEADER3, True)
@@ -167,31 +157,19 @@ class VisualizzaSezioneView(QWidget):
         self.layout_posti.addWidget(header_lista_posti)
         self.layout_posti.addWidget(content_lista_posti)
 
-        pagina_content = QWidget()
-        layout_content = QVBoxLayout(pagina_content)
-        layout_content.addWidget(self.label_nome)
-        layout_content.addWidget(self.label_descrizione)
-        layout_content.addSpacing(20)
-        layout_content.addWidget(crea_posto_box)
-        layout_content.addSpacing(20)
-        layout_content.addWidget(label_lista_posti)
-        layout_content.addWidget(self.posti)
-        layout_content.addStretch()
-
-        # Funzione di scroll
-        self.__scroll_area = QScrollArea()
-        self.__scroll_area.setWidgetResizable(True)
-        self.__scroll_area.setWidget(pagina_content)
-
         # Layout
-        main_layout = QVBoxLayout(self)
-        main_layout.addWidget(self.pagina_header)
-        main_layout.addWidget(self.__scroll_area)
+        self._layout_content.addWidget(self.label_nome)
+        self._layout_content.addWidget(self.label_descrizione)
+        self._layout_content.addSpacing(20)
+        self._layout_content.addWidget(crea_posto_box)
+        self._layout_content.addSpacing(20)
+        self._layout_content.addWidget(label_lista_posti)
+        self._layout_content.addWidget(self.posti)
+        self._layout_content.addStretch()
 
+    @override
     def _connect_signals(self) -> None:
-        self.__btn_indietro.clicked.connect(  # type:ignore
-            self.tornaIndietroRequest.emit
-        )
+        super()._connect_signals()
 
         # La QLineEdit per la fila solo mostra maiuscole
         def to_upper(text: str) -> None:
@@ -217,7 +195,10 @@ class VisualizzaSezioneView(QWidget):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def set_data(self, data: SezionePageData, lista_posti: list[Posto]) -> None:
+    @override
+    def set_data(  # type: ignore[override]
+        self, data: SezionePageData, lista_posti: list[Posto]
+    ) -> None:
         """Carica i dati della sezione nella pagina.
 
         :param data: data salvata in una classe immutabile
@@ -240,23 +221,19 @@ class VisualizzaSezioneView(QWidget):
         else:
             self.displayPostiRequest.emit(self.layout_lista_posti)
 
+    @override
     def aggiorna_pagina(self) -> None:
-        """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
+        super().aggiorna_pagina()
+
         self.layout_lista_posti.svuota_layout()
         self.displayPostiRequest.emit(self.layout_lista_posti)
 
-        if vertical_scroll := self.__scroll_area.verticalScrollBar():
-            vertical_scroll.setValue(0)
-
-    def __svuota_layout_generico(self, layout: QLayout):
-        while layout.count() > 0:
-            item = layout.takeAt(0)
-            if item is None:
-                raise ValueError("Expected item at index 0")
-            if widget := item.widget():
-                widget.setParent(None)
-            elif child_layout := item.layout():
-                self.__svuota_layout_generico(child_layout)
+    def reset_pagina(self) -> None:
+        """Resetta la pagina svuotando i campi d'input per creare posti."""
+        self.fila.setText("")
+        self.single_numero.setValue(0)
+        self.range_numeri.setText("")
+        self.checkbox_numeri.setChecked(False)
 
     def mostra_msg_input_error(self, message: str) -> None:
         """Aggiorna il testo della label `input_error`.
@@ -265,9 +242,3 @@ class VisualizzaSezioneView(QWidget):
         """
         self.__input_error.setText(message)
         self.__input_error.show()  # Si assicura che la label sia visualizzata.
-
-    def reset_pagina(self) -> None:
-        self.fila.setText("")
-        self.single_numero.setValue(0)
-        self.range_numeri.setText("")
-        self.checkbox_numeri.setChecked(False)

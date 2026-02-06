@@ -1,12 +1,8 @@
-from PyQt6.QtWidgets import (
-    QWidget,
-    QLabel,
-    QVBoxLayout,
-    QHBoxLayout,
-    QGridLayout,
-    QScrollArea,
-)
+from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, QGridLayout
 from PyQt6.QtCore import Qt, pyqtSignal
+from typing import override
+
+from core.view import AbstractVisualizzaView
 
 from controller.login.user_session import UserSession
 
@@ -22,7 +18,7 @@ from view.utils import make_vline
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class VisualizzaOperaView(QWidget):
+class VisualizzaOperaView(AbstractVisualizzaView):
     """Pagina per visualizzare le singole `Opera` in dettaglio.
 
     Contiene le tutte informazioni dell'`Opera` ed una lista con tutte le `Regia`
@@ -30,34 +26,24 @@ class VisualizzaOperaView(QWidget):
 
     Segnali
     ---
-    - `tornaIndietroRequest()`: emesso quando si clicca il pulsante Indietro;
     - `displayRegieRequest(ListLayout)`: emesso per mostrare a schermo la lista regie;
     - `nuovaRegiaRequest()`: emesso quando si clicca il pulsante Nuova regia.
     """
 
-    tornaIndietroRequest = pyqtSignal()
     displayRegieRequest = pyqtSignal(ListLayout)
     nuovaRegiaRequest = pyqtSignal()
 
     def __init__(self, user_session: UserSession):
-        super().__init__()
-
         self.is_admin = user_session.ha_permessi_admin()
         self.id_current_opera: int = -1
 
-        self._setup_ui()
-        self._connect_signals()
+        super().__init__()
 
     # ------------------------- SETUP INIT -------------------------
 
+    @override
     def _setup_ui(self) -> None:
-        # Top widget
-        self.__btn_indietro = DefaultButton("Indietro")
-
-        self.pagina_header = QWidget()
-        layout_header = QHBoxLayout(self.pagina_header)
-        layout_header.addWidget(self.__btn_indietro)
-        layout_header.addStretch()
+        super()._setup_ui()
 
         # Labels
         self.label_nome = HyphenatedLabel("[Nome Opera]")
@@ -153,32 +139,20 @@ class VisualizzaOperaView(QWidget):
         self.layout_regie.addWidget(content_lista_regie)
         # end-Lista Regie
 
-        pagina_content = QWidget()
-        layout_content = QVBoxLayout(pagina_content)
-        layout_content.addWidget(self.label_nome)
-        layout_content.addWidget(self.label_librettista)
-        layout_content.addWidget(self.label_compositore)
-        layout_content.addWidget(self.label_genere)
-        layout_content.addWidget(self.label_atti)
-        layout_content.addWidget(self.label_prima_rappresentazione)
-        layout_content.addWidget(self.label_trama)
-        layout_content.addWidget(self.regie)
-        layout_content.addStretch()
-
-        # Funzione di scroll
-        scroll_area = QScrollArea()
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setWidget(pagina_content)
-
         # Layout
-        main_layout = QVBoxLayout(self)
-        main_layout.addWidget(self.pagina_header)
-        main_layout.addWidget(scroll_area)
+        self._layout_content.addWidget(self.label_nome)
+        self._layout_content.addWidget(self.label_librettista)
+        self._layout_content.addWidget(self.label_compositore)
+        self._layout_content.addWidget(self.label_genere)
+        self._layout_content.addWidget(self.label_atti)
+        self._layout_content.addWidget(self.label_prima_rappresentazione)
+        self._layout_content.addWidget(self.label_trama)
+        self._layout_content.addWidget(self.regie)
+        self._layout_content.addStretch()
 
+    @override
     def _connect_signals(self) -> None:
-        self.__btn_indietro.clicked.connect(  # type:ignore
-            self.tornaIndietroRequest.emit
-        )
+        super()._connect_signals()
 
         if self.is_admin:
             self.__btn_nuova_regia.clicked.connect(  # type:ignore
@@ -187,7 +161,8 @@ class VisualizzaOperaView(QWidget):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def set_data(
+    @override
+    def set_data(  # type: ignore[override]
         self, data: OperaPageData, genere_nome: str, lista_regie: list[Regia]
     ) -> None:
         """Carica i dati dell'opera nella pagina.
@@ -221,7 +196,9 @@ class VisualizzaOperaView(QWidget):
         else:
             self.displayRegieRequest.emit(self.layout_lista_regie)
 
+    @override
     def aggiorna_pagina(self) -> None:
-        """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
+        super().aggiorna_pagina()
+
         self.layout_lista_regie.svuota_layout()
         self.displayRegieRequest.emit(self.layout_lista_regie)

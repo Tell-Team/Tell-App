@@ -118,8 +118,7 @@ class AcquistoSectionView(AbstractSectionView):
 
     @override
     def aggiorna_pagina(self) -> None:
+        super().aggiorna_pagina()
+
         self.layout_lista_spettacoli.svuota_layout()
         self.displaySpettacoliRequest.emit(self.layout_lista_spettacoli)
-
-        if vertical_scroll := self._scroll_area.verticalScrollBar():
-            vertical_scroll.setValue(0)

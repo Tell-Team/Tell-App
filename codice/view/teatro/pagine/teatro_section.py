@@ -84,8 +84,7 @@ class TeatroSectionView(AbstractSectionView):
 
     @override
     def aggiorna_pagina(self) -> None:
+        super().aggiorna_pagina()
+
         self.layout_lista_sezioni.svuota_layout()
         self.displaySezioniRequest.emit(self.layout_lista_sezioni)
-
-        if vertical_scroll := self._scroll_area.verticalScrollBar():
-            vertical_scroll.setValue(0)

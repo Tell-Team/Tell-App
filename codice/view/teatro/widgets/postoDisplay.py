@@ -38,7 +38,7 @@ class PostoDisplay(ItemDisplay):
 
     def __setup_ui(self, p: Posto) -> None:
         # Labels
-        fila_numero = QLabel(f"{p.get_fila()}{p.get_numero()}")
+        fila_numero = QLabel(f"{p.get_fila()} | {p.get_numero()}")
         fila_numero.setProperty(WidgetRole.BODY_TEXT, True)
         fila_numero.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 

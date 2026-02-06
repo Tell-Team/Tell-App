@@ -1,8 +1,11 @@
 from abc import abstractmethod
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QScrollArea
 from PyQt6.QtCore import pyqtSignal
+from functools import partial
 
 from core.metaclasses import ABCQObjectMeta
+
+from controller.navigation import Pagina
 
 from view.utils.custom_button import DefaultButton
 
@@ -14,20 +17,12 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
     Segnali
     ---
     - `logoutRequest()`: emesso quando si clicca il pulsante Logout;
-    - `goToAcquisto()`: emesso quando si clicca il pulsante Acquisto;
-    - `goToSpettacoli()`: emesso quando si clicca il pulsante Spettacoli;
-    - `goToInfo()`: emesso quando si clicca il pulsante Info;
-    - `goToTeatro()`: emesso quando si clicca il pulsante Teatro;
-    - `goToAccount()`: emesso quando si clicca il pulsante Account.
+    - `goToSection()`: emesso quando si clicca il pulsante di sezione dell'app.
     """
 
     logoutRequest = pyqtSignal()
 
-    goToAcquisto = pyqtSignal()
-    goToSpettacoli = pyqtSignal()
-    goToInfo = pyqtSignal()
-    goToTeatro = pyqtSignal()
-    goToAccount = pyqtSignal()
+    goToSection = pyqtSignal(Pagina)
 
     def __init__(self):
         super().__init__()
@@ -86,23 +81,19 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
         )
 
         self._btn_sezione_acquisto.clicked.connect(  # type:ignore
-            self.goToAcquisto.emit
+            partial(self.goToSection.emit, Pagina.SEZIONE_ACQUISTO)
         )
-
         self._btn_sezione_spettacoli.clicked.connect(  # type:ignore
-            self.goToSpettacoli.emit
+            partial(self.goToSection.emit, Pagina.SEZIONE_SPETTACOLI)
         )
-
         self._btn_sezione_info.clicked.connect(  # type:ignore
-            self.goToInfo.emit
+            partial(self.goToSection.emit, Pagina.SEZIONE_INFO)
         )
-
         self._btn_sezione_teatro.clicked.connect(  # type:ignore
-            self.goToTeatro.emit
+            partial(self.goToSection.emit, Pagina.SEZIONE_TEATRO)
         )
-
         self._btn_sezione_account.clicked.connect(  # type:ignore
-            self.goToAccount.emit
+            partial(self.goToSection.emit, Pagina.SEZIONE_ACCOUNT)
         )
 
     # ------------------------- METODI DI VIEW -------------------------
@@ -110,4 +101,5 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
     @abstractmethod
     def aggiorna_pagina(self) -> None:
         """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
-        ...
+        if vertical_scroll := self._scroll_area.verticalScrollBar():
+            vertical_scroll.setValue(0)

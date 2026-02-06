@@ -93,8 +93,7 @@ class AccountSectionView(AbstractSectionView):
 
     @override
     def aggiorna_pagina(self) -> None:
+        super().aggiorna_pagina()
+
         self.layout_lista_account.svuota_layout()
         self.displayAccountRequest.emit(self.layout_lista_account)
-
-        if vertical_scroll := self._scroll_area.verticalScrollBar():
-            vertical_scroll.setValue(0)

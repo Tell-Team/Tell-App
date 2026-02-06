@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import pyqtSignal, QObject
-from functools import partial
 from typing import Optional
 
 from core.metaclasses import ABCQObjectMeta
@@ -46,20 +45,8 @@ class AbstractSectionController(QObject, metaclass=ABCQObjectMeta):
         )
 
         # Navigazione tra sezioni
-        self._view_section.goToAcquisto.connect(  # type:ignore
-            partial(self.goToSectionRequest.emit, Pagina.SEZIONE_ACQUISTO)
-        )
-        self._view_section.goToSpettacoli.connect(  # type:ignore
-            partial(self.goToSectionRequest.emit, Pagina.SEZIONE_SPETTACOLI)
-        )
-        self._view_section.goToInfo.connect(  # type:ignore
-            partial(self.goToSectionRequest.emit, Pagina.SEZIONE_INFO)
-        )
-        self._view_section.goToAccount.connect(  # type:ignore
-            partial(self.goToSectionRequest.emit, Pagina.SEZIONE_ACCOUNT)
-        )
-        self._view_section.goToTeatro.connect(  # type:ignore
-            partial(self.goToSectionRequest.emit, Pagina.SEZIONE_TEATRO)
+        self._view_section.goToSection.connect(  # type:ignore
+            self.goToSectionRequest.emit
         )
 
     # ------------------------- METODI DEL CONTROLLER -------------------------

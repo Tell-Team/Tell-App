@@ -68,6 +68,8 @@ class NuovoAccountView(AbstractCreaView):
 
     @override
     def reset_pagina(self) -> None:
+        super().reset_pagina()
+
         self.username.setText("")
         self.password.setText("")
         self.conferma.setText("")

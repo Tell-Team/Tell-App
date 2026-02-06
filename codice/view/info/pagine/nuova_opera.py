@@ -112,6 +112,8 @@ class NuovaOperaView(AbstractCreaView):
 
     @override
     def reset_pagina(self) -> None:
+        super().reset_pagina()
+
         self.nome.setText("")
         self.trama.setText("")
         self.genere.setCurrentIndex(0)

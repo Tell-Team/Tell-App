@@ -1,7 +1,9 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import pyqtSignal, QObject
 from functools import partial
-from typing import Optional
+from typing import Optional, override
+
+from core.controller import AbstractVisualizzaController
 
 
 from model.model import Model
@@ -15,161 +17,96 @@ from view.utils.list_widgets import ListLayout
 from view.utils import PopupMessage
 
 
-class ScegliPostiController(QObject):
+class ScegliPostiController(AbstractVisualizzaController):
     """# - CORREGIR"""
 
-    goBackRequest: pyqtSignal = pyqtSignal()
+    _view_page: ScegliPostiView
 
     def __init__(self, model: Model, scegli_posti_v: ScegliPostiView):
-        super().__init__()
-        self.__model = model
-        self.__scegli_posti_view = scegli_posti_v
+        if type(scegli_posti_v) is not ScegliPostiView:
+            raise TypeError("Atteso ScegliPostiView per scegli_posti_v.")
 
-        self.__connect_signals()
+        super().__init__(model, scegli_posti_v)
 
     # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
 
-    def __connect_signals(self) -> None:
-        self.__scegli_posti_view.tornaIndietroRequest.connect(  # type:ignore
-            self.goBackRequest.emit
+    @override
+    def _connect_signals(self) -> None:
+        super()._connect_signals()
+
+        self._view_page.getSezioniPostiRequest.connect(  # type:ignore
+            self.__carica_sezione_e_posti_data
         )
 
-        self.__scegli_posti_view.getSezioniPostiRequest.connect(  # type:ignore
-            self.__carica_sezione_posto_comboboxes
+        self._view_page.sezione.currentIndexChanged.connect(  # type:ignore
+            lambda: self.__setup_fila_combobox(self._view_page.sezione.currentData())
+        )
+
+        self._view_page.fila.currentIndexChanged.connect(  # type:ignore
+            lambda: self.__setup_posto_combobox(self._view_page.sezione.currentData())
         )
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
-    def __get_sezioni_posti(self, id_evento: int) -> list[tuple[Sezione, list[Posto]]]:
+    def __get_sezioni_e_file_e_posti_disponibili(self, id_evento: int):
         if id_evento == -1:
-            return []
-        lista: list[tuple[Sezione, list[Posto]]] = []
-        sezioni = self.__model.get_sezioni()
-        for s in sezioni:
-            posti = self.__model.get_posti_by_sezione(s.get_id())
-            lista.append((s, posti))
-        return lista
+            return None
+        return self._model.get_sezioni_e_file_e_posti_disponibili(id_evento)
 
-    def __carica_sezione_posto_comboboxes(self, id_evento: int) -> None:
-        couple = self.__get_sezioni_posti(id_evento)
-        self.__scegli_posti_view.setup_sezione_combobox(couple)
+    def __carica_sezione_e_posti_data(self, id_evento: int) -> None:
+        couple = self.__get_sezioni_e_file_e_posti_disponibili(id_evento)
+        self.setup_sezione_combobox(couple)
 
-    # def __display_eventi(self, layout_eventi: ListLayout) -> None:
-    #     """Mostra a schermo le informazioni degli eventi salvati e associati ad
-    #     uno spettacolo ed assegna a ciascuno dei pulsanti per modificarli o eliminarli.
+    def setup_sezione_combobox(
+        self,
+        sezioni_file_e_posti: Optional[
+            list[tuple[Sezione, list[tuple[str, list[Posto]]]]]
+        ],
+    ) -> None:
+        self.__lista_sezioni_file_e_posti = sezioni_file_e_posti
 
-    #     :param layout_eventi: layout dove saranno caricate tutti le regie
-    #     """
-    #     lista_eventi = self.__get_eventi_by_spettacolo(
-    #         self.__scegli_posti_view.id_current_spettacolo
-    #     )
+        self._view_page.sezione.clear()
 
-    #     # Verifica che la lista non sia vuota
-    #     if not lista_eventi:
-    #         layout_eventi.mostra_msg_lista_vuota()
-    #         return
+        if (
+            self.__lista_sezioni_file_e_posti is None
+            or not self.__lista_sezioni_file_e_posti
+        ):
+            return
 
-    #     # Funzione di eliminazione per gli eventi
-    #     def on_conferma(widget_evento: EventoDisplay, id_: int) -> None:
-    #         """Prova ad eliminare l'istanza di Evento.
+        self._view_page.sezione.insertItem(0, "Scegliere sezione...", -1)
+        for i, couple in enumerate(self.__lista_sezioni_file_e_posti, start=1):
+            s, fila_posti = couple
+            self._view_page.sezione.insertItem(i, s.get_nome(), s.get_id())
 
-    #         :param widget_evento: widget associato all'Evento` da eliminare
-    #         :param id_: id dell'evento da eliminare
-    #         """
-    #         try:
-    #             self.__elimina_evento(id_)
-    #         except OggettoInUsoException as exc:
-    #             widget_evento.annulla_elimina()
-    #             PopupMessage.mostra_errore(
-    #                 self.__scegli_posti_view,
-    #                 "Evento in uso",
-    #                 f"Si è verificato un errore: {exc}",
-    #             )
-    #         else:
-    #             self.__scegli_posti_view.aggiorna_pagina()
+    def __setup_fila_combobox(self, id_sezione: int) -> None:
+        self._view_page.fila.clear()
 
-    #     for evento in lista_eventi:
-    #         current_evento = EventoDisplay(evento)
+        if id_sezione == -1:
+            return
 
-    #         current_evento.modificaRequest.connect(  # type:ignore
-    #             self.__modifica_evento
-    #         )
+        self._view_page.fila.insertItem(0, "Scegliere fila...", -1)
+        for s, fila_posti in self.__lista_sezioni_file_e_posti:
+            if s.get_id() != id_sezione:
+                continue
 
-    #         current_evento.eliminaConfermata.connect(  # type:ignore
-    #             partial(on_conferma, current_evento, evento.get_id())
-    #         )
+            for i, couple in enumerate(fila_posti, start=1):
+                f, posti = couple
+                self._view_page.fila.insertItem(i, f, f)
+                print(f)
 
-    #         layout_eventi.aggiungi_list_item(current_evento)
+    def __setup_posto_combobox(self, nome_fila: str | int) -> None:
+        self._view_page.numero.clear()
 
-    # def __nuovo_evento(self) -> None:
-    #     """Carica la pagina `NuovoEventoView`, dove l'utente può inserire i dati
-    #     necessari per creare un evento."""
-    #     # Ottieni la pagina NuovoEventoView
-    #     from view.spettacoli.pagine import NuovoEventoView
+        if nome_fila == -1:
+            return
 
-    #     cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
-    #     pagina_nome = Pagina.NUOVO_EVENTO
-    #     self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
-    #     current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
+        self._view_page.numero.insertItem(0, "Scegliere posto...", -1)
+        for s, fila_posti in self.__lista_sezioni_file_e_posti:
+            for f, posti in fila_posti:
+                if f != nome_fila:
+                    continue
 
-    #     if type(current_pagina) is not NuovoEventoView:
-    #         PopupMessage.mostra_errore(
-    #             self.__scegli_posti_view,
-    #             "Pagina non trovata",
-    #             f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
-    #             + f"Type trovato: {type(current_pagina)}",
-    #         )
-    #         return
-
-    #     # Setup pagina pulendo i campi
-    #     current_pagina.reset_pagina()
-    #     current_pagina.id_spettacolo = self.__scegli_posti_view.id_current_spettacolo
-
-    #     # Apri la pagina
-    #     self.goToPageRequest.emit(pagina_nome, True)
-
-    # def __modifica_evento(self, id_: int) -> None:
-    #     """Carica la pagina `ModificaEventoView`, con i dati del evento indicato
-    #     inseriti nei campo di input.
-
-    #     :param id_: id del evento da modificare
-    #     """
-    #     # Copia del evento da modificare
-    #     current_evento = self.__get_evento(id_)
-    #     if not current_evento:
-    #         PopupMessage.mostra_errore(
-    #             self.__scegli_posti_view,
-    #             "Evento inesistente",
-    #             f"Non è presente nessun evento con id {id_}.",
-    #         )
-    #         return
-
-    #     # Ottieni la pagina ModificaEventoView
-    #     from view.spettacoli.pagine import ModificaEventoView
-
-    #     cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
-    #     pagina_nome = Pagina.MODIFICA_EVENTO
-    #     self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
-    #     current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
-
-    #     if type(current_pagina) is not ModificaEventoView:
-    #         PopupMessage.mostra_errore(
-    #             self.__scegli_posti_view,
-    #             "Pagina non trovata",
-    #             f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
-    #             + f"Type trovato: {type(current_pagina)}",
-    #         )
-    #         return
-
-    #     # Salva i dati dentro di un container
-    #     evento_data = EventoPageData(
-    #         id=current_evento.get_id(),
-    #         data_ora=current_evento.get_data_ora(),
-    #         id_spettacolo=current_evento.get_id_spettacolo(),
-    #     )
-
-    #     # Setup pagina con i data del genere
-    #     current_pagina.set_data(evento_data)
-
-    #     # Apri la pagina
-    #     self.goToPageRequest.emit(pagina_nome, True)
+                for i, p in enumerate(posti, start=1):
+                    self._view_page.numero.insertItem(
+                        i, str(p.get_numero()), p.get_id()
+                    )

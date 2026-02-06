@@ -103,7 +103,8 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
     @abstractmethod
     def reset_pagina(self) -> None:
         """Resetta la pagina allo stato default."""
-        ...
+        if vertical_scroll := self._scroll_area.verticalScrollBar():
+            vertical_scroll.setValue(0)
 
     def mostra_msg_input_error(self, message: str) -> None:
         """Aggiorna il testo della label `input_error`.

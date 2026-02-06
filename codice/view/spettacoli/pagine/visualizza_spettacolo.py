@@ -5,9 +5,11 @@ from PyQt6.QtWidgets import (
     QLayout,
     QHBoxLayout,
     QGridLayout,
-    QScrollArea,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
+from typing import override
+
+from core.view import AbstractVisualizzaView
 
 from controller.login.user_session import UserSession
 
@@ -24,7 +26,7 @@ from view.utils import make_vline
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class VisualizzaSpettacoloView(QWidget):
+class VisualizzaSpettacoloView(AbstractVisualizzaView):
     """Pagina per visualizzare i singoli `Spettacolo` in dettaglio.
 
     Contiene le tutte informazioni dello `Spettacolo` ed una lista con tutti gli `Evento`
@@ -32,34 +34,24 @@ class VisualizzaSpettacoloView(QWidget):
 
     Segnali
     ---
-    - `tornaIndietroRequest()`: emesso quando si clicca il pulsante Indietro;
     - `displayEventiRequest(ListLayout)`: emesso per mostrare a schermo la lista eventi;
     - `nuovoEventoRequest()`: emesso quando si clicca il pulsante Nuovo evento.
     """
 
-    tornaIndietroRequest = pyqtSignal()
     displayEventiRequest = pyqtSignal(ListLayout)
     nuovoEventoRequest = pyqtSignal()
 
     def __init__(self, user_session: UserSession):
-        super().__init__()
-
         self.is_biglietteria = user_session.ha_permessi_biglietteria()
         self.id_current_spettacolo: int = -1
 
-        self._setup_ui()
-        self._connect_signals()
+        super().__init__()
 
     # ------------------------- SETUP INIT -------------------------
 
+    @override
     def _setup_ui(self) -> None:
-        # Top widget
-        self.__btn_indietro = DefaultButton("Indietro")
-
-        self.pagina_header = QWidget()
-        layout_header = QHBoxLayout(self.pagina_header)
-        layout_header.addWidget(self.__btn_indietro)
-        layout_header.addStretch()
+        super()._setup_ui()
 
         # Labels
         self.label_titolo = HyphenatedLabel("[Titolo Spettacolo]")
@@ -133,28 +125,16 @@ class VisualizzaSpettacoloView(QWidget):
         self.layout_eventi.addWidget(content_lista_eventi)
         # end-Lista Eventi
 
-        pagina_content = QWidget()
-        layout_content = QVBoxLayout(pagina_content)
-        layout_content.addWidget(self.label_titolo)
-        layout_content.addWidget(self.label_note)
-        layout_content.addWidget(container_dati_speciali)
-        layout_content.addWidget(self.eventi)
-        layout_content.addStretch()
-
-        # Funzione di scroll
-        scroll_area = QScrollArea()
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setWidget(pagina_content)
-
         # Layout
-        main_layout = QVBoxLayout(self)
-        main_layout.addWidget(self.pagina_header)
-        main_layout.addWidget(scroll_area)
+        self._layout_content.addWidget(self.label_titolo)
+        self._layout_content.addWidget(self.label_note)
+        self._layout_content.addWidget(container_dati_speciali)
+        self._layout_content.addWidget(self.eventi)
+        self._layout_content.addStretch()
 
+    @override
     def _connect_signals(self) -> None:
-        self.__btn_indietro.clicked.connect(  # type:ignore
-            self.tornaIndietroRequest.emit
-        )
+        super()._connect_signals()
 
         if self.is_biglietteria:
             self.__btn_nuovo_evento.clicked.connect(  # type:ignore
@@ -163,10 +143,9 @@ class VisualizzaSpettacoloView(QWidget):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def set_data(
-        self,
-        data: SpettacoloPageData,
-        lista_eventi: list[Evento],
+    @override
+    def set_data(  # type: ignore[override]
+        self, data: SpettacoloPageData, lista_eventi: list[Evento]
     ) -> None:
         """Carica i dati dello spettacolo nella pagina.
 
@@ -206,8 +185,10 @@ class VisualizzaSpettacoloView(QWidget):
         else:
             self.displayEventiRequest.emit(self.layout_lista_eventi)
 
+    @override
     def aggiorna_pagina(self) -> None:
-        """Permette di aggiornare la pagina e visualizzare modifiche previamente non mostrate."""
+        super().aggiorna_pagina()
+
         self.layout_lista_eventi.svuota_layout()
         self.displayEventiRequest.emit(self.layout_lista_eventi)
 

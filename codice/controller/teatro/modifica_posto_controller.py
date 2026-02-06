@@ -41,7 +41,7 @@ class ModificaPostoController(QObject):
     def _connect_signals(self) -> None:
         # Annulla modifica
         self.__view_modifica.annullaRequest.connect(  # type:ignore
-            self._annulla_salvataggio
+            self.__annulla_salvataggio
         )
         # Conferma modifica
         self.__view_modifica.salvaRequest.connect(  # type:ignore
@@ -56,7 +56,7 @@ class ModificaPostoController(QObject):
     def __modifica_posto(self, copia_posto: Posto) -> None:
         self.__model.modifica_posto(copia_posto)
 
-    def _annulla_salvataggio(self) -> None:
+    def __annulla_salvataggio(self) -> None:
         self.goBackRequest.emit()
         self.__view_modifica.reset_pagina()
 

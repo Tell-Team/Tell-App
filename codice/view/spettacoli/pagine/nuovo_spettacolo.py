@@ -13,6 +13,7 @@ from core.view import AbstractCreaView
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.custom_button import DefaultButton
+from view.utils.hyphenate_text import HyphenatedLabel
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
@@ -105,8 +106,8 @@ class NuovoSpettacoloView(AbstractCreaView):
         )
         # end-Lista interpreti
 
-        # Lista tectici
-        label_tecnico = QLabel("Tecnico :")
+        # Lista tectici (Musicisti/Direttori artistici)
+        label_tecnico = HyphenatedLabel("Musicista/direttore artistico :")
         label_tecnico.setProperty(WidgetRole.BODY_TEXT, True)
         label_tecnico.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.tecnico_nome = QLineEdit()
@@ -130,7 +131,9 @@ class NuovoSpettacoloView(AbstractCreaView):
         self.label_lista_tecnici_error.setProperty(WidgetRole.BODY_TEXT, True)
         self.label_lista_tecnici_error.setProperty(WidgetColor.Text.ERROR_MESSAGE, True)
 
-        label_lista_tecnici_vuota = EmptyStateLabel("Non vi sono tecnici registrati.")
+        label_lista_tecnici_vuota = EmptyStateLabel(
+            "Non vi sono musicisti/direttori artistici registrati."
+        )
         label_lista_tecnici_vuota.setProperty(WidgetRole.BODY_TEXT, True)
         label_lista_tecnici_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
 
@@ -198,6 +201,8 @@ class NuovoSpettacoloView(AbstractCreaView):
 
     @override
     def reset_pagina(self) -> None:
+        super().reset_pagina()
+
         self.titolo.setText("")
         self.note.setText("")
         self.lista_interpreti = {}

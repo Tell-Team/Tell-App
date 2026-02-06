@@ -1,7 +1,8 @@
 from PyQt6.QtWidgets import QWidget
-from PyQt6.QtCore import pyqtSignal, QObject
 from functools import partial
-from typing import Optional
+from typing import Optional, override
+
+from core.controller import AbstractVisualizzaController
 
 from controller.navigation import Pagina
 
@@ -18,55 +19,49 @@ from view.utils.list_widgets import ListLayout
 from view.utils import PopupMessage
 
 
-class VisualizzaOperaController(QObject):
+class VisualizzaOperaController(AbstractVisualizzaController):
     """Gestice la pagina `VisualizzaOperaView` dell'app.
 
     Segnali
     ---
     - `goBackRequest()`: emesso per tornare alla pagina `InfoSectionView`;
-    - `goToPageRequest(Pagina, bool)`: emesso per visualizzare un'altra pagina;
-    - `getPageRequest(Pagina, dict)`: emesso per ottenere la pagina che vendrà visualizzata.
     """
 
-    goBackRequest: pyqtSignal = pyqtSignal()
-    goToPageRequest: pyqtSignal = pyqtSignal(Pagina, bool)
-    getPageRequest: pyqtSignal = pyqtSignal(Pagina, dict)
+    _view_page: VisualizzaOperaView
 
     def __init__(self, model: Model, opera_v: VisualizzaOperaView):
-        super().__init__()
-        self.__model = model
-        self.__visualizza_opera_view = opera_v
+        if type(opera_v) is not VisualizzaOperaView:
+            raise TypeError("Atteso VisualizzaOperaView per opera_v.")
 
-        self.__connect_signals()
+        super().__init__(model, opera_v)
 
     # ------------------------- COLLEGAMENTO DEI SEGNALI -------------------------
 
-    def __connect_signals(self) -> None:
-        self.__visualizza_opera_view.tornaIndietroRequest.connect(  # type:ignore
-            self.goBackRequest.emit
-        )
+    @override
+    def _connect_signals(self) -> None:
+        super()._connect_signals()
 
-        self.__visualizza_opera_view.displayRegieRequest.connect(  # type:ignore
+        self._view_page.displayRegieRequest.connect(  # type:ignore
             self.__display_regie
         )
 
-        self.__visualizza_opera_view.nuovaRegiaRequest.connect(  # type:ignore
+        self._view_page.nuovaRegiaRequest.connect(  # type:ignore
             self.__nuova_regia
         )
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
     def __get_opera(self, id_: int) -> Optional[Opera]:
-        return self.__model.get_opera(id_)
+        return self._model.get_opera(id_)
 
     def __get_spettacolo(self, id_: int) -> Optional[Spettacolo]:
-        return self.__model.get_spettacolo(id_)
+        return self._model.get_spettacolo(id_)
 
     def __get_regie_by_opera(self, id_: int) -> list[Regia]:
-        return self.__model.get_regie_by_opera(id_)
+        return self._model.get_regie_by_opera(id_)
 
     def __elimina_regia(self, id_: int) -> None:
-        self.__model.elimina_spettacolo(id_)
+        self._model.elimina_spettacolo(id_)
 
     def __display_regie(self, layout_regie: ListLayout) -> None:
         """Mostra a schermo le informazioni delle regie salvate e associate ad
@@ -74,9 +69,7 @@ class VisualizzaOperaController(QObject):
 
         :param layout_regie: layout dove saranno caricate tutti le regie
         """
-        lista_regie = self.__get_regie_by_opera(
-            self.__visualizza_opera_view.id_current_opera
-        )
+        lista_regie = self.__get_regie_by_opera(self._view_page.id_current_opera)
 
         if not lista_regie:
             layout_regie.mostra_msg_lista_vuota()
@@ -96,17 +89,15 @@ class VisualizzaOperaController(QObject):
             except OggettoInUsoException as exc:
                 widget_regia.annulla_elimina()
                 PopupMessage.mostra_errore(
-                    self.__visualizza_opera_view,
+                    self._view_page,
                     "Regia in uso",
                     f"Si è verificato un errore: {exc}",
                 )
             else:
-                self.__visualizza_opera_view.aggiorna_pagina()
+                self._view_page.aggiorna_pagina()
 
         for regia in lista_regie:
-            current_regia = RegiaDisplay(
-                regia, editable=self.__visualizza_opera_view.is_admin
-            )
+            current_regia = RegiaDisplay(regia, editable=self._view_page.is_admin)
 
             current_regia.modificaRequest.connect(  # type:ignore
                 self.__modifica_regia
@@ -131,7 +122,7 @@ class VisualizzaOperaController(QObject):
 
         if type(current_pagina) is not NuovaRegiaView:
             PopupMessage.mostra_errore(
-                self.__visualizza_opera_view,
+                self._view_page,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
                 + f"Type trovato: {type(current_pagina)}",
@@ -139,12 +130,12 @@ class VisualizzaOperaController(QObject):
             return
 
         # Setup pagina pulendo i campi
-        id_current_opera = self.__visualizza_opera_view.id_current_opera
+        id_current_opera = self._view_page.id_current_opera
         current_opera = self.__get_opera(id_current_opera)
 
         if not isinstance(current_opera, Opera):
             PopupMessage.mostra_errore(
-                self.__visualizza_opera_view,
+                self._view_page,
                 "Opera inesistente",
                 f"Non è presente nessuna opera con id {id_current_opera}.",
             )
@@ -166,7 +157,7 @@ class VisualizzaOperaController(QObject):
         current_regia = self.__get_spettacolo(id_)
         if not isinstance(current_regia, Regia):
             PopupMessage.mostra_errore(
-                self.__visualizza_opera_view,
+                self._view_page,
                 "Regia inesistente",
                 f"Non è presente nessuna regia con id {id_}.",
             )
@@ -182,7 +173,7 @@ class VisualizzaOperaController(QObject):
 
         if type(current_pagina) is not ModificaRegiaView:
             PopupMessage.mostra_errore(
-                self.__visualizza_opera_view,
+                self._view_page,
                 "Pagina non trovata",
                 f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
                 + f"Type trovato: {type(current_pagina)}",
@@ -204,7 +195,7 @@ class VisualizzaOperaController(QObject):
         opera_associata = self.__get_opera(current_regia.get_id_opera())
         if not isinstance(opera_associata, Opera):
             PopupMessage.mostra_errore(
-                self.__visualizza_opera_view,
+                self._view_page,
                 "Opera inesistente",
                 f"Non è presente nessuna opera con id '{current_regia.get_id_opera()}'.",
             )
