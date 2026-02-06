@@ -83,12 +83,23 @@ class CUAccountController(AbstractCUController):
         try:
             if password != password_conferma:
                 # La nuova password è diversa dalla conferma
-                raise DatoIncongruenteException(
-                    "La password inserita non coincide con la sua conferma."
+                current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
+                PopupMessage.mostra_errore(
+                    current_pagina,
+                    "Input non valido",
+                    "Si è verificato un errore: La password inserita non coincide con la sua conferma.",
                 )
+                return
             if ruolo is None:
                 # Non è stato specificato un ruolo
-                raise DatoIncongruenteException("Selezionare un ruolo.")
+                current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
+                PopupMessage.mostra_errore(
+                    current_pagina,
+                    "Input non valido",
+                    "Si è verificato un errore: È necessario selezionare un ruolo.",
+                )
+                return
+
             nuovo_account = Account(username, password, ruolo)
         except DatoIncongruenteException as e:
             # È stato trovato un campo con input non valido
@@ -147,16 +158,29 @@ class CUAccountController(AbstractCUController):
         # Tenta di modificare l'account
         try:
             if password_new:
-                if password_new != current_pagina.conferma.text():
-                    raise DatoIncongruenteException(
-                        "La nuova password non coincide con la sua conferma."
+                if password != current_pagina.conferma.text():
+                    # La nuova password è diversa dalla conferma
+                    current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
+                    PopupMessage.mostra_errore(
+                        current_pagina,
+                        "Input non valido",
+                        "Si è verificato un errore: La nuova password non coincide con la sua conferma.",
                     )
+                    return
+
                 self._model.cambia_password(
                     id_account, password, password_new, self.__user_session_id
                 )
             if ruolo is None:
                 # Non è stato specificato un ruolo
-                raise DatoIncongruenteException("Selezionare un ruolo.")
+                current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
+                PopupMessage.mostra_errore(
+                    current_pagina,
+                    "Input non valido",
+                    "Si è verificato un errore: È necessario selezionare un ruolo.",
+                )
+                return
+
             self._model.cambia_ruolo(id_account, ruolo, self.__user_session_id)
         except DatoIncongruenteException as e:
             # È stato trovato un campo con input non valido

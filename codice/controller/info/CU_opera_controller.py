@@ -129,12 +129,23 @@ class CUOperaController(AbstractCUController):
         try:
             copia_opera.set_nome(nome)
             copia_opera.set_trama(trama)
+
+            if id_genere < 0:
+                current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
+                PopupMessage.mostra_errore(
+                    current_pagina,
+                    "Input non valido",
+                    "Si è verificato un errore: È necessario selezionare un genere.",
+                )
+                return
+
             copia_opera.set_id_genere(id_genere)
             copia_opera.set_compositore(compositore)
             copia_opera.set_librettista(librettista)
             copia_opera.set_numero_atti(atti)
             copia_opera.set_data_prima_rappresentazione(data)
             copia_opera.set_teatro_prima_rappresentazione(teatro)
+
         except DatoIncongruenteException as exc:
             # È stato trovato un campo con input non valido
             current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
