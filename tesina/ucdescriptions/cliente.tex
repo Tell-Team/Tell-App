@@ -1,0 +1,700 @@
+% Secondo UML puro, non posso usare nelle descrizioni di casi d'uso:
+%   - Elementi di UI (es. pulsanti);
+%   - include() come passo del main flow;
+%   - Blocchi if-else o for;
+%   - Niente di error handling;
+%   - Niente di "Il caso d'uso inizia quando..."
+
+
+%--- CONVENZIONI NELLA GRAMMATICA DELLA TESINA: ---
+% #1: Per pratticità, noi useremo include() e blocchi if nelle descrizioni dei casi d'uso.
+%   - "include()" viene usato per indicare altri casi d'uso come passi nella sequenza degli eventi
+%        principali di un casi d'uso in particolare.
+%   - I "blocchi if" vengono usati per i passi dove si verifica il tipo di account dell'utente.
+%
+% #2: Nella tabella del glossario ci devono essere 4 sezioni: Termine, Sinonimi, Definizione, Esempi d'uso.
+%     - "Termine" contiene il termino canonico da utilizzare nelle descrizioni dei casi d'uso scritto in 
+%         all-caps "PAROLA" (oppure come "Parola" se necessario). Se "parola" è presente nelle descrizioni,
+%         si riferisce ad un'altro termine, e.g. sezione (dell'app) e Sezione (del teatro). 
+%     - "Sinonimi" contiene tutte le possibili varianti trovate nelle descrizioni. Qui ci possono essere le
+%         versioni come "Parola".
+%     - "Definizione" contiene il significato inequivocabile del termine.
+%     - "Esempi d'uso" contiene i casi un cui si può usare e trovare il termine, se necessario chiarirlo.
+%
+% #3: Le precondizioni possono usare questi tre tempi verbali:
+%  	- Presente semplice per condizioni che devono verificarsi una volta, e.g. "si trova", "è autenticato".
+% 	- Presente progresivo per condizioni che devono verificarsi continuamente, e.g. "sta visualizzando".
+%
+% #4: Sia le precondizioni che le postcondizioni devono seguire la struttura della Soggetto-Verbo-Oggetto.
+%--- END
+
+%--- CONVEZIONE NEI TERMINI USATI NELLA TESINA: ---
+% La parola "sistema" viene scritta in minuscolo.
+% Evitare l'uso di "dettagli".
+
+% "memorizzate"(1) :  Deve avere un uso consistente in tutte le tabelle. Usato per indicare istanze
+%   memorizzate nel model. Quando si parla di liste associate a un'istanza, e.g. le regie associate all'opera,
+%    non è necessario usare questo termine.
+% "Informazioni"(2) : In maiuscole, è il nome della sezione Info ed ha bisogno di una
+%   definizione precisa.
+% "mostra a schermo <oggetto>"(3) : Concetto usato nei passi realizzati dal sistema.
+% "visualizza a schermo <oggetto>"(4) : Concetto usato nei passi realizzati dal'utente.
+% "si trova"(5) : Deve avere un uso consistente in tutte le tabelle.
+% "associate"(6) : Il suo modo di uso è "lista [instanze A] associate a [instanza B]".
+% "lista di <oggetto>"(7) : Deve usare sempre "di". No "delle" o "degli".
+% "Spettacoli"(8) : In maiuscole, è il nome della sezione Spettacoli ed ha bisogno di
+%   una definizione precisa.
+% "visualizza in più dettaglio"(9) : Per indicare i casi d'uso Visualizza. Devo darli una
+%   definizione megliore. % - Studiare il suo uso nelle descrizioni.
+
+% "nel suo nome" : Usato in Ricerca Opera
+% "nel suo titolo" : Usato in Ricerca Spettacolo
+
+% Utilizzare "informazioni essenziali" per i casi d'uso di Lista.
+% Utilizzare "informazioni" per i casi d'uso di Visualizza.
+% - Revisare l'uso di "dati" nelle descrizioni.
+
+% "non vengono inclusi" : Usato per indicare le instanze che non sono visualizzate nei casi d'uso di ricerca.
+
+% - "ottiene" : Studiarla nel suo contesto. Non sono convinto.
+%---END
+
+% UC: Lista Opere		[X]
+% UC ext: Ricerca Opera	[X]
+% UC: Visualizza Opera	[X]
+% UC: Lista Regie		[X]
+% UC: Lista Spettacoli		[X]
+% UC ext: Ricerca Spettacolo	[X]
+% UC: Visualizza Spettacolo	[X]
+% UC: Lista Eventi		[]
+% UC: Lista Sezioni		[]
+% UC: Visualizza Sezione	[]
+% UC: Lista Posti		[]
+% UC: Crea Prenotazione	[]
+% UC: Visualizza Prenotazione	[]
+% UC ext: Modifica Prenotazione	[]
+% UC ext: Elimina Prenotazione	[]
+% UC: Genera ricevuta		[X]
+
+\newcommand{\attori}{Cliente \\ Biglietteria \\ Amministratore}
+
+
+{\ucTable	% UC: Lista Opere
+	{	% Caso d'uso
+		Lista Opere
+		
+	}{	% ID
+		1
+		
+	}{	% Breve descrizione
+		L'utente ottiene la lista di opere memorizzate.
+        % - "ottiene"
+        % "memorizzate"(1)
+		
+	}{	% Attori Primari
+		\attori
+		
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'utente si trova nella sezione Informazioni.
+			% "Informazioni"(2)
+			% "si trova"(5)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item Il sistema mostra a schermo le informazioni essenziali di tutte le opere memorizzate.
+            % "mostra a schermo <oggetto>"(3)
+            \item Il sistema permette all'utente di visualizzare in più dettaglio le opere.
+            % "visualizza in più dettaglio"(9)
+            \item \textbf{If} l'utente è autenticato come Amministratore
+            \begin{enumerate}
+                \item Il sistema permette all'utente di modificare ed eliminare le opere.
+            \end{enumerate}
+            \item[] \textbf{punto di estensione:} Ricerca Opera
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item La lista di opere memorizzate viene visualizzata a schermo.
+			% "visualizza a schermo <oggetto>"(4)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucExtTable	% UC EXT: Ricerca Opera
+	{	% Caso d'uso
+		Ricerca Opera
+		
+	}{	% ID
+		2
+		
+	}{	% Breve descrizione
+		L'utente filtra la lista di opere tramite una parola chiave ricercata nel nome.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'utente si trova nella sezione Informazioni.
+			% "si trova"(5)
+			% "Informazioni"(2)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item L'utente effettua una ricerca specificando una chiave di ricerca.
+            \item Le opere che non contengono la parola chiave nel suo nome non vengono inclusi nella lista risultante.
+            % "nel suo nome"
+            % "non vengono inclusi"
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item La lista risultante è filtrata.
+		\end{enumerate}
+} }
+
+
+{\ucTable	% UC: Visualizza Opera
+	{	% Caso d'uso
+		Visualizza Opera
+		
+	}{	% ID
+		3
+		
+	}{	% Breve descrizione
+		L'utente ottiene le informazioni riguardo una singola opera.
+        % - "ottiene"
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'utente si trova nella sezione Informazioni.
+			% "Informazioni"(2)
+			% "si trova"(5)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item L'utente richiede le informazioni di un'opera.
+            \item Il sistema mostra a schermo le informazioni.
+            % "mostra a schermo <oggetto>"(3)
+            \item \textbf{include}(Lista Regie)
+            \item[] \textbf{punto di estensione:} Crea Regia
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item Le informazioni dell'opera vengono visualizzate a schermo.
+			% "visualizza a schermo <oggetto>"(4)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucTable	% UC: Lista Regie
+	{	% Caso d'uso
+		Lista Regie
+		
+	}{	% ID
+		4
+		
+	}{	% Breve descrizione
+		L'utente ottiene la lista di regie associate all'opera che sta visualizzando.
+        % - "ottiene"
+        % "associate"(6)
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'utente sta visualizzando una singola opera.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item Il sistema mostra a schermo le informazioni essenziali di tutte le regie associate all'opera.
+            % "mostra a schermo <oggetto>"(3)
+            % "associate"(6)
+            % - Mattia usa "informazioni rilevanti dell'evento (es. ...)" per Lista Eventi
+            \item \textbf{If} l'utente è autenticato come Amministratore
+            \begin{enumerate}
+                \item Il sistema permette all'utente di modificare ed eliminare le regie.
+            \end{enumerate}
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item La lista di regie associate all'opera viene visualizzata a schermo.
+			% "visualizza a schermo <oggetto>"(4)
+			% "associate"(6)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucTable	% UC: Lista Spettacoli
+	{	% Caso d'uso
+		Lista Spettacoli
+		
+	}{	% ID
+		5
+		
+	}{	% Breve descrizione
+		L'utente ottiene la lista di spettacoli memorizzati.
+        % - "ottiene"
+        % "memorizzate"(1)
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'utente si trova nella sezione Spettacoli.
+			% "si trova"(5)
+			% "Spettacoli"(8)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item Il sistema mostra a schermo le informazioni essenziali di tutti gli spettacoli memorizzati.
+            % "mostra a schermo <oggetto>"(3)
+            \item Il sistema permette all'utente di visualizzare in più dettaglio gli spettacoli.
+            % "visualizza in più dettaglio"(9)
+            % - Che passi bisogna seguire? Non sono sicuro del passo precedente.
+            % - Ancora non conosco come vogliono la view della sezione Spettacoli
+            \item \textbf{If} l'utente è autenticato come Amministratore o Biglietteria
+            \begin{enumerate}
+                \item Il sistema permette all'utente di modificare ed eliminare gli spettacoli.
+            \end{enumerate}
+            % - Non sono neanche sicuro se questo passo precedente è vero.
+            \item[] \textbf{punto di estensione:} Ricerca Spettacolo
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item La lista di spettacoli memorizzati viene visualizzata a schermo.
+			% "visualizza a schermo <oggetto>"(4)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucExtTable	% UC EXT: Ricerca Spettacolo
+	{	% Caso d'uso
+		Ricerca Spettacolo
+		
+	}{	% ID
+		6
+		
+	}{	% Breve descrizione
+		L'utente filtra la lista di spettacoli tramite una parola chiave ricercata nel titolo.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'utente si trova nella sezione Spettacoli.
+			% "si trova"(5)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item L'utente effettua una ricerca specificando una chiave di ricerca.
+            \item Gli spettacoli che non contengono la parola chiave nel suo titolo non vengono inclusi nella lista risultante.
+            % "nel suo titolo"
+            % "non vengono inclusi"
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item La lista risultante è filtrata.
+		\end{enumerate}	
+} }
+
+
+{\ucTable	% UC: Visualizza Spettacolo
+	{	% Caso d'uso
+		Visualizza Spettacolo
+		
+	}{	% ID
+		7
+		
+	}{	% Breve descrizione
+		L'utente ottiene le informazioni riguardo un singolo spettacolo.
+        % - "ottiene"
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'utente si trova nella sezione Spettacoli.
+			% "si trova"(5)
+			% "Spettacoli"(8)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item L'utente richiede le informazioni di uno spettacolo.
+            \item Il sistema mostra a schermo le informazioni.
+            % "mostra a schermo <oggetto>"(3) 
+            \item \textbf{include}(Lista Eventi)
+            \item[] \textbf{punto di estensione:} Nuovo Evento
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item Le informazioni dello spettacolo vengono visualizzate a schermo.
+			% "visualizza a schermo <oggetto>"(4)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa	
+} }
+
+
+{\ucTable	% UC: Lista Eventi
+	{	% Caso d'uso
+		Lista Eventi
+		
+	}{	% ID
+		8
+		
+	}{	% Breve descrizione
+		L'utente ottiene la lista di eventi associati allo spettacolo che sta visualizzando.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'utente sta visualizzando un singolo spettacolo.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item Il sistema mostra a schermo le informazioni essenziali di tutti gli eventi associati allo spettacolo.
+            % "mostra a schermo <oggetto>"(3)
+            % "associate"(6)
+            \item \textbf{If} l'utente è autenticato come Amministratore o Biglietteria
+            \begin{enumerate}
+                \item Il sistema permette all'utente di modificare ed eliminare gli eventi.
+            \end{enumerate}
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item La lista di eventi associati allo spettacolo viene visualizzata a schermo.
+                % "visualizza a schermo <oggetto>"(4)
+                % "associate"(6)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
+
+% ------ HASTA AQUÍ LLEGUÉ ----------
+
+
+{\ucTable	% UC: Lista Sezioni
+	{	% Caso d'uso
+		Lista Sezioni
+		
+	}{	% ID
+		9
+		
+	}{	% Breve descrizione
+		Elencazione delle sezioni.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'utente si trova nella categoria "Sezioni"
+			\item L'utente sta visualizzando l'elenco delle sezioni.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item Il caso d'uso inizia quando l'utente seleziona \textit{Sezioni}.
+			\item \textbf{include}(Visualizza Sezione)
+			\item \textbf{If} esistono sezioni
+			\begin{enumerate}
+				\item Il Sistema mostra all'utente tutte le Sezioni presenti una dopo l'altra.
+			\end{enumerate}
+			\item \textbf{Else}
+			\begin{enumerate}
+				\item Il Sistema comunica che la lista delle Sezioni è vuota.
+				\item Il Sistema mostra un elenco vuoto.
+			\end{enumerate}				
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item Il Sistema ha elencato le Sezioni presenti.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+		
+} }
+
+
+{\ucTable	% UC: Visualizza Sezione
+	{	% Caso d'uso
+		Visualizza Sezione
+		
+	}{	% ID
+		10
+		
+	}{	% Breve descrizione
+		Visualizzazione con dettagli di una sezione.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'utente sta ha richiesto la lista delle sezioni.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item Il caso d'uso inizia quando l'utente visualizza una Sezione.
+			\item \textbf{include}(Lista Posti)
+			\item Il Sistema mostra all'utente i dati della Sezione.
+			\item Il Sistema mostra il pulsante \textit{Lista Posti}.
+			\item \textbf{If} l'utente è autenticato come Amministratore
+			\begin{enumerate}
+				\item Il Sistema mostra, accanto al primo pulsante, altre due opzioni: \textit{Modifica Sezione} e \textit{Elimina Sezione}.
+				\item[] \textbf{punto di estensione}: modificaSezione, eliminaSezione
+			\end{enumerate}
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item Il Sistema ha mostrato i dati della Sezione.
+			\item Il Sistema dà l'opzione di visualizzare i posti relativi alla Sezione.
+			\item Se l'utente è Amministratore, il Sistema permette di modificare o eliminare la sezione.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucTable	% UC: Lista Posti
+	{	% Caso d'uso
+		Lista Posti
+		
+	}{	% ID
+		11
+		
+	}{	% Breve descrizione
+		Elencazione dei posti.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item È stato caricato in memoria un database valido. 
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item Il caso d'uso inizia quando l'utente seleziona \textit{Posti} all'interno di una Sezione.
+			\item \textbf{If} la Sezione contiene Posti
+			\begin{enumerate}
+				\item Il Sistema mostra all'utente tutti i Posti presenti della Sezione sotto forma di elenco.
+			\end{enumerate}
+			\item \textbf{Else}
+			\begin{enumerate}
+				\item Il Sistema comunica che la lista dei Posti della Sezione è vuota.
+				\item Il Sistema mostra un elenco vuoto.
+			\end{enumerate}				
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item Il Sistema ha elencato i Posti della Sezione selezionata.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucTable	% UC: Crea Prenotazione
+	{	% Caso d'uso
+		Crea Prenotazione
+		
+	}{	% ID
+		12
+		
+	}{	% Breve descrizione
+		L'utente prenota posti di un evento svolto nel teatro.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'utente visualizza l'elenco degli eventi.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item Il caso d'uso inizia quando l'utente preme il pulsante di creazione.
+			\item Il Sistema, tramite un'interfaccia, permette di inserire i dati relativi alla prenotazione.
+			\item L'utente inserisce i dati relativi alla prenotazione.
+			\item L'utente salva i dati.
+			\item Il Sistema verifica i dati e li salva in memoria.
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item L'utente crea una prenotazione.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucTable	% UC: Visualizza Prenotazione
+	{	% Caso d'uso
+		Visualizza Prenotazione
+		
+	}{	% ID
+		13
+		
+	}{	% Breve descrizione
+		L'utente ottiene l'informazione anagrafica riguardo una singola prenotazione.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'utente visualizza la lista delle prenotazioni.
+			\item L'elenco delle prenotazioni, sia esso filtrato o meno, non è vuoto.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item Il caso d'uso inizia quando l'utente richiede le informazioni di una prenotazione.
+			\item Il Sistema mostra le informazioni relative alla prenotazione.
+			\item Il Sistema mostra tre pulsanti per modificare, eliminare o generare la ricevuta della prenotazione.
+			\item \textbf{If} l'utente è Amministratore o Biglietteria
+			\begin{enumerate}
+				\item Il Sistema mostra un pulsante per segnare la prenotazione come \emph{pagata}.
+			\end{enumerate}
+			\item[] \textbf{punto di estensione:} modificaPrenotazione
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item L'utente visualizza le informazioni di una prenotazione.
+			\item Il Sistema permette all'utente di modificare, eliminare o generare una ricevuta della prenotazione.
+			\item Se l'utente è Amministratore o Biglietteria, il Sistema permette di segnarla come \emph{pagata}.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucExtTable	% UC EXT: Modifica Prenotazione
+	{	% Caso d'uso
+		Modifica Prenotazione
+		
+	}{	% ID
+		14
+		
+	}{	% Breve descrizione
+		L'utente modifica una prenotazione esistente all'interno dell'elenco delle prenotazioni.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'utente visualizza l'elenco delle prenotazioni.
+			\item L'utente ha premuto il pulsante di modifica.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item Il Sistema mostra la interfaccia di creazione di prenotazione, ma con i dati saltavi della prenotazione già creata selezionati.
+			\item L'utente modifica i dati relativi alla prenotazione.
+			\item L'utente salva i dati.
+			\item Il Sistema verifica i dati e li salva in memoria.
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item L'utente effettua la modifica di una prenotazione.
+		\end{enumerate}
+		
+} }
+
+
+{\ucExtTable	% UC EXT: Elimina Prenotazione
+	{	% Caso d'uso
+		Elimina Prenotazione
+		
+	}{	% ID
+		15
+		
+	}{	% Breve descrizione
+		L'utente elimina una prenotazione esistente all'interno dell'elenco delle prenotazioni.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'utente visualizza l'elenco delle prenotazioni.
+			\item L'utente ha premuto il pulsante di eliminazione.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item Il Sistema chiede conferma per eliminare la prenotazione.
+			\item L'utente conferma l'eliminazione della prenotazione.
+			\item Il Sistema effettua l'eliminazione.
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item L'utente effettua l'eliminazione di una prenotazione.
+		\end{enumerate}
+		
+} }
+
+
+{\ucTable	% UC: Genera Ricevuta
+	{	% Caso d'uso
+		Genera Ricevuta
+		
+	}{	% ID
+		16
+		
+	}{	% Breve descrizione
+		L'utente genera la ricevuta di una prenotazione e la stampa.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'utente visualizza una prenotazione.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item L'utente avvia il caso d'uso selezionando il comando "Genera ricevuta". %%% PARA PENSAR , SEÑORES
+            \item Il sistema genera un documento con tutta l'informazione relativa all'acquisto dei biglietti prenotati.
+            \item Il sistema manda in stampa il documento.
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item La ricevuta è stampata.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa	
+} }

@@ -1,0 +1,342 @@
+% UC: Crea Spettacolo			[X]
+% UC ext: Modifica Spettacolo		[X]
+% UC ext: Elimina Spettacolo		[] <- C'è UI per facilitare la descrizione
+% UC ext: Crea Evento			[]
+% UC ext: Modifica Evento		[]
+% UC ext: Elimina Evento		[]
+% UC: Lista Prenotazioni		[]
+% UC ext: Ricerca Prenotazione		[]
+% UC ext: Segna Prenotazione come pagata	[]
+
+\newcommand{\attori}{Biglietteria \\ Amministratore}
+
+
+{\ucTable	% UC: Crea Spettacolo
+{	% Caso d'uso
+	Crea Spettacolo
+	
+}{	% ID
+	17
+	
+}{	% Breve descrizione
+	L'utente crea un'istanza di spettacolo svolto nel teatro.
+    % - Da discutere
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'utente è autenticato come Amministratore o Biglietteria.
+        \item L'utente si trova nella sezione Spettacoli.
+        % "si trova"(5)
+        % "Spettacoli"(8)
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item L'utente avvia il caso d'uso selezionando il comando Creazione.
+        \item Il sistema mostra una interfaccia per inserire dati e impostazioni dello spettacolo.
+        \item L'utente inserisce le informazioni dello spettacolo.
+        \item L'utente conferma la creazione.
+        \item Il sistema verifica i dati e li salva in memoria.
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item L'utente crea uno spettacolo.
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Alternativa
+} }
+
+{\ucExtTable	% UC EXT: Modifica Spettacolo
+{	% Caso d'uso
+	Modifica Spettacolo
+	
+}{	% ID
+	18
+	
+}{	% Breve descrizione
+	L'utente modifica le informazioni di uno spettacolo.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'utente è autenticato come Amministratore o Biglietteria.
+        \item L'utente si trova nella sezione Spettacoli.
+        % "si trova"(5)
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item L'utente avvia il caso d'uso selezionando il comando Modifica associato ad uno spettacolo.
+        \item Il sistema consente all'utente di modificare le informazioni dell'opera.
+        \item L'utente inserisce le modifiche desiderate e le conferma.
+        \item Il sistema verifica i dati e li salva in memoria.
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item L'utente effettua la modifica di uno spettacolo.
+    \end{enumerate}
+	
+} }
+
+{\ucExtTable	% UC EXT: Elimina Spettacolo
+{	% Caso d'uso
+	Elimina Spettacolo
+	
+}{	% ID
+	19
+	
+}{	% Breve descrizione
+	L'utente elimina uno spettacolo dalla lista di spettacoli memorizzati.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'utente visualizza i dettagli di uno spettacolo.
+        \item L'utente ha premuto il pulsante di elimina.
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item Il Sistema richiede conferma dell'operazione.
+        \item L'utente conferma l'eliminazione.
+        \item \textbf{For} ogni evento dello spettacolo
+        \begin{enumerate}
+            \item \textbf{include}(Elimina Evento)
+        \end{enumerate}
+        \item Il Sistema elimina lo spettacolo.
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item L'utente effettua l'elimina di uno spettacolo.
+    \end{enumerate}
+	
+} }
+
+{\ucExtTable	% UC EXT: Crea Evento
+{	% Caso d'uso
+	Crea Evento
+	
+}{	% ID
+	20
+	
+}{	% Breve descrizione
+	L'utente crea un nuovo evento associato a uno spettacolo esistente.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item Lo spettacolo a cui associare l'evento è già presente nel Sistema. %/""
+        \item L'utente seleziona l'opzione per aggiungere un nuovo evento.
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item Il Sistema mostra un modulo per l'inserimento dei dati dell'evento (data, ora, sala, disponibilità posti).
+        \item L'utente compila i campi richiesti.
+        \item L'utente conferma la creazione.
+        \item Il Sistema verifica i dati e registra il nuovo evento.
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item Il nuovo evento risulta associato allo spettacolo selezionato.
+    \end{enumerate}
+	
+} }
+
+{\ucExtTable	% UC EXT: Modifica Evento
+{	% Caso d'uso
+	Modifica Evento
+	
+}{	% ID
+	21
+	
+}{	% Breve descrizione
+	L'utente modifica i dettagli di un evento programmato.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'evento da modificare è presente nel Sistema. %/""
+        \item L'utente ha premuto il pulsante di modifica relativo all'evento.
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item Il Sistema mostra un modulo precompilato con i dati correnti dell'evento.
+        \item L'utente aggiorna le informazioni desiderate. % Data, ora, sala, disponibilità posti
+        \item L'utente conferma la modifica.
+        \item Il Sistema verifica i dati e salva le modifiche.
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item L'evento risulta aggiornato nel Sistema.
+    \end{enumerate}
+	
+} }
+
+{\ucExtTable	% UC EXT: Elimina Evento
+{	% Caso d'uso
+	Elimina Evento
+	
+}{	% ID
+	22
+	
+}{	% Breve descrizione
+	L'utente elimina un evento associato a uno spettacolo.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'evento da eliminare è già stato creato e visibile nel Sistema. %/""
+        \item L'utente preme il pulsante di elimina relativo all'evento.
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item Il Sistema mostra un messaggio di conferma
+        \item L'utente conferma l'eliminazione dell'evento.
+        \item Il Sistema effettua l'eliminazione.
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item L'utente effettua l'eliminazione di un evento.
+    \end{enumerate}
+	
+} }
+
+{\ucTable	% UC: Lista Prenotazioni
+{	% Caso d'uso
+	Lista Prenotazioni
+	
+}{	% ID
+	23
+	
+}{	% Breve descrizione
+	L'utente visualizza l'elenco delle prenotazione salvate nel Sistema.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'utente è autenticato come Amministratore o Biglietteria.
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item Il caso d'uso inizia quando l'utente richiede di visualizzare la lista completa delle prenotazione.
+        \item \textbf{If} c'è almeno una prenotazione memorizzata nel Sistema 
+        \begin{enumerate}
+            \item \textbf{For} ogni prenotazione nel Sistema
+            \begin{enumerate}
+                \item Il Sistema mostra un'anteprima della prenotazione con informazioni basiche.
+            \end{enumerate}
+            \item[] \textbf{punto di estensione:} Ricerca Prenotazione
+        \end{enumerate}
+        \item \textbf{Else}
+        \begin{enumerate}
+            \item Il Sistema informa l'utente che non vi sono prenotazioni memorizzate.
+        \end{enumerate}
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item L'utente visualizza l'elenco delle prenotazioni salvate nel Sistema.
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Alternativa
+} }
+
+{\ucExtTable	% UC EXT: Ricerca Prenotazione
+{	% Caso d'uso
+	Ricerca Prenotazione
+	
+}{	% ID
+	24
+	
+}{	% Breve descrizione
+	L'utente filtra la lista delle prenotazioni applicando eventuali filtri.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'utente ha inserito i criteri di ricerca.
+        \item L'utente ha premuto il pulsante di ricerca.
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item Il Sistema ricerca, nell'elenco delle prenotazioni, delle prenotazioni coincidenti.
+        \item \textbf{If} il Sistema trova almeno una prenotazione coincidente
+        \begin{enumerate}
+            \item \textbf{For} ogni prenotazione coincidente
+            \begin{enumerate}
+                \item Il Sistema mostra un'anteprima della prenotazione con informazioni basiche.
+            \end{enumerate}
+        \end{enumerate}
+        \item \textbf{Else}
+        \begin{enumerate}
+            \item Il Sistema informa che non vi sono prenotazioni coincidenti.
+        \end{enumerate}
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item L'utente visualizza l'elenco filtrato.
+    \end{enumerate}
+	
+} }
+
+{\ucExtTable	% UC EXT: Segna Prenotazione come Pagata
+{	% Caso d'uso
+	Segna Prenotazione come Pagata
+	
+}{	% ID
+	25
+	
+}{	% Breve descrizione
+	L'utente segna una prenotazione come \emph{pagata}.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'utente visualizza l'elenco delle prenotazioni.
+        \item L'utente ha premuto il pulsante di assegnamento (come \emph{pagata}).
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item Il Sistema chiede conferma all'utente.
+        \item L'utente conferma l'assegnamento della prenotazione come \emph{pagata}.
+        \item Il Sistema segna la prenotazione come \emph{pagata}.
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item L'utente effettua l'assegnamento di una prenotazione come \emph{pagata}.
+    \end{enumerate}
+	
+} }

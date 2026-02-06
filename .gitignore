@@ -1,2 +1,7 @@
 *.aux
 *.log
+*.synctex.gz
+*\.vscode
+*\__pycache__
+codice/db
+codice/sample_db.py

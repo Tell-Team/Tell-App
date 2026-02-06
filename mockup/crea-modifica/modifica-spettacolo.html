@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <script src="../enter-to-skip.js" defer></script>
+
+    <title>Modifica spettacolo</title>
+
+    <link rel="stylesheet" href="../body-creazione.css" />
+  </head>
+
+  <body>
+    <h1>Modifica spettacolo:</h1>
+    <form id="formulario-spettacolo">
+      <!-- TITOLO -->
+      <div class="singola-riga">
+        <label for="titolo">Titolo *:</label>
+        <select
+          type="text"
+          id="form-titolo"
+          name="titolo"
+          placeholder="Inserire titolo"
+          required
+        >
+          <option value="__vuoto__">. . .</option>
+        </select>
+        <p id="input-error-titolo" style="color: red"></p>
+        <br />
+      </div>
+
+      <!-- NOTE -->
+      <div class="singola-riga">
+        <label for="form-note">Note:</label>
+        <textarea
+          id="form-note"
+          rows="4"
+          cols="50"
+          placeholder="Inserire note"
+          style="font-family: Times"
+        ></textarea>
+        <p id="input-error-note" style="color: red"></p>
+        <br />
+      </div>
+
+      <br />
+      <!-- LISTA INTERPRETI -->
+      <h3 style="margin: 3px">Interpreti</h3>
+      <div id="lista-interpreti"></div>
+
+      <div class="singola-riga">
+        <label for="form-interprete">Nuovo interprete:</label>
+        <input
+          type="text"
+          id="form-interprete-ruolo"
+          placeholder="Inserire ruolo"
+        />
+        <input
+          type="text"
+          id="form-interprete-nome"
+          placeholder="Inserire nome"
+        />
+        <br />
+        <button type="button" onclick="aggiungiInterprete();">Aggiungi</button>
+        <p id="input-error-interprete" style="color: red"></p>
+      </div>
+
+      <br />
+      <!-- LISTA TECNICI -->
+      <h3 style="margin: 3px">Tecnici</h3>
+      <div id="lista-tecnici"></div>
+
+      <div class="singola-riga">
+        <label for="form-tecnico">Nuovo tecnico:</label>
+        <input
+          type="text"
+          id="form-tecnico-ruolo"
+          placeholder="Inserire ruolo"
+        />
+        <input type="text" id="form-tecnico-nome" placeholder="Inserire nome" />
+        <br />
+        <button type="button" onclick="aggiungiTecnico();">Aggiungi</button>
+        <p id="input-error-tecnico" style="color: red"></p>
+      </div>
+
+      <br />
+      <!-- DATA EVENTO -->
+      <h3 style="margin: 3px">Lista Eventi</h3>
+      <div id="lista-date"></div>
+
+      <div class="singola-riga">
+        <label for="form-data">Nuovo evento:</label>
+        <input type="date" id="form-data" />
+        <button type="button" onclick="aggiungiData();">Aggiungi</button>
+        <p id="input-error-data" style="color: red"></p>
+      </div>
+
+      <br />
+      <button type="submit">Salva</button>
+      <button
+        type="button"
+        onclick="localStorage.removeItem('spettacolo-da-modificare'); window.location.href = '../visualizza/spettacoli.html';"
+      >
+        Cancella</button
+      ><br />
+    </form>
+
+    <p id="successo" style="color: green"></p>
+
+    <!-- Display delle opere disponibili -->
+    <script>
+      let opere = JSON.parse(localStorage.getItem("opere")) || [];
+
+      const opzioniOpera = document.getElementById("form-titolo");
+
+      function caricaOpere() {
+        opzioniOpera.innerHTML = '<option value="__vuoto__">. . .</option>';
+
+        opere.forEach((opera, index) => {
+          const opzione = document.createElement("option");
+
+          const nomeOpera = opera.nome;
+          opzione.value = `${opera.nome}`;
+          opzione.text = nomeOpera;
+
+          opzioniOpera.appendChild(opzione);
+        });
+
+        opzioniOpera.value = "__vuoto__";
+      }
+
+      caricaOpere();
+    </script>
+
+    <!-- Carica gli interpreti, tecnici e date dello spettacolo corrente (CASO MODIFICA) -->
+    <script>
+      let tempInterpreti =
+        JSON.parse(localStorage.getItem("tempInterpreti")) || [];
+      let tempTecnici = JSON.parse(localStorage.getItem("tempTecnici")) || [];
+      let tempDate = JSON.parse(localStorage.getItem("tempDate")) || [];
+
+      const listaDivInterpreti = document.getElementById("lista-interpreti");
+      const listaDivTecnici = document.getElementById("lista-tecnici");
+      const listaDivDate = document.getElementById("lista-date");
+
+      function renderInterpreti() {
+        listaDivInterpreti.innerHTML = "";
+        tempInterpreti.forEach((interprete, index) => {
+          const container = document.createElement("div");
+          container.classList.add("singola-riga");
+
+          const p = document.createElement("p");
+          p.style.margin = "3px";
+          p.innerHTML = `<strong>${interprete.ruolo}</strong>: ${interprete.nome}`;
+
+          const btnElimina = document.createElement("button");
+          btnElimina.type = "button";
+          btnElimina.textContent = "Elimina";
+          btnElimina.style.marginLeft = "10px";
+          btnElimina.onclick = function () {
+            eliminaInterprete(index);
+          };
+
+          container.appendChild(p);
+          container.appendChild(btnElimina);
+          listaDivInterpreti.appendChild(container);
+        });
+        localStorage.setItem("tempInterpreti", JSON.stringify(tempInterpreti));
+      }
+
+      function aggiungiInterprete() {
+        const ruolo = document
+          .getElementById("form-interprete-ruolo")
+          .value.trim();
+        const nome = document
+          .getElementById("form-interprete-nome")
+          .value.trim();
+        const errorMessage = document.getElementById("input-error-interprete");
+
+        if (ruolo === "" || nome === "") {
+          errorMessage.textContent =
+            "Ruolo e Nome dell'interprete non possono essere vuoti.";
+        } else {
+          errorMessage.textContent = "";
+          tempInterpreti.push({ ruolo, nome });
+          renderInterpreti();
+          document.getElementById("form-interprete-ruolo").value = "";
+          document.getElementById("form-interprete-nome").value = "";
+        }
+      }
+
+      function eliminaInterprete(index) {
+        const conferma = window.confirm(
+          `Sei sicuro di voler eliminare l\'interprete \'${tempInterpreti[index].nome}\' (${tempInterpreti[index].ruolo})?`
+        );
+        if (conferma) {
+          tempInterpreti.splice(index, 1);
+          renderInterpreti();
+        }
+      }
+
+      function renderTecnici() {
+        listaDivTecnici.innerHTML = "";
+        tempTecnici.forEach((tecnico, index) => {
+          const container = document.createElement("div");
+          container.classList.add("singola-riga");
+
+          const p = document.createElement("p");
+          p.style.margin = "3px";
+          p.innerHTML = `<strong>${tecnico.ruolo}</strong>: ${tecnico.nome}`;
+
+          const btnElimina = document.createElement("button");
+          btnElimina.type = "button";
+          btnElimina.textContent = "Elimina";
+          btnElimina.style.marginLeft = "10px";
+          btnElimina.onclick = function () {
+            eliminaTecnico(index);
+          };
+
+          container.appendChild(p);
+          container.appendChild(btnElimina);
+          listaDivTecnici.appendChild(container);
+        });
+        localStorage.setItem("tempTecnici", JSON.stringify(tempTecnici));
+      }
+
+      function aggiungiTecnico() {
+        const ruolo = document
+          .getElementById("form-tecnico-ruolo")
+          .value.trim();
+        const nome = document.getElementById("form-tecnico-nome").value.trim();
+        const errorMessage = document.getElementById("input-error-tecnico");
+
+        if (ruolo === "" || nome === "") {
+          errorMessage.textContent =
+            "Ruolo e Nome del tecnico non possono essere vuoti.";
+        } else {
+          errorMessage.textContent = "";
+          tempTecnici.push({ ruolo, nome });
+          renderTecnici();
+          document.getElementById("form-tecnico-ruolo").value = "";
+          document.getElementById("form-tecnico-nome").value = "";
+        }
+      }
+
+      function eliminaTecnico(index) {
+        const conferma = window.confirm(
+          `Sei sicuro di voler eliminare il tecnico \'${tempTecnici[index].nome}\' (${tempTecnici[index].ruolo})?`
+        );
+        if (conferma) {
+          tempTecnici.splice(index, 1);
+          renderTecnici();
+        }
+      }
+
+      function renderDate() {
+        listaDivDate.innerHTML = "";
+        tempDate.forEach((data, index) => {
+          const container = document.createElement("div");
+          container.classList.add("singola-riga");
+
+          const dataObj = new Date(data.data);
+          const dataFormattata = dataObj.toLocaleDateString("it-IT", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+
+          const p = document.createElement("p");
+          p.style.margin = "3px";
+          p.innerHTML = `<strong>${dataFormattata}</strong>`;
+
+          const btnElimina = document.createElement("button");
+          btnElimina.type = "button";
+          btnElimina.textContent = "Elimina";
+          btnElimina.style.marginLeft = "10px";
+          btnElimina.onclick = function () {
+            eliminaData(index);
+          };
+
+          container.appendChild(p);
+          container.appendChild(btnElimina);
+          listaDivDate.appendChild(container);
+        });
+        localStorage.setItem("tempDate", JSON.stringify(tempDate));
+      }
+
+      function aggiungiData() {
+        const data = document.getElementById("form-data").value.trim();
+        const errorMessage = document.getElementById("input-error-data");
+
+        if (data === "") {
+          errorMessage.textContent = "Data non valida.";
+        } else {
+          errorMessage.textContent = "";
+          tempDate.push({ data });
+          renderDate();
+          document.getElementById("form-data").value = "";
+        }
+      }
+
+      function eliminaData(index) {
+        const conferma = window.confirm(
+          `Sei sicuro di voler eliminare questa data?`
+        );
+        if (conferma) {
+          tempDate.splice(index, 1);
+          renderDate();
+        }
+      }
+    </script>
+
+    <!-- CASO MODIFICA + CASO CREAZIONE ////////////////// ERRORES -->
+    <script>
+      // Carica spettacolo da modificare
+      document.addEventListener("DOMContentLoaded", () => {
+        const modifica = JSON.parse(
+          localStorage.getItem("spettacolo-da-modificare")
+        );
+
+        if (modifica) {
+          document.querySelector("h1").textContent = "Modifica spettacolo:";
+          document.getElementById("form-titolo").value = modifica.titolo;
+          document.getElementById("form-note").value = modifica.note;
+
+          tempInterpreti = modifica.interpreti || [];
+          tempTecnici = modifica.tecnici || [];
+          renderInterpreti();
+          renderTecnici();
+        } else {
+          localStorage.removeItem("tempInterpreti");
+          localStorage.removeItem("tempTecnici");
+          tempInterpreti = [];
+          tempTecnici = [];
+        }
+      });
+
+      // Salva spettacolo
+      document
+        .getElementById("formulario-spettacolo")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          let errorCount = 0;
+
+          const titolo = document.getElementById("form-titolo").value.trim();
+          const note = document.getElementById("form-note").value.trim();
+
+          if (titolo === "__vuoto__") {
+            document.getElementById("input-error-titolo").textContent =
+              "Selezionare un titolo per l'opera.";
+            errorCount++;
+          } else {
+            document.getElementById("input-error-titolo").textContent = "";
+          }
+
+          if (errorCount > 0) return;
+
+          const modifica = JSON.parse(
+            localStorage.getItem("spettacolo-da-modificare")
+          );
+          let spettacoli = JSON.parse(localStorage.getItem("spettacoli")) || [];
+
+          const nuovoSpettacolo = {
+            titolo,
+            note,
+            interpreti: tempInterpreti,
+            tecnici: tempTecnici,
+          };
+
+          if (modifica) {
+            spettacoli[modifica.index] = nuovoSpettacolo;
+            localStorage.removeItem("spettacolo-da-modificare");
+          } else {
+            spettacoli.push(nuovoSpettacolo);
+          }
+
+          localStorage.setItem("spettacoli", JSON.stringify(spettacoli));
+          localStorage.removeItem("tempInterpreti");
+          localStorage.removeItem("tempTecnici");
+
+          document.getElementById("successo").textContent =
+            "Spettacolo salvato con successo!";
+          setTimeout(() => {
+            window.location.href = "../visualizza/spettacoli.html";
+          }, 1000);
+        });
+    </script>
+  </body>
+</html>

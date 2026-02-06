@@ -1,0 +1,87 @@
+from model.pianificazione.genere import Genere
+from model.exceptions import (
+    IdOccupatoException,
+    IdInesistenteException,
+    OccupatoException,
+)
+from typing import Optional
+import copy
+
+
+class GestoreGeneri:
+    def __init__(self):
+        self.__lista_generi: list[Genere] = []
+
+    # Stato
+    def ha_genere(self, id_: int) -> bool:
+        for g in self.__lista_generi:
+            if g.get_id() == id_:
+                return True
+
+        return False
+
+    # Getters
+    def get_max_id(self) -> int:
+        ids = map(lambda x: x.get_id(), self.__lista_generi)
+
+        try:
+            return max(ids)
+        except ValueError:
+            return -1
+
+    def get_genere(self, id_: int) -> Optional[Genere]:
+        for g in self.__lista_generi:
+            if g.get_id() == id_:
+                return copy.copy(g)
+
+        return None
+
+    def get_generi(self) -> list[Genere]:
+        return copy.deepcopy(self.__lista_generi)
+
+    # Validazione
+    def __controllo_unique_key(self, primo: Genere, secondo: Genere):
+        """Throws: OccupatoException"""
+        if primo.get_nome() == secondo.get_nome():
+            raise OccupatoException(
+                f'E\' già presente un genere di nome "{primo.get_nome()}".'
+            )
+
+    # Modificatori
+    def aggiungi_genere(self, genere: Genere):
+        """Throws: IdOccupatoException, OccupatoException"""
+        for g in self.__lista_generi:
+            if g.get_id() == genere.get_id():
+                raise IdOccupatoException(
+                    f"E' già presente un genere con id {genere.get_id()}."
+                )
+
+            self.__controllo_unique_key(g, genere)
+
+        self.__lista_generi.append(copy.copy(genere))
+
+    def elimina_genere(self, id_: int):
+        """Throws: IdInesistenteException"""
+        for i, g in enumerate(self.__lista_generi):
+            if g.get_id() == id_:
+                self.__lista_generi.pop(i)
+                return
+
+        raise IdInesistenteException(f"Non è presente nessun genere con id {id_}.")
+
+    def modifica_genere(self, genere_modificato: Genere):
+        """Throws: IdInesistenteException, OccupatoException"""
+        posizione_da_modificare: Optional[int] = None
+
+        for i, g in enumerate(self.__lista_generi):
+            if g.get_id() != genere_modificato.get_id():
+                self.__controllo_unique_key(g, genere_modificato)
+            else:
+                posizione_da_modificare = i
+
+        if posizione_da_modificare is None:
+            raise IdInesistenteException(
+                f"Non è presente nessun genere con id {genere_modificato.get_id()}."
+            )
+
+        self.__lista_generi[posizione_da_modificare] = copy.copy(genere_modificato)
