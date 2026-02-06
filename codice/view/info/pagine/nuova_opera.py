@@ -78,14 +78,8 @@ class NuovaOperaView(AbstractCreaView):
         label_data.setProperty(WidgetRole.BODY_TEXT, True)
         label_data.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.data = QDateEdit()
-        self.data.setCalendarPopup(True)
         self.data.setDisplayFormat("dd/MM/yyyy")
-
-        # atti_data_layout = QHBoxLayout()
-        # atti_data_layout.addWidget(label_atti)
-        # atti_data_layout.addWidget(self.atti)
-        # atti_data_layout.addWidget(label_data)
-        # atti_data_layout.addWidget(self.data)
+        # self.data.setCalendarPopup(True)  # - USAR SOLO SI HAY UN ESTILO PARA EL QCalendarPopup BIEN HECHO
 
         label_teatro = QLabel(
             'Teatro prima rappresentazione<span style="color:red;">*</span> :'
@@ -102,7 +96,6 @@ class NuovaOperaView(AbstractCreaView):
         self._form_layout.addRow(label_librettista, self.librettista)
         self._form_layout.addRow(label_atti, self.atti)
         self._form_layout.addRow(label_data, self.data)
-        # self.form_layout.addRow(atti_data_layout)
         self._form_layout.addRow(label_teatro, self.teatro)
 
     # ------------------------- METODI DI VIEW -------------------------

@@ -1,6 +1,4 @@
 from PyQt6.QtWidgets import QLabel, QLineEdit, QSpinBox
-from PyQt6.QtCore import QRegularExpression
-from PyQt6.QtGui import QRegularExpressionValidator
 from typing import override
 
 from core.view import AbstractCreaView
@@ -40,8 +38,6 @@ class ModificaPostoView(AbstractCreaView):
         label_fila.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.fila = QLineEdit()
         self.fila.setPlaceholderText("Inserire lettera")
-        validator = QRegularExpressionValidator(QRegularExpression("[A-Za-z]+"))
-        self.fila.setValidator(validator)
 
         label_numero = QLabel('Numero<span style="color:red;">*</span> :')
         label_numero.setProperty(WidgetRole.BODY_TEXT, True)

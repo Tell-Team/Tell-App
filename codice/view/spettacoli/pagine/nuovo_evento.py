@@ -33,6 +33,7 @@ class NuovoEventoView(AbstractCreaView):
         label_data.setProperty(WidgetRole.BODY_TEXT, True)
         label_data.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.data = QDateEdit()
+        self.data.setDisplayFormat("dd/MM/yyyy")
         self.data.setDate(QDate.currentDate())
         self.data.setMinimumDate(QDate.currentDate())
 

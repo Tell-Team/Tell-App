@@ -84,8 +84,6 @@ class VisualizzaSezioneView(QWidget):
 
         self.fila = QLineEdit()
         self.fila.setPlaceholderText("Inserire lettera")
-        validator = QRegularExpressionValidator(QRegularExpression("[A-Za-z]+"))
-        self.fila.setValidator(validator)
 
         label_numero = QLabel('Numero<span style="color:red;">*</span> :')
         label_numero.setProperty(WidgetRole.BODY_TEXT, True)

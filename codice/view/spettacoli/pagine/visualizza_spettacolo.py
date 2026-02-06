@@ -181,7 +181,11 @@ class VisualizzaSpettacoloView(QWidget):
 
         # Carica dati dello spettacolo
         self.label_titolo.setText(f"{data.titolo}")
-        self.label_note.setText(f"{data.note}")
+        self.label_note.show()
+        if data.note:
+            self.label_note.setText(f"{data.note}")
+        else:
+            self.label_note.hide()
         self.__svuota_layout_generico(self.layout_dati_speciali)
         if type(data) is RegiaPageData:
             label_regista = QLabel(f"<b>Regista:</b> {data.regista}")
