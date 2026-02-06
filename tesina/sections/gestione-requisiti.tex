@@ -7,36 +7,38 @@
 			\newcounter{rf}
 			
 			\textbf{Area Cliente} \\
-			\textbf{RF\mycount{rf}: Visualizza opere} \\ 
+			\textbf{RF\increaseCount{rf}: Visualizza opere} \\ 
 			Il sistema dovrà mostrare al cliente le anagrafiche delle opere e l'archivio delle relative regie. \\ \\
-			\textbf{RF\mycount{rf}: Visualizza spettacoli} \\ 
+			\textbf{RF\increaseCount{rf}: Visualizza spettacoli} \\ 
 			Il sistema dovrà mostrare al cliente la lista degli spettacoli e dei relativi eventi disponibili all'acquisto. \\ \\
-			\textbf{RF\mycount{rf}: Visualizza struttura posti} \\ 
+			\textbf{RF\increaseCount{rf}: Visualizza struttura posti} \\ 
 			Il sistema dovrà consentire al cliente di visualizzare la struttura posti del teatro durante la composizione della prenotazione. \\ \\
-			\textbf{RF\mycount{rf}: Gestisci prenotazione} \\ 
+			\textbf{RF\increaseCount{rf}: Gestisci prenotazione} \\ 
 			Il sistema dovrà consentire al cliente di creare una prenotazione e modificarne i posti o eliminarla completamente prima di averla confermata. \\ \\
-			\textbf{RF\mycount{rf}: Conferma prenotazione} \\ 
+			\textbf{RF\increaseCount{rf}: Conferma prenotazione} \\ 
 			Il sistema dovrà consentire al cliente di confermare la prenotazione, e produrre la ricevuta contenente l'identificativo della prenotazione per il pagamento alla cassa. \\ \\
 			
 			\noindent \textbf{Area Biglietteria} \\
-			\textbf{RF\mycount{rf}: Gestisci spettacoli} \\ 
+			\textbf{RF\increaseCount{rf}: Gestisci spettacoli} \\ 
 			Il sistema dovrà consentire alla biglietteria di creare, modificare e rimuovere gli spettacoli in programma e i relativie eventi. \\ \\
-			\textbf{RF\mycount{rf}: Gestisci lista prenotazioni} \\ 
+			\textbf{RF\increaseCount{rf}: Gestisci lista prenotazioni} \\ 
 			Il sistema dovrà consentire alla biglietteria di visualizzare e modificare tutte le prenotazioni effettuate nel teatro e di contrassegnare le prenotazioni che sono state pagate in cassa. \\ \\
 			
 			\noindent \textbf{Area Amministratore} \\
-			\textbf{RF\mycount{rf}: Gestisci opere} \\ 
+			\textbf{RF\increaseCount{rf}: Gestisci opere} \\ 
 			Il sistema dovrà consentire all'amministratore di creare, modificare e rimuovere le anagrafiche delle opere e l'archivio delle relative regie. \\ \\
-			\textbf{RF\mycount{rf}: Gestisci struttura posti} \\ 
+			\textbf{RF\increaseCount{rf}: Gestisci struttura posti} \\ 
 			Il sistema dovrà consentire all'amministratore di modificare la struttura posti del teatro. \\
 		
 		\subsubsection{Requisiti Non Funzionali}
 			\newcounter{rnf}
 			
-			\textbf{RNF\mycount{rnf}: Python3} \\ Il sistema dovrà essere implementato in linguaggio Python3. \\
+			\textbf{RNF\increaseCount{rnf}: Python3} \\ Il sistema dovrà essere implementato in linguaggio Python3. \\
 			\newpage
 	
 	\subsection{Casi d'uso}
+		\newcounter{classId}
+
 		\subsubsection{Attori}
 			\textbf{Diagramma} \\ \\ 
 			\begin{center} \includegraphics[height=.85\textheight]{imgs/use_case/attori} \end{center}

@@ -1,6 +1,12 @@
+
+#LaTeX
+*.txss2
 *.aux
 *.log
 *.synctex.gz
-*\.vscode
-*\__pycache__
+**/tesina/*.pdf
+
+#Python
+*/.vscode
+*/__pycache__
 codice/db

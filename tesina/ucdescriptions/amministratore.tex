@@ -15,15 +15,15 @@
 % UC: Modifica Posto		[]
 % UC: Elimina Posto		[]
 
-\newcommand{\attori}{Amministratore}
-
+\renewcommand{\attori}{Amministratore}
+% ID: 25-36
 
 {\ucTable	% UC: Crea Opera
 {	% Caso d'uso
 	Crea Opera
 	
 }{	% ID
-	26
+	\increaseCount{classId}
 	
 }{	% Breve descrizione
 	L'utente crea un'istanza di opera svolta nel teatro.
@@ -60,7 +60,7 @@
 	Modifica Opera
 	
 }{	% ID
-	27
+	\increaseCount{classId}
 	
 }{	% Breve descrizione
 	L'utente modifica le informazioni di un'opera.
@@ -95,7 +95,7 @@
 	Elimina Opera
 	
 }{	% ID
-	28
+	\increaseCount{classId}
 	
 }{	% Breve descrizione
 	L'utente elimina un'opera dalla lista di opere memorizzate.
@@ -130,7 +130,7 @@
 	Crea Regia
 	
 }{	% ID
-	29
+	\increaseCount{classId}
 	
 }{	% Breve descrizione
 	L'utente crea una nuova regia per un'opera.
@@ -164,7 +164,7 @@
 	Modifica Regia
 	
 }{	% ID
-	30
+	\increaseCount{classId}
 	
 }{	% Breve descrizione
 	L'utente modifica le informazioni di una regia.
@@ -197,7 +197,7 @@
 	Elimina Regia
 	
 }{	% ID
-	31
+	\increaseCount{classId}
 	
 }{	% Breve descrizione
 	L'utente elimina una regia dalla lista di regie associate all'opera.
@@ -235,7 +235,7 @@
 	Crea Sezione
 	
 }{	% ID
-	32
+	\increaseCount{classId}
 	
 }{	% Breve descrizione
 	Creazione di un settore di posti.
@@ -284,7 +284,7 @@
 	Modifica Sezione
 	
 }{	% ID
-	33
+	\increaseCount{classId}
 	
 }{	% Breve descrizione
 	Modifica di una Sezione.
@@ -336,7 +336,7 @@
 	Elimina Sezione
 	
 }{	% ID
-	34
+	\increaseCount{classId}
 	
 }{	% Breve descrizione
 	Eliminazione di una Sezione.
@@ -377,7 +377,7 @@
 	Crea Posto
 	
 }{	% ID
-	35
+	\increaseCount{classId}
 	
 }{	% Breve descrizione
 	Creazione di un posto in una Sezione.
@@ -425,7 +425,7 @@
 	Modifica Posto
 	
 }{	% ID
-	36
+	\increaseCount{classId}
 	
 }{	% Breve descrizione
 	Modifica di un Posto.
@@ -474,7 +474,7 @@
 	Elimina Posto
 	
 }{	% ID
-	37
+	\increaseCount{classId}
 	
 }{	% Breve descrizione
 	Eliminazione di un Posto.

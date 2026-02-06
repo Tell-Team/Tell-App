@@ -78,14 +78,14 @@
 % UC: Genera ricevuta		[X]
 
 \newcommand{\attori}{Cliente \\ Biglietteria \\ Amministratore}
-
+% ID: 1-15
 
 {\ucTable	% UC: Lista Opere
 	{	% Caso d'uso
 		Lista Opere
 		
 	}{	% ID
-		1
+		\increaseCount{classId}
 		
 	}{	% Breve descrizione
 		L'utente ottiene la lista di opere memorizzate.
@@ -130,7 +130,7 @@
 		Ricerca Opera
 		
 	}{	% ID
-		2
+		\increaseCount{classId}
 		
 	}{	% Breve descrizione
 		L'utente filtra la lista di opere tramite una parola chiave ricercata nel nome.
@@ -164,7 +164,7 @@
 		Visualizza Opera
 		
 	}{	% ID
-		3
+		\increaseCount{classId}
 		
 	}{	% Breve descrizione
 		L'utente ottiene le informazioni riguardo una singola opera.
@@ -203,7 +203,7 @@
 		Lista Regie
 		
 	}{	% ID
-		4
+		\increaseCount{classId}
 		
 	}{	% Breve descrizione
 		L'utente ottiene la lista di regie associate all'opera che sta visualizzando.
@@ -244,7 +244,7 @@
 		Lista Spettacoli
 		
 	}{	% ID
-		5
+		\increaseCount{classId}
 		
 	}{	% Breve descrizione
 		L'utente ottiene la lista di spettacoli memorizzati.
@@ -288,7 +288,7 @@
 		Ricerca Spettacolo
 		
 	}{	% ID
-		6
+		\increaseCount{classId}
 		
 	}{	% Breve descrizione
 		L'utente filtra la lista di spettacoli tramite una parola chiave ricercata nel titolo.
@@ -321,7 +321,7 @@
 		Visualizza Spettacolo
 		
 	}{	% ID
-		7
+		\increaseCount{classId}
 		
 	}{	% Breve descrizione
 		L'utente ottiene le informazioni riguardo un singolo spettacolo.
@@ -360,7 +360,7 @@
 		Lista Eventi
 		
 	}{	% ID
-		8
+		\increaseCount{classId}
 		
 	}{	% Breve descrizione
 		L'utente ottiene la lista di eventi associati allo spettacolo che sta visualizzando.
@@ -402,7 +402,7 @@
 		Lista Sezioni
 		
 	}{	% ID
-		9
+		\increaseCount{classId}
 		
 	}{	% Breve descrizione
 		Elencazione delle sezioni.
@@ -436,7 +436,6 @@
 		\end{enumerate}
 		
 	}{	% Sequenza Eventi Alternativa
-		
 } }
 
 
@@ -445,7 +444,7 @@
 		Visualizza Sezione
 		
 	}{	% ID
-		10
+		\increaseCount{classId}
 		
 	}{	% Breve descrizione
 		Visualizzazione con dettagli di una sezione.
@@ -486,7 +485,7 @@
 		Lista Posti
 		
 	}{	% ID
-		11
+		\increaseCount{classId}
 		
 	}{	% Breve descrizione
 		Elencazione dei posti.
@@ -526,7 +525,7 @@
 		Crea Prenotazione
 		
 	}{	% ID
-		12
+		\increaseCount{classId}
 		
 	}{	% Breve descrizione
 		L'utente prenota posti di un evento svolto nel teatro.
@@ -561,7 +560,7 @@
 		Visualizza Prenotazione
 		
 	}{	% ID
-		13
+		\increaseCount{classId}
 		
 	}{	% Breve descrizione
 		L'utente ottiene l'informazione anagrafica riguardo una singola prenotazione.
@@ -583,7 +582,6 @@
 			\begin{enumerate}
 				\item Il Sistema mostra un pulsante per segnare la prenotazione come \emph{pagata}.
 			\end{enumerate}
-			\item[] \textbf{punto di estensione:} modificaPrenotazione
 		\end{enumerate}
 		
 	}{	% Postcondizioni
@@ -597,46 +595,12 @@
 } }
 
 
-{\ucExtTable	% UC EXT: Modifica Prenotazione
-	{	% Caso d'uso
-		Modifica Prenotazione
-		
-	}{	% ID
-		14
-		
-	}{	% Breve descrizione
-		L'utente modifica una prenotazione esistente all'interno dell'elenco delle prenotazioni.
-		
-	}{	% Attori Primari
-		\attori
-	}{	% Precondizioni
-		\begin{enumerate}
-			\item L'utente visualizza l'elenco delle prenotazioni.
-			\item L'utente ha premuto il pulsante di modifica.
-		\end{enumerate}
-		
-	}{	% Sequenza Eventi Principale
-		\begin{enumerate}
-			\item Il Sistema mostra la interfaccia di creazione di prenotazione, ma con i dati saltavi della prenotazione già creata selezionati.
-			\item L'utente modifica i dati relativi alla prenotazione.
-			\item L'utente salva i dati.
-			\item Il Sistema verifica i dati e li salva in memoria.
-		\end{enumerate}
-		
-	}{	% Postcondizioni
-		\begin{enumerate}
-			\item L'utente effettua la modifica di una prenotazione.
-		\end{enumerate}
-		
-} }
-
-
 {\ucExtTable	% UC EXT: Elimina Prenotazione
 	{	% Caso d'uso
 		Elimina Prenotazione
 		
 	}{	% ID
-		15
+		\increaseCount{classId}
 		
 	}{	% Breve descrizione
 		L'utente elimina una prenotazione esistente all'interno dell'elenco delle prenotazioni.
@@ -669,7 +633,7 @@
 		Genera Ricevuta
 		
 	}{	% ID
-		16
+		\increaseCount{classId}
 		
 	}{	% Breve descrizione
 		L'utente genera la ricevuta di una prenotazione e la stampa.

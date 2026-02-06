@@ -1,5 +1,5 @@
 
-\newcommand{\mycount}[1]{\stepcounter{#1}\arabic{#1}}
+\newcommand{\increaseCount}[1]{\stepcounter{#1}\arabic{#1}}
 
 \newcommand{\ucTable}[8] {
 	\begin{table}[H]
@@ -32,8 +32,9 @@
 			\cellcolor{gray!20}
 			\begin{minipage}{\linewidth}
 				{#5}
+				\vspace*{.25em}
 			\end{minipage} \\
-			\hline
+			\hline 
 			\textbf{Sequenza degli eventi principale:}
 				{#6} \\
 			\hline
@@ -42,6 +43,7 @@
 			\cellcolor{gray!20}
 			\begin{minipage}{\linewidth}
 				{#7}
+				\vspace*{.25em}
 			\end{minipage} \\
 			\hline
 			\textbf{Sequenza degli eventi alternativa:} \\
@@ -63,40 +65,47 @@
 			\color{white}
 			\centerline{\textbf{Caso d'uso di estensione:} 
 				{#1}} \\
-			\hline
+			\hline 
+			\vspace*{-.5em}
 			\textbf{ID:} 
 				{#2} \\
 			\hline
-			\cellcolor{gray!20}
+			\cellcolor{gray!20} \vspace*{-.5em}
 			\textbf{Breve descrizione:} \\
 			\cellcolor{gray!20}
 			\textbf{Segmento 1:} 
 				{#3} \\
 			\hline
-			\textbf{Attori primari:} \\
+			\vspace*{-.65em}
+			\textbf{Attori primari:} \\ 
 			\begin{minipage}{\linewidth}
+				\vspace*{.25em}
 				{#4}
-			\end{minipage}
-			\vspace{0pt} \\
+				\vspace*{.5em}
+			\end{minipage} \\
 			\hline
+			\vspace*{-.65em}
 			\textbf{Attori secondari:} \\
 				Nessuno. \\
 			\hline
-			\cellcolor{gray!20}
+			\cellcolor{gray!20} \vspace*{-.65em}
 			\textbf{Precondizioni del segmento 1:} \\
 			\cellcolor{gray!20}
 			\begin{minipage}{\linewidth}
 				{#5}
+				\vspace*{.25em}
 			\end{minipage} \\
 			\hline
+			\vspace*{-.5em}
 			\textbf{Sequenza degli eventi principale del segmento 1:}
 				{#6} \\
 			\hline
-			\cellcolor{gray!20}
+			\cellcolor{gray!20} \vspace*{-.5em}
 			\textbf{Postcondizioni del segmento 1:} \\
 			\cellcolor{gray!20}
 			\begin{minipage}{\linewidth}
 				{#7}
+				\vspace*{.25em}
 			\end{minipage} \\
 			\hline
 		\end{tabular}
