@@ -7,6 +7,7 @@ from core.controller import AbstractVisualizzaController
 from controller.navigation import Pagina
 
 from model.model import Model
+from model.pianificazione.spettacolo import Spettacolo
 from model.organizzazione.evento import Evento
 from model.exceptions import OggettoInUsoException
 
@@ -48,7 +49,14 @@ class VisualizzaSpettacoloController(AbstractVisualizzaController):
             self.__nuovo_evento
         )
 
+        self._view_page.visualizzaPrezziRequest.connect(  # type:ignore
+            self.__visualizza_prezzi_associati
+        )
+
     # ------------------------- METODI DEL CONTROLLER -------------------------
+
+    def __get_spettacolo(self, id_: int) -> Optional[Spettacolo]:
+        return self._model.get_spettacolo(id_)
 
     def __get_evento(self, id_: int) -> Optional[Evento]:
         return self._model.get_evento(id_)
@@ -58,6 +66,36 @@ class VisualizzaSpettacoloController(AbstractVisualizzaController):
 
     def __elimina_evento(self, id_: int) -> None:
         self._model.elimina_evento(id_)
+
+    def __visualizza_prezzi_associati(self, id_spettacolo: int) -> None:
+        """Carica la pagina `PrezziAssociatiView` con i dati relativi allo spettacolo
+        indicato.
+
+        :param id\\_: id dello spettacolo da visualizzare
+        """
+        # Copia dello spettacolo da visualizzare
+        current_spettacolo = self.__get_spettacolo(id_spettacolo)
+        if not current_spettacolo:
+            PopupMessage.mostra_errore(
+                self._view_page,
+                "Spettacolo inesistente",
+                f"Non è presente nessuno spettacolo con id {id_spettacolo}.",
+            )
+            return
+
+        # Ottieni la pagina PrezziAssociatiView
+        from view.spettacoli.pagine import PrezziAssociatiView
+
+        pagina_nome = Pagina.PREZZI_ASSOCIATI
+        current_pagina = self._ottieni_pagina(pagina_nome)
+        if type(current_pagina) is not PrezziAssociatiView:
+            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+            return
+
+        current_pagina.set_data(current_spettacolo.get_id())
+
+        # Apri la pagina
+        self.goToPageRequest.emit(pagina_nome, True)
 
     def __display_eventi(self, layout_eventi: ListLayout) -> None:
         """Mostra a schermo le informazioni degli eventi salvati e associati ad

@@ -21,7 +21,7 @@ from view.info.utils import RegiaPageData
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
 from view.utils.custom_button import DefaultButton
-from view.utils import make_vline
+from view.utils import make_vline, make_hline
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
@@ -35,11 +35,13 @@ class VisualizzaSpettacoloView(AbstractVisualizzaView):
     Segnali
     ---
     - `displayEventiRequest(ListLayout)`: emesso per mostrare a schermo la lista eventi;
-    - `nuovoEventoRequest()`: emesso quando si clicca il pulsante Nuovo evento.
+    - `nuovoEventoRequest()`: emesso quando si clicca il pulsante Nuovo evento;
+    - `visualizzaPrezziRequest(int)`: emesso quando si clicca il pulsanti Lista prezzi.
     """
 
     displayEventiRequest = pyqtSignal(ListLayout)
     nuovoEventoRequest = pyqtSignal()
+    visualizzaPrezziRequest = pyqtSignal(int)
 
     def __init__(self, user_session: UserSession):
         self.is_biglietteria = user_session.ha_permessi_biglietteria()
@@ -129,6 +131,10 @@ class VisualizzaSpettacoloView(AbstractVisualizzaView):
         self._layout_content.addWidget(self.label_titolo)
         self._layout_content.addWidget(self.label_note)
         self._layout_content.addWidget(container_dati_speciali)
+        if self.is_biglietteria:
+            self.__btn_visualizza_prezzi = DefaultButton("Lista Prezzi")
+            self._layout_content.addWidget(self.__btn_visualizza_prezzi)
+        self._layout_content.addWidget(make_hline())
         self._layout_content.addWidget(self.eventi)
         self._layout_content.addStretch()
 
@@ -139,6 +145,10 @@ class VisualizzaSpettacoloView(AbstractVisualizzaView):
         if self.is_biglietteria:
             self.__btn_nuovo_evento.clicked.connect(  # type:ignore
                 self.nuovoEventoRequest.emit
+            )
+
+            self.__btn_visualizza_prezzi.clicked.connect(  # type:ignore
+                lambda: self.visualizzaPrezziRequest.emit(self.id_current_spettacolo)
             )
 
     # ------------------------- METODI DI VIEW -------------------------

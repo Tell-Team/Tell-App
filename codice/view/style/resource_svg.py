@@ -11,6 +11,8 @@ def __resource_path(*parts: str) -> str:
 
 
 # __ROOT = /codice/view//style/
+CREA_ICON = QIcon(__resource_path("icons", "crea.svg"))
+SALVA_ICON = QIcon(__resource_path("icons", "salva.svg"))
 ELIMINA_ICON = QIcon(__resource_path("icons", "elimina.svg"))
 MODIFICA_ICON = QIcon(__resource_path("icons", "modifica.svg"))
 RICERCA_ICON = QIcon(__resource_path("icons", "ricerca.svg"))

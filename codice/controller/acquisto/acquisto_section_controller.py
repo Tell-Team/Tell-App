@@ -7,6 +7,7 @@ from controller.navigation import Pagina
 from model.model import Model
 from model.pianificazione.spettacolo import Spettacolo
 from model.pianificazione.regia import Regia
+from model.organizzazione.evento import Evento
 
 from view.acquisto.pagine import AcquistoSectionView
 from view.acquisto.widgets import AcquistoDisplay
@@ -63,6 +64,9 @@ class AcquistoSectionController(AbstractSectionController):
                 )
             )
         )
+
+    def __get_eventi_by_spettacolo(self, id_: int) -> list[Evento]:
+        return self._model.get_eventi_by_spettacolo(id_)
 
     def __display_spettacoli(self, layout_spettacoli: ListLayout) -> None:
         """Mostra a schermo alcune informazioni degli spettacoli salvati ed assegna a
@@ -134,7 +138,7 @@ class AcquistoSectionController(AbstractSectionController):
             tecnici=current_spettacolo.get_tecnici(),
         )
 
-        lista_eventi = self._model.get_eventi_by_spettacolo(current_spettacolo.get_id())
+        lista_eventi = self.__get_eventi_by_spettacolo(current_spettacolo.get_id())
 
         current_pagina.set_data(spettacolo_data, lista_eventi)
 

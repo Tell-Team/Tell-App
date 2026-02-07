@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
-    QPushButton,
     QVBoxLayout,
     QHBoxLayout,
     QGridLayout,
@@ -22,6 +21,7 @@ from view.teatro.utils import SezionePageData
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
+from view.utils.custom_button import SalvaButton
 from view.utils import make_vline
 
 from view.style.ui_style import WidgetRole, WidgetColor
@@ -96,8 +96,7 @@ class VisualizzaSezioneView(AbstractVisualizzaView):
 
         self.checkbox_numeri = QCheckBox()
 
-        self.__btn_aggiungi_posto = QPushButton("Aggiungi")
-        self.__btn_aggiungi_posto.setProperty(WidgetRole.SAVE_BUTTON, True)
+        self.__btn_aggiungi_posto = SalvaButton("Aggiungi", has_icon=False)
 
         crea_posto_fields = QWidget()
         layout_crea_posto_fields = QHBoxLayout(crea_posto_fields)

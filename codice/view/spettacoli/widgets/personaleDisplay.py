@@ -34,14 +34,14 @@ class PersonaleDisplay(ItemDisplay):
         widget_key.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
         scroll_key = HorizontalWheelScrollArea()
         scroll_key.setWidget(widget_key)
-        scroll_key.setMinimumWidth(250)  # - DA CORRIGERE
+        scroll_key.setMinimumWidth(250)
 
         widget_value = QLabel(value)
         widget_value.setProperty(WidgetRole.BODY_TEXT, True)
         widget_value.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
         scroll_value = HorizontalWheelScrollArea()
         scroll_value.setWidget(widget_value)
-        scroll_value.setMinimumWidth(200)  # - DA CORRIGERE
+        scroll_value.setMinimumWidth(200)
 
         self.__btn_rimuovi = EliminaButton()
         self.__btn_rimuovi.setFixedSize(32, 32)

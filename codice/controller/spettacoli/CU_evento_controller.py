@@ -127,7 +127,7 @@ class CUEventoController(AbstractCUController):
             try:
                 self.__modifica_evento(copia_evento)
             except IdInesistenteException as exc:
-                # Non esiste un genere con quell'id
+                # Non esiste un'evento con quell'id
                 PopupMessage.mostra_errore(
                     current_pagina,
                     "ID Evento insesistente",

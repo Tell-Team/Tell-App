@@ -2,7 +2,6 @@ from abc import abstractmethod
 from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
-    QPushButton,
     QFormLayout,
     QVBoxLayout,
     QHBoxLayout,
@@ -14,7 +13,7 @@ from functools import partial
 
 from core.metaclasses import ABCQObjectMeta
 
-from view.utils.custom_button import DefaultButton
+from view.utils.custom_button import DefaultButton, SalvaButton
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
@@ -67,8 +66,7 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
         # Setup Pulsanti
         self._btn_annulla = DefaultButton("Annulla")
 
-        self._btn_conferma = QPushButton("Salva")
-        self._btn_conferma.setProperty(WidgetRole.SAVE_BUTTON, True)
+        self._btn_conferma = SalvaButton("Salva", has_icon=False)
 
         self._pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self._pulsanti)

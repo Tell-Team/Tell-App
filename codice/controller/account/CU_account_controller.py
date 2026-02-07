@@ -66,6 +66,22 @@ class CUAccountController(AbstractCUController):
     def __aggiungi_account(self, account: Account, agent_id: int) -> None:
         self._model.aggiungi_account(account, agent_id)
 
+    def __cambia_password(
+        self,
+        account_id: int,
+        password_corrente: str,
+        nuova_password: str,
+        agent_id: int,
+    ) -> None:
+        self._model.cambia_password(
+            account_id, password_corrente, nuova_password, agent_id
+        )
+
+    def __cambia_ruolo(
+        self, account_id: int, nuovo_ruolo: Ruolo, agent_id: int
+    ) -> None:
+        self._model.cambia_ruolo(account_id, nuovo_ruolo, agent_id)
+
     def __set_modifica_password_enabled(self, text: str) -> None:
         self._view_modifica.set_modifica_password_enabled(bool(text))
 
@@ -168,7 +184,7 @@ class CUAccountController(AbstractCUController):
                     )
                     return
 
-                self._model.cambia_password(
+                self.__cambia_password(
                     id_account, password, password_new, self.__user_session_id
                 )
             if ruolo is None:
@@ -181,7 +197,7 @@ class CUAccountController(AbstractCUController):
                 )
                 return
 
-            self._model.cambia_ruolo(id_account, ruolo, self.__user_session_id)
+            self.__cambia_ruolo(id_account, ruolo, self.__user_session_id)
         except DatoIncongruenteException as e:
             # È stato trovato un campo con input non valido
             current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)

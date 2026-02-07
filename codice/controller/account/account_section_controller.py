@@ -54,6 +54,9 @@ class AccountSectionController(AbstractSectionController):
     def __get_account(self, id_: int) -> Optional[Account]:
         return self._model.get_account(id_)
 
+    def __get_accounts(self) -> list[Account]:
+        return self._model.get_accounts()
+
     def __elimina_account(self, id_: int) -> None:
         self._model.elimina_account(id_, self.__user_session_id)
 
@@ -63,7 +66,7 @@ class AccountSectionController(AbstractSectionController):
 
         :param layout_accounts: layout dove saranno caricati tutti gli account
         """
-        accounts = self._model.get_accounts()
+        accounts = self.__get_accounts()
 
         # Verifica che la lista non sia vuota
         if not accounts:

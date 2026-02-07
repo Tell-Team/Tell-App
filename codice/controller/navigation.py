@@ -22,6 +22,9 @@ class Pagina(Enum):
 
     SEZIONE_SPETTACOLI = "spettacoli_section"
     VISUALIZZA_SPETTACOLO = "visualizza_spettacolo"
+    PREZZI_ASSOCIATI = "prezzi_associati"
+    NUOVO_PREZZO = "nuovo_prezzo"
+    MODIFICA_PREZZO = "modifica_prezzo"
     NUOVO_SPETTACOLO = "nuovo_spettacolo"
     MODIFICA_SPETTACOLO = "modifica_spettacolo"
     NUOVO_EVENTO = "nuovo_evento"
@@ -177,6 +180,9 @@ class NavigationController(QObject):
             from view.spettacoli.pagine import (
                 SpettacoliSectionView,
                 VisualizzaSpettacoloView,
+                PrezziAssociatiView,
+                NuovoPrezzoView,
+                ModificaPrezzoView,
                 NuovoSpettacoloView,
                 ModificaSpettacoloView,
                 NuovoEventoView,
@@ -187,6 +193,9 @@ class NavigationController(QObject):
             self.__visualizza_spettacolo_view = VisualizzaSpettacoloView(
                 self.__user_session
             )
+            self.__prezzi_associati_view = PrezziAssociatiView()
+            self.__nuovo_prezzo_view = NuovoPrezzoView()
+            self.__modifica_prezzo_view = ModificaPrezzoView()
             self.__nuovo_spettacolo_view = NuovoSpettacoloView()
             self.__modifica_spettacolo_view = ModificaSpettacoloView()
             self.__nuovo_evento_view = NuovoEventoView()
@@ -252,6 +261,11 @@ class NavigationController(QObject):
             self.__registra_pagina(
                 Pagina.VISUALIZZA_SPETTACOLO, self.__visualizza_spettacolo_view
             )
+            self.__registra_pagina(
+                Pagina.PREZZI_ASSOCIATI, self.__prezzi_associati_view
+            )
+            self.__registra_pagina(Pagina.NUOVO_PREZZO, self.__nuovo_prezzo_view)
+            self.__registra_pagina(Pagina.MODIFICA_PREZZO, self.__modifica_prezzo_view)
             self.__registra_pagina(
                 Pagina.NUOVO_SPETTACOLO, self.__nuovo_spettacolo_view
             )
@@ -324,6 +338,8 @@ class NavigationController(QObject):
             from controller.spettacoli import (
                 SpettacoliSectionController,
                 VisualizzaSpettacoloController,
+                PrezziAssociatiController,
+                CUPrezzoController,
                 CUSpettacoloController,
                 CUEventoController,
             )
@@ -339,6 +355,16 @@ class NavigationController(QObject):
                         "__visualizza_spettacolo_controller",
                         VisualizzaSpettacoloController,
                         (model, self.__visualizza_spettacolo_view),
+                    ),
+                    (
+                        "__prezzi_associati_controller",
+                        PrezziAssociatiController,
+                        (model, self.__prezzi_associati_view),
+                    ),
+                    (
+                        "__cu_prezzo_controller",
+                        CUPrezzoController,
+                        (model, self.__nuovo_prezzo_view, self.__modifica_prezzo_view),
                     ),
                     (
                         "__cu_spettacolo_controller",
