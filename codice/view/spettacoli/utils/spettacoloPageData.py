@@ -9,4 +9,4 @@ class SpettacoloPageData:
     titolo: str
     note: str
     interpreti: dict[str, str]
-    tecnici: dict[str, str]
+    musicisti_e_direttori_artistici: dict[str, str]

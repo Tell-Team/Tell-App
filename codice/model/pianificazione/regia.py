@@ -10,10 +10,15 @@ class Regia(Spettacolo):
         id_opera: int,
         note: str,
         interpreti: dict[str, str],
-        tecnici: dict[str, str],
+        musicisti_e_direttori_artistici: dict[str, str],
     ):
         """Throws: DatoIncongruenteException"""
-        super().__init__(f"{regista} ({anno_produzione})", note, interpreti, tecnici)
+        super().__init__(
+            f"{regista} ({anno_produzione})",
+            note,
+            interpreti,
+            musicisti_e_direttori_artistici,
+        )
 
         self.set_regista(regista)
         self.set_anno_produzione(anno_produzione)
@@ -63,7 +68,7 @@ class Regia(Spettacolo):
             and self.get_titolo() == other.get_titolo()  # type: ignore
             and self.get_note() == other.get_note()  # type: ignore
             and self.get_interpreti() == other.get_interpreti()  # type: ignore
-            and self.get_tecnici() == other.get_tecnici()  # type: ignore
+            and self.get_musicisti_e_direttori_artistici() == other.get_musicisti_e_direttori_artistici()  # type: ignore
         ):
             return True
 

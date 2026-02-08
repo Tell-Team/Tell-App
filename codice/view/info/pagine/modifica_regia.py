@@ -32,7 +32,9 @@ class ModificaRegiaView(NuovaRegiaView):
         self.titolo.setText(data.titolo)
         self.note.setText(data.note)
         self.lista_interpreti = data.interpreti
-        self.lista_tecnici = data.tecnici
+        self.lista_musicisti_e_direttori_artistici = (
+            data.musicisti_e_direttori_artistici
+        )
         self.regista.setText(data.regista)
         self.anno.setValue(data.anno_produzione)
 

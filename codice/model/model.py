@@ -241,6 +241,16 @@ class Model:
             )
         )
 
+    def get_spettacoli_in_programma_by_titolo(self, titolo: str) -> list[Spettacolo]:
+        titolo_lower = titolo.lower()
+        return list(
+            filter(
+                lambda s: self.__spettacolo_in_programma(s)
+                and titolo_lower in s.get_titolo().lower(),
+                self.get_spettacoli(),
+            )
+        )
+
     def get_spettacoli_by_titolo(self, titolo: str) -> list[Spettacolo]:
         return self.__gestore_spettacoli.get_spettacoli_by_titolo(titolo)
 
@@ -494,8 +504,21 @@ class Model:
         """Throws: IdInesistenteException, OccupatoException"""
         self.__valida_opera(opera_modificata)
 
+        opera_da_modificare = self.get_opera(opera_modificata.get_id())
+        nome_modificato = False
+        if opera_da_modificare is not None:
+            nome_modificato = (
+                opera_modificata.get_nome() != opera_da_modificare.get_nome()
+            )
+
         self.__gestore_opere.modifica_opera(opera_modificata)
+        if nome_modificato:
+            for r in self.get_regie_by_opera(opera_modificata.get_id()):
+                r.set_titolo(opera_modificata.get_nome())
+                self.modifica_spettacolo(r)
+
         self.__salva_opere()
+        self.__salva_spettacoli()
 
     #   SPETTACOLI
     def aggiungi_spettacolo(self, spettacolo: Spettacolo):

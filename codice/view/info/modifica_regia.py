@@ -17,7 +17,7 @@ from PyQt6.QtWidgets import (
 class ModificaRegiaView(QWidget):
     """
     View per la modifica di una scheda di Regia esistente.
-    Gestisce righe dinamiche per i dettagli tecnici.
+    Gestisce righe dinamiche per i dettagli musicisti_e_direttori_artistici.
 
     Segnali:
     - regia_modificata(dict): emesso al salvataggio.
@@ -82,7 +82,9 @@ class ModificaRegiaView(QWidget):
         # Layout Principale
         main_layout: QVBoxLayout = QVBoxLayout(self)
         main_layout.addWidget(self.__titolo_label)
-        main_layout.addWidget(QLabel("Dettagli Tecnici (Luci, Audio, Scena):"))
+        main_layout.addWidget(
+            QLabel("Dettagli Musicisti_e_direttori_artistici (Luci, Audio, Scena):")
+        )
         main_layout.addWidget(self.__scroll_area)
         main_layout.addWidget(self.__btn_aggiungi_riga)
         main_layout.addLayout(btn_layout)

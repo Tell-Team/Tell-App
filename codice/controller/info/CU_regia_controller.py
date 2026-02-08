@@ -58,8 +58,8 @@ class CURegiaController(AbstractCUController):
             pagina.displayInterpreti.connect(  # type:ignore
                 self.__display_interpreti
             )
-            pagina.displayTecnici.connect(  # type:ignore
-                self.__display_tecnici
+            pagina.displayMusicisti_e_direttori_artistici.connect(  # type:ignore
+                self.__display_musicisti_e_direttori_artistici
             )
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
@@ -96,22 +96,26 @@ class CURegiaController(AbstractCUController):
         pagina.aggiorna_pagina()
 
     def __aggiungi_tecnico(self, pagina: NuovaRegiaView, nome: str, posto: str) -> None:
-        """Aggiunge un tecnico alla `lista_tecnici` della pagina.
+        """Aggiunge un tecnico alla `lista_musicisti_e_direttori_artistici` della pagina.
 
         :param pagina: pagina dove il tecnico sarà aggiunto
         :param nome: nome del tecnico
         :param posto: posto del tecnico"""
         # Verifiche che ci sia input
         if not nome or not posto:
-            pagina.label_lista_tecnici_error.setText("Input non valido")
+            pagina.label_lista_musicisti_e_direttori_artistici_error.setText(
+                "Input non valido"
+            )
             return
 
         # Verifica che il tecnico non sia presente nella lista
-        if nome in pagina.lista_tecnici.keys():
-            pagina.label_lista_tecnici_error.setText("Tecnico esistente")
+        if nome in pagina.lista_musicisti_e_direttori_artistici.keys():
+            pagina.label_lista_musicisti_e_direttori_artistici_error.setText(
+                "Tecnico esistente"
+            )
             return
 
-        pagina.lista_tecnici[nome] = posto
+        pagina.lista_musicisti_e_direttori_artistici[nome] = posto
         pagina.aggiorna_pagina()
 
     def __display_interpreti(self, pagina: NuovaRegiaView) -> None:
@@ -142,33 +146,35 @@ class CURegiaController(AbstractCUController):
 
             pagina.layout_lista_interpreti.aggiungi_list_item(current_interprete)
 
-    def __display_tecnici(self, pagina: NuovaRegiaView) -> None:
-        """Mostra a schermo le informazioni dei tecnici salvati nella
-        `lista_tecnici` della pagina ed assegna a ciascuno un pulsante di elimina.
+    def __display_musicisti_e_direttori_artistici(self, pagina: NuovaRegiaView) -> None:
+        """Mostra a schermo le informazioni dei musicisti_e_direttori_artistici salvati nella
+        `lista_musicisti_e_direttori_artistici` della pagina ed assegna a ciascuno un pulsante di elimina.
 
-        :param pagina: pagina dove saranno caricati i tecnici
+        :param pagina: pagina dove saranno caricati i musicisti_e_direttori_artistici
         """
-        # Ottieni la lista tecnici (dict)
-        tecnici = pagina.lista_tecnici
+        # Ottieni la lista musicisti_e_direttori_artistici (dict)
+        musicisti_e_direttori_artistici = pagina.lista_musicisti_e_direttori_artistici
 
         # Verifica che il dict non sia vuoto
-        if len(tecnici) == 0:
-            pagina.layout_lista_tecnici.mostra_msg_lista_vuota()
+        if len(musicisti_e_direttori_artistici) == 0:
+            pagina.layout_lista_musicisti_e_direttori_artistici.mostra_msg_lista_vuota()
             return
 
-        # Mostra tutti i tecnici salvati a schermo
-        for nome, posto in tecnici.items():
+        # Mostra tutti i musicisti_e_direttori_artistici salvati a schermo
+        for nome, posto in musicisti_e_direttori_artistici.items():
             current_tecnico = PersonaleDisplay(nome, posto)
 
             def elimina_interprete(nome: str) -> None:
-                pagina.lista_tecnici.pop(nome)
+                pagina.lista_musicisti_e_direttori_artistici.pop(nome)
                 pagina.aggiorna_pagina()
 
             current_tecnico.eliminaRequest.connect(  # type:ignore
                 elimina_interprete
             )
 
-            pagina.layout_lista_tecnici.aggiungi_list_item(current_tecnico)
+            pagina.layout_lista_musicisti_e_direttori_artistici.aggiungi_list_item(
+                current_tecnico
+            )
 
     @override
     def _richiesta_nuovo(self) -> None:
@@ -177,14 +183,23 @@ class CURegiaController(AbstractCUController):
         # Ottieni l'input inserito
         note = current_pagina.note.toPlainText()
         interpreti = current_pagina.lista_interpreti
-        tecnici = current_pagina.lista_tecnici
+        musicisti_e_direttori_artistici = (
+            current_pagina.lista_musicisti_e_direttori_artistici
+        )
         regista = current_pagina.regista.text()
         anno = current_pagina.anno.value()
         id_opera = current_pagina.opera.currentData()
 
         # Tenta di creare la nuova regia
         try:
-            nuova_regia = Regia(regista, anno, id_opera, note, interpreti, tecnici)
+            nuova_regia = Regia(
+                regista,
+                anno,
+                id_opera,
+                note,
+                interpreti,
+                musicisti_e_direttori_artistici,
+            )
         except DatoIncongruenteException as exc:
             # È stato trovato un campo con input non valido
             current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
@@ -227,7 +242,9 @@ class CURegiaController(AbstractCUController):
         # Ottieni l'input inserito
         note = current_pagina.note.toPlainText()
         interpreti = current_pagina.lista_interpreti
-        tecnici = current_pagina.lista_tecnici
+        musicisti_e_direttori_artistici = (
+            current_pagina.lista_musicisti_e_direttori_artistici
+        )
         regista = current_pagina.regista.text()
         anno = current_pagina.anno.value()
         id_opera = current_pagina.opera.currentData()
@@ -237,7 +254,9 @@ class CURegiaController(AbstractCUController):
             # copia_regia.set_titolo(titolo)
             copia_regia.set_note(note)
             copia_regia.set_interpreti(interpreti)
-            copia_regia.set_tecnici(tecnici)
+            copia_regia.set_musicisti_e_direttori_artistici(
+                musicisti_e_direttori_artistici
+            )
             copia_regia.set_regista(regista)
             copia_regia.set_anno_produzione(anno)
             copia_regia.set_id_opera(id_opera)

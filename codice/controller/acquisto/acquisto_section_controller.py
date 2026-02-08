@@ -135,7 +135,7 @@ class AcquistoSectionController(AbstractSectionController):
             titolo=current_spettacolo.get_titolo(),
             note=current_spettacolo.get_note(),
             interpreti=current_spettacolo.get_interpreti(),
-            tecnici=current_spettacolo.get_tecnici(),
+            musicisti_e_direttori_artistici=current_spettacolo.get_musicisti_e_direttori_artistici(),
         )
 
         lista_eventi = self.__get_eventi_by_spettacolo(current_spettacolo.get_id())

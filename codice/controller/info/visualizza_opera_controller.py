@@ -186,7 +186,7 @@ class VisualizzaOperaController(AbstractVisualizzaController):
             titolo=current_regia.get_titolo(),
             note=current_regia.get_note(),
             interpreti=current_regia.get_interpreti(),
-            tecnici=current_regia.get_tecnici(),
+            musicisti_e_direttori_artistici=current_regia.get_musicisti_e_direttori_artistici(),
             regista=current_regia.get_regista(),
             anno_produzione=current_regia.get_anno_produzione(),
             id_opera=current_regia.get_id_opera(),

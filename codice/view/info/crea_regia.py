@@ -8,10 +8,10 @@ from PyQt6.QtWidgets import (
     QFormLayout,
     QHBoxLayout,
     QVBoxLayout,
-    QMessageBox, 
-    QGridLayout, 
-    QScrollArea, 
-    QSizePolicy
+    QMessageBox,
+    QGridLayout,
+    QScrollArea,
+    QSizePolicy,
 )
 
 # Definizione di un tipo per rappresentare il dettaglio di un ruolo
@@ -56,12 +56,16 @@ class CreaRegiaView(QWidget):
 
         # 1. Titolo
         self.__titolo: QLabel = QLabel("Aggiungi Nuova Regia per: [Titolo Opera]")
-        self.__titolo.setStyleSheet("font-size: 18pt; font-weight: bold; border-bottom: 2px solid #ccc;")
+        self.__titolo.setStyleSheet(
+            "font-size: 18pt; font-weight: bold; border-bottom: 2px solid #ccc;"
+        )
         self.__titolo.setContentsMargins(0, 0, 0, 10)
 
         # 2. Dati Base Regia (FormLayout)
         self.__nome_regia_input: QLineEdit = QLineEdit()
-        self.__nome_regia_input.setPlaceholderText("Es. Regia di [Nome] - Stagione [Anno]")
+        self.__nome_regia_input.setPlaceholderText(
+            "Es. Regia di [Nome] - Stagione [Anno]"
+        )
         self.__regista_input: QLineEdit = QLineEdit()
         self.__stagione_input: QLineEdit = QLineEdit()
         self.__stagione_input.setPlaceholderText("Es. 2025/2026")
@@ -70,17 +74,21 @@ class CreaRegiaView(QWidget):
         dati_base_layout.setContentsMargins(0, 10, 0, 10)
         dati_base_layout.addRow(QLabel("Nome Regia *"), self.__nome_regia_input)
         dati_base_layout.addRow(QLabel("Regista *"), self.__regista_input)
-        dati_base_layout.addRow(QLabel("Stagione / Anno di Validità *"), self.__stagione_input)
+        dati_base_layout.addRow(
+            QLabel("Stagione / Anno di Validità *"), self.__stagione_input
+        )
 
-        # 3. Dettagli Artistici e Tecnici Flessibili (QGridLayout in QScrollArea)
+        # 3. Dettagli Artistici e Musicisti_e_direttori_artistici Flessibili (QGridLayout in QScrollArea)
 
         # Layout per i dettagli (Griglia dove si aggiungono le righe)
         self.__dettagli_grid_layout: QGridLayout = QGridLayout()
         self.__dettagli_grid_layout.setSpacing(5)
         # Intestazioni della tabella
         self.__dettagli_grid_layout.addWidget(QLabel("<b>Ruolo (Chiave)</b>"), 0, 0)
-        self.__dettagli_grid_layout.addWidget(QLabel("<b>Nominativo (Valore)</b>"), 0, 1)
-        self.__dettagli_grid_layout.addWidget(QLabel(""), 0, 2) # Per il bottone 'X'
+        self.__dettagli_grid_layout.addWidget(
+            QLabel("<b>Nominativo (Valore)</b>"), 0, 1
+        )
+        self.__dettagli_grid_layout.addWidget(QLabel(""), 0, 2)  # Per il bottone 'X'
 
         # Widget contenitore e Area di Scorrimento per i dettagli
         dettagli_container: QWidget = QWidget()
@@ -89,16 +97,19 @@ class CreaRegiaView(QWidget):
         scroll_area: QScrollArea = QScrollArea()
         scroll_area.setWidgetResizable(True)
         scroll_area.setWidget(dettagli_container)
-        scroll_area.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
-        scroll_area.setMaximumHeight(200) # Limita l'altezza della tabella
+        scroll_area.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum
+        )
+        scroll_area.setMaximumHeight(200)  # Limita l'altezza della tabella
 
         self.__btn_aggiungi_ruolo: QPushButton = QPushButton("+ Aggiungi Ruolo")
-        self.__btn_aggiungi_ruolo.setStyleSheet("background-color: #17a2b8; color: white;")
+        self.__btn_aggiungi_ruolo.setStyleSheet(
+            "background-color: #17a2b8; color: white;"
+        )
         self.__btn_aggiungi_ruolo.clicked.connect(self.__aggiungi_riga_dettaglio)
 
         # Aggiunge una riga iniziale (mockup)
         self.__aggiungi_riga_dettaglio()
-
 
         # 4. Bottoni Azioni
         self.__btn_annulla: QPushButton = QPushButton("Annulla")
@@ -117,10 +128,20 @@ class CreaRegiaView(QWidget):
         main_layout.addWidget(QLabel("<h2>Dati Base Regia</h2>"))
         main_layout.addLayout(dati_base_layout)
         main_layout.addWidget(QLabel("<hr>"))
-        main_layout.addWidget(QLabel("<h2>Dettagli Artistici e Tecnici Flessibili</h2>"))
-        main_layout.addWidget(QLabel("<p>Aggiungere i membri del team (Direttore d'orchestra, Costumista, Scenografo, ecc.).</p>"))
+        main_layout.addWidget(
+            QLabel(
+                "<h2>Dettagli Artistici e Musicisti_e_direttori_artistici Flessibili</h2>"
+            )
+        )
+        main_layout.addWidget(
+            QLabel(
+                "<p>Aggiungere i membri del team (Direttore d'orchestra, Costumista, Scenografo, ecc.).</p>"
+            )
+        )
         main_layout.addWidget(scroll_area)
-        main_layout.addWidget(self.__btn_aggiungi_ruolo, alignment=Qt.AlignmentFlag.AlignLeft)
+        main_layout.addWidget(
+            self.__btn_aggiungi_ruolo, alignment=Qt.AlignmentFlag.AlignLeft
+        )
         main_layout.addLayout(btn_layout)
         main_layout.setSpacing(15)
 
@@ -169,7 +190,6 @@ class CreaRegiaView(QWidget):
         # Aggiunge una riga iniziale pulita
         self.__aggiungi_riga_dettaglio()
 
-
     # ------------------------- METODI PRIVATI DI GESTIONE DATI/UI -------------------------
 
     def __pulisci_dettagli(self) -> None:
@@ -178,13 +198,14 @@ class CreaRegiaView(QWidget):
 
         :raises: nessuna eccezione prevista.
         """
-        while self.__dettagli_grid_layout.count() > 3: # 3 sono le intestazioni
-            item = self.__dettagli_grid_layout.takeAt(3) # Partiamo dalla quarta posizione (indice 3)
+        while self.__dettagli_grid_layout.count() > 3:  # 3 sono le intestazioni
+            item = self.__dettagli_grid_layout.takeAt(
+                3
+            )  # Partiamo dalla quarta posizione (indice 3)
             widget = item.widget()
             if widget is not None:
                 widget.deleteLater()
         self.__campi_dettagli.clear()
-
 
     def __aggiungi_riga_dettaglio(self, ruolo: str = "", nominativo: str = "") -> None:
         """
@@ -194,7 +215,7 @@ class CreaRegiaView(QWidget):
         :param nominativo: valore iniziale per il campo nominativo.
         :raises: nessuna eccezione prevista.
         """
-        riga: int = len(self.__campi_dettagli) + 1 # +1 perché 0 è l'intestazione
+        riga: int = len(self.__campi_dettagli) + 1  # +1 perché 0 è l'intestazione
 
         # Campi Input
         ruolo_input: QLineEdit = QLineEdit(ruolo)
@@ -203,14 +224,16 @@ class CreaRegiaView(QWidget):
         # Bottone Rimuovi
         btn_rimuovi: QPushButton = QPushButton("X")
         btn_rimuovi.setFixedSize(25, 25)
-        btn_rimuovi.setStyleSheet("background-color: #dc3545; color: white; font-weight: bold;")
+        btn_rimuovi.setStyleSheet(
+            "background-color: #dc3545; color: white; font-weight: bold;"
+        )
 
         # Memorizza i riferimenti ai campi e la loro riga
         nuova_riga: Dict[str, QLineEdit] = {
             "ruolo": ruolo_input,
             "nominativo": nominativo_input,
             "bottone": btn_rimuovi,
-            "riga_indice": riga
+            "riga_indice": riga,
         }
         self.__campi_dettagli.append(nuova_riga)
 
@@ -222,7 +245,6 @@ class CreaRegiaView(QWidget):
         # Connessione per la rimozione
         # Usa lambda per passare l'oggetto riga quando il bottone è cliccato
         btn_rimuovi.clicked.connect(lambda: self.__rimuovi_riga_dettaglio(nuova_riga))
-
 
     def __rimuovi_riga_dettaglio(self, riga_da_rimuovere: Dict[str, Any]) -> None:
         """
@@ -243,10 +265,11 @@ class CreaRegiaView(QWidget):
             # 3. Ridispone i widget rimanenti per eliminare lo spazio vuoto
             self.__aggiorna_layout_dettagli()
 
-        except ValueError: # pragma: no cover
+        except ValueError:  # pragma: no cover
             # Questo non dovrebbe succedere se la logica è corretta
-            self.__mostra_errore("Errore Interno", "Riferimento alla riga di dettaglio non trovato.")
-
+            self.__mostra_errore(
+                "Errore Interno", "Riferimento alla riga di dettaglio non trovato."
+            )
 
     def __aggiorna_layout_dettagli(self) -> None:
         """
@@ -265,13 +288,12 @@ class CreaRegiaView(QWidget):
 
         # Reinserisce i widget dalla lista aggiornata
         for i, riga in enumerate(self.__campi_dettagli):
-            nuova_riga = i + 1 # L'indice di riga effettivo
+            nuova_riga = i + 1  # L'indice di riga effettivo
             self.__dettagli_grid_layout.addWidget(riga["ruolo"], nuova_riga, 0)
             self.__dettagli_grid_layout.addWidget(riga["nominativo"], nuova_riga, 1)
             self.__dettagli_grid_layout.addWidget(riga["bottone"], nuova_riga, 2)
             # Potrebbe essere necessario aggiornare riga_indice in riga (anche se non strettamente necessario per la logica)(?)
             riga["riga_indice"] = nuova_riga
-
 
     def __get_dettagli_form(self) -> List[DettaglioRuolo]:
         """
@@ -289,12 +311,8 @@ class CreaRegiaView(QWidget):
 
             # Include solo se almeno un campo è valorizzato (per la validazione successiva)
             if ruolo or nominativo:
-                dettagli_raccolti.append({
-                    "ruolo": ruolo,
-                    "nominativo": nominativo
-                })
+                dettagli_raccolti.append({"ruolo": ruolo, "nominativo": nominativo})
         return dettagli_raccolti
-
 
     def __mostra_errore(self, titolo: str, testo: str) -> None:
         """
@@ -318,25 +336,38 @@ class CreaRegiaView(QWidget):
         :raises: nessuna eccezione prevista.
         """
         if not self.__nome_regia_input.text().strip():
-            self.__mostra_errore("Valore mancante", "Il campo 'Nome Regia' è obbligatorio.")
+            self.__mostra_errore(
+                "Valore mancante", "Il campo 'Nome Regia' è obbligatorio."
+            )
             return False
         if not self.__regista_input.text().strip():
-            self.__mostra_errore("Valore mancante", "Il campo 'Regista' è obbligatorio.")
+            self.__mostra_errore(
+                "Valore mancante", "Il campo 'Regista' è obbligatorio."
+            )
             return False
         if not self.__stagione_input.text().strip():
-            self.__mostra_errore("Valore mancante", "Il campo 'Stagione/Anno di Validità' è obbligatorio.")
+            self.__mostra_errore(
+                "Valore mancante",
+                "Il campo 'Stagione/Anno di Validità' è obbligatorio.",
+            )
             return False
 
         # Validazione Dettagli Flessibili:
         # Va ad assicurarsi che se una riga è parzialmente compilata l'utente sia avvisato
         dettagli = self.__get_dettagli_form()
         for i, dettaglio in enumerate(dettagli):
-            if (dettaglio["ruolo"] and not dettaglio["nominativo"]):
-                 self.__mostra_errore("Dettaglio incompleto", f"Nella riga {i+1} dei Dettagli Flessibili, hai inserito un Ruolo ma non il Nominativo.")
-                 return False
-            if (dettaglio["nominativo"] and not dettaglio["ruolo"]):
-                 self.__mostra_errore("Dettaglio incompleto", f"Nella riga {i+1} dei Dettagli Flessibili, hai inserito un Nominativo ma non il Ruolo.")
-                 return False
+            if dettaglio["ruolo"] and not dettaglio["nominativo"]:
+                self.__mostra_errore(
+                    "Dettaglio incompleto",
+                    f"Nella riga {i+1} dei Dettagli Flessibili, hai inserito un Ruolo ma non il Nominativo.",
+                )
+                return False
+            if dettaglio["nominativo"] and not dettaglio["ruolo"]:
+                self.__mostra_errore(
+                    "Dettaglio incompleto",
+                    f"Nella riga {i+1} dei Dettagli Flessibili, hai inserito un Nominativo ma non il Ruolo.",
+                )
+                return False
         return True
 
     def __on_salva_clicked(self) -> None:
@@ -376,9 +407,11 @@ if __name__ == "__main__":
         print("\n--- REGIA CREATA ---")
         print(f"Dati Base: {dati['nome_regia']}, {dati['regista']}, {dati['stagione']}")
         print(f"Dettagli Flessibili ({len(dati['dettagli'])}):")
-        for dett in dati['dettagli']:
+        for dett in dati["dettagli"]:
             print(f"  - Ruolo: {dett['ruolo']}, Nominativo: {dett['nominativo']}")
-        QMessageBox.information(finestra, "Dati Ricevuti", "Regia salvata con successo!")
+        QMessageBox.information(
+            finestra, "Dati Ricevuti", "Regia salvata con successo!"
+        )
 
     def on_annullata() -> None:
         QMessageBox.information(finestra, "Annullato", "Operazione annullata")

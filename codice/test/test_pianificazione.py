@@ -489,7 +489,7 @@ class TestTell(unittest.TestCase):
         )
         print("Passato CONGRUENZA interpreti")
 
-        # CONGRUENZA tecnici
+        # CONGRUENZA musicisti_e_direttori_artistici
         self.assertRaises(
             DatoIncongruenteException,
             Regia,
@@ -510,7 +510,7 @@ class TestTell(unittest.TestCase):
             dict(),
             dict([(STR_NON_VUOTA, " ")]),
         )
-        print("Passato CONGRUENZA tecnici")
+        print("Passato CONGRUENZA musicisti_e_direttori_artistici")
 
     def test_model_spettacoli_e_regie(self):
         print("\n### MODEL SPETTEACOLI E REGIE ###")

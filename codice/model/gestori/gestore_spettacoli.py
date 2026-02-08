@@ -44,10 +44,11 @@ class GestoreSpettacoli:
         return copy.deepcopy(self.__lista_spettacoli)
 
     def get_spettacoli_by_titolo(self, titolo: str) -> list[Spettacolo]:
+        titolo_lower = titolo.lower()
         return copy.deepcopy(
             list(
                 filter(
-                    lambda o: titolo.lower() in o.get_titolo().lower(),
+                    lambda o: titolo_lower in o.get_titolo().lower(),
                     self.__lista_spettacoli,
                 )
             )

@@ -11,7 +11,7 @@ from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class PersonaleDisplay(ItemDisplay):
-    """View degli interpreti e tecnici degli spettacoli.
+    """View degli interpreti e musicisti_e_direttori_artistici degli spettacoli.
 
     Segnali
     ---

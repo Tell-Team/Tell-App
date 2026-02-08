@@ -45,7 +45,9 @@ class ModificaSpettacoloView(NuovoSpettacoloView):
         self.titolo.setText(data.titolo)
         self.note.setText(data.note)
         self.lista_interpreti = data.interpreti
-        self.lista_tecnici = data.tecnici
+        self.lista_musicisti_e_direttori_artistici = (
+            data.musicisti_e_direttori_artistici
+        )
 
         if isinstance(data, RegiaPageData):
             self.titolo.setEnabled(False)

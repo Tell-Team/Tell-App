@@ -162,7 +162,7 @@ class SpettacoliSectionController(AbstractSectionController):
                 titolo=current_spettacolo.get_titolo(),
                 note=current_spettacolo.get_note(),
                 interpreti=current_spettacolo.get_interpreti(),
-                tecnici=current_spettacolo.get_tecnici(),
+                musicisti_e_direttori_artistici=current_spettacolo.get_musicisti_e_direttori_artistici(),
                 regista=current_spettacolo.get_regista(),
                 anno_produzione=current_spettacolo.get_anno_produzione(),
                 id_opera=current_spettacolo.get_id_opera(),
@@ -173,7 +173,7 @@ class SpettacoliSectionController(AbstractSectionController):
                 titolo=current_spettacolo.get_titolo(),
                 note=current_spettacolo.get_note(),
                 interpreti=current_spettacolo.get_interpreti(),
-                tecnici=current_spettacolo.get_tecnici(),
+                musicisti_e_direttori_artistici=current_spettacolo.get_musicisti_e_direttori_artistici(),
             )
 
         lista_eventi = self.__get_eventi_by_spettacolo(current_spettacolo.get_id())
@@ -230,7 +230,7 @@ class SpettacoliSectionController(AbstractSectionController):
                 titolo=current_spettacolo.get_titolo(),
                 note=current_spettacolo.get_note(),
                 interpreti=current_spettacolo.get_interpreti(),
-                tecnici=current_spettacolo.get_tecnici(),
+                musicisti_e_direttori_artistici=current_spettacolo.get_musicisti_e_direttori_artistici(),
                 regista=current_spettacolo.get_regista(),
                 anno_produzione=current_spettacolo.get_anno_produzione(),
                 id_opera=current_spettacolo.get_id_opera(),
@@ -241,7 +241,7 @@ class SpettacoliSectionController(AbstractSectionController):
                 titolo=current_spettacolo.get_titolo(),
                 note=current_spettacolo.get_note(),
                 interpreti=current_spettacolo.get_interpreti(),
-                tecnici=current_spettacolo.get_tecnici(),
+                musicisti_e_direttori_artistici=current_spettacolo.get_musicisti_e_direttori_artistici(),
             )
 
         current_pagina.set_data(spettacolo_data)

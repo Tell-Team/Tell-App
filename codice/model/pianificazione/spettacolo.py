@@ -10,7 +10,7 @@ class Spettacolo:
         titolo: str,
         note: str,
         interpreti: dict[str, str],
-        tecnici: dict[str, str],
+        musicisti_e_direttori_artistici: dict[str, str],
     ):
         """Throws: DatoIncongruenteException"""
         self.__id = Spettacolo.__next_id
@@ -19,7 +19,7 @@ class Spettacolo:
         self.set_titolo(titolo)
         self.set_note(note)
         self.set_interpreti(interpreti)
-        self.set_tecnici(tecnici)
+        self.set_musicisti_e_direttori_artistici(musicisti_e_direttori_artistici)
 
     # Getters
     def get_id(self) -> int:
@@ -34,8 +34,8 @@ class Spettacolo:
     def get_interpreti(self) -> dict[str, str]:
         return copy.copy(self.__interpreti)
 
-    def get_tecnici(self) -> dict[str, str]:
-        return copy.copy(self.__tecnici)
+    def get_musicisti_e_direttori_artistici(self) -> dict[str, str]:
+        return copy.copy(self.__musicisti_e_direttori_artistici)
 
     # Setters
     @staticmethod
@@ -77,23 +77,27 @@ class Spettacolo:
 
         self.__interpreti = interpreti_stripped
 
-    def set_tecnici(self, tecnici: dict[str, str]):
+    def set_musicisti_e_direttori_artistici(
+        self, musicisti_e_direttori_artistici: dict[str, str]
+    ):
         """Throws: DatoIncongruenteException"""
-        tecnici_stripped = dict(
+        musicisti_e_direttori_artistici_stripped = dict(
             zip(
-                map(lambda i: i.strip(), tecnici.keys()),
-                map(lambda i: i.strip(), tecnici.values()),
+                map(lambda i: i.strip(), musicisti_e_direttori_artistici.keys()),
+                map(lambda i: i.strip(), musicisti_e_direttori_artistici.values()),
             )
         )
 
-        if "" in tecnici_stripped.keys():
+        if "" in musicisti_e_direttori_artistici_stripped.keys():
             raise DatoIncongruenteException(
                 "Il ruolo del tecnico non può essere vuoto."
             )
-        if "" in tecnici_stripped.values():
+        if "" in musicisti_e_direttori_artistici_stripped.values():
             raise DatoIncongruenteException("Il nome del tecnico non può essere vuoto.")
 
-        self.__tecnici = tecnici_stripped
+        self.__musicisti_e_direttori_artistici = (
+            musicisti_e_direttori_artistici_stripped
+        )
 
     # Magics
     def __eq__(self, other: object) -> bool:
@@ -101,7 +105,7 @@ class Spettacolo:
             self.get_titolo() == other.get_titolo()  # type: ignore
             and self.get_note() == other.get_note()  # type: ignore
             and self.get_interpreti() == other.get_interpreti()  # type: ignore
-            and self.get_tecnici() == other.get_tecnici()  # type: ignore
+            and self.get_musicisti_e_direttori_artistici() == other.get_musicisti_e_direttori_artistici()  # type: ignore
         ):
             return True
 

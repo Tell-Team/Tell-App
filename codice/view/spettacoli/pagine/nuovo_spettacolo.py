@@ -24,15 +24,15 @@ class NuovoSpettacoloView(AbstractCreaView):
     Segnali
     ---
     - `displayInterpreti(CreaAbstractView)`: emesso per mostrare la lista interpreti a schermo;
-    - `displayTecnici(CreaAbstractView)`: emesso per mostrare la lista tecnici a schermo;
+    - `displayMusicisti_e_direttori_artistici(CreaAbstractView)`: emesso per mostrare la lista musicisti_e_direttori_artistici a schermo;
     - `aggiungiInterprete(CreaAbstractView, str, str)`: emesso quando si clicca il pulsante
     Aggiungi degli interpreti;
     - `aggiungiTecnico(CreaAbstractView, str, str)`: emesso quando si clicca il pulsante Aggiungi
-    dei tecnici.
+    dei musicisti_e_direttori_artistici.
     """
 
     displayInterpreti = pyqtSignal(AbstractCreaView)
-    displayTecnici = pyqtSignal(AbstractCreaView)
+    displayMusicisti_e_direttori_artistici = pyqtSignal(AbstractCreaView)
     aggiungiInterprete = pyqtSignal(AbstractCreaView, str, str)
     aggiungiTecnico = pyqtSignal(AbstractCreaView, str, str)
 
@@ -125,24 +125,35 @@ class NuovoSpettacoloView(AbstractCreaView):
 
         label_tecnico.setFixedHeight(tecnico.sizeHint().height())
 
-        self.lista_tecnici: dict[str, str] = {}
+        self.lista_musicisti_e_direttori_artistici: dict[str, str] = {}
 
-        self.label_lista_tecnici_error = QLabel("")
-        self.label_lista_tecnici_error.setProperty(WidgetRole.BODY_TEXT, True)
-        self.label_lista_tecnici_error.setProperty(WidgetColor.Text.ERROR_MESSAGE, True)
+        self.label_lista_musicisti_e_direttori_artistici_error = QLabel("")
+        self.label_lista_musicisti_e_direttori_artistici_error.setProperty(
+            WidgetRole.BODY_TEXT, True
+        )
+        self.label_lista_musicisti_e_direttori_artistici_error.setProperty(
+            WidgetColor.Text.ERROR_MESSAGE, True
+        )
 
-        label_lista_tecnici_vuota = EmptyStateLabel(
+        label_lista_musicisti_e_direttori_artistici_vuota = EmptyStateLabel(
             "Non vi sono musicisti/direttori artistici registrati."
         )
-        label_lista_tecnici_vuota.setProperty(WidgetRole.BODY_TEXT, True)
-        label_lista_tecnici_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
-
-        widget_lista_tecnici = QWidget()
-        widget_lista_tecnici.setProperty(WidgetRole.ITEM_LIST, True)
-        self.layout_lista_tecnici = ListLayout(
-            widget_lista_tecnici, label_lista_tecnici_vuota
+        label_lista_musicisti_e_direttori_artistici_vuota.setProperty(
+            WidgetRole.BODY_TEXT, True
         )
-        # end-Lista tecnici
+        label_lista_musicisti_e_direttori_artistici_vuota.setProperty(
+            WidgetColor.Text.SECONDARY_TEXT, True
+        )
+
+        widget_lista_musicisti_e_direttori_artistici = QWidget()
+        widget_lista_musicisti_e_direttori_artistici.setProperty(
+            WidgetRole.ITEM_LIST, True
+        )
+        self.layout_lista_musicisti_e_direttori_artistici = ListLayout(
+            widget_lista_musicisti_e_direttori_artistici,
+            label_lista_musicisti_e_direttori_artistici_vuota,
+        )
+        # end-Lista musicisti_e_direttori_artistici
 
         spacer = QWidget()
         l_spacer = QVBoxLayout(spacer)
@@ -156,7 +167,10 @@ class NuovoSpettacoloView(AbstractCreaView):
             self.label_lista_interpreti_error, widget_lista_interpreti
         )
         self._form_layout.addRow(label_tecnico, tecnico)
-        self._form_layout.addRow(self.label_lista_tecnici_error, widget_lista_tecnici)
+        self._form_layout.addRow(
+            self.label_lista_musicisti_e_direttori_artistici_error,
+            widget_lista_musicisti_e_direttori_artistici,
+        )
         self._form_layout.addRow(None, spacer)
 
     @override
@@ -181,7 +195,7 @@ class NuovoSpettacoloView(AbstractCreaView):
 
         self.displayInterpreti.emit(self)
 
-        self.displayTecnici.emit(self)
+        self.displayMusicisti_e_direttori_artistici.emit(self)
 
     # ------------------------- METODI DI VIEW -------------------------
 
@@ -195,9 +209,9 @@ class NuovoSpettacoloView(AbstractCreaView):
 
         self.tecnico_nome.setText("")
         self.tecnico_posto.setText("")
-        self.label_lista_tecnici_error.setText("")
-        self.layout_lista_tecnici.svuota_layout()
-        self.displayTecnici.emit(self)
+        self.label_lista_musicisti_e_direttori_artistici_error.setText("")
+        self.layout_lista_musicisti_e_direttori_artistici.svuota_layout()
+        self.displayMusicisti_e_direttori_artistici.emit(self)
 
     @override
     def reset_pagina(self) -> None:
@@ -206,5 +220,5 @@ class NuovoSpettacoloView(AbstractCreaView):
         self.titolo.setText("")
         self.note.setText("")
         self.lista_interpreti = {}
-        self.lista_tecnici = {}
+        self.lista_musicisti_e_direttori_artistici = {}
         self._input_error.setText("")
