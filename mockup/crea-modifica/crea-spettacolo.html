@@ -63,9 +63,9 @@
       </div>
 
       <br />
-      <!-- LISTA TECNICI -->
-      <h3 style="margin: 3px">Tecnici</h3>
-      <div id="lista-tecnici"></div>
+      <!-- LISTA MUSICISTI E DIRETTORI ARTISTICI -->
+      <h3 style="margin: 3px">Musicisti e direttori artistici</h3>
+      <div id="lista-musicisti_e_direttori_artistici"></div>
 
       <div class="singola-riga">
         <label for="form-tecnico">Nuovo tecnico:</label>
@@ -134,15 +134,15 @@
       caricaOpere();
     </script>
 
-    <!-- Carica gli interpreti, tecnici e date dello spettacolo corrente (CASO MODIFICA) -->
+    <!-- Carica gli interpreti, musicisti e direttori artistici e date dello spettacolo corrente (CASO MODIFICA) -->
     <script>
       let tempInterpreti =
         JSON.parse(localStorage.getItem("tempInterpreti")) || [];
-      let tempTecnici = JSON.parse(localStorage.getItem("tempTecnici")) || [];
+      let tempMusicisti_e_direttori_artistici = JSON.parse(localStorage.getItem("tempMusicisti_e_direttori_artistici")) || [];
       let tempDate = JSON.parse(localStorage.getItem("tempDate")) || [];
 
       const listaDivInterpreti = document.getElementById("lista-interpreti");
-      const listaDivTecnici = document.getElementById("lista-tecnici");
+      const listaDivMusicisti_e_direttori_artistici = document.getElementById("lista-musicisti_e_direttori_artistici");
       const listaDivDate = document.getElementById("lista-date");
 
       function renderInterpreti() {
@@ -201,9 +201,9 @@
         }
       }
 
-      function renderTecnici() {
-        listaDivTecnici.innerHTML = "";
-        tempTecnici.forEach((tecnico, index) => {
+      function renderMusicisti_e_direttori_artistici() {
+        listaDivMusicisti_e_direttori_artistici.innerHTML = "";
+        tempMusicisti_e_direttori_artistici.forEach((tecnico, index) => {
           const container = document.createElement("div");
           container.classList.add("singola-riga");
 
@@ -221,9 +221,9 @@
 
           container.appendChild(p);
           container.appendChild(btnElimina);
-          listaDivTecnici.appendChild(container);
+          listaDivMusicisti_e_direttori_artistici.appendChild(container);
         });
-        localStorage.setItem("tempTecnici", JSON.stringify(tempTecnici));
+        localStorage.setItem("tempMusicisti_e_direttori_artistici", JSON.stringify(tempMusicisti_e_direttori_artistici));
       }
 
       function aggiungiTecnico() {
@@ -238,8 +238,8 @@
             "Ruolo e Nome del tecnico non possono essere vuoti.";
         } else {
           errorMessage.textContent = "";
-          tempTecnici.push({ ruolo, nome });
-          renderTecnici();
+          tempMusicisti_e_direttori_artistici.push({ ruolo, nome });
+          renderMusicisti_e_direttori_artistici();
           document.getElementById("form-tecnico-ruolo").value = "";
           document.getElementById("form-tecnico-nome").value = "";
         }
@@ -247,11 +247,11 @@
 
       function eliminaTecnico(index) {
         const conferma = window.confirm(
-          `Sei sicuro di voler eliminare il tecnico \'${tempTecnici[index].nome}\' (${tempTecnici[index].ruolo})?`
+          `Sei sicuro di voler eliminare il tecnico \'${tempMusicisti_e_direttori_artistici[index].nome}\' (${tempMusicisti_e_direttori_artistici[index].ruolo})?`
         );
         if (conferma) {
-          tempTecnici.splice(index, 1);
-          renderTecnici();
+          tempMusicisti_e_direttori_artistici.splice(index, 1);
+          renderMusicisti_e_direttori_artistici();
         }
       }
 
@@ -326,14 +326,14 @@
           document.getElementById("form-note").value = modifica.note;
 
           tempInterpreti = modifica.interpreti || [];
-          tempTecnici = modifica.tecnici || [];
+          tempMusicisti_e_direttori_artistici = modifica.musicisti_e_direttori_artistici || [];
           renderInterpreti();
-          renderTecnici();
+          renderMusicisti_e_direttori_artistici();
         } else {
           localStorage.removeItem("tempInterpreti");
-          localStorage.removeItem("tempTecnici");
+          localStorage.removeItem("tempMusicisti_e_direttori_artistici");
           tempInterpreti = [];
-          tempTecnici = [];
+          tempMusicisti_e_direttori_artistici = [];
         }
       });
 
@@ -367,7 +367,7 @@
             titolo,
             note,
             interpreti: tempInterpreti,
-            tecnici: tempTecnici,
+            musicisti_e_direttori_artistici: tempMusicisti_e_direttori_artistici,
           };
 
           if (modifica) {
@@ -379,7 +379,7 @@
 
           localStorage.setItem("spettacoli", JSON.stringify(spettacoli));
           localStorage.removeItem("tempInterpreti");
-          localStorage.removeItem("tempTecnici");
+          localStorage.removeItem("tempMusicisti_e_direttori_artistici");
 
           document.getElementById("successo").textContent =
             "Spettacolo salvato con successo!";
