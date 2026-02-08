@@ -17,16 +17,13 @@ from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class PrezziAssociatiView(AbstractVisualizzaView):
-    """Pagina per visualizzare i singoli `Spettacolo` in dettaglio.
-
-    Contiene le tutte informazioni dello `Spettacolo` ed una lista con tutti gli `Evento`
-    associati ad essa.
+    """Pagina per visualizzare le coppie sezione-prezzo associate ad uno `Spettacolo`. Permette
+    di crea, modificare o eliminare prezzi associati alle sezione per uno `Spettacolo`.
 
     Segnali
     ---
-    - `displaySezioniPrezziRequest(ListLayout)`: emesso per mostrare a schermo la lista eventi;
-    - `nuovoEventoRequest()`: emesso quando si clicca il pulsante Nuovo evento.
-    # - CORREGIR
+    - `displaySezioniPrezziRequest(ListLayout)`: emesso per mostrare a schermo la lista di
+    coppie sezione-prezzo.
     """
 
     displaySezioniPrezziRequest = pyqtSignal(ListLayout)

@@ -90,7 +90,7 @@ class CUPrezzoController(AbstractCUController):
                 # Esiste già un prezzo di la sezione indicata per lo spettacolo indicato
                 PopupMessage.mostra_errore(
                     current_pagina,
-                    "Prezzo occupato",  # - CORREGIR
+                    "Posto esistente",
                     f"Si è verificato un errore: {exc}",
                 )
             else:
@@ -143,7 +143,7 @@ class CUPrezzoController(AbstractCUController):
                 # Esiste già un prezzo di la sezione indicata per lo spettacolo indicato
                 PopupMessage.mostra_errore(
                     current_pagina,
-                    "Prezzo occupato",  # - CORREGIR
+                    "Prezzo esistente",
                     f"Si è verificato un errore: {exc}",
                 )
             else:

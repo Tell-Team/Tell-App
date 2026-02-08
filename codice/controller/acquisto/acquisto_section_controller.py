@@ -7,7 +7,6 @@ from controller.navigation import Pagina
 from model.model import Model
 from model.pianificazione.spettacolo import Spettacolo
 from model.pianificazione.regia import Regia
-from model.organizzazione.evento import Evento
 
 from view.acquisto.pagine import AcquistoSectionView
 from view.acquisto.widgets import AcquistoDisplay
@@ -17,8 +16,6 @@ from view.utils.list_widgets import ListLayout
 from view.utils import PopupMessage
 
 from view.style.ui_style import WidgetRole
-
-import copy  # - DA TOGLIERE: C'è una definizione che dovrebbe stare nel model
 
 
 class AcquistoSectionController(AbstractSectionController):
@@ -55,18 +52,8 @@ class AcquistoSectionController(AbstractSectionController):
     def __get_spettacoli_in_programa(self) -> list[Spettacolo]:
         return self._model.get_spettacoli_in_programma()
 
-    def __get_spettacoli_by_titolo(self, titolo: str) -> list[Spettacolo]:
-        return copy.deepcopy(  # - DA AGGIUNGERE AL MODEL
-            list(
-                filter(
-                    lambda o: titolo.lower() in o.get_titolo().lower(),
-                    self.__get_spettacoli_in_programa(),
-                )
-            )
-        )
-
-    def __get_eventi_by_spettacolo(self, id_: int) -> list[Evento]:
-        return self._model.get_eventi_by_spettacolo(id_)
+    def __get_spettacoli_in_programma_by_titolo(self, titolo: str) -> list[Spettacolo]:
+        return self._model.get_spettacoli_in_programma_by_titolo(titolo)
 
     def __display_spettacoli(self, layout_spettacoli: ListLayout) -> None:
         """Mostra a schermo alcune informazioni degli spettacoli salvati ed assegna a
@@ -80,7 +67,7 @@ class AcquistoSectionController(AbstractSectionController):
         lista_spettacoli = (
             self.__get_spettacoli_in_programa()
             if not filtro
-            else self.__get_spettacoli_by_titolo(filtro)
+            else self.__get_spettacoli_in_programma_by_titolo(filtro)
         )
 
         # Verifica che la lista non sia vuota
@@ -138,9 +125,7 @@ class AcquistoSectionController(AbstractSectionController):
             musicisti_e_direttori_artistici=current_spettacolo.get_musicisti_e_direttori_artistici(),
         )
 
-        lista_eventi = self.__get_eventi_by_spettacolo(current_spettacolo.get_id())
-
-        current_pagina.set_data(spettacolo_data, lista_eventi)
+        current_pagina.set_data(spettacolo_data)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

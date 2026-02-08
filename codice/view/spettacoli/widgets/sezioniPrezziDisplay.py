@@ -23,19 +23,17 @@ from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class SezioniPrezziDisplay(ItemDisplay):
-    """View dei singoli eventi della Lista Eventi dentro della pagina
-    `VisualizzaSpettacoloView`.
+    """View della coppia sezione-prezzo della pagina `PrezziAssociatiView`.
 
     Segnali
     ---
-    - `scegliPostiRequest(int)`: emesso quando si clicca il pulsante Scegli posti;
-    - `modificaRequest(int)`: emesso quando si clicca il pulsante Modifica;
-    - `eliminaConfermata()`: emesso quando si clicca il pulsante Sì.
-    # - CORREGIR
+    - `creaRequest()`: emesso quando si clicca il pulsante Aggiungi;
+    - `modificaRequest()`: emesso quando si clicca il pulsante Modifica;
+    - `eliminaConfermata()`: emesso quando si clicca il pulsante Elimina.
     """
 
-    modificaRequest = pyqtSignal()
     creaRequest = pyqtSignal()
+    modificaRequest = pyqtSignal()
     eliminaConfermata = pyqtSignal()
 
     def __init__(self, s: Sezione, p: Optional[Prezzo]):

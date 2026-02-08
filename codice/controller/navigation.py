@@ -77,17 +77,16 @@ class NavigationController(QObject):
     def __get_stack(self) -> QStackedWidget:
         return self.__main_window.get_stack()
 
-    def __get_current_central_page(self) -> QWidget:
+    def __get_central_widget(self) -> QWidget:
         """Ritorna la pagina visualizzata dall'utente.
 
         :raise RuntimeError: non c'è un central widget asegnato alla `QMainWindow`
         """
         # È sempre chiamato con un centralWidget definito. Quindi, lanciare
         #   un RuntimeError è segno di un bug.
-        widget = self.__main_window.centralWidget()
-        if widget is None:
-            raise RuntimeError("Non c'è un central widget asegnato.")
-        return widget
+        if widget := self.__main_window.centralWidget():
+            return widget
+        raise RuntimeError("Non c'è un central widget asegnato.")
 
     def __registra_pagina(self, nome: Pagina, widget: QWidget) -> None:
         """Registra una pagina nell'history.
@@ -132,7 +131,7 @@ class NavigationController(QObject):
             widget = self.__pagine[nome]
         except KeyError as exc:
             PopupMessage.mostra_errore(
-                self.__get_current_central_page(),
+                self.__get_central_widget(),
                 "Pagina non trovata",
                 f"Si è verificato un errore: {exc}",
             )

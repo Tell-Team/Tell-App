@@ -67,7 +67,7 @@ class AcquistoDisplay(ItemDisplay):
 
     def carica_dati_regia(self, dati: tuple[str, ...]) -> None:
         if not (len(dati) == 2):
-            raise ValueError("dati deve essere un tuple di 2 string")
+            raise ValueError("dati deve essere un tuple[str, str]")
 
         compositore = HyphenatedLabel(f"Direttore d'orchestra: {dati[0]}")
         compositore.setProperty(WidgetRole.BODY_TEXT, True)

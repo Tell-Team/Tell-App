@@ -2,8 +2,9 @@ from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
     QVBoxLayout,
-    QComboBox,
+    QHBoxLayout,
     QFormLayout,
+    QComboBox,
     QSizePolicy,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
@@ -11,7 +12,6 @@ from typing import override
 
 from core.view import AbstractVisualizzaView
 
-from model.organizzazione.evento import Evento
 from model.organizzazione.sezione import Sezione
 from model.organizzazione.posto import Posto
 
@@ -30,12 +30,19 @@ class ScegliPostiView(AbstractVisualizzaView):
 
     Segnali
     ---
-    - `getSezioniPostiRequest(int)`:
-    - `displayPostiSceltiRequest(ListLayout)`:
-    # - POR COMPLETAR
+    - `setupEventoCombobox(int)` :
+    - `setupSezioneCombobox(int)` :
+    - `setupFilaCombobox(int, int)` :
+    - `setupPostoCombobox(str)` :
+    - `displayPostiSceltiRequest(ListLayout)` :
+    # - COMPLETAR
     """
 
-    getSezioniPostiRequest = pyqtSignal(int)
+    setupEventoCombobox = pyqtSignal(int)
+    setupSezioneCombobox = pyqtSignal(int)
+    setupFilaCombobox = pyqtSignal(int, int)
+    setupPostoCombobox = pyqtSignal(str)
+
     displayPostiSceltiRequest = pyqtSignal(ListLayout)
 
     def __init__(self):
@@ -94,6 +101,7 @@ class ScegliPostiView(AbstractVisualizzaView):
         self._layout_content.addWidget(self.label_titolo)
         self._layout_content.addWidget(self.label_note)
         self._layout_content.addWidget(form_content)
+        self._layout_content.addWidget(make_hline())
         self._layout_content.addWidget(self.posti_scelti)
         self._layout_content.addStretch()
 
@@ -106,25 +114,58 @@ class ScegliPostiView(AbstractVisualizzaView):
         label_sezione = QLabel('Sezione<span style="color:red;">*</span> :')
         label_sezione.setProperty(WidgetRole.BODY_TEXT, True)
         label_sezione.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_sezione.setMinimumWidth(label_evento.sizeHint().width())
+        label_sezione.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.sezione = QComboBox()
+
+        sezione_box = QWidget()
+        layout_sezione_box = QFormLayout(sezione_box)
+        layout_sezione_box.setContentsMargins(0, 2, 0, 2)
+        layout_sezione_box.addRow(label_sezione, self.sezione)
 
         label_fila = QLabel('Fila<span style="color:red;">*</span> :')
         label_fila.setProperty(WidgetRole.BODY_TEXT, True)
         label_fila.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_fila.setMinimumWidth(label_evento.sizeHint().width())
+        label_fila.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.fila = QComboBox()
 
         label_numero = QLabel('Numero posto<span style="color:red;">*</span> :')
         label_numero.setProperty(WidgetRole.BODY_TEXT, True)
         label_numero.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_numero.setMinimumWidth(label_evento.sizeHint().width())
+        label_numero.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.numero = QComboBox()
 
-        self.__btn_aggiungi = DefaultButton("Aggiungi")
+        # layout_fila_numero.addWidget(label_fila)
+        # layout_fila_numero.addWidget(self.fila)
+        # layout_fila_numero.addWidget(label_numero)
+        # layout_fila_numero.addWidget(self.numero)
+
+        fila_box = QWidget()
+        layout_fila_box = QFormLayout(fila_box)
+        layout_fila_box.setContentsMargins(0, 2, 0, 2)
+        layout_fila_box.addRow(label_fila, self.fila)
+
+        numero_box = QWidget()
+        layout_numero_box = QFormLayout(numero_box)
+        layout_numero_box.setContentsMargins(0, 2, 0, 2)
+        layout_numero_box.addRow(label_numero, self.numero)
+
+        fila_numero_box = QWidget()
+        layout_fila_numero = QHBoxLayout(fila_numero_box)
+        layout_fila_numero.setContentsMargins(0, 0, 0, 0)
+        layout_fila_numero.addWidget(fila_box)
+        layout_fila_numero.addWidget(numero_box)
+
+        self.__btn_aggiungi = DefaultButton("Aggiungi posto")
 
         self.__form_layout.addRow(label_evento, self.evento)
-        self.__form_layout.addRow(make_hline())
-        self.__form_layout.addRow(label_sezione, self.sezione)
-        self.__form_layout.addRow(label_fila, self.fila)
-        self.__form_layout.addRow(label_numero, self.numero)
+        # self.__form_layout.addRow(make_hline())
+        self.__form_layout.addRow(sezione_box)
+        self.__form_layout.addRow(fila_numero_box)
+        # self.__form_layout.addRow(label_fila, self.fila)
+        # self.__form_layout.addRow(label_numero, self.numero)
         self.__form_layout.addRow(self.__btn_aggiungi)
 
     @override
@@ -132,15 +173,23 @@ class ScegliPostiView(AbstractVisualizzaView):
         super()._connect_signals()
 
         self.evento.currentIndexChanged.connect(  # type:ignore
-            lambda: self.getSezioniPostiRequest.emit(self.evento.currentData())
+            lambda: self.setupSezioneCombobox.emit(self.evento.currentData())
+        )
+
+        self.sezione.currentIndexChanged.connect(  # type:ignore
+            lambda: self.setupFilaCombobox.emit(
+                self.sezione.currentData(), self.evento.currentData()
+            )
+        )
+
+        self.fila.currentTextChanged.connect(  # type:ignore
+            lambda: self.setupPostoCombobox.emit(self.fila.currentText())
         )
 
     # ------------------------- METODI DI VIEW -------------------------
 
     @override
-    def set_data(  # type: ignore[override]
-        self, data: SpettacoloPageData, lista_eventi: list[Evento]
-    ) -> None:
+    def set_data(self, data: SpettacoloPageData) -> None:  # type: ignore[override]
         """Carica i dati dello spettacolo nella pagina.
 
         :param data: data salvata in una classe immutabile
@@ -153,7 +202,7 @@ class ScegliPostiView(AbstractVisualizzaView):
         # # Carica dati dello spettacolo
         self.label_titolo.setText(data.titolo)
         self.label_note.setText(data.note)
-        self.__setup_evento_combobox(lista_eventi)
+        self.setupEventoCombobox.emit(self.id_current_spettacolo)
 
     @override
     def aggiorna_pagina(self) -> None:
@@ -161,13 +210,3 @@ class ScegliPostiView(AbstractVisualizzaView):
 
         self.layout_lista_posti_scelti.svuota_layout()
         self.displayPostiSceltiRequest.emit(self.layout_lista_posti_scelti)
-
-    def __setup_evento_combobox(self, eventi: list[Evento]) -> None:
-        """Riempisce il `QComboBox` degli eventi."""
-        self.evento.clear()
-
-        self.evento.insertItem(0, "Scegliere evento...", -1)
-        for i, e in enumerate(eventi, start=1):
-            self.evento.insertItem(
-                i, e.get_data_ora().strftime("%d/%m/%y - %H:%M"), e.get_id()
-            )

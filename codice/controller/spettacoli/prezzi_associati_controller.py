@@ -25,7 +25,6 @@ class PrezziAssociatiController(AbstractVisualizzaController):
     Segnali
     ---
     - `goBackRequest()`: emesso per tornare alla pagina `SpettacoliSectionView`.
-    # - CORREGIR
     """
 
     _view_page: PrezziAssociatiView
@@ -63,11 +62,12 @@ class PrezziAssociatiController(AbstractVisualizzaController):
         self._model.elimina_prezzo(id_)
 
     def __display_sezioni(self, layout_sezioni_prezzi: ListLayout) -> None:
-        """Mostra a schermo le informazioni degli eventi salvati e associati ad
-        uno spettacolo ed assegna a ciascuno dei pulsanti per modificarli o eliminarli.
+        """Mostra a schermo le informazioni delle coppie sezione-prezzo salvate e
+        associate ad uno `Spettacolo` ed assegna a ciascuna dei pulsanti per creare,
+        modificare o eliminare i prezzi.
 
-        :param layout_eventi: layout dove saranno caricate tutti le regie
-        # - CORREGIR
+        :param layout_sezioni_prezzi: layout dove saranno caricate tutte le coppie
+        sezione-prezzo
         """
         lista_sezioni = self.__get_sezioni()
 
@@ -80,10 +80,7 @@ class PrezziAssociatiController(AbstractVisualizzaController):
         def on_conferma(id_prezzo: int) -> None:
             """Prova ad eliminare un prezzo associato ad una sezione.
 
-            :widget_sezione_prezzi: widget associato al `Prezzo` da eliminare
-            :param id\\_: id del prezzo da eliminare
-            # - CORREGIR
-            """
+            :param id_prezzo: id del prezzo da eliminare"""
             try:
                 self.__elimina_prezzo(id_prezzo)
             except IdInesistenteException as exc:
@@ -99,7 +96,7 @@ class PrezziAssociatiController(AbstractVisualizzaController):
         for sezione in lista_sezioni:
             prezzo = self.__get_prezzo_by_spettacolo_e_sezione(
                 id_current_spettacolo, sezione.get_id()
-            )  # - SIEMPRE REGRESA None
+            )
 
             current_sezione_prezzo = SezioniPrezziDisplay(sezione, prezzo)
 
