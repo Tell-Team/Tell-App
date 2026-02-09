@@ -125,6 +125,7 @@ class AcquistoSectionController(AbstractSectionController):
             musicisti_e_direttori_artistici=current_spettacolo.get_musicisti_e_direttori_artistici(),
         )
 
+        current_pagina.lista_posti_scelti.clear()
         current_pagina.set_data(spettacolo_data)
 
         # Apri la pagina

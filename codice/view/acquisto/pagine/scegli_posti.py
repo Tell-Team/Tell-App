@@ -12,6 +12,7 @@ from typing import override
 
 from core.view import AbstractVisualizzaView
 
+from model.organizzazione.evento import Evento
 from model.organizzazione.sezione import Sezione
 from model.organizzazione.posto import Posto
 
@@ -19,7 +20,7 @@ from view.spettacoli.utils import SpettacoloPageData
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
-from view.utils.custom_button import DefaultButton
+from view.utils.custom_button import DefaultButton, SalvaButton
 from view.utils import make_hline
 
 from view.style.ui_style import WidgetRole, WidgetColor
@@ -34,15 +35,17 @@ class ScegliPostiView(AbstractVisualizzaView):
     - `setupSezioneCombobox(int)` :
     - `setupFilaCombobox(int, int)` :
     - `setupPostoCombobox(str)` :
+    - `aggiungiPostoScelto(int, int, int)` :
     - `displayPostiSceltiRequest(ListLayout)` :
     # - COMPLETAR
     """
 
     setupEventoCombobox = pyqtSignal(int)
     setupSezioneCombobox = pyqtSignal(int)
-    setupFilaCombobox = pyqtSignal(int, int)
+    setupFilaCombobox = pyqtSignal(int)
     setupPostoCombobox = pyqtSignal(str)
 
+    aggiungiPostoScelto = pyqtSignal(int, int, int)
     displayPostiSceltiRequest = pyqtSignal(ListLayout)
 
     def __init__(self):
@@ -56,7 +59,7 @@ class ScegliPostiView(AbstractVisualizzaView):
     def _setup_ui(self) -> None:
         super()._setup_ui()
 
-        self.label_titolo = QLabel("[Titolo Spettacolo]")
+        self.label_titolo = HyphenatedLabel("[Titolo Spettacolo]")
         self.label_titolo.setProperty(WidgetRole.HEADER1, True)
         self.label_titolo.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
@@ -79,7 +82,7 @@ class ScegliPostiView(AbstractVisualizzaView):
         header_posti_scelti = QLabel("Posti scelti")
         header_posti_scelti.setProperty(WidgetRole.HEADER2, True)
 
-        self.lista_posti_scelti: list[tuple[Sezione, Posto]] = []
+        self.lista_posti_scelti: list[tuple[Evento, Sezione, Posto]] = []
 
         label_nessun_posto_scelto = EmptyStateLabel("Nessun posto scelto.")
         label_nessun_posto_scelto.setProperty(WidgetRole.BODY_TEXT, True)
@@ -97,12 +100,18 @@ class ScegliPostiView(AbstractVisualizzaView):
         self.layout_posti_scelti.addWidget(content_lista_posti_scelti)
         # end-Lista Posti prenotati
 
+        self.__btn_conferma = SalvaButton("Conferma", has_icon=False)
+        # - DARLE UN NOMBRE MEJOR
+        # - FALTA CONECTARLOS
+        # - A LO MEJOR DEBERÍA DEJAR PEGADO A LA IZQUIERDA
+
         # Layout
         self._layout_content.addWidget(self.label_titolo)
         self._layout_content.addWidget(self.label_note)
         self._layout_content.addWidget(form_content)
         self._layout_content.addWidget(make_hline())
         self._layout_content.addWidget(self.posti_scelti)
+        self._layout_content.addWidget(self.__btn_conferma)
         self._layout_content.addStretch()
 
     def __setup_form(self):
@@ -177,13 +186,19 @@ class ScegliPostiView(AbstractVisualizzaView):
         )
 
         self.sezione.currentIndexChanged.connect(  # type:ignore
-            lambda: self.setupFilaCombobox.emit(
-                self.sezione.currentData(), self.evento.currentData()
-            )
+            lambda: self.setupFilaCombobox.emit(self.sezione.currentData())
         )
 
         self.fila.currentTextChanged.connect(  # type:ignore
             lambda: self.setupPostoCombobox.emit(self.fila.currentText())
+        )
+
+        self.__btn_aggiungi.clicked.connect(  # type:ignore
+            lambda: self.aggiungiPostoScelto.emit(
+                self.evento.currentData(),
+                self.sezione.currentData(),
+                self.numero.currentData(),
+            )
         )
 
     # ------------------------- METODI DI VIEW -------------------------

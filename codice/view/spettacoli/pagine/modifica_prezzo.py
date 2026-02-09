@@ -30,6 +30,7 @@ class ModificaPrezzoView(NuovoPrezzoView):
     def reset_pagina(self) -> None:
         super().reset_pagina()
 
+        self._input_error.setText("")
         self.id_current_prezzo = -1
 
     def set_data_modifica(

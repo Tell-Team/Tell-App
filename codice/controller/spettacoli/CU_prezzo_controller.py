@@ -59,7 +59,8 @@ class CUPrezzoController(AbstractCUController):
         current_pagina = self._view_nuova
 
         # Ottieni l'input inserito
-        ammontare = float(current_pagina.prezzo.text())
+        ammontare_str = current_pagina.prezzo.text()
+        ammontare = float(ammontare_str) if ammontare_str else -1
         id_spettacolo = current_pagina.id_spettacolo
         id_sezione = current_pagina.id_sezione
 
@@ -113,7 +114,8 @@ class CUPrezzoController(AbstractCUController):
             return
 
         # Ottieni l'input inserito
-        ammontare = float(current_pagina.prezzo.text())
+        ammontare_str = current_pagina.prezzo.text()
+        ammontare = float(ammontare_str) if ammontare_str else -1
         # id_spettacolo = current_pagina.id_spettacolo
         # id_sezione = current_pagina.id_sezione
 
