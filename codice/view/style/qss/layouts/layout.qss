@@ -156,38 +156,6 @@ QDateEdit::down-arrow, QTimeEdit::down-arrow {
     height: 12px;
 }
 
-/* # - DE AQUÍ EN ADELANTE CORREGIR */
-/* ------------------------ QDateEdit Calendar Popup ------------------------ */
-QCalendarWidget { font-size: 14px; }
-
-QCalendarWidget QWidget#qt_calendar_prevmonth,
-QCalendarWidget QWidget#qt_calendar_nextmonth,
-QCalendarWidget QWidget#qt_calendar_monthheader {
-    background-color: #f3f3f3;
-}
-
-QCalendarWidget QToolButton {
-    height: 30px;
-    icon-size: 16px;
-    background-color: transparent;
-    color: #222;
-    border: none;
-    margin: 5px;
-}
-
-QCalendarWidget QToolButton:hover { background-color: #d1d1d1; border-radius: 4px; }
-QCalendarWidget QToolButton:pressed { background-color: #9a9a9a; }
-
-QCalendarWidget QAbstractItemView {
-    border: 1px solid #b0b0b0;
-    selection-background-color: #2b7cff;
-    selection-color: white;
-    outline: 0;
-}
-
-QCalendarWidget QAbstractItemView:disabled { color: #777; }
-
-/* # - DE AQUÍ PATRÁS CORREGIR */
 /* ------------------------ ScrollArea ------------------------ */
 QScrollArea {
     background-color: none;

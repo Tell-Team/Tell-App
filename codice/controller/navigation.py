@@ -19,6 +19,7 @@ class Pagina(Enum):
     # Non hanno uno scopo funzionale dentro del codice.
     SEZIONE_ACQUISTO = "acquisto_section"
     SCEGLI_POSTI = "scegli_posti"
+    RICEVUTA = "ricevuta"
 
     SEZIONE_SPETTACOLI = "spettacoli_section"
     VISUALIZZA_SPETTACOLO = "visualizza_spettacolo"

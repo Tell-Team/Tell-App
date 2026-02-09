@@ -73,6 +73,8 @@ class AccountSectionController(AbstractSectionController):
             layout_accounts.mostra_msg_lista_vuota()
             return
 
+        accounts = sorted(accounts, key=lambda x: (x.get_ruolo()), reverse=True)
+
         # Funzione di eliminazione per gli account
         def on_conferma(id_: int) -> None:
             """Prova ad eliminare l'istanza di Account.

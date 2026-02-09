@@ -1,6 +1,10 @@
+from PyQt6.QtWidgets import QWidget
+from collections import defaultdict
 from typing import Optional, override
 
 from core.controller import AbstractVisualizzaController
+
+from controller.navigation import Pagina
 
 from model.model import Model
 from model.organizzazione.evento import Evento
@@ -12,6 +16,8 @@ from view.acquisto.pagine import ScegliPostiView
 from view.acquisto.widgets import PostoSceltoDisplay
 
 from view.utils.list_widgets import ListLayout
+
+from view.utils import PopupMessage
 
 
 class ScegliPostiController(AbstractVisualizzaController):
@@ -53,6 +59,10 @@ class ScegliPostiController(AbstractVisualizzaController):
 
         self._view_page.displayPostiSceltiRequest.connect(  # type:ignore
             self.__display_posti_scelti
+        )
+
+        self._view_page.iniziaCreazionePrenotazione.connect(  # type:ignore
+            self.__inizia_creazione_prenotazione
         )
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
@@ -108,6 +118,7 @@ class ScegliPostiController(AbstractVisualizzaController):
         if not self.__sezioni:
             self._view_page.sezione.setEnabled(False)
             return
+        self.__sezioni = sorted(self.__sezioni, key=lambda x: x.get_nome())
 
         self._view_page.sezione.insertItem(0, "Scegliere sezione...", -1)
         for i, sezione in enumerate(self.__sezioni, start=1):
@@ -127,9 +138,7 @@ class ScegliPostiController(AbstractVisualizzaController):
         if not self.__lista_fila_posti:
             self._view_page.fila.setEnabled(False)
             return
-        self.__lista_fila_posti = sorted(
-            self.__lista_fila_posti, key=lambda x: (x[0])
-        )  # - REVISAR
+        self.__lista_fila_posti = sorted(self.__lista_fila_posti, key=lambda x: (x[0]))
 
         self._view_page.fila.insertItem(0, "Scegliere fila...", None)
         for i, couple in enumerate(self.__lista_fila_posti, start=1):
@@ -182,6 +191,16 @@ class ScegliPostiController(AbstractVisualizzaController):
         if (evento, sezione, posto) in self._view_page.lista_posti_scelti:
             return
         self._view_page.lista_posti_scelti.append((evento, sezione, posto))
+        # Ordina la lista per il display dei posti
+        self._view_page.lista_posti_scelti = sorted(
+            self._view_page.lista_posti_scelti,
+            key=lambda x: (
+                x[0].get_data_ora(),
+                x[1].get_nome(),
+                x[2].get_fila(),
+                x[2].get_numero(),
+            ),
+        )
         self._view_page.aggiorna_pagina()
 
     def __display_posti_scelti(self, layout_posti_scelti: ListLayout) -> None:
@@ -208,3 +227,29 @@ class ScegliPostiController(AbstractVisualizzaController):
             )
 
             layout_posti_scelti.aggiungi_list_item(current_posto_scelto)
+
+    def __inizia_creazione_prenotazione(self) -> None:
+        lista_posti_scelti = self._view_page.lista_posti_scelti
+
+        tree: dict[Evento, dict[Sezione, set[Posto]]] = defaultdict(
+            lambda: defaultdict(set)
+        )
+
+        for e, s, p in lista_posti_scelti:
+            tree[e][s].add(p)
+
+        from view.acquisto.pagine import RicevutaView
+
+        cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
+        pagina_nome = Pagina.RICEVUTA
+        self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
+        current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
+
+        if type(current_pagina) is not RicevutaView:
+            PopupMessage.mostra_errore(
+                self._view_page,
+                "Pagina non trovata",
+                f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
+                + f"Type trovato: {type(current_pagina)}",
+            )
+            return

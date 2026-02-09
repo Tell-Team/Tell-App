@@ -88,8 +88,6 @@ QSpinBox::up-button:pressed, QSpinBox::down-button:pressed,
 QDateEdit::up-button:pressed, QDateEdit::down-button:pressed,
 QTimeEdit::up-button:pressed, QTimeEdit::down-button:pressed { background-color: #1f1f1f; }
 
-/* # - OMITÍ EL CALENDAR */
-
 /* ------------------------ ScrollArea ------------------------ */
 QScrollArea { 
     border: 1px solid #555555;

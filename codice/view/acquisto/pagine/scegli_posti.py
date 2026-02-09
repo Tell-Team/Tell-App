@@ -47,6 +47,7 @@ class ScegliPostiView(AbstractVisualizzaView):
 
     aggiungiPostoScelto = pyqtSignal(int, int, int)
     displayPostiSceltiRequest = pyqtSignal(ListLayout)
+    iniziaCreazionePrenotazione = pyqtSignal()
 
     def __init__(self):
         self.id_current_spettacolo: int = -1
@@ -199,6 +200,10 @@ class ScegliPostiView(AbstractVisualizzaView):
                 self.sezione.currentData(),
                 self.numero.currentData(),
             )
+        )
+
+        self.__btn_conferma.clicked.connect(  # type:ignore
+            self.iniziaCreazionePrenotazione.emit
         )
 
     # ------------------------- METODI DI VIEW -------------------------
