@@ -311,17 +311,22 @@ class Model:
             tuple[Sezione, list[tuple[str, list[Posto]]]]
         ] = list()
 
-        for id_sezione, lista_posti_sezione in itertools.groupby(
+        for id_sezione, posti_sezione in itertools.groupby(
             posti_disponibili, lambda p: p.get_id_sezione()
         ):
             sezione: Sezione = self.get_sezione(id_sezione)  # type: ignore
 
             file_e_posti_disponibili: list[tuple[str, list[Posto]]] = list()
 
-            for fila, lista_posti_fila in itertools.groupby(
+            lista_posti_sezione: list[Posto] = sorted(
+                list(posti_sezione), key=lambda p: p.get_fila()
+            )
+            for fila, posti_fila in itertools.groupby(
                 lista_posti_sezione, lambda p: p.get_fila()
             ):
-                file_e_posti_disponibili.append((fila, list(lista_posti_fila)))
+                file_e_posti_disponibili.append(
+                    (fila, sorted(list(posti_fila), key=lambda p: p.get_numero()))
+                )
 
             sezioni_e_file_e_posti_disponibili.append(
                 (sezione, file_e_posti_disponibili)

@@ -13,6 +13,11 @@ class Ruolo(Enum):
     BIGLIETTERIA = auto()
     AMMINISTRATORE = auto()
 
+    def __lt__(self, other: object) -> bool:
+        if self.__class__ is other.__class__:
+            return self.value < other.value  # type: ignore
+        return NotImplemented
+
 
 class Account:
     __next_id = 0
