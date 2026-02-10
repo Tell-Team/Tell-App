@@ -16,7 +16,7 @@ class Pagina(Enum):
     """Enum con i nomi (keys) per registrare pagine nel `NavigationController`."""
 
     # I valori indicano il nome del file dove si trova la classe della pagina.
-    # Non hanno uno scopo funzionale dentro del
+    # Non hanno uno scopo funzionale dentro del codice.
     SEZIONE_ACQUISTO = "acquisto_section"
     SCEGLI_POSTI = "scegli_posti"
     RICEVUTA = "ricevuta"
