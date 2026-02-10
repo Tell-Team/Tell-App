@@ -5,7 +5,7 @@ from core.controller import AbstractVisualizzaController
 
 from controller.navigation import Pagina
 
-from model.model import Model
+from model.model.model import Model
 from model.pianificazione.spettacolo import Spettacolo
 from model.organizzazione.sezione import Sezione
 from model.organizzazione.prezzo import Prezzo

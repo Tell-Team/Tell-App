@@ -4,7 +4,7 @@ from typing import Optional
 
 from controller.login.user_session import UserSession  # - TESTING
 
-from model.model import Model
+from model.model.model import Model
 from model.account.account import Account
 
 from model.exceptions import CredenzialiErrateException

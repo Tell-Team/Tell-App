@@ -6,7 +6,7 @@ from core.controller import AbstractSectionController
 from controller.login.user_session import UserSession
 from controller.navigation import Pagina
 
-from model.model import Model
+from model.model.model import Model
 from model.account.account import Account, Ruolo
 from model.exceptions import OggettoInUsoException
 

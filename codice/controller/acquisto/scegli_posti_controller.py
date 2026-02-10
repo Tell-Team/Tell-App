@@ -6,7 +6,7 @@ from core.controller import AbstractVisualizzaController
 
 from controller.navigation import Pagina
 
-from model.model import Model
+from model.model.model import Model
 from model.organizzazione.evento import Evento
 from model.organizzazione.sezione import Sezione
 from model.organizzazione.posto import Posto

@@ -5,7 +5,7 @@ from core.controller import AbstractSectionController
 
 from controller.navigation import Pagina
 
-from model.model import Model
+from model.model.model import Model
 from model.pianificazione.opera import Opera
 from model.pianificazione.genere import Genere
 from model.pianificazione.regia import Regia

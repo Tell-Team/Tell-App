@@ -2,7 +2,7 @@ from controller.login import LoginController
 from controller.login.user_session import UserSession
 from controller.navigation import NavigationController
 
-from model.model import Model
+from model.model.model import Model
 
 from view.main_window import MainWindow
 

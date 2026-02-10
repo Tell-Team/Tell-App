@@ -4,7 +4,7 @@ from core.controller import AbstractCUController
 
 from controller.login.user_session import UserSession
 
-from model.model import Model
+from model.model.model import Model
 from model.account.account import Account, Ruolo
 from model.exceptions import (
     CredenzialiErrateException,

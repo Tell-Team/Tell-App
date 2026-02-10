@@ -206,7 +206,7 @@ class RicevutaView(QWidget):
     #     self.__form_layout.addRow(self.__btn_aggiungi)
 
     def _connect_signals(self) -> None:
-
+        ...
         # self.evento.currentIndexChanged.connect(  # type:ignore
         #     lambda: self.setupSezioneCombobox.emit(self.evento.currentData())
         # )

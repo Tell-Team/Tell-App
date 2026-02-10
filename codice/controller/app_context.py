@@ -3,7 +3,7 @@ from typing import Optional
 from controller.app_flow_controller import AppFlowController
 from controller.login import LoginController
 
-from model.model import Model
+from model.model.model import Model
 
 
 class AppContext:

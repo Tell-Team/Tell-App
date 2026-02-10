@@ -20,7 +20,7 @@ from model.exceptions import (
 )
 from model.organizzazione.evento import Evento
 from model.pianificazione.spettacolo import Spettacolo
-from model.model import Model
+from model.model.model import Model
 
 
 DATA_ORA_FUTURO = datetime(2970, 1, 1, 0, 0, 0)

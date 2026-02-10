@@ -5,7 +5,7 @@ from typing import Optional, Callable, Tuple, Type, Any
 
 from controller.login.user_session import UserSession
 
-from model.model import Model
+from model.model.model import Model
 
 from view.main_window import MainWindow
 
@@ -16,7 +16,7 @@ class Pagina(Enum):
     """Enum con i nomi (keys) per registrare pagine nel `NavigationController`."""
 
     # I valori indicano il nome del file dove si trova la classe della pagina.
-    # Non hanno uno scopo funzionale dentro del codice.
+    # Non hanno uno scopo funzionale dentro del
     SEZIONE_ACQUISTO = "acquisto_section"
     SCEGLI_POSTI = "scegli_posti"
     RICEVUTA = "ricevuta"

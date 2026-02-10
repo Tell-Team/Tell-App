@@ -5,7 +5,7 @@ from core.controller import AbstractSectionController
 
 from controller.navigation import Pagina
 
-from model.model import Model
+from model.model.model import Model
 from model.organizzazione.sezione import Sezione
 from model.organizzazione.posto import Posto
 from model.exceptions import OggettoInUsoException

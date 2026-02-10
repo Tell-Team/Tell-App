@@ -2,7 +2,7 @@ from typing import Optional, override
 
 from core.controller import AbstractCUController
 
-from model.model import Model
+from model.model.model import Model
 from model.organizzazione.sezione import Sezione
 from model.exceptions import (
     DatoIncongruenteException,

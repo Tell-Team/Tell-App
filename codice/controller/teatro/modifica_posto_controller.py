@@ -1,7 +1,7 @@
 from PyQt6.QtCore import pyqtSignal, QObject
 from typing import Optional
 
-from model.model import Model
+from model.model.model import Model
 from model.organizzazione.posto import Posto
 from model.exceptions import (
     DatoIncongruenteException,

@@ -3,7 +3,7 @@ from typing import Optional, override
 
 from core.controller import AbstractCUController
 
-from model.model import Model
+from model.model.model import Model
 from model.organizzazione.evento import Evento
 from model.exceptions import (
     DatoIncongruenteException,

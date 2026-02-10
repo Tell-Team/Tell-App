@@ -14,7 +14,7 @@ from model.organizzazione.evento import Evento
 from model.pianificazione.genere import Genere
 from model.pianificazione.opera import Opera
 from model.pianificazione.regia import Regia
-from model.model import Model
+from model.model.model import Model
 
 
 STR_NON_VUOTA = "BCNRFF"

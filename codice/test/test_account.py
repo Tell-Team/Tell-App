@@ -10,7 +10,7 @@ from model.exceptions import (
     PermessiInsufficientiException,
     OccupatoException,
 )
-from model.model import Model
+from model.model.model import Model
 
 
 STR_NON_VUOTA = "BCNRFF"

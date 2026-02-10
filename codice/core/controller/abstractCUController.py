@@ -5,7 +5,7 @@ from functools import partial
 from core.metaclasses import ABCQObjectMeta
 from core.view import AbstractCreaView
 
-from model.model import Model
+from model.model.model import Model
 
 
 class AbstractCUController(QObject, metaclass=ABCQObjectMeta):

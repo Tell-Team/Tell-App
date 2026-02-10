@@ -7,7 +7,7 @@ from core.view import AbstractSectionView
 
 from controller.navigation import Pagina
 
-from model.model import Model
+from model.model.model import Model
 
 from view.utils import PopupMessage
 

@@ -4,7 +4,7 @@ from core.controller import AbstractSectionController
 
 from controller.navigation import Pagina
 
-from model.model import Model
+from model.model.model import Model
 from model.pianificazione.spettacolo import Spettacolo
 from model.pianificazione.regia import Regia
 

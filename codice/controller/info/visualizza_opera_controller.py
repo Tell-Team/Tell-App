@@ -6,7 +6,7 @@ from core.controller import AbstractVisualizzaController
 
 from controller.navigation import Pagina
 
-from model.model import Model
+from model.model.model import Model
 from model.pianificazione.opera import Opera
 from model.pianificazione.regia import Regia, Spettacolo
 from model.exceptions import OggettoInUsoException
