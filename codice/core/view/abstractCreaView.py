@@ -66,7 +66,7 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
         # Setup Pulsanti
         self._btn_annulla = DefaultButton("Annulla")
 
-        self._btn_conferma = SalvaButton("Salva", has_icon=False)
+        self._btn_conferma = SalvaButton("Salva")
 
         self._pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self._pulsanti)

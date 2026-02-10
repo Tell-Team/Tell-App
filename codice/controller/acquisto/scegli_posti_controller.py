@@ -1,16 +1,23 @@
 from PyQt6.QtWidgets import QWidget
-from collections import defaultdict
-from typing import Optional, override
+from datetime import datetime
+from typing import Optional, override, TypeVar
 
 from core.controller import AbstractVisualizzaController
 
 from controller.navigation import Pagina
 
 from model.model.model import Model
+from model.pianificazione.spettacolo import Spettacolo
 from model.organizzazione.evento import Evento
 from model.organizzazione.sezione import Sezione
 from model.organizzazione.posto import Posto
-from model.exceptions import IdInesistenteException
+from model.organizzazione.prenotazione import Prenotazione
+from model.organizzazione.occupazione import Occupazione
+from model.exceptions import (
+    IdInesistenteException,
+    DatoIncongruenteException,
+    IdOccupatoException,
+)
 
 from view.acquisto.pagine import ScegliPostiView
 from view.acquisto.widgets import PostoSceltoDisplay
@@ -61,11 +68,14 @@ class ScegliPostiController(AbstractVisualizzaController):
             self.__display_posti_scelti
         )
 
-        self._view_page.iniziaCreazionePrenotazione.connect(  # type:ignore
+        self._view_page.creaNuovaPrenotazione.connect(  # type:ignore
             self.__inizia_creazione_prenotazione
         )
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
+
+    def __get_spettacolo(self, id_: int) -> Optional[Spettacolo]:
+        return self._model.get_spettacolo(id_)
 
     def __get_evento(self, id_: int) -> Optional[Evento]:
         return self._model.get_evento(id_)
@@ -82,6 +92,12 @@ class ScegliPostiController(AbstractVisualizzaController):
 
     def __get_posto(self, id_: int) -> Optional[Posto]:
         return self._model.get_posto(id_)
+
+    def __aggiungi_prenotazione(self, prenotazione: Prenotazione) -> None:
+        self._model.aggiungi_prenotazione(prenotazione)
+
+    def __aggiungi_occupazione(self, occupazione: Occupazione) -> None:
+        self._model.aggiungi_occupazione(occupazione)
 
     def __setup_evento_combobox(self, id_spettacolo: int) -> None:
         """Riempisce il `QComboBox` degli eventi della pagina.
@@ -229,14 +245,35 @@ class ScegliPostiController(AbstractVisualizzaController):
             layout_posti_scelti.aggiungi_list_item(current_posto_scelto)
 
     def __inizia_creazione_prenotazione(self) -> None:
+        """Carica la pagina `RicevutaView` con i dati dei posti da prenotare, inclusi le
+        sezioni ed eventi associati."""
         lista_posti_scelti = self._view_page.lista_posti_scelti
 
-        tree: dict[Evento, dict[Sezione, set[Posto]]] = defaultdict(
-            lambda: defaultdict(set)
-        )
+        self.__data_emmisione = datetime.now()
 
+        K = TypeVar("K")
+        V = TypeVar("V")
+
+        def get_or_create(
+            lst: list[tuple[K, list[V]]],
+            key: K,
+        ) -> tuple[K, list[V]]:
+            for item in lst:
+                if item[0] == key:
+                    return item
+            new: tuple[K, list[V]] = (key, [])
+            lst.append(new)
+            return new
+
+        self.__tree: list[tuple[Evento, list[tuple[Sezione, list[Posto]]]]] = []
         for e, s, p in lista_posti_scelti:
-            tree[e][s].add(p)
+            _, sezioni = get_or_create(self.__tree, e)
+            _, posti = get_or_create(sezioni, s)
+            if p not in posti:
+                posti.append(p)
+
+        if not self.__nuova_prenotazione():
+            return
 
         from view.acquisto.pagine import RicevutaView
 
@@ -253,3 +290,76 @@ class ScegliPostiController(AbstractVisualizzaController):
                 + f"Type trovato: {type(current_pagina)}",
             )
             return
+
+        spettacolo = self.__get_spettacolo(self._view_page.id_current_spettacolo)
+        assert isinstance(spettacolo, Spettacolo)
+
+        nominativo = self._view_page.nominativo.text().strip()
+
+        current_pagina.set_data(
+            self.__tree, spettacolo.get_titolo(), nominativo, self.__data_emmisione
+        )
+
+        self.goToPageRequest.emit(pagina_nome, True)
+
+    def __nuova_prenotazione(self) -> bool:
+        """Tenta di creare e salvare la prenotazione.
+
+        Se si verifica un problema, ritorna `False`; altrimenti, ritorna `True`."""
+        pagina = self._view_page
+
+        # Ottieni i dati per creare la prenotazione
+        nominativo = pagina.nominativo.text()
+        data_emmisione = self.__data_emmisione
+
+        try:
+            nuova_prenotazione = Prenotazione(nominativo, data_emmisione)
+        except DatoIncongruenteException as exc:
+            # È stato trovato un dato non valido
+            PopupMessage.mostra_errore(
+                pagina,
+                "Impossibile creare prenotazione",
+                f"Si è verificato un errore: {exc}",
+            )
+            return False
+
+        try:
+            self.__aggiungi_prenotazione(nuova_prenotazione)
+        except IdOccupatoException as exc:
+            # Esiste già una prenotazione con quell'id
+            PopupMessage.mostra_errore(
+                pagina,
+                "ID Prenotazione occupato",
+                f"Si è verificato un errore: {exc}",
+            )
+            return False
+
+        # Tenta di creare le istanze di Occupazione
+        lista_eventi_posti = self.__tree
+        for e, sp in lista_eventi_posti:
+            for _, posti in sp:
+                for p in posti:
+                    try:
+                        nuova_occupazione = Occupazione(
+                            e.get_id(), p.get_id(), nuova_prenotazione.get_id()
+                        )
+                    except DatoIncongruenteException as exc:
+                        # È stato trovato un dato non valido
+                        PopupMessage.mostra_errore(
+                            pagina,
+                            "Impossibile creare occupazione",  # - CORREGIR
+                            f"Si è verificato un errore: {exc}",
+                        )
+                        return False
+                    else:
+                        try:
+                            self.__aggiungi_occupazione(nuova_occupazione)
+                        except IdOccupatoException as exc:
+                            # Esiste già una Occupazione con quell'id
+                            PopupMessage.mostra_errore(
+                                pagina,
+                                "ID Occupazione occupato",  # - CORREGIR
+                                f"Si è verificato un errore: {exc}",
+                            )
+                            return False
+        return True

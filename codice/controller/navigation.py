@@ -155,6 +155,7 @@ class NavigationController(QObject):
         :param nome: key usata per trovare la pagina
         """
         self.__go_to_page(nome, save_history=False)
+        self.__history.clear()  # - TESTING
 
     # Questo metodo è chiamato per ottenere l'istanza di pagina nei controller della view
     def __get_page(self, nome: Pagina, container: dict[str, Optional[QWidget]]) -> None:
@@ -164,10 +165,15 @@ class NavigationController(QObject):
 
     def __carica_pagine(self) -> None:
         # Acquisto
-        from view.acquisto.pagine import AcquistoSectionView, ScegliPostiView
+        from view.acquisto.pagine import (
+            AcquistoSectionView,
+            ScegliPostiView,
+            RicevutaView,
+        )
 
         self.__acquisto_section = AcquistoSectionView(self.__user_session)
         self.__scegli_posti_view = ScegliPostiView()
+        self.__ricevuta_view = RicevutaView()
 
         # Info
         from view.info.pagine import InfoSectionView, VisualizzaOperaView
@@ -251,6 +257,7 @@ class NavigationController(QObject):
         # Acquisto
         self.__registra_pagina(Pagina.SEZIONE_ACQUISTO, self.__acquisto_section)
         self.__registra_pagina(Pagina.SCEGLI_POSTI, self.__scegli_posti_view)
+        self.__registra_pagina(Pagina.RICEVUTA, self.__ricevuta_view)
         # Info
         self.__registra_pagina(Pagina.SEZIONE_INFO, self.__info_section)
         self.__registra_pagina(Pagina.VISUALIZZA_OPERA, self.__visualizza_opera_view)
@@ -306,7 +313,11 @@ class NavigationController(QObject):
 
     def __carica_controllers(self, model: Model) -> list[QObject]:
         # Controller necessario per gli utenti Cliente
-        from controller.acquisto import AcquistoSectionController, ScegliPostiController
+        from controller.acquisto import (
+            AcquistoSectionController,
+            ScegliPostiController,
+            RicevutaController,
+        )
         from controller.info import InfoSectionController, VisualizzaOperaController
 
         # Definizioni dei controller come attributi privati
@@ -320,6 +331,11 @@ class NavigationController(QObject):
                 "__scegli_posti_controller",
                 ScegliPostiController,
                 (model, self.__scegli_posti_view),
+            ),
+            (
+                "__ricevuta_controller",
+                RicevutaController,
+                (model, self.__ricevuta_view),
             ),
             (
                 "__info_controller",

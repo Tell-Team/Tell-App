@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QFormLayout,
+    QLineEdit,
     QComboBox,
     QSizePolicy,
 )
@@ -31,13 +32,19 @@ class ScegliPostiView(AbstractVisualizzaView):
 
     Segnali
     ---
-    - `setupEventoCombobox(int)` :
-    - `setupSezioneCombobox(int)` :
-    - `setupFilaCombobox(int, int)` :
-    - `setupPostoCombobox(str)` :
-    - `aggiungiPostoScelto(int, int, int)` :
-    - `displayPostiSceltiRequest(ListLayout)` :
-    # - COMPLETAR
+    - `setupEventoCombobox(int)` : emesso per riempire la combobox `self.evento` con eventi
+        disponibili;
+    - `setupSezioneCombobox(int)` : emesso per riempire la combobox `self.sezione` con sezioni
+        disponibili associate all'evento scelto;
+    - `setupFilaCombobox(int)` : emesso per riempire la combobox `self.fila` con file
+        disponibili associate alla sezione scelta;
+    - `setupPostoCombobox(str)` : emesso per riempire la combobox `self.numero` con i numeri
+        dei posti disponibili relativi alla fila scelta;
+    - `aggiungiPostoScelto(int, int, int)` : emesso per aggiungere un
+        `tuple[Evento, Sezione, Posto]` alla `self.lista_posti_scelti` e mostrare il posto a
+        schermo;
+    - `displayPostiSceltiRequest(ListLayout)` : emesso per mostrare i posti scelti a schermo;
+    - `creaNuovaPrenotazione()` : emesso per salvare una nuova prenotazione nel sistema.
     """
 
     setupEventoCombobox = pyqtSignal(int)
@@ -47,7 +54,7 @@ class ScegliPostiView(AbstractVisualizzaView):
 
     aggiungiPostoScelto = pyqtSignal(int, int, int)
     displayPostiSceltiRequest = pyqtSignal(ListLayout)
-    iniziaCreazionePrenotazione = pyqtSignal()
+    creaNuovaPrenotazione = pyqtSignal()
 
     def __init__(self):
         self.id_current_spettacolo: int = -1
@@ -103,7 +110,6 @@ class ScegliPostiView(AbstractVisualizzaView):
 
         self.__btn_conferma = SalvaButton("Conferma", has_icon=False)
         # - DARLE UN NOMBRE MEJOR
-        # - FALTA CONECTARLOS
         # - A LO MEJOR DEBERÍA DEJAR PEGADO A LA IZQUIERDA
 
         # Layout
@@ -116,6 +122,14 @@ class ScegliPostiView(AbstractVisualizzaView):
         self._layout_content.addStretch()
 
     def __setup_form(self):
+        label_nominativo = QLabel(
+            'Nominativo<span style="color:red;">*</span> :'
+        )  # - PENSAR EN UN TEXTO MEJOR
+        label_nominativo.setProperty(WidgetRole.BODY_TEXT, True)
+        label_nominativo.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        self.nominativo = QLineEdit()
+        self.nominativo.setPlaceholderText("Inserire nome")  # - CORREGIR TAMBIÉN
+
         label_evento = QLabel('Data evento<span style="color:red;">*</span> :')
         label_evento.setProperty(WidgetRole.BODY_TEXT, True)
         label_evento.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
@@ -147,11 +161,6 @@ class ScegliPostiView(AbstractVisualizzaView):
         label_numero.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.numero = QComboBox()
 
-        # layout_fila_numero.addWidget(label_fila)
-        # layout_fila_numero.addWidget(self.fila)
-        # layout_fila_numero.addWidget(label_numero)
-        # layout_fila_numero.addWidget(self.numero)
-
         fila_box = QWidget()
         layout_fila_box = QFormLayout(fila_box)
         layout_fila_box.setContentsMargins(0, 2, 0, 2)
@@ -170,12 +179,10 @@ class ScegliPostiView(AbstractVisualizzaView):
 
         self.__btn_aggiungi = DefaultButton("Aggiungi posto")
 
+        self.__form_layout.addRow(label_nominativo, self.nominativo)
         self.__form_layout.addRow(label_evento, self.evento)
-        # self.__form_layout.addRow(make_hline())
         self.__form_layout.addRow(sezione_box)
         self.__form_layout.addRow(fila_numero_box)
-        # self.__form_layout.addRow(label_fila, self.fila)
-        # self.__form_layout.addRow(label_numero, self.numero)
         self.__form_layout.addRow(self.__btn_aggiungi)
 
     @override
@@ -203,7 +210,7 @@ class ScegliPostiView(AbstractVisualizzaView):
         )
 
         self.__btn_conferma.clicked.connect(  # type:ignore
-            self.iniziaCreazionePrenotazione.emit
+            self.creaNuovaPrenotazione.emit
         )
 
     # ------------------------- METODI DI VIEW -------------------------

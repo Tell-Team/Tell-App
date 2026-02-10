@@ -20,20 +20,32 @@ class DefaultButton(QPushButton):
 
 
 class CreaButton(QPushButton):
-    def __init__(self, text: Optional[str] = None, parent: Optional[QWidget] = None):
+    def __init__(
+        self,
+        text: Optional[str] = None,
+        parent: Optional[QWidget] = None,
+        has_icon: bool = True,
+    ):
         super().__init__(text, parent)
 
         self.setProperty(WidgetColor.Button.BLUE_BUTTON, True)
-        self.setIcon(CREA_ICON)
+        if has_icon:
+            self.setIcon(CREA_ICON)
 
 
 class RicercaButton(QPushButton):
-    def __init__(self, text: Optional[str] = None, parent: Optional[QWidget] = None):
+    def __init__(
+        self,
+        text: Optional[str] = None,
+        parent: Optional[QWidget] = None,
+        has_icon: bool = True,
+    ):
         super().__init__(text, parent)
 
         self.setProperty(WidgetRole.SEARCH_BUTTON, True)
         self.setProperty(WidgetColor.Button.BLUE_BUTTON, True)
-        self.setIcon(RICERCA_ICON)
+        if has_icon:
+            self.setIcon(RICERCA_ICON)
 
 
 class SalvaButton(QPushButton):
