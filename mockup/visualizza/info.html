@@ -9,10 +9,22 @@
     <br /><br />
 
     <div class="singola-riga">
-      <button onclick="window.location.href = './spettacoli.html';">
-        Spettacoli
+      <button onclick="window.location.href = './acquisto.html';">
+        Acquisto
       </button>
       <span style="color: gray">Info</span>
+      <button
+        class="ticketOnly"
+        onclick="window.location.href = './spettacoli.html';"
+      >
+        Spettacoli
+      </button>
+      <button
+        class="adminOnly"
+        onclick="window.location.href = './teatro.html';"
+      >
+        Teatro
+      </button>
       <button
         onclick="window.location.href = './account.html';"
         class="adminOnly"
@@ -28,30 +40,11 @@
         class="adminOnly"
         onclick="window.location.href = '../crea-modifica/crea-opera.html'"
       >
-        + Nueva Opera
+        + Nuova Opera
       </button>
     </div>
 
     <div id="lista-opera"></div>
-
-    <!-- Sezione teatri statica -->
-    <br />
-    <h2>Teatri</h2>
-
-    <div class="istanza">
-      <h3>Vitrifrigo Arena</h3>
-      <p>
-        Inaugurato nel 1996<br />
-        Via R. Ripa, 1
-      </p>
-      <button
-        style="margin-left: 10px"
-        onclick="window.location.href = './info_teatro.html';"
-      >
-        Maggiori info
-      </button>
-    </div>
-    <!-- Sezione teatri statica -->
 
     <br />
     <div class="singola-riga">
@@ -61,7 +54,7 @@
         class="adminOnly"
         onclick="window.location.href = '../crea-modifica/crea-modifica-genere.html'"
       >
-        + Nuevo Genere
+        + Nuovo Genere
       </button>
     </div>
 
@@ -129,10 +122,20 @@
             modificaOpera(index);
           };
 
+          const btnElimina = document.createElement("button");
+          btnElimina.type = "button";
+          btnElimina.classList.add("adminOnly");
+          btnElimina.textContent = "Elimina";
+          btnElimina.style.marginLeft = "5px";
+          btnElimina.onclick = function () {
+            eliminaOpera(index);
+          };
+
           container.appendChild(h3);
           container.appendChild(p);
           container.appendChild(btnMaggioriInfo);
           container.appendChild(btnModifica);
+          container.appendChild(btnElimina);
 
           listaDivOpera.appendChild(container);
         });
@@ -230,9 +233,19 @@
             modificaGenere(index);
           };
 
+          const btnElimina = document.createElement("button");
+          btnElimina.type = "button";
+          btnElimina.classList.add("adminOnly");
+          btnElimina.textContent = "Elimina";
+          btnElimina.style.marginLeft = "10px";
+          btnElimina.onclick = function () {
+            eliminaGenere(index);
+          };
+
           container.appendChild(h3);
           container.appendChild(p);
           container.appendChild(btnModifica);
+          container.appendChild(btnElimina);
 
           listaDivGenere.appendChild(container);
         });

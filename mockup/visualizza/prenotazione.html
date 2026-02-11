@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="../style-secondo-ruolo.css" />
+    <link rel="stylesheet" href="../body-creazione.css" />
+
+    <style>
+      body {
+        padding-left: 5px;
+        border: none;
+      }
+      /* Classe per gli asterischi rossi presenti nel software */
+      .obbligatorio { color: red; }
+    </style>
+  </head>
+  <body>
+    <button onclick="window.location.href = './spettacoli.html';">
+      Indietro
+    </button>
+    
+    <h2>Zelmira</h2>
+    <div class="istanza">
+      <div class="singola-riga">
+        <label>Data evento<span class="obbligatorio">*</span> : </label>
+        <select>
+          <option>Scegliere evento...</option>
+          <option>10/08/2025 - 21:00</option>
+        </select>
+      </div>
+
+      <div class="singola-riga">
+        <label>Sezione<span class="obbligatorio">*</span> :</label>
+        <select>
+          <option></option> <option>Tribuna A</option>
+        </select>
+      </div>
+
+      <div class="singola-riga">
+        <label>Fila<span class="obbligatorio">*</span> :</label>
+        <select><option></option></select>
+        
+        <label style="margin-left: 10px;">Numero posto<span class="obbligatorio">*</span> :</label>
+        <select><option></option></select>
+      </div>
+
+      <button style="margin-top: 10px;">Aggiungi posto</button>
+    </div>
+
+    <hr /> <h2 style="margin-bottom: 8px">Posti scelti</h2>
+    
+    <div style="border: 1px solid black; padding: 5px; margin-bottom: 10px;">
+      <div class="singola-riga">
+        <span>Sabato 16 Agosto, Tribuna A, Posto 14</span>
+        <button>Rimuovi</button>
+      </div>
+      <div class="singola-riga">
+        <span>Sabato 16 Agosto, Tribuna A, Posto 15</span>
+        <button>Rimuovi</button>
+      </div>
+    </div>
+
+    <button onclick="window.location.href = './ricevuta.html';">
+      Conferma
+    </button>
+  </body>
+</html>

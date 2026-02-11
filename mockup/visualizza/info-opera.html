@@ -14,28 +14,66 @@
       );
 
       const display = document.getElementById("visualizzata");
-
       display.innerHTML = "";
 
+      // Titolo dell'opera
       const h2 = document.createElement("h2");
       h2.textContent = `${visualizza.nome}`;
-      const p = document.createElement("p");
-
-      const data = new Date(visualizza.data);
-      const giorno = data.getDay(data);
-      const mese = data.toLocaleString("it-IT", { month: "long" });
-      const anno = data.getFullYear();
-      const dataFormattata = `${giorno} di ${mese} del ${anno}`;
-
-      p.innerHTML = `Libretto di ${visualizza.librettista}
-      <br>Musica di ${visualizza.compositore}
-      <br>Prima rappresentazione a ${visualizza.teatro} il ${dataFormattata}.
-      <br>
-      <br>${visualizza.trama}`;
-
       display.appendChild(h2);
-      display.appendChild(p);
-      display.appendChild(document.createElement("br"));
+
+      // --- NUOVA PARTE: DETTAGLI OPERA ---
+      const pInfo = document.createElement("p");
+      
+      const data = new Date(visualizza.data);
+      const giorno = String(data.getDate()).padStart(2, '0');
+      const meseNum = String(data.getMonth() + 1).padStart(2, '0');
+      const meseTesto = data.toLocaleString("it-IT", { month: "long" });
+      const anno = data.getFullYear();
+      
+      // Data in formato testuale e numerico come nel software
+      const dataTestuale = `${giorno} di ${meseTesto} del ${anno}`;
+      const dataNumerica = `${giorno}/${meseNum}/${anno}`;
+
+      pInfo.innerHTML = `
+        Libretto di ${visualizza.librettista}<br>
+        Musica composta da ${visualizza.compositore}<br>
+        Genere: ${visualizza.genere.nome || 'N/D'}<br>
+        Numero di atti: ${visualizza.atti || 'N/D'}<br><br>
+        È stata rappresentata per prima volta il ${dataNumerica} nel teatro ${visualizza.teatro}<br><br>
+        ${visualizza.trama}
+      `;
+      display.appendChild(pInfo);
+
+      // --- NUOVA PARTE: SEZIONE REGIE ---
+      const h3Regie = document.createElement("h3");
+      h3Regie.textContent = "Lista regie";
+      display.appendChild(h3Regie);
+
+      // Etichetta "Regista" centrata (come nello screenshot)
+      const labelRegista = document.createElement("div");
+      labelRegista.style.textAlign = "center";
+      labelRegista.style.fontWeight = "bold";
+      labelRegista.textContent = "Regista";
+      display.appendChild(labelRegista);
+
+      // Contenitore per la lista (il "box" del software)
+      const boxRegie = document.createElement("div");
+      boxRegie.style.border = "1px solid black"; // Struttura base
+      boxRegie.style.padding = "10px";
+      boxRegie.style.marginTop = "5px";
+
+      // Logica per mostrare le regie o il messaggio di vuoto
+      if (visualizza.regie && visualizza.regie.length > 0) {
+          visualizza.regie.forEach(regia => {
+              const item = document.createElement("div");
+              item.textContent = regia;
+              boxRegie.appendChild(item);
+          });
+      } else {
+          boxRegie.textContent = "Al momento, non vi sono regie per questa opera.";
+      }
+
+      display.appendChild(boxRegie);
     </script>
   </body>
 </html>

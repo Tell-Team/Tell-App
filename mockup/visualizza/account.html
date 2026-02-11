@@ -13,21 +13,33 @@
         Spettacoli
       </button>
       <button onclick="window.location.href = './info.html';">Info</button>
-      <span style="color: gray">Account</span>
+      <button
+        class="ticketOnly"
+        onclick="window.location.href = './spettacoli.html';"
+      >
+        Spettacoli
+      </button>
+      <button
+        class="adminOnly"
+        onclick="window.location.href = './teatro.html';"
+      >
+        Teatro
+      </button>
+      <span style="color: red">Account</span>
     </div>
 
+    <div class="singola-riga" style="margin-top: 20px;">
     <h2>Account</h2>
-
-    <div class="istanza container">
-      <div class="singola-riga">
-        <h3>Amministratori</h3>
-        <button
+    <button
           class="adminOnly"
           onclick="window.location.href = '../crea-modifica/crea-account.html'"
         >
-          +
-        </button>
-      </div>
+          + Nuovo Account
+    </button>
+    </div>
+
+    <div class="istanza container">
+        <h3>Amministratori</h3>
       <div class="singola-riga">
         <span>Admin A</span>
         <button
@@ -36,30 +48,27 @@
         >
           Modifica
         </button>
-        <button class="adminOnly">Rimuovi</button>
+        <button class="adminOnly">Elimina</button>
       </div>
       <div class="singola-riga">
         <span>Admin B</span>
         <button class="adminOnly">Modifica</button>
-        <button class="adminOnly">Rimuovi</button>
+        <button class="adminOnly">Elimina</button>
       </div>
       <br />
     </div>
 
     <div class="istanza container">
-      <div class="singola-riga">
         <h3>Biglietterie</h3>
-        <button class="adminOnly">+</button>
-      </div>
       <div class="singola-riga">
         <span>Biglietteria A</span>
         <button class="adminOnly">Modifica</button>
-        <button class="adminOnly">Rimuovi</button>
+        <button class="adminOnly">Elimina</button>
       </div>
       <div class="singola-riga">
         <span>Biglietteria B</span>
         <button class="adminOnly">Modifica</button>
-        <button class="adminOnly">Rimuovi</button>
+        <button class="adminOnly">Elimina</button>
       </div>
       <br />
     </div>
