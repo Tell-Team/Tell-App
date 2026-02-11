@@ -1,10 +1,4 @@
-from PyQt6.QtWidgets import (
-    QWidget,
-    QLabel,
-    QLineEdit,
-    QVBoxLayout,
-    QHBoxLayout,
-)
+from PyQt6.QtWidgets import QWidget, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import override
 

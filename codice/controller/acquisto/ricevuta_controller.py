@@ -55,35 +55,33 @@ class RicevutaController(QObject):
     #     self.__model.aggiungi_occupazione(occupazione)
 
     def __display_posti_scelti(self, layout_posti_scelti: ListLayout) -> None:
-        """Mostra a schermo le informazioni del posto da prenotare.
+        """Mostra a schermo le informazioni dei posti prenotati.
 
         :param layout_posti_scelti: layout dove saranno caricati tutti i posti scelti
-        # - CORREGIR
         """
         pagina = self.__pagina_ricevuta
-        lista_posti_scelti = pagina.lista_posti_scelti
+        evento, lista_sezione_posti = pagina.lista_posti_scelti
 
-        if not lista_posti_scelti:
+        if evento is None or not lista_sezione_posti:
             layout_posti_scelti.mostra_msg_lista_vuota()
             return
 
-        for e, sp in lista_posti_scelti:
-            current_posto_scelto = EventoPostiDisplay(e, sp)
+        current_posto_scelto = EventoPostiDisplay(evento, lista_sezione_posti)
 
-            layout_posti_scelti.aggiungi_list_item(
-                current_posto_scelto, WidgetRole.ITEM_CARD
-            )
+        layout_posti_scelti.aggiungi_list_item(
+            current_posto_scelto, WidgetRole.ITEM_CARD
+        )
 
     def __stampa_ricevuta_e_crea_prenotazione(self) -> None:
         # Logica per stampare ricevuta
-        ...  # - VAMOS A IMPLEMENTAR ESTO???
+        ...  # - CÓMO COÑO HAGO ESTO? TOCA ESTUDIAR
 
         self.__pagina_ricevuta.abilita_btn_fine(True)
 
         # pagina = self.__pagina_ricevuta
 
         # # Ottieni i dati per creare la prenotazione
-        # nominativo = "texto de mierda"  # - CORREGIR
+        # nominativo = "texto de mierda"
         # tempo_emission = pagina.tempo_emission
 
         # # Tenta di creare la nuova prenotazione
@@ -120,7 +118,7 @@ class RicevutaController(QObject):
         #                     # È stato trovato un dato non valido
         #                     PopupMessage.mostra_errore(
         #                         pagina,
-        #                         "Impossibile creare occupazione",  # - CORREGIR
+        #                         "Impossibile occupare posto",
         #                         f"Si è verificato un errore: {exc}",
         #                     )
         #                 else:
@@ -130,7 +128,7 @@ class RicevutaController(QObject):
         #                         # Esiste già una Occupazione con quell'id
         #                         PopupMessage.mostra_errore(
         #                             pagina,
-        #                             "ID Occupazione occupato",  # - CORREGIR
+        #                             "Impossibile occupare posto",
         #                             f"Si è verificato un errore: {exc}",
         #                         )
 

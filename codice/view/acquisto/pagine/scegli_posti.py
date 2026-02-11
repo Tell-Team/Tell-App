@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
     QSizePolicy,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
-from typing import override
+from typing import Optional, override
 
 from core.view import AbstractVisualizzaView
 
@@ -90,7 +90,8 @@ class ScegliPostiView(AbstractVisualizzaView):
         header_posti_scelti = QLabel("Posti scelti")
         header_posti_scelti.setProperty(WidgetRole.HEADER2, True)
 
-        self.lista_posti_scelti: list[tuple[Evento, Sezione, Posto]] = []
+        self.evento_scelto: Optional[Evento] = None
+        self.lista_posti_scelti: list[tuple[Sezione, Posto]] = []
 
         label_nessun_posto_scelto = EmptyStateLabel("Nessun posto scelto.")
         label_nessun_posto_scelto.setProperty(WidgetRole.BODY_TEXT, True)
@@ -122,13 +123,11 @@ class ScegliPostiView(AbstractVisualizzaView):
         self._layout_content.addStretch()
 
     def __setup_form(self):
-        label_nominativo = QLabel(
-            'Nominativo<span style="color:red;">*</span> :'
-        )  # - PENSAR EN UN TEXTO MEJOR
+        label_nominativo = QLabel('Nominativo<span style="color:red;">*</span> :')
         label_nominativo.setProperty(WidgetRole.BODY_TEXT, True)
         label_nominativo.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.nominativo = QLineEdit()
-        self.nominativo.setPlaceholderText("Inserire nome")  # - CORREGIR TAMBIÉN
+        self.nominativo.setPlaceholderText("Inserire nominativo")
 
         label_evento = QLabel('Data evento<span style="color:red;">*</span> :')
         label_evento.setProperty(WidgetRole.BODY_TEXT, True)
@@ -235,5 +234,11 @@ class ScegliPostiView(AbstractVisualizzaView):
     def aggiorna_pagina(self) -> None:
         super().aggiorna_pagina()
 
+        self.evento.setEnabled(True)
+
         self.layout_lista_posti_scelti.svuota_layout()
         self.displayPostiSceltiRequest.emit(self.layout_lista_posti_scelti)
+
+        # Questo evita di creare una prenotazione per più di un'evento alla volta.
+        if self.layout_lista_posti_scelti.count() > 1:
+            self.evento.setEnabled(False)

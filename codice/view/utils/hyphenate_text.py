@@ -19,7 +19,10 @@ def _soft_hyphenate_html(text: str, step: int = 1) -> str:  # alt: step = 6
 
     for i, part in enumerate(parts):
         if not part.startswith("<"):
-            parts[i] = " ".join(hyphenate_word(w) for w in part.split())
+            tokens = re.split(r"(\s+)", part)
+            parts[i] = "".join(
+                hyphenate_word(t) if not t.isspace() else t for t in tokens
+            )
 
     return "<html><body>" + "".join(parts) + "</body></html>"
 

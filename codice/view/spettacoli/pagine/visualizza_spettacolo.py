@@ -161,7 +161,7 @@ class VisualizzaSpettacoloView(AbstractVisualizzaView):
 
         :param data: data salvata in una classe immutabile
         :param lista_eventi: lista degli eventi associati allo spettacolo"""
-        # Reset layout lista regie
+        # Reset layout lista eventi
         self.layout_lista_eventi.svuota_layout()
 
         # Salva dati dello spettacolo nella pagina

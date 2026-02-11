@@ -45,6 +45,7 @@ class AcquistoSectionView(AbstractSectionView):
 
         if not self.is_biglietteria:
             self._btn_sezione_spettacoli.hide()
+            self._btn_sezione_prenotazioni.hide()
         if not self.is_admin:
             self._btn_sezione_teatro.hide()
             self._btn_sezione_account.hide()

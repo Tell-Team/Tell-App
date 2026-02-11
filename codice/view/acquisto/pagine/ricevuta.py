@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from datetime import datetime
+from typing import Optional
 
 from model.organizzazione.evento import Evento
 from model.organizzazione.sezione import Sezione
@@ -65,10 +66,18 @@ class RicevutaView(QWidget):
             self.label_nominativo.styleSheet() + " font-size: 16px; "
         )
 
+        self.label_prezzo = HyphenatedLabel("<b>Prezzo</b>: € [Ammontare Prezzo]")
+        self.label_prezzo.setProperty(WidgetRole.BODY_TEXT, True)
+        self.label_prezzo.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.label_prezzo.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        self.label_prezzo.setStyleSheet(
+            self.label_prezzo.styleSheet() + " font-size: 16px; "
+        )
+
         # Lista Posti prenotati
-        self.lista_posti_scelti: list[
-            tuple[Evento, list[tuple[Sezione, list[Posto]]]]
-        ] = []
+        self.lista_posti_scelti: tuple[
+            Optional[Evento], list[tuple[Sezione, list[Posto]]]
+        ] = (None, [])
 
         label_nessun_posto_scelto = EmptyStateLabel("Nessun posto scelto.")
         label_nessun_posto_scelto.setProperty(WidgetRole.BODY_TEXT, True)
@@ -86,7 +95,7 @@ class RicevutaView(QWidget):
         self.layout_posti_scelti.addStretch()
         # end-Lista Posti prenotati
 
-        self.label_emissione = QLabel()
+        self.label_emissione = QLabel("<b>Emissione</b>: [Data Emissione]")
         self.label_emissione.setProperty(WidgetRole.BODY_TEXT, True)
         self.label_emissione.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
 
@@ -104,6 +113,7 @@ class RicevutaView(QWidget):
         self.__layout_content = QVBoxLayout(pagina_content)
         self.__layout_content.addWidget(self.label_spettacolo)
         self.__layout_content.addWidget(self.label_nominativo)
+        self.__layout_content.addWidget(self.label_prezzo)
         self.__layout_content.addWidget(self.posti_scelti)
         self.__layout_content.addStretch()
         self.__layout_content.addWidget(self.label_emissione)
@@ -132,10 +142,11 @@ class RicevutaView(QWidget):
 
     def set_data(
         self,
-        data: list[tuple[Evento, list[tuple[Sezione, list[Posto]]]]],
+        data: tuple[Evento, list[tuple[Sezione, list[Posto]]]],
         titolo_spettacolo: str,
         nominativo: str,
         data_emmisione: datetime,
+        ammontare_prezzo: float,
     ) -> None:
         """Carica i dati dei posti prenotati.
 
@@ -147,9 +158,8 @@ class RicevutaView(QWidget):
         self.layout_lista_posti_scelti.svuota_layout()
 
         self.label_spettacolo.setText("<b>Spettacolo</b>: " + titolo_spettacolo)
-        self.label_nominativo.setText(
-            "<b>Nominativo</b>: " + nominativo
-        )  # - NO ME GUSTA QUE DIGA "Nominativo". SUENA RARO
+        self.label_nominativo.setText("<b>Nominativo</b>: " + nominativo)
+        self.label_prezzo.setText(f"<b>Prezzo</b>: € {ammontare_prezzo:.2f}")
 
         self.lista_posti_scelti = data
 

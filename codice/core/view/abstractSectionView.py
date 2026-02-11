@@ -42,6 +42,7 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
         # Sezioni dell'app
         self._btn_sezione_acquisto = DefaultButton("Acquisto")
         self._btn_sezione_spettacoli = DefaultButton("Spettacoli")
+        self._btn_sezione_prenotazioni = DefaultButton("Prenotazioni")
         self._btn_sezione_info = DefaultButton("Info")
         self._btn_sezione_teatro = DefaultButton("Teatro")
         self._btn_sezione_account = DefaultButton("Account")
@@ -50,6 +51,7 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
         layout_sezioni = QHBoxLayout(sezioni_app)
         layout_sezioni.addWidget(self._btn_sezione_acquisto)
         layout_sezioni.addWidget(self._btn_sezione_spettacoli)
+        layout_sezioni.addWidget(self._btn_sezione_prenotazioni)
         layout_sezioni.addWidget(self._btn_sezione_info)
         layout_sezioni.addWidget(self._btn_sezione_teatro)
         layout_sezioni.addWidget(self._btn_sezione_account)
@@ -85,6 +87,9 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
         )
         self._btn_sezione_spettacoli.clicked.connect(  # type:ignore
             partial(self.goToSection.emit, Pagina.SEZIONE_SPETTACOLI)
+        )
+        self._btn_sezione_prenotazioni.clicked.connect(  # type:ignore
+            partial(self.goToSection.emit, Pagina.SEZIONE_PRENOTAZIONI)
         )
         self._btn_sezione_info.clicked.connect(  # type:ignore
             partial(self.goToSection.emit, Pagina.SEZIONE_INFO)

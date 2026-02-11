@@ -31,6 +31,9 @@ class Pagina(Enum):
     NUOVO_EVENTO = "nuovo_evento"
     MODIFICA_EVENTO = "modifica_evento"
 
+    SEZIONE_PRENOTAZIONI = "prenotazioni_section"
+    VISUALIZZA_PRENOTAZIONE = "visualizza_prenotazione"
+
     SEZIONE_INFO = "info_section"
     VISUALIZZA_OPERA = "visualizza_opera"
     NUOVA_OPERA = "nuova_opera"
@@ -134,7 +137,7 @@ class NavigationController(QObject):
             PopupMessage.mostra_errore(
                 self.__get_central_widget(),
                 "Pagina non trovata",
-                f"Si è verificato un errore: {exc}",
+                f"Si è verificato un errore: Non c'è una pagina registrata con {exc}",
             )
         else:
             current = self.__get_stack().currentWidget()
@@ -206,6 +209,17 @@ class NavigationController(QObject):
             self.__modifica_spettacolo_view = ModificaSpettacoloView()
             self.__nuovo_evento_view = NuovoEventoView()
             self.__modifica_evento_view = ModificaEventoView()
+
+            # Prenotazioni
+            from view.prenotazioni.pagine import (
+                PrenotazioniSectionView,
+                VisualizzaPrenotazioneView,
+            )
+
+            self.__prenotazioni_section_view = PrenotazioniSectionView(
+                self.__user_session
+            )
+            self.__visualizza_prenotazione_view = VisualizzaPrenotazioneView()
 
         if self.__user_session.ha_permessi_admin():
             # Info
@@ -281,6 +295,13 @@ class NavigationController(QObject):
             )
             self.__registra_pagina(Pagina.NUOVO_EVENTO, self.__nuovo_evento_view)
             self.__registra_pagina(Pagina.MODIFICA_EVENTO, self.__modifica_evento_view)
+            # Prenotazioni
+            self.__registra_pagina(
+                Pagina.SEZIONE_PRENOTAZIONI, self.__prenotazioni_section_view
+            )
+            self.__registra_pagina(
+                Pagina.VISUALIZZA_PRENOTAZIONE, self.__visualizza_prenotazione_view
+            )
 
         if self.__user_session.ha_permessi_admin():
             # Info
@@ -399,6 +420,26 @@ class NavigationController(QObject):
                             self.__nuovo_evento_view,
                             self.__modifica_evento_view,
                         ),
+                    ),
+                ]
+            )
+            # Prenotazioni
+            from controller.prenotazioni import (
+                PrenotazioniSectionController,
+                VisualizzaPrenotazioneController,
+            )
+
+            controller_defs.extend(
+                [
+                    (
+                        "__prenotazioni_controller",
+                        PrenotazioniSectionController,
+                        (model, self.__prenotazioni_section_view),
+                    ),
+                    (
+                        "__visualizza_prenotazione_controller",
+                        VisualizzaPrenotazioneController,
+                        (model, self.__visualizza_prenotazione_view),
                     ),
                 ]
             )
