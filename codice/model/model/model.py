@@ -21,6 +21,7 @@ from model.pianificazione.opera import Opera
 from model.pianificazione.spettacolo import Spettacolo
 from model.pianificazione.regia import Regia
 from model.exceptions import (
+    AzioneIncongruenteException,
     DatoIncongruenteException,
     IdInesistenteException,
     OggettoInUsoException,
@@ -295,16 +296,19 @@ class Model:
         ids_posti_occupati = list(
             map(
                 lambda o: o.get_id_posto(),
-                self.__gestore_occupazioni.get_occupazioni_per_evento(id_evento),
+                self.__gestore_occupazioni.get_occupazioni_by_evento(id_evento),
             )
         )
 
-        posti_disponibili = list(
-            filter(
-                lambda p: p.get_id_sezione() in ids_sezioni_con_prezzo
-                and p.get_id() not in ids_posti_occupati,
-                self.get_posti(),
-            )
+        posti_disponibili = sorted(
+            list(
+                filter(
+                    lambda p: p.get_id_sezione() in ids_sezioni_con_prezzo
+                    and p.get_id() not in ids_posti_occupati,
+                    self.get_posti(),
+                )
+            ),
+            key=lambda p: self.get_sezione(p.get_id_sezione()).get_nome(),  # type: ignore
         )
 
         sezioni_e_file_e_posti_disponibili: list[
@@ -368,9 +372,31 @@ class Model:
     def get_prenotazioni_by_nominativo(self, nominativo: str) -> list[Prenotazione]:
         return self.__gestore_prenotazioni.get_prenotazioni_by_nominativo(nominativo)
 
+    def ammontare_totale_prenotazione(self, id_prenotazione: int) -> float:
+        ammontare_totale = 0.0
+
+        for o in self.__gestore_occupazioni.get_occupazioni_by_prenotazione(
+            id_prenotazione
+        ):
+            evento: Evento = self.get_evento(o.get_id_evento())  # type: ignore
+            posto: Posto = self.get_posto(o.get_id_posto())  # type: ignore
+            prezzo: Prezzo = self.get_prezzo_by_spettacolo_e_sezione(  # type: ignore
+                evento.get_id_spettacolo(), posto.get_id_sezione()
+            )
+            ammontare_totale += prezzo.get_ammontare()
+
+        return ammontare_totale
+
     #   OCCUPAZIONI
     def get_occupazione(self, id_: int) -> Optional[Occupazione]:
         return self.__gestore_occupazioni.get_occupazione(id_)
+
+    def get_occupazioni_by_prenotazione(
+        self, id_prenotazione: int
+    ) -> list[Occupazione]:
+        return self.__gestore_occupazioni.get_occupazioni_by_prenotazione(
+            id_prenotazione
+        )
 
     # Validazione
     def __valida_opera(self, opera: Opera):
@@ -417,7 +443,7 @@ class Model:
             )
 
     def __valida_occupazione(self, occupazione: Occupazione):
-        """Throws: IdInesistenteException"""
+        """Throws: IdInesistenteException, AzioneIncongruenteException"""
         if not self.__gestore_eventi.ha_evento(occupazione.get_id_evento()):
             raise IdInesistenteException(
                 f"Non è presente nessun evento con id {occupazione.get_id_evento()}."
@@ -433,6 +459,21 @@ class Model:
         ):
             raise IdInesistenteException(
                 f"Non è presente nessuna prenotazione con id {occupazione.get_id_prenotazione()}."
+            )
+
+        evento: Evento = self.get_evento(occupazione.get_id_evento())  # type: ignore
+        id_spettacolo = evento.get_id_spettacolo()
+        posto: Posto = self.get_posto(occupazione.get_id_posto())  # type: ignore
+        id_sezione = posto.get_id_sezione()
+
+        if (
+            self.__gestore_prezzi.get_prezzo_by_spettacolo_e_sezione(
+                id_spettacolo, id_sezione
+            )
+            is None
+        ):
+            raise AzioneIncongruenteException(
+                "La sezione contenente il posto selezionato non ha un prezzo specificato per lo spettacolo selezionato."
             )
 
     # Login
@@ -660,24 +701,29 @@ class Model:
         self.__gestore_prenotazioni.aggiungi_prenotazione(prenotazione)
         self.__salva_prenotazioni()
 
-    def elimina_prenotazione(self, id_: int):
-        """Throws: OggettoInUsoException, IdInesistenteException"""
-        if self.__gestore_occupazioni.prenotazione_in_uso(id_):
-            raise OggettoInUsoException(
-                "La prenotazione è ancora legata ad una o più occupazioni."
-            )
+    def __elimina_occupazioni_by_prenotazione(self, id_prenotazione: int):
+        self.__gestore_occupazioni.elimina_occupazioni_by_prenotazione(id_prenotazione)
+        self.__salva_occupazioni()
 
+    def elimina_prenotazione(self, id_: int):
+        """Throws: IdInesistenteException"""
+        self.__elimina_occupazioni_by_prenotazione(id_)
         self.__gestore_prenotazioni.elimina_prenotazione(id_)
         self.__salva_prenotazioni()
 
-    def modifica_prenotazione(self, prenotazione_modificata: Prenotazione):
-        """Throws: IdInesistenteException"""
-        self.__gestore_prenotazioni.modifica_prenotazione(prenotazione_modificata)
+    def segna_prenotazione_come_pagata(self, id_: int):
+        """Throws: AzioneIncongruenteException, IdInesistenteException"""
+        self.__gestore_prenotazioni.segna_come_pagata(id_)
+        self.__salva_prenotazioni()
+
+    def segna_prenotazione_come_non_pagata(self, id_: int):
+        """Throws: AzioneIncongruenteException, IdInesistenteException"""
+        self.__gestore_prenotazioni.segna_come_non_pagata(id_)
         self.__salva_prenotazioni()
 
     #   OCCUPAZIONI
     def aggiungi_occupazione(self, occupazione: Occupazione):
-        """Throws: IdInesistenteException, IdOccupatoException, OccupatoException"""
+        """Throws: IdInesistenteException, AzioneIncongruenteException, IdOccupatoException, OccupatoException"""
         self.__valida_occupazione(occupazione)
 
         self.__gestore_occupazioni.aggiungi_occupazione(occupazione)
@@ -689,7 +735,7 @@ class Model:
         self.__salva_occupazioni()
 
     def modifica_occupazione(self, occupazione_modificata: Occupazione):
-        """Throws: IdInesistenteException, OccupatoException"""
+        """Throws: IdInesistenteException, AzioneIncongruenteException, OccupatoException"""
         self.__valida_occupazione(occupazione_modificata)
 
         self.__gestore_occupazioni.modifica_occupazione(occupazione_modificata)

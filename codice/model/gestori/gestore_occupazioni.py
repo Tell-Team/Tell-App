@@ -50,7 +50,19 @@ class GestoreOccupazioni:
 
         return None
 
-    def get_occupazioni_per_evento(self, id_evento: int) -> list[Occupazione]:
+    def get_occupazioni_by_prenotazione(
+        self, id_prenotazione: int
+    ) -> list[Occupazione]:
+        return copy.deepcopy(
+            list(
+                filter(
+                    lambda o: o.get_id_prenotazione() == id_prenotazione,
+                    self.__lista_occupazioni,
+                )
+            )
+        )
+
+    def get_occupazioni_by_evento(self, id_evento: int) -> list[Occupazione]:
         return copy.deepcopy(
             list(
                 filter(
@@ -92,6 +104,14 @@ class GestoreOccupazioni:
 
         raise IdInesistenteException(
             f"Non è presente nessuna occupazione con id {id_}."
+        )
+
+    def elimina_occupazioni_by_prenotazione(self, id_prenotazione: int):
+        self.__lista_occupazioni = list(
+            filter(
+                lambda p: p.get_id_prenotazione() != id_prenotazione,
+                self.__lista_occupazioni,
+            )
         )
 
     def modifica_occupazione(self, occupazione_modificata: Occupazione):

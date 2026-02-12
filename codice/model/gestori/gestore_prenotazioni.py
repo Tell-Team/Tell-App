@@ -60,6 +60,28 @@ class GestorePrenotazioni:
 
         self.__lista_prenotazioni.append(copy.copy(prenotazione))
 
+    def segna_come_pagata(self, id_: int):
+        """Throws: AzioneIncongruenteException, IdInesistenteException"""
+        for p in self.__lista_prenotazioni:
+            if p.get_id() == id_:
+                p.segna_come_pagata()
+                return
+
+        raise IdInesistenteException(
+            f"Non è presente nessuna prenotazione con id {id_}."
+        )
+
+    def segna_come_non_pagata(self, id_: int):
+        """Throws: AzioneIncongruenteException, IdInesistenteException"""
+        for p in self.__lista_prenotazioni:
+            if p.get_id() == id_:
+                p.segna_come_non_pagata()
+                return
+
+        raise IdInesistenteException(
+            f"Non è presente nessuna prenotazione con id {id_}."
+        )
+
     def elimina_prenotazione(self, id_: int):
         """Throws: IdInesistenteException"""
         for i, p in enumerate(self.__lista_prenotazioni):
@@ -69,15 +91,4 @@ class GestorePrenotazioni:
 
         raise IdInesistenteException(
             f"Non è presente nessuna prenotazione con id {id_}."
-        )
-
-    def modifica_prenotazione(self, prenotazione_modificata: Prenotazione):
-        """Throws: IdInesistenteException"""
-        for i, p in enumerate(self.__lista_prenotazioni):
-            if p.get_id() == prenotazione_modificata.get_id():
-                self.__lista_prenotazioni[i] = copy.copy(prenotazione_modificata)
-                return
-
-        raise IdInesistenteException(
-            f"Non è presente nessuna prenotazione con id {prenotazione_modificata.get_id()}."
         )
