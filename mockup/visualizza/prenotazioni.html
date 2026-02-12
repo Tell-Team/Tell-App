@@ -9,7 +9,7 @@
     <br /><br />
 
     <div class="singola-riga">
-      <span style="color: gray">Acquisto</span>
+      <button onclick="window.location.href = './acquisto.html';">Acquisto</button>
       <button onclick="window.location.href = './info.html';">Info</button>
       <button
         class="ticketOnly"
@@ -17,12 +17,7 @@
       >
         Spettacoli
       </button>
-      <button
-        class="ticketOnly"
-        onclick="window.location.href = './prenotazioni.html';"
-      >
-        Prenotazioni
-      </button>
+      <span style="color: green">Prenotazioni</span>
       <button
         class="adminOnly"
         onclick="window.location.href = './teatro.html';"
@@ -38,23 +33,15 @@
     </div>
 
     <div class="singola-riga">
-      <h2>Acquisto</h2>
+      <h2>Prenotazioni</h2>
       <div style="display: flex; align-items: center; border: 1px solid #ccc; padding: 2px 5px; margin-left: 10px;">
-        <input type="text" placeholder="Inserire titolo..." style="border: none; outline: none;">
+        <input type="text" placeholder="Ricerca nominativo..." style="border: none; outline: none;">
         <button style="background: #3b82f6; color: white; border: none; cursor: pointer;">🔍</button>
       </div>
     </div>
 
     <div class="istanza">
-      <h3>Zelmira</h3>
-      <div class="singola-riga">
-        <button
-          style="margin-left: 5px"
-          onclick="window.location.href = './prenotazione.html';"
-        >
-          Scegli posti
-        </button>
-      </div>
+      Non vi sono prenotazioni al momento.
     </div>
   </body>
 </html>

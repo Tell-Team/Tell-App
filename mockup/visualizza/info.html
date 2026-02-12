@@ -20,6 +20,12 @@
         Spettacoli
       </button>
       <button
+        class="ticketOnly"
+        onclick="window.location.href = './prenotazioni.html';"
+      >
+        Prenotazioni
+      </button>
+      <button
         class="adminOnly"
         onclick="window.location.href = './teatro.html';"
       >
@@ -107,7 +113,7 @@
 
           const btnMaggioriInfo = document.createElement("button");
           btnMaggioriInfo.type = "button";
-          btnMaggioriInfo.textContent = "Maggiori info";
+          btnMaggioriInfo.textContent = "Maggior info";
           btnMaggioriInfo.style.marginLeft = "10px";
           btnMaggioriInfo.onclick = function () {
             maggioriInfoOpera(index);
