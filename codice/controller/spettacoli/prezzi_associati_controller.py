@@ -16,7 +16,7 @@ from view.spettacoli.utils import PrezzoPageData
 from view.spettacoli.widgets import SezioniPrezziDisplay
 
 from view.utils.list_widgets import ListLayout
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 
 
 class PrezziAssociatiController(AbstractVisualizzaController):
@@ -84,11 +84,7 @@ class PrezziAssociatiController(AbstractVisualizzaController):
             try:
                 self.__elimina_prezzo(id_prezzo)
             except IdInesistenteException as exc:
-                PopupMessage.mostra_errore(
-                    self._view_page,
-                    "ID Prezzo inesistente",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(self._view_page, "ID Prezzo inesistente", str(exc))
             else:
                 self._view_page.aggiorna_pagina()
 
@@ -123,7 +119,7 @@ class PrezziAssociatiController(AbstractVisualizzaController):
             self._view_page.id_current_spettacolo
         )
         if not current_spettacolo:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_page,
                 "Spettacolo inesistente",
                 f"Non è presente nessuno spettacolo con id {self._view_page.id_current_spettacolo}.",
@@ -157,7 +153,7 @@ class PrezziAssociatiController(AbstractVisualizzaController):
             self._view_page.id_current_spettacolo
         )
         if not current_spettacolo:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_page,
                 "Spettacolo inesistente",
                 f"Non è presente nessuno spettacolo con id {self._view_page.id_current_spettacolo}.",
@@ -168,7 +164,7 @@ class PrezziAssociatiController(AbstractVisualizzaController):
             current_spettacolo.get_id(), sezione.get_id()
         )
         if not current_prezzo:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_page,
                 "Prezzo inesistente",
                 f"Non è presente nessun prezzo per la sezione con id {sezione.get_id()} "

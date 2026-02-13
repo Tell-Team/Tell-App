@@ -15,7 +15,7 @@ from view.teatro.utils import SezionePageData
 from view.teatro.widgets import SezioneDisplay
 
 from view.utils.list_widgets import ListLayout
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 from view.style.ui_style import WidgetRole
 
 
@@ -81,11 +81,7 @@ class TeatroSectionController(AbstractSectionController):
                 self.__elimina_sezione(id_)
             except OggettoInUsoException as exc:
                 widget_sezione.annulla_elimina()
-                PopupMessage.mostra_errore(
-                    self._view_section,
-                    "Sezione in uso",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(self._view_section, "Sezione in uso", str(exc))
             else:
                 self._view_section.aggiorna_pagina()
 
@@ -111,7 +107,7 @@ class TeatroSectionController(AbstractSectionController):
         # Copia della sezione da visualizzare
         current_sezione = self.__get_sezione(id_)
         if not current_sezione:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_section,
                 "Sezione inesistente",
                 f"Non è presente nessuna sezione con id {id_}.",
@@ -168,7 +164,7 @@ class TeatroSectionController(AbstractSectionController):
         # Copia della sezione da modificare
         current_sezione = self.__get_sezione(id_)
         if not current_sezione:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_section,
                 "Sezione inesistente",
                 f"Non è presente nessuna sezione con id {id_}.",

@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QApplication
 import logging
 import sys
+from view.style import resources_rc  # type:ignore
 
 from controller.app_context import AppContext
 

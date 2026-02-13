@@ -16,7 +16,7 @@ from view.spettacoli.widgets import EventoDisplay
 from view.spettacoli.utils import EventoPageData
 
 from view.utils.list_widgets import ListLayout
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 
 
 class VisualizzaSpettacoloController(AbstractVisualizzaController):
@@ -76,7 +76,7 @@ class VisualizzaSpettacoloController(AbstractVisualizzaController):
         # Copia dello spettacolo da visualizzare
         current_spettacolo = self.__get_spettacolo(id_spettacolo)
         if not current_spettacolo:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_page,
                 "Spettacolo inesistente",
                 f"Non è presente nessuno spettacolo con id {id_spettacolo}.",
@@ -125,11 +125,7 @@ class VisualizzaSpettacoloController(AbstractVisualizzaController):
                 self.__elimina_evento(id_)
             except OggettoInUsoException as exc:
                 widget_evento.annulla_elimina()
-                PopupMessage.mostra_errore(
-                    self._view_page,
-                    "Evento in uso",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(self._view_page, "Evento in uso", str(exc))
             else:
                 self._view_page.aggiorna_pagina()
 
@@ -158,10 +154,10 @@ class VisualizzaSpettacoloController(AbstractVisualizzaController):
         current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(current_pagina) is not NuovoEventoView:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_page,
                 "Pagina non trovata",
-                f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
+                f"Non è stato trovata la pagina '{pagina_nome}'. "
                 + f"Type trovato: {type(current_pagina)}",
             )
             return
@@ -182,7 +178,7 @@ class VisualizzaSpettacoloController(AbstractVisualizzaController):
         # Copia del evento da modificare
         current_evento = self.__get_evento(id_)
         if not current_evento:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_page,
                 "Evento inesistente",
                 f"Non è presente nessun evento con id {id_}.",
@@ -198,10 +194,10 @@ class VisualizzaSpettacoloController(AbstractVisualizzaController):
         current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(current_pagina) is not ModificaEventoView:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_page,
                 "Pagina non trovata",
-                f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
+                f"Non è stato trovata la pagina '{pagina_nome}'. "
                 + f"Type trovato: {type(current_pagina)}",
             )
             return

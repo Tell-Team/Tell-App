@@ -13,7 +13,7 @@ from view.acquisto.widgets import EventoPostiDisplay
 
 from view.utils.list_widgets import ListLayout
 
-# from view.utils import PopupMessage
+# from view.utils import mostra_errore
 
 from view.style.ui_style import WidgetRole
 
@@ -89,20 +89,20 @@ class RicevutaController(QObject):
         #     nuova_prenotazione = Prenotazione(nominativo, tempo_emission)
         # except DatoIncongruenteException as exc:
         #     # È stato trovato un dato non valido
-        #     PopupMessage.mostra_errore(
+        #     mostra_errore(
         #         pagina,
         #         "Impossibile creare prenotazione",
-        #         f"Si è verificato un errore: {exc}",
+        #         str(exc)
         #     )
         # else:
         #     try:
         #         self.__aggiungi_prenotazione(nuova_prenotazione)
         #     except IdOccupatoException as exc:
         #         # Esiste già una prenotazione con quell'id
-        #         PopupMessage.mostra_errore(
+        #         mostra_errore(
         #             pagina,
         #             "ID Prenotazione occupato",
-        #             f"Si è verificato un errore: {exc}",
+        #             str(exc)
         #         )
 
         #     # Tenta di creare le istanze di Occupazione
@@ -116,20 +116,20 @@ class RicevutaController(QObject):
         #                     )
         #                 except DatoIncongruenteException as exc:
         #                     # È stato trovato un dato non valido
-        #                     PopupMessage.mostra_errore(
+        #                     mostra_errore(
         #                         pagina,
         #                         "Impossibile occupare posto",
-        #                         f"Si è verificato un errore: {exc}",
+        #                         str(exc)
         #                     )
         #                 else:
         #                     try:
         #                         self.__aggiungi_occupazione(nuova_occupazione)
         #                     except IdOccupatoException as exc:
         #                         # Esiste già una Occupazione con quell'id
-        #                         PopupMessage.mostra_errore(
+        #                         mostra_errore(
         #                             pagina,
         #                             "Impossibile occupare posto",
-        #                             f"Si è verificato un errore: {exc}",
+        #                             str(exc)
         #                         )
 
         #     pagina.abilita_btn_fine(True)

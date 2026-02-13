@@ -20,7 +20,7 @@ from view.teatro.utils import PostoPageData
 from view.teatro.widgets import PostoDisplay
 
 from view.utils.list_widgets import ListLayout
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 
 
 CAMPI_NECESSARI = "<b>ATTENZIONE</b>: È necessario compilare tutti i campi d'input."
@@ -97,11 +97,7 @@ class VisualizzaSezioneController(AbstractVisualizzaController):
             try:
                 self.__elimina_posto(id_)
             except OggettoInUsoException as exc:
-                PopupMessage.mostra_errore(
-                    self._view_page,
-                    "Posto in uso",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(self._view_page, "Posto in uso", str(exc))
             else:
                 self._view_page.aggiorna_pagina()
 
@@ -139,11 +135,7 @@ class VisualizzaSezioneController(AbstractVisualizzaController):
             nuovo_posto = Posto(fila, numero, id_sezione)
         except DatoIncongruenteException as exc:
             pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-            PopupMessage.mostra_errore(
-                pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(pagina, "Input non valido", str(exc))
         else:
             pagina.mostra_msg_input_error("")
 
@@ -151,18 +143,10 @@ class VisualizzaSezioneController(AbstractVisualizzaController):
                 self.__aggiungi_posto(nuovo_posto)
             except OccupatoException as exc:
                 # Esiste già un posto con quel numero
-                PopupMessage.mostra_errore(
-                    pagina,
-                    "Numero Posto occupato",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(pagina, "Numero Posto occupato", str(exc))
             except IdOccupatoException as exc:
                 # Esiste già un posto con quell'id
-                PopupMessage.mostra_errore(
-                    pagina,
-                    "ID Posto occupato",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(pagina, "ID Posto occupato", str(exc))
             else:
                 pagina.aggiorna_pagina()
 
@@ -186,10 +170,10 @@ class VisualizzaSezioneController(AbstractVisualizzaController):
 
         if not pagina.range_numeri.text().strip():
             pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 pagina,
                 "Input non valido",
-                "Si è verificato un errore: È necessari inserire un rango.",
+                "È necessari inserire un rango.",
             )
             return
 
@@ -197,11 +181,7 @@ class VisualizzaSezioneController(AbstractVisualizzaController):
             numeri = parse_ranges(pagina.range_numeri.text())
         except ValueError as exc:
             pagina.mostra_msg_input_error(FORMATO_SVAGLIATO)
-            PopupMessage.mostra_errore(
-                pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(pagina, "Input non valido", str(exc))
             return
 
         fila = pagina.fila.text()
@@ -213,11 +193,7 @@ class VisualizzaSezioneController(AbstractVisualizzaController):
                 nuovo_posto = Posto(fila, num, id_sezione)
             except DatoIncongruenteException as exc:
                 pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-                PopupMessage.mostra_errore(
-                    pagina,
-                    "Input non valido",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(pagina, "Input non valido", str(exc))
                 return
             else:
                 lista_posti.append(nuovo_posto)
@@ -236,7 +212,7 @@ class VisualizzaSezioneController(AbstractVisualizzaController):
 
         if posti_errati:
             error_msg = "\n".join(posti_errati)
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 pagina,
                 "Posti non validi",
                 f"Si sono verificati i seguenti errori:\n{error_msg}",
@@ -251,7 +227,7 @@ class VisualizzaSezioneController(AbstractVisualizzaController):
         # Copia del posto da modificare
         current_posto = self.__get_posto(id_)
         if not current_posto:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_page,
                 "Posto inesistente",
                 f"Non è presente nessun posto con id {id_}.",
@@ -267,10 +243,10 @@ class VisualizzaSezioneController(AbstractVisualizzaController):
         current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(current_pagina) is not ModificaPostoView:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_page,
                 "Pagina non trovata",
-                f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
+                f"Non è stato trovata la pagina '{pagina_nome}'. "
                 + f"Type trovato: {type(current_pagina)}",
             )
             return

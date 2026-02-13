@@ -13,7 +13,7 @@ from model.exceptions import (
 
 from view.spettacoli.pagine import ModificaEventoView, NuovoEventoView
 
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 
 
 DATI_INCONGRUENTI = "<b>ATTENZIONE</b>: È necessario inserire una data ed ore validi."
@@ -69,11 +69,7 @@ class CUEventoController(AbstractCUController):
         except DatoIncongruenteException as exc:
             # È stato trovato un campo con input non valido
             current_pagina.mostra_msg_input_error(DATI_INCONGRUENTI)
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(current_pagina, "Input non valido", str(exc))
         else:
             current_pagina.mostra_msg_input_error("")
 
@@ -81,11 +77,7 @@ class CUEventoController(AbstractCUController):
                 self.__aggiungi_evento(nuovo_evento)
             except IdOccupatoException as exc:
                 # Esiste già un evento con quell'id
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "ID Evento occupato",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(current_pagina, "ID Evento occupato", str(exc))
             else:
                 self.goBackRequest.emit()
 
@@ -97,7 +89,7 @@ class CUEventoController(AbstractCUController):
         copia_evento = self.__get_evento(current_pagina.id_current_evento)
         if not isinstance(copia_evento, Evento):
             # Non esiste evento con l'id salvato nella pagina
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 current_pagina,
                 "Errore nel salvataggio",
                 f"Non è presente nessun evento con id {current_pagina.id_current_evento}. "
@@ -116,11 +108,7 @@ class CUEventoController(AbstractCUController):
             copia_evento.set_data_ora(py_date)
         except DatoIncongruenteException as exc:
             current_pagina.mostra_msg_input_error(DATI_INCONGRUENTI)
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(current_pagina, "Input non valido", str(exc))
         else:
             current_pagina.mostra_msg_input_error("")
 
@@ -128,10 +116,6 @@ class CUEventoController(AbstractCUController):
                 self.__modifica_evento(copia_evento)
             except IdInesistenteException as exc:
                 # Non esiste un'evento con quell'id
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "ID Evento insesistente",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(current_pagina, "ID Evento insesistente", str(exc))
             else:
                 self.goBackRequest.emit()

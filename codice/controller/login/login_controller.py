@@ -11,7 +11,7 @@ from model.exceptions import CredenzialiErrateException
 
 from view.login import LoginDialog
 
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 
 
 class LoginController(QObject):
@@ -58,11 +58,7 @@ class LoginController(QObject):
             id_account = self.__model.login(username, password)
             # Non viene usato hashing
         except CredenzialiErrateException as exc:
-            PopupMessage.mostra_errore(
-                self.__login_dialog,
-                "Credenziali errate",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(self.__login_dialog, "Credenziali errate", str(exc))
             return
         else:
             if account := self.__model.get_account(id_account):

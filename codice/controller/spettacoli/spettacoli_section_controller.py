@@ -17,7 +17,7 @@ from view.spettacoli.utils import SpettacoloPageData
 from view.info.utils import RegiaPageData
 
 from view.utils.list_widgets import ListLayout
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 from view.style.ui_style import WidgetRole
 
 
@@ -96,11 +96,7 @@ class SpettacoliSectionController(AbstractSectionController):
                 self.__elimina_spettacolo(id_)
             except OggettoInUsoException as exc:
                 widget_spettacolo.annulla_elimina()
-                PopupMessage.mostra_errore(
-                    self._view_section,
-                    "Spettacolo in uso",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(self._view_section, "Spettacolo in uso", str(exc))
             else:
                 self._view_section.aggiorna_pagina()
 
@@ -140,7 +136,7 @@ class SpettacoliSectionController(AbstractSectionController):
         # Copia dello spettacolo da visualizzare
         current_spettacolo = self.__get_spettacolo(id_)
         if not current_spettacolo:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_section,
                 "Spettacolo inesistente",
                 f"Non è presente nessuno spettacolo con id {id_}.",
@@ -207,7 +203,7 @@ class SpettacoliSectionController(AbstractSectionController):
         # Copia dello spettacolo da modificare
         current_spettacolo = self.__get_spettacolo(id_)
         if not current_spettacolo:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_section,
                 "Spettacolo inesistente",
                 f"Non è presente nessuno spettacolo con id {id_}.",

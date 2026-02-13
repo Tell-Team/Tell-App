@@ -13,7 +13,7 @@ from model.exceptions import (
 
 from view.spettacoli.pagine import ModificaPrezzoView, NuovoPrezzoView
 
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 
 
 DATI_INCONGRUENTI = "<b>ATTENZIONE</b>: È necessario inserire un prezzo valido."
@@ -70,11 +70,7 @@ class CUPrezzoController(AbstractCUController):
         except DatoIncongruenteException as exc:
             # È stato trovato un campo con input non valido
             current_pagina.mostra_msg_input_error(DATI_INCONGRUENTI)
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(current_pagina, "Input non valido", str(exc))
         else:
             current_pagina.mostra_msg_input_error("")
 
@@ -82,18 +78,10 @@ class CUPrezzoController(AbstractCUController):
                 self.__aggiungi_prezzo(nuovo_prezzo)
             except IdOccupatoException as exc:
                 # Esiste già un evento con quell'id
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "ID Evento occupato",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(current_pagina, "ID Evento occupato", str(exc))
             except OccupatoException as exc:
                 # Esiste già un prezzo di la sezione indicata per lo spettacolo indicato
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "Posto esistente",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(current_pagina, "Posto esistente", str(exc))
             else:
                 self.goBackRequest.emit()
 
@@ -105,7 +93,7 @@ class CUPrezzoController(AbstractCUController):
         copia_prezzo = self.__get_prezzo(current_pagina.id_current_prezzo)
         if not isinstance(copia_prezzo, Prezzo):
             # Non esiste prezzo con l'id salvato nella pagina
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 current_pagina,
                 "Errore nel salvataggio",
                 f"Non è presente nessun prezzo con id {current_pagina.id_current_prezzo}. "
@@ -124,11 +112,7 @@ class CUPrezzoController(AbstractCUController):
             copia_prezzo.set_ammontare(ammontare)
         except DatoIncongruenteException as exc:
             current_pagina.mostra_msg_input_error(DATI_INCONGRUENTI)
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(current_pagina, "Input non valido", str(exc))
         else:
             current_pagina.mostra_msg_input_error("")
 
@@ -136,17 +120,9 @@ class CUPrezzoController(AbstractCUController):
                 self.__modifica_prezzo(copia_prezzo)
             except IdInesistenteException as exc:
                 # Non esiste un prezzo con quell'id
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "ID Prezzo insesistente",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(current_pagina, "ID Prezzo insesistente", str(exc))
             except OccupatoException as exc:
                 # Esiste già un prezzo di la sezione indicata per lo spettacolo indicato
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "Prezzo esistente",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(current_pagina, "Prezzo esistente", str(exc))
             else:
                 self.goBackRequest.emit()

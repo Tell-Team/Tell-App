@@ -61,13 +61,11 @@ class VisualizzaPrenotazioneController(AbstractVisualizzaController):
 
     def __aggiorna_stato_prenotazione(self, is_pagata: bool) -> None:
         try:
-            if is_pagata:
-                self._model.segna_prenotazione_come_pagata(
-                    self._view_page.id_current_prenotazione
-                )
-            else:
-                self._model.segna_prenotazione_come_non_pagata(
-                    self._view_page.id_current_prenotazione
-                )
+            id_ = self._view_page.id_current_prenotazione
+            (
+                self._model.segna_prenotazione_come_pagata(id_)
+                if is_pagata
+                else self._model.segna_prenotazione_come_non_pagata(id_)
+            )
         except AzioneIncongruenteException:
             return

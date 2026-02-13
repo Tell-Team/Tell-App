@@ -9,7 +9,7 @@ from model.model.model import Model
 
 from view.main_window import MainWindow
 
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 
 
 class Pagina(Enum):
@@ -134,10 +134,10 @@ class NavigationController(QObject):
 
             self.__get_stack().setCurrentWidget(widget)
             return
-        PopupMessage.mostra_errore(
+        mostra_error_popup(
             self.__get_central_widget(),
             "Pagina non trovata",
-            f"Si è verificato un errore: Non c'è una pagina registrata con {nome}",
+            f"Non c'è una pagina registrata con {nome}",
         )
 
     def __go_to_section(self, nome: Pagina) -> None:

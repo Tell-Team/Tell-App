@@ -16,7 +16,7 @@ from view.info.widgets import OperaDisplay, GenereDisplay
 from view.info.utils import OperaPageData, GenerePageData
 
 from view.utils.list_widgets import ListLayout
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 from view.style.ui_style import WidgetRole
 
 
@@ -106,11 +106,7 @@ class InfoSectionController(AbstractSectionController):
                 self.__elimina_opera(id_)
             except OggettoInUsoException as exc:
                 widget_opera.annulla_elimina()
-                PopupMessage.mostra_errore(
-                    self._view_section,
-                    "Opera in uso",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(self._view_section, "Opera in uso", str(exc))
             else:
                 self._view_section.aggiorna_pagina()
 
@@ -157,11 +153,7 @@ class InfoSectionController(AbstractSectionController):
                 self.__elimina_genere(id_)
             except OggettoInUsoException as exc:
                 widget_genere.annulla_elimina()
-                PopupMessage.mostra_errore(
-                    self._view_section,
-                    "Genere in uso",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(self._view_section, "Genere in uso", str(exc))
             else:
                 self._view_section.aggiorna_pagina()
 
@@ -189,7 +181,7 @@ class InfoSectionController(AbstractSectionController):
         # Copia dell'opera da visualizzare
         current_opera = self.__get_opera(id_)
         if not current_opera:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_section,
                 "Opera inesistente",
                 f"Non è presente nessuna opera con id {id_}.",
@@ -208,7 +200,7 @@ class InfoSectionController(AbstractSectionController):
         # Setup pagina con i dati dell'opera
         genere_associato = self.__get_genere(current_opera.get_id_genere())
         if not genere_associato:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_section,
                 "Genere inesistente",
                 f"Non è presente nessun genere con id {current_opera.get_id_genere()}.",
@@ -262,7 +254,7 @@ class InfoSectionController(AbstractSectionController):
         # Copia dell'opera da modificare
         current_opera = self.__get_opera(id_)
         if not current_opera:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_section,
                 "Opera inesistente",
                 f"Non è presente nessuna opera con id {id_}.",
@@ -325,7 +317,7 @@ class InfoSectionController(AbstractSectionController):
         # Copia del genere da modificare
         current_genere = self.__get_genere(id_)
         if not current_genere:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_section,
                 "Genere inesistente",
                 f"Non è presente nessun genere con id {id_}.",

@@ -17,7 +17,7 @@ from model.exceptions import (
 
 from view.account.pagine import NuovoAccountView, ModificaAccountView
 
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 
 
 CAMPI_NECESSARI = "<b>ATTENZIONE</b>: È necessario compilare tutti i campi di input."
@@ -100,19 +100,19 @@ class CUAccountController(AbstractCUController):
             if password != password_conferma:
                 # La nuova password è diversa dalla conferma
                 current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-                PopupMessage.mostra_errore(
+                mostra_error_popup(
                     current_pagina,
                     "Input non valido",
-                    "Si è verificato un errore: La password inserita non coincide con la sua conferma.",
+                    "La password inserita non coincide con la sua conferma.",
                 )
                 return
             if ruolo is None:
                 # Non è stato specificato un ruolo
                 current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-                PopupMessage.mostra_errore(
+                mostra_error_popup(
                     current_pagina,
                     "Input non valido",
-                    "Si è verificato un errore: È necessario selezionare un ruolo.",
+                    "È necessario selezionare un ruolo.",
                 )
                 return
 
@@ -120,11 +120,7 @@ class CUAccountController(AbstractCUController):
         except DatoIncongruenteException as e:
             # È stato trovato un campo con input non valido
             current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {e}",
-            )
+            mostra_error_popup(current_pagina, "Input non valido", str(e))
         else:
             current_pagina.mostra_msg_input_error("")
 
@@ -132,32 +128,16 @@ class CUAccountController(AbstractCUController):
                 self.__aggiungi_account(nuovo_account, self.__user_session_id)
             except IdInesistenteException as e:
                 # Non esiste un account (agent) con quell'id
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "ID Account inesistente",
-                    f"Si è verificato un errore: {e}",
-                )
+                mostra_error_popup(current_pagina, "ID Account inesistente", str(e))
             except IdOccupatoException as e:
                 # Esiste già un account con quell'id
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "ID Account occupato",
-                    f"Si è verificato un errore: {e}",
-                )
+                mostra_error_popup(current_pagina, "ID Account occupato", str(e))
             except OccupatoException as e:
                 # L'account è in uso
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "Account occupato",
-                    f"Si è verificato un errore: {e}",
-                )
+                mostra_error_popup(current_pagina, "Account occupato", str(e))
             except PermessiInsufficientiException as e:
                 # L'account richiedente non ha i permessi necessari
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "Privilegi insufficienti",
-                    f"Si è verificato un errore {e}",
-                )
+                mostra_error_popup(current_pagina, "Privilegi insufficienti", str(e))
             else:
                 self.goBackRequest.emit()
 
@@ -177,10 +157,10 @@ class CUAccountController(AbstractCUController):
                 if password != current_pagina.conferma.text():
                     # La nuova password è diversa dalla conferma
                     current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-                    PopupMessage.mostra_errore(
+                    mostra_error_popup(
                         current_pagina,
                         "Input non valido",
-                        "Si è verificato un errore: La nuova password non coincide con la sua conferma.",
+                        "La nuova password non coincide con la sua conferma.",
                     )
                     return
 
@@ -190,10 +170,10 @@ class CUAccountController(AbstractCUController):
             if ruolo is None:
                 # Non è stato specificato un ruolo
                 current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-                PopupMessage.mostra_errore(
+                mostra_error_popup(
                     current_pagina,
                     "Input non valido",
-                    "Si è verificato un errore: È necessario selezionare un ruolo.",
+                    "È necessario selezionare un ruolo.",
                 )
                 return
 
@@ -201,33 +181,17 @@ class CUAccountController(AbstractCUController):
         except DatoIncongruenteException as e:
             # È stato trovato un campo con input non valido
             current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {e}",
-            )
+            mostra_error_popup(current_pagina, "Input non valido", str(e))
         except CredenzialiErrateException as e:
             # La vecchia password non è corretta
             current_pagina.mostra_msg_input_error(CREDENZIALI_ERRATE)
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "Credenziali errate",
-                f"Si è verificato un errore: {e}",
-            )
+            mostra_error_popup(current_pagina, "Credenziali errate", str(e))
         except PermessiInsufficientiException as e:
             # L'account richiedente non ha i permessi necessari
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "Privilegi insufficienti",
-                f"Si è verificato un errore {e}",
-            )
+            mostra_error_popup(current_pagina, "Privilegi insufficienti", str(e))
         except IdInesistenteException as e:
             # L'ID non esiste
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "ID inesistente",
-                f"Si è verificato un errore {e}",
-            )
+            mostra_error_popup(current_pagina, "ID inesistente", str(e))
         else:
             current_pagina.mostra_msg_input_error("")
             self.goBackRequest.emit()

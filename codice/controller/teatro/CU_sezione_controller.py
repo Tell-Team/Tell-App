@@ -12,7 +12,7 @@ from model.exceptions import (
 
 from view.teatro.pagine import ModificaSezioneView, NuovaSezioneView
 
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 
 
 CAMPI_NECESSARI = "<b>ATTENZIONE</b>: È necessario compilare tutti i campi d'input."
@@ -67,11 +67,7 @@ class CUSezioneController(AbstractCUController):
         except DatoIncongruenteException as exc:
             # È stato trovato un campo con input non valido
             current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(current_pagina, "Input non valido", str(exc))
         else:
             current_pagina.mostra_msg_input_error("")
 
@@ -79,11 +75,7 @@ class CUSezioneController(AbstractCUController):
                 self.__aggiungi_sezione(nuova_sezione)
             except IdOccupatoException as exc:
                 # Esiste già una sezione con quell'id
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "ID Sezione occupato",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(current_pagina, "ID Sezione occupato", str(exc))
             else:
                 self.goBackRequest.emit()
 
@@ -95,7 +87,7 @@ class CUSezioneController(AbstractCUController):
         copia_sezione = self.__get_sezione(current_pagina.id_current_sezione)
         if not isinstance(copia_sezione, Sezione):
             # Non esiste sezine con l'id salvato nella pagina
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 current_pagina,
                 "Errore nel salvataggio",
                 f"Non è presente nessuna sezione con id {current_pagina.id_current_sezione}. "
@@ -113,11 +105,7 @@ class CUSezioneController(AbstractCUController):
             copia_sezione.set_descrizione(descrizione)
         except DatoIncongruenteException as exc:
             current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(current_pagina, "Input non valido", str(exc))
         else:
             current_pagina.mostra_msg_input_error("")
 
@@ -125,10 +113,6 @@ class CUSezioneController(AbstractCUController):
                 self.__modifica_sezione(copia_sezione)
             except IdInesistenteException as exc:
                 # Non esiste una sezione con quell'id
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "ID Sezione insesistente",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(current_pagina, "ID Sezione insesistente", str(exc))
             else:
                 self.goBackRequest.emit()

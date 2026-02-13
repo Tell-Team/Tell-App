@@ -12,7 +12,7 @@ from model.exceptions import (
 
 from view.info.pagine import ModificaGenereView, NuovoGenereView
 
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 
 
 CAMPI_NECESSARI = "<b>ATTENZIONE</b>: È necessario compilare tutti i campi d'input."
@@ -64,11 +64,7 @@ class CUGenereController(AbstractCUController):
         except DatoIncongruenteException as exc:
             # È stato trovato un campo con input non valido
             current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(current_pagina, "Input non valido", str(exc))
         else:
             current_pagina.mostra_msg_input_error("")
 
@@ -76,11 +72,7 @@ class CUGenereController(AbstractCUController):
                 self.__aggiungi_genere(nuovo_genere)
             except IdOccupatoException as exc:
                 # Esiste già un genere con quell'id
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "ID Genere occupato",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(current_pagina, "ID Genere occupato", str(exc))
             else:
                 self.goBackRequest.emit()
 
@@ -92,7 +84,7 @@ class CUGenereController(AbstractCUController):
         copia_genere = self.__get_genere(current_pagina.id_current_genere)
         if not isinstance(copia_genere, Genere):
             # Non esiste genere con l'id salvato nella pagina
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 current_pagina,
                 "Errore nel salvataggio",
                 f"Non è presente nessun genere con id {current_pagina.id_current_genere}. "
@@ -110,11 +102,7 @@ class CUGenereController(AbstractCUController):
             copia_genere.set_descrizione(descrizione)
         except DatoIncongruenteException as exc:
             current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(current_pagina, "Input non valido", str(exc))
         else:
             current_pagina.mostra_msg_input_error("")
 
@@ -122,10 +110,6 @@ class CUGenereController(AbstractCUController):
                 self.__modifica_genere(copia_genere)
             except IdInesistenteException as exc:
                 # Non esiste un genere con quell'id
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "ID Generi insesistente",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(current_pagina, "ID Generi insesistente", str(exc))
             else:
                 self.goBackRequest.emit()

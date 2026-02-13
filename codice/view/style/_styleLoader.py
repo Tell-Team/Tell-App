@@ -115,17 +115,22 @@ def load_stylesheet(theme: Optional[OSTheme] = None) -> str:
     ---
     Throws: FileNotFoundError, IOError
     """
-    from pathlib import Path
+    from PyQt6.QtCore import QFile, QTextStream
 
     if theme is None:
         theme = OSTheme.LIGHT
 
-    COLORS_QSS = Path(__file__).parent.joinpath("qss", "themes", theme)
-    LAYOUT_QSS = Path(__file__).parent.joinpath("qss", "layouts", "layout.qss")
+    paths = [
+        ":/qss/themes/" + theme,  # QSS with color styling
+        ":/qss/layouts/layout.qss",  # QSS with layout styling
+    ]
 
-    with open(COLORS_QSS, "r", encoding="utf-8") as f:
-        qss_finale = f.read()
-    with open(LAYOUT_QSS, "r", encoding="utf-8") as file:
-        qss_finale = qss_finale + file.read()
+    final_stylesheet = ""
+    for path in paths:
+        file = QFile(path)
+        if not file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text):
+            raise FileNotFoundError(f"Cannot open QSS resource: {path}")
+        stream = QTextStream(file)
+        final_stylesheet += stream.readAll() + "\n"
 
-    return qss_finale
+    return final_stylesheet

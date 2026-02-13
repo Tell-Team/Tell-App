@@ -16,7 +16,7 @@ from view.info.widgets import RegiaDisplay
 from view.info.utils import RegiaPageData
 
 from view.utils.list_widgets import ListLayout
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 
 
 class VisualizzaOperaController(AbstractVisualizzaController):
@@ -88,11 +88,7 @@ class VisualizzaOperaController(AbstractVisualizzaController):
                 self.__elimina_regia(id_)
             except OggettoInUsoException as exc:
                 widget_regia.annulla_elimina()
-                PopupMessage.mostra_errore(
-                    self._view_page,
-                    "Regia in uso",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(self._view_page, "Regia in uso", str(exc))
             else:
                 self._view_page.aggiorna_pagina()
 
@@ -121,10 +117,10 @@ class VisualizzaOperaController(AbstractVisualizzaController):
         current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(current_pagina) is not NuovaRegiaView:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_page,
                 "Pagina non trovata",
-                f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
+                f"Non è stato trovata la pagina '{pagina_nome}'. "
                 + f"Type trovato: {type(current_pagina)}",
             )
             return
@@ -134,7 +130,7 @@ class VisualizzaOperaController(AbstractVisualizzaController):
         current_opera = self.__get_opera(id_current_opera)
 
         if not isinstance(current_opera, Opera):
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_page,
                 "Opera inesistente",
                 f"Non è presente nessuna opera con id {id_current_opera}.",
@@ -156,7 +152,7 @@ class VisualizzaOperaController(AbstractVisualizzaController):
         # Copia della regia da modificare
         current_regia = self.__get_spettacolo(id_)
         if not isinstance(current_regia, Regia):
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_page,
                 "Regia inesistente",
                 f"Non è presente nessuna regia con id {id_}.",
@@ -172,10 +168,10 @@ class VisualizzaOperaController(AbstractVisualizzaController):
         current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(current_pagina) is not ModificaRegiaView:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_page,
                 "Pagina non trovata",
-                f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
+                f"Non è stato trovata la pagina '{pagina_nome}'. "
                 + f"Type trovato: {type(current_pagina)}",
             )
             return
@@ -194,7 +190,7 @@ class VisualizzaOperaController(AbstractVisualizzaController):
 
         opera_associata = self.__get_opera(current_regia.get_id_opera())
         if not isinstance(opera_associata, Opera):
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_page,
                 "Opera inesistente",
                 f"Non è presente nessuna opera con id '{current_regia.get_id_opera()}'.",

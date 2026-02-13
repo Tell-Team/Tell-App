@@ -27,7 +27,7 @@ from view.prenotazioni.utils import PrenotazionePageData
 
 from view.utils.list_widgets import ListLayout
 
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 
 
 class ScegliPostiController(AbstractVisualizzaController):
@@ -312,10 +312,10 @@ class ScegliPostiController(AbstractVisualizzaController):
         current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
         if type(current_pagina) is not RicevutaView:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_page,
                 "Pagina non trovata",
-                f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
+                f"Non è stato trovata la pagina '{pagina_nome}'. "
                 + f"Type trovato: {type(current_pagina)}",
             )
             return
@@ -354,22 +354,14 @@ class ScegliPostiController(AbstractVisualizzaController):
             nuova_prenotazione = Prenotazione(nominativo, data_emmisione)
         except DatoIncongruenteException as exc:
             # È stato trovato un dato non valido
-            PopupMessage.mostra_errore(
-                pagina,
-                "Impossibile creare prenotazione",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(pagina, "Impossibile creare prenotazione", str(exc))
             return False
         else:
             try:
                 self.__aggiungi_prenotazione(nuova_prenotazione)
             except IdOccupatoException as exc:
                 # Esiste già una prenotazione con quell'id
-                PopupMessage.mostra_errore(
-                    pagina,
-                    "ID Prenotazione occupato",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(pagina, "ID Prenotazione occupato", str(exc))
                 return False
 
         # Tenta di creare le istanze di Occupazione
@@ -388,11 +380,7 @@ class ScegliPostiController(AbstractVisualizzaController):
                     )
                 except DatoIncongruenteException as exc:
                     # È stato trovato un dato non valido
-                    PopupMessage.mostra_errore(
-                        pagina,
-                        "Impossibile occupare posto",
-                        f"Si è verificato un errore: {exc}",
-                    )
+                    mostra_error_popup(pagina, "Impossibile occupare posto", str(exc))
                     errore_verificato = True
                     break
                 else:
@@ -400,20 +388,17 @@ class ScegliPostiController(AbstractVisualizzaController):
                         self.__aggiungi_occupazione(nuova_occupazione)
                     except IdOccupatoException as exc:
                         # Esiste già una Occupazione con quell'id
-                        PopupMessage.mostra_errore(
-                            pagina,
-                            "Impossibile occupare posto",
-                            f"Si è verificato un errore: {exc}",
+                        mostra_error_popup(
+                            pagina, "Impossibile occupare posto", str(exc)
                         )
                         errore_verificato = True
                         break
                     except OccupatoException:
                         # Il posto da prenotare è già occupatto
-                        PopupMessage.mostra_errore(
+                        mostra_error_popup(
                             pagina,
                             "Impossibile occupare posto",
-                            f"Si è verificato un errore: Il posto {p.get_fila()} "
-                            + f" #{p.get_numero()} è già occupato.",
+                            f"Il posto {p.get_fila()} #{p.get_numero()} è già occupato.",
                         )
                         errore_verificato = True
                         break

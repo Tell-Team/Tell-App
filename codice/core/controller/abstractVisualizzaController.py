@@ -9,7 +9,7 @@ from controller.navigation import Pagina
 
 from model.model.model import Model
 
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 
 
 class AbstractVisualizzaController(QObject, metaclass=ABCQObjectMeta):
@@ -57,9 +57,8 @@ class AbstractVisualizzaController(QObject, metaclass=ABCQObjectMeta):
 
         :param pagina_nome: nametag associato alla pagina attesa
         :param tipo: tipo ottenuto al chiamare `_ottiene_pagina`"""
-        PopupMessage.mostra_errore(
+        mostra_error_popup(
             self._view_page,
             "Pagina non trovata",
-            f"Si è verificato un errore: Non è stato trovata la pagina '{pagina_nome}'. "
-            + f"Type trovato: {tipo}",
+            f"Non è stato trovata la pagina '{pagina_nome}'. Type trovato: {tipo}",
         )

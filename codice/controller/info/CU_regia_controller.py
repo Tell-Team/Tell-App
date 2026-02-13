@@ -13,7 +13,7 @@ from model.exceptions import (
 from view.info.pagine import ModificaRegiaView, NuovaRegiaView
 from view.spettacoli.widgets import PersonaleDisplay
 
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 
 
 CAMPI_NECESSARI = (
@@ -203,11 +203,7 @@ class CURegiaController(AbstractCUController):
         except DatoIncongruenteException as exc:
             # È stato trovato un campo con input non valido
             current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(current_pagina, "Input non valido", str(exc))
         else:
             current_pagina.mostra_msg_input_error("")
 
@@ -215,11 +211,7 @@ class CURegiaController(AbstractCUController):
                 self.__aggiungi_regia(nuova_regia)
             except IdOccupatoException as exc:
                 # Esiste già una regia con quell'id
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "ID Regia occupata",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(current_pagina, "ID Regia occupata", str(exc))
             else:
                 self.goBackRequest.emit()
 
@@ -231,7 +223,7 @@ class CURegiaController(AbstractCUController):
         copia_regia = self.__get_spettacolo(current_pagina.id_current_regia)
         if not isinstance(copia_regia, Regia):
             # Non esiste regia con l'id salvata nella pagina
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 current_pagina,
                 "Errore nel salvataggio",
                 f"Non è presente nessuna regia con id {current_pagina.id_current_regia}. "
@@ -262,11 +254,7 @@ class CURegiaController(AbstractCUController):
             copia_regia.set_id_opera(id_opera)
         except DatoIncongruenteException as exc:
             current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(current_pagina, "Input non valido", str(exc))
         else:
             current_pagina.mostra_msg_input_error("")
 
@@ -274,10 +262,6 @@ class CURegiaController(AbstractCUController):
                 self.__modifica_regia(copia_regia)
             except IdInesistenteException as exc:
                 # Non esiste una regia con quell'id
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "ID Regia insesistente",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(current_pagina, "ID Regia insesistente", str(exc))
             else:
                 self.goBackRequest.emit()

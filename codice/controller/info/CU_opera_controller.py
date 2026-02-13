@@ -12,7 +12,7 @@ from model.exceptions import (
 
 from view.info.pagine import ModificaOperaView, NuovaOperaView
 
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 
 
 CAMPI_NECESSARI = "<b>ATTENZIONE</b>: È necessario compilare tutti i campi d'input."
@@ -72,11 +72,7 @@ class CUOperaController(AbstractCUController):
         except DatoIncongruenteException as exc:
             # È stato trovato un campo con input non valido
             current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(current_pagina, "Input non valido", str(exc))
         else:
             current_pagina.mostra_msg_input_error("")
 
@@ -84,18 +80,10 @@ class CUOperaController(AbstractCUController):
                 self.__aggiungi_opera(nuova_opera)
             except IdInesistenteException as exc:
                 # L'opera è collegata ad un genere che non esiste
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "Genere inesistente",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(current_pagina, "Genere inesistente", str(exc))
             except IdOccupatoException as exc:
                 # Esiste già un'opera con quell'id
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "ID Opera occupato",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(current_pagina, "ID Opera occupato", str(exc))
             else:
                 self.goBackRequest.emit()
 
@@ -107,7 +95,7 @@ class CUOperaController(AbstractCUController):
         copia_opera = self.__get_opera(current_pagina.id_current_opera)
         if not isinstance(copia_opera, Opera):
             # Non esiste opera con l'id salvata nella pagina
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 current_pagina,
                 "Errore nel salvataggio",
                 f"Non è presente nessuna opera con id {current_pagina.id_current_opera}. "
@@ -132,10 +120,10 @@ class CUOperaController(AbstractCUController):
 
             if id_genere < 0:
                 current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-                PopupMessage.mostra_errore(
+                mostra_error_popup(
                     current_pagina,
                     "Input non valido",
-                    "Si è verificato un errore: È necessario selezionare un genere.",
+                    "È necessario selezionare un genere.",
                 )
                 return
 
@@ -149,11 +137,7 @@ class CUOperaController(AbstractCUController):
         except DatoIncongruenteException as exc:
             # È stato trovato un campo con input non valido
             current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(current_pagina, "Input non valido", str(exc))
         else:
             current_pagina.mostra_msg_input_error("")
 
@@ -161,10 +145,6 @@ class CUOperaController(AbstractCUController):
                 self.__modifica_opera(copia_opera)
             except IdInesistenteException as exc:
                 # Non esiste un'opera con quell'id
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "ID Opera inesistente",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(current_pagina, "ID Opera inesistente", str(exc))
             else:
                 self.goBackRequest.emit()

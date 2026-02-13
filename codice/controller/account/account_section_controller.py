@@ -15,7 +15,7 @@ from view.account.utils import AccountPageData
 from view.account.widgets import AccountDisplay
 
 from view.utils.list_widgets import ListLayout
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
@@ -85,10 +85,10 @@ class AccountSectionController(AbstractSectionController):
                 self.__elimina_account(id_)
             except OggettoInUsoException as e:
                 current_account.annulla_elimina()
-                PopupMessage.mostra_errore(
+                mostra_error_popup(
                     self._view_section,
                     "Account in uso",
-                    f"Si è verificato un errore: {e}",
+                    str(e),
                 )
             else:
                 self._view_section.aggiorna_pagina()
@@ -145,7 +145,7 @@ class AccountSectionController(AbstractSectionController):
         # Copia dell'account da modificare
         current_account = self.__get_account(id_)
         if not current_account:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_section,
                 "Account insesitente",
                 f"Non è presente nessun account con id {id_}",

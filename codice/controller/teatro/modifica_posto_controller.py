@@ -10,7 +10,8 @@ from model.exceptions import (
 )
 
 from view.teatro.pagine import ModificaPostoView
-from view.utils import PopupMessage
+
+from view.utils import mostra_error_popup
 
 
 CAMPI_NECESSARI = (
@@ -67,7 +68,7 @@ class ModificaPostoController(QObject):
         copia_posto = self.__get_posto(pagina.id_current_posto)
         if not isinstance(copia_posto, Posto):
             # Non esiste posto con l'id salvato nella pagina
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 pagina,
                 "Errore nel salvataggio",
                 f"Non è presente nessun posto con id {pagina.id_current_posto}. "
@@ -83,11 +84,7 @@ class ModificaPostoController(QObject):
             copia_posto.set_numero(numero)
         except DatoIncongruenteException as exc:
             pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-            PopupMessage.mostra_errore(
-                pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(pagina, "Input non valido", str(exc))
         else:
             pagina.mostra_msg_input_error("")
 
@@ -95,17 +92,9 @@ class ModificaPostoController(QObject):
                 self.__modifica_posto(copia_posto)
             except OccupatoException as exc:
                 # Esiste già un posto con quel numero
-                PopupMessage.mostra_errore(
-                    pagina,
-                    "Numero Posto occupato",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(pagina, "Numero Posto occupato", str(exc))
             except IdInesistenteException as exc:
                 # Non esiste un posto con quell'id
-                PopupMessage.mostra_errore(
-                    pagina,
-                    "ID Posto inesistente",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(pagina, "ID Posto inesistente", str(exc))
             else:
                 self.goBackRequest.emit()

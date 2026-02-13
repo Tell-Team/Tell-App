@@ -13,7 +13,7 @@ from view.acquisto.widgets import AcquistoDisplay
 from view.spettacoli.utils import SpettacoloPageData
 
 from view.utils.list_widgets import ListLayout
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 
 from view.style.ui_style import WidgetRole
 
@@ -100,7 +100,7 @@ class AcquistoSectionController(AbstractSectionController):
         # Copia dello spettacolo per iniziare la prenotazione
         current_spettacolo = self.__get_spettacolo(id_)
         if not current_spettacolo:
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 self._view_section,
                 "Spettacolo inesistente",
                 f"Non è presente nessuno spettacolo con id {id_}.",

@@ -13,7 +13,7 @@ from model.exceptions import (
 from view.spettacoli.pagine import ModificaSpettacoloView, NuovoSpettacoloView
 from view.spettacoli.widgets import PersonaleDisplay
 
-from view.utils import PopupMessage
+from view.utils import mostra_error_popup
 
 
 CAMPI_NECESSARI = (
@@ -204,11 +204,7 @@ class CUSpettacoloController(AbstractCUController):
         except DatoIncongruenteException as exc:
             # È stato trovato un campo con input non valido
             current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(current_pagina, "Input non valido", str(exc))
         else:
             current_pagina.mostra_msg_input_error("")
 
@@ -216,11 +212,7 @@ class CUSpettacoloController(AbstractCUController):
                 self.__aggiungi_spettacolo(nuovo_spettacolo)
             except IdOccupatoException as exc:
                 # Esiste già uno spettacolo con quell'id
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "ID Spettacolo occupata",
-                    f"Si è verificato un errore: {exc}",
-                )
+                mostra_error_popup(current_pagina, "ID Spettacolo occupata", str(exc))
             else:
                 self.goBackRequest.emit()
 
@@ -232,7 +224,7 @@ class CUSpettacoloController(AbstractCUController):
         copia_spettacolo = self.__get_spettacolo(current_pagina.id_current_spettacolo)
         if not isinstance(copia_spettacolo, Spettacolo):
             # Non esiste spettacolo con l'id salvato nella pagina
-            PopupMessage.mostra_errore(
+            mostra_error_popup(
                 current_pagina,
                 "Errore nel salvataggio",
                 f"Non è presente nessuno spettacolo con id {current_pagina.id_current_spettacolo}. "
@@ -258,11 +250,7 @@ class CUSpettacoloController(AbstractCUController):
             )
         except DatoIncongruenteException as exc:
             current_pagina.mostra_msg_input_error(CAMPI_NECESSARI)
-            PopupMessage.mostra_errore(
-                current_pagina,
-                "Input non valido",
-                f"Si è verificato un errore: {exc}",
-            )
+            mostra_error_popup(current_pagina, "Input non valido", str(exc))
         else:
             current_pagina.mostra_msg_input_error("")
 
@@ -270,10 +258,8 @@ class CUSpettacoloController(AbstractCUController):
                 self.__modifica_spettacolo(copia_spettacolo)
             except IdInesistenteException as exc:
                 # Non esiste uno spettacolo con quell'id
-                PopupMessage.mostra_errore(
-                    current_pagina,
-                    "ID Spettacolo insesistente",
-                    f"Si è verificato un errore: {exc}",
+                mostra_error_popup(
+                    current_pagina, "ID Spettacolo insesistente", str(exc)
                 )
             else:
                 self.goBackRequest.emit()
