@@ -1,4 +1,4 @@
-from .sezionePageData import SezionePageData
-from .postoPageData import PostoPageData
+from .sezioneData import SezioneData
+from .postoData import PostoData
 
-__all__ = ["SezionePageData", "PostoPageData"]
+__all__ = ["SezioneData", "PostoData"]

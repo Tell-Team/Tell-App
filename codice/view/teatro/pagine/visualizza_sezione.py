@@ -17,7 +17,7 @@ from core.view import AbstractVisualizzaView
 
 from model.organizzazione.posto import Posto
 
-from view.teatro.utils import SezionePageData
+from view.teatro.utils import SezioneData
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
@@ -196,7 +196,7 @@ class VisualizzaSezioneView(AbstractVisualizzaView):
 
     @override
     def set_data(  # type: ignore[override]
-        self, data: SezionePageData, lista_posti: list[Posto]
+        self, data: SezioneData, lista_posti: list[Posto]
     ) -> None:
         """Carica i dati della sezione nella pagina.
 

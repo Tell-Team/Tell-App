@@ -13,7 +13,7 @@ from model.exceptions import OggettoInUsoException
 
 from view.info.pagine import InfoSectionView
 from view.info.widgets import OperaDisplay, GenereDisplay
-from view.info.utils import OperaPageData, GenerePageData
+from view.info.utils import OperaData, GenereData
 
 from view.utils.list_widgets import ListLayout
 from view.utils import mostra_error_popup
@@ -207,7 +207,7 @@ class InfoSectionController(AbstractSectionController):
             )
             return
 
-        opera_data = OperaPageData(
+        opera_data = OperaData(
             id=current_opera.get_id(),
             nome=current_opera.get_nome(),
             trama=current_opera.get_trama(),
@@ -271,7 +271,7 @@ class InfoSectionController(AbstractSectionController):
             return
 
         # Salva i dati dentro di un container
-        opera_data = OperaPageData(
+        opera_data = OperaData(
             id=current_opera.get_id(),
             nome=current_opera.get_nome(),
             trama=current_opera.get_trama(),
@@ -334,7 +334,7 @@ class InfoSectionController(AbstractSectionController):
             return
 
         # Salva i dati dentro di un container
-        genere_data = GenerePageData(
+        genere_data = GenereData(
             id=current_genere.get_id(),
             nome=current_genere.get_nome(),
             descrizione=current_genere.get_descrizione(),

@@ -4,11 +4,12 @@ from typing import Optional, override
 
 from core.view import AbstractVisualizzaView
 
+from model.model.model import DettagliPrenotazione
 from model.organizzazione.evento import Evento
 from model.organizzazione.sezione import Sezione
 from model.organizzazione.posto import Posto
 
-from view.prenotazioni.utils import PrenotazionePageData
+from view.prenotazioni.utils import PrenotazioneData
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
@@ -105,6 +106,7 @@ class VisualizzaPrenotazioneView(AbstractVisualizzaView):
         self.layout_posti = QVBoxLayout(self.posti)
         self.layout_posti.addWidget(header_posti)
         self.layout_posti.addWidget(content_lista_posti)
+        self.layout_posti.addStretch()
         # end-Lista Posti
 
         # Layout
@@ -134,24 +136,27 @@ class VisualizzaPrenotazioneView(AbstractVisualizzaView):
     @override
     def set_data(  # type: ignore[override]
         self,
-        data: PrenotazionePageData,
-        lista_evento_posti: tuple[Evento, list[tuple[Sezione, list[Posto]]]],
+        data: PrenotazioneData,
+        dettagli: DettagliPrenotazione,
     ) -> None:
         """Carica i dati dello spettacolo nella pagina.
 
         :param data: data salvata in una classe immutabile
-        :param lista_evento_posti: lista dei posti prenotati, insieme alle sezioni ed
-        evento associati"""
+        :param dettagli: dataclass con lo spettacolo, evento e posti associati
+        alla prenotazione"""
         # Reset layout lista posti
         self.layout_lista_posti.svuota_layout()
 
         # Salva dati della prenotazione nella pagina
         self.id_current_prenotazione = data.id
-        self.lista_evento_posti = lista_evento_posti
+        lista_sezione_posti = [(x.sezione, x.posti) for x in dettagli.sezioni]
+        self.lista_evento_posti = (dettagli.evento, lista_sezione_posti)
 
         # Carica dati della prenotazione
         self.label_nominativo.setText(f"{data.nominativo}")
-        self.label_spettacolo.setText(f"<b>Spettacolo</b>: {data.titolo_spettacolo}")
+        self.label_spettacolo.setText(
+            f"<b>Spettacolo</b>: {dettagli.spettacolo.get_titolo()}"
+        )
         self.label_emmisione.setText(
             "<b>Emissione</b>: "
             + data.data_ora_registrazione.strftime("%a %b %d %Y %H:%M:%S")

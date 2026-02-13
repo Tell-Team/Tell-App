@@ -1,3 +1,3 @@
-from .accountPageData import AccountPageData
+from .accountData import AccountData
 
-__all__ = ["AccountPageData"]
+__all__ = ["AccountData"]

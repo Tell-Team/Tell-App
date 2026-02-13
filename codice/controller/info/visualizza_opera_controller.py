@@ -13,7 +13,7 @@ from model.exceptions import OggettoInUsoException
 
 from view.info.pagine import VisualizzaOperaView
 from view.info.widgets import RegiaDisplay
-from view.info.utils import RegiaPageData
+from view.info.utils import RegiaData
 
 from view.utils.list_widgets import ListLayout
 from view.utils import mostra_error_popup
@@ -177,7 +177,7 @@ class VisualizzaOperaController(AbstractVisualizzaController):
             return
 
         # Salva i dati dentro di un container
-        regia_data = RegiaPageData(
+        regia_data = RegiaData(
             id=current_regia.get_id(),
             titolo=current_regia.get_titolo(),
             note=current_regia.get_note(),

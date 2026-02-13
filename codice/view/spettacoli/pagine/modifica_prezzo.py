@@ -4,7 +4,7 @@ from model.pianificazione.spettacolo import Spettacolo
 from model.organizzazione.sezione import Sezione
 
 from view.spettacoli.pagine import NuovoPrezzoView
-from view.spettacoli.utils import PrezzoPageData
+from view.spettacoli.utils import PrezzoData
 
 
 class ModificaPrezzoView(NuovoPrezzoView):
@@ -34,7 +34,7 @@ class ModificaPrezzoView(NuovoPrezzoView):
         self.id_current_prezzo = -1
 
     def set_data_modifica(
-        self, data: PrezzoPageData, spettacolo: Spettacolo, sezione: Sezione
+        self, data: PrezzoData, spettacolo: Spettacolo, sezione: Sezione
     ) -> None:
         super().set_data(spettacolo, sezione)
 

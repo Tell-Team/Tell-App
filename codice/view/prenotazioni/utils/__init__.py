@@ -1,3 +1,3 @@
-from .prenotazionePageData import PrenotazionePageData
+from .prenotazioneData import PrenotazioneData
 
-__all__ = ["PrenotazionePageData"]
+__all__ = ["PrenotazioneData"]

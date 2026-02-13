@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 @dataclass(frozen=True)
-class PrenotazionePageData:
+class PrenotazioneData:
     """Container immutabile per le pagine di `Prenotazione`."""
 
     id: int
@@ -11,4 +11,3 @@ class PrenotazionePageData:
     data_ora_registrazione: datetime
     is_pagata: bool
     ammontare: float  # Ottenuto chiamando un metodo del model
-    titolo_spettacolo: str  # Ottenuto chiamando un metodo di Spettacolo

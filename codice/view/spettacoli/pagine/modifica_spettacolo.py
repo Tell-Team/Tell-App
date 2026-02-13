@@ -1,8 +1,8 @@
 from typing import override
 
 from view.spettacoli.pagine import NuovoSpettacoloView
-from view.spettacoli.utils import SpettacoloPageData
-from view.info.utils import RegiaPageData
+from view.spettacoli.utils import SpettacoloData
+from view.info.utils import RegiaData
 
 from view.utils.hyphenate_text import HyphenatedLabel
 from view.style.ui_style import WidgetRole, WidgetColor
@@ -33,7 +33,7 @@ class ModificaSpettacoloView(NuovoSpettacoloView):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def set_data(self, data: SpettacoloPageData) -> None:
+    def set_data(self, data: SpettacoloData) -> None:
         """Carica i dati di una regia nella pagina.
 
         :param data: data salvata in una classe immutabile
@@ -49,7 +49,7 @@ class ModificaSpettacoloView(NuovoSpettacoloView):
             data.musicisti_e_direttori_artistici
         )
 
-        if isinstance(data, RegiaPageData):
+        if isinstance(data, RegiaData):
             self.titolo.setEnabled(False)
             self.__tipo_spettacolo.setText(
                 "**Questo spettacolo è una Regia di "

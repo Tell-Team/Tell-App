@@ -15,8 +15,8 @@ from controller.login.user_session import UserSession
 
 from model.organizzazione.evento import Evento
 
-from view.spettacoli.utils import SpettacoloPageData
-from view.info.utils import RegiaPageData
+from view.spettacoli.utils import SpettacoloData
+from view.info.utils import RegiaData
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
@@ -155,7 +155,7 @@ class VisualizzaSpettacoloView(AbstractVisualizzaView):
 
     @override
     def set_data(  # type: ignore[override]
-        self, data: SpettacoloPageData, lista_eventi: list[Evento]
+        self, data: SpettacoloData, lista_eventi: list[Evento]
     ) -> None:
         """Carica i dati dello spettacolo nella pagina.
 
@@ -176,7 +176,7 @@ class VisualizzaSpettacoloView(AbstractVisualizzaView):
         else:
             self.label_note.hide()
         self.__svuota_layout_generico(self.layout_dati_speciali)
-        if type(data) is RegiaPageData:
+        if type(data) is RegiaData:
             label_regista = QLabel(f"<b>Regista:</b> {data.regista}")
             label_regista.setProperty(WidgetRole.BODY_TEXT, True)
             label_regista.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)

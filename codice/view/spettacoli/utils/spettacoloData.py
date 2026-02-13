@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
-class SpettacoloPageData:
+class SpettacoloData:
     """Container immutabile per le pagine di `Spettacolo`."""
 
     id: int

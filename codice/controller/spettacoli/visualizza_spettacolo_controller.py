@@ -13,7 +13,7 @@ from model.exceptions import OggettoInUsoException
 
 from view.spettacoli.pagine import VisualizzaSpettacoloView
 from view.spettacoli.widgets import EventoDisplay
-from view.spettacoli.utils import EventoPageData
+from view.spettacoli.utils import EventoData
 
 from view.utils.list_widgets import ListLayout
 from view.utils import mostra_error_popup
@@ -203,7 +203,7 @@ class VisualizzaSpettacoloController(AbstractVisualizzaController):
             return
 
         # Salva i dati dentro di un container
-        evento_data = EventoPageData(
+        evento_data = EventoData(
             id=current_evento.get_id(),
             data_ora=current_evento.get_data_ora(),
             id_spettacolo=current_evento.get_id_spettacolo(),

@@ -10,7 +10,7 @@ from model.pianificazione.regia import Regia
 
 from view.acquisto.pagine import AcquistoSectionView
 from view.acquisto.widgets import AcquistoDisplay
-from view.spettacoli.utils import SpettacoloPageData
+from view.spettacoli.utils import SpettacoloData
 
 from view.utils.list_widgets import ListLayout
 from view.utils import mostra_error_popup
@@ -117,7 +117,7 @@ class AcquistoSectionController(AbstractSectionController):
             return
 
         # Salva i dati dentro di un container
-        spettacolo_data = SpettacoloPageData(
+        spettacolo_data = SpettacoloData(
             id=current_spettacolo.get_id(),
             titolo=current_spettacolo.get_titolo(),
             note=current_spettacolo.get_note(),

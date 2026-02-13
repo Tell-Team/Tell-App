@@ -6,6 +6,10 @@
 #
 # WARNING! All changes made in this file will be lost!
 
+# 1) python -m pip install PyQt5 pyqt5-tools
+# 2) pyrcc5 resources.qrc -o resources_rc.py  ( Con la carpeta de scripts en PATH )
+
+
 from PyQt6 import QtCore
 
 qt_resource_data = b"\

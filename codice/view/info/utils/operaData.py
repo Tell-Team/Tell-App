@@ -3,7 +3,7 @@ from datetime import date
 
 
 @dataclass(frozen=True)
-class OperaPageData:
+class OperaData:
     """Container immutabile per le pagine di `Opera`."""
 
     id: int

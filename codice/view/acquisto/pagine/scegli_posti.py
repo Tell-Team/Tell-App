@@ -17,7 +17,7 @@ from model.organizzazione.evento import Evento
 from model.organizzazione.sezione import Sezione
 from model.organizzazione.posto import Posto
 
-from view.spettacoli.utils import SpettacoloPageData
+from view.spettacoli.utils import SpettacoloData
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
@@ -213,7 +213,7 @@ class ScegliPostiView(AbstractVisualizzaView):
     # ------------------------- METODI DI VIEW -------------------------
 
     @override
-    def set_data(self, data: SpettacoloPageData) -> None:  # type: ignore[override]
+    def set_data(self, data: SpettacoloData) -> None:  # type: ignore[override]
         """Carica i dati dello spettacolo nella pagina.
 
         :param data: data salvata in una classe immutabile

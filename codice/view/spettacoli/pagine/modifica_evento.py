@@ -1,7 +1,7 @@
 from typing import override
 
 from view.spettacoli.pagine import NuovoEventoView
-from view.spettacoli.utils import EventoPageData
+from view.spettacoli.utils import EventoData
 
 
 class ModificaEventoView(NuovoEventoView):
@@ -23,7 +23,7 @@ class ModificaEventoView(NuovoEventoView):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def set_data(self, data: EventoPageData) -> None:
+    def set_data(self, data: EventoData) -> None:
         """Carica i dati di un evento nella pagina.
 
         :param data: data salvata in una classe immutabile"""

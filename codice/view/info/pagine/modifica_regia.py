@@ -1,7 +1,7 @@
 from typing import override
 
 from view.info.pagine import NuovaRegiaView
-from view.info.utils import RegiaPageData
+from view.info.utils import RegiaData
 
 
 class ModificaRegiaView(NuovaRegiaView):
@@ -23,7 +23,7 @@ class ModificaRegiaView(NuovaRegiaView):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def set_data(self, data: RegiaPageData) -> None:
+    def set_data(self, data: RegiaData) -> None:
         """Carica i dati di una regia nella pagina.
 
         :param data: data salvata in una classe immutabile"""

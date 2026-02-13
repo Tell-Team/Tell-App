@@ -8,7 +8,7 @@ from controller.login.user_session import UserSession
 
 from model.pianificazione.regia import Regia
 
-from view.info.utils import OperaPageData
+from view.info.utils import OperaData
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
@@ -163,7 +163,7 @@ class VisualizzaOperaView(AbstractVisualizzaView):
 
     @override
     def set_data(  # type: ignore[override]
-        self, data: OperaPageData, genere_nome: str, lista_regie: list[Regia]
+        self, data: OperaData, genere_nome: str, lista_regie: list[Regia]
     ) -> None:
         """Carica i dati dell'opera nella pagina.
 

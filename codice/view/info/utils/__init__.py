@@ -1,5 +1,5 @@
-from .operaPageData import OperaPageData
-from .generePageData import GenerePageData
-from .regiaPageData import RegiaPageData
+from .operaData import OperaData
+from .genereData import GenereData
+from .regiaData import RegiaData
 
-__all__ = ["OperaPageData", "GenerePageData", "RegiaPageData"]
+__all__ = ["OperaData", "GenereData", "RegiaData"]

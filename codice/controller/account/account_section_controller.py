@@ -11,7 +11,7 @@ from model.account.account import Account, Ruolo
 from model.exceptions import OggettoInUsoException
 
 from view.account.pagine import AccountSectionView
-from view.account.utils import AccountPageData
+from view.account.utils import AccountData
 from view.account.widgets import AccountDisplay
 
 from view.utils.list_widgets import ListLayout
@@ -162,7 +162,7 @@ class AccountSectionController(AbstractSectionController):
             return
 
         # Salva i dati dentro di un container
-        account_dato = AccountPageData(
+        account_dato = AccountData(
             id=current_account.get_id(),
             username=current_account.get_username(),
             ruolo=current_account.get_ruolo(),

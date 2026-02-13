@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
-from view.spettacoli.utils import SpettacoloPageData
+from view.spettacoli.utils import SpettacoloData
 
 
 @dataclass(frozen=True)
-class RegiaPageData(SpettacoloPageData):
+class RegiaData(SpettacoloData):
     """Container immutabile per i widget di `Regia`."""
 
     regista: str

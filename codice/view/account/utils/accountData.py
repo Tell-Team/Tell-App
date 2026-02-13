@@ -4,7 +4,7 @@ from model.account.account import Ruolo
 
 
 @dataclass(frozen=True)
-class AccountPageData:
+class AccountData:
     """Container immutabile per le pagine di `Account`."""
 
     id: int

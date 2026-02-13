@@ -12,7 +12,7 @@ from model.organizzazione.prezzo import Prezzo
 from model.exceptions import IdInesistenteException
 
 from view.spettacoli.pagine import PrezziAssociatiView
-from view.spettacoli.utils import PrezzoPageData
+from view.spettacoli.utils import PrezzoData
 from view.spettacoli.widgets import SezioniPrezziDisplay
 
 from view.utils.list_widgets import ListLayout
@@ -182,7 +182,7 @@ class PrezziAssociatiController(AbstractVisualizzaController):
             return
 
         # Salva i dati dentro di un container
-        prezzo_data = PrezzoPageData(
+        prezzo_data = PrezzoData(
             id=current_prezzo.get_id(),
             ammontare=current_prezzo.get_ammontare(),
             id_spettacolo=current_prezzo.get_id_spettacolo(),

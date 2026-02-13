@@ -1,7 +1,7 @@
 from typing import override
 
 from view.info.pagine import NuovaOperaView
-from view.info.utils import OperaPageData
+from view.info.utils import OperaData
 
 
 class ModificaOperaView(NuovaOperaView):
@@ -23,7 +23,7 @@ class ModificaOperaView(NuovaOperaView):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def set_data(self, data: OperaPageData) -> None:
+    def set_data(self, data: OperaData) -> None:
         """Carica i dati di un'opera nella pagina.
 
         :param data: data salvata in una classe immutabile"""

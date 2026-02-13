@@ -11,7 +11,7 @@ from model.organizzazione.posto import Posto
 from model.exceptions import OggettoInUsoException
 
 from view.teatro.pagine import TeatroSectionView
-from view.teatro.utils import SezionePageData
+from view.teatro.utils import SezioneData
 from view.teatro.widgets import SezioneDisplay
 
 from view.utils.list_widgets import ListLayout
@@ -123,7 +123,7 @@ class TeatroSectionController(AbstractSectionController):
             self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
             return
 
-        sezione_data = SezionePageData(
+        sezione_data = SezioneData(
             id=current_sezione.get_id(),
             nome=current_sezione.get_nome(),
             descrizione=current_sezione.get_descrizione(),
@@ -181,7 +181,7 @@ class TeatroSectionController(AbstractSectionController):
             return
 
         # Salva i dati dentro di un container
-        sezione_data = SezionePageData(
+        sezione_data = SezioneData(
             id=current_sezione.get_id(),
             nome=current_sezione.get_nome(),
             descrizione=current_sezione.get_descrizione(),

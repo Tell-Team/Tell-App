@@ -23,7 +23,7 @@ from model.exceptions import (
 
 from view.acquisto.pagine import ScegliPostiView
 from view.acquisto.widgets import PostoSceltoDisplay
-from view.prenotazioni.utils import PrenotazionePageData
+from view.prenotazioni.utils import PrenotazioneData
 
 from view.utils.list_widgets import ListLayout
 
@@ -326,16 +326,15 @@ class ScegliPostiController(AbstractVisualizzaController):
         prenotazione = self.__get_prenotazione(id_prenotazione)
         assert isinstance(prenotazione, Prenotazione)
 
-        prenotazione_data = PrenotazionePageData(
+        prenotazione_data = PrenotazioneData(
             id=id_prenotazione,
             nominativo=prenotazione.get_nominativo(),
             data_ora_registrazione=prenotazione.get_data_ora_registrazione(),
             is_pagata=prenotazione.pagata(),
             ammontare=self.__ammontare_totale_prenotazione(id_prenotazione),
-            titolo_spettacolo=spettacolo.get_titolo(),
         )
 
-        current_pagina.set_data(prenotazione_data, self.__tree)
+        current_pagina.set_data(prenotazione_data, self.__tree, spettacolo.get_titolo())
 
         self.goToPageRequest.emit(pagina_nome, True)
 

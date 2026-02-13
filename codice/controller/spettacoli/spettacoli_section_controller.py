@@ -13,8 +13,8 @@ from model.exceptions import OggettoInUsoException
 
 from view.spettacoli.pagine import SpettacoliSectionView
 from view.spettacoli.widgets import SpettacoloDisplay
-from view.spettacoli.utils import SpettacoloPageData
-from view.info.utils import RegiaPageData
+from view.spettacoli.utils import SpettacoloData
+from view.info.utils import RegiaData
 
 from view.utils.list_widgets import ListLayout
 from view.utils import mostra_error_popup
@@ -153,7 +153,7 @@ class SpettacoliSectionController(AbstractSectionController):
             return
 
         if isinstance(current_spettacolo, Regia):
-            spettacolo_data = RegiaPageData(
+            spettacolo_data = RegiaData(
                 id=current_spettacolo.get_id(),
                 titolo=current_spettacolo.get_titolo(),
                 note=current_spettacolo.get_note(),
@@ -164,7 +164,7 @@ class SpettacoliSectionController(AbstractSectionController):
                 id_opera=current_spettacolo.get_id_opera(),
             )
         else:  # Caso Spettacolo generico
-            spettacolo_data = SpettacoloPageData(
+            spettacolo_data = SpettacoloData(
                 id=current_spettacolo.get_id(),
                 titolo=current_spettacolo.get_titolo(),
                 note=current_spettacolo.get_note(),
@@ -221,7 +221,7 @@ class SpettacoliSectionController(AbstractSectionController):
 
         # Salva i dati dentro di un container
         if isinstance(current_spettacolo, Regia):
-            spettacolo_data = RegiaPageData(
+            spettacolo_data = RegiaData(
                 id=current_spettacolo.get_id(),
                 titolo=current_spettacolo.get_titolo(),
                 note=current_spettacolo.get_note(),
@@ -232,7 +232,7 @@ class SpettacoliSectionController(AbstractSectionController):
                 id_opera=current_spettacolo.get_id_opera(),
             )
         else:
-            spettacolo_data = SpettacoloPageData(
+            spettacolo_data = SpettacoloData(
                 id=current_spettacolo.get_id(),
                 titolo=current_spettacolo.get_titolo(),
                 note=current_spettacolo.get_note(),

@@ -5,15 +5,12 @@ from core.controller import AbstractSectionController
 
 from controller.navigation import Pagina
 
-from model.model.model import Model
-from model.organizzazione.evento import Evento
-from model.organizzazione.sezione import Sezione
-from model.organizzazione.posto import Posto
+from model.model.model import Model, DettagliPrenotazione
 from model.organizzazione.prenotazione import Prenotazione
 from model.exceptions import OggettoInUsoException
 
 from view.prenotazioni.pagine import PrenotazioniSectionView
-from view.prenotazioni.utils import PrenotazionePageData
+from view.prenotazioni.utils import PrenotazioneData
 from view.prenotazioni.widgets import PrenotazioneDisplay
 
 from view.utils.list_widgets import ListLayout
@@ -45,14 +42,6 @@ class PrenotazioniSectionController(AbstractSectionController):
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
-    def __get_titolo_spettacolo_by_prenotazione(self, id_: int) -> str:
-        occupazioni = self._model.get_occupazioni_by_prenotazione(id_)
-        evento = self._model.get_evento(occupazioni[0].get_id_evento())
-        assert evento is not None
-        spettacolo = self._model.get_spettacolo(evento.get_id_spettacolo())
-        assert spettacolo is not None
-        return spettacolo.get_titolo()
-
     def __get_prenotazione(self, id_: int) -> Optional[Prenotazione]:
         return self._model.get_prenotazione(id_)
 
@@ -62,11 +51,8 @@ class PrenotazioniSectionController(AbstractSectionController):
     def __get_prenotazioni_by_nominativo(self, filtro: str) -> list[Prenotazione]:
         return self._model.get_prenotazioni_by_nominativo(filtro)
 
-    def __get_evento_e_posti_by_prenotazione(
-        self, id_: int
-    ) -> tuple[
-        Evento, list[tuple[Sezione, list[Posto]]]
-    ]: ...  # - IMPLEMENTAR EN EL MODEL
+    def __get_dettagli_prenotazione(self, id_: int) -> DettagliPrenotazione:
+        return self._model.get_dettagli_prenotazione(id_)
 
     def __elimina_prenotazione(self, id_: int) -> None:
         self._model.elimina_prenotazione(id_)
@@ -151,7 +137,7 @@ class PrenotazioniSectionController(AbstractSectionController):
             return
 
         # Ottieni i dati della prenotazione
-        prenotazione_data = PrenotazionePageData(
+        prenotazione_data = PrenotazioneData(
             id=current_prenotazione.get_id(),
             nominativo=current_prenotazione.get_nominativo(),
             data_ora_registrazione=current_prenotazione.get_data_ora_registrazione(),
@@ -159,16 +145,11 @@ class PrenotazioniSectionController(AbstractSectionController):
             ammontare=self.__ammontare_totale_prenotazione(
                 current_prenotazione.get_id()
             ),
-            titolo_spettacolo=self.__get_titolo_spettacolo_by_prenotazione(
-                current_prenotazione.get_id()
-            ),
         )
 
-        lista_evento_posti = self.__get_evento_e_posti_by_prenotazione(
-            current_prenotazione.get_id()
-        )
+        dettagli = self.__get_dettagli_prenotazione(current_prenotazione.get_id())
 
-        current_pagina.set_data(prenotazione_data, lista_evento_posti)
+        current_pagina.set_data(prenotazione_data, dettagli)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

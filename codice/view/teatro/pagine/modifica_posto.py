@@ -3,7 +3,7 @@ from typing import override
 
 from core.view import AbstractCreaView
 
-from view.teatro.utils import PostoPageData
+from view.teatro.utils import PostoData
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
@@ -64,7 +64,7 @@ class ModificaPostoView(AbstractCreaView):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def set_data(self, data: PostoPageData) -> None:
+    def set_data(self, data: PostoData) -> None:
         self.id_current_posto = data.id
 
         self.fila.setText(data.fila)

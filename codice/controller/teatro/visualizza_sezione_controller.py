@@ -16,7 +16,7 @@ from model.exceptions import (
 )
 
 from view.teatro.pagine import VisualizzaSezioneView
-from view.teatro.utils import PostoPageData
+from view.teatro.utils import PostoData
 from view.teatro.widgets import PostoDisplay
 
 from view.utils.list_widgets import ListLayout
@@ -252,7 +252,7 @@ class VisualizzaSezioneController(AbstractVisualizzaController):
             return
 
         # Salva i dati dentro di un container
-        posto_data = PostoPageData(
+        posto_data = PostoData(
             id=current_posto.get_id(),
             fila=current_posto.get_fila(),
             numero=current_posto.get_numero(),

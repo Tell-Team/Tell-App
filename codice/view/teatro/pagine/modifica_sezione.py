@@ -1,7 +1,7 @@
 from typing import override
 
 from view.teatro.pagine import NuovaSezioneView
-from view.teatro.utils import SezionePageData
+from view.teatro.utils import SezioneData
 
 
 class ModificaSezioneView(NuovaSezioneView):
@@ -22,7 +22,7 @@ class ModificaSezioneView(NuovaSezioneView):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def set_data(self, data: SezionePageData) -> None:
+    def set_data(self, data: SezioneData) -> None:
         self.id_current_sezione = data.id
 
         self.nome.setText(data.nome)

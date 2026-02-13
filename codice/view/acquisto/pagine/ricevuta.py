@@ -12,7 +12,7 @@ from model.organizzazione.evento import Evento
 from model.organizzazione.sezione import Sezione
 from model.organizzazione.posto import Posto
 
-from view.prenotazioni.utils import PrenotazionePageData
+from view.prenotazioni.utils import PrenotazioneData
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
@@ -143,8 +143,9 @@ class RicevutaView(QWidget):
 
     def set_data(
         self,
-        data: PrenotazionePageData,
+        data: PrenotazioneData,
         lista_posti_scelti: tuple[Evento, list[tuple[Sezione, list[Posto]]]],
+        titolo_spettacolo: str,
     ) -> None:
         """Carica i dati dei posti prenotati.
 
@@ -153,7 +154,7 @@ class RicevutaView(QWidget):
         """
         self.layout_lista_posti_scelti.svuota_layout()
 
-        self.label_spettacolo.setText("<b>Spettacolo</b>: " + data.titolo_spettacolo)
+        self.label_spettacolo.setText("<b>Spettacolo</b>: " + titolo_spettacolo)
         self.label_nominativo.setText("<b>Nominativo</b>: " + data.nominativo)
         self.label_prezzo.setText(f"<b>Prezzo</b>: € {data.ammontare:.2f}")
 

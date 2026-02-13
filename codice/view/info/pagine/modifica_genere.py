@@ -1,7 +1,7 @@
 from typing import override
 
 from view.info.pagine import NuovoGenereView
-from view.info.utils import GenerePageData
+from view.info.utils import GenereData
 
 
 class ModificaGenereView(NuovoGenereView):
@@ -23,7 +23,7 @@ class ModificaGenereView(NuovoGenereView):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def set_data(self, data: GenerePageData) -> None:
+    def set_data(self, data: GenereData) -> None:
         """Carica i dati di un genere nella pagina.
 
         :param data: data salvata in una classe immutabile"""

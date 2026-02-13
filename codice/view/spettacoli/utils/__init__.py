@@ -1,5 +1,5 @@
-from .spettacoloPageData import SpettacoloPageData
-from .eventoPageData import EventoPageData
-from .prezzoPageData import PrezzoPageData
+from .spettacoloData import SpettacoloData
+from .eventoData import EventoData
+from .prezzoData import PrezzoData
 
-__all__ = ["SpettacoloPageData", "EventoPageData", "PrezzoPageData"]
+__all__ = ["SpettacoloData", "EventoData", "PrezzoData"]

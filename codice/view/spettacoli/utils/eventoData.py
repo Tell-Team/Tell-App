@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 @dataclass(frozen=True)
-class EventoPageData:
+class EventoData:
     """Container immutabile per le pagine di `Evento`."""
 
     id: int

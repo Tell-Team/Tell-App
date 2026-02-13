@@ -5,7 +5,7 @@ from typing import override
 from model.account.account import Ruolo
 
 from view.account.pagine import NuovoAccountView
-from view.account.utils import AccountPageData
+from view.account.utils import AccountData
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
@@ -57,7 +57,7 @@ class ModificaAccountView(NuovoAccountView):
         self.conferma.setEnabled(enabled)
         self.password.setEnabled(enabled)
 
-    def set_data(self, data: AccountPageData) -> None:
+    def set_data(self, data: AccountData) -> None:
         """Carica i dati di un'account nella pagina.
 
         :param data: data salvata in una classe immutabile"""
