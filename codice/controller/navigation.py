@@ -101,24 +101,15 @@ class NavigationController(QObject):
         self.__pagine[nome] = widget
         self.__get_stack().addWidget(widget)
 
-    def esiste_pagina(self, nome: Pagina) -> Optional[QWidget]:
-        """Ritorna una pagina registrata nell'history.
-
-        :param nome: key usata per cercare la pagina nel dict
-        """
-        for key in self.__pagine:
-            if key == nome:
-                return self.__pagine.get(key)
-
     # --- Metodi da collegare ai controller ---
     def __go_back(self) -> None:
         """Visualizza la pagina precedente, registrata nell'history."""
         if not self.__history:
             return
+
         last_widget = self.__history.pop()
 
-        attr = getattr(last_widget, "aggiorna_pagina", None)
-        if callable(attr):
+        if callable(attr := getattr(last_widget, "aggiorna_pagina", None)):
             attr()
 
         self.__get_stack().setCurrentWidget(last_widget)
@@ -126,31 +117,28 @@ class NavigationController(QObject):
     def __go_to_page(self, nome: Pagina, save_history: bool = True) -> None:
         """Visualizza una pagina registrata.
 
+        Se la pagina da visualizzare non è trovata, mostra un messaggio d'errore.
+
         :param nome: key usata per trovare la pagina
         :param save_history: verifica se la pagina sarà salvata nell'history o no
-
-        :raise KeyError: la pagina cercata non è stata trovata
         """
-        try:
-            widget = self.__pagine[nome]
-        except KeyError as exc:
-            PopupMessage.mostra_errore(
-                self.__get_central_widget(),
-                "Pagina non trovata",
-                f"Si è verificato un errore: Non c'è una pagina registrata con {exc}",
-            )
-        else:
+        if widget := self.__pagine.get(nome):
             current = self.__get_stack().currentWidget()
             if current and save_history:
                 self.__history.append(current)
 
             # Dopo di andar ad un'altra pagina, questa viene aggiornata se ha il metodo
             #   `aggiorna_pagina` definito.
-            attr = getattr(widget, "aggiorna_pagina", None)
-            if callable(attr):
+            if callable(attr := getattr(widget, "aggiorna_pagina", None)):
                 attr()
 
             self.__get_stack().setCurrentWidget(widget)
+            return
+        PopupMessage.mostra_errore(
+            self.__get_central_widget(),
+            "Pagina non trovata",
+            f"Si è verificato un errore: Non c'è una pagina registrata con {nome}",
+        )
 
     def __go_to_section(self, nome: Pagina) -> None:
         """Visualizza una pagina senza salvare la pagina corrente nell'history.
@@ -162,7 +150,7 @@ class NavigationController(QObject):
 
     # Questo metodo è chiamato per ottenere l'istanza di pagina nei controller della view
     def __get_page(self, nome: Pagina, container: dict[str, Optional[QWidget]]) -> None:
-        container["value"] = self.esiste_pagina(nome)
+        container["value"] = self.__pagine.get(nome)  # Se esiste, ritorna la pagina
 
     # ------------------------- CREAZIONE DELLE PAGINE -------------------------
 

@@ -6,6 +6,9 @@ from core.controller import AbstractSectionController
 from controller.navigation import Pagina
 
 from model.model.model import Model
+from model.organizzazione.evento import Evento
+from model.organizzazione.sezione import Sezione
+from model.organizzazione.posto import Posto
 from model.organizzazione.prenotazione import Prenotazione
 from model.exceptions import OggettoInUsoException
 
@@ -42,6 +45,14 @@ class PrenotazioniSectionController(AbstractSectionController):
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
+    def __get_titolo_spettacolo_by_prenotazione(self, id_: int) -> str:
+        occupazioni = self._model.get_occupazioni_by_prenotazione(id_)
+        evento = self._model.get_evento(occupazioni[0].get_id_evento())
+        assert evento is not None
+        spettacolo = self._model.get_spettacolo(evento.get_id_spettacolo())
+        assert spettacolo is not None
+        return spettacolo.get_titolo()
+
     def __get_prenotazione(self, id_: int) -> Optional[Prenotazione]:
         return self._model.get_prenotazione(id_)
 
@@ -51,8 +62,17 @@ class PrenotazioniSectionController(AbstractSectionController):
     def __get_prenotazioni_by_nominativo(self, filtro: str) -> list[Prenotazione]:
         return self._model.get_prenotazioni_by_nominativo(filtro)
 
+    def __get_evento_e_posti_by_prenotazione(
+        self, id_: int
+    ) -> tuple[
+        Evento, list[tuple[Sezione, list[Posto]]]
+    ]: ...  # - IMPLEMENTAR EN EL MODEL
+
     def __elimina_prenotazione(self, id_: int) -> None:
         self._model.elimina_prenotazione(id_)
+
+    def __ammontare_totale_prenotazione(self, id_: int) -> float:
+        return self._model.ammontare_totale_prenotazione(id_)
 
     def __display_prenotazioni(self, layout_prenotazioni: ListLayout) -> None:
         """Mostra a schermo alcune informazioni delle prenotazioni salvate ed assegna a
@@ -83,7 +103,6 @@ class PrenotazioniSectionController(AbstractSectionController):
             """
             try:
                 self.__elimina_prenotazione(id_)
-                # - CORREGIR LA EXCEPCIÓN
             except OggettoInUsoException as exc:
                 widget_prenotazione.annulla_elimina()
                 PopupMessage.mostra_errore(
@@ -135,14 +154,25 @@ class PrenotazioniSectionController(AbstractSectionController):
             self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
             return
 
+        # Ottieni i dati della prenotazione
         prenotazione_data = PrenotazionePageData(
             id=current_prenotazione.get_id(),
             nominativo=current_prenotazione.get_nominativo(),
             data_ora_registrazione=current_prenotazione.get_data_ora_registrazione(),
             is_pagata=current_prenotazione.pagata(),
+            ammontare=self.__ammontare_totale_prenotazione(
+                current_prenotazione.get_id()
+            ),
+            titolo_spettacolo=self.__get_titolo_spettacolo_by_prenotazione(
+                current_prenotazione.get_id()
+            ),
         )
 
-        current_pagina.set_data(prenotazione_data)
+        lista_evento_posti = self.__get_evento_e_posti_by_prenotazione(
+            current_prenotazione.get_id()
+        )
+
+        current_pagina.set_data(prenotazione_data, lista_evento_posti)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

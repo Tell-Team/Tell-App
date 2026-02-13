@@ -32,13 +32,15 @@ class EventoPostiDisplay(ItemDisplay):
         layout.addWidget(label_data)
         layout.addWidget(label_posti)
 
-        for s, posti in sp:
-            for p in posti:
-                label_current_posto = QLabel(
-                    f"  - Sezione: {s.get_nome()}, Posto: {p.get_fila()} #{p.get_numero()}"
-                )
-                label_current_posto.setProperty(WidgetRole.BODY_TEXT, True)
-                label_current_posto.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
-                layout.addWidget(label_current_posto)
+        def make_label_posto(s: Sezione, p: Posto) -> QLabel:
+            label = QLabel(
+                f"  - Sezione: {s.get_nome()}, Posto: {p.get_fila()} #{p.get_numero()}"
+            )
+            label.setProperty(WidgetRole.BODY_TEXT, True)
+            label.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+            return label
+
+        for label in (make_label_posto(s, p) for s, posti in sp for p in posti):
+            layout.addWidget(label)
 
         layout.addStretch()

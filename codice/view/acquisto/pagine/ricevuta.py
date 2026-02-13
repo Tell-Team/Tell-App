@@ -6,12 +6,13 @@ from PyQt6.QtWidgets import (
     QScrollArea,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
-from datetime import datetime
 from typing import Optional
 
 from model.organizzazione.evento import Evento
 from model.organizzazione.sezione import Sezione
 from model.organizzazione.posto import Posto
+
+from view.prenotazioni.utils import PrenotazionePageData
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
@@ -142,29 +143,25 @@ class RicevutaView(QWidget):
 
     def set_data(
         self,
-        data: tuple[Evento, list[tuple[Sezione, list[Posto]]]],
-        titolo_spettacolo: str,
-        nominativo: str,
-        data_emmisione: datetime,
-        ammontare_prezzo: float,
+        data: PrenotazionePageData,
+        lista_posti_scelti: tuple[Evento, list[tuple[Sezione, list[Posto]]]],
     ) -> None:
         """Carica i dati dei posti prenotati.
 
-        :param data: lista dei posti prenotati, con la sezione ed evento a cui stano associati
-        :param titolo_spettacolo: titolo dello spettacolo per cui sono stati prenotati i posti
-        :param nominativo: nome inserito dall'utente che ha prenotato i posti
-        :param data_emissione: datetime con l'istante in cui è stata creata la prenotazione
+        :param data: data della prenotazione salvata in una classe immutabile.
+        :param lista_posti_scelti: lista dei posti scelti, insieme alle sezioni ed evento
         """
         self.layout_lista_posti_scelti.svuota_layout()
 
-        self.label_spettacolo.setText("<b>Spettacolo</b>: " + titolo_spettacolo)
-        self.label_nominativo.setText("<b>Nominativo</b>: " + nominativo)
-        self.label_prezzo.setText(f"<b>Prezzo</b>: € {ammontare_prezzo:.2f}")
+        self.label_spettacolo.setText("<b>Spettacolo</b>: " + data.titolo_spettacolo)
+        self.label_nominativo.setText("<b>Nominativo</b>: " + data.nominativo)
+        self.label_prezzo.setText(f"<b>Prezzo</b>: € {data.ammontare:.2f}")
 
-        self.lista_posti_scelti = data
+        self.lista_posti_scelti = lista_posti_scelti
 
         self.label_emissione.setText(
-            "<b>Emissione</b>: " + data_emmisione.strftime("%a %b %d %Y %H:%M:%S")
+            "<b>Emissione</b>: "
+            + data.data_ora_registrazione.strftime("%a %b %d %Y %H:%M:%S")
         )
 
         self.abilita_btn_fine(False)

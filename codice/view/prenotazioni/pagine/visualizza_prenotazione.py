@@ -1,12 +1,16 @@
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QCheckBox
+from PyQt6.QtWidgets import QWidget, QLabel, QHBoxLayout, QVBoxLayout, QCheckBox
 from PyQt6.QtCore import Qt, pyqtSignal
-from typing import override
+from typing import Optional, override
 
 from core.view import AbstractVisualizzaView
 
+from model.organizzazione.evento import Evento
+from model.organizzazione.sezione import Sezione
+from model.organizzazione.posto import Posto
+
 from view.prenotazioni.utils import PrenotazionePageData
 
-from view.utils.list_widgets import ListLayout
+from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
 
 from view.style.ui_style import WidgetRole, WidgetColor
@@ -20,15 +24,12 @@ class VisualizzaPrenotazioneView(AbstractVisualizzaView):
 
     Segnali
     ---
-    - `displayEventiRequest(ListLayout)`: emesso per mostrare a schermo la lista eventi;
-    - `nuovoEventoRequest()`: emesso quando si clicca il pulsante Nuovo evento;
-    - `visualizzaPrezziRequest(int)`: emesso quando si clicca il pulsanti Lista prezzi.
-    # - CORREGIR
+    - `displayPostiRequest(ListLayout)`: emesso per mostrare a schermo la lista posti.
+    - `aggiornaStatoPrenotazione(bool)`: emesso per aggiornare lo stato di `pagata` della
+        prenotazione.
     """
 
-    # displayEventiRequest = pyqtSignal(ListLayout)
-    # nuovoEventoRequest = pyqtSignal()
-    # visualizzaPrezziRequest = pyqtSignal(int)
+    displayPostiRequest = pyqtSignal(ListLayout)
     aggiornaStatoPrenotazione = pyqtSignal(bool)
 
     def __init__(self):
@@ -76,64 +77,35 @@ class VisualizzaPrenotazioneView(AbstractVisualizzaView):
         layout_stato.addWidget(self.__checkbox_stato)
         layout_stato.addStretch()
 
-        # # Lista Eventi
-        # label_lista_eventi = QLabel("Lista eventi")
-        # label_lista_eventi.setProperty(WidgetRole.HEADER2, True)
+        # Lista Posti
+        label_lista_posti = QLabel("Lista posti")
+        label_lista_posti.setProperty(WidgetRole.HEADER2, True)
 
-        # header_eventi = QWidget()
-        # self.layout_header_eventi = QHBoxLayout(header_eventi)
-        # self.layout_header_eventi.setContentsMargins(0, 0, 0, 0)
-        # self.layout_header_eventi.addWidget(label_lista_eventi)
+        header_posti = QWidget()
+        self.layout_header_posti = QHBoxLayout(header_posti)
+        self.layout_header_posti.setContentsMargins(0, 0, 0, 0)
+        self.layout_header_posti.addWidget(label_lista_posti)
+        self.layout_header_posti.addStretch()
 
-        # if self.is_biglietteria:
-        #     self.__btn_nuovo_evento = DefaultButton("Nuovo evento")
-        #     self.layout_header_eventi.addWidget(self.__btn_nuovo_evento)
+        self.lista_evento_posti: Optional[
+            tuple[Evento, list[tuple[Sezione, list[Posto]]]]
+        ] = None
 
-        # self.layout_header_eventi.addStretch()
+        label_lista_posti_vuota = EmptyStateLabel("Non vi sono posti prenotati.")
+        label_lista_posti_vuota.setProperty(WidgetRole.BODY_TEXT, True)
+        label_lista_posti_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
 
-        # self.lista_eventi: list[Evento] = []
+        content_lista_posti = QWidget()
+        content_lista_posti.setProperty(WidgetRole.ITEM_LIST, True)
+        self.layout_lista_posti = ListLayout(
+            content_lista_posti, label_lista_posti_vuota
+        )
 
-        # label_lista_eventi_vuota = EmptyStateLabel(
-        #     "Al momento, non vi sono eventi per questo spettacolo."
-        # )
-        # label_lista_eventi_vuota.setProperty(WidgetRole.BODY_TEXT, True)
-        # label_lista_eventi_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
-
-        # content_lista_eventi = QWidget()
-        # content_lista_eventi.setProperty(WidgetRole.ITEM_LIST, True)
-        # self.layout_lista_eventi = ListLayout(
-        #     content_lista_eventi, label_lista_eventi_vuota
-        # )
-
-        # header_data = QLabel("Data")
-        # header_data.setProperty(WidgetRole.HEADER3, True)
-        # header_ora = QLabel("Ora")
-        # header_ora.setProperty(WidgetRole.HEADER3, True)
-        # header_opzioni = QLabel("Opzioni")
-        # header_opzioni.setProperty(WidgetRole.HEADER3, True)
-
-        # header_lista_eventi = QWidget()
-        # layout_header_lista_eventi = QGridLayout(header_lista_eventi)
-        # layout_header_lista_eventi.setContentsMargins(1, 1, 1, 1)
-        # layout_header_lista_eventi.addWidget(
-        #     header_data, 0, 0, alignment=Qt.AlignmentFlag.AlignCenter
-        # )
-        # layout_header_lista_eventi.addWidget(make_vline(), 0, 1)
-        # layout_header_lista_eventi.addWidget(
-        #     header_ora, 0, 2, alignment=Qt.AlignmentFlag.AlignCenter
-        # )
-
-        # layout_header_lista_eventi.addWidget(make_vline(), 0, 3)
-        # layout_header_lista_eventi.addWidget(
-        #     header_opzioni, 0, 4, alignment=Qt.AlignmentFlag.AlignCenter
-        # )
-
-        # self.eventi = QWidget()
-        # self.layout_eventi = QVBoxLayout(self.eventi)
-        # self.layout_eventi.addWidget(header_eventi)
-        # self.layout_eventi.addWidget(header_lista_eventi)
-        # self.layout_eventi.addWidget(content_lista_eventi)
-        # # end-Lista Eventi
+        self.posti = QWidget()
+        self.layout_posti = QVBoxLayout(self.posti)
+        self.layout_posti.addWidget(header_posti)
+        self.layout_posti.addWidget(content_lista_posti)
+        # end-Lista Posti
 
         # Layout
         self._layout_content.addWidget(self.label_nominativo)
@@ -141,11 +113,7 @@ class VisualizzaPrenotazioneView(AbstractVisualizzaView):
         self._layout_content.addWidget(self.label_emmisione)
         self._layout_content.addWidget(self.label_prezzo)
         self._layout_content.addWidget(content_stato)
-        # if self.is_biglietteria:
-        #     self.__btn_visualizza_prezzi = DefaultButton("Lista Prezzi")
-        #     self._layout_content.addWidget(self.__btn_visualizza_prezzi)
-        # self._layout_content.addWidget(make_hline())
-        # self._layout_content.addWidget(self.eventi)
+        self._layout_content.addWidget(self.posti)
         self._layout_content.addStretch()
 
     @override
@@ -156,81 +124,51 @@ class VisualizzaPrenotazioneView(AbstractVisualizzaView):
             self.__on_checkbox_stato_toggled
         )
 
-        # if self.is_biglietteria:
-        #     self.__btn_nuovo_evento.clicked.connect(  # type:ignore
-        #         self.nuovoEventoRequest.emit
-        #     )
-
-        #     self.__btn_visualizza_prezzi.clicked.connect(  # type:ignore
-        #         lambda: self.visualizzaPrezziRequest.emit(self.id_current_spettacolo)
-        #     )
-
     # ------------------------- METODI DI VIEW -------------------------
 
+    def __on_checkbox_stato_toggled(self, checked: bool) -> None:
+        stato = "Pagata" if checked else "Non pagata"
+        self.label_stato.setText("<b>Stato</b>: " + stato)
+        self.aggiornaStatoPrenotazione.emit(checked)
+
     @override
-    def set_data(self, data: PrenotazionePageData) -> None:  # type: ignore[override]
+    def set_data(  # type: ignore[override]
+        self,
+        data: PrenotazionePageData,
+        lista_evento_posti: tuple[Evento, list[tuple[Sezione, list[Posto]]]],
+    ) -> None:
         """Carica i dati dello spettacolo nella pagina.
 
         :param data: data salvata in una classe immutabile
-        :param lista_eventi: lista degli eventi associati allo spettacolo
-        # - CORREGIR"""
-        # # Reset layout lista regie
-        # self.layout_lista_eventi.svuota_layout()
+        :param lista_evento_posti: lista dei posti prenotati, insieme alle sezioni ed
+        evento associati"""
+        # Reset layout lista posti
+        self.layout_lista_posti.svuota_layout()
 
         # Salva dati della prenotazione nella pagina
         self.id_current_prenotazione = data.id
-        # self.lista_eventi = lista_eventi
+        self.lista_evento_posti = lista_evento_posti
 
         # Carica dati della prenotazione
         self.label_nominativo.setText(f"{data.nominativo}")
-        self.label_spettacolo.setText(
-            "<b>Spettacolo</b>: [Titolo Spettacolo]"
-        )  # - ARREGLAR
+        self.label_spettacolo.setText(f"<b>Spettacolo</b>: {data.titolo_spettacolo}")
         self.label_emmisione.setText(
             "<b>Emissione</b>: "
             + data.data_ora_registrazione.strftime("%a %b %d %Y %H:%M:%S")
         )
-        self.label_prezzo.setText("<b>Prezzo</b>: € [Ammontare Prezzo]")  # - ARREGLAR
+        self.label_prezzo.setText(f"<b>Prezzo</b>: € {data.ammontare:.2f}")
+        self.__on_checkbox_stato_toggled(data.is_pagata)
         self.__checkbox_stato.setChecked(data.is_pagata)
 
-        # self.__svuota_layout_generico(self.layout_dati_speciali)
-        # if type(data) is RegiaPageData:
-        #     label_regista = QLabel(f"<b>Regista:</b> {data.regista}")
-        #     label_regista.setProperty(WidgetRole.BODY_TEXT, True)
-        #     label_regista.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
-        #     self.layout_dati_speciali.addWidget(label_regista)
-
-        #     label_anno = QLabel(f"<b>Anno di produzione:</b> {data.anno_produzione}")
-        #     label_anno.setProperty(WidgetRole.BODY_TEXT, True)
-        #     label_anno.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
-        #     self.layout_dati_speciali.addWidget(label_anno)
-        # else:  # Caso Spettacolo generico
-        #     ...
-
-        # # Carica lista regie
-        # if not self.lista_eventi:
-        #     self.layout_lista_eventi.mostra_msg_lista_vuota()
-        # else:
-        #     self.displayEventiRequest.emit(self.layout_lista_eventi)
-
-    def __on_checkbox_stato_toggled(self, checked: bool) -> None:
-        self.aggiornaStatoPrenotazione.emit(checked)
-        stato = "Pagata" if checked else "Non pagata"
-        self.label_stato.setText("<b>Stato</b>: " + stato)
+        # Carica lista posti
+        if not self.lista_evento_posti:
+            self.layout_lista_posti.mostra_msg_lista_vuota()
+        else:
+            self.displayPostiRequest.emit(self.layout_lista_posti)
 
     @override
     def aggiorna_pagina(self) -> None:
         super().aggiorna_pagina()
 
-        # self.layout_lista_eventi.svuota_layout()
-        # self.displayEventiRequest.emit(self.layout_lista_eventi)
-
-    # def __svuota_layout_generico(self, layout: QLayout):
-    #     while layout.count() > 0:
-    #         item = layout.takeAt(0)
-    #         if item is None:
-    #             raise ValueError("Expected item at index 0")
-    #         if widget := item.widget():
-    #             widget.setParent(None)
-    #         elif child_layout := item.layout():
-    #             self.__svuota_layout_generico(child_layout)
+        self.layout_lista_posti.svuota_layout()
+        self.displayPostiRequest.emit(self.layout_lista_posti)

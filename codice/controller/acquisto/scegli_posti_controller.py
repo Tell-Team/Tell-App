@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QWidget
 from datetime import datetime
-from typing import Optional, override, TypeVar
+from typing import Optional, Union, override, TypeVar
 
 from core.controller import AbstractVisualizzaController
 
@@ -23,6 +23,7 @@ from model.exceptions import (
 
 from view.acquisto.pagine import ScegliPostiView
 from view.acquisto.widgets import PostoSceltoDisplay
+from view.prenotazioni.utils import PrenotazionePageData
 
 from view.utils.list_widgets import ListLayout
 
@@ -100,6 +101,9 @@ class ScegliPostiController(AbstractVisualizzaController):
     ) -> Optional[Prezzo]:
         return self._model.get_prezzo_by_spettacolo_e_sezione(id_spettacolo, id_sezione)
 
+    def __get_prenotazione(self, id_: int) -> Optional[Prenotazione]:
+        return self._model.get_prenotazione(id_)
+
     def __aggiungi_prenotazione(self, prenotazione: Prenotazione) -> None:
         self._model.aggiungi_prenotazione(prenotazione)
 
@@ -108,6 +112,9 @@ class ScegliPostiController(AbstractVisualizzaController):
 
     def __elimina_prenotazione(self, id_: int) -> None:
         self._model.elimina_prenotazione(id_)
+
+    def __ammontare_totale_prenotazione(self, id_: int) -> float:
+        return self._model.ammontare_totale_prenotazione(id_)
 
     def __setup_evento_combobox(self, id_spettacolo: int) -> None:
         """Riempisce il `QComboBox` degli eventi della pagina.
@@ -208,8 +215,6 @@ class ScegliPostiController(AbstractVisualizzaController):
         assert isinstance(evento, Evento)
         if not isinstance(self._view_page.evento_scelto, Evento):
             self._view_page.evento_scelto = evento
-        # elif evento is not self._view_page.evento_scelto:
-        #     return  # Solo puede haber un único evento
 
         sezione = self.__get_sezione(id_sezione)
         assert isinstance(sezione, Sezione)
@@ -224,11 +229,7 @@ class ScegliPostiController(AbstractVisualizzaController):
         # Ordina la lista per il display dei posti
         self._view_page.lista_posti_scelti = sorted(
             self._view_page.lista_posti_scelti,
-            key=lambda x: (
-                x[0].get_nome(),
-                x[1].get_fila(),
-                x[1].get_numero(),
-            ),
+            key=lambda x: (x[0].get_nome(), x[1].get_fila(), x[1].get_numero()),
         )
         self._view_page.aggiorna_pagina()
 
@@ -268,7 +269,7 @@ class ScegliPostiController(AbstractVisualizzaController):
         """Carica la pagina `RicevutaView` con i dati dei posti da prenotare, inclusi le
         sezioni ed eventi associati."""
         pagina = self._view_page
-        id_current_spettacolo = pagina.id_current_spettacolo
+        # id_current_spettacolo = pagina.id_current_spettacolo
         evento_scelto = pagina.evento_scelto
         assert isinstance(evento_scelto, Evento)
         lista_posti_scelti = pagina.lista_posti_scelti
@@ -290,24 +291,19 @@ class ScegliPostiController(AbstractVisualizzaController):
             return new
 
         lista_sezione_posti: list[tuple[Sezione, list[Posto]]] = []
-        ammontare_prezzo: float = 0
         for s, p in lista_posti_scelti:
             _, posti = get_or_create(lista_sezione_posti, s)
             if p not in posti:
                 posti.append(p)
 
-                prezzo = self.__get_prezzo_by_spettacolo_e_sezione(
-                    id_current_spettacolo, s.get_id()
-                )
-                assert isinstance(prezzo, Prezzo)
-
-                ammontare_prezzo += prezzo.get_ammontare()
-
         self.__tree = (evento_scelto, lista_sezione_posti)
 
-        if not self.__nuova_prenotazione():
+        # Tenta di creare l'istanza di Prenotazione e tutte le Occupazione
+        id_prenotazione = self.__nuova_prenotazione()
+        if id_prenotazione is False:
             return
 
+        # Ottieni la pagina RicevutaView
         from view.acquisto.pagine import RicevutaView
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
@@ -327,22 +323,27 @@ class ScegliPostiController(AbstractVisualizzaController):
         spettacolo = self.__get_spettacolo(self._view_page.id_current_spettacolo)
         assert isinstance(spettacolo, Spettacolo)
 
-        nominativo = self._view_page.nominativo.text().strip()
+        prenotazione = self.__get_prenotazione(id_prenotazione)
+        assert isinstance(prenotazione, Prenotazione)
 
-        current_pagina.set_data(
-            self.__tree,
-            spettacolo.get_titolo(),
-            nominativo,
-            self.__data_emmisione,
-            ammontare_prezzo,
+        prenotazione_data = PrenotazionePageData(
+            id=id_prenotazione,
+            nominativo=prenotazione.get_nominativo(),
+            data_ora_registrazione=prenotazione.get_data_ora_registrazione(),
+            is_pagata=prenotazione.pagata(),
+            ammontare=self.__ammontare_totale_prenotazione(id_prenotazione),
+            titolo_spettacolo=spettacolo.get_titolo(),
         )
+
+        current_pagina.set_data(prenotazione_data, self.__tree)
 
         self.goToPageRequest.emit(pagina_nome, True)
 
-    def __nuova_prenotazione(self) -> bool:
+    def __nuova_prenotazione(self) -> Union[bool, int]:
         """Tenta di creare e salvare la prenotazione.
 
-        Se si verifica un problema, ritorna `False`; altrimenti, ritorna `True`."""
+        Se si verifica un problema, ritorna `False`; altrimenti, ritorna l'id
+        della prenotazione."""
         pagina = self._view_page
 
         # Ottieni i dati per creare la prenotazione
@@ -421,4 +422,4 @@ class ScegliPostiController(AbstractVisualizzaController):
         if errore_verificato:
             self.__elimina_prenotazione(nuova_prenotazione.get_id())
             return False
-        return True
+        return nuova_prenotazione.get_id()

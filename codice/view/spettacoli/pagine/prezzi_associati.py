@@ -40,7 +40,7 @@ class PrezziAssociatiView(AbstractVisualizzaView):
         super()._setup_ui()
 
         # Lista Sezioni-prezzi
-        header_sezioni_prezzi = QLabel("Lista prezzi (associati a sezioni)")
+        header_sezioni_prezzi = QLabel("Lista prezzi (associati alle sezioni)")
         header_sezioni_prezzi.setProperty(WidgetRole.HEADER1, True)
         header_sezioni_prezzi.setAlignment(Qt.AlignmentFlag.AlignLeft)
 

@@ -229,15 +229,13 @@ class VisualizzaSezioneController(AbstractVisualizzaController):
                 self.__aggiungi_posto(posto)
             except (IdOccupatoException, OccupatoException) as exc:
                 posti_errati.append(
-                    f"Posto {posto.get_fila()}{posto.get_numero()}: {exc}"
+                    f"Posto {posto.get_fila()} #{posto.get_numero()}: {exc}"
                 )
 
         pagina.aggiorna_pagina()
 
         if posti_errati:
-            error_msg: str = ""
-            for msg in posti_errati:
-                error_msg = error_msg + f"{msg}\n"
+            error_msg = "\n".join(posti_errati)
             PopupMessage.mostra_errore(
                 pagina,
                 "Posti non validi",

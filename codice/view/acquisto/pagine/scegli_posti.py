@@ -110,8 +110,6 @@ class ScegliPostiView(AbstractVisualizzaView):
         # end-Lista Posti prenotati
 
         self.__btn_conferma = SalvaButton("Conferma", has_icon=False)
-        # - DARLE UN NOMBRE MEJOR
-        # - A LO MEJOR DEBERÍA DEJAR PEGADO A LA IZQUIERDA
 
         # Layout
         self._layout_content.addWidget(self.label_titolo)

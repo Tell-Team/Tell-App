@@ -9,15 +9,15 @@ il tema dell'OS scelto.
 Compatibile: Windows, macOS, fallback Linux (light)
 """
 
-import platform
 import subprocess
-from pathlib import Path
 from PyQt6.QtGui import QPalette, QColor
-from typing import Literal, Optional
+from typing import Optional
+from enum import StrEnum
 
-from view.style.palette import LIGHT, DARK
 
-type OSTheme = Literal["light.qss", "dark.qss"]
+class OSTheme(StrEnum):
+    LIGHT = "light.qss"
+    DARK = "dark.qss"
 
 
 def rileva_tema_os() -> OSTheme:
@@ -30,46 +30,46 @@ def rileva_tema_os() -> OSTheme:
     ---
     Throws: NotImplementedError
     """
-    sistema: str = platform.system()
+    import platform
 
-    if sistema == "Windows":
-        # Windows 10/11: legge il registro
-        try:
-            import winreg
+    match platform.system():
+        case "Windows":
+            # Windows 10/11: legge il registro
+            try:
+                import winreg
 
-            chiave = winreg.OpenKey(
-                winreg.HKEY_CURRENT_USER,
-                r"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize",
+                chiave = winreg.OpenKey(
+                    winreg.HKEY_CURRENT_USER,
+                    r"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize",
+                )
+                valore, _ = winreg.QueryValueEx(chiave, "AppsUseLightTheme")
+                winreg.CloseKey(chiave)
+                return OSTheme.LIGHT if valore == 1 else OSTheme.DARK
+            except Exception:
+                return OSTheme.LIGHT  # fallback
+        case "Darwin":
+            # macOS: usa defaults read
+            try:
+                risultato = subprocess.run(
+                    ["defaults", "read", "-g", "AppleInterfaceStyle"],
+                    capture_output=True,
+                    text=True,
+                )
+                if "Dark" in risultato.stdout:
+                    return OSTheme.DARK
+                return OSTheme.LIGHT
+            except Exception:
+                return OSTheme.LIGHT  # fallback
+        case "Linux":
+            # Linux: fallback light (GNOME/KDE differiscono)
+            return OSTheme.LIGHT
+        case _:
+            raise NotImplementedError(
+                f"Rilevamento tema non implementato per OS: {platform.system()}"
             )
-            valore, _ = winreg.QueryValueEx(chiave, "AppsUseLightTheme")
-            winreg.CloseKey(chiave)
-            return "light.qss" if valore == 1 else "dark.qss"
-        except Exception:
-            return "light.qss"  # fallback
-    elif sistema == "Darwin":
-        # macOS: usa defaults read
-        try:
-            risultato = subprocess.run(
-                ["defaults", "read", "-g", "AppleInterfaceStyle"],
-                capture_output=True,
-                text=True,
-            )
-            if "Dark" in risultato.stdout:
-                return "dark.qss"
-            else:
-                return "light.qss"
-        except Exception:
-            return "light.qss"  # fallback
-    elif sistema == "Linux":
-        # Linux: fallback light (GNOME/KDE differiscono)
-        return "light.qss"
-    else:
-        raise NotImplementedError(
-            f"Rilevamento tema non implementato per OS: {sistema}"
-        )
 
 
-def build_qpalette(theme: Optional[OSTheme] = None) -> QPalette:
+def build_qpalette(theme: Optional[OSTheme] = None):
     """Crea un `QPalette` che corrisponda al tema dell'OS selezionato. Se nessun
     tema è selezionato, `light.qss` viene usato come default value.
 
@@ -77,12 +77,13 @@ def build_qpalette(theme: Optional[OSTheme] = None) -> QPalette:
     ---
         `QPalette` pronta per `QApplication.setPalette`.
     """
+    from view.style.palette import LIGHT, DARK
+
     qp = QPalette()
 
-    if theme is None or theme == "light.qss":
+    if theme is None:
         palette = LIGHT
-    elif theme == "dark.qss":
-        palette = DARK
+    palette = LIGHT if theme == OSTheme.LIGHT else DARK
 
     qp.setColor(QPalette.ColorRole.Window, QColor(palette.window_bg))
     qp.setColor(QPalette.ColorRole.WindowText, QColor(palette.window_text))
@@ -114,15 +115,17 @@ def load_stylesheet(theme: Optional[OSTheme] = None) -> str:
     ---
     Throws: FileNotFoundError, IOError
     """
+    from pathlib import Path
+
     if theme is None:
-        theme = "light.qss"
+        theme = OSTheme.LIGHT
 
-    COLORS_QSS_PATH = Path(__file__).parent.joinpath("qss", "themes", theme)
-    LAYOUT_QSS_PATH = Path(__file__).parent.joinpath("qss", "layouts", "layout.qss")
+    COLORS_QSS = Path(__file__).parent.joinpath("qss", "themes", theme)
+    LAYOUT_QSS = Path(__file__).parent.joinpath("qss", "layouts", "layout.qss")
 
-    with open(COLORS_QSS_PATH, "r", encoding="utf-8") as f:
+    with open(COLORS_QSS, "r", encoding="utf-8") as f:
         qss_finale = f.read()
-    with open(LAYOUT_QSS_PATH, "r", encoding="utf-8") as file:
+    with open(LAYOUT_QSS, "r", encoding="utf-8") as file:
         qss_finale = qss_finale + file.read()
 
     return qss_finale

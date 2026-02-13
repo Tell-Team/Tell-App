@@ -189,7 +189,7 @@ class VisualizzaSpettacoloView(AbstractVisualizzaView):
         else:  # Caso Spettacolo generico
             ...
 
-        # Carica lista regie
+        # Carica lista eventi
         if not self.lista_eventi:
             self.layout_lista_eventi.mostra_msg_lista_vuota()
         else:

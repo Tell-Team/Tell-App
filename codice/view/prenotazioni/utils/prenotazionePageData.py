@@ -10,3 +10,5 @@ class PrenotazionePageData:
     nominativo: str
     data_ora_registrazione: datetime
     is_pagata: bool
+    ammontare: float  # Ottenuto chiamando un metodo del model
+    titolo_spettacolo: str  # Ottenuto chiamando un metodo di Spettacolo
