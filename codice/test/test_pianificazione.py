@@ -56,15 +56,13 @@ class TestTell(unittest.TestCase):
 
         # GET
         g_ = self.__model.get_genere(g.get_id())
-        if g_ is None:
-            raise Exception()
+        assert g_ is not None
         self.assertEqual(g_, g)
         print("Passato GET")
 
         g_.set_nome(g_.get_nome() + STR_NON_VUOTA)
         g = self.__model.get_genere(g.get_id())
-        if g is None:
-            raise Exception()
+        assert g is not None
         self.assertEqual(g.get_descrizione(), g_.get_descrizione())
         self.assertNotEqual(g.get_nome(), g_.get_nome())
         print("Passato GET side effect")
@@ -88,8 +86,7 @@ class TestTell(unittest.TestCase):
         print("Passato MODIFICA IdInesistente")
 
         g = self.__model.get_genere(g.get_id())
-        if g is None:
-            raise Exception()
+        assert g is not None
         g.set_nome(g2.get_nome())
         self.assertRaises(OccupatoException, self.__model.modifica_genere, g)
         print("Passato MODIFICA Occupato")
@@ -97,8 +94,7 @@ class TestTell(unittest.TestCase):
         g.set_nome(g.get_nome() + STR_NON_VUOTA * 3)
         self.__model.modifica_genere(g)
         g_ = self.__model.get_genere(g.get_id())
-        if g_ is None:
-            raise Exception()
+        assert g_ is not None
         self.assertEqual(g_, g)
         print("Passato MODIFICA")
 
@@ -303,15 +299,13 @@ class TestTell(unittest.TestCase):
 
         # GET
         o_ = self.__model.get_opera(o.get_id())
-        if o_ is None:
-            raise Exception()
+        assert o_ is not None
         self.assertEqual(o_, o)
         print("Passato GET")
 
         o_.set_nome(o_.get_nome() + STR_NON_VUOTA)
         o = self.__model.get_opera(o.get_id())
-        if o is None:
-            raise Exception()
+        assert o is not None
         self.assertEqual(o.get_compositore(), o_.get_compositore())
         self.assertNotEqual(o.get_nome(), o_.get_nome())
         print("Passato GET side effect")
@@ -388,8 +382,7 @@ class TestTell(unittest.TestCase):
         print("Passato MODIFICA IdInesistente")
 
         o = self.__model.get_opera(o.get_id())
-        if o is None:
-            raise Exception()
+        assert o is not None
         o.set_nome(o2.get_nome())
         self.assertRaises(OccupatoException, self.__model.modifica_opera, o)
         print("Passato MODIFICA Occupato")
@@ -397,8 +390,7 @@ class TestTell(unittest.TestCase):
         o.set_nome(o.get_nome() + STR_NON_VUOTA * 3)
         self.__model.modifica_opera(o)
         o_ = self.__model.get_opera(o.get_id())
-        if o_ is None:
-            raise Exception()
+        assert o_ is not None
         self.assertEqual(o_, o)
         print("Passato MODIFICA")
 
@@ -554,15 +546,13 @@ class TestTell(unittest.TestCase):
 
         # GET
         r_: Regia | None = self.__model.get_spettacolo(r.get_id())  # type: ignore
-        if r_ is None:
-            raise Exception()
+        assert r_ is not None
         self.assertEqual(r_, r)
         print("Passato GET")
 
         r_.set_titolo(r_.get_titolo() + STR_NON_VUOTA)
         r: Regia | None = self.__model.get_spettacolo(r.get_id())  # type: ignore
-        if r is None:
-            raise Exception()
+        assert r is not None
         self.assertEqual(r.get_note(), r_.get_note())
         self.assertNotEqual(r.get_titolo(), r_.get_titolo())
         print("Passato GET side effect")
@@ -650,13 +640,11 @@ class TestTell(unittest.TestCase):
         print("Passato MODIFICA IdInesistente")
 
         r: Regia | None = self.__model.get_spettacolo(r.get_id())  # type: ignore
-        if r is None:
-            raise Exception()
+        assert r is not None
         r.set_titolo(r.get_titolo() + STR_NON_VUOTA * 3)
         self.__model.modifica_spettacolo(r)
         r_: Regia | None = self.__model.get_spettacolo(r.get_id())  # type: ignore
-        if r_ is None:
-            raise Exception()
+        assert r_ is not None
         self.assertEqual(r_, r)
         print("Passato MODIFICA")
 

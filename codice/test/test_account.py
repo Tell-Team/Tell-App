@@ -95,8 +95,7 @@ class TestTell(unittest.TestCase):
 
         admin_id = int(self.__model._Model__gestore_accounts._GestoreAccounts__lista_accounts[0].get_id())  # type: ignore
         admin = self.__model.get_account(admin_id)
-        if admin is None:
-            raise Exception()
+        assert admin is not None
 
         # AGGIUNGI
         a = Account(STR_NON_VUOTA, PASSWORD_CONFORME, Ruolo.BIGLIETTERIA)
@@ -131,23 +130,20 @@ class TestTell(unittest.TestCase):
 
         # GET
         a_ = self.__model.get_account(a.get_id())
-        if a_ is None:
-            raise Exception()
+        assert a_ is not None
         self.assertEqual(a_, a)
         print("Passato GET")
 
         a_.set_username(a_.get_username() + STR_NON_VUOTA)
         a = self.__model.get_account(a.get_id())
-        if a is None:
-            raise Exception()
+        assert a is not None
         self.assertTrue(a.controlla_password(a_._Account__password))  # type: ignore
         self.assertNotEqual(a.get_username(), a_.get_username())
         print("Passato GET side effect")
 
         # PRESENZA ADMIN
         ad = self.__model.get_account(admin_id)
-        if ad is None:
-            raise Exception()
+        assert ad is not None
         self.assertEqual(ad.get_username(), "admin")
         self.assertEqual(ad.get_ruolo(), Ruolo.AMMINISTRATORE)
         self.assertTrue(ad.controlla_password("00000000"))

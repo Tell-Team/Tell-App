@@ -20,7 +20,7 @@ from model.exceptions import (
 )
 from model.organizzazione.evento import Evento
 from model.pianificazione.spettacolo import Spettacolo
-from model.model.model import Model
+from model.model.model import DettagliPrenotazione, DettagliSezione, Model
 
 
 DATA_ORA_FUTURO = datetime(2970, 1, 1, 0, 0, 0)
@@ -78,15 +78,13 @@ class TestTell(unittest.TestCase):
 
         # GET
         e_ = self.__model.get_evento(e.get_id())
-        if e_ is None:
-            raise Exception()
+        assert e_ is not None
         self.assertEqual(e_, e)
         print("Passato GET")
 
         e_.set_data_ora(DATA_ORA_FUTURO)
         e = self.__model.get_evento(e.get_id())
-        if e is None:
-            raise Exception()
+        assert e is not None
         self.assertEqual(e.get_id_spettacolo(), e_.get_id_spettacolo())
         self.assertNotEqual(e.get_data_ora(), e_.get_data_ora())
         print("Passato GET side effect")
@@ -189,8 +187,7 @@ class TestTell(unittest.TestCase):
         print("Passato MODIFICA IdInesistente")
 
         e = self.__model.get_evento(e.get_id())
-        if e is None:
-            raise Exception()
+        assert e is not None
         e.set_data_ora(e2.get_data_ora())
         self.assertRaises(OccupatoException, self.__model.modifica_evento, e)
         print("Passato MODIFICA Occupato")
@@ -198,8 +195,7 @@ class TestTell(unittest.TestCase):
         e.set_data_ora(DATA_ORA_FUTURO)
         self.__model.modifica_evento(e)
         e_ = self.__model.get_evento(e.get_id())
-        if e_ is None:
-            raise Exception()
+        assert e_ is not None
         self.assertEqual(e_, e)
         print("Passato MODIFICA")
 
@@ -260,15 +256,13 @@ class TestTell(unittest.TestCase):
 
         # GET
         s_ = self.__model.get_sezione(s.get_id())
-        if s_ is None:
-            raise Exception()
+        assert s_ is not None
         self.assertEqual(s_, s)
         print("Passato GET")
 
         s_.set_nome(s_.get_nome() + STR_NON_VUOTA)
         s = self.__model.get_sezione(s.get_id())
-        if s is None:
-            raise Exception()
+        assert s is not None
         self.assertEqual(s.get_descrizione(), s_.get_descrizione())
         self.assertNotEqual(s.get_nome(), s_.get_nome())
         print("Passato GET side effect")
@@ -402,8 +396,7 @@ class TestTell(unittest.TestCase):
         print("Passato MODIFICA IdInesistente")
 
         s = self.__model.get_sezione(s.get_id())
-        if s is None:
-            raise Exception()
+        assert s is not None
         s.set_nome(s2.get_nome())
         self.assertRaises(OccupatoException, self.__model.modifica_sezione, s)
         print("Passato MODIFICA Occupato")
@@ -411,8 +404,7 @@ class TestTell(unittest.TestCase):
         s.set_nome(s.get_nome() + STR_NON_VUOTA * 6)
         self.__model.modifica_sezione(s)
         s_ = self.__model.get_sezione(s.get_id())
-        if s_ is None:
-            raise Exception()
+        assert s_ is not None
         self.assertEqual(s_, s)
         print("Passato MODIFICA")
 
@@ -496,15 +488,13 @@ class TestTell(unittest.TestCase):
 
         # GET
         p_ = self.__model.get_posto(p.get_id())
-        if p_ is None:
-            raise Exception()
+        assert p_ is not None
         self.assertEqual(p_, p)
         print("Passato GET")
 
         p_.set_numero(p_.get_numero() + 1)
         p = self.__model.get_posto(p.get_id())
-        if p is None:
-            raise Exception()
+        assert p is not None
         self.assertEqual(p.get_id_sezione(), p_.get_id_sezione())
         self.assertNotEqual(p.get_numero(), p_.get_numero())
         print("Passato GET side effect")
@@ -545,8 +535,7 @@ class TestTell(unittest.TestCase):
         print("Passato MODIFICA IdInesistente")
 
         p = self.__model.get_posto(p.get_id())
-        if p is None:
-            raise Exception()
+        assert p is not None
         p.set_fila(p2.get_fila())
         p.set_numero(p2.get_numero())
         self.assertRaises(OccupatoException, self.__model.modifica_posto, p)
@@ -555,8 +544,7 @@ class TestTell(unittest.TestCase):
         p.set_numero(p.get_numero() + 3)
         self.__model.modifica_posto(p)
         p_ = self.__model.get_posto(p.get_id())
-        if p_ is None:
-            raise Exception()
+        assert p_ is not None
         self.assertEqual(p_, p)
         print("Passato MODIFICA")
 
@@ -650,15 +638,13 @@ class TestTell(unittest.TestCase):
 
         # GET
         p_ = self.__model.get_prezzo(p.get_id())
-        if p_ is None:
-            raise Exception()
+        assert p_ is not None
         self.assertEqual(p_, p)
         print("Passato GET")
 
         p_.set_ammontare(p_.get_ammontare() + FLOAT_NONZERO)
         p = self.__model.get_prezzo(p.get_id())
-        if p is None:
-            raise Exception()
+        assert p is not None
         self.assertEqual(p.get_id_spettacolo(), p_.get_id_spettacolo())
         self.assertNotEqual(p.get_ammontare(), p_.get_ammontare())
         print("Passato GET side effect")
@@ -675,8 +661,7 @@ class TestTell(unittest.TestCase):
         p_ = self.__model.get_prezzo_by_spettacolo_e_sezione(
             p.get_id_spettacolo(), p.get_id_sezione()
         )
-        if p_ is None:
-            raise Exception()
+        assert p_ is not None
         self.assertEqual(p_, p)
         print("Passato GET BY SPETTACOLO E SEZIONE")
 
@@ -684,8 +669,7 @@ class TestTell(unittest.TestCase):
         p = self.__model.get_prezzo_by_spettacolo_e_sezione(
             p.get_id_spettacolo(), p.get_id_sezione()
         )
-        if p is None:
-            raise Exception()
+        assert p is not None
         self.assertEqual(p.get_id_spettacolo(), p_.get_id_spettacolo())
         self.assertNotEqual(p.get_ammontare(), p_.get_ammontare())
         print("Passato GET BY SPETTACOLO E SEZIONE side effect")
@@ -707,8 +691,7 @@ class TestTell(unittest.TestCase):
         print("Passato MODIFICA IdInesistente")
 
         p = self.__model.get_prezzo(p.get_id())
-        if p is None:
-            raise Exception()
+        assert p is not None
         p.set_id_sezione(p3.get_id_sezione())
         self.assertRaises(OccupatoException, self.__model.modifica_prezzo, p)
         print("Passato MODIFICA Occupato")
@@ -717,8 +700,7 @@ class TestTell(unittest.TestCase):
         p.set_ammontare(p.get_ammontare() + FLOAT_NONZERO)
         self.__model.modifica_prezzo(p)
         p_ = self.__model.get_prezzo(p.get_id())
-        if p_ is None:
-            raise Exception()
+        assert p_ is not None
         self.assertEqual(p_, p)
         print("Passato MODIFICA")
 
@@ -787,15 +769,13 @@ class TestTell(unittest.TestCase):
 
         # GET
         p_ = self.__model.get_prenotazione(p.get_id())
-        if p_ is None:
-            raise Exception()
+        assert p_ is not None
         self.assertEqual(p_, p)
         print("Passato GET")
 
         p_.set_nominativo(p_.get_nominativo() + STR_NON_VUOTA)
         p = self.__model.get_prenotazione(p.get_id())
-        if p is None:
-            raise Exception()
+        assert p is not None
         self.assertEqual(
             p.get_data_ora_registrazione(), p_.get_data_ora_registrazione()
         )
@@ -848,23 +828,30 @@ class TestTell(unittest.TestCase):
         self.__model.aggiungi_evento(e1)
         o1 = Occupazione(e1.get_id(), po1.get_id(), p.get_id())
         self.__model.aggiungi_occupazione(o1)
+
         se2 = Sezione(STR_NON_VUOTA * 2, STR_NON_VUOTA)
         self.__model.aggiungi_sezione(se2)
         po2 = Posto(STR_NON_VUOTA, 2, se2.get_id())
         self.__model.aggiungi_posto(po2)
-        sp2 = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
-        self.__model.aggiungi_spettacolo(sp2)
-        pr2 = Prezzo(FLOAT_NONZERO, sp2.get_id(), se2.get_id())
+        pr2 = Prezzo(FLOAT_NONZERO, sp1.get_id(), se2.get_id())
         self.__model.aggiungi_prezzo(pr2)
-        e2 = Evento(DATA_ORA_FUTURO, sp2.get_id())
-        self.__model.aggiungi_evento(e2)
-        o2 = Occupazione(e2.get_id(), po2.get_id(), p.get_id())
+        o2 = Occupazione(e1.get_id(), po2.get_id(), p.get_id())
         self.__model.aggiungi_occupazione(o2)
+
         self.assertEqual(
             self.__model.ammontare_totale_prenotazione(p.get_id()),
             FLOAT_NONZERO + FLOAT_NONZERO,
         )
         print("Passato AMMONTARE TOTALE PRENOTAZIONE")
+
+        # DETTAGLI PRENOTAZIONE
+        self.assertEqual(
+            self.__model.get_dettagli_prenotazione(p.get_id()),
+            DettagliPrenotazione(
+                sp1, e1, [DettagliSezione(se1, [po1]), DettagliSezione(se2, [po2])]
+            ),
+        )
+        print("Passato DETTAGLI PRENOTAZIONE")
 
         # CARICA
         self.__model._Model__carica_prenotazioni()  # type: ignore
@@ -1002,8 +989,7 @@ class TestTell(unittest.TestCase):
 
         # GET
         o_ = self.__model.get_occupazione(o.get_id())
-        if o_ is None:
-            raise Exception()
+        assert o_ is not None
         self.assertEqual(o_, o)
         print("Passato GET")
 
@@ -1014,8 +1000,7 @@ class TestTell(unittest.TestCase):
         self.__model.aggiungi_prezzo(Prezzo(FLOAT_NONZERO, sp2.get_id(), se.get_id()))
         o_.set_id_evento(e2.get_id())
         o = self.__model.get_occupazione(o.get_id())
-        if o is None:
-            raise Exception()
+        assert o is not None
         self.assertEqual(o.get_id_posto(), o_.get_id_posto())
         self.assertNotEqual(o.get_id_evento(), o_.get_id_evento())
         print("Passato GET side effect")
@@ -1053,8 +1038,7 @@ class TestTell(unittest.TestCase):
         o2 = Occupazione(e2.get_id(), po.get_id(), pr.get_id())
         self.__model.aggiungi_occupazione(o2)
         o = self.__model.get_occupazione(o.get_id())
-        if o is None:
-            raise Exception()
+        assert o is not None
         o.set_id_evento(o2.get_id_evento())
         self.assertRaises(OccupatoException, self.__model.modifica_occupazione, o)
         print("Passato MODIFICA Occupato")
@@ -1067,8 +1051,7 @@ class TestTell(unittest.TestCase):
         o.set_id_evento(e3.get_id())
         self.__model.modifica_occupazione(o)
         o_ = self.__model.get_occupazione(o.get_id())
-        if o_ is None:
-            raise Exception()
+        assert o_ is not None
         self.assertEqual(o_, o)
         print("Passato MODIFICA")
 

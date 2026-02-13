@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 import itertools
 from model.organizzazione.occupazione import Occupazione
 from model.gestori.gestore_occupazioni import GestoreOccupazioni
@@ -29,6 +30,19 @@ from model.exceptions import (
 from pickle import load, dump
 from typing import Optional
 import os
+
+
+@dataclass(frozen=True)
+class DettagliSezione:
+    sezione: Sezione
+    posti: list[Posto]
+
+
+@dataclass(frozen=True)
+class DettagliPrenotazione:
+    spettacolo: Spettacolo
+    evento: Evento
+    sezioni: list[DettagliSezione]
 
 
 class Model:
@@ -386,6 +400,37 @@ class Model:
             ammontare_totale += prezzo.get_ammontare()
 
         return ammontare_totale
+
+    def get_dettagli_prenotazione(self, id_prenotazione: int) -> DettagliPrenotazione:
+        occupazioni = self.get_occupazioni_by_prenotazione(id_prenotazione)
+
+        evento: Evento = self.get_evento(occupazioni[0].get_id_evento())  # type: ignore
+        spettacolo: Spettacolo = self.get_spettacolo(evento.get_id_spettacolo())  # type: ignore
+
+        posti_occupati: list[Posto] = []
+        for o in occupazioni:
+            posto: Posto = self.get_posto(o.get_id_posto())  # type: ignore
+            posti_occupati.append(posto)
+
+        posti_occupati.sort(
+            key=lambda p: self.get_sezione(p.get_id_sezione()).get_nome()  # type: ignore
+        )
+        lista_dettagli_sezioni: list[DettagliSezione] = []
+        for id_sezione, posti_sezione in itertools.groupby(
+            posti_occupati, lambda p: p.get_id_sezione()
+        ):
+            sezione: Sezione = self.get_sezione(id_sezione)  # type: ignore
+
+            lista_dettagli_sezioni.append(
+                DettagliSezione(
+                    sezione, sorted(list(posti_sezione), key=lambda p: p.get_numero())
+                )
+            )
+
+        dettagli_prenotazione = DettagliPrenotazione(
+            spettacolo, evento, lista_dettagli_sezioni
+        )
+        return dettagli_prenotazione
 
     #   OCCUPAZIONI
     def get_occupazione(self, id_: int) -> Optional[Occupazione]:
