@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from model.account.account import Ruolo
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class AccountData:
     """Container immutabile per le pagine di `Account`."""
 

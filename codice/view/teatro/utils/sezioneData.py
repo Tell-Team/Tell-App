@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class SezioneData:
     """Container immutabile per le pagine di `Sezione`."""
 

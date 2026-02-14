@@ -86,7 +86,8 @@ class LoginDialog(QDialog):
         self.__geometry_initialized = True
 
     def keyPressEvent(self, a0: Optional[QKeyEvent]) -> None:
-        assert isinstance(a0, QKeyEvent)
+        if not isinstance(a0, QKeyEvent):
+            raise TypeError(f"{type(QKeyEvent)} expect. Type recieved: {type(a0)}")
         if a0.key() == Qt.Key.Key_Escape:
             a0.ignore()
         else:

@@ -79,7 +79,6 @@ class NuovaOperaView(AbstractCreaView):
         label_data.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
         self.data = QDateEdit()
         self.data.setDisplayFormat("dd/MM/yyyy")
-        # self.data.setCalendarPopup(True)  # - USAR SOLO SI HAY UN ESTILO PARA EL QCalendarPopup BIEN HECHO
 
         label_teatro = QLabel(
             'Teatro prima rappresentazione<span style="color:red;">*</span> :'

@@ -149,7 +149,7 @@ class PrenotazioniSectionController(AbstractSectionController):
 
         dettagli = self.__get_dettagli_prenotazione(current_prenotazione.get_id())
 
-        current_pagina.set_data(prenotazione_data, dettagli)
+        current_pagina.set_data(prenotazione_data, dettagli)  # - NECESITA MEJORAS
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

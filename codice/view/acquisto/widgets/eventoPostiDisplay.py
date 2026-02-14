@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QLabel, QVBoxLayout
+from datetime import datetime
 
-from model.organizzazione.evento import Evento
-from model.organizzazione.sezione import Sezione
+from model.model.model import SezionePostiInfo
 from model.organizzazione.posto import Posto
 
 from view.utils.list_widgets import ItemDisplay
@@ -10,17 +10,16 @@ from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class EventoPostiDisplay(ItemDisplay):
-    """View dei posti prenotati per un'evento. È usato nella pagina `RicevutaView`."""
+    """View dei posti prenotati per un'evento. È usato nelle pagine `RicevutaView` e
+    `VisualizzaPrenotazioneView`."""
 
-    def __init__(self, e: Evento, sp: list[tuple[Sezione, list[Posto]]]):
+    def __init__(self, evento_data: datetime, s_p: list[SezionePostiInfo]):
         super().__init__()
 
-        self.__setup_ui(e, sp)
+        self.__setup_ui(evento_data, s_p)
 
-    def __setup_ui(self, e: Evento, sp: list[tuple[Sezione, list[Posto]]]) -> None:
-        label_data = QLabel(
-            f"<b>Data</b>: {e.get_data_ora().strftime("%d/%m/%y - %H:%M")}"
-        )
+    def __setup_ui(self, evento_data: datetime, s_p: list[SezionePostiInfo]) -> None:
+        label_data = QLabel(f"<b>Data</b>: {evento_data.strftime("%d/%m/%y - %H:%M")}")
         label_data.setProperty(WidgetRole.BODY_TEXT, True)
         label_data.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
@@ -32,15 +31,19 @@ class EventoPostiDisplay(ItemDisplay):
         layout.addWidget(label_data)
         layout.addWidget(label_posti)
 
-        def make_label_posto(s: Sezione, p: Posto) -> QLabel:
+        def make_label_posto(
+            sezione_nome: str, prezzo_ammontare: float, p: Posto
+        ) -> QLabel:
             label = QLabel(
-                f"  - Sezione: {s.get_nome()}, Posto: {p.get_fila()} #{p.get_numero()}"
+                f"  - [€ {prezzo_ammontare:.2f}] Sezione: {sezione_nome}, Posto: {p.get_fila()} #{p.get_numero()}"
             )
             label.setProperty(WidgetRole.BODY_TEXT, True)
             label.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
             return label
 
-        for label in (make_label_posto(s, p) for s, posti in sp for p in posti):
-            layout.addWidget(label)
+        for sezione_nome, prezzo_ammontare, posto in (
+            (sp.sezione_nome, sp.prezzo_ammontare, p) for sp in s_p for p in sp.posti
+        ):
+            layout.addWidget(make_label_posto(sezione_nome, prezzo_ammontare, posto))
 
         layout.addStretch()

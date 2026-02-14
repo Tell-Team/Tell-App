@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from view.spettacoli.utils import SpettacoloData
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class RegiaData(SpettacoloData):
     """Container immutabile per i widget di `Regia`."""
 

@@ -6,7 +6,7 @@ from core.controller import AbstractVisualizzaController
 
 from controller.navigation import Pagina
 
-from model.model.model import Model
+from model.model.model import Model, RicevutaData, SezionePostiInfo
 from model.pianificazione.spettacolo import Spettacolo
 from model.organizzazione.evento import Evento
 from model.organizzazione.sezione import Sezione
@@ -23,7 +23,6 @@ from model.exceptions import (
 
 from view.acquisto.pagine import ScegliPostiView
 from view.acquisto.widgets import PostoSceltoDisplay
-from view.prenotazioni.utils import PrenotazioneData
 
 from view.utils.list_widgets import ListLayout
 
@@ -186,7 +185,8 @@ class ScegliPostiController(AbstractVisualizzaController):
         self._view_page.numero.insertItem(0, "", -1)
         self._view_page.numero.setEnabled(True)
 
-        assert self.__lista_fila_posti is not None
+        if self.__lista_fila_posti is None:
+            raise Exception("La lista dei posti disponibili è vuota.")
         self.__posti = next(
             (p for f, p in self.__lista_fila_posti if f == txt_fila), None
         )
@@ -208,16 +208,12 @@ class ScegliPostiController(AbstractVisualizzaController):
         if id_evento == -1 or id_sezione == -1 or id_posto == -1:
             return
 
-        evento = self.__get_evento(id_evento)
-        assert isinstance(evento, Evento)
+        evento: Evento = self.__get_evento(id_evento)  # type:ignore
         if not isinstance(self._view_page.evento_scelto, Evento):
             self._view_page.evento_scelto = evento
 
-        sezione = self.__get_sezione(id_sezione)
-        assert isinstance(sezione, Sezione)
-
-        posto = self.__get_posto(id_posto)
-        assert isinstance(posto, Posto)
+        sezione: Sezione = self.__get_sezione(id_sezione)  # type:ignore
+        posto: Posto = self.__get_posto(id_posto)  # type:ignore
 
         # Verifica che la tuple non è già presente nella lista
         if (sezione, posto) in self._view_page.lista_posti_scelti:
@@ -245,10 +241,9 @@ class ScegliPostiController(AbstractVisualizzaController):
             return
 
         for s, p in lista_posti_scelti:
-            prezzo = self.__get_prezzo_by_spettacolo_e_sezione(
+            prezzo: Prezzo = self.__get_prezzo_by_spettacolo_e_sezione(  # type:ignore
                 pagina.id_current_spettacolo, s.get_id()
             )
-            assert isinstance(prezzo, Prezzo)
 
             current_posto_scelto = PostoSceltoDisplay(evento_scelto, s, prezzo, p)
 
@@ -266,9 +261,7 @@ class ScegliPostiController(AbstractVisualizzaController):
         """Carica la pagina `RicevutaView` con i dati dei posti da prenotare, inclusi le
         sezioni ed eventi associati."""
         pagina = self._view_page
-        # id_current_spettacolo = pagina.id_current_spettacolo
-        evento_scelto = pagina.evento_scelto
-        assert isinstance(evento_scelto, Evento)
+        evento_scelto: Evento = pagina.evento_scelto  # type:ignore
         lista_posti_scelti = pagina.lista_posti_scelti
 
         self.__data_emmisione = datetime.now()
@@ -317,21 +310,38 @@ class ScegliPostiController(AbstractVisualizzaController):
             )
             return
 
-        spettacolo = self.__get_spettacolo(self._view_page.id_current_spettacolo)
-        assert isinstance(spettacolo, Spettacolo)
-
-        prenotazione = self.__get_prenotazione(id_prenotazione)
-        assert isinstance(prenotazione, Prenotazione)
-
-        prenotazione_data = PrenotazioneData(
-            id=id_prenotazione,
-            nominativo=prenotazione.get_nominativo(),
-            data_ora_registrazione=prenotazione.get_data_ora_registrazione(),
-            is_pagata=prenotazione.pagata(),
-            ammontare=self.__ammontare_totale_prenotazione(id_prenotazione),
+        spettacolo: Spettacolo = self.__get_spettacolo(  # type:ignore
+            self._view_page.id_current_spettacolo
         )
 
-        current_pagina.set_data(prenotazione_data, self.__tree, spettacolo.get_titolo())
+        prenotazione: Prenotazione = self.__get_prenotazione(  # type:ignore
+            id_prenotazione
+        )
+
+        sezione_posti: list[SezionePostiInfo] = []
+        for sezione, posti in lista_sezione_posti:
+            prezzo: Prezzo = self._model.get_prezzo_by_spettacolo_e_sezione(
+                spettacolo.get_id(), sezione.get_id()
+            )  # type:ignore
+
+            sezione_posti.append(
+                SezionePostiInfo(
+                    sezione_nome=sezione.get_nome(),
+                    prezzo_ammontare=prezzo.get_ammontare(),  # necessario per stampare la ricevuta
+                    posti=posti,
+                )
+            )
+
+        ricevuta_data = RicevutaData(
+            spettacolo_titolo=spettacolo.get_titolo(),
+            evento_dataora=evento_scelto.get_data_ora(),
+            sezioni_posti=sezione_posti,
+            prezzo_complessivo=self.__ammontare_totale_prenotazione(id_prenotazione),
+            emmisione_dataora=prenotazione.get_data_ora_registrazione(),
+            nominativo=prenotazione.get_nominativo(),
+        )
+
+        current_pagina.set_data(ricevuta_data)
 
         self.goToPageRequest.emit(pagina_nome, True)
 

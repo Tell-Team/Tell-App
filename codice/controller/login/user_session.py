@@ -4,7 +4,7 @@ from typing import Optional
 from model.account.account import Ruolo
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class UserSession:
     """Container immutabile per la creazioni di sessioni utente."""
 

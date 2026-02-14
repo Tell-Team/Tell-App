@@ -5,7 +5,7 @@ Palette di colori centralizzata per i temi dell'app.
 from dataclasses import dataclass
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class Palette:
     window_bg: str  # QMainWindow, QDialog, QWidget, QGroupBox
     window_text: str  # QLabel, QGroupBox, static text

@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 import itertools
 from model.organizzazione.occupazione import Occupazione
 from model.gestori.gestore_occupazioni import GestoreOccupazioni
@@ -43,6 +44,23 @@ class DettagliPrenotazione:
     spettacolo: Spettacolo
     evento: Evento
     sezioni: list[DettagliSezione]
+
+
+@dataclass(frozen=True, slots=True)
+class SezionePostiInfo:  # Usato per mostrare i posti scelti nelle ricevute e prenotazioni
+    sezione_nome: str
+    prezzo_ammontare: float
+    posti: list[Posto]
+
+
+@dataclass(frozen=True, slots=True)
+class RicevutaData:  # Usato per mostrare e stampare la ricevuta
+    spettacolo_titolo: str
+    evento_dataora: datetime
+    sezioni_posti: list[SezionePostiInfo]
+    prezzo_complessivo: float
+    emmisione_dataora: datetime
+    nominativo: str
 
 
 class Model:

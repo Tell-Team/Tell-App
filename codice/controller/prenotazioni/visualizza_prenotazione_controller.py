@@ -2,7 +2,8 @@ from typing import override
 
 from core.controller import AbstractVisualizzaController
 
-from model.model.model import Model
+from model.model.model import Model, SezionePostiInfo
+from model.organizzazione.prezzo import Prezzo
 from model.exceptions import AzioneIncongruenteException
 
 from view.prenotazioni.pagine import VisualizzaPrenotazioneView
@@ -43,6 +44,9 @@ class VisualizzaPrenotazioneController(AbstractVisualizzaController):
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
+    def __get_prezzo_by_spettacolo_e_sezione(self, id_spettacolo: int, id_sezione: int):
+        return self._model.get_prezzo_by_spettacolo_e_sezione(id_spettacolo, id_sezione)
+
     def __display_posti_prenotati(self, layout_posti: ListLayout) -> None:
         """Mostra a schermo le informazioni degli posti prenotati.
 
@@ -55,7 +59,22 @@ class VisualizzaPrenotazioneController(AbstractVisualizzaController):
             return
 
         e, sp = lista_posti
-        current_evento = EventoPostiDisplay(e, sp)
+
+        sezione_posti: list[SezionePostiInfo] = []
+        for sezione, posti in sp:
+            prezzo: Prezzo = self.__get_prezzo_by_spettacolo_e_sezione(
+                e.get_id_spettacolo(), sezione.get_id()
+            )  # type:ignore
+
+            sezione_posti.append(
+                SezionePostiInfo(
+                    sezione_nome=sezione.get_nome(),
+                    prezzo_ammontare=prezzo.get_ammontare(),
+                    posti=posti,
+                )
+            )
+
+        current_evento = EventoPostiDisplay(e.get_data_ora(), sezione_posti)
 
         layout_posti.aggiungi_list_item(current_evento)
 

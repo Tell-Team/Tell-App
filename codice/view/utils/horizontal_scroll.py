@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QScrollArea, QWidget
+from PyQt6.QtWidgets import QScrollArea, QWidget, QScrollBar
 from PyQt6.QtCore import Qt, QEvent, QObject
 from PyQt6.QtGui import (
     QWheelEvent,
@@ -28,8 +28,7 @@ class HorizontalWheelScrollArea(QScrollArea):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
         self.setAutoFillBackground(False)
-        viewport = self.viewport()
-        assert viewport is not None
+        viewport: QWidget = self.viewport()  # type:ignore
         viewport.setAutoFillBackground(False)
         viewport.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
@@ -66,8 +65,9 @@ class ScrollFadeOverlay(QWidget):
         self.__scroll_area = scroll_area
         self.__fade_width = fade_width
 
-        self.__h_scroll_bar = self.__scroll_area.horizontalScrollBar()
-        assert self.__h_scroll_bar is not None
+        self.__h_scroll_bar: QScrollBar = (
+            self.__scroll_area.horizontalScrollBar()
+        )  # type:ignore
         self.__h_scroll_bar.valueChanged.connect(  # type:ignore
             self.update
         )
@@ -83,7 +83,6 @@ class ScrollFadeOverlay(QWidget):
     def paintEvent(self, a0: Optional[QPaintEvent]):
         painter = QPainter(self)
 
-        assert self.__h_scroll_bar is not None
         value = self.__h_scroll_bar.value()
         maximum = self.__h_scroll_bar.maximum()
 

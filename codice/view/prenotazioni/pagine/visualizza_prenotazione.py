@@ -82,12 +82,6 @@ class VisualizzaPrenotazioneView(AbstractVisualizzaView):
         label_lista_posti = QLabel("Lista posti")
         label_lista_posti.setProperty(WidgetRole.HEADER2, True)
 
-        header_posti = QWidget()
-        self.layout_header_posti = QHBoxLayout(header_posti)
-        self.layout_header_posti.setContentsMargins(0, 0, 0, 0)
-        self.layout_header_posti.addWidget(label_lista_posti)
-        self.layout_header_posti.addStretch()
-
         self.lista_evento_posti: Optional[
             tuple[Evento, list[tuple[Sezione, list[Posto]]]]
         ] = None
@@ -104,7 +98,7 @@ class VisualizzaPrenotazioneView(AbstractVisualizzaView):
 
         self.posti = QWidget()
         self.layout_posti = QVBoxLayout(self.posti)
-        self.layout_posti.addWidget(header_posti)
+        self.layout_posti.addWidget(label_lista_posti)
         self.layout_posti.addWidget(content_lista_posti)
         self.layout_posti.addStretch()
         # end-Lista Posti

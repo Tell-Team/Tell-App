@@ -6,13 +6,10 @@ from PyQt6.QtWidgets import (
     QScrollArea,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
+from datetime import datetime
 from typing import Optional
 
-from model.organizzazione.evento import Evento
-from model.organizzazione.sezione import Sezione
-from model.organizzazione.posto import Posto
-
-from view.prenotazioni.utils import PrenotazioneData
+from model.model.model import RicevutaData, SezionePostiInfo
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
@@ -67,6 +64,14 @@ class RicevutaView(QWidget):
             self.label_nominativo.styleSheet() + " font-size: 16px; "
         )
 
+        self.label_data_evento = HyphenatedLabel("<b>Data evento</b>: [Data Evento]")
+        self.label_data_evento.setProperty(WidgetRole.BODY_TEXT, True)
+        self.label_data_evento.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.label_data_evento.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        self.label_data_evento.setStyleSheet(
+            self.label_data_evento.styleSheet() + " font-size: 16px; "
+        )
+
         self.label_prezzo = HyphenatedLabel("<b>Prezzo</b>: € [Ammontare Prezzo]")
         self.label_prezzo.setProperty(WidgetRole.BODY_TEXT, True)
         self.label_prezzo.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
@@ -76,9 +81,13 @@ class RicevutaView(QWidget):
         )
 
         # Lista Posti prenotati
-        self.lista_posti_scelti: tuple[
-            Optional[Evento], list[tuple[Sezione, list[Posto]]]
-        ] = (None, [])
+        label_lista_posti = QLabel("Lista posti")
+        label_lista_posti.setProperty(WidgetRole.HEADER2, True)
+
+        self.lista_posti_scelti: tuple[Optional[datetime], list[SezionePostiInfo]] = (
+            None,
+            [],
+        )
 
         label_nessun_posto_scelto = EmptyStateLabel("Nessun posto scelto.")
         label_nessun_posto_scelto.setProperty(WidgetRole.BODY_TEXT, True)
@@ -92,13 +101,14 @@ class RicevutaView(QWidget):
 
         self.posti_scelti = QWidget()
         self.layout_posti_scelti = QVBoxLayout(self.posti_scelti)
+        self.layout_posti_scelti.addWidget(label_lista_posti)
         self.layout_posti_scelti.addWidget(content_lista_posti_scelti)
         self.layout_posti_scelti.addStretch()
         # end-Lista Posti prenotati
 
         self.label_emissione = QLabel("<b>Emissione</b>: [Data Emissione]")
         self.label_emissione.setProperty(WidgetRole.BODY_TEXT, True)
-        self.label_emissione.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        self.label_emissione.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
 
         self.__btn_stampa = CreaButton("Stampa", has_icon=False)
         self.__btn_fine = DefaultButton("Fine")
@@ -114,6 +124,7 @@ class RicevutaView(QWidget):
         self.__layout_content = QVBoxLayout(pagina_content)
         self.__layout_content.addWidget(self.label_spettacolo)
         self.__layout_content.addWidget(self.label_nominativo)
+        self.__layout_content.addWidget(self.label_data_evento)
         self.__layout_content.addWidget(self.label_prezzo)
         self.__layout_content.addWidget(self.posti_scelti)
         self.__layout_content.addStretch()
@@ -141,29 +152,28 @@ class RicevutaView(QWidget):
 
     # ------------------------- METODI DI VIEW -------------------------
 
-    def set_data(
-        self,
-        data: PrenotazioneData,
-        lista_posti_scelti: tuple[Evento, list[tuple[Sezione, list[Posto]]]],
-        titolo_spettacolo: str,
-    ) -> None:
+    def set_data(self, data: RicevutaData) -> None:
         """Carica i dati dei posti prenotati.
 
-        :param data: data della prenotazione salvata in una classe immutabile.
-        :param lista_posti_scelti: lista dei posti scelti, insieme alle sezioni ed evento
+        :param data: container con tutti i dati necessari per fare e mostrare una ricevuta.
         """
         self.layout_lista_posti_scelti.svuota_layout()
 
-        self.label_spettacolo.setText("<b>Spettacolo</b>: " + titolo_spettacolo)
+        self.label_spettacolo.setText("<b>Spettacolo</b>: " + data.spettacolo_titolo)
         self.label_nominativo.setText("<b>Nominativo</b>: " + data.nominativo)
-        self.label_prezzo.setText(f"<b>Prezzo</b>: € {data.ammontare:.2f}")
+        self.label_data_evento.setText(
+            "<b>Data evento</b>:" + data.evento_dataora.strftime("%d/%m/%y - %H:%M")
+        )
+        self.label_prezzo.setText(f"<b>Prezzo</b>: € {data.prezzo_complessivo:.2f}")
 
-        self.lista_posti_scelti = lista_posti_scelti
+        self.lista_posti_scelti = (data.evento_dataora, data.sezioni_posti)
 
         self.label_emissione.setText(
             "<b>Emissione</b>: "
-            + data.data_ora_registrazione.strftime("%a %b %d %Y %H:%M:%S")
+            + data.emmisione_dataora.strftime("%a %b %d %Y %H:%M:%S")
         )
+
+        self.data_ricevuta = data  # Usato per stampare la ricevuta
 
         self.abilita_btn_fine(False)
 
