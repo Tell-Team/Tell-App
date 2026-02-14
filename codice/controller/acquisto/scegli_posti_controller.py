@@ -151,7 +151,6 @@ class ScegliPostiController(AbstractVisualizzaController):
         if not self.__sezioni:
             self._view_page.sezione.setEnabled(False)
             return
-        self.__sezioni = sorted(self.__sezioni, key=lambda x: x.get_nome())
 
         self._view_page.sezione.insertItem(0, "Scegliere sezione...", -1)
         for i, sezione in enumerate(self.__sezioni, start=1):
@@ -171,7 +170,6 @@ class ScegliPostiController(AbstractVisualizzaController):
         if not self.__lista_fila_posti:
             self._view_page.fila.setEnabled(False)
             return
-        self.__lista_fila_posti = sorted(self.__lista_fila_posti, key=lambda x: (x[0]))
 
         self._view_page.fila.insertItem(0, "Scegliere fila...", None)
         for i, couple in enumerate(self.__lista_fila_posti, start=1):
@@ -195,7 +193,6 @@ class ScegliPostiController(AbstractVisualizzaController):
         if not self.__posti:
             self._view_page.numero.setEnabled(False)
             return
-        self.__posti = sorted(self.__posti, key=lambda x: x.get_numero())
 
         self._view_page.numero.setItemText(0, "Scegliere numero...")
         for i, posto in enumerate(self.__posti, start=1):
