@@ -322,7 +322,7 @@ class Model:
                     self.get_posti(),
                 )
             ),
-            key=lambda p: self.get_sezione(p.get_id_sezione()).get_nome(),  # type: ignore
+            key=lambda p: self.get_sezione(p.get_id_sezione()).get_nome().lower(),  # type: ignore
         )
 
         sezioni_e_file_e_posti_disponibili: list[
@@ -337,7 +337,7 @@ class Model:
             file_e_posti_disponibili: list[tuple[str, list[Posto]]] = list()
 
             lista_posti_sezione: list[Posto] = sorted(
-                list(posti_sezione), key=lambda p: p.get_fila()
+                list(posti_sezione), key=lambda p: p.get_fila().lower()
             )
             for fila, posti_fila in itertools.groupby(
                 lista_posti_sezione, lambda p: p.get_fila()
@@ -413,7 +413,7 @@ class Model:
             posti_occupati.append(posto)
 
         posti_occupati.sort(
-            key=lambda p: self.get_sezione(p.get_id_sezione()).get_nome()  # type: ignore
+            key=lambda p: self.get_sezione(p.get_id_sezione()).get_nome().lower()  # type: ignore
         )
         lista_dettagli_sezioni: list[DettagliSezione] = []
         for id_sezione, posti_sezione in itertools.groupby(
