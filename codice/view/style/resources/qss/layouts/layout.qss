@@ -116,9 +116,8 @@ QComboBox QAbstractItemView {
 }
 
 QComboBox::down-arrow {
-    image: url(down_arrow.png); /* # - Si deve aggiungere nella view */
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
 }
 
 /* ------------------------ QSpinBox & QDateEdit Buttons ------------------------ */
@@ -138,20 +137,8 @@ QSpinBox::down-button, QDateEdit::down-button, QTimeEdit::down-button {
     padding: 0;
 }
 
-QSpinBox::up-arrow, QDateEdit::up-arrow, QTimeEdit::up-arrow {
-    image: url(up_arrow.png); /* # - Si deve aggiungere nella view */
-    width: 10px;
-    height: 10px;
-}
-
-QSpinBox::down-arrow {
-    image: url(down_arrow.png); /* # - Si deve aggiungere nella view */
-    width: 10px;
-    height: 10px;
-}
-
-QDateEdit::down-arrow, QTimeEdit::down-arrow {
-    image: url(calendar_icon.png); /* # - Si deve aggiungere nella view */
+QSpinBox::up-arrow, QDateEdit::up-arrow, QTimeEdit::up-arrow,
+QSpinBox::down-arrow, QDateEdit::down-arrow, QTimeEdit::down-arrow {
     width: 12px;
     height: 12px;
 }

@@ -58,16 +58,13 @@ QSpinBox:disabled, QDateEdit:disabled, QTimeEdit:disabled {
 }
 
 /* ------------------------ ComboBox & QDateEdit Dropdown ------------------------ */
-QComboBox::drop-down, QDateEdit::drop-down {
-    border-left: 1px solid #b0b0b0;
-}
-
+QComboBox::drop-down, QDateEdit::drop-down { border-left: 1px solid #b0b0b0; }
 QComboBox::drop-down:hover, QDateEdit::drop-down:hover { background-color: #d1d1d1; }
 QComboBox::drop-down:pressed, QDateEdit::drop-down:pressed { background-color: #9a9a9a; }
 
-QComboBox QAbstractItemView {
-    selection-color: white;
-}
+QComboBox QAbstractItemView { selection-color: white; }
+
+QComboBox::down-arrow { image: url(:icons/arrows/light_down_arrow.svg); }
 
 /* ------------------------ QSpinBox & QDateEdit Buttons ------------------------ */
 QSpinBox::up-button, QDateEdit::up-button, QTimeEdit::up-button {
@@ -78,6 +75,12 @@ QSpinBox::up-button, QDateEdit::up-button, QTimeEdit::up-button {
 QSpinBox::down-button, QDateEdit::down-button, QTimeEdit::down-button {
     border-left: 1px solid #b0b0b0;
 }
+
+QSpinBox::up-arrow, QDateEdit::up-arrow,
+QTimeEdit::up-arrow { image: url(:icons/arrows/light_up_arrow.svg); }
+
+QSpinBox::down-arrow, QDateEdit::down-arrow, 
+QTimeEdit::down-arrow { image: url(:icons/arrows/light_down_arrow.svg); }
 
 QSpinBox::up-button:hover, QSpinBox::down-button:hover,
 QDateEdit::up-button:hover, QDateEdit::down-button:hover,
