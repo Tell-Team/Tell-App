@@ -6,8 +6,7 @@ from core.controller import AbstractVisualizzaController
 
 from controller.navigation import Pagina
 
-from model.model.model import Model, RicevutaData, SezionePostiInfo
-from model.pianificazione.spettacolo import Spettacolo
+from model.model.model import Model, RicevutaData
 from model.organizzazione.evento import Evento
 from model.organizzazione.sezione import Sezione
 from model.organizzazione.posto import Posto
@@ -76,9 +75,6 @@ class ScegliPostiController(AbstractVisualizzaController):
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
-    def __get_spettacolo(self, id_: int) -> Optional[Spettacolo]:
-        return self._model.get_spettacolo(id_)
-
     def __get_evento(self, id_: int) -> Optional[Evento]:
         return self._model.get_evento(id_)
 
@@ -100,8 +96,8 @@ class ScegliPostiController(AbstractVisualizzaController):
     ) -> Optional[Prezzo]:
         return self._model.get_prezzo_by_spettacolo_e_sezione(id_spettacolo, id_sezione)
 
-    def __get_prenotazione(self, id_: int) -> Optional[Prenotazione]:
-        return self._model.get_prenotazione(id_)
+    def __get_dettagli_ricevuta(self, id_prenotazione: int) -> RicevutaData:
+        return self._model.get_dettagli_prenotazione(id_prenotazione)
 
     def __aggiungi_prenotazione(self, prenotazione: Prenotazione) -> None:
         self._model.aggiungi_prenotazione(prenotazione)
@@ -111,9 +107,6 @@ class ScegliPostiController(AbstractVisualizzaController):
 
     def __elimina_prenotazione(self, id_: int) -> None:
         self._model.elimina_prenotazione(id_)
-
-    def __ammontare_totale_prenotazione(self, id_: int) -> float:
-        return self._model.ammontare_totale_prenotazione(id_)
 
     def __setup_evento_combobox(self, id_spettacolo: int) -> None:
         """Riempisce il `QComboBox` degli eventi della pagina.
@@ -281,12 +274,14 @@ class ScegliPostiController(AbstractVisualizzaController):
             return new
 
         lista_sezione_posti: list[tuple[Sezione, list[Posto]]] = []
+        posti_occ: list[Posto] = []
         for s, p in lista_posti_scelti:
             _, posti = get_or_create(lista_sezione_posti, s)
+            posti_occ.append(p)
             if p not in posti:
                 posti.append(p)
 
-        self.__tree = (evento_scelto, lista_sezione_posti)
+        self.__evento_posti = (evento_scelto, posti_occ)
 
         # Tenta di creare l'istanza di Prenotazione e tutte le Occupazione
         id_prenotazione = self.__nuova_prenotazione()
@@ -310,36 +305,10 @@ class ScegliPostiController(AbstractVisualizzaController):
             )
             return
 
-        spettacolo: Spettacolo = self.__get_spettacolo(  # type:ignore
-            self._view_page.id_current_spettacolo
-        )
-
-        prenotazione: Prenotazione = self.__get_prenotazione(  # type:ignore
-            id_prenotazione
-        )
-
-        sezione_posti: list[SezionePostiInfo] = []
-        for sezione, posti in lista_sezione_posti:
-            prezzo: Prezzo = self._model.get_prezzo_by_spettacolo_e_sezione(
-                spettacolo.get_id(), sezione.get_id()
-            )  # type:ignore
-
-            sezione_posti.append(
-                SezionePostiInfo(
-                    sezione_nome=sezione.get_nome(),
-                    prezzo_ammontare=prezzo.get_ammontare(),  # necessario per stampare la ricevuta
-                    posti=posti,
-                )
-            )
-
-        ricevuta_data = RicevutaData(
-            spettacolo_titolo=spettacolo.get_titolo(),
-            evento_dataora=evento_scelto.get_data_ora(),
-            sezioni_posti=sezione_posti,
-            prezzo_complessivo=self.__ammontare_totale_prenotazione(id_prenotazione),
-            emmisione_dataora=prenotazione.get_data_ora_registrazione(),
-            nominativo=prenotazione.get_nominativo(),
-        )
+        # Ritorna anche l'id e lo stato di pagamento, che non sarano usati nella pagina.
+        #   Comunque preferisco chiamare il metodo del model per delegare questo lavore
+        #   invece di farlo di nuovo qui.
+        ricevuta_data = self.__get_dettagli_ricevuta(id_prenotazione)
 
         current_pagina.set_data(ricevuta_data)
 
@@ -371,43 +340,40 @@ class ScegliPostiController(AbstractVisualizzaController):
                 return False
 
         # Tenta di creare le istanze di Occupazione
-        e, sp = self.__tree
+        e, posti = self.__evento_posti
 
         # Se si verifica un errore, elimina la prenotazione e occupazioni
         errore_verificato: bool = False
-        for _, posti in sp:
+        for p in posti:
             if errore_verificato:
                 break
 
-            for p in posti:
+            try:
+                nuova_occupazione = Occupazione(
+                    e.get_id(), p.get_id(), nuova_prenotazione.get_id()
+                )
+            except DatoIncongruenteException as exc:
+                # È stato trovato un dato non valido
+                mostra_error_popup(pagina, "Impossibile occupare posto", str(exc))
+                errore_verificato = True
+                break
+            else:
                 try:
-                    nuova_occupazione = Occupazione(
-                        e.get_id(), p.get_id(), nuova_prenotazione.get_id()
-                    )
-                except DatoIncongruenteException as exc:
-                    # È stato trovato un dato non valido
+                    self.__aggiungi_occupazione(nuova_occupazione)
+                except IdOccupatoException as exc:
+                    # Esiste già una Occupazione con quell'id
                     mostra_error_popup(pagina, "Impossibile occupare posto", str(exc))
                     errore_verificato = True
                     break
-                else:
-                    try:
-                        self.__aggiungi_occupazione(nuova_occupazione)
-                    except IdOccupatoException as exc:
-                        # Esiste già una Occupazione con quell'id
-                        mostra_error_popup(
-                            pagina, "Impossibile occupare posto", str(exc)
-                        )
-                        errore_verificato = True
-                        break
-                    except OccupatoException:
-                        # Il posto da prenotare è già occupatto
-                        mostra_error_popup(
-                            pagina,
-                            "Impossibile occupare posto",
-                            f"Il posto {p.get_fila()} #{p.get_numero()} è già occupato.",
-                        )
-                        errore_verificato = True
-                        break
+                except OccupatoException:
+                    # Il posto da prenotare è già occupatto
+                    mostra_error_popup(
+                        pagina,
+                        "Impossibile occupare posto",
+                        f"Il posto {p.get_fila()} #{p.get_numero()} è già occupato.",
+                    )
+                    errore_verificato = True
+                    break
 
         # È stato verificato un errore al creare le istanze Occupazione
         if errore_verificato:

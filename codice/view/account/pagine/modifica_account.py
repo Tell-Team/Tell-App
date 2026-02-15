@@ -36,8 +36,8 @@ class ModificaAccountView(NuovoAccountView):
         self._svuota_form_layout(self._form_layout)
 
         label_nuova_password = QLabel("Nuova password :")
-        label_nuova_password.setProperty(WidgetRole.BODY_TEXT, True)
-        label_nuova_password.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_nuova_password.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_nuova_password.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         self.nuova_password = QLineEdit()
         self.nuova_password.setPlaceholderText("Inserire nuova password")
         self.nuova_password.setEchoMode(QLineEdit.EchoMode.Password)

@@ -57,7 +57,7 @@ class InfoSectionView(AbstractSectionView):
 
         # Opere
         header_opere = QLabel("Opere")
-        header_opere.setProperty(WidgetRole.HEADER1, True)
+        header_opere.setProperty(WidgetRole.Label.HEADER1, True)
         header_opere.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self.filtro_ricerca: str = ""
@@ -65,7 +65,7 @@ class InfoSectionView(AbstractSectionView):
         self.ricerca_bar = QLineEdit()
         self.ricerca_bar.setPlaceholderText("Inserire nome...")
         self.ricerca_bar.setClearButtonEnabled(True)
-        self.ricerca_bar.setProperty(WidgetRole.SEARCH_BAR, True)
+        self.ricerca_bar.setProperty(WidgetRole.LineEdit.SEARCH_BAR, True)
 
         self.__btn_ricerca = RicercaButton()
         self.__btn_ricerca.setFixedHeight(self.ricerca_bar.sizeHint().height())
@@ -89,8 +89,8 @@ class InfoSectionView(AbstractSectionView):
         # Non è necessario salvare questa label come attributo perché il suo funzionamento
         #   viene gestito dal ListLayout a cui viene collegata.
         label_lista_opere_vuota = EmptyStateLabel("Non vi sono opere disponibili.")
-        label_lista_opere_vuota.setProperty(WidgetRole.BODY_TEXT, True)
-        label_lista_opere_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_lista_opere_vuota.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_lista_opere_vuota.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
 
         widget_lista_opere = QWidget()
         self.layout_lista_opere = ListLayout(
@@ -104,7 +104,7 @@ class InfoSectionView(AbstractSectionView):
 
         # Generi
         header_generi = QLabel("Generi")
-        header_generi.setProperty(WidgetRole.HEADER1, True)
+        header_generi.setProperty(WidgetRole.Label.HEADER1, True)
         header_generi.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         widget_header_generi = QWidget()
@@ -117,8 +117,8 @@ class InfoSectionView(AbstractSectionView):
         layout_header_generi.addStretch()
 
         label_lista_generi_vuota = EmptyStateLabel("Non vi sono generi disponibili.")
-        label_lista_generi_vuota.setProperty(WidgetRole.BODY_TEXT, True)
-        label_lista_generi_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_lista_generi_vuota.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_lista_generi_vuota.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
 
         widget_lista_generi = QWidget()
         self.layout_lista_generi = ListLayout(

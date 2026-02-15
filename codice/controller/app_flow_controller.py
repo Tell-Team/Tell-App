@@ -13,11 +13,7 @@ class AppFlowController:
     due istanze vengono eliminate e il dialog viene nuovamente visualizzato.
     """
 
-    def __init__(
-        self,
-        model: Model,
-        login_controller: LoginController,
-    ):
+    def __init__(self, model: Model, login_controller: LoginController):
         self.__model = model
         self.__login_controller = login_controller
 

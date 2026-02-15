@@ -52,7 +52,7 @@ class AcquistoSectionView(AbstractSectionView):
 
         # Acquisto
         header_spettacoli = QLabel("Acquisto")
-        header_spettacoli.setProperty(WidgetRole.HEADER1, True)
+        header_spettacoli.setProperty(WidgetRole.Label.HEADER1, True)
         header_spettacoli.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self.filtro_ricerca: str = ""
@@ -60,7 +60,7 @@ class AcquistoSectionView(AbstractSectionView):
         self.ricerca_bar = QLineEdit()
         self.ricerca_bar.setPlaceholderText("Inserire titolo...")
         self.ricerca_bar.setClearButtonEnabled(True)
-        self.ricerca_bar.setProperty(WidgetRole.SEARCH_BAR, True)
+        self.ricerca_bar.setProperty(WidgetRole.LineEdit.SEARCH_BAR, True)
 
         self.__btn_ricerca = RicercaButton()
         self.__btn_ricerca.setFixedHeight(self.ricerca_bar.sizeHint().height())
@@ -82,8 +82,10 @@ class AcquistoSectionView(AbstractSectionView):
         label_lista_spettacoli_vuota = EmptyStateLabel(
             "Non vi sono spettacoli disponibili."
         )
-        label_lista_spettacoli_vuota.setProperty(WidgetRole.BODY_TEXT, True)
-        label_lista_spettacoli_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_lista_spettacoli_vuota.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_lista_spettacoli_vuota.setProperty(
+            WidgetColor.Label.SECONDARY_COLOR, True
+        )
 
         widget_lista_spettacoli = QWidget()
         self.layout_lista_spettacoli = ListLayout(

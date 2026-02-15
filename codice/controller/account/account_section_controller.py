@@ -109,12 +109,12 @@ class AccountSectionController(AbstractSectionController):
             )
 
             COLORE = (
-                WidgetColor.Item.RED_ITEM
+                WidgetColor.Item.RED
                 if acc.get_ruolo() == Ruolo.AMMINISTRATORE
-                else WidgetColor.Item.BLUE_ITEM
+                else WidgetColor.Item.BLUE
             )
             layout_accounts.aggiungi_list_item(
-                current_account, WidgetRole.ITEM_LIST, COLORE
+                current_account, WidgetRole.Item.LIST, COLORE
             )
 
     def __nuovo_account(self) -> None:

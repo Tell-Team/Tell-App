@@ -42,39 +42,39 @@ class RicevutaView(QWidget):
 
     def __setup_ui(self) -> None:
         label_header = QLabel("Ricevuta")
-        label_header.setProperty(WidgetRole.HEADER1, True)
-        label_header.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        label_header.setProperty(WidgetRole.Label.HEADER1, True)
+        label_header.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
         label_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.label_spettacolo = HyphenatedLabel(
             "<b>Spettacolo</b>: [Titolo Spettacolo]"
         )
-        self.label_spettacolo.setProperty(WidgetRole.BODY_TEXT, True)
-        self.label_spettacolo.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.label_spettacolo.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        self.label_spettacolo.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
         self.label_spettacolo.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.label_spettacolo.setStyleSheet(
             self.label_spettacolo.styleSheet() + " font-size: 16px; "
         )
 
         self.label_nominativo = HyphenatedLabel("<b>Nominativo</b>: [Nominativo]")
-        self.label_nominativo.setProperty(WidgetRole.BODY_TEXT, True)
-        self.label_nominativo.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.label_nominativo.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        self.label_nominativo.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
         self.label_nominativo.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.label_nominativo.setStyleSheet(
             self.label_nominativo.styleSheet() + " font-size: 16px; "
         )
 
         self.label_data_evento = HyphenatedLabel("<b>Data evento</b>: [Data Evento]")
-        self.label_data_evento.setProperty(WidgetRole.BODY_TEXT, True)
-        self.label_data_evento.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.label_data_evento.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        self.label_data_evento.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
         self.label_data_evento.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.label_data_evento.setStyleSheet(
             self.label_data_evento.styleSheet() + " font-size: 16px; "
         )
 
         self.label_prezzo = HyphenatedLabel("<b>Prezzo</b>: € [Ammontare Prezzo]")
-        self.label_prezzo.setProperty(WidgetRole.BODY_TEXT, True)
-        self.label_prezzo.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.label_prezzo.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        self.label_prezzo.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
         self.label_prezzo.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.label_prezzo.setStyleSheet(
             self.label_prezzo.styleSheet() + " font-size: 16px; "
@@ -82,7 +82,7 @@ class RicevutaView(QWidget):
 
         # Lista Posti prenotati
         label_lista_posti = QLabel("Lista posti")
-        label_lista_posti.setProperty(WidgetRole.HEADER2, True)
+        label_lista_posti.setProperty(WidgetRole.Label.HEADER2, True)
 
         self.lista_posti_scelti: tuple[Optional[datetime], list[SezionePostiInfo]] = (
             None,
@@ -90,8 +90,8 @@ class RicevutaView(QWidget):
         )
 
         label_nessun_posto_scelto = EmptyStateLabel("Nessun posto scelto.")
-        label_nessun_posto_scelto.setProperty(WidgetRole.BODY_TEXT, True)
-        label_nessun_posto_scelto.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_nessun_posto_scelto.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_nessun_posto_scelto.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
 
         content_lista_posti_scelti = QWidget()
         self.layout_lista_posti_scelti = ListLayout(
@@ -107,8 +107,8 @@ class RicevutaView(QWidget):
         # end-Lista Posti prenotati
 
         self.label_emissione = QLabel("<b>Emissione</b>: [Data Emissione]")
-        self.label_emissione.setProperty(WidgetRole.BODY_TEXT, True)
-        self.label_emissione.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.label_emissione.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        self.label_emissione.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         self.__btn_stampa = CreaButton("Stampa", has_icon=False)
         self.__btn_fine = DefaultButton("Fine")
@@ -157,8 +157,10 @@ class RicevutaView(QWidget):
 
         :param data: container con tutti i dati necessari per fare e mostrare una ricevuta.
         """
+        # Reset layout lista posti scelti
         self.layout_lista_posti_scelti.svuota_layout()
 
+        # Carica dati della prenotazione
         self.label_spettacolo.setText("<b>Spettacolo</b>: " + data.spettacolo_titolo)
         self.label_nominativo.setText("<b>Nominativo</b>: " + data.nominativo)
         self.label_data_evento.setText(

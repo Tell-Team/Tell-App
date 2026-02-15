@@ -38,15 +38,15 @@ class OperaDisplay(ItemDisplay):
     def __setup_ui(self, o: Opera) -> None:
         # Labels
         nome = HyphenatedLabel(o.get_nome())
-        nome.setProperty(WidgetRole.HEADER2, True)
+        nome.setProperty(WidgetRole.Label.HEADER2, True)
 
         librettista = HyphenatedLabel(f"Librettista: {o.get_librettista()}")
-        librettista.setProperty(WidgetRole.BODY_TEXT, True)
-        librettista.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        librettista.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        librettista.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         compositore = HyphenatedLabel(f"Direttore d'orchestra: {o.get_compositore()}")
-        compositore.setProperty(WidgetRole.BODY_TEXT, True)
-        compositore.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        compositore.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        compositore.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         # Pulsanti
         self.__btn_visualizza = DefaultButton("Maggior info")
@@ -75,8 +75,8 @@ class OperaDisplay(ItemDisplay):
 
             # Pannello di eliminazione
             domanda = QLabel("<b>Sicuro di eliminare?</b>")
-            domanda.setProperty(WidgetRole.BODY_TEXT, True)
-            domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+            domanda.setProperty(WidgetRole.Label.BODY_TEXT, True)
+            domanda.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
             self.__btn_no = DefaultButton("No")
             self.__btn_si = EliminaButton("Sì", has_icon=False)

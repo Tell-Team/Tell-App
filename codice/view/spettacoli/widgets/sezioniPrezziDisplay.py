@@ -47,14 +47,14 @@ class SezioniPrezziDisplay(ItemDisplay):
     def __setup_ui(self, s: Sezione, p: Optional[Prezzo]) -> None:
         # Labels
         self.label_sezione = QLabel(s.get_nome())
-        self.label_sezione.setProperty(WidgetRole.BODY_TEXT, True)
-        self.label_sezione.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.label_sezione.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        self.label_sezione.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         self.label_prezzo = QLabel(
             f"{p.get_ammontare():.2f}" if (p is not None) else "Non definito"
         )
-        self.label_prezzo.setProperty(WidgetRole.BODY_TEXT, True)
-        self.label_prezzo.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.label_prezzo.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        self.label_prezzo.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         # Layout
         layout = QGridLayout(self)

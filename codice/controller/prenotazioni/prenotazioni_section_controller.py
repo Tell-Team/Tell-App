@@ -5,12 +5,11 @@ from core.controller import AbstractSectionController
 
 from controller.navigation import Pagina
 
-from model.model.model import Model, DettagliPrenotazione
+from model.model.model import Model, PrenotazioneData
 from model.organizzazione.prenotazione import Prenotazione
 from model.exceptions import OggettoInUsoException
 
 from view.prenotazioni.pagine import PrenotazioniSectionView
-from view.prenotazioni.utils import PrenotazioneData
 from view.prenotazioni.widgets import PrenotazioneDisplay
 
 from view.utils.list_widgets import ListLayout
@@ -51,14 +50,11 @@ class PrenotazioniSectionController(AbstractSectionController):
     def __get_prenotazioni_by_nominativo(self, filtro: str) -> list[Prenotazione]:
         return self._model.get_prenotazioni_by_nominativo(filtro)
 
-    def __get_dettagli_prenotazione(self, id_: int) -> DettagliPrenotazione:
+    def __get_dettagli_prenotazione(self, id_: int) -> PrenotazioneData:
         return self._model.get_dettagli_prenotazione(id_)
 
     def __elimina_prenotazione(self, id_: int) -> None:
         self._model.elimina_prenotazione(id_)
-
-    def __ammontare_totale_prenotazione(self, id_: int) -> float:
-        return self._model.ammontare_totale_prenotazione(id_)
 
     def __display_prenotazioni(self, layout_prenotazioni: ListLayout) -> None:
         """Mostra a schermo alcune informazioni delle prenotazioni salvate ed assegna a
@@ -108,7 +104,7 @@ class PrenotazioniSectionController(AbstractSectionController):
             )
 
             layout_prenotazioni.aggiungi_list_item(
-                current_prenotazione, WidgetRole.ITEM_CARD
+                current_prenotazione, WidgetRole.Item.CARD
             )
 
     def __visualizza_prenotazione(self, id_: int) -> None:
@@ -117,9 +113,8 @@ class PrenotazioniSectionController(AbstractSectionController):
 
         :param id\\_: id della prenotazione da visualizzare
         """
-        # Copia della prenotazione da visualizzare
-        current_prenotazione = self.__get_prenotazione(id_)
-        if not current_prenotazione:
+        # Verifica l'esistenza della prenotazione
+        if not self.__get_prenotazione(id_):
             mostra_error_popup(
                 self._view_section,
                 "Prenotazione inesistente",
@@ -136,20 +131,9 @@ class PrenotazioniSectionController(AbstractSectionController):
             self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
             return
 
-        # Ottieni i dati della prenotazione
-        prenotazione_data = PrenotazioneData(
-            id=current_prenotazione.get_id(),
-            nominativo=current_prenotazione.get_nominativo(),
-            data_ora_registrazione=current_prenotazione.get_data_ora_registrazione(),
-            is_pagata=current_prenotazione.pagata(),
-            ammontare=self.__ammontare_totale_prenotazione(
-                current_prenotazione.get_id()
-            ),
-        )
+        prenotazione_data = self.__get_dettagli_prenotazione(id_)
 
-        dettagli = self.__get_dettagli_prenotazione(current_prenotazione.get_id())
-
-        current_pagina.set_data(prenotazione_data, dettagli)  # - NECESITA MEJORAS
+        current_pagina.set_data(prenotazione_data)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

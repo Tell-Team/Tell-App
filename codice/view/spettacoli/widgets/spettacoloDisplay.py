@@ -37,7 +37,7 @@ class SpettacoloDisplay(ItemDisplay):
     def __setup_ui(self, s: Spettacolo, dati: tuple[str, ...] = ()) -> None:
         # Labels
         titolo = HyphenatedLabel(s.get_titolo())
-        titolo.setProperty(WidgetRole.HEADER2, True)
+        titolo.setProperty(WidgetRole.Label.HEADER2, True)
 
         # Pulsanti
         self.__btn_visualizza = DefaultButton("Maggior info")
@@ -69,8 +69,8 @@ class SpettacoloDisplay(ItemDisplay):
 
         # Pannello di eliminazione
         domanda = QLabel("<b>Sicuro di eliminare?</b>")
-        domanda.setProperty(WidgetRole.BODY_TEXT, True)
-        domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        domanda.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        domanda.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         self.__btn_no = DefaultButton("No")
         self.__btn_si = EliminaButton("Sì", has_icon=False)
@@ -129,11 +129,11 @@ class SpettacoloDisplay(ItemDisplay):
             raise ValueError("dati deve essere un tuple[str, str]")
 
         compositore = HyphenatedLabel(f"Direttore d'orchestra: {dati[0]}")
-        compositore.setProperty(WidgetRole.BODY_TEXT, True)
-        compositore.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        compositore.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        compositore.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
         self.__layout.addWidget(compositore)
 
         regista = HyphenatedLabel(f"Regista: {dati[1]}")
-        regista.setProperty(WidgetRole.BODY_TEXT, True)
-        regista.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        regista.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        regista.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
         self.__layout.addWidget(regista)

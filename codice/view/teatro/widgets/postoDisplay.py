@@ -39,8 +39,8 @@ class PostoDisplay(ItemDisplay):
     def __setup_ui(self, p: Posto) -> None:
         # Labels
         fila_numero = QLabel(f"{p.get_fila()}  #{p.get_numero()}")
-        fila_numero.setProperty(WidgetRole.BODY_TEXT, True)
-        fila_numero.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        fila_numero.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        fila_numero.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         # Pulsanti
         self.__btn_modifica = ModificaButton("")

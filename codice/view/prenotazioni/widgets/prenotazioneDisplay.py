@@ -34,13 +34,13 @@ class PrenotazioneDisplay(ItemDisplay):
     def __setup_ui(self, p: Prenotazione) -> None:
         # Labels
         label_nominativo = HyphenatedLabel(p.get_nominativo())
-        label_nominativo.setProperty(WidgetRole.HEADER2, True)
+        label_nominativo.setProperty(WidgetRole.Label.HEADER2, True)
 
         label_emissione = QLabel(
             "<b>Data emissione</b>: "
             + p.get_data_ora_registrazione().strftime("%a %b %d %Y %H:%M:%S")
         )
-        label_emissione.setProperty(WidgetRole.BODY_TEXT, True)
+        label_emissione.setProperty(WidgetRole.Label.BODY_TEXT, True)
 
         self.__btn_visualizza = DefaultButton("Maggior info")
         self.__btn_elimina = EliminaButton("Elimina")
@@ -60,8 +60,8 @@ class PrenotazioneDisplay(ItemDisplay):
 
         # Pannello di eliminazione
         domanda = QLabel("<b>Sicuro di eliminare?</b>")
-        domanda.setProperty(WidgetRole.BODY_TEXT, True)
-        domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        domanda.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        domanda.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         self.__btn_no = DefaultButton("No")
         self.__btn_si = EliminaButton("Sì", has_icon=False)

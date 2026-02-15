@@ -41,7 +41,7 @@ class PrenotazioniSectionView(AbstractSectionView):
 
         # Prenotazioni
         header_prenotazioni = QLabel("Prenotazioni")
-        header_prenotazioni.setProperty(WidgetRole.HEADER1, True)
+        header_prenotazioni.setProperty(WidgetRole.Label.HEADER1, True)
         header_prenotazioni.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self.filtro_ricerca: str = ""
@@ -49,7 +49,7 @@ class PrenotazioniSectionView(AbstractSectionView):
         self.ricerca_bar = QLineEdit()
         self.ricerca_bar.setPlaceholderText("Inserire nominativo...")
         self.ricerca_bar.setClearButtonEnabled(True)
-        self.ricerca_bar.setProperty(WidgetRole.SEARCH_BAR, True)
+        self.ricerca_bar.setProperty(WidgetRole.LineEdit.SEARCH_BAR, True)
 
         self.__btn_ricerca = RicercaButton()
         self.__btn_ricerca.setFixedHeight(self.ricerca_bar.sizeHint().height())
@@ -72,9 +72,9 @@ class PrenotazioniSectionView(AbstractSectionView):
         label_lista_prenotazioni_vuota = EmptyStateLabel(
             "Non vi sono prenotazioni registrati."
         )
-        label_lista_prenotazioni_vuota.setProperty(WidgetRole.BODY_TEXT, True)
+        label_lista_prenotazioni_vuota.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_lista_prenotazioni_vuota.setProperty(
-            WidgetColor.Text.SECONDARY_TEXT, True
+            WidgetColor.Label.SECONDARY_COLOR, True
         )
 
         widget_lista_prenotazioni = QWidget()

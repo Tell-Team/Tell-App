@@ -124,7 +124,7 @@ class SpettacoliSectionController(AbstractSectionController):
             )
 
             layout_spettacoli.aggiungi_list_item(
-                current_spettacolo, WidgetRole.ITEM_CARD
+                current_spettacolo, WidgetRole.Item.CARD
             )
 
     def __visualizza_spettacolo(self, id_: int) -> None:

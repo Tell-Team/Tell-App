@@ -41,27 +41,27 @@ class PrezziAssociatiView(AbstractVisualizzaView):
 
         # Lista Sezioni-prezzi
         header_sezioni_prezzi = QLabel("Lista prezzi (associati alle sezioni)")
-        header_sezioni_prezzi.setProperty(WidgetRole.HEADER1, True)
+        header_sezioni_prezzi.setProperty(WidgetRole.Label.HEADER1, True)
         header_sezioni_prezzi.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         label_lista_sezioni_vuota = EmptyStateLabel(
             "Al momento, non vi sono sezioni registrate."
         )
-        label_lista_sezioni_vuota.setProperty(WidgetRole.BODY_TEXT, True)
-        label_lista_sezioni_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_lista_sezioni_vuota.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_lista_sezioni_vuota.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
 
         content_sezioni_prezzi = QWidget()
-        content_sezioni_prezzi.setProperty(WidgetRole.ITEM_LIST, True)
+        content_sezioni_prezzi.setProperty(WidgetRole.Item.LIST, True)
         self.layout_sezioni_prezzi_box = ListLayout(
             content_sezioni_prezzi, label_lista_sezioni_vuota
         )
 
         header_sezione = QLabel("Sezione")
-        header_sezione.setProperty(WidgetRole.HEADER3, True)
+        header_sezione.setProperty(WidgetRole.Label.HEADER3, True)
         header_prezzo = QLabel("Prezzo")
-        header_prezzo.setProperty(WidgetRole.HEADER3, True)
+        header_prezzo.setProperty(WidgetRole.Label.HEADER3, True)
         header_opzioni = QLabel("Opzioni")
-        header_opzioni.setProperty(WidgetRole.HEADER3, True)
+        header_opzioni.setProperty(WidgetRole.Label.HEADER3, True)
 
         header_lista_sezioni_prezzi = QWidget()
         layout_lista_sezioni_prezzi = QGridLayout(header_lista_sezioni_prezzi)

@@ -27,14 +27,14 @@ class NuovoGenereView(AbstractCreaView):
     @override
     def _setup_form(self) -> None:
         label_nome = QLabel('Nome<span style="color:red;">*</span> :')
-        label_nome.setProperty(WidgetRole.BODY_TEXT, True)
-        label_nome.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_nome.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_nome.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         self.nome = QLineEdit()
         self.nome.setPlaceholderText("Inserire nome")
 
         label_descrizione = QLabel('Descrizione<span style="color:red;">*</span> :')
-        label_descrizione.setProperty(WidgetRole.BODY_TEXT, True)
-        label_descrizione.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_descrizione.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_descrizione.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         self.descrizione = QTextEdit()
         self.descrizione.setPlaceholderText("Inserire descrizione")
         self.descrizione.setFixedHeight(80)

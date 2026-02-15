@@ -23,7 +23,7 @@ class HorizontalWheelScrollArea(QScrollArea):
         super().__init__()
 
         self.setWidgetResizable(True)
-        self.setProperty(WidgetRole.INVISIBLE_H_SCROLL, True)
+        self.setProperty(WidgetRole.ScrollArea.INVISIBLE_H_SCROLL, True)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
@@ -65,9 +65,9 @@ class ScrollFadeOverlay(QWidget):
         self.__scroll_area = scroll_area
         self.__fade_width = fade_width
 
-        self.__h_scroll_bar: QScrollBar = (
+        self.__h_scroll_bar: QScrollBar = (  # type:ignore
             self.__scroll_area.horizontalScrollBar()
-        )  # type:ignore
+        )
         self.__h_scroll_bar.valueChanged.connect(  # type:ignore
             self.update
         )

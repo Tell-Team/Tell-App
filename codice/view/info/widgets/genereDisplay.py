@@ -36,11 +36,11 @@ class GenereDisplay(ItemDisplay):
     def __setup_ui(self, g: Genere) -> None:
         # Labels
         nome = HyphenatedLabel(g.get_nome())
-        nome.setProperty(WidgetRole.HEADER2, True)
+        nome.setProperty(WidgetRole.Label.HEADER2, True)
 
         descrizione = HyphenatedLabel(g.get_descrizione())
-        descrizione.setProperty(WidgetRole.BODY_TEXT, True)
-        descrizione.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        descrizione.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        descrizione.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         # Layout
         layout = QVBoxLayout(self)
@@ -63,8 +63,8 @@ class GenereDisplay(ItemDisplay):
 
             # Pannello di eliminazione
             domanda = QLabel("<b>Sicuro di eliminare?</b>")
-            domanda.setProperty(WidgetRole.BODY_TEXT, True)
-            domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+            domanda.setProperty(WidgetRole.Label.BODY_TEXT, True)
+            domanda.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
             self.__btn_no = DefaultButton("No")
             self.__btn_si = EliminaButton("Sì", has_icon=False)

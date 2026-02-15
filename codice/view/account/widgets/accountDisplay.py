@@ -36,7 +36,7 @@ class AccountDisplay(ItemDisplay):
     def __setup_ui(self, acc: Account) -> None:
         # Labels
         self.__username = HyphenatedLabel(acc.get_username())
-        self.__username.setProperty(WidgetRole.HEADER2, True)
+        self.__username.setProperty(WidgetRole.Label.HEADER2, True)
 
         # Layout
         layout = QHBoxLayout(self)
@@ -57,8 +57,8 @@ class AccountDisplay(ItemDisplay):
 
             # Pannello di eliminazione
             domanda = QLabel("<b>Sicuro di eliminare?</b>")
-            domanda.setProperty(WidgetRole.HEADER3, True)
-            domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+            domanda.setProperty(WidgetRole.Label.HEADER3, True)
+            domanda.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
             self.__btn_si = EliminaButton("Sì", has_icon=False)
             self.__btn_no = DefaultButton("No")

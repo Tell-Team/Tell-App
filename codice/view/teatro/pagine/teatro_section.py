@@ -38,7 +38,7 @@ class TeatroSectionView(AbstractSectionView):
 
         # Sezioni
         header_sezioni = QLabel("Sezioni")
-        header_sezioni.setProperty(WidgetRole.HEADER1, True)
+        header_sezioni.setProperty(WidgetRole.Label.HEADER1, True)
         header_sezioni.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self._btn_nuova_sezione = DefaultButton("Nuova sezione")
@@ -51,8 +51,8 @@ class TeatroSectionView(AbstractSectionView):
         layout_header_sezioni.addStretch()
 
         label_lista_sezioni_vuota = EmptyStateLabel("Non vi sono sezioni disponibili.")
-        label_lista_sezioni_vuota.setProperty(WidgetRole.BODY_TEXT, True)
-        label_lista_sezioni_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_lista_sezioni_vuota.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_lista_sezioni_vuota.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
 
         widget_lista_sezioni = QWidget()
         self.layout_lista_sezioni = ListLayout(

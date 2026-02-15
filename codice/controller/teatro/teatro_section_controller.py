@@ -101,7 +101,7 @@ class TeatroSectionController(AbstractSectionController):
                 partial(on_conferma, current_sezione, sezione.get_id())
             )
 
-            layout_sezioni.aggiungi_list_item(current_sezione, WidgetRole.ITEM_CARD)
+            layout_sezioni.aggiungi_list_item(current_sezione, WidgetRole.Item.CARD)
 
     def __visualizza_sezione(self, id_: int) -> None:
         # Copia della sezione da visualizzare

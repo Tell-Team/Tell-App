@@ -2,14 +2,15 @@ from typing import override
 
 from core.controller import AbstractVisualizzaController
 
-from model.model.model import Model, SezionePostiInfo
-from model.organizzazione.prezzo import Prezzo
+from model.model.model import Model
 from model.exceptions import AzioneIncongruenteException
 
 from view.prenotazioni.pagine import VisualizzaPrenotazioneView
 from view.acquisto.widgets import EventoPostiDisplay
 
 from view.utils.list_widgets import ListLayout
+
+from view.style.ui_style import WidgetRole
 
 
 class VisualizzaPrenotazioneController(AbstractVisualizzaController):
@@ -44,39 +45,22 @@ class VisualizzaPrenotazioneController(AbstractVisualizzaController):
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
-    def __get_prezzo_by_spettacolo_e_sezione(self, id_spettacolo: int, id_sezione: int):
-        return self._model.get_prezzo_by_spettacolo_e_sezione(id_spettacolo, id_sezione)
-
-    def __display_posti_prenotati(self, layout_posti: ListLayout) -> None:
+    def __display_posti_prenotati(self, layout_posti_prenotati: ListLayout) -> None:
         """Mostra a schermo le informazioni degli posti prenotati.
 
-        :param layout_posti: layout dove saranno caricate tutti i posti"""
-        lista_posti = self._view_page.lista_evento_posti
+        :param layout_posti_prenotati: layout dove saranno caricate tutti i posti"""
+        evento_dataora, lista_sezione_posti = self._view_page.lista_evento_posti
 
         # Verifica che la lista non sia vuota
-        if not lista_posti:
-            layout_posti.mostra_msg_lista_vuota()
+        if evento_dataora is None or not lista_sezione_posti:
+            layout_posti_prenotati.mostra_msg_lista_vuota()
             return
 
-        e, sp = lista_posti
+        current_evento_posti = EventoPostiDisplay(evento_dataora, lista_sezione_posti)
 
-        sezione_posti: list[SezionePostiInfo] = []
-        for sezione, posti in sp:
-            prezzo: Prezzo = self.__get_prezzo_by_spettacolo_e_sezione(
-                e.get_id_spettacolo(), sezione.get_id()
-            )  # type:ignore
-
-            sezione_posti.append(
-                SezionePostiInfo(
-                    sezione_nome=sezione.get_nome(),
-                    prezzo_ammontare=prezzo.get_ammontare(),
-                    posti=posti,
-                )
-            )
-
-        current_evento = EventoPostiDisplay(e.get_data_ora(), sezione_posti)
-
-        layout_posti.aggiungi_list_item(current_evento)
+        layout_posti_prenotati.aggiungi_list_item(
+            current_evento_posti, WidgetRole.Item.CARD
+        )
 
     def __aggiorna_stato_prenotazione(self, is_pagata: bool) -> None:
         try:

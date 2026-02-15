@@ -42,7 +42,7 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
     def _setup_ui(self) -> None:
         # Setup Header
         self._header = QLabel("")
-        self._header.setProperty(WidgetRole.HEADER1, True)
+        self._header.setProperty(WidgetRole.Label.HEADER1, True)
         self._header.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         # Setup QFormLayout
@@ -76,8 +76,8 @@ class AbstractCreaView(QWidget, metaclass=ABCQObjectMeta):
 
         # Label input_error
         self._input_error = QLabel("")
-        self._input_error.setProperty(WidgetRole.BODY_TEXT, True)
-        self._input_error.setProperty(WidgetColor.Text.ERROR_MESSAGE, True)
+        self._input_error.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        self._input_error.setProperty(WidgetColor.Label.ERROR_COLOR, True)
 
         # Setup main layout
         self._main_layout = QVBoxLayout(self)

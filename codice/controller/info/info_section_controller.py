@@ -127,7 +127,7 @@ class InfoSectionController(AbstractSectionController):
                 partial(on_conferma, current_opera, opera.get_id())
             )
 
-            layout_opere.aggiungi_list_item(current_opera, WidgetRole.ITEM_CARD)
+            layout_opere.aggiungi_list_item(current_opera, WidgetRole.Item.CARD)
 
     def __display_generi(self, layout_generi: ListLayout) -> None:
         """Mostra a schermo le informazioni dei generi salvati ed assegna a
@@ -170,7 +170,7 @@ class InfoSectionController(AbstractSectionController):
                 partial(on_conferma, current_genere, genere.get_id())
             )
 
-            layout_generi.aggiungi_list_item(current_genere, WidgetRole.ITEM_CARD)
+            layout_generi.aggiungi_list_item(current_genere, WidgetRole.Item.CARD)
 
     def __visualizza_opera(self, id_: int) -> None:
         """Carica la pagina `VisualizzaOperaView` con i dati relativi all'opera

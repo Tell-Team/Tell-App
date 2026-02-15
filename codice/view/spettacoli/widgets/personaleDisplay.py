@@ -30,15 +30,15 @@ class PersonaleDisplay(ItemDisplay):
         self.__key = key
 
         widget_key = QLabel(self.__key)
-        widget_key.setProperty(WidgetRole.BODY_TEXT, True)
-        widget_key.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        widget_key.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        widget_key.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
         scroll_key = HorizontalWheelScrollArea()
         scroll_key.setWidget(widget_key)
         scroll_key.setMinimumWidth(250)
 
         widget_value = QLabel(value)
-        widget_value.setProperty(WidgetRole.BODY_TEXT, True)
-        widget_value.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        widget_value.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        widget_value.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
         scroll_value = HorizontalWheelScrollArea()
         scroll_value.setWidget(widget_value)
         scroll_value.setMinimumWidth(200)

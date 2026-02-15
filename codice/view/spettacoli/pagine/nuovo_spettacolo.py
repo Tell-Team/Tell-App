@@ -54,22 +54,22 @@ class NuovoSpettacoloView(AbstractCreaView):
     @override
     def _setup_form(self) -> None:
         label_titolo = QLabel('Titolo<span style="color:red;">*</span> :')
-        label_titolo.setProperty(WidgetRole.BODY_TEXT, True)
-        label_titolo.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_titolo.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_titolo.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         self.titolo = QLineEdit()
         self.titolo.setPlaceholderText("Inserire titolo")
 
         label_note = QLabel("Note :")
-        label_note.setProperty(WidgetRole.BODY_TEXT, True)
-        label_note.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_note.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_note.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         self.note = QTextEdit()
         self.note.setPlaceholderText("Inserire note")
         self.note.setFixedHeight(80)
 
         # Lista interpreti
         label_interprete = QLabel("Interprete :")
-        label_interprete.setProperty(WidgetRole.BODY_TEXT, True)
-        label_interprete.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_interprete.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_interprete.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         self.interprete_nome = QLineEdit()
         self.interprete_nome.setPlaceholderText("Inserire nome")
         self.interprete_ruolo = QLineEdit()
@@ -88,19 +88,21 @@ class NuovoSpettacoloView(AbstractCreaView):
         self.lista_interpreti: dict[str, str] = {}
 
         self.label_lista_interpreti_error = QLabel("")
-        self.label_lista_interpreti_error.setProperty(WidgetRole.BODY_TEXT, True)
+        self.label_lista_interpreti_error.setProperty(WidgetRole.Label.BODY_TEXT, True)
         self.label_lista_interpreti_error.setProperty(
-            WidgetColor.Text.ERROR_MESSAGE, True
+            WidgetColor.Label.ERROR_COLOR, True
         )
 
         label_lista_interpreti_vuota = EmptyStateLabel(
             "Non vi sono interpreti registrati."
         )
-        label_lista_interpreti_vuota.setProperty(WidgetRole.BODY_TEXT, True)
-        label_lista_interpreti_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_lista_interpreti_vuota.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_lista_interpreti_vuota.setProperty(
+            WidgetColor.Label.SECONDARY_COLOR, True
+        )
 
         widget_lista_interpreti = QWidget()
-        widget_lista_interpreti.setProperty(WidgetRole.ITEM_LIST, True)
+        widget_lista_interpreti.setProperty(WidgetRole.Item.LIST, True)
         self.layout_lista_interpreti = ListLayout(
             widget_lista_interpreti, label_lista_interpreti_vuota
         )
@@ -108,8 +110,8 @@ class NuovoSpettacoloView(AbstractCreaView):
 
         # Lista tectici (Musicisti/Direttori artistici)
         label_tecnico = HyphenatedLabel("Musicista/direttore artistico :")
-        label_tecnico.setProperty(WidgetRole.BODY_TEXT, True)
-        label_tecnico.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_tecnico.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_tecnico.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         self.tecnico_nome = QLineEdit()
         self.tecnico_nome.setPlaceholderText("Inserire nome")
         self.tecnico_posto = QLineEdit()
@@ -129,25 +131,25 @@ class NuovoSpettacoloView(AbstractCreaView):
 
         self.label_lista_musicisti_e_direttori_artistici_error = QLabel("")
         self.label_lista_musicisti_e_direttori_artistici_error.setProperty(
-            WidgetRole.BODY_TEXT, True
+            WidgetRole.Label.BODY_TEXT, True
         )
         self.label_lista_musicisti_e_direttori_artistici_error.setProperty(
-            WidgetColor.Text.ERROR_MESSAGE, True
+            WidgetColor.Label.ERROR_COLOR, True
         )
 
         label_lista_musicisti_e_direttori_artistici_vuota = EmptyStateLabel(
             "Non vi sono musicisti/direttori artistici registrati."
         )
         label_lista_musicisti_e_direttori_artistici_vuota.setProperty(
-            WidgetRole.BODY_TEXT, True
+            WidgetRole.Label.BODY_TEXT, True
         )
         label_lista_musicisti_e_direttori_artistici_vuota.setProperty(
-            WidgetColor.Text.SECONDARY_TEXT, True
+            WidgetColor.Label.SECONDARY_COLOR, True
         )
 
         widget_lista_musicisti_e_direttori_artistici = QWidget()
         widget_lista_musicisti_e_direttori_artistici.setProperty(
-            WidgetRole.ITEM_LIST, True
+            WidgetRole.Item.LIST, True
         )
         self.layout_lista_musicisti_e_direttori_artistici = ListLayout(
             widget_lista_musicisti_e_direttori_artistici,

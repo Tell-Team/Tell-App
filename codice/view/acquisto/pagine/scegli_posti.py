@@ -68,12 +68,12 @@ class ScegliPostiView(AbstractVisualizzaView):
         super()._setup_ui()
 
         self.label_titolo = HyphenatedLabel("[Titolo Spettacolo]")
-        self.label_titolo.setProperty(WidgetRole.HEADER1, True)
+        self.label_titolo.setProperty(WidgetRole.Label.HEADER1, True)
         self.label_titolo.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self.label_note = HyphenatedLabel("[Note Spettacolo]")
-        self.label_note.setProperty(WidgetRole.BODY_TEXT, True)
-        self.label_note.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.label_note.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        self.label_note.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         # Form
         form_content = QWidget()
@@ -88,17 +88,17 @@ class ScegliPostiView(AbstractVisualizzaView):
 
         # Lista Posti prenotati
         header_posti_scelti = QLabel("Posti scelti")
-        header_posti_scelti.setProperty(WidgetRole.HEADER2, True)
+        header_posti_scelti.setProperty(WidgetRole.Label.HEADER2, True)
 
         self.evento_scelto: Optional[Evento] = None
         self.lista_posti_scelti: list[tuple[Sezione, Posto]] = []
 
         label_nessun_posto_scelto = EmptyStateLabel("Nessun posto scelto.")
-        label_nessun_posto_scelto.setProperty(WidgetRole.BODY_TEXT, True)
-        label_nessun_posto_scelto.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_nessun_posto_scelto.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_nessun_posto_scelto.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
 
         content_lista_posti_scelti = QWidget()
-        content_lista_posti_scelti.setProperty(WidgetRole.ITEM_LIST, True)
+        content_lista_posti_scelti.setProperty(WidgetRole.Item.LIST, True)
         self.layout_lista_posti_scelti = ListLayout(
             content_lista_posti_scelti, label_nessun_posto_scelto
         )
@@ -122,19 +122,19 @@ class ScegliPostiView(AbstractVisualizzaView):
 
     def __setup_form(self):
         label_nominativo = QLabel('Nominativo<span style="color:red;">*</span> :')
-        label_nominativo.setProperty(WidgetRole.BODY_TEXT, True)
-        label_nominativo.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_nominativo.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_nominativo.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         self.nominativo = QLineEdit()
         self.nominativo.setPlaceholderText("Inserire nominativo")
 
         label_evento = QLabel('Data evento<span style="color:red;">*</span> :')
-        label_evento.setProperty(WidgetRole.BODY_TEXT, True)
-        label_evento.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_evento.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_evento.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         self.evento = QComboBox()
 
         label_sezione = QLabel('Sezione<span style="color:red;">*</span> :')
-        label_sezione.setProperty(WidgetRole.BODY_TEXT, True)
-        label_sezione.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_sezione.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_sezione.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         label_sezione.setMinimumWidth(label_evento.sizeHint().width())
         label_sezione.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.sezione = QComboBox()
@@ -145,15 +145,15 @@ class ScegliPostiView(AbstractVisualizzaView):
         layout_sezione_box.addRow(label_sezione, self.sezione)
 
         label_fila = QLabel('Fila<span style="color:red;">*</span> :')
-        label_fila.setProperty(WidgetRole.BODY_TEXT, True)
-        label_fila.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_fila.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_fila.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         label_fila.setMinimumWidth(label_evento.sizeHint().width())
         label_fila.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.fila = QComboBox()
 
         label_numero = QLabel('Numero posto<span style="color:red;">*</span> :')
-        label_numero.setProperty(WidgetRole.BODY_TEXT, True)
-        label_numero.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_numero.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_numero.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         label_numero.setMinimumWidth(label_evento.sizeHint().width())
         label_numero.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.numero = QComboBox()

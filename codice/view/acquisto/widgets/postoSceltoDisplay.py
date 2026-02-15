@@ -36,15 +36,14 @@ class PostoSceltoDisplay(ItemDisplay):
     def __setup_ui(self, e: Evento, s: Sezione, prezzo: Prezzo, p: Posto) -> None:
         self.__prenotazione_key = (s, p)
 
-        label_identificador = HyphenatedLabel()
-        label_identificador.setText(
+        label_identificador = HyphenatedLabel(
             f"<b>Data:</b> {e.get_data_ora().strftime("%d/%m/%y - %H:%M")} | "
             + f"<b>Sezione:</b> {s.get_nome()} |  "
             + f"<b>Posto:</b> {p.get_fila()} #{p.get_numero()} |  "
             + f"<b>Prezzo:</b> € {prezzo.get_ammontare():.2f}"
         )
-        label_identificador.setProperty(WidgetRole.BODY_TEXT, True)
-        label_identificador.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        label_identificador.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_identificador.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
         scroll_label = HorizontalWheelScrollArea()
         scroll_label.setWidget(label_identificador)
         # scroll_label.setMinimumWidth(250)

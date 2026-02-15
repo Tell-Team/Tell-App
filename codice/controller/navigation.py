@@ -146,7 +146,7 @@ class NavigationController(QObject):
         :param nome: key usata per trovare la pagina
         """
         self.__go_to_page(nome, save_history=False)
-        self.__history.clear()  # - TESTING
+        self.__history.clear()
 
     # Questo metodo è chiamato per ottenere l'istanza di pagina nei controller della view
     def __get_page(self, nome: Pagina, container: dict[str, Optional[QWidget]]) -> None:

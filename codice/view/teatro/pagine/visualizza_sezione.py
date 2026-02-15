@@ -55,29 +55,29 @@ class VisualizzaSezioneView(AbstractVisualizzaView):
 
         # Labels
         self.label_nome = HyphenatedLabel("[Nome Sezione]")
-        self.label_nome.setProperty(WidgetRole.HEADER1, True)
+        self.label_nome.setProperty(WidgetRole.Label.HEADER1, True)
         self.label_nome.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self.label_descrizione = HyphenatedLabel("[Descrizione Sezione]")
-        self.label_descrizione.setProperty(WidgetRole.BODY_TEXT, True)
+        self.label_descrizione.setProperty(WidgetRole.Label.BODY_TEXT, True)
         self.label_descrizione.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         # Crea posto/i widget
         self.lista_posti: list[Posto] = []
 
         label_crea_posto_box = QLabel("Aggiungi posto:")
-        label_crea_posto_box.setProperty(WidgetRole.HEADER2, True)
+        label_crea_posto_box.setProperty(WidgetRole.Label.HEADER2, True)
 
         label_fila = QLabel('Fila<span style="color:red;">*</span> :')
-        label_fila.setProperty(WidgetRole.BODY_TEXT, True)
-        label_fila.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_fila.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_fila.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
 
         self.fila = QLineEdit()
         self.fila.setPlaceholderText("Inserire nome")
 
         label_numero = QLabel('Numero<span style="color:red;">*</span> :')
-        label_numero.setProperty(WidgetRole.BODY_TEXT, True)
-        label_numero.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_numero.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_numero.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
 
         self.single_numero = QSpinBox()
         self.single_numero.setMinimum(0)
@@ -108,11 +108,11 @@ class VisualizzaSezioneView(AbstractVisualizzaView):
         layout_crea_posto_fields.addWidget(self.__btn_aggiungi_posto)
 
         self.__input_error = QLabel("")
-        self.__input_error.setProperty(WidgetRole.BODY_TEXT, True)
-        self.__input_error.setProperty(WidgetColor.Text.ERROR_MESSAGE, True)
+        self.__input_error.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        self.__input_error.setProperty(WidgetColor.Label.ERROR_COLOR, True)
 
         crea_posto_box = QWidget()
-        crea_posto_box.setProperty(WidgetRole.ITEM_CARD, True)
+        crea_posto_box.setProperty(WidgetRole.Item.CARD, True)
         layout_crea_posto_box = QVBoxLayout(crea_posto_box)
         layout_crea_posto_box.addWidget(label_crea_posto_box)
         layout_crea_posto_box.addWidget(crea_posto_fields)
@@ -121,24 +121,24 @@ class VisualizzaSezioneView(AbstractVisualizzaView):
 
         # Lista posti
         label_lista_posti = QLabel("Lista posti")
-        label_lista_posti.setProperty(WidgetRole.HEADER2, True)
+        label_lista_posti.setProperty(WidgetRole.Label.HEADER2, True)
 
         label_lista_posti_vuota = EmptyStateLabel(
             "Al momento, non vi sono posti assegnati alla sezione."
         )
-        label_lista_posti_vuota.setProperty(WidgetRole.BODY_TEXT, True)
-        label_lista_posti_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_lista_posti_vuota.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_lista_posti_vuota.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
 
         content_lista_posti = QWidget()
-        content_lista_posti.setProperty(WidgetRole.ITEM_LIST, True)
+        content_lista_posti.setProperty(WidgetRole.Item.LIST, True)
         self.layout_lista_posti = ListLayout(
             content_lista_posti, label_lista_posti_vuota
         )
 
         header_numero = QLabel("Fila | Numero")
-        header_numero.setProperty(WidgetRole.HEADER3, True)
+        header_numero.setProperty(WidgetRole.Label.HEADER3, True)
         header_opzioni = QLabel("Opzioni")
-        header_opzioni.setProperty(WidgetRole.HEADER3, True)
+        header_opzioni.setProperty(WidgetRole.Label.HEADER3, True)
 
         header_lista_posti = QWidget()
         layout_header_lista_posti = QGridLayout(header_lista_posti)

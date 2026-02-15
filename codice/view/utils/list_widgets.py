@@ -7,9 +7,9 @@ item.
 """
 
 from PyQt6.QtWidgets import QWidget, QLabel, QLayout, QVBoxLayout
-from typing import Optional, Union
+from typing import Optional
 
-from view.style.ui_style import WidgetRole, WidgetColorAlias
+from view.style.ui_style import WidgetStyle
 
 
 # Queste classi vuote servono per evitare possibili errori al chiamare i metodi di ListLayout.
@@ -50,24 +50,16 @@ class ListLayout(QVBoxLayout):
             self.setContentsMargins(1, 1, 1, 1)
             return
 
-        while self.count() > 1:
-            item = self.takeAt(1)
-            if item is None:  # Sempre c'è un EmptyStateLabel
-                raise ValueError("Expected item at index 1")  # Non lancia mai l'error
-            if widget := item.widget():
-                widget.setParent(None)
-                widget.deleteLater()  # Evita potenziali memory leaks
-            elif child_layout := item.layout():
-                self.svuota_layout(child_layout)
+        from view.utils import svuota_layout_generico
+
+        svuota_layout_generico(self, 1)
 
     def mostra_msg_lista_vuota(self) -> None:
         """Mostra un messaggio indicando che la lista non ha istanze da visualizzare."""
         self.setContentsMargins(2, 2, 2, 2)
         self.__box.show()
 
-    def aggiungi_list_item(
-        self, widget: ItemDisplay, *styles: Union[WidgetRole, WidgetColorAlias]
-    ) -> None:
+    def aggiungi_list_item(self, widget: ItemDisplay, *styles: WidgetStyle) -> None:
         """Aggiunge un widget creato per il display delle istanze del model.
 
         :param widget: widget speciale per visualizzare una instanza del model

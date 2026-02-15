@@ -91,7 +91,7 @@ class AcquistoSectionController(AbstractSectionController):
             )
 
             layout_spettacoli.aggiungi_list_item(
-                current_spettacolo, WidgetRole.ITEM_CARD
+                current_spettacolo, WidgetRole.Item.CARD
             )
 
     def __scegli_posti(self, id_: int) -> None:

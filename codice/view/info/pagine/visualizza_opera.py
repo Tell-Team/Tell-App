@@ -47,42 +47,42 @@ class VisualizzaOperaView(AbstractVisualizzaView):
 
         # Labels
         self.label_nome = HyphenatedLabel("[Nome Opera]")
-        self.label_nome.setProperty(WidgetRole.HEADER1, True)
+        self.label_nome.setProperty(WidgetRole.Label.HEADER1, True)
         self.label_nome.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self.label_librettista = HyphenatedLabel("Libretto di [Librettista Opera].")
-        self.label_librettista.setProperty(WidgetRole.BODY_TEXT, True)
-        self.label_librettista.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.label_librettista.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        self.label_librettista.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         self.label_compositore = HyphenatedLabel(
             "Musica composta da [Compositore Opera]."
         )
-        self.label_compositore.setProperty(WidgetRole.BODY_TEXT, True)
-        self.label_compositore.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.label_compositore.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        self.label_compositore.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         self.label_genere = HyphenatedLabel(f"Genere: [Genere Opera]")
-        self.label_genere.setProperty(WidgetRole.BODY_TEXT, True)
-        self.label_genere.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.label_genere.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        self.label_genere.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         self.label_atti = QLabel(f"Numero di atti: [Atti Opera]")
-        self.label_atti.setProperty(WidgetRole.BODY_TEXT, True)
-        self.label_atti.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.label_atti.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        self.label_atti.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         self.label_prima_rappresentazione = HyphenatedLabel(
             f"È stata rappresentata per prima volta il [Data Opera] nel teatro [Teatro Opera]."
         )
-        self.label_prima_rappresentazione.setProperty(WidgetRole.BODY_TEXT, True)
+        self.label_prima_rappresentazione.setProperty(WidgetRole.Label.BODY_TEXT, True)
         self.label_prima_rappresentazione.setProperty(
-            WidgetColor.Text.PRIMARY_TEXT, True
+            WidgetColor.Label.PRIMARY_COLOR, True
         )
 
         self.label_trama = HyphenatedLabel("[Trama Opera]")
-        self.label_trama.setProperty(WidgetRole.BODY_TEXT, True)
-        self.label_trama.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.label_trama.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        self.label_trama.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         # Lista Regie
         label_lista_regie = QLabel("Lista regie")
-        label_lista_regie.setProperty(WidgetRole.HEADER2, True)
+        label_lista_regie.setProperty(WidgetRole.Label.HEADER2, True)
 
         header_regie = QWidget()
         self.layout_header_regie = QHBoxLayout(header_regie)
@@ -100,11 +100,11 @@ class VisualizzaOperaView(AbstractVisualizzaView):
         label_lista_regie_vuota = EmptyStateLabel(
             "Al momento, non vi sono regie per questa opera."
         )
-        label_lista_regie_vuota.setProperty(WidgetRole.BODY_TEXT, True)
-        label_lista_regie_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_lista_regie_vuota.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_lista_regie_vuota.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
 
         content_lista_regie = QWidget()
-        content_lista_regie.setProperty(WidgetRole.ITEM_LIST, True)
+        content_lista_regie.setProperty(WidgetRole.Item.LIST, True)
         self.layout_lista_regie = ListLayout(
             content_lista_regie, label_lista_regie_vuota
         )
@@ -112,9 +112,9 @@ class VisualizzaOperaView(AbstractVisualizzaView):
         # header_titolo = QLabel("Titolo")
         # header_titolo.setProperty(WidgetRole.HEADER3, True)
         header_regista = QLabel("Regista")
-        header_regista.setProperty(WidgetRole.HEADER3, True)
+        header_regista.setProperty(WidgetRole.Label.HEADER3, True)
         header_opzioni = QLabel("Opzioni")
-        header_opzioni.setProperty(WidgetRole.HEADER3, True)
+        header_opzioni.setProperty(WidgetRole.Label.HEADER3, True)
 
         header_lista_regie = QWidget()
         layout_header_lista_regie = QGridLayout(header_lista_regie)

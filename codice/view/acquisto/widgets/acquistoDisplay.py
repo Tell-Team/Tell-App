@@ -33,7 +33,7 @@ class AcquistoDisplay(ItemDisplay):
     def __setup_ui(self, s: Spettacolo, dati: tuple[str, ...] = ()) -> None:
         # Labels
         titolo = HyphenatedLabel(s.get_titolo())
-        titolo.setProperty(WidgetRole.HEADER2, True)
+        titolo.setProperty(WidgetRole.Label.HEADER2, True)
 
         self.__btn_scegli_posti = DefaultButton("Scegli posti")
 
@@ -70,11 +70,11 @@ class AcquistoDisplay(ItemDisplay):
             raise ValueError("dati deve essere un tuple[str, str]")
 
         compositore = HyphenatedLabel(f"Direttore d'orchestra: {dati[0]}")
-        compositore.setProperty(WidgetRole.BODY_TEXT, True)
-        compositore.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        compositore.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        compositore.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
         self.__layout.addWidget(compositore)
 
         regista = HyphenatedLabel(f"Regista: {dati[1]}")
-        regista.setProperty(WidgetRole.BODY_TEXT, True)
-        regista.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        regista.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        regista.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
         self.__layout.addWidget(regista)

@@ -30,16 +30,16 @@ class NuovoEventoView(AbstractCreaView):
     @override
     def _setup_form(self) -> None:
         label_data = QLabel('Data<span style="color:red;">*</span> :')
-        label_data.setProperty(WidgetRole.BODY_TEXT, True)
-        label_data.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_data.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_data.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         self.data = QDateEdit()
         self.data.setDisplayFormat("dd/MM/yyyy")
         self.data.setDate(QDate.currentDate())
         self.data.setMinimumDate(QDate.currentDate())
 
         label_ora = QLabel('Ora<span style="color:red;">*</span> :')
-        label_ora.setProperty(WidgetRole.BODY_TEXT, True)
-        label_ora.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_ora.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_ora.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         self.ora = QTimeEdit()
         self.ora.setTime(QTime.currentTime())
 

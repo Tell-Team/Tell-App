@@ -82,24 +82,19 @@ class AbstractSectionView(QWidget, metaclass=ABCQObjectMeta):
             self.logoutRequest.emit
         )
 
-        self._btn_sezione_acquisto.clicked.connect(  # type:ignore
-            partial(self.goToSection.emit, Pagina.SEZIONE_ACQUISTO)
-        )
-        self._btn_sezione_spettacoli.clicked.connect(  # type:ignore
-            partial(self.goToSection.emit, Pagina.SEZIONE_SPETTACOLI)
-        )
-        self._btn_sezione_prenotazioni.clicked.connect(  # type:ignore
-            partial(self.goToSection.emit, Pagina.SEZIONE_PRENOTAZIONI)
-        )
-        self._btn_sezione_info.clicked.connect(  # type:ignore
-            partial(self.goToSection.emit, Pagina.SEZIONE_INFO)
-        )
-        self._btn_sezione_teatro.clicked.connect(  # type:ignore
-            partial(self.goToSection.emit, Pagina.SEZIONE_TEATRO)
-        )
-        self._btn_sezione_account.clicked.connect(  # type:ignore
-            partial(self.goToSection.emit, Pagina.SEZIONE_ACCOUNT)
-        )
+        map_sezioni: dict[DefaultButton, Pagina] = {
+            self._btn_sezione_acquisto: Pagina.SEZIONE_ACQUISTO,
+            self._btn_sezione_spettacoli: Pagina.SEZIONE_SPETTACOLI,
+            self._btn_sezione_prenotazioni: Pagina.SEZIONE_PRENOTAZIONI,
+            self._btn_sezione_info: Pagina.SEZIONE_INFO,
+            self._btn_sezione_teatro: Pagina.SEZIONE_TEATRO,
+            self._btn_sezione_account: Pagina.SEZIONE_ACCOUNT,
+        }
+
+        for btn, pagina in map_sezioni.items():
+            btn.clicked.connect(  # type:ignore
+                partial(self.goToSection.emit, pagina)
+            )
 
     # ------------------------- METODI DI VIEW -------------------------
 

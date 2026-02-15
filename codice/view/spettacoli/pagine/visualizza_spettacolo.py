@@ -1,11 +1,4 @@
-from PyQt6.QtWidgets import (
-    QWidget,
-    QLabel,
-    QVBoxLayout,
-    QLayout,
-    QHBoxLayout,
-    QGridLayout,
-)
+from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, QGridLayout
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import override
 
@@ -21,7 +14,7 @@ from view.info.utils import RegiaData
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
 from view.utils.custom_button import DefaultButton
-from view.utils import make_vline, make_hline
+from view.utils import make_vline, make_hline, svuota_layout_generico
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
@@ -57,12 +50,12 @@ class VisualizzaSpettacoloView(AbstractVisualizzaView):
 
         # Labels
         self.label_titolo = HyphenatedLabel("[Titolo Spettacolo]")
-        self.label_titolo.setProperty(WidgetRole.HEADER1, True)
+        self.label_titolo.setProperty(WidgetRole.Label.HEADER1, True)
         self.label_titolo.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self.label_note = HyphenatedLabel("[Note Spettacolo]")
-        self.label_note.setProperty(WidgetRole.BODY_TEXT, True)
-        self.label_note.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        self.label_note.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        self.label_note.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         container_dati_speciali = QWidget()
         self.layout_dati_speciali = QVBoxLayout(container_dati_speciali)
@@ -70,7 +63,7 @@ class VisualizzaSpettacoloView(AbstractVisualizzaView):
 
         # Lista Eventi
         label_lista_eventi = QLabel("Lista eventi")
-        label_lista_eventi.setProperty(WidgetRole.HEADER2, True)
+        label_lista_eventi.setProperty(WidgetRole.Label.HEADER2, True)
 
         header_eventi = QWidget()
         self.layout_header_eventi = QHBoxLayout(header_eventi)
@@ -88,21 +81,21 @@ class VisualizzaSpettacoloView(AbstractVisualizzaView):
         label_lista_eventi_vuota = EmptyStateLabel(
             "Al momento, non vi sono eventi per questo spettacolo."
         )
-        label_lista_eventi_vuota.setProperty(WidgetRole.BODY_TEXT, True)
-        label_lista_eventi_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_lista_eventi_vuota.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_lista_eventi_vuota.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
 
         content_lista_eventi = QWidget()
-        content_lista_eventi.setProperty(WidgetRole.ITEM_LIST, True)
+        content_lista_eventi.setProperty(WidgetRole.Item.LIST, True)
         self.layout_lista_eventi = ListLayout(
             content_lista_eventi, label_lista_eventi_vuota
         )
 
         header_data = QLabel("Data")
-        header_data.setProperty(WidgetRole.HEADER3, True)
+        header_data.setProperty(WidgetRole.Label.HEADER3, True)
         header_ora = QLabel("Ora")
-        header_ora.setProperty(WidgetRole.HEADER3, True)
+        header_ora.setProperty(WidgetRole.Label.HEADER3, True)
         header_opzioni = QLabel("Opzioni")
-        header_opzioni.setProperty(WidgetRole.HEADER3, True)
+        header_opzioni.setProperty(WidgetRole.Label.HEADER3, True)
 
         header_lista_eventi = QWidget()
         layout_header_lista_eventi = QGridLayout(header_lista_eventi)
@@ -175,16 +168,16 @@ class VisualizzaSpettacoloView(AbstractVisualizzaView):
             self.label_note.setText(f"{data.note}")
         else:
             self.label_note.hide()
-        self.__svuota_layout_generico(self.layout_dati_speciali)
+        svuota_layout_generico(self.layout_dati_speciali)
         if type(data) is RegiaData:
             label_regista = QLabel(f"<b>Regista:</b> {data.regista}")
-            label_regista.setProperty(WidgetRole.BODY_TEXT, True)
-            label_regista.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+            label_regista.setProperty(WidgetRole.Label.BODY_TEXT, True)
+            label_regista.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
             self.layout_dati_speciali.addWidget(label_regista)
 
             label_anno = QLabel(f"<b>Anno di produzione:</b> {data.anno_produzione}")
-            label_anno.setProperty(WidgetRole.BODY_TEXT, True)
-            label_anno.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+            label_anno.setProperty(WidgetRole.Label.BODY_TEXT, True)
+            label_anno.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
             self.layout_dati_speciali.addWidget(label_anno)
         else:  # Caso Spettacolo generico
             ...
@@ -201,13 +194,3 @@ class VisualizzaSpettacoloView(AbstractVisualizzaView):
 
         self.layout_lista_eventi.svuota_layout()
         self.displayEventiRequest.emit(self.layout_lista_eventi)
-
-    def __svuota_layout_generico(self, layout: QLayout):
-        while layout.count() > 0:
-            item = layout.takeAt(0)
-            if item is None:
-                raise ValueError("Expected item at index 0")
-            if widget := item.widget():
-                widget.setParent(None)
-            elif child_layout := item.layout():
-                self.__svuota_layout_generico(child_layout)

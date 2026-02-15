@@ -33,19 +33,6 @@ from typing import Optional
 import os
 
 
-@dataclass(frozen=True)
-class DettagliSezione:
-    sezione: Sezione
-    posti: list[Posto]
-
-
-@dataclass(frozen=True)
-class DettagliPrenotazione:
-    spettacolo: Spettacolo
-    evento: Evento
-    sezioni: list[DettagliSezione]
-
-
 @dataclass(frozen=True, slots=True)
 class SezionePostiInfo:  # Usato per mostrare i posti scelti nelle ricevute e prenotazioni
     sezione_nome: str
@@ -61,6 +48,12 @@ class RicevutaData:  # Usato per mostrare e stampare la ricevuta
     prezzo_complessivo: float
     emmisione_dataora: datetime
     nominativo: str
+
+
+@dataclass(frozen=True, slots=True)
+class PrenotazioneData(RicevutaData):  # Usato per mostrare i dati di una prenotazione
+    id: int
+    is_pagata: bool
 
 
 class Model:
@@ -419,9 +412,10 @@ class Model:
 
         return ammontare_totale
 
-    def get_dettagli_prenotazione(self, id_prenotazione: int) -> DettagliPrenotazione:
+    def get_dettagli_prenotazione(self, id_prenotazione: int) -> PrenotazioneData:
         occupazioni = self.get_occupazioni_by_prenotazione(id_prenotazione)
 
+        prenotazione: Prenotazione = self.get_prenotazione(id_prenotazione)  # type: ignore
         evento: Evento = self.get_evento(occupazioni[0].get_id_evento())  # type: ignore
         spettacolo: Spettacolo = self.get_spettacolo(evento.get_id_spettacolo())  # type: ignore
 
@@ -433,21 +427,34 @@ class Model:
         posti_occupati.sort(
             key=lambda p: self.get_sezione(p.get_id_sezione()).get_nome().lower()  # type: ignore
         )
-        lista_dettagli_sezioni: list[DettagliSezione] = []
+        lista_dettagli_sezioni: list[SezionePostiInfo] = []
         for id_sezione, posti_sezione in itertools.groupby(
             posti_occupati, lambda p: p.get_id_sezione()
         ):
             sezione: Sezione = self.get_sezione(id_sezione)  # type: ignore
+            prezzo: Prezzo = self.get_prezzo_by_spettacolo_e_sezione(
+                spettacolo.get_id(), sezione.get_id()
+            )  # type:ignore
 
             lista_dettagli_sezioni.append(
-                DettagliSezione(
-                    sezione, sorted(list(posti_sezione), key=lambda p: p.get_numero())
+                SezionePostiInfo(
+                    sezione.get_nome(),
+                    prezzo.get_ammontare(),
+                    sorted(list(posti_sezione), key=lambda p: p.get_numero()),
                 )
             )
 
-        dettagli_prenotazione = DettagliPrenotazione(
-            spettacolo, evento, lista_dettagli_sezioni
+        dettagli_prenotazione = PrenotazioneData(
+            spettacolo_titolo=spettacolo.get_titolo(),
+            evento_dataora=evento.get_data_ora(),
+            sezioni_posti=lista_dettagli_sezioni,
+            prezzo_complessivo=self.ammontare_totale_prenotazione(id_prenotazione),
+            emmisione_dataora=prenotazione.get_data_ora_registrazione(),
+            nominativo=prenotazione.get_nominativo(),
+            id=prenotazione.get_id(),
+            is_pagata=prenotazione.pagata(),
         )
+
         return dettagli_prenotazione
 
     #   OCCUPAZIONI

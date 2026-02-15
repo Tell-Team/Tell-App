@@ -34,14 +34,14 @@ class ModificaPostoView(AbstractCreaView):
     @override
     def _setup_form(self) -> None:
         label_fila = QLabel('Fila<span style="color:red;">*</span> :')
-        label_fila.setProperty(WidgetRole.BODY_TEXT, True)
-        label_fila.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_fila.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_fila.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         self.fila = QLineEdit()
         self.fila.setPlaceholderText("Inserire nome")
 
         label_numero = QLabel('Numero<span style="color:red;">*</span> :')
-        label_numero.setProperty(WidgetRole.BODY_TEXT, True)
-        label_numero.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_numero.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_numero.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         self.numero = QSpinBox()
         self.numero.setMinimum(0)
 

@@ -42,12 +42,12 @@ class EventoDisplay(ItemDisplay):
     def __setup_ui(self, ev: Evento) -> None:
         # Labels
         data = QLabel(ev.get_data_ora().strftime("%d-%m-%Y"))
-        data.setProperty(WidgetRole.BODY_TEXT, True)
-        data.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        data.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        data.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         ora = QLabel(ev.get_data_ora().strftime("%H:%M"))
-        ora.setProperty(WidgetRole.BODY_TEXT, True)
-        ora.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        ora.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        ora.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         # Layout
         layout = QGridLayout(self)
@@ -75,8 +75,8 @@ class EventoDisplay(ItemDisplay):
 
         # Pannello di eliminazione
         domanda = QLabel("<b>Sicuro?</b>")
-        domanda.setProperty(WidgetRole.BODY_TEXT, True)
-        domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        domanda.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        domanda.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         self.__btn_si = EliminaButton("Sì", has_icon=False)
         self.__btn_si.setMinimumSize(40, 32)

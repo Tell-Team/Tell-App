@@ -17,15 +17,15 @@ class LoginPage(QWidget):
     def _setup_ui(self) -> None:
         # Content
         title = QLabel("Tell")
-        title.setProperty(WidgetRole.TITLE, True)
+        title.setProperty(WidgetRole.Label.TITLE, True)
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.btn_login_as_cliente = QPushButton("Accedi")
-        self.btn_login_as_cliente.setProperty(WidgetColor.Button.BLUE_BUTTON, True)
-        self.btn_login_as_cliente.setProperty(WidgetRole.MAIN_BUTTON, True)
+        self.btn_login_as_cliente.setProperty(WidgetColor.Button.BLUE, True)
+        self.btn_login_as_cliente.setProperty(WidgetRole.Button.MAIN, True)
 
         self.btn_login_with_credentials = QPushButton("Accedi con credenziali")
-        self.btn_login_with_credentials.setProperty(WidgetRole.TRASPARENT_BUTTON, True)
+        self.btn_login_with_credentials.setProperty(WidgetRole.Button.TRASPARENT, True)
         font = self.btn_login_with_credentials.font()
         font.setUnderline(True)
         self.btn_login_with_credentials.setFont(font)

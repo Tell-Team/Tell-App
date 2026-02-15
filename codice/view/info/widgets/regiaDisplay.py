@@ -50,8 +50,8 @@ class RegiaDisplay(ItemDisplay):
         # scroll_titolo.setWidget(titolo)
 
         regista_anno = QLabel(f"{r.get_regista()} ({r.get_anno_produzione()})")
-        regista_anno.setProperty(WidgetRole.BODY_TEXT, True)
-        regista_anno.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+        regista_anno.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        regista_anno.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
         scroll_regista_anno = HorizontalWheelScrollArea()
         scroll_regista_anno.setWidget(regista_anno)
 
@@ -83,8 +83,8 @@ class RegiaDisplay(ItemDisplay):
 
             # Pannello di eliminazione
             domanda = QLabel("<b>Sicuro?</b>")
-            domanda.setProperty(WidgetRole.BODY_TEXT, True)
-            domanda.setProperty(WidgetColor.Text.PRIMARY_TEXT, True)
+            domanda.setProperty(WidgetRole.Label.BODY_TEXT, True)
+            domanda.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
             self.__btn_si = EliminaButton("Sì", has_icon=False)
             self.__btn_si.setMinimumSize(40, 32)

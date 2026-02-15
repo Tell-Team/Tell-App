@@ -46,7 +46,7 @@ class AccountSectionView(AbstractSectionView):
 
         # Account Header
         header_account = QLabel("Account")
-        header_account.setProperty(WidgetRole.HEADER1, True)
+        header_account.setProperty(WidgetRole.Label.HEADER1, True)
         header_account.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self._btn_nuovo_account = DefaultButton("Nuovo Account")
@@ -61,8 +61,8 @@ class AccountSectionView(AbstractSectionView):
         # Non è necessario, perché in prattica non vendrà mai visualizzato. Comunque
         #   lo lascio, in caso sia utile.
         label_lista_account_vuota = EmptyStateLabel("Non vi sono account registrati.")
-        label_lista_account_vuota.setProperty(WidgetRole.BODY_TEXT, True)
-        label_lista_account_vuota.setProperty(WidgetColor.Text.SECONDARY_TEXT, True)
+        label_lista_account_vuota.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_lista_account_vuota.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
 
         widget_lista_account = QWidget()
         self.layout_lista_account = ListLayout(

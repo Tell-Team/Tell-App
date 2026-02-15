@@ -96,7 +96,7 @@ class PrezziAssociatiController(AbstractVisualizzaController):
 
             current_sezione_prezzo = SezioniPrezziDisplay(sezione, prezzo)
 
-            if prezzo is None:
+            if not Prezzo:
                 current_sezione_prezzo.creaRequest.connect(  # type:ignore
                     partial(self.__nuovo_prezzo, sezione)
                 )
