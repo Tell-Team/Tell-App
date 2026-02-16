@@ -45,62 +45,62 @@ class TestTell(unittest.TestCase):
         print("\n### MODEL GENERI ###")
 
         # AGGIUNGI
-        g = Genere(STR_NON_VUOTA, STR_NON_VUOTA)
-        self.__model.aggiungi_genere(g)
-        self.assertRaises(IdOccupatoException, self.__model.aggiungi_genere, g)
+        genere = Genere(STR_NON_VUOTA, STR_NON_VUOTA)
+        self.__model.aggiungi_genere(genere)
+        self.assertRaises(IdOccupatoException, self.__model.aggiungi_genere, genere)
         print("Passato AGGIUNGI IdOccupato")
 
-        g2 = Genere(g.get_nome(), STR_NON_VUOTA)
-        self.assertRaises(OccupatoException, self.__model.aggiungi_genere, g2)
+        genere2 = Genere(genere.get_nome(), STR_NON_VUOTA)
+        self.assertRaises(OccupatoException, self.__model.aggiungi_genere, genere2)
         print("Passato AGGIUNGI Occupato")
 
         # GET
-        g_ = self.__model.get_genere(g.get_id())
-        assert g_ is not None
-        self.assertEqual(g_, g)
+        genere_ = self.__model.get_genere(genere.get_id())
+        assert genere_ is not None
+        self.assertEqual(genere_, genere)
         print("Passato GET")
 
-        g_.set_nome(g_.get_nome() + STR_NON_VUOTA)
-        g = self.__model.get_genere(g.get_id())
-        assert g is not None
-        self.assertEqual(g.get_descrizione(), g_.get_descrizione())
-        self.assertNotEqual(g.get_nome(), g_.get_nome())
+        genere_.set_nome(genere_.get_nome() + STR_NON_VUOTA)
+        genere = self.__model.get_genere(genere.get_id())
+        assert genere is not None
+        self.assertEqual(genere.get_descrizione(), genere_.get_descrizione())
+        self.assertNotEqual(genere.get_nome(), genere_.get_nome())
         print("Passato GET side effect")
 
         # GET LISTA
-        g2 = Genere(STR_NON_VUOTA * 2, STR_NON_VUOTA)
-        self.__model.aggiungi_genere(g2)
-        self.assertEqual(self.__model.get_generi(), [g, g2])
+        genere2 = Genere(STR_NON_VUOTA * 2, STR_NON_VUOTA)
+        self.__model.aggiungi_genere(genere2)
+        self.assertEqual(self.__model.get_generi(), [genere, genere2])
         print("Passato GET LISTA")
 
-        g2_ = self.__model.get_generi()[1]
-        g2_.set_nome(g2_.get_nome() + STR_NON_VUOTA)
-        g2 = self.__model.get_generi()[1]
-        self.assertEqual(g2.get_descrizione(), g2_.get_descrizione())
-        self.assertNotEqual(g2.get_nome(), g2_.get_nome())
+        genere2_ = self.__model.get_generi()[1]
+        genere2_.set_nome(genere2_.get_nome() + STR_NON_VUOTA)
+        genere2 = self.__model.get_generi()[1]
+        self.assertEqual(genere2.get_descrizione(), genere2_.get_descrizione())
+        self.assertNotEqual(genere2.get_nome(), genere2_.get_nome())
         print("Passato GET LISTA side effect")
 
         # MODIFICA
-        g3 = Genere(STR_NON_VUOTA * 3, STR_NON_VUOTA)
-        self.assertRaises(IdInesistenteException, self.__model.modifica_genere, g3)
+        genere3 = Genere(STR_NON_VUOTA * 3, STR_NON_VUOTA)
+        self.assertRaises(IdInesistenteException, self.__model.modifica_genere, genere3)
         print("Passato MODIFICA IdInesistente")
 
-        g = self.__model.get_genere(g.get_id())
-        assert g is not None
-        g.set_nome(g2.get_nome())
-        self.assertRaises(OccupatoException, self.__model.modifica_genere, g)
+        genere = self.__model.get_genere(genere.get_id())
+        assert genere is not None
+        genere.set_nome(genere2.get_nome())
+        self.assertRaises(OccupatoException, self.__model.modifica_genere, genere)
         print("Passato MODIFICA Occupato")
 
-        g.set_nome(g.get_nome() + STR_NON_VUOTA * 3)
-        self.__model.modifica_genere(g)
-        g_ = self.__model.get_genere(g.get_id())
-        assert g_ is not None
-        self.assertEqual(g_, g)
+        genere.set_nome(genere.get_nome() + STR_NON_VUOTA * 3)
+        self.__model.modifica_genere(genere)
+        genere_ = self.__model.get_genere(genere.get_id())
+        assert genere_ is not None
+        self.assertEqual(genere_, genere)
         print("Passato MODIFICA")
 
         # CARICA
         self.__model._Model__carica_generi()  # type: ignore
-        self.assertEqual(self.__model.get_generi(), [g, g2])
+        self.assertEqual(self.__model.get_generi(), [genere, genere2])
         print("Passato CARICA")
 
         # ELIMINA
@@ -109,7 +109,7 @@ class TestTell(unittest.TestCase):
         )
         print("Passato ELIMINA IdInesistente")
 
-        o = Opera(
+        opera = Opera(
             STR_NON_VUOTA,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
@@ -117,17 +117,17 @@ class TestTell(unittest.TestCase):
             DATA,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
-            g.get_id(),
+            genere.get_id(),
         )
-        self.__model.aggiungi_opera(o)
+        self.__model.aggiungi_opera(opera)
         self.assertRaises(
-            OggettoInUsoException, self.__model.elimina_genere, g.get_id()
+            OggettoInUsoException, self.__model.elimina_genere, genere.get_id()
         )
         print("Passato ELIMINA OggettoInUso")
-        self.__model.elimina_opera(o.get_id())
+        self.__model.elimina_opera(opera.get_id())
 
-        self.__model.elimina_genere(g.get_id())
-        self.assertEqual(self.__model.get_generi(), [g2])
+        self.__model.elimina_genere(genere.get_id())
+        self.assertEqual(self.__model.get_generi(), [genere2])
         print("Passato ELIMINA")
 
     # ### OPERE ###
@@ -255,7 +255,7 @@ class TestTell(unittest.TestCase):
         print("\n### MODEL OPERE ###")
 
         # AGGIUNGI
-        o = Opera(
+        opera = Opera(
             STR_NON_VUOTA,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
@@ -265,12 +265,12 @@ class TestTell(unittest.TestCase):
             STR_NON_VUOTA,
             ID_NON_ESISTENTE,
         )
-        self.assertRaises(IdInesistenteException, self.__model.aggiungi_opera, o)
+        self.assertRaises(IdInesistenteException, self.__model.aggiungi_opera, opera)
         print("Passato AGGIUNGI IdInesistente")
 
-        g = Genere(STR_NON_VUOTA, STR_NON_VUOTA)
-        self.__model.aggiungi_genere(g)
-        o = Opera(
+        genere = Genere(STR_NON_VUOTA, STR_NON_VUOTA)
+        self.__model.aggiungi_genere(genere)
+        opera = Opera(
             STR_NON_VUOTA,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
@@ -278,40 +278,40 @@ class TestTell(unittest.TestCase):
             DATA,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
-            g.get_id(),
+            genere.get_id(),
         )
-        self.__model.aggiungi_opera(o)
-        self.assertRaises(IdOccupatoException, self.__model.aggiungi_opera, o)
+        self.__model.aggiungi_opera(opera)
+        self.assertRaises(IdOccupatoException, self.__model.aggiungi_opera, opera)
         print("Passato AGGIUNGI IdOccupato")
 
-        o2 = Opera(
-            o.get_nome(),
-            o.get_compositore(),
+        opera2 = Opera(
+            opera.get_nome(),
+            opera.get_compositore(),
             STR_NON_VUOTA,
             1,
             DATA,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
-            g.get_id(),
+            genere.get_id(),
         )
-        self.assertRaises(OccupatoException, self.__model.aggiungi_opera, o2)
+        self.assertRaises(OccupatoException, self.__model.aggiungi_opera, opera2)
         print("Passato AGGIUNGI Occupato")
 
         # GET
-        o_ = self.__model.get_opera(o.get_id())
-        assert o_ is not None
-        self.assertEqual(o_, o)
+        opera_ = self.__model.get_opera(opera.get_id())
+        assert opera_ is not None
+        self.assertEqual(opera_, opera)
         print("Passato GET")
 
-        o_.set_nome(o_.get_nome() + STR_NON_VUOTA)
-        o = self.__model.get_opera(o.get_id())
-        assert o is not None
-        self.assertEqual(o.get_compositore(), o_.get_compositore())
-        self.assertNotEqual(o.get_nome(), o_.get_nome())
+        opera_.set_nome(opera_.get_nome() + STR_NON_VUOTA)
+        opera = self.__model.get_opera(opera.get_id())
+        assert opera is not None
+        self.assertEqual(opera.get_compositore(), opera_.get_compositore())
+        self.assertNotEqual(opera.get_nome(), opera_.get_nome())
         print("Passato GET side effect")
 
         # GET LISTA
-        o2 = Opera(
+        opera2 = Opera(
             STR_NON_VUOTA * 2,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
@@ -319,21 +319,21 @@ class TestTell(unittest.TestCase):
             DATA,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
-            g.get_id(),
+            genere.get_id(),
         )
-        self.__model.aggiungi_opera(o2)
-        self.assertEqual(self.__model.get_opere(), [o, o2])
+        self.__model.aggiungi_opera(opera2)
+        self.assertEqual(self.__model.get_opere(), [opera, opera2])
         print("Passato GET LISTA")
 
-        o2_ = self.__model.get_opere()[1]
-        o2_.set_nome(o2_.get_nome() + STR_NON_VUOTA)
-        o2 = self.__model.get_opere()[1]
-        self.assertEqual(o2.get_compositore(), o2_.get_compositore())
-        self.assertNotEqual(o2.get_nome(), o2_.get_nome())
+        opera2_ = self.__model.get_opere()[1]
+        opera2_.set_nome(opera2_.get_nome() + STR_NON_VUOTA)
+        opera2 = self.__model.get_opere()[1]
+        self.assertEqual(opera2.get_compositore(), opera2_.get_compositore())
+        self.assertNotEqual(opera2.get_nome(), opera2_.get_nome())
         print("Passato GET LISTA side effect")
 
         # GET LISTA by nome
-        o3 = Opera(
+        opera3 = Opera(
             STR_NON_VUOTA * 3,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
@@ -341,10 +341,10 @@ class TestTell(unittest.TestCase):
             DATA,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
-            g.get_id(),
+            genere.get_id(),
         )
-        self.__model.aggiungi_opera(o3)
-        o4 = Opera(
+        self.__model.aggiungi_opera(opera3)
+        opera4 = Opera(
             "other",
             STR_NON_VUOTA,
             STR_NON_VUOTA,
@@ -352,23 +352,25 @@ class TestTell(unittest.TestCase):
             DATA,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
-            g.get_id(),
+            genere.get_id(),
         )
-        self.__model.aggiungi_opera(o4)
-        self.assertEqual(self.__model.get_opere_by_nome(STR_NON_VUOTA), [o, o2, o3])
+        self.__model.aggiungi_opera(opera4)
+        self.assertEqual(
+            self.__model.get_opere_by_nome(STR_NON_VUOTA), [opera, opera2, opera3]
+        )
         print("Passato GET LISTA by nome")
 
-        o2_ = self.__model.get_opere_by_nome(STR_NON_VUOTA)[1]
-        o2_.set_nome(o2_.get_nome() + STR_NON_VUOTA)
-        o2 = self.__model.get_opere_by_nome(STR_NON_VUOTA)[1]
-        self.assertEqual(o2.get_compositore(), o2_.get_compositore())
-        self.assertNotEqual(o2.get_nome(), o2_.get_nome())
+        opera2_ = self.__model.get_opere_by_nome(STR_NON_VUOTA)[1]
+        opera2_.set_nome(opera2_.get_nome() + STR_NON_VUOTA)
+        opera2 = self.__model.get_opere_by_nome(STR_NON_VUOTA)[1]
+        self.assertEqual(opera2.get_compositore(), opera2_.get_compositore())
+        self.assertNotEqual(opera2.get_nome(), opera2_.get_nome())
         print("Passato GET LISTA by nome side effect")
-        self.__model.elimina_opera(o3.get_id())
-        self.__model.elimina_opera(o4.get_id())
+        self.__model.elimina_opera(opera3.get_id())
+        self.__model.elimina_opera(opera4.get_id())
 
         # MODIFICA
-        o3 = Opera(
+        opera3 = Opera(
             STR_NON_VUOTA * 3,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
@@ -376,27 +378,27 @@ class TestTell(unittest.TestCase):
             DATA,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
-            g.get_id(),
+            genere.get_id(),
         )
-        self.assertRaises(IdInesistenteException, self.__model.modifica_opera, o3)
+        self.assertRaises(IdInesistenteException, self.__model.modifica_opera, opera3)
         print("Passato MODIFICA IdInesistente")
 
-        o = self.__model.get_opera(o.get_id())
-        assert o is not None
-        o.set_nome(o2.get_nome())
-        self.assertRaises(OccupatoException, self.__model.modifica_opera, o)
+        opera = self.__model.get_opera(opera.get_id())
+        assert opera is not None
+        opera.set_nome(opera2.get_nome())
+        self.assertRaises(OccupatoException, self.__model.modifica_opera, opera)
         print("Passato MODIFICA Occupato")
 
-        o.set_nome(o.get_nome() + STR_NON_VUOTA * 3)
-        self.__model.modifica_opera(o)
-        o_ = self.__model.get_opera(o.get_id())
-        assert o_ is not None
-        self.assertEqual(o_, o)
+        opera.set_nome(opera.get_nome() + STR_NON_VUOTA * 3)
+        self.__model.modifica_opera(opera)
+        opera_ = self.__model.get_opera(opera.get_id())
+        assert opera_ is not None
+        self.assertEqual(opera_, opera)
         print("Passato MODIFICA")
 
         # CARICA
         self.__model._Model__carica_opere()  # type: ignore
-        self.assertEqual(self.__model.get_opere(), [o, o2])
+        self.assertEqual(self.__model.get_opere(), [opera, opera2])
         print("Passato CARICA")
 
         # ELIMINA
@@ -405,14 +407,16 @@ class TestTell(unittest.TestCase):
         )
         print("Passato ELIMINA IdInesistente")
 
-        r = Regia(STR_NON_VUOTA, 0, o.get_id(), STR_NON_VUOTA, dict(), dict())
-        self.__model.aggiungi_spettacolo(r)
-        self.assertRaises(OggettoInUsoException, self.__model.elimina_opera, o.get_id())
+        regia = Regia(STR_NON_VUOTA, 0, opera.get_id(), STR_NON_VUOTA, dict(), dict())
+        self.__model.aggiungi_spettacolo(regia)
+        self.assertRaises(
+            OggettoInUsoException, self.__model.elimina_opera, opera.get_id()
+        )
         print("Passato ELIMINA OggettoInUso")
-        self.__model.elimina_spettacolo(r.get_id())
+        self.__model.elimina_spettacolo(regia.get_id())
 
-        self.__model.elimina_opera(o.get_id())
-        self.assertEqual(self.__model.get_opere(), [o2])
+        self.__model.elimina_opera(opera.get_id())
+        self.assertEqual(self.__model.get_opere(), [opera2])
         print("Passato ELIMINA")
 
     # ### SPETTACOLI E REGIE ###
@@ -508,7 +512,7 @@ class TestTell(unittest.TestCase):
         print("\n### MODEL SPETTEACOLI E REGIE ###")
 
         # AGGIUNGI
-        r = Regia(
+        regia = Regia(
             STR_NON_VUOTA,
             0,
             ID_NON_ESISTENTE,
@@ -516,12 +520,14 @@ class TestTell(unittest.TestCase):
             dict(),
             dict(),
         )
-        self.assertRaises(IdInesistenteException, self.__model.aggiungi_spettacolo, r)
+        self.assertRaises(
+            IdInesistenteException, self.__model.aggiungi_spettacolo, regia
+        )
         print("Passato AGGIUNGI IdInesistente")
 
-        g = Genere(STR_NON_VUOTA, STR_NON_VUOTA)
-        self.__model.aggiungi_genere(g)
-        o = Opera(
+        genere = Genere(STR_NON_VUOTA, STR_NON_VUOTA)
+        self.__model.aggiungi_genere(genere)
+        opera = Opera(
             STR_NON_VUOTA,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
@@ -529,73 +535,75 @@ class TestTell(unittest.TestCase):
             DATA,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
-            g.get_id(),
+            genere.get_id(),
         )
-        self.__model.aggiungi_opera(o)
-        r = Regia(
+        self.__model.aggiungi_opera(opera)
+        regia = Regia(
             STR_NON_VUOTA,
             0,
-            o.get_id(),
+            opera.get_id(),
             STR_NON_VUOTA,
             dict(),
             dict(),
         )
-        self.__model.aggiungi_spettacolo(r)
-        self.assertRaises(IdOccupatoException, self.__model.aggiungi_spettacolo, r)
+        self.__model.aggiungi_spettacolo(regia)
+        self.assertRaises(IdOccupatoException, self.__model.aggiungi_spettacolo, regia)
         print("Passato AGGIUNGI IdOccupato")
 
         # GET
-        r_: Regia | None = self.__model.get_spettacolo(r.get_id())  # type: ignore
-        assert r_ is not None
-        self.assertEqual(r_, r)
+        regia_: Regia | None = self.__model.get_spettacolo(regia.get_id())  # type: ignore
+        assert regia_ is not None
+        self.assertEqual(regia_, regia)
         print("Passato GET")
 
-        r_.set_titolo(r_.get_titolo() + STR_NON_VUOTA)
-        r: Regia | None = self.__model.get_spettacolo(r.get_id())  # type: ignore
-        assert r is not None
-        self.assertEqual(r.get_note(), r_.get_note())
-        self.assertNotEqual(r.get_titolo(), r_.get_titolo())
+        regia_.set_titolo(regia_.get_titolo() + STR_NON_VUOTA)
+        regia: Regia | None = self.__model.get_spettacolo(regia.get_id())  # type: ignore
+        assert regia is not None
+        self.assertEqual(regia.get_note(), regia_.get_note())
+        self.assertNotEqual(regia.get_titolo(), regia_.get_titolo())
         print("Passato GET side effect")
 
         # GET LISTA
-        r2 = Regia(
+        regia2 = Regia(
             STR_NON_VUOTA,
             0,
-            o.get_id(),
+            opera.get_id(),
             STR_NON_VUOTA,
             dict(),
             dict(),
         )
-        self.__model.aggiungi_spettacolo(r2)
-        self.assertEqual(self.__model.get_spettacoli(), [r, r2])
+        self.__model.aggiungi_spettacolo(regia2)
+        self.assertEqual(self.__model.get_spettacoli(), [regia, regia2])
         print("Passato GET LISTA")
 
-        r2_ = self.__model.get_spettacoli()[1]
-        r2_.set_titolo(r2_.get_titolo() + STR_NON_VUOTA)
-        r2 = self.__model.get_spettacoli()[1]
-        self.assertEqual(r2.get_note(), r2_.get_note())
-        self.assertNotEqual(r2.get_titolo(), r2_.get_titolo())
+        regia2_ = self.__model.get_spettacoli()[1]
+        regia2_.set_titolo(regia2_.get_titolo() + STR_NON_VUOTA)
+        regia2 = self.__model.get_spettacoli()[1]
+        self.assertEqual(regia2.get_note(), regia2_.get_note())
+        self.assertNotEqual(regia2.get_titolo(), regia2_.get_titolo())
         print("Passato GET LISTA side effect")
 
         # GET LISTA by titolo
-        s = Spettacolo("other", "", dict(), dict())
-        self.__model.aggiungi_spettacolo(s)
-        s2 = Spettacolo("other", "", dict(), dict())
-        self.__model.aggiungi_spettacolo(s2)
-        self.assertEqual(self.__model.get_spettacoli_by_titolo("other"), [s, s2])
+        spettacolo = Spettacolo("other", "", dict(), dict())
+        self.__model.aggiungi_spettacolo(spettacolo)
+        spettacolo2 = Spettacolo("other", "", dict(), dict())
+        self.__model.aggiungi_spettacolo(spettacolo2)
+        self.assertEqual(
+            self.__model.get_spettacoli_by_titolo("other"), [spettacolo, spettacolo2]
+        )
         print("Passato GET LISTA by titolo")
 
-        s2_ = self.__model.get_spettacoli_by_titolo("other")[1]
-        s2_.set_titolo(s2_.get_titolo() + STR_NON_VUOTA)
-        s2 = self.__model.get_spettacoli_by_titolo("other")[1]
-        self.assertEqual(s2.get_note(), s2_.get_note())
-        self.assertNotEqual(s2.get_titolo(), s2_.get_titolo())
+        spettacolo2_ = self.__model.get_spettacoli_by_titolo("other")[1]
+        spettacolo2_.set_titolo(spettacolo2_.get_titolo() + STR_NON_VUOTA)
+        spettacolo2 = self.__model.get_spettacoli_by_titolo("other")[1]
+        self.assertEqual(spettacolo2.get_note(), spettacolo2_.get_note())
+        self.assertNotEqual(spettacolo2.get_titolo(), spettacolo2_.get_titolo())
         print("Passato GET LISTA by titolo side effect")
-        self.__model.elimina_spettacolo(s.get_id())
-        self.__model.elimina_spettacolo(s2.get_id())
+        self.__model.elimina_spettacolo(spettacolo.get_id())
+        self.__model.elimina_spettacolo(spettacolo2.get_id())
 
         # GET LISTA by opera
-        o2 = Opera(
+        opera2 = Opera(
             STR_NON_VUOTA * 2,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
@@ -603,32 +611,34 @@ class TestTell(unittest.TestCase):
             DATA,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
-            g.get_id(),
+            genere.get_id(),
         )
-        self.__model.aggiungi_opera(o2)
-        r3 = Regia(
+        self.__model.aggiungi_opera(opera2)
+        regia3 = Regia(
             STR_NON_VUOTA,
             0,
-            o2.get_id(),
+            opera2.get_id(),
             STR_NON_VUOTA,
             dict(),
             dict(),
         )
-        self.__model.aggiungi_spettacolo(r3)
-        self.assertEqual(self.__model.get_regie_by_opera(o.get_id()), [r, r2])
+        self.__model.aggiungi_spettacolo(regia3)
+        self.assertEqual(
+            self.__model.get_regie_by_opera(opera.get_id()), [regia, regia2]
+        )
         print("Passato GET LISTA by opera")
 
-        r2_ = self.__model.get_regie_by_opera(o.get_id())[1]
-        r2_.set_titolo(r2_.get_titolo() + STR_NON_VUOTA)
-        r2 = self.__model.get_regie_by_opera(o.get_id())[1]
-        self.assertEqual(r2.get_note(), r2_.get_note())
-        self.assertNotEqual(r2.get_titolo(), r2_.get_titolo())
+        regia2_ = self.__model.get_regie_by_opera(opera.get_id())[1]
+        regia2_.set_titolo(regia2_.get_titolo() + STR_NON_VUOTA)
+        regia2 = self.__model.get_regie_by_opera(opera.get_id())[1]
+        self.assertEqual(regia2.get_note(), regia2_.get_note())
+        self.assertNotEqual(regia2.get_titolo(), regia2_.get_titolo())
         print("Passato GET LISTA by opera side effect")
-        self.__model.elimina_spettacolo(r3.get_id())
-        self.__model.elimina_opera(o2.get_id())
+        self.__model.elimina_spettacolo(regia3.get_id())
+        self.__model.elimina_opera(opera2.get_id())
 
         # MODIFICA
-        r3 = Regia(
+        regia3 = Regia(
             STR_NON_VUOTA,
             0,
             ID_NON_ESISTENTE,
@@ -636,21 +646,23 @@ class TestTell(unittest.TestCase):
             dict(),
             dict(),
         )
-        self.assertRaises(IdInesistenteException, self.__model.modifica_spettacolo, r3)
+        self.assertRaises(
+            IdInesistenteException, self.__model.modifica_spettacolo, regia3
+        )
         print("Passato MODIFICA IdInesistente")
 
-        r: Regia | None = self.__model.get_spettacolo(r.get_id())  # type: ignore
-        assert r is not None
-        r.set_titolo(r.get_titolo() + STR_NON_VUOTA * 3)
-        self.__model.modifica_spettacolo(r)
-        r_: Regia | None = self.__model.get_spettacolo(r.get_id())  # type: ignore
-        assert r_ is not None
-        self.assertEqual(r_, r)
+        regia: Regia | None = self.__model.get_spettacolo(regia.get_id())  # type: ignore
+        assert regia is not None
+        regia.set_titolo(regia.get_titolo() + STR_NON_VUOTA * 3)
+        self.__model.modifica_spettacolo(regia)
+        regia_: Regia | None = self.__model.get_spettacolo(regia.get_id())  # type: ignore
+        assert regia_ is not None
+        self.assertEqual(regia_, regia)
         print("Passato MODIFICA")
 
         # CARICA
         self.__model._Model__carica_spettacoli()  # type: ignore
-        self.assertEqual(self.__model.get_spettacoli(), [r, r2])
+        self.assertEqual(self.__model.get_spettacoli(), [regia, regia2])
         print("Passato CARICA")
 
         # ELIMINA
@@ -659,16 +671,16 @@ class TestTell(unittest.TestCase):
         )
         print("Passato ELIMINA IdInesistente")
 
-        e = Evento(DATA_ORA_PASSATO, r.get_id())
-        self.__model.aggiungi_evento(e)
+        evento = Evento(DATA_ORA_PASSATO, regia.get_id())
+        self.__model.aggiungi_evento(evento)
         self.assertRaises(
-            OggettoInUsoException, self.__model.elimina_spettacolo, r.get_id()
+            OggettoInUsoException, self.__model.elimina_spettacolo, regia.get_id()
         )
         print("Passato ELIMINA OggettoInUso")
-        self.__model.elimina_evento(e.get_id())
+        self.__model.elimina_evento(evento.get_id())
 
-        self.__model.elimina_spettacolo(r.get_id())
-        self.assertEqual(self.__model.get_spettacoli(), [r2])
+        self.__model.elimina_spettacolo(regia.get_id())
+        self.assertEqual(self.__model.get_spettacoli(), [regia2])
         print("Passato ELIMINA")
 
     def tearDown(self) -> None:

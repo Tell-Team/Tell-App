@@ -20,7 +20,7 @@ from model.exceptions import (
 )
 from model.organizzazione.evento import Evento
 from model.pianificazione.spettacolo import Spettacolo
-from model.model.model import DettagliPrenotazione, DettagliSezione, Model
+from model.model.model import Model
 
 
 DATA_ORA_FUTURO = datetime(2970, 1, 1, 0, 0, 0)
@@ -51,78 +51,81 @@ class TestTell(unittest.TestCase):
         print("Passato CONGRUENZA id_spettacolo")
 
         # ATTIVO
-        e = Evento(DATA_ORA_PASSATO, 0)
-        self.assertFalse(e.attivo())
-        e.set_data_ora(DATA_ORA_FUTURO)
-        self.assertTrue(e.attivo())
+        evento = Evento(DATA_ORA_PASSATO, 0)
+        self.assertFalse(evento.attivo())
+        evento.set_data_ora(DATA_ORA_FUTURO)
+        self.assertTrue(evento.attivo())
         print("Passato ATTIVO")
 
     def test_model_evento(self):
         print("\n### MODEL EVENTO ###")
 
         # AGGIUNGI
-        e = Evento(DATA_ORA_PASSATO, ID_NON_ESISTENTE)
-        self.assertRaises(IdInesistenteException, self.__model.aggiungi_evento, e)
+        evento = Evento(DATA_ORA_PASSATO, ID_NON_ESISTENTE)
+        self.assertRaises(IdInesistenteException, self.__model.aggiungi_evento, evento)
         print("Passato AGGIUNGI IdInesistente")
 
-        s = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
-        self.__model.aggiungi_spettacolo(s)
-        e = Evento(DATA_ORA_PASSATO, s.get_id())
-        self.__model.aggiungi_evento(e)
-        self.assertRaises(IdOccupatoException, self.__model.aggiungi_evento, e)
+        spettacolo = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
+        self.__model.aggiungi_spettacolo(spettacolo)
+        evento = Evento(DATA_ORA_PASSATO, spettacolo.get_id())
+        self.__model.aggiungi_evento(evento)
+        self.assertRaises(IdOccupatoException, self.__model.aggiungi_evento, evento)
         print("Passato AGGIUNGI IdOccupato")
 
-        e2 = Evento(e.get_data_ora(), s.get_id())
-        self.assertRaises(OccupatoException, self.__model.aggiungi_evento, e2)
+        evento2 = Evento(evento.get_data_ora(), spettacolo.get_id())
+        self.assertRaises(OccupatoException, self.__model.aggiungi_evento, evento2)
         print("Passato AGGIUNGI Occupato")
 
         # GET
-        e_ = self.__model.get_evento(e.get_id())
-        assert e_ is not None
-        self.assertEqual(e_, e)
+        evento_ = self.__model.get_evento(evento.get_id())
+        assert evento_ is not None
+        self.assertEqual(evento_, evento)
         print("Passato GET")
 
-        e_.set_data_ora(DATA_ORA_FUTURO)
-        e = self.__model.get_evento(e.get_id())
-        assert e is not None
-        self.assertEqual(e.get_id_spettacolo(), e_.get_id_spettacolo())
-        self.assertNotEqual(e.get_data_ora(), e_.get_data_ora())
+        evento_.set_data_ora(DATA_ORA_FUTURO)
+        evento = self.__model.get_evento(evento.get_id())
+        assert evento is not None
+        self.assertEqual(evento.get_id_spettacolo(), evento_.get_id_spettacolo())
+        self.assertNotEqual(evento.get_data_ora(), evento_.get_data_ora())
         print("Passato GET side effect")
 
         # GET LISTA
-        e2 = Evento(datetime.now(), s.get_id())
-        self.__model.aggiungi_evento(e2)
-        self.assertEqual(self.__model.get_eventi(), [e, e2])
+        evento2 = Evento(datetime.now(), spettacolo.get_id())
+        self.__model.aggiungi_evento(evento2)
+        self.assertEqual(self.__model.get_eventi(), [evento, evento2])
         print("Passato GET LISTA")
 
-        e2_ = self.__model.get_eventi()[1]
-        e2_.set_data_ora(DATA_ORA_FUTURO)
-        e2 = self.__model.get_eventi()[1]
-        self.assertEqual(e2.get_id_spettacolo(), e2_.get_id_spettacolo())
-        self.assertNotEqual(e2.get_data_ora(), e2_.get_data_ora())
+        evento2_ = self.__model.get_eventi()[1]
+        evento2_.set_data_ora(DATA_ORA_FUTURO)
+        evento2 = self.__model.get_eventi()[1]
+        self.assertEqual(evento2.get_id_spettacolo(), evento2_.get_id_spettacolo())
+        self.assertNotEqual(evento2.get_data_ora(), evento2_.get_data_ora())
         print("Passato GET LISTA side effect")
 
         # GET LISTA by spettacolo
-        s2 = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
-        self.__model.aggiungi_spettacolo(s2)
-        e3 = Evento(DATA_ORA_PASSATO, s2.get_id())
-        self.__model.aggiungi_evento(e3)
-        self.assertEqual(self.__model.get_eventi_by_spettacolo(s.get_id()), [e, e2])
+        spettacolo2 = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
+        self.__model.aggiungi_spettacolo(spettacolo2)
+        evento3 = Evento(DATA_ORA_PASSATO, spettacolo2.get_id())
+        self.__model.aggiungi_evento(evento3)
+        self.assertEqual(
+            self.__model.get_eventi_by_spettacolo(spettacolo.get_id()),
+            [evento, evento2],
+        )
         print("Passato GET LISTA by spettacolo")
 
-        e2_ = self.__model.get_eventi_by_spettacolo(s.get_id())[1]
-        e2_.set_data_ora(DATA_ORA_FUTURO)
-        e2 = self.__model.get_eventi_by_spettacolo(s.get_id())[1]
-        self.assertEqual(e2.get_id_spettacolo(), e2_.get_id_spettacolo())
-        self.assertNotEqual(e2.get_data_ora(), e2_.get_data_ora())
+        evento2_ = self.__model.get_eventi_by_spettacolo(spettacolo.get_id())[1]
+        evento2_.set_data_ora(DATA_ORA_FUTURO)
+        evento2 = self.__model.get_eventi_by_spettacolo(spettacolo.get_id())[1]
+        self.assertEqual(evento2.get_id_spettacolo(), evento2_.get_id_spettacolo())
+        self.assertNotEqual(evento2.get_data_ora(), evento2_.get_data_ora())
         print("Passato GET LISTA by spettacolo side effect")
-        self.__model.elimina_evento(e3.get_id())
-        self.__model.elimina_spettacolo(s2.get_id())
+        self.__model.elimina_evento(evento3.get_id())
+        self.__model.elimina_spettacolo(spettacolo2.get_id())
 
         # GET LISTA SPETTACOLI in programma
-        g = Genere(STR_NON_VUOTA, STR_NON_VUOTA)
-        self.__model.aggiungi_genere(g)
-        o = Opera(
+        genere = Genere(STR_NON_VUOTA, STR_NON_VUOTA)
+        self.__model.aggiungi_genere(genere)
+        opera = Opera(
             STR_NON_VUOTA,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
@@ -130,78 +133,78 @@ class TestTell(unittest.TestCase):
             DATA,
             STR_NON_VUOTA,
             STR_NON_VUOTA,
-            g.get_id(),
+            genere.get_id(),
         )
-        self.__model.aggiungi_opera(o)
-        r = Regia(
+        self.__model.aggiungi_opera(opera)
+        regia = Regia(
             STR_NON_VUOTA,
             0,
-            o.get_id(),
+            opera.get_id(),
             STR_NON_VUOTA,
             dict(),
             dict(),
         )
-        self.__model.aggiungi_spettacolo(r)
-        r2 = Regia(
+        self.__model.aggiungi_spettacolo(regia)
+        regia2 = Regia(
             STR_NON_VUOTA,
             0,
-            o.get_id(),
+            opera.get_id(),
             STR_NON_VUOTA,
             dict(),
             dict(),
         )
-        self.__model.aggiungi_spettacolo(r2)
-        r3 = Regia(
+        self.__model.aggiungi_spettacolo(regia2)
+        regia3 = Regia(
             STR_NON_VUOTA,
             0,
-            o.get_id(),
+            opera.get_id(),
             STR_NON_VUOTA,
             dict(),
             dict(),
         )
-        self.__model.aggiungi_spettacolo(r3)
-        e4 = Evento(DATA_ORA_PASSATO, r2.get_id())
-        self.__model.aggiungi_evento(e4)
-        e5 = Evento(DATA_ORA_FUTURO, r3.get_id())
-        self.__model.aggiungi_evento(e5)
-        self.assertEqual(self.__model.get_spettacoli_in_programma(), [r3])
+        self.__model.aggiungi_spettacolo(regia3)
+        evento4 = Evento(DATA_ORA_PASSATO, regia2.get_id())
+        self.__model.aggiungi_evento(evento4)
+        evento5 = Evento(DATA_ORA_FUTURO, regia3.get_id())
+        self.__model.aggiungi_evento(evento5)
+        self.assertEqual(self.__model.get_spettacoli_in_programma(), [regia3])
         print("Passato GET LISTA SPETTACOLI in programma")
 
-        r3_ = self.__model.get_spettacoli_in_programma()[0]
-        r3_.set_titolo(r3_.get_titolo() + STR_NON_VUOTA)
-        r3 = self.__model.get_spettacoli_in_programma()[0]
-        self.assertEqual(r3.get_note(), r3_.get_note())
-        self.assertNotEqual(r3.get_titolo(), r3_.get_titolo())
+        regia3_ = self.__model.get_spettacoli_in_programma()[0]
+        regia3_.set_titolo(regia3_.get_titolo() + STR_NON_VUOTA)
+        regia3 = self.__model.get_spettacoli_in_programma()[0]
+        self.assertEqual(regia3.get_note(), regia3_.get_note())
+        self.assertNotEqual(regia3.get_titolo(), regia3_.get_titolo())
         print("Passato GET LISTA SPETTACOLI in programma side effect")
-        self.__model.elimina_evento(e5.get_id())
-        self.__model.elimina_evento(e4.get_id())
-        self.__model.elimina_spettacolo(r3.get_id())
-        self.__model.elimina_spettacolo(r2.get_id())
-        self.__model.elimina_spettacolo(r.get_id())
-        self.__model.elimina_opera(o.get_id())
-        self.__model.elimina_genere(g.get_id())
+        self.__model.elimina_evento(evento5.get_id())
+        self.__model.elimina_evento(evento4.get_id())
+        self.__model.elimina_spettacolo(regia3.get_id())
+        self.__model.elimina_spettacolo(regia2.get_id())
+        self.__model.elimina_spettacolo(regia.get_id())
+        self.__model.elimina_opera(opera.get_id())
+        self.__model.elimina_genere(genere.get_id())
 
         # MODIFICA
-        e3 = Evento(DATA_ORA_PASSATO, ID_NON_ESISTENTE)
-        self.assertRaises(IdInesistenteException, self.__model.modifica_evento, e3)
+        evento3 = Evento(DATA_ORA_PASSATO, ID_NON_ESISTENTE)
+        self.assertRaises(IdInesistenteException, self.__model.modifica_evento, evento3)
         print("Passato MODIFICA IdInesistente")
 
-        e = self.__model.get_evento(e.get_id())
-        assert e is not None
-        e.set_data_ora(e2.get_data_ora())
-        self.assertRaises(OccupatoException, self.__model.modifica_evento, e)
+        evento = self.__model.get_evento(evento.get_id())
+        assert evento is not None
+        evento.set_data_ora(evento2.get_data_ora())
+        self.assertRaises(OccupatoException, self.__model.modifica_evento, evento)
         print("Passato MODIFICA Occupato")
 
-        e.set_data_ora(DATA_ORA_FUTURO)
-        self.__model.modifica_evento(e)
-        e_ = self.__model.get_evento(e.get_id())
-        assert e_ is not None
-        self.assertEqual(e_, e)
+        evento.set_data_ora(DATA_ORA_FUTURO)
+        self.__model.modifica_evento(evento)
+        evento_ = self.__model.get_evento(evento.get_id())
+        assert evento_ is not None
+        self.assertEqual(evento_, evento)
         print("Passato MODIFICA")
 
         # CARICA
         self.__model._Model__carica_eventi()  # type: ignore
-        self.assertEqual(self.__model.get_eventi(), [e, e2])
+        self.assertEqual(self.__model.get_eventi(), [evento, evento2])
         print("Passato CARICA")
 
         # ELIMINA
@@ -210,23 +213,27 @@ class TestTell(unittest.TestCase):
         )
         print("Passato ELIMINA IdInesistente")
 
-        se = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
-        self.__model.aggiungi_sezione(se)
-        self.__model.aggiungi_prezzo(Prezzo(FLOAT_NONZERO, s.get_id(), se.get_id()))
-        po = Posto(STR_NON_VUOTA, 1, se.get_id())
-        self.__model.aggiungi_posto(po)
-        pr = Prenotazione(STR_NON_VUOTA, DATA_ORA_PASSATO)
-        self.__model.aggiungi_prenotazione(pr)
-        o = Occupazione(e.get_id(), po.get_id(), pr.get_id())
-        self.__model.aggiungi_occupazione(o)
+        sezione = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(sezione)
+        self.__model.aggiungi_prezzo(
+            Prezzo(FLOAT_NONZERO, spettacolo.get_id(), sezione.get_id())
+        )
+        posto = Posto(STR_NON_VUOTA, 1, sezione.get_id())
+        self.__model.aggiungi_posto(posto)
+        prenotazione = Prenotazione(STR_NON_VUOTA, DATA_ORA_PASSATO)
+        self.__model.aggiungi_prenotazione(prenotazione)
+        occupazione = Occupazione(
+            evento.get_id(), posto.get_id(), prenotazione.get_id()
+        )
+        self.__model.aggiungi_occupazione(occupazione)
         self.assertRaises(
-            OggettoInUsoException, self.__model.elimina_evento, e.get_id()
+            OggettoInUsoException, self.__model.elimina_evento, evento.get_id()
         )
         print("Passato ELIMINA OggettoInUso")
 
-        self.__model.elimina_occupazione(o.get_id())
-        self.__model.elimina_evento(e.get_id())
-        self.assertEqual(self.__model.get_eventi(), [e2])
+        self.__model.elimina_occupazione(occupazione.get_id())
+        self.__model.elimina_evento(evento.get_id())
+        self.assertEqual(self.__model.get_eventi(), [evento2])
         print("Passato ELIMINA")
 
     # ### SEZIONI ###
@@ -245,106 +252,124 @@ class TestTell(unittest.TestCase):
         print("\n### MODEL SEZIONI ###")
 
         # AGGIUNGI
-        s = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
-        self.__model.aggiungi_sezione(s)
-        self.assertRaises(IdOccupatoException, self.__model.aggiungi_sezione, s)
+        sezione = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(sezione)
+        self.assertRaises(IdOccupatoException, self.__model.aggiungi_sezione, sezione)
         print("Passato AGGIUNGI IdOccupato")
 
-        s2 = Sezione(s.get_nome(), STR_NON_VUOTA)
-        self.assertRaises(OccupatoException, self.__model.aggiungi_sezione, s2)
+        sezione2 = Sezione(sezione.get_nome(), STR_NON_VUOTA)
+        self.assertRaises(OccupatoException, self.__model.aggiungi_sezione, sezione2)
         print("Passato AGGIUNGI Occupato")
 
         # GET
-        s_ = self.__model.get_sezione(s.get_id())
-        assert s_ is not None
-        self.assertEqual(s_, s)
+        sezione_ = self.__model.get_sezione(sezione.get_id())
+        assert sezione_ is not None
+        self.assertEqual(sezione_, sezione)
         print("Passato GET")
 
-        s_.set_nome(s_.get_nome() + STR_NON_VUOTA)
-        s = self.__model.get_sezione(s.get_id())
-        assert s is not None
-        self.assertEqual(s.get_descrizione(), s_.get_descrizione())
-        self.assertNotEqual(s.get_nome(), s_.get_nome())
+        sezione_.set_nome(sezione_.get_nome() + STR_NON_VUOTA)
+        sezione = self.__model.get_sezione(sezione.get_id())
+        assert sezione is not None
+        self.assertEqual(sezione.get_descrizione(), sezione_.get_descrizione())
+        self.assertNotEqual(sezione.get_nome(), sezione_.get_nome())
         print("Passato GET side effect")
 
         # GET LISTA
-        s2 = Sezione(STR_NON_VUOTA * 2, STR_NON_VUOTA)
-        self.__model.aggiungi_sezione(s2)
-        self.assertEqual(self.__model.get_sezioni(), [s, s2])
+        sezione2 = Sezione(STR_NON_VUOTA * 2, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(sezione2)
+        self.assertEqual(self.__model.get_sezioni(), [sezione, sezione2])
         print("Passato GET LISTA")
 
-        s2_ = self.__model.get_sezioni()[1]
-        s2_.set_nome(s2_.get_nome() + STR_NON_VUOTA)
-        s2 = self.__model.get_sezioni()[1]
-        self.assertEqual(s2.get_descrizione(), s2_.get_descrizione())
-        self.assertNotEqual(s2.get_nome(), s2_.get_nome())
+        sezione2_ = self.__model.get_sezioni()[1]
+        sezione2_.set_nome(sezione2_.get_nome() + STR_NON_VUOTA)
+        sezione2 = self.__model.get_sezioni()[1]
+        self.assertEqual(sezione2.get_descrizione(), sezione2_.get_descrizione())
+        self.assertNotEqual(sezione2.get_nome(), sezione2_.get_nome())
         print("Passato GET LISTA side effect")
 
         # GET SEZIONI E FILE E POSTI DISPONIBILI
-        sp = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
-        self.__model.aggiungi_spettacolo(sp)
-        sp2 = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
-        self.__model.aggiungi_spettacolo(sp2)
+        spettacolo = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
+        self.__model.aggiungi_spettacolo(spettacolo)
+        spettacolo2 = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
+        self.__model.aggiungi_spettacolo(spettacolo2)
 
-        e = Evento(DATA_ORA_PASSATO, sp.get_id())
-        self.__model.aggiungi_evento(e)
-        e2 = Evento(DATA_ORA_PASSATO, sp2.get_id())
-        self.__model.aggiungi_evento(e2)
+        evento = Evento(DATA_ORA_PASSATO, spettacolo.get_id())
+        self.__model.aggiungi_evento(evento)
+        evento2 = Evento(DATA_ORA_PASSATO, spettacolo2.get_id())
+        self.__model.aggiungi_evento(evento2)
 
-        pr = Prenotazione(STR_NON_VUOTA, DATA_ORA_PASSATO)
-        self.__model.aggiungi_prenotazione(pr)
+        prenotazione = Prenotazione(STR_NON_VUOTA, DATA_ORA_PASSATO)
+        self.__model.aggiungi_prenotazione(prenotazione)
 
-        # s: sezione senza prezzi
-        p11 = Posto(STR_NON_VUOTA, 1, s.get_id())
-        self.__model.aggiungi_posto(p11)
+        # sezione: sezione senza prezzi
+        posto11 = Posto(STR_NON_VUOTA, 1, sezione.get_id())
+        self.__model.aggiungi_posto(posto11)
 
-        # s2: sezione con prezzo per un altro spettacolo
-        self.__model.aggiungi_prezzo(Prezzo(FLOAT_NONZERO, sp2.get_id(), s2.get_id()))
+        # sezione2: sezione con prezzo per un altro spettacolo
+        self.__model.aggiungi_prezzo(
+            Prezzo(FLOAT_NONZERO, spettacolo2.get_id(), sezione2.get_id())
+        )
 
-        p21 = Posto(STR_NON_VUOTA, 1, s2.get_id())
-        self.__model.aggiungi_posto(p21)
+        posto21 = Posto(STR_NON_VUOTA, 1, sezione2.get_id())
+        self.__model.aggiungi_posto(posto21)
 
-        # s3: sezione disponibile
-        s3 = Sezione(STR_NON_VUOTA * 3, STR_NON_VUOTA)
-        self.__model.aggiungi_sezione(s3)
-        self.__model.aggiungi_prezzo(Prezzo(FLOAT_NONZERO, sp.get_id(), s3.get_id()))
-        self.__model.aggiungi_prezzo(Prezzo(FLOAT_NONZERO, sp2.get_id(), s3.get_id()))
+        # sezione3: sezione disponibile
+        sezione3 = Sezione(STR_NON_VUOTA * 3, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(sezione3)
+        self.__model.aggiungi_prezzo(
+            Prezzo(FLOAT_NONZERO, spettacolo.get_id(), sezione3.get_id())
+        )
+        self.__model.aggiungi_prezzo(
+            Prezzo(FLOAT_NONZERO, spettacolo2.get_id(), sezione3.get_id())
+        )
 
-        #   p31: posto disponibile in fila STR_NON_VUOTA
-        p31 = Posto(STR_NON_VUOTA, 1, s3.get_id())
-        self.__model.aggiungi_posto(p31)
+        #   posto31: posto disponibile in fila STR_NON_VUOTA
+        posto31 = Posto(STR_NON_VUOTA, 1, sezione3.get_id())
+        self.__model.aggiungi_posto(posto31)
         #   p32: posto occupato per un altro evento in fila STR_NON_VUOTA*2
-        p32 = Posto(STR_NON_VUOTA * 2, 2, s3.get_id())
-        self.__model.aggiungi_posto(p32)
-        o32 = Occupazione(e2.get_id(), p32.get_id(), pr.get_id())
-        self.__model.aggiungi_occupazione(o32)
+        posto32 = Posto(STR_NON_VUOTA * 2, 2, sezione3.get_id())
+        self.__model.aggiungi_posto(posto32)
+        occupazione32 = Occupazione(
+            evento2.get_id(), posto32.get_id(), prenotazione.get_id()
+        )
+        self.__model.aggiungi_occupazione(occupazione32)
         #   p33: posto occupato per questo evento
-        p33 = Posto(STR_NON_VUOTA, 3, s3.get_id())
-        self.__model.aggiungi_posto(p33)
-        o33 = Occupazione(e.get_id(), p33.get_id(), pr.get_id())
-        self.__model.aggiungi_occupazione(o33)
+        posto33 = Posto(STR_NON_VUOTA, 3, sezione3.get_id())
+        self.__model.aggiungi_posto(posto33)
+        occupazione33 = Occupazione(
+            evento.get_id(), posto33.get_id(), prenotazione.get_id()
+        )
+        self.__model.aggiungi_occupazione(occupazione33)
 
-        # s4: sezione vuota
-        s4 = Sezione(STR_NON_VUOTA * 4, STR_NON_VUOTA)
-        self.__model.aggiungi_sezione(s4)
-        self.__model.aggiungi_prezzo(Prezzo(FLOAT_NONZERO, sp.get_id(), s4.get_id()))
+        # sezione4: sezione vuota
+        sezione4 = Sezione(STR_NON_VUOTA * 4, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(sezione4)
+        self.__model.aggiungi_prezzo(
+            Prezzo(FLOAT_NONZERO, spettacolo.get_id(), sezione4.get_id())
+        )
 
-        # s5: sezione occupata
-        s5 = Sezione(STR_NON_VUOTA * 5, STR_NON_VUOTA)
-        self.__model.aggiungi_sezione(s5)
-        self.__model.aggiungi_prezzo(Prezzo(FLOAT_NONZERO, sp.get_id(), s5.get_id()))
+        # sezione5: sezione occupata
+        sezione5 = Sezione(STR_NON_VUOTA * 5, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(sezione5)
+        self.__model.aggiungi_prezzo(
+            Prezzo(FLOAT_NONZERO, spettacolo.get_id(), sezione5.get_id())
+        )
 
-        #   p51: posto occupato per questo evento
-        p51 = Posto(STR_NON_VUOTA, 1, s5.get_id())
-        self.__model.aggiungi_posto(p51)
-        o51 = Occupazione(e.get_id(), p51.get_id(), pr.get_id())
-        self.__model.aggiungi_occupazione(o51)
+        #   posto51: posto occupato per questo evento
+        posto51 = Posto(STR_NON_VUOTA, 1, sezione5.get_id())
+        self.__model.aggiungi_posto(posto51)
+        occupazione51 = Occupazione(
+            evento.get_id(), posto51.get_id(), prenotazione.get_id()
+        )
+        self.__model.aggiungi_occupazione(occupazione51)
 
-        #   p52: posto occupato per questo evento
-        p52 = Posto(STR_NON_VUOTA, 2, s5.get_id())
-        self.__model.aggiungi_posto(p52)
-        o52 = Occupazione(e.get_id(), p52.get_id(), pr.get_id())
-        self.__model.aggiungi_occupazione(o52)
+        #   posto52: posto occupato per questo evento
+        posto52 = Posto(STR_NON_VUOTA, 2, sezione5.get_id())
+        self.__model.aggiungi_posto(posto52)
+        occupazione52 = Occupazione(
+            evento.get_id(), posto52.get_id(), prenotazione.get_id()
+        )
+        self.__model.aggiungi_occupazione(occupazione52)
 
         self.assertRaises(
             IdInesistenteException,
@@ -354,63 +379,69 @@ class TestTell(unittest.TestCase):
         print("Passato GET SEZIONI E FILE E POSTI DISPONIBILI IdInesistente")
 
         self.assertEqual(
-            self.__model.get_sezioni_e_file_e_posti_disponibili(e.get_id()),
-            [(s3, [(STR_NON_VUOTA, [p31]), (STR_NON_VUOTA * 2, [p32])])],
+            self.__model.get_sezioni_e_file_e_posti_disponibili(evento.get_id()),
+            [(sezione3, [(STR_NON_VUOTA, [posto31]), (STR_NON_VUOTA * 2, [posto32])])],
         )
         print("Passato GET SEZIONI E FILE E POSTI DISPONIBILI")
 
-        s3_ = self.__model.get_sezioni_e_file_e_posti_disponibili(e.get_id())[0][0]
-        s3_.set_nome(s3_.get_nome() + STR_NON_VUOTA)
-        s3 = self.__model.get_sezioni_e_file_e_posti_disponibili(e.get_id())[0][0]
-        self.assertEqual(s3.get_descrizione(), s3_.get_descrizione())
-        self.assertNotEqual(s3.get_nome(), s3_.get_nome())
+        sezione3_ = self.__model.get_sezioni_e_file_e_posti_disponibili(
+            evento.get_id()
+        )[0][0]
+        sezione3_.set_nome(sezione3_.get_nome() + STR_NON_VUOTA)
+        sezione3 = self.__model.get_sezioni_e_file_e_posti_disponibili(evento.get_id())[
+            0
+        ][0]
+        self.assertEqual(sezione3.get_descrizione(), sezione3_.get_descrizione())
+        self.assertNotEqual(sezione3.get_nome(), sezione3_.get_nome())
         print("Passato GET SEZIONI E FILE E POSTI DISPONIBILI side effect sezione")
 
-        p31_ = self.__model.get_sezioni_e_file_e_posti_disponibili(e.get_id())[0][1][0][
+        posto31_ = self.__model.get_sezioni_e_file_e_posti_disponibili(evento.get_id())[
+            0
+        ][1][0][1][0]
+        posto31_.set_numero(posto31_.get_numero() + 1)
+        p31 = self.__model.get_sezioni_e_file_e_posti_disponibili(evento.get_id())[0][
             1
-        ][0]
-        p31_.set_numero(p31_.get_numero() + 1)
-        p31 = self.__model.get_sezioni_e_file_e_posti_disponibili(e.get_id())[0][1][0][
-            1
-        ][0]
-        self.assertEqual(p31.get_id_sezione(), p31_.get_id_sezione())
-        self.assertNotEqual(p31.get_numero(), p31_.get_numero())
+        ][0][1][0]
+        self.assertEqual(p31.get_id_sezione(), posto31_.get_id_sezione())
+        self.assertNotEqual(p31.get_numero(), posto31_.get_numero())
         print("Passato GET SEZIONI E FILE E POSTI DISPONIBILI side effect posto")
-        self.__model.elimina_occupazione(o32.get_id())
-        self.__model.elimina_occupazione(o33.get_id())
-        self.__model.elimina_occupazione(o51.get_id())
-        self.__model.elimina_occupazione(o52.get_id())
-        self.__model.elimina_posto(p11.get_id())
-        self.__model.elimina_posto(p31.get_id())
-        self.__model.elimina_posto(p32.get_id())
-        self.__model.elimina_posto(p33.get_id())
-        self.__model.elimina_posto(p51.get_id())
-        self.__model.elimina_posto(p52.get_id())
-        self.__model.elimina_sezione(s3.get_id())
-        self.__model.elimina_sezione(s4.get_id())
-        self.__model.elimina_sezione(s5.get_id())
+        self.__model.elimina_occupazione(occupazione32.get_id())
+        self.__model.elimina_occupazione(occupazione33.get_id())
+        self.__model.elimina_occupazione(occupazione51.get_id())
+        self.__model.elimina_occupazione(occupazione52.get_id())
+        self.__model.elimina_posto(posto11.get_id())
+        self.__model.elimina_posto(posto31.get_id())
+        self.__model.elimina_posto(posto32.get_id())
+        self.__model.elimina_posto(posto33.get_id())
+        self.__model.elimina_posto(posto51.get_id())
+        self.__model.elimina_posto(posto52.get_id())
+        self.__model.elimina_sezione(sezione3.get_id())
+        self.__model.elimina_sezione(sezione4.get_id())
+        self.__model.elimina_sezione(sezione5.get_id())
 
         # MODIFICA
-        s3 = Sezione(STR_NON_VUOTA * 3, STR_NON_VUOTA)
-        self.assertRaises(IdInesistenteException, self.__model.modifica_sezione, s3)
+        sezione3 = Sezione(STR_NON_VUOTA * 3, STR_NON_VUOTA)
+        self.assertRaises(
+            IdInesistenteException, self.__model.modifica_sezione, sezione3
+        )
         print("Passato MODIFICA IdInesistente")
 
-        s = self.__model.get_sezione(s.get_id())
-        assert s is not None
-        s.set_nome(s2.get_nome())
-        self.assertRaises(OccupatoException, self.__model.modifica_sezione, s)
+        sezione = self.__model.get_sezione(sezione.get_id())
+        assert sezione is not None
+        sezione.set_nome(sezione2.get_nome())
+        self.assertRaises(OccupatoException, self.__model.modifica_sezione, sezione)
         print("Passato MODIFICA Occupato")
 
-        s.set_nome(s.get_nome() + STR_NON_VUOTA * 6)
-        self.__model.modifica_sezione(s)
-        s_ = self.__model.get_sezione(s.get_id())
-        assert s_ is not None
-        self.assertEqual(s_, s)
+        sezione.set_nome(sezione.get_nome() + STR_NON_VUOTA * 3)
+        self.__model.modifica_sezione(sezione)
+        sezione_ = self.__model.get_sezione(sezione.get_id())
+        assert sezione_ is not None
+        self.assertEqual(sezione_, sezione)
         print("Passato MODIFICA")
 
         # CARICA
         self.__model._Model__carica_sezioni()  # type: ignore
-        self.assertEqual(self.__model.get_sezioni(), [s, s2])
+        self.assertEqual(self.__model.get_sezioni(), [sezione, sezione2])
         print("Passato CARICA")
 
         # ELIMINA
@@ -419,16 +450,16 @@ class TestTell(unittest.TestCase):
         )
         print("Passato ELIMINA IdInesistente")
 
-        p = Posto(STR_NON_VUOTA, 1, s.get_id())
-        self.__model.aggiungi_posto(p)
+        posto = Posto(STR_NON_VUOTA, 1, sezione.get_id())
+        self.__model.aggiungi_posto(posto)
         self.assertRaises(
-            OggettoInUsoException, self.__model.elimina_sezione, s.get_id()
+            OggettoInUsoException, self.__model.elimina_sezione, sezione.get_id()
         )
         print("Passato ELIMINA OggettoInUso")
-        self.__model.elimina_posto(p.get_id())
+        self.__model.elimina_posto(posto.get_id())
 
-        self.__model.elimina_sezione(s.get_id())
-        self.assertEqual(self.__model.get_sezioni(), [s2])
+        self.__model.elimina_sezione(sezione.get_id())
+        self.assertEqual(self.__model.get_sezioni(), [sezione2])
         print("Passato ELIMINA")
 
     # ### POSTI ###
@@ -469,88 +500,90 @@ class TestTell(unittest.TestCase):
         print("\n### MODEL POSTO ###")
 
         # AGGIUNGI
-        p = Posto(STR_NON_VUOTA, 1, ID_NON_ESISTENTE)
-        self.assertRaises(IdInesistenteException, self.__model.aggiungi_posto, p)
+        posto = Posto(STR_NON_VUOTA, 1, ID_NON_ESISTENTE)
+        self.assertRaises(IdInesistenteException, self.__model.aggiungi_posto, posto)
         print("Passato AGGIUNGI IdInesistente")
 
-        s = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
-        self.__model.aggiungi_sezione(s)
-        p = Posto(STR_NON_VUOTA, 1, s.get_id())
-        self.__model.aggiungi_posto(p)
-        p.set_numero(p.get_numero() + 1)
-        self.assertRaises(IdOccupatoException, self.__model.aggiungi_posto, p)
+        sezione = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(sezione)
+        posto = Posto(STR_NON_VUOTA, 1, sezione.get_id())
+        self.__model.aggiungi_posto(posto)
+        posto.set_numero(posto.get_numero() + 1)
+        self.assertRaises(IdOccupatoException, self.__model.aggiungi_posto, posto)
         print("Passato AGGIUNGI IdOccupato")
-        p.set_numero(p.get_numero() - 1)
+        posto.set_numero(posto.get_numero() - 1)
 
-        p2 = Posto(p.get_fila(), p.get_numero(), s.get_id())
-        self.assertRaises(OccupatoException, self.__model.aggiungi_posto, p2)
+        posto2 = Posto(posto.get_fila(), posto.get_numero(), sezione.get_id())
+        self.assertRaises(OccupatoException, self.__model.aggiungi_posto, posto2)
         print("Passato AGGIUNGI Occupato")
 
         # GET
-        p_ = self.__model.get_posto(p.get_id())
-        assert p_ is not None
-        self.assertEqual(p_, p)
+        posto_ = self.__model.get_posto(posto.get_id())
+        assert posto_ is not None
+        self.assertEqual(posto_, posto)
         print("Passato GET")
 
-        p_.set_numero(p_.get_numero() + 1)
-        p = self.__model.get_posto(p.get_id())
-        assert p is not None
-        self.assertEqual(p.get_id_sezione(), p_.get_id_sezione())
-        self.assertNotEqual(p.get_numero(), p_.get_numero())
+        posto_.set_numero(posto_.get_numero() + 1)
+        posto = self.__model.get_posto(posto.get_id())
+        assert posto is not None
+        self.assertEqual(posto.get_id_sezione(), posto_.get_id_sezione())
+        self.assertNotEqual(posto.get_numero(), posto_.get_numero())
         print("Passato GET side effect")
 
         # GET LISTA
-        p2 = Posto(STR_NON_VUOTA * 2, 2, s.get_id())
-        self.__model.aggiungi_posto(p2)
-        self.assertEqual(self.__model.get_posti(), [p, p2])
+        posto2 = Posto(STR_NON_VUOTA * 2, 2, sezione.get_id())
+        self.__model.aggiungi_posto(posto2)
+        self.assertEqual(self.__model.get_posti(), [posto, posto2])
         print("Passato GET LISTA")
 
-        p2_ = self.__model.get_posti()[1]
-        p2_.set_numero(p2_.get_numero() + 1)
-        p2 = self.__model.get_posti()[1]
-        self.assertEqual(p2.get_id_sezione(), p2_.get_id_sezione())
-        self.assertNotEqual(p2.get_numero(), p2_.get_numero())
+        posto2_ = self.__model.get_posti()[1]
+        posto2_.set_numero(posto2_.get_numero() + 1)
+        posto2 = self.__model.get_posti()[1]
+        self.assertEqual(posto2.get_id_sezione(), posto2_.get_id_sezione())
+        self.assertNotEqual(posto2.get_numero(), posto2_.get_numero())
         print("Passato GET LISTA side effect")
 
         # GET LISTA by sezione
-        s2 = Sezione(STR_NON_VUOTA * 4, STR_NON_VUOTA)
-        self.__model.aggiungi_sezione(s2)
-        p3 = Posto(STR_NON_VUOTA * 3, 3, s2.get_id())
-        self.__model.aggiungi_posto(p3)
-        self.assertEqual(self.__model.get_posti_by_sezione(s.get_id()), [p, p2])
+        sezione2 = Sezione(STR_NON_VUOTA * 4, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(sezione2)
+        posto3 = Posto(STR_NON_VUOTA * 3, 3, sezione2.get_id())
+        self.__model.aggiungi_posto(posto3)
+        self.assertEqual(
+            self.__model.get_posti_by_sezione(sezione.get_id()), [posto, posto2]
+        )
         print("Passato GET LISTA by sezione")
 
-        p2_ = self.__model.get_posti_by_sezione(s.get_id())[1]
-        p2_.set_numero(p2_.get_numero() + 1)
-        p2 = self.__model.get_posti_by_sezione(s.get_id())[1]
-        self.assertEqual(p2.get_id_sezione(), p2_.get_id_sezione())
-        self.assertNotEqual(p2.get_numero(), p2_.get_numero())
+        posto2_ = self.__model.get_posti_by_sezione(sezione.get_id())[1]
+        posto2_.set_numero(posto2_.get_numero() + 1)
+        posto2 = self.__model.get_posti_by_sezione(sezione.get_id())[1]
+        self.assertEqual(posto2.get_id_sezione(), posto2_.get_id_sezione())
+        self.assertNotEqual(posto2.get_numero(), posto2_.get_numero())
         print("Passato GET LISTA by sezione side effect")
-        self.__model.elimina_posto(p3.get_id())
-        self.__model.elimina_sezione(s2.get_id())
+        self.__model.elimina_posto(posto3.get_id())
+        self.__model.elimina_sezione(sezione2.get_id())
 
         # MODIFICA
-        p4 = Posto(STR_NON_VUOTA * 4, 4, ID_NON_ESISTENTE)
-        self.assertRaises(IdInesistenteException, self.__model.modifica_posto, p4)
+        posto4 = Posto(STR_NON_VUOTA * 4, 4, ID_NON_ESISTENTE)
+        self.assertRaises(IdInesistenteException, self.__model.modifica_posto, posto4)
         print("Passato MODIFICA IdInesistente")
 
-        p = self.__model.get_posto(p.get_id())
-        assert p is not None
-        p.set_fila(p2.get_fila())
-        p.set_numero(p2.get_numero())
-        self.assertRaises(OccupatoException, self.__model.modifica_posto, p)
+        posto = self.__model.get_posto(posto.get_id())
+        assert posto is not None
+        posto.set_fila(posto2.get_fila())
+        posto.set_numero(posto2.get_numero())
+        self.assertRaises(OccupatoException, self.__model.modifica_posto, posto)
         print("Passato MODIFICA Occupato")
 
-        p.set_numero(p.get_numero() + 3)
-        self.__model.modifica_posto(p)
-        p_ = self.__model.get_posto(p.get_id())
-        assert p_ is not None
-        self.assertEqual(p_, p)
+        posto.set_numero(posto.get_numero() + 3)
+        self.__model.modifica_posto(posto)
+        posto_ = self.__model.get_posto(posto.get_id())
+        assert posto_ is not None
+        self.assertEqual(posto_, posto)
         print("Passato MODIFICA")
 
         # CARICA
         self.__model._Model__carica_posti()  # type: ignore
-        self.assertEqual(self.__model.get_posti(), [p, p2])
+        self.assertEqual(self.__model.get_posti(), [posto, posto2])
         print("Passato CARICA")
 
         # ELIMINA
@@ -559,21 +592,27 @@ class TestTell(unittest.TestCase):
         )
         print("Passato ELIMINA IdInesistente")
 
-        sp = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
-        self.__model.aggiungi_spettacolo(sp)
-        self.__model.aggiungi_prezzo(Prezzo(FLOAT_NONZERO, sp.get_id(), s.get_id()))
-        e = Evento(DATA_ORA_PASSATO, sp.get_id())
-        self.__model.aggiungi_evento(e)
-        pr = Prenotazione(STR_NON_VUOTA, DATA_ORA_PASSATO)
-        self.__model.aggiungi_prenotazione(pr)
-        o = Occupazione(e.get_id(), p.get_id(), pr.get_id())
-        self.__model.aggiungi_occupazione(o)
-        self.assertRaises(OggettoInUsoException, self.__model.elimina_posto, p.get_id())
+        spettacolo = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
+        self.__model.aggiungi_spettacolo(spettacolo)
+        self.__model.aggiungi_prezzo(
+            Prezzo(FLOAT_NONZERO, spettacolo.get_id(), sezione.get_id())
+        )
+        evento = Evento(DATA_ORA_PASSATO, spettacolo.get_id())
+        self.__model.aggiungi_evento(evento)
+        prenotazione = Prenotazione(STR_NON_VUOTA, DATA_ORA_PASSATO)
+        self.__model.aggiungi_prenotazione(prenotazione)
+        occupazione = Occupazione(
+            evento.get_id(), posto.get_id(), prenotazione.get_id()
+        )
+        self.__model.aggiungi_occupazione(occupazione)
+        self.assertRaises(
+            OggettoInUsoException, self.__model.elimina_posto, posto.get_id()
+        )
         print("Passato ELIMINA OggettoInUso")
 
-        self.__model.elimina_occupazione(o.get_id())
-        self.__model.elimina_posto(p.get_id())
-        self.assertEqual(self.__model.get_posti(), [p2])
+        self.__model.elimina_occupazione(occupazione.get_id())
+        self.__model.elimina_posto(posto.get_id())
+        self.assertEqual(self.__model.get_posti(), [posto2])
         print("Passato ELIMINA")
 
     # ### PREZZI ###
@@ -614,101 +653,104 @@ class TestTell(unittest.TestCase):
         print("\n### MODEL PREZZI ###")
 
         # AGGIUNGI
-        sp = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
-        self.__model.aggiungi_spettacolo(sp)
-        se = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
-        self.__model.aggiungi_sezione(se)
+        spettacolo = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
+        self.__model.aggiungi_spettacolo(spettacolo)
+        sezione = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(sezione)
 
-        p = Prezzo(FLOAT_NONZERO, ID_NON_ESISTENTE, se.get_id())
-        self.assertRaises(IdInesistenteException, self.__model.aggiungi_prezzo, p)
+        prezzo = Prezzo(FLOAT_NONZERO, ID_NON_ESISTENTE, sezione.get_id())
+        self.assertRaises(IdInesistenteException, self.__model.aggiungi_prezzo, prezzo)
         print("Passato AGGIUNGI IdInesistente spettacolo")
 
-        p = Prezzo(FLOAT_NONZERO, sp.get_id(), ID_NON_ESISTENTE)
-        self.assertRaises(IdInesistenteException, self.__model.aggiungi_prezzo, p)
+        prezzo = Prezzo(FLOAT_NONZERO, spettacolo.get_id(), ID_NON_ESISTENTE)
+        self.assertRaises(IdInesistenteException, self.__model.aggiungi_prezzo, prezzo)
         print("Passato AGGIUNGI IdInesistente sezione")
 
-        p = Prezzo(FLOAT_NONZERO, sp.get_id(), se.get_id())
-        self.__model.aggiungi_prezzo(p)
-        self.assertRaises(IdOccupatoException, self.__model.aggiungi_prezzo, p)
+        prezzo = Prezzo(FLOAT_NONZERO, spettacolo.get_id(), sezione.get_id())
+        self.__model.aggiungi_prezzo(prezzo)
+        self.assertRaises(IdOccupatoException, self.__model.aggiungi_prezzo, prezzo)
         print("Passato AGGIUNGI IdOccupato")
 
-        p2 = Prezzo(FLOAT_NONZERO, sp.get_id(), se.get_id())
-        self.assertRaises(OccupatoException, self.__model.aggiungi_prezzo, p2)
+        prezzo2 = Prezzo(FLOAT_NONZERO, spettacolo.get_id(), sezione.get_id())
+        self.assertRaises(OccupatoException, self.__model.aggiungi_prezzo, prezzo2)
         print("Passato AGGIUNGI Occupato")
 
         # GET
-        p_ = self.__model.get_prezzo(p.get_id())
-        assert p_ is not None
-        self.assertEqual(p_, p)
+        prezzo_ = self.__model.get_prezzo(prezzo.get_id())
+        assert prezzo_ is not None
+        self.assertEqual(prezzo_, prezzo)
         print("Passato GET")
 
-        p_.set_ammontare(p_.get_ammontare() + FLOAT_NONZERO)
-        p = self.__model.get_prezzo(p.get_id())
-        assert p is not None
-        self.assertEqual(p.get_id_spettacolo(), p_.get_id_spettacolo())
-        self.assertNotEqual(p.get_ammontare(), p_.get_ammontare())
+        prezzo_.set_ammontare(prezzo_.get_ammontare() + FLOAT_NONZERO)
+        prezzo = self.__model.get_prezzo(prezzo.get_id())
+        assert prezzo is not None
+        self.assertEqual(prezzo.get_id_spettacolo(), prezzo_.get_id_spettacolo())
+        self.assertNotEqual(prezzo.get_ammontare(), prezzo_.get_ammontare())
         print("Passato GET side effect")
 
         # GET BY SPETTACOLO E SEZIONE
-        sp2 = Spettacolo(STR_NON_VUOTA * 2, STR_NON_VUOTA, dict(), dict())
-        self.__model.aggiungi_spettacolo(sp2)
-        se2 = Sezione(STR_NON_VUOTA * 2, STR_NON_VUOTA)
-        self.__model.aggiungi_sezione(se2)
-        p2 = Prezzo(FLOAT_NONZERO, sp2.get_id(), se.get_id())
-        self.__model.aggiungi_prezzo(p2)
-        p3 = Prezzo(FLOAT_NONZERO, sp.get_id(), se2.get_id())
-        self.__model.aggiungi_prezzo(p3)
-        p_ = self.__model.get_prezzo_by_spettacolo_e_sezione(
-            p.get_id_spettacolo(), p.get_id_sezione()
+        spettacolo2 = Spettacolo(STR_NON_VUOTA * 2, STR_NON_VUOTA, dict(), dict())
+        self.__model.aggiungi_spettacolo(spettacolo2)
+        sezione2 = Sezione(STR_NON_VUOTA * 2, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(sezione2)
+        prezzo2 = Prezzo(FLOAT_NONZERO, spettacolo2.get_id(), sezione.get_id())
+        self.__model.aggiungi_prezzo(prezzo2)
+        prezzo3 = Prezzo(FLOAT_NONZERO, spettacolo.get_id(), sezione2.get_id())
+        self.__model.aggiungi_prezzo(prezzo3)
+        prezzo_ = self.__model.get_prezzo_by_spettacolo_e_sezione(
+            prezzo.get_id_spettacolo(), prezzo.get_id_sezione()
         )
-        assert p_ is not None
-        self.assertEqual(p_, p)
+        assert prezzo_ is not None
+        self.assertEqual(prezzo_, prezzo)
         print("Passato GET BY SPETTACOLO E SEZIONE")
 
-        p_.set_ammontare(p_.get_ammontare() + FLOAT_NONZERO)
-        p = self.__model.get_prezzo_by_spettacolo_e_sezione(
-            p.get_id_spettacolo(), p.get_id_sezione()
+        prezzo_.set_ammontare(prezzo_.get_ammontare() + FLOAT_NONZERO)
+        prezzo = self.__model.get_prezzo_by_spettacolo_e_sezione(
+            prezzo.get_id_spettacolo(), prezzo.get_id_sezione()
         )
-        assert p is not None
-        self.assertEqual(p.get_id_spettacolo(), p_.get_id_spettacolo())
-        self.assertNotEqual(p.get_ammontare(), p_.get_ammontare())
+        assert prezzo is not None
+        self.assertEqual(prezzo.get_id_spettacolo(), prezzo_.get_id_spettacolo())
+        self.assertNotEqual(prezzo.get_ammontare(), prezzo_.get_ammontare())
         print("Passato GET BY SPETTACOLO E SEZIONE side effect")
 
         # GET LISTA BY SPETTACOLO
-        self.assertEqual(self.__model.get_prezzi_by_spettacolo(sp.get_id()), [p, p3])
+        self.assertEqual(
+            self.__model.get_prezzi_by_spettacolo(spettacolo.get_id()),
+            [prezzo, prezzo3],
+        )
         print("Passato GET LISTA BY SPETTACOLO")
 
-        p3_ = self.__model.get_prezzi_by_spettacolo(sp.get_id())[1]
-        p3_.set_ammontare(p3_.get_ammontare() + FLOAT_NONZERO)
-        p3 = self.__model.get_prezzi_by_spettacolo(sp.get_id())[1]
-        self.assertEqual(p3.get_id_spettacolo(), p3_.get_id_spettacolo())
-        self.assertNotEqual(p3.get_ammontare(), p3_.get_ammontare())
+        prezzo3_ = self.__model.get_prezzi_by_spettacolo(spettacolo.get_id())[1]
+        prezzo3_.set_ammontare(prezzo3_.get_ammontare() + FLOAT_NONZERO)
+        prezzo3 = self.__model.get_prezzi_by_spettacolo(spettacolo.get_id())[1]
+        self.assertEqual(prezzo3.get_id_spettacolo(), prezzo3_.get_id_spettacolo())
+        self.assertNotEqual(prezzo3.get_ammontare(), prezzo3_.get_ammontare())
         print("Passato GET LISTA BY SPETTACOLO side effect")
 
         # MODIFICA
-        p4 = Prezzo(FLOAT_NONZERO, sp2.get_id(), se2.get_id())
-        self.assertRaises(IdInesistenteException, self.__model.modifica_prezzo, p4)
+        prezzo4 = Prezzo(FLOAT_NONZERO, spettacolo2.get_id(), sezione2.get_id())
+        self.assertRaises(IdInesistenteException, self.__model.modifica_prezzo, prezzo4)
         print("Passato MODIFICA IdInesistente")
 
-        p = self.__model.get_prezzo(p.get_id())
-        assert p is not None
-        p.set_id_sezione(p3.get_id_sezione())
-        self.assertRaises(OccupatoException, self.__model.modifica_prezzo, p)
+        prezzo = self.__model.get_prezzo(prezzo.get_id())
+        assert prezzo is not None
+        prezzo.set_id_sezione(prezzo3.get_id_sezione())
+        self.assertRaises(OccupatoException, self.__model.modifica_prezzo, prezzo)
         print("Passato MODIFICA Occupato")
 
-        p.set_id_sezione(se.get_id())
-        p.set_ammontare(p.get_ammontare() + FLOAT_NONZERO)
-        self.__model.modifica_prezzo(p)
-        p_ = self.__model.get_prezzo(p.get_id())
-        assert p_ is not None
-        self.assertEqual(p_, p)
+        prezzo.set_id_sezione(sezione.get_id())
+        prezzo.set_ammontare(prezzo.get_ammontare() + FLOAT_NONZERO)
+        self.__model.modifica_prezzo(prezzo)
+        prezzo_ = self.__model.get_prezzo(prezzo.get_id())
+        assert prezzo_ is not None
+        self.assertEqual(prezzo_, prezzo)
         print("Passato MODIFICA")
 
         # CARICA
         self.__model._Model__carica_prezzi()  # type: ignore
         self.assertEqual(
             self.__model._Model__gestore_prezzi._GestorePrezzi__lista_prezzi,  # type: ignore
-            [p, p2, p3],
+            [prezzo, prezzo2, prezzo3],
         )
         print("Passato CARICA")
 
@@ -718,27 +760,27 @@ class TestTell(unittest.TestCase):
         )
         print("Passato ELIMINA IdInesistente")
 
-        self.__model.elimina_prezzo(p.get_id())
-        self.assertEqual(self.__model._Model__gestore_prezzi._GestorePrezzi__lista_prezzi, [p2, p3])  # type: ignore
+        self.__model.elimina_prezzo(prezzo.get_id())
+        self.assertEqual(self.__model._Model__gestore_prezzi._GestorePrezzi__lista_prezzi, [prezzo2, prezzo3])  # type: ignore
         print("Passato ELIMINA")
 
         # ELIMINA BY SPETTACOLO
-        p = Prezzo(FLOAT_NONZERO, sp.get_id(), se.get_id())
-        self.__model.aggiungi_prezzo(p)
-        p4 = Prezzo(FLOAT_NONZERO, sp2.get_id(), se2.get_id())
-        self.__model.aggiungi_prezzo(p4)
-        self.__model.elimina_spettacolo(sp.get_id())
-        self.assertEqual(self.__model._Model__gestore_prezzi._GestorePrezzi__lista_prezzi, [p2, p4])  # type: ignore
+        prezzo = Prezzo(FLOAT_NONZERO, spettacolo.get_id(), sezione.get_id())
+        self.__model.aggiungi_prezzo(prezzo)
+        prezzo4 = Prezzo(FLOAT_NONZERO, spettacolo2.get_id(), sezione2.get_id())
+        self.__model.aggiungi_prezzo(prezzo4)
+        self.__model.elimina_spettacolo(spettacolo.get_id())
+        self.assertEqual(self.__model._Model__gestore_prezzi._GestorePrezzi__lista_prezzi, [prezzo2, prezzo4])  # type: ignore
         print("Passato ELIMINA BY SPETTACOLO")
 
         # ELIMINA BY SEZIONE
-        self.__model.aggiungi_spettacolo(sp)
-        p = Prezzo(FLOAT_NONZERO, sp.get_id(), se.get_id())
-        self.__model.aggiungi_prezzo(p)
-        p3 = Prezzo(FLOAT_NONZERO, sp.get_id(), se2.get_id())
-        self.__model.aggiungi_prezzo(p3)
-        self.__model.elimina_sezione(se.get_id())
-        self.assertEqual(self.__model._Model__gestore_prezzi._GestorePrezzi__lista_prezzi, [p4, p3])  # type: ignore
+        self.__model.aggiungi_spettacolo(spettacolo)
+        prezzo = Prezzo(FLOAT_NONZERO, spettacolo.get_id(), sezione.get_id())
+        self.__model.aggiungi_prezzo(prezzo)
+        prezzo3 = Prezzo(FLOAT_NONZERO, spettacolo.get_id(), sezione2.get_id())
+        self.__model.aggiungi_prezzo(prezzo3)
+        self.__model.elimina_sezione(sezione.get_id())
+        self.assertEqual(self.__model._Model__gestore_prezzi._GestorePrezzi__lista_prezzi, [prezzo4, prezzo3])  # type: ignore
         print("Passato ELIMINA BY SEZIONE")
 
     # ### PRENOTAZIONI ###
@@ -750,112 +792,125 @@ class TestTell(unittest.TestCase):
         print("Passato CONGRUENZA nominativo")
 
         # CONGRUENZA segna_come_pagata
-        p = Prenotazione(STR_NON_VUOTA, DATA_ORA_PASSATO)
-        p.segna_come_pagata()
-        self.assertRaises(AzioneIncongruenteException, p.segna_come_pagata)
+        prenotazione = Prenotazione(STR_NON_VUOTA, DATA_ORA_PASSATO)
+        prenotazione.segna_come_pagata()
+        self.assertRaises(AzioneIncongruenteException, prenotazione.segna_come_pagata)
 
         # CONGRUENZA segna_come_non_pagata
-        p.segna_come_non_pagata()
-        self.assertRaises(AzioneIncongruenteException, p.segna_come_non_pagata)
+        prenotazione.segna_come_non_pagata()
+        self.assertRaises(
+            AzioneIncongruenteException, prenotazione.segna_come_non_pagata
+        )
 
     def test_model_prenotazioni(self):
         print("\n### MODEL PRENOTAZIONI ###")
 
         # AGGIUNGI
-        p = Prenotazione(STR_NON_VUOTA, DATA_ORA_PASSATO)
-        self.__model.aggiungi_prenotazione(p)
-        self.assertRaises(IdOccupatoException, self.__model.aggiungi_prenotazione, p)
+        prenotazione = Prenotazione(STR_NON_VUOTA, DATA_ORA_PASSATO)
+        self.__model.aggiungi_prenotazione(prenotazione)
+        self.assertRaises(
+            IdOccupatoException, self.__model.aggiungi_prenotazione, prenotazione
+        )
         print("Passato AGGIUNGI IdOccupato")
 
         # GET
-        p_ = self.__model.get_prenotazione(p.get_id())
-        assert p_ is not None
-        self.assertEqual(p_, p)
+        prenotazione_ = self.__model.get_prenotazione(prenotazione.get_id())
+        assert prenotazione_ is not None
+        self.assertEqual(prenotazione_, prenotazione)
         print("Passato GET")
 
-        p_.set_nominativo(p_.get_nominativo() + STR_NON_VUOTA)
-        p = self.__model.get_prenotazione(p.get_id())
-        assert p is not None
+        prenotazione_.set_nominativo(prenotazione_.get_nominativo() + STR_NON_VUOTA)
+        prenotazione = self.__model.get_prenotazione(prenotazione.get_id())
+        assert prenotazione is not None
         self.assertEqual(
-            p.get_data_ora_registrazione(), p_.get_data_ora_registrazione()
+            prenotazione.get_data_ora_registrazione(),
+            prenotazione_.get_data_ora_registrazione(),
         )
-        self.assertNotEqual(p.get_nominativo(), p_.get_nominativo())
+        self.assertNotEqual(
+            prenotazione.get_nominativo(), prenotazione_.get_nominativo()
+        )
         print("Passato GET side effect")
 
         # GET LISTA
-        p2 = Prenotazione(STR_NON_VUOTA * 2, DATA_ORA_PASSATO)
-        self.__model.aggiungi_prenotazione(p2)
-        self.assertEqual(self.__model.get_prenotazioni(), [p, p2])
+        prenotazione2 = Prenotazione(STR_NON_VUOTA * 2, DATA_ORA_PASSATO)
+        self.__model.aggiungi_prenotazione(prenotazione2)
+        self.assertEqual(self.__model.get_prenotazioni(), [prenotazione, prenotazione2])
         print("Passato GET LISTA")
 
-        p2_ = self.__model.get_prenotazioni()[1]
-        p2_.set_nominativo(p2_.get_nominativo() + STR_NON_VUOTA)
-        p2 = self.__model.get_prenotazioni()[1]
+        prenotazione2_ = self.__model.get_prenotazioni()[1]
+        prenotazione2_.set_nominativo(prenotazione2_.get_nominativo() + STR_NON_VUOTA)
+        prenotazione2 = self.__model.get_prenotazioni()[1]
         self.assertEqual(
-            p2.get_data_ora_registrazione(), p2_.get_data_ora_registrazione()
+            prenotazione2.get_data_ora_registrazione(),
+            prenotazione2_.get_data_ora_registrazione(),
         )
-        self.assertNotEqual(p2.get_nominativo(), p2_.get_nominativo())
+        self.assertNotEqual(
+            prenotazione2.get_nominativo(), prenotazione2_.get_nominativo()
+        )
         print("Passato GET LISTA side effect")
 
         # GET LISTA BY NOMINATIVO
-        p3 = Prenotazione("other", DATA_ORA_PASSATO)
-        self.__model.aggiungi_prenotazione(p3)
+        prenotazione3 = Prenotazione("other", DATA_ORA_PASSATO)
+        self.__model.aggiungi_prenotazione(prenotazione3)
         self.assertEqual(
-            self.__model.get_prenotazioni_by_nominativo(STR_NON_VUOTA), [p, p2]
+            self.__model.get_prenotazioni_by_nominativo(STR_NON_VUOTA),
+            [prenotazione, prenotazione2],
         )
         print("Passato GET LISTA BY NOMINATIVO")
-        self.__model.elimina_prenotazione(p3.get_id())
+        self.__model.elimina_prenotazione(prenotazione3.get_id())
 
-        p2_ = self.__model.get_prenotazioni_by_nominativo(STR_NON_VUOTA * 2)[0]
-        p2_.set_nominativo(p2_.get_nominativo() + STR_NON_VUOTA)
-        p2 = self.__model.get_prenotazioni_by_nominativo(STR_NON_VUOTA * 2)[0]
+        prenotazione2_ = self.__model.get_prenotazioni_by_nominativo(STR_NON_VUOTA * 2)[
+            0
+        ]
+        prenotazione2_.set_nominativo(prenotazione2_.get_nominativo() + STR_NON_VUOTA)
+        prenotazione2 = self.__model.get_prenotazioni_by_nominativo(STR_NON_VUOTA * 2)[
+            0
+        ]
         self.assertEqual(
-            p2.get_data_ora_registrazione(), p2_.get_data_ora_registrazione()
+            prenotazione2.get_data_ora_registrazione(),
+            prenotazione2_.get_data_ora_registrazione(),
         )
-        self.assertNotEqual(p2.get_nominativo(), p2_.get_nominativo())
+        self.assertNotEqual(
+            prenotazione2.get_nominativo(), prenotazione2_.get_nominativo()
+        )
         print("Passato GET LISTA BY NOMINATIVO side effect")
 
         # AMMONTARE TOTALE PRENOTAZIONE
-        se1 = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
-        self.__model.aggiungi_sezione(se1)
-        po1 = Posto(STR_NON_VUOTA, 1, se1.get_id())
-        self.__model.aggiungi_posto(po1)
-        sp1 = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
-        self.__model.aggiungi_spettacolo(sp1)
-        pr1 = Prezzo(FLOAT_NONZERO, sp1.get_id(), se1.get_id())
-        self.__model.aggiungi_prezzo(pr1)
-        e1 = Evento(DATA_ORA_FUTURO, sp1.get_id())
-        self.__model.aggiungi_evento(e1)
-        o1 = Occupazione(e1.get_id(), po1.get_id(), p.get_id())
-        self.__model.aggiungi_occupazione(o1)
+        sezione1 = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(sezione1)
+        posto1 = Posto(STR_NON_VUOTA, 1, sezione1.get_id())
+        self.__model.aggiungi_posto(posto1)
+        spettacolo1 = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
+        self.__model.aggiungi_spettacolo(spettacolo1)
+        prezzo1 = Prezzo(FLOAT_NONZERO, spettacolo1.get_id(), sezione1.get_id())
+        self.__model.aggiungi_prezzo(prezzo1)
+        evento1 = Evento(DATA_ORA_FUTURO, spettacolo1.get_id())
+        self.__model.aggiungi_evento(evento1)
+        occupazione1 = Occupazione(
+            evento1.get_id(), posto1.get_id(), prenotazione.get_id()
+        )
+        self.__model.aggiungi_occupazione(occupazione1)
 
-        se2 = Sezione(STR_NON_VUOTA * 2, STR_NON_VUOTA)
-        self.__model.aggiungi_sezione(se2)
-        po2 = Posto(STR_NON_VUOTA, 2, se2.get_id())
-        self.__model.aggiungi_posto(po2)
-        pr2 = Prezzo(FLOAT_NONZERO, sp1.get_id(), se2.get_id())
-        self.__model.aggiungi_prezzo(pr2)
-        o2 = Occupazione(e1.get_id(), po2.get_id(), p.get_id())
-        self.__model.aggiungi_occupazione(o2)
+        sezione2 = Sezione(STR_NON_VUOTA * 2, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(sezione2)
+        posto2 = Posto(STR_NON_VUOTA, 2, sezione2.get_id())
+        self.__model.aggiungi_posto(posto2)
+        prezzo2 = Prezzo(FLOAT_NONZERO, spettacolo1.get_id(), sezione2.get_id())
+        self.__model.aggiungi_prezzo(prezzo2)
+        occupazione2 = Occupazione(
+            evento1.get_id(), posto2.get_id(), prenotazione.get_id()
+        )
+        self.__model.aggiungi_occupazione(occupazione2)
 
         self.assertEqual(
-            self.__model.ammontare_totale_prenotazione(p.get_id()),
+            self.__model.ammontare_totale_prenotazione(prenotazione.get_id()),
             FLOAT_NONZERO + FLOAT_NONZERO,
         )
         print("Passato AMMONTARE TOTALE PRENOTAZIONE")
 
-        # DETTAGLI PRENOTAZIONE
-        self.assertEqual(
-            self.__model.get_dettagli_prenotazione(p.get_id()),
-            DettagliPrenotazione(
-                sp1, e1, [DettagliSezione(se1, [po1]), DettagliSezione(se2, [po2])]
-            ),
-        )
-        print("Passato DETTAGLI PRENOTAZIONE")
-
         # CARICA
         self.__model._Model__carica_prenotazioni()  # type: ignore
-        self.assertEqual(self.__model.get_prenotazioni(), [p, p2])
+        self.assertEqual(self.__model.get_prenotazioni(), [prenotazione, prenotazione2])
         print("Passato CARICA")
 
         # ELIMINA
@@ -864,8 +919,8 @@ class TestTell(unittest.TestCase):
         )
         print("Passato ELIMINA IdInesistente")
 
-        self.__model.elimina_prenotazione(p.get_id())
-        self.assertEqual(self.__model.get_prenotazioni(), [p2])
+        self.__model.elimina_prenotazione(prenotazione.get_id())
+        self.assertEqual(self.__model.get_prenotazioni(), [prenotazione2])
         print("Passato ELIMINA")
 
         # SEGNA COME PAGATA
@@ -876,13 +931,13 @@ class TestTell(unittest.TestCase):
         )
         print("Passato SEGNA COME PAGATA IdInesistente")
 
-        self.__model.segna_prenotazione_come_pagata(p2.get_id())
+        self.__model.segna_prenotazione_come_pagata(prenotazione2.get_id())
         print("Passato SEGNA COME PAGATA")
 
         self.assertRaises(
             AzioneIncongruenteException,
             self.__model.segna_prenotazione_come_pagata,
-            p2.get_id(),
+            prenotazione2.get_id(),
         )
         print("Passato SEGNA COME PAGATA AzioneIncongruente")
 
@@ -894,13 +949,13 @@ class TestTell(unittest.TestCase):
         )
         print("Passato SEGNA COME NON PAGATA IdInesistente")
 
-        self.__model.segna_prenotazione_come_non_pagata(p2.get_id())
+        self.__model.segna_prenotazione_come_non_pagata(prenotazione2.get_id())
         print("Passato SEGNA COME NON PAGATA")
 
         self.assertRaises(
             AzioneIncongruenteException,
             self.__model.segna_prenotazione_come_non_pagata,
-            p2.get_id(),
+            prenotazione2.get_id(),
         )
         print("Passato SEGNA COME NON PAGATA AzioneIncongruente")
 
@@ -942,124 +997,169 @@ class TestTell(unittest.TestCase):
         print("\n### MODEL OCCUPAZIONI ###")
 
         # AGGIUNGI
-        sp = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
-        self.__model.aggiungi_spettacolo(sp)
-        e = Evento(DATA_ORA_PASSATO, sp.get_id())
-        self.__model.aggiungi_evento(e)
-        se = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
-        self.__model.aggiungi_sezione(se)
-        self.__model.aggiungi_prezzo(Prezzo(FLOAT_NONZERO, sp.get_id(), se.get_id()))
-        po = Posto(STR_NON_VUOTA, 1, se.get_id())
-        self.__model.aggiungi_posto(po)
-        pr = Prenotazione(STR_NON_VUOTA, DATA_ORA_PASSATO)
-        self.__model.aggiungi_prenotazione(pr)
+        spettacolo = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
+        self.__model.aggiungi_spettacolo(spettacolo)
+        evento = Evento(DATA_ORA_PASSATO, spettacolo.get_id())
+        self.__model.aggiungi_evento(evento)
+        sezione = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(sezione)
+        self.__model.aggiungi_prezzo(
+            Prezzo(FLOAT_NONZERO, spettacolo.get_id(), sezione.get_id())
+        )
+        posto = Posto(STR_NON_VUOTA, 1, sezione.get_id())
+        self.__model.aggiungi_posto(posto)
+        prenotazione = Prenotazione(STR_NON_VUOTA, DATA_ORA_PASSATO)
+        self.__model.aggiungi_prenotazione(prenotazione)
 
-        o = Occupazione(ID_NON_ESISTENTE, po.get_id(), pr.get_id())
-        self.assertRaises(IdInesistenteException, self.__model.aggiungi_occupazione, o)
+        occupazione = Occupazione(
+            ID_NON_ESISTENTE, posto.get_id(), prenotazione.get_id()
+        )
+        self.assertRaises(
+            IdInesistenteException, self.__model.aggiungi_occupazione, occupazione
+        )
         print("Passato AGGIUNGI IdInesistente evento")
 
-        o = Occupazione(e.get_id(), ID_NON_ESISTENTE, pr.get_id())
-        self.assertRaises(IdInesistenteException, self.__model.aggiungi_occupazione, o)
+        occupazione = Occupazione(
+            evento.get_id(), ID_NON_ESISTENTE, prenotazione.get_id()
+        )
+        self.assertRaises(
+            IdInesistenteException, self.__model.aggiungi_occupazione, occupazione
+        )
         print("Passato AGGIUNGI IdInesistente posto")
 
-        o = Occupazione(e.get_id(), po.get_id(), ID_NON_ESISTENTE)
-        self.assertRaises(IdInesistenteException, self.__model.aggiungi_occupazione, o)
+        occupazione = Occupazione(evento.get_id(), posto.get_id(), ID_NON_ESISTENTE)
+        self.assertRaises(
+            IdInesistenteException, self.__model.aggiungi_occupazione, occupazione
+        )
         print("Passato AGGIUNGI IdInesistente prenotazione")
 
-        sp2 = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
-        self.__model.aggiungi_spettacolo(sp2)
-        e2 = Evento(DATA_ORA_PASSATO, sp2.get_id())
-        self.__model.aggiungi_evento(e2)
-        o = Occupazione(e2.get_id(), po.get_id(), pr.get_id())
+        spettacolo2 = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
+        self.__model.aggiungi_spettacolo(spettacolo2)
+        evento2 = Evento(DATA_ORA_PASSATO, spettacolo2.get_id())
+        self.__model.aggiungi_evento(evento2)
+        occupazione = Occupazione(
+            evento2.get_id(), posto.get_id(), prenotazione.get_id()
+        )
         self.assertRaises(
-            AzioneIncongruenteException, self.__model.aggiungi_occupazione, o
+            AzioneIncongruenteException, self.__model.aggiungi_occupazione, occupazione
         )
         print("Passato AGGIUNGI AzioneIncogruente")
-        self.__model.elimina_evento(e2.get_id())
-        self.__model.elimina_spettacolo(sp2.get_id())
+        self.__model.elimina_evento(evento2.get_id())
+        self.__model.elimina_spettacolo(spettacolo2.get_id())
 
-        o = Occupazione(e.get_id(), po.get_id(), pr.get_id())
-        self.__model.aggiungi_occupazione(o)
-        self.assertRaises(IdOccupatoException, self.__model.aggiungi_occupazione, o)
+        occupazione = Occupazione(
+            evento.get_id(), posto.get_id(), prenotazione.get_id()
+        )
+        self.__model.aggiungi_occupazione(occupazione)
+        self.assertRaises(
+            IdOccupatoException, self.__model.aggiungi_occupazione, occupazione
+        )
         print("Passato AGGIUNGI IdOccupato")
 
-        o2 = Occupazione(e.get_id(), po.get_id(), pr.get_id())
-        self.assertRaises(OccupatoException, self.__model.aggiungi_occupazione, o2)
+        occupazione2 = Occupazione(
+            evento.get_id(), posto.get_id(), prenotazione.get_id()
+        )
+        self.assertRaises(
+            OccupatoException, self.__model.aggiungi_occupazione, occupazione2
+        )
         print("Passato AGGIUNGI Occupato")
 
         # GET
-        o_ = self.__model.get_occupazione(o.get_id())
-        assert o_ is not None
-        self.assertEqual(o_, o)
+        occupazione_ = self.__model.get_occupazione(occupazione.get_id())
+        assert occupazione_ is not None
+        self.assertEqual(occupazione_, occupazione)
         print("Passato GET")
 
-        sp2 = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
-        self.__model.aggiungi_spettacolo(sp2)
-        e2 = Evento(DATA_ORA_PASSATO, sp2.get_id())
-        self.__model.aggiungi_evento(e2)
-        self.__model.aggiungi_prezzo(Prezzo(FLOAT_NONZERO, sp2.get_id(), se.get_id()))
-        o_.set_id_evento(e2.get_id())
-        o = self.__model.get_occupazione(o.get_id())
-        assert o is not None
-        self.assertEqual(o.get_id_posto(), o_.get_id_posto())
-        self.assertNotEqual(o.get_id_evento(), o_.get_id_evento())
+        spettacolo2 = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
+        self.__model.aggiungi_spettacolo(spettacolo2)
+        evento2 = Evento(DATA_ORA_PASSATO, spettacolo2.get_id())
+        self.__model.aggiungi_evento(evento2)
+        self.__model.aggiungi_prezzo(
+            Prezzo(FLOAT_NONZERO, spettacolo2.get_id(), sezione.get_id())
+        )
+        occupazione_.set_id_evento(evento2.get_id())
+        occupazione = self.__model.get_occupazione(occupazione.get_id())
+        assert occupazione is not None
+        self.assertEqual(occupazione.get_id_posto(), occupazione_.get_id_posto())
+        self.assertNotEqual(occupazione.get_id_evento(), occupazione_.get_id_evento())
         print("Passato GET side effect")
 
         # GET LISTA BY PRENOTAZIONE
-        o2 = Occupazione(e2.get_id(), po.get_id(), pr.get_id())
-        self.__model.aggiungi_occupazione(o2)
-        po2 = Posto(STR_NON_VUOTA * 2, 1, se.get_id())
-        self.__model.aggiungi_posto(po2)
-        pr2 = Prenotazione(STR_NON_VUOTA, DATA_ORA_PASSATO)
-        self.__model.aggiungi_prenotazione(pr2)
-        o3 = Occupazione(e2.get_id(), po2.get_id(), pr2.get_id())
-        self.__model.aggiungi_occupazione(o3)
+        occupazione2 = Occupazione(
+            evento2.get_id(), posto.get_id(), prenotazione.get_id()
+        )
+        self.__model.aggiungi_occupazione(occupazione2)
+        posto2 = Posto(STR_NON_VUOTA * 2, 1, sezione.get_id())
+        self.__model.aggiungi_posto(posto2)
+        prenotazione2 = Prenotazione(STR_NON_VUOTA, DATA_ORA_PASSATO)
+        self.__model.aggiungi_prenotazione(prenotazione2)
+        occupazione3 = Occupazione(
+            evento2.get_id(), posto2.get_id(), prenotazione2.get_id()
+        )
+        self.__model.aggiungi_occupazione(occupazione3)
         self.assertEqual(
-            self.__model.get_occupazioni_by_prenotazione(pr.get_id()), [o, o2]
+            self.__model.get_occupazioni_by_prenotazione(prenotazione.get_id()),
+            [occupazione, occupazione2],
         )
         print("Passato GET LISTA BY PRENOTAZIONE")
 
-        o2_ = self.__model.get_occupazioni_by_prenotazione(pr.get_id())[1]
-        o2_.set_id_prenotazione(o3.get_id_prenotazione())
-        o2 = self.__model.get_occupazioni_by_prenotazione(pr.get_id())[1]
-        self.assertEqual(o2.get_id_evento(), o2_.get_id_evento())
-        self.assertNotEqual(o2.get_id_prenotazione(), o2_.get_id_prenotazione())
+        occupazione2_ = self.__model.get_occupazioni_by_prenotazione(
+            prenotazione.get_id()
+        )[1]
+        occupazione2_.set_id_prenotazione(occupazione3.get_id_prenotazione())
+        occupazione2 = self.__model.get_occupazioni_by_prenotazione(
+            prenotazione.get_id()
+        )[1]
+        self.assertEqual(occupazione2.get_id_evento(), occupazione2_.get_id_evento())
+        self.assertNotEqual(
+            occupazione2.get_id_prenotazione(), occupazione2_.get_id_prenotazione()
+        )
         print("Passato GET LISTA BY PRENOTAZIONE side effect")
-        self.__model.elimina_occupazione(o2.get_id())
-        self.__model.elimina_occupazione(o3.get_id())
-        self.__model.elimina_posto(po2.get_id())
-        self.__model.elimina_prenotazione(pr2.get_id())
+        self.__model.elimina_occupazione(occupazione2.get_id())
+        self.__model.elimina_occupazione(occupazione3.get_id())
+        self.__model.elimina_posto(posto2.get_id())
+        self.__model.elimina_prenotazione(prenotazione2.get_id())
 
         # MODIFICA
-        o3 = Occupazione(e2.get_id(), po.get_id(), pr.get_id())
-        self.assertRaises(IdInesistenteException, self.__model.modifica_occupazione, o3)
+        occupazione3 = Occupazione(
+            evento2.get_id(), posto.get_id(), prenotazione.get_id()
+        )
+        self.assertRaises(
+            IdInesistenteException, self.__model.modifica_occupazione, occupazione3
+        )
         print("Passato MODIFICA IdInesistente")
 
-        o2 = Occupazione(e2.get_id(), po.get_id(), pr.get_id())
-        self.__model.aggiungi_occupazione(o2)
-        o = self.__model.get_occupazione(o.get_id())
-        assert o is not None
-        o.set_id_evento(o2.get_id_evento())
-        self.assertRaises(OccupatoException, self.__model.modifica_occupazione, o)
+        occupazione2 = Occupazione(
+            evento2.get_id(), posto.get_id(), prenotazione.get_id()
+        )
+        self.__model.aggiungi_occupazione(occupazione2)
+        occupazione = self.__model.get_occupazione(occupazione.get_id())
+        assert occupazione is not None
+        occupazione.set_id_evento(occupazione2.get_id_evento())
+        self.assertRaises(
+            OccupatoException, self.__model.modifica_occupazione, occupazione
+        )
         print("Passato MODIFICA Occupato")
 
-        sp3 = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
-        self.__model.aggiungi_spettacolo(sp3)
-        self.__model.aggiungi_prezzo(Prezzo(FLOAT_NONZERO, sp3.get_id(), se.get_id()))
-        e3 = Evento(DATA_ORA_PASSATO, sp3.get_id())
-        self.__model.aggiungi_evento(e3)
-        o.set_id_evento(e3.get_id())
-        self.__model.modifica_occupazione(o)
-        o_ = self.__model.get_occupazione(o.get_id())
-        assert o_ is not None
-        self.assertEqual(o_, o)
+        spettacolo3 = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
+        self.__model.aggiungi_spettacolo(spettacolo3)
+        self.__model.aggiungi_prezzo(
+            Prezzo(FLOAT_NONZERO, spettacolo3.get_id(), sezione.get_id())
+        )
+        evento3 = Evento(DATA_ORA_PASSATO, spettacolo3.get_id())
+        self.__model.aggiungi_evento(evento3)
+        occupazione.set_id_evento(evento3.get_id())
+        self.__model.modifica_occupazione(occupazione)
+        occupazione_ = self.__model.get_occupazione(occupazione.get_id())
+        assert occupazione_ is not None
+        self.assertEqual(occupazione_, occupazione)
         print("Passato MODIFICA")
 
         # CARICA
         self.__model._Model__carica_occupazioni()  # type: ignore
         self.assertEqual(
             self.__model._Model__gestore_occupazioni._GestoreOccupazioni__lista_occupazioni,  # type: ignore
-            [o, o2],
+            [occupazione, occupazione2],
         )
         print("Passato CARICA")
 
@@ -1069,19 +1169,23 @@ class TestTell(unittest.TestCase):
         )
         print("Passato ELIMINA IdInesistente")
 
-        self.__model.elimina_occupazione(o.get_id())
-        self.assertEqual(self.__model._Model__gestore_occupazioni._GestoreOccupazioni__lista_occupazioni, [o2])  # type: ignore
+        self.__model.elimina_occupazione(occupazione.get_id())
+        self.assertEqual(self.__model._Model__gestore_occupazioni._GestoreOccupazioni__lista_occupazioni, [occupazione2])  # type: ignore
         print("Passato ELIMINA")
 
         # ELIMINA BY PRENOTAZIONE
-        pr2 = Prenotazione(STR_NON_VUOTA, DATA_ORA_PASSATO)
-        self.__model.aggiungi_prenotazione(pr2)
-        o3 = Occupazione(e.get_id(), po.get_id(), pr2.get_id())
-        self.__model.aggiungi_occupazione(o3)
-        o4 = Occupazione(e3.get_id(), po.get_id(), pr2.get_id())
-        self.__model.aggiungi_occupazione(o4)
-        self.__model.elimina_prenotazione(pr2.get_id())
-        self.assertEqual(self.__model._Model__gestore_occupazioni._GestoreOccupazioni__lista_occupazioni, [o2])  # type: ignore
+        prenotazione2 = Prenotazione(STR_NON_VUOTA, DATA_ORA_PASSATO)
+        self.__model.aggiungi_prenotazione(prenotazione2)
+        occupazione3 = Occupazione(
+            evento.get_id(), posto.get_id(), prenotazione2.get_id()
+        )
+        self.__model.aggiungi_occupazione(occupazione3)
+        occupazione4 = Occupazione(
+            evento3.get_id(), posto.get_id(), prenotazione2.get_id()
+        )
+        self.__model.aggiungi_occupazione(occupazione4)
+        self.__model.elimina_prenotazione(prenotazione2.get_id())
+        self.assertEqual(self.__model._Model__gestore_occupazioni._GestoreOccupazioni__lista_occupazioni, [occupazione2])  # type: ignore
         print("Passato ELIMINA BY PRENOTAZIONE")
 
     def tearDown(self) -> None:
