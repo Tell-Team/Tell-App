@@ -8,15 +8,16 @@
 % UC ext: Crea Regia		[X]
 % UC ext: Modifica Regia	[X]
 % UC ext: Elimina Regia	[X]
-% UC: Crea Sezione		[]
-% UC ext: Modifica Sezione	[]
-% UC ext: Elimina Sezione	[]
-% UC: Crea Posto		[]
-% UC: Modifica Posto		[]
-% UC: Elimina Posto		[]
+% UC: Crea Sezione		[X]
+% UC: Visualizza Sezione	[X]
+% UC ext: Modifica Sezione	[X]
+% UC ext: Elimina Sezione	[X]
+% UC: Crea Posto		[X]
+% UC: Modifica Posto		[X]
+% UC: Elimina Posto		[X]
 
 \renewcommand{\attori}{Amministratore}
-% ID: 25-36
+% ID: 24-36
 
 {\ucTable	% UC: Crea Opera
 {	% Caso d'uso
@@ -26,30 +27,29 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	L'utente crea un'istanza di opera svolta nel teatro.
-    % - DISCUTERE: "istanza" non è il termine appropriato.
+	L'Utente crea un'Opera da svolgere nel teatro.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente si trova nella sezione Informazioni.
-        % "Informazioni"(2)
+        \item L'Utente si trova nella sezione INFORMAZIONI.
+        % "INFORMAZIONI"(2)
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item L'utente avvia il caso d'uso selezionando il comando "Crea Opera".
-        \item Il sistema mostra una interfaccia per inserire dati e impostazioni dell'opera.
-        \item L'utente inserisce le informazioni dell'opera.
-        \item L'utente conferma la creazione.
+        \item L'Utente avvia il caso d'uso selezionando il comando "Crea Opera".
+        \item Il sistema mostra una interfaccia per inserire dati e impostazioni dell'Opera.
+        \item L'Utente inserisce le informazioni dell'Opera.
+        \item L'Utente conferma la creazione.
         \item Il sistema verifica i dati e li salva in memoria.
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item La nuova opera è memorizzata e immediatamente visibile a tutti gli utenti.
+        \item La nuova Opera è memorizzata e immediatamente visibile a tutti gli utenti.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Alternativa
@@ -63,23 +63,23 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	L'utente modifica le informazioni di un'opera.
+	L'Utente modifica le informazioni di un'Opera.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente si trova nella sezione Informazioni.
+        \item L'Utente si trova nella sezione INFORMAZIONI.
         % "si trova"(5)
-        % "Informazioni"(2)
+        % "INFORMAZIONI"(2)
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item L'utente avvia il caso d'uso selezionando il comando "Modifica" associato ad un'opera.
-        \item Il sistema consente all'utente di modificare le informazioni dell'opera.
-        \item L'utente inserisce le modifiche desiderate e le conferma.
+        \item L'Utente avvia il caso d'uso selezionando il comando "Modifica" associato ad un'Opera.
+        \item Il sistema consente all'Utente di modificare le informazioni dell'Opera.
+        \item L'Utente inserisce le modifiche desiderate e le conferma.
         \item Il sistema verifica i dati e li salva in memoria.
     \end{enumerate}
 	
@@ -98,29 +98,29 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	L'utente elimina un'opera dalla lista di opere memorizzate.
+	L'Utente elimina un'Opera dalla lista di Opere memorizzate.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente si trova nella sezione Informazioni.
+        \item L'Utente si trova nella sezione INFORMAZIONI.
         % "si trova"(5)
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item L'utente avvia il caso d'uso selezionando il comando "Elimina" associato ad un'opera.
-        \item Il sistema richiede all'utente di confermare l'intenzione di eliminare l'opera.
-        \item L'utente conferma l'elimina.
-        \item Il sistema verifica che non ci siano regie associate all'opera e la elimina permanentemente.
+        \item L'Utente avvia il caso d'uso selezionando il comando "Elimina" associato ad un'Opera.
+        \item Il sistema richiede all'Utente di confermare l'intenzione di eliminare l'Opera.
+        \item L'Utente conferma l'elimina.
+        \item Il sistema verifica che non ci siano Regie associate all'Opera e la elimina permanentemente.
         % "e la elimina permanentemente"(10)
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
+        \item L'Utente effettua l'eliminazione di un'Opera.
     \end{enumerate}
 	
 } }
@@ -133,28 +133,28 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	L'utente crea una nuova regia per un'opera.
+	L'Utente crea una nuova Regia per un'Opera.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
     \begin{enumerate}
-        \item L'utente sta visualizzando un'opera.
+        \item L'Utente sta visualizzando un'Opera.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
     \begin{enumerate}
-        \item L'utente avvia il caso d'uso selezionando il comando "Crea Regia".
-        \item Il sistema mostra una interfaccia per inserire dati e impostazioni della regia.
-        \item L'utente inserisce le informazioni della regia.
-        \item L'utente conferma la creazione.
+        \item L'Utente avvia il caso d'uso selezionando il comando "Crea Regia".
+        \item Il sistema mostra una interfaccia per inserire dati e impostazioni della Regia.
+        \item L'Utente inserisce le informazioni della Regia.
+        \item L'Utente conferma la creazione.
         \item Il sistema verifica i dati e li salva in memoria.
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item La nuova regia è memorizzata e immediatamente visibile a tutti gli utenti.
+        \item La nuova Regia è memorizzata e immediatamente visibile a tutti gli utenti.
     \end{enumerate}
 	
 } }
@@ -167,21 +167,21 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	L'utente modifica le informazioni di una regia.
+	L'Utente modifica le informazioni di una Regia.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente sta visualizzando un'opera.
+        \item L'Utente sta visualizzando un'Opera.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
     \begin{enumerate}
-        \item L'utente avvia il caso d'uso selezionando il comando "Modifica" associato ad una regia.
-        \item Il sistema consente all'utente di modificare le informazioni della regia.
-        \item L'utente inserisce le modifiche desiderate e le conferma.
+        \item L'Utente avvia il caso d'uso selezionando il comando "Modifica" associato ad una Regia.
+        \item Il sistema consente all'Utente di modificare le informazioni della Regia.
+        \item L'Utente inserisce le modifiche desiderate e le conferma.
         \item Il sistema verifica i dati e li salva in memoria.
     \end{enumerate}
 	
@@ -200,35 +200,31 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	L'utente elimina una regia dalla lista di regie associate all'opera.
+	L'Utente elimina una Regia dalla lista di Regie associate all'Opera.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente sta visualizzando un'opera.
+        \item L'Utente sta visualizzando un'Opera.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
     \begin{enumerate}
-        \item L'utente avvia il caso d'uso selezionando il comando "Elimina" associato ad una regia.
-        \item Il sistema richiede all'utente di confermare l'intenzione di eliminare la regia.
-        \item L'utente conferma l'elimina.
-        \item Il sistema verifica che non ci siano eventi associate alla regia e la elimina permanentemente.
+        \item L'Utente avvia il caso d'uso selezionando il comando "Elimina" associato ad una Regia.
+        \item Il sistema richiede all'Utente di confermare l'intenzione di eliminare la Regia.
+        \item L'Utente conferma l'elimina.
+        \item Il sistema verifica che non ci siano Eventi associate alla Regia e la elimina permanentemente.
         % "e la elimina permanentemente"(10)
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
+        \item L'Utente effettua l'eliminazione di una Regia.
     \end{enumerate}
 	
 } }
-
-
-% - DA QUESTO PUNTO IN AVANTI, NON HO FATTO CORREZIONI NEI USECASE
-
 
 {\ucTable	% UC: Crea Sezione
 {	% Caso d'uso
@@ -238,44 +234,68 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	Creazione di un settore di posti.
+	L'Utente crea una Sezione di Posti nel teatro.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente è autenticato come Amministratore.
+        \item L'Utente si trova nella sezione TEATRO.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item Il caso d'uso inizia quando l'utente seleziona \textit{Crea una Sezione}.
-        \item Il Sistema chiede all'utente, tramite un interfaccia, come che nome dare alla nuova Sezione e i dati da assegnargli.
-        \item \textbf{If} l'utente conferma i dati
-        \begin{enumerate}
-            \item Il Sistema valida il nome e i dati inseriti.
-            \item \textbf{If} nome e dati sono validi
-            \begin{enumerate}
-                \item Il Sistema aggiunge la nuova Sezione alla Lista delle Sezioni.
-            \end{enumerate}
-            \item \textbf{Else}
-            \begin{enumerate}
-                \item Il Sistema restituisce un messaggio di errore.
-                \item L'utente torna al passo 2.
-            \end{enumerate}
-        \end{enumerate}
-        \item \textbf{Else if} l'utente annulla
-        \begin{enumerate}
-            \item Il Sistema annulla l'operazione.
-        \end{enumerate} 
+        \item L'Utente avvia il caso d'uso selezionando il comando "Crea Sezione".
+        \item Il sistema mostra una interfaccia per inserire i dati della Sezione.
+        \item L'Utente inserisce le informazioni della Sezione.
+        \item L'Utente conferma la creazione.
+        \item Il sistema verifica i dati e li salva in memoria.
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item La nuova sezione è stata aggiunta alla Lista delle Sezioni.
+        \item L'Utente crea una Sezione.
+        % \item La nuova Sezione è stata aggiunta alla Lista delle Sezioni.
     \end{enumerate}
 	
+}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucTable	% UC: Visualizza Sezione
+{	% Caso d'uso
+    Visualizza Sezione
+    
+}{	% ID
+    \increaseCount{classId}
+    
+}{	% Breve descrizione
+    L'Utente visualizza le informazioni riguardo una singola Sezione.
+    
+}{	% Attori Primari
+    \attori
+}{	% Precondizioni
+    \begin{enumerate}
+        \item L'Utente si trova nella sezione TEATRO.
+        % "si trova"(5)
+    \end{enumerate}
+    
+}{	% Sequenza Eventi Principale
+    \begin{enumerate}
+        \item L'Utente richiede le informazioni di una Sezione.
+        \item Il sistema mostra a schermo le informazioni.
+        % "mostra a schermo <oggetto>"(3)
+        \item \textbf{include}(Lista Posto) % - Non è corretto secondo l'altra usecase description
+        \item[] \textbf{punto di estensione:} Crea Posto
+    \end{enumerate}
+    
+}{	% Postcondizioni
+    \begin{enumerate}
+        \item Le informazioni della Sezione vengono visualizzate a schermo.
+        % "visualizza a schermo <oggetto>"(4)
+    \end{enumerate}
+    
 }{	% Sequenza Eventi Alternativa
 } }
 
@@ -287,46 +307,28 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	Modifica di una Sezione.
+	L'Utente modifica le informazioni di una Sezione.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente è autenticato come Amministratore.
-        \item L'utente ha selezionato una Sezione.
+        \item L'Utente si trova nella sezione TEATRO.
+        % "si trova"(5)
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item Il caso d'uso inizia quando l'utente seleziona \textit{Modifica Sezione} all'interno di una Sezione.
-        \item \textbf{include}(Crea Posto)
-        \item \textbf{include}(Modifica Posto)
-        \item \textbf{include}(Elimina Posto)
-        \item Il Sistema, tramite un interfaccia, chiede all'utente le modifiche da apportare alla Sezione o ai Posti ad essa appartenenti.
-        \item \textbf{If} l'utente conferma
-        \begin{enumerate}
-            \item \textbf{If} le modifiche sono valide
-            \begin{enumerate}
-                \item Il Sistema modifica la Sezione selezionata.
-                \item Il Sistema informa che la modifica è avvenuta con successo.
-            \end{enumerate}
-            \item \textbf{Else}
-            \begin{enumerate}
-                \item Il Sistema mostra un messaggio di errore.
-                \item L'utente torna al passo 5.
-            \end{enumerate}
-        \end{enumerate}
-        \item \textbf{Else if} l'utente annulla
-        \begin{enumerate}
-            \item Il Sistema annulla l'operazione.
-        \end{enumerate}
+        \item L'Utente avvia il caso d'uso selezionando il comando "Modifica" associato ad una Sezione.
+        \item Il sistema consente all'Utente di modificare le informazioni della Sezione, e.g. nome, descrizione.
+        \item L'Utente inserisce le modifiche desiderate e le conferma.
+        \item Il sistema verifica i dati e li salva in memoria.
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item Il Sistema ha modificato la Sezione selezionata.
+        \item L'Utente effettua la modifica di una Sezione.
     \end{enumerate}
 	
 } }
@@ -339,35 +341,28 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	Eliminazione di una Sezione.
+	L'Utente elimina una Sezione dalla lista di Sezioni memorizzate.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente è autenticato come Amministratore.
-        \item L'utente ha selezionato una Sezione.
+        \item L'Utente si trova nella sezione TEATRO.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item Il caso d'uso inizia quando l'utente seleziona \textit{Elimina Sezione} all'interno di una Sezione.
-        \item Il Sistema chiede conferma all'utente.
-        \item \textbf{If} l'utente conferma
-        \begin{enumerate}
-            \item Il Sistema elimina la Sezione selezionata.
-            \item Il Sistema informa che l'eliminazione è avvenuta con successo.
-        \end{enumerate}
-        \item \textbf{Else if} l'utente annulla
-        \begin{enumerate}
-            \item Il Sistema annulla l'operazione.
-        \end{enumerate}
+        \item L'Utente avvia il caso d'uso selezionando il comando "Elimina" associato ad una Sezione.
+        \item Il sistema richiede all'Utente di confermare l'intenzione di eliminare la Sezione.
+        \item L'Utente conferma l'elimina.
+        \item Il sistema verifica che non ci siano Posti associati alla Sezione e la elimina permanentemente.
+        % "e la elimina permanentemente"(10)
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item Il Sistema ha eliminato la Sezione selezionata.
+        \item L'Utente effettua l'eliminazione di una Sezione.
     \end{enumerate}
 	
 } }
@@ -380,41 +375,33 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	Creazione di un posto in una Sezione.
+	L'Utente crea un Posto (o Posti) per una Sezione.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente è autenticato come Amministratore.
+        \item L'Utente sta visualizzando una Sezione.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item Il caso d'uso inizia quando l'utente seleziona \textit{Nuovo Posto} all'interno di una Sezione.
-        \item Il Sistema, tramite un interfaccia, chiede all'utente gli attributi da assegnare al Posto.
-        \item Il Sistema chiede conferma all'utente
-        \item  \textbf{If} l'utente conferma
-        \begin{enumerate}
-            \item Il sistema valida i dati inseriti.
+        \item L'Utente avvia il caso d'uso inserendo i dati necessario (fila e numero) nella pagina.
+        \item \textbf{If} l'Utente sceglie di creare multipli Posti
             \begin{enumerate}
-                \item Il Sistema aggiunge un nuovo Posto alla Lista dei Posti.
+                \item Il sistema permette all'Utente di inserire un rango di numeri (per i Posti) nella pagina.
             \end{enumerate}
-            \item \textbf{Else}
+        \item L'Utente conferma la creazione.
+        \item \textbf{For} ogni numero inserito nel campo di numeri % - Studiare/Corriggere
             \begin{enumerate}
-                \item Il Sistema restituisce un messaggio di errore.
+                \item Il sistema verifica i dati e li salva in memoria.
             \end{enumerate}
-        \end{enumerate}
-        \item \textbf{Else if} l'utente annulla
-        \begin{enumerate}
-            \item Il Sistema annulla l'operazione.
-        \end{enumerate}
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item Il nuovo Posto è stato aggiunto alla Lista dei Posti.
+        \item Il nuovo Posto (o Posti) è memorizzato e immediatamente visibile a tutti gli utenti.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Alternativa
@@ -428,42 +415,27 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	Modifica di un Posto.
+	L'Utente modifica le informazioni di un Posto.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente è autenticato come Amministratore.
+        \item L'Utente sta visualizzando una Sezione.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item Il caso d'uso inizia quando l'utente seleziona \textit{Modifica Posto} all'interno di un Posto.
-        \item Il Sistema chiede le modifiche da apportare al Posto.
-        \item Il Sistema chiede conferma all'utente.
-        \item \textbf{If} l'utente conferma
-        \begin{enumerate}
-            \item Il Sistema verifica i dati inseriti.
-            \item \textbf{If} i dati sono validi
-            \begin{enumerate}
-                \item Il Sistema modifica il Posto selezionato.
-            \end{enumerate}
-            \item \textbf{Else}
-            \begin{enumerate}
-                \item Il Sistema restituisce un messaggio di errore.
-            \end{enumerate}
-            \item \textbf{Else if} L'utente annulla
-            \begin{enumerate}
-                \item Il Sistema annulla l'operazione.
-            \end{enumerate}
-        \end{enumerate}
+        \item L'Utente avvia il caso d'uso selezionando il comando "Modifica" associato ad un Posto.
+        \item Il sistema consente all'Utente di modificare la fila e numero del Posto.
+        \item L'Utente inserisce le modifiche desiderate e le conferma.
+        \item Il sistema verifica i dati e li salva in memoria.
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item Il Sistema ha modificato la Sezione selezionata.
+        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Alternativa
@@ -477,33 +449,26 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	Eliminazione di un Posto.
+	L'Utente elimina un Posto dalla lista di Posti associati alla Sezione.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente è autenticato come Amministratore.
+        \item L'Utente sta visualizzando una Sezione.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item Il caso d'uso inizia quando l'utente seleziona \textit{Elimina Posto} all'interno di una Posto.
-        \item Il Sistema chiede conferma all'utente.
-        \item \textbf{If} l'utente conferma
-        \begin{enumerate}
-            \item Il Sistema elimina il Posto selezionato.
-        \end{enumerate}
-        \item \textbf{Else if} l'utente annulla
-        \begin{enumerate}
-            \item Il Sistema annulla l'operazione.
-        \end{enumerate}
+        \item L'Utente avvia il caso d'uso selezionando il comando "Elimina" associato ad un Posto.
+        \item Il sistema verifica che non ci siano Prenotazioni associate al Posto e lo elimina permanentemente.
+        % "e la elimina permanentemente"(10)
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item Il Sistema ha eliminato il Posto selezionato.
+        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Alternativa

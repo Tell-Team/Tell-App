@@ -4,12 +4,13 @@
 % UC ext: Crea Evento			[X]
 % UC ext: Modifica Evento		[X]
 % UC ext: Elimina Evento		[X]
-% UC: Lista Prenotazioni		[]
-% UC ext: Ricerca Prenotazione		[]
+% UC: Lista Prenotazioni		[X]
+% UC ext: Ricerca Prenotazione		[X]
+% UC ext: Elimina Prenotazione	[X]
 % UC ext: Segna Prenotazione come pagata	[X]
 
 \renewcommand{\attori}{Biglietteria \\ Amministratore}
-% ID: 15-24
+% ID: 14-23
 
 
 {\ucTable	% UC: Crea Spettacolo
@@ -20,31 +21,30 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	L'utente crea un'istanza di spettacolo svolto nel teatro.
-    % - DISCUTERE: "istanza" non è il termine appropriato.
+	L'Utente crea uno Spettacolo da svolgere nel teatro.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente si trova nella sezione Spettacoli.
+        \item L'Utente si trova nella sezione SPETTACOLI.
         % "si trova"(5)
-        % "Spettacoli"(8)
+        % "SPETTACOLI"(8)
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item L'utente avvia il caso d'uso selezionando il comando Creazione.
-        \item Il sistema mostra una interfaccia per inserire dati e impostazioni dello spettacolo.
-        \item L'utente inserisce le informazioni dello spettacolo.
-        \item L'utente conferma la creazione.
+        \item L'Utente avvia il caso d'uso selezionando il comando "Crea Spettacolo".
+        \item Il sistema mostra una interfaccia per inserire dati e impostazioni dello Spettacolo.
+        \item L'Utente inserisce le informazioni dello Spettacolo.
+        \item L'Utente conferma la creazione.
         \item Il sistema verifica i dati e li salva in memoria.
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item L'utente crea uno spettacolo.
+        \item L'Utente crea uno Spettacolo.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Alternativa
@@ -58,28 +58,28 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	L'utente modifica le informazioni di uno spettacolo.
+	L'Utente modifica le informazioni di uno Spettacolo.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente si trova nella sezione Spettacoli.
+        \item L'Utente si trova nella sezione SPETTACOLI.
         % "si trova"(5)
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item L'utente avvia il caso d'uso selezionando il comando Modifica associato ad uno spettacolo.
-        \item Il sistema consente all'utente di modificare le informazioni dell'opera.
-        \item L'utente inserisce le modifiche desiderate e le conferma.
+        \item L'Utente avvia il caso d'uso selezionando il comando "Modifica" associato ad uno Spettacolo.
+        \item Il sistema consente all'Utente di modificare le informazioni dell'Opera.
+        \item L'Utente inserisce le modifiche desiderate e le conferma.
         \item Il sistema verifica i dati e li salva in memoria.
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item L'utente effettua la modifica di uno spettacolo.
+        \item L'Utente effettua la modifica di uno Spettacolo.
     \end{enumerate}
 	
 } }
@@ -92,29 +92,29 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	L'utente elimina uno spettacolo dalla lista di spettacoli memorizzati.
+	L'Utente elimina uno Spettacolo dalla lista di Spettacoli memorizzati.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente si trova nella sezione Spettacoli.
+        \item L'Utente si trova nella sezione SPETTACOLI.
         % "si trova"(5)
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item L'utente avvia il caso d'uso selezionando il comando "Elimina" associato ad uno spettacolo.
-        \item Il sistema richiede all'utente di confermare l'intenzione di eliminare lo spettacolo.
-        \item L'utente conferma l'elimina.
-        \item Il sistema verifica che non ci siano eventi associati allo spettacolo e lo elimina permanentemente.
+        \item L'Utente avvia il caso d'uso selezionando il comando "Elimina" associato ad uno Spettacolo.
+        \item Il sistema richiede all'Utente di confermare l'intenzione di eliminare lo Spettacolo.
+        \item L'Utente conferma l'elimina.
+        \item Il sistema verifica che non ci siano Eventi associati allo Spettacolo e lo elimina permanentemente.
         % "e la elimina permanentemente"(10)
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
+        \item L'Utente effettua l'eliminazione di uno Spettacolo.
     \end{enumerate}
 	
 } }
@@ -127,28 +127,28 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	L'utente crea un evento per uno spettacolo.
+	L'Utente crea un'Evento per uno Spettacolo.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente sta visualizzando uno spettacolo.
+        \item L'Utente sta visualizzando uno Spettacolo.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item L'utente avvia il caso d'uso selezionando il comando "Crea Evento".
-        \item Il sistema mostra una interfaccia per inserire la data e ora dell'evento.
-        \item L'utente inserisce le informazioni dell'evento.
-        \item L'utente conferma la creazione.
+        \item L'Utente avvia il caso d'uso selezionando il comando "Crea Evento".
+        \item Il sistema mostra una interfaccia per inserire la data e ora dell'Evento.
+        \item L'Utente inserisce le informazioni dell'Evento.
+        \item L'Utente conferma la creazione.
         \item Il sistema verifica i dati e li salva in memoria.
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item Il nuovo evento è memorizzato e immediatamente visibile a tutti gli utenti.
+        \item Il nuovo Evento è memorizzato e immediatamente visibile a tutti gli utenti.
     \end{enumerate}
 	
 } }
@@ -161,21 +161,21 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	L'utente modifica le informazioni di un'evento.
+	L'Utente modifica le informazioni di un'Evento.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente sta visualizzando un'opera.
+        \item L'Utente sta visualizzando un'Opera.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item L'utente avvia il caso d'uso selezionando il comando "Modifica" associato ad un'evento.
-        \item Il sistema consente all'utente di modificare la data e ora dell'evento.
-        \item L'utente inserisce le modifiche desiderate e le conferma.
+        \item L'Utente avvia il caso d'uso selezionando il comando "Modifica" associato ad un'Evento.
+        \item Il sistema consente all'Utente di modificare la data e ora dell'Evento.
+        \item L'Utente inserisce le modifiche desiderate e le conferma.
         \item Il sistema verifica i dati e li salva in memoria.
     \end{enumerate}
 	
@@ -194,28 +194,28 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	L'utente elimina un'evento dalla lista di eventi associati allo spettacolo.
+	L'Utente elimina un'Evento dalla lista di Eventi associati allo Spettacolo.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente sta visualizzando un'opera.
+        \item L'Utente sta visualizzando un'Opera.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item L'utente avvia il caso d'uso selezionando il comando "Elimina" associato ad un'evento.
-        \item Il sistema richiede all'utente di confermare l'intenzione di eliminare l'evento.
-        \item L'utente conferma l'elimina.
-        \item Il sistema verifica che non ci siano prenotazioni associate all'evento e lo elimina permanentemente.
+        \item L'Utente avvia il caso d'uso selezionando il comando "Elimina" associato ad un'Evento.
+        \item Il sistema richiede all'Utente di confermare l'intenzione di eliminare l'Evento.
+        \item L'Utente conferma l'elimina.
+        \item Il sistema verifica che non ci siano Prenotazioni associate all'Evento e lo elimina permanentemente.
         % "e la elimina permanentemente"(10)
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
+        \item L'Utente effettua l'eliminazione di un'Evento.
     \end{enumerate}
 	
 } }
@@ -228,40 +228,69 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	L'utente visualizza l'elenco delle prenotazione salvate nel Sistema.
+	L'Utente visualizza l'elenco delle Prenotazione memorizzate.
+    % "visualizza"
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente è autenticato come Amministratore o Biglietteria.
+        \item L'Utente si trova nella sezione PRENOTAZIONI.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item Il caso d'uso inizia quando l'utente richiede di visualizzare la lista completa delle prenotazione.
-        \item \textbf{If} c'è almeno una prenotazione memorizzata nel Sistema 
-        \begin{enumerate}
-            \item \textbf{For} ogni prenotazione nel Sistema
-            \begin{enumerate}
-                \item Il Sistema mostra un'anteprima della prenotazione con informazioni basiche.
-            \end{enumerate}
-            \item[] \textbf{punto di estensione:} Ricerca Prenotazione
-        \end{enumerate}
-        \item \textbf{Else}
-        \begin{enumerate}
-            \item Il Sistema informa l'utente che non vi sono prenotazioni memorizzate.
-        \end{enumerate}
+        \item Il sistema mostra a schermo il nominativo e l'ora di emmisione di tutte Prenotazioni memorizzate.
+        % "mostra a schermo <oggetto>"(3)
+        \item Il sistema permette all'Utente di visualizzare in più dettaglio ed eliminare le Prenotazioni.
+        % "visualizza in più dettaglio"(9)
+        \item[] \textbf{punto di estensione:} Ricerca Prenotazione
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item L'utente visualizza l'elenco delle prenotazioni salvate nel Sistema.
+        \item La lista di Prenotazioni memorizzate viene visualizzata a schermo.
+        % "visualizza a schermo <oggetto>"(4)
     \end{enumerate}
 	
 }{	% Sequenza Eventi Alternativa
 } }
+
+
+{\ucExtTable	% UC EXT: Elimina Prenotazione
+{	% Caso d'uso
+    Elimina Prenotazione
+    
+}{	% ID
+    \increaseCount{classId}
+    
+}{	% Breve descrizione
+    L'Utente elimina una Sezione dalla lista di Sezioni memorizzate.
+    
+}{	% Attori Primari
+    \attori
+}{	% Precondizioni
+    \begin{enumerate}
+        \item L'Utente si trova nella sezione PRENOTAZIONI.
+    \end{enumerate}
+    
+}{	% Sequenza Eventi Principale
+    \begin{enumerate}
+        \item L'Utente avvia il caso d'uso selezionando il comando "Elimina" associato ad una Prenotazione.
+        \item Il sistema richiede all'Utente di confermare l'intenzione di eliminare la Prenotazione.
+        \item L'Utente conferma l'elimina.
+        \item Il sistema elimina la Prenotazione permanentemente.
+        % "e la elimina permanentemente"(10)
+    \end{enumerate}
+    
+}{	% Postcondizioni
+    \begin{enumerate}
+        \item L'Utente effettua l'eliminazione di una Prenotazione.
+    \end{enumerate}
+		
+} }
+
 
 {\ucExtTable	% UC EXT: Ricerca Prenotazione
 {	% Caso d'uso
@@ -271,36 +300,28 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	L'utente filtra la lista delle prenotazioni applicando eventuali filtri.
+	L'Utente filtra la lista delle Prenotazioni una parola chiave ricercata nel nominativo.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente ha inserito i criteri di ricerca.
-        \item L'utente ha premuto il pulsante di ricerca.
+        \item L'Utente si trova nella sezione PRENOTAZIONI.
+			% "si trova"(5)
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item Il Sistema ricerca, nell'elenco delle prenotazioni, delle prenotazioni coincidenti.
-        \item \textbf{If} il Sistema trova almeno una prenotazione coincidente
-        \begin{enumerate}
-            \item \textbf{For} ogni prenotazione coincidente
-            \begin{enumerate}
-                \item Il Sistema mostra un'anteprima della prenotazione con informazioni basiche.
-            \end{enumerate}
-        \end{enumerate}
-        \item \textbf{Else}
-        \begin{enumerate}
-            \item Il Sistema informa che non vi sono prenotazioni coincidenti.
-        \end{enumerate}
+        \item L'Utente effettua una ricerca specificando una chiave di ricerca.
+        \item Le Prenotazioni che non contengono la parola chiave nel suo nominativo non vengono incluse nella lista risultante.
+        % "nel suo nominativo"
+        % "non vengono inclusi"
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item L'utente visualizza l'elenco filtrato.
+        \item La lista risultante è filtrata. % Versión precedente: L'Utente visualizza l'elenco filtrato.
     \end{enumerate}
 	
 } }
@@ -313,28 +334,27 @@
 	\increaseCount{classId}
 	
 }{	% Breve descrizione
-	L'utente segna una prenotazione come \emph{pagata}.
+	L'Utente segna una Prenotazione come \emph{pagata}.
 	
 }{	% Attori Primari
 	\attori
 	
 }{	% Precondizioni
 	\begin{enumerate}
-        \item L'utente sta visualizzando l'elenco delle prenotazioni.
-        % - CORRIGGERE: È necessario conoscere come funziona Lista Prenotazioni
+        \item L'Utente sta visualizzando una Prenotazione.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item L'utente avvia il caso d'uso selezionando il comando "Segna come \emph{pagata}" associato ad una prenotazione.
-        \item Il sistema chiede conferma all'utente.
-        \item L'utente conferma l'assegnamento della prenotazione come \emph{pagata}.
+        \item L'Utente avvia il caso d'uso selezionando il comando "Segna come \emph{pagata}" associato ad una Prenotazione.
+        \item Il sistema chiede conferma all'Utente. % - Nella prattica, non chiede mai conferma
+        \item L'Utente conferma l'assegnamento della Prenotazione come \emph{pagata}.
         \item Il sistema effettua l'assegnamento.
     \end{enumerate}
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item La prenotazione è segnata come \emph{pagata}.
+        \item La Prenotazione è segnata come \emph{pagata}.
     \end{enumerate}
 	
 } }
