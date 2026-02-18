@@ -147,20 +147,15 @@ class VisualizzaSpettacoloView(AbstractVisualizzaView):
     # ------------------------- METODI DI VIEW -------------------------
 
     @override
-    def set_data(  # type: ignore[override]
-        self, data: SpettacoloData, lista_eventi: list[Evento]
-    ) -> None:
+    def set_data(self, data: SpettacoloData) -> None:  # type: ignore[override]
         """Carica i dati dello spettacolo nella pagina.
 
-        :param data: data salvata in una classe immutabile
-        :param lista_eventi: lista degli eventi associati allo spettacolo"""
+        :param data: data salvata in una classe immutabile"""
         # Reset layout lista eventi
         self.layout_lista_eventi.svuota_layout()
 
         # Salva dati dello spettacolo nella pagina
         self.id_current_spettacolo = data.id
-        self.lista_eventi = lista_eventi
-
         # Carica dati dello spettacolo
         self.label_titolo.setText(f"{data.titolo}")
         self.label_note.show()
@@ -181,12 +176,6 @@ class VisualizzaSpettacoloView(AbstractVisualizzaView):
             self.layout_dati_speciali.addWidget(label_anno)
         else:  # Caso Spettacolo generico
             ...
-
-        # Carica lista eventi
-        if not self.lista_eventi:
-            self.layout_lista_eventi.mostra_msg_lista_vuota()
-        else:
-            self.displayEventiRequest.emit(self.layout_lista_eventi)
 
     @override
     def aggiorna_pagina(self) -> None:

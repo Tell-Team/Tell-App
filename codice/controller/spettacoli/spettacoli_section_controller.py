@@ -8,7 +8,6 @@ from controller.navigation import Pagina
 from model.model.model import Model
 from model.pianificazione.spettacolo import Spettacolo
 from model.pianificazione.regia import Regia
-from model.organizzazione.evento import Evento
 from model.exceptions import OggettoInUsoException
 
 from view.spettacoli.pagine import SpettacoliSectionView
@@ -57,9 +56,6 @@ class SpettacoliSectionController(AbstractSectionController):
 
     def __get_spettacoli_by_titolo(self, titolo: str) -> list[Spettacolo]:
         return self._model.get_spettacoli_by_titolo(titolo)
-
-    def __get_eventi_by_spettacolo(self, id_: int) -> list[Evento]:
-        return self._model.get_eventi_by_spettacolo(id_)
 
     def __elimina_spettacolo(self, id_: int) -> None:
         self._model.elimina_spettacolo(id_)
@@ -172,9 +168,7 @@ class SpettacoliSectionController(AbstractSectionController):
                 musicisti_e_direttori_artistici=current_spettacolo.get_musicisti_e_direttori_artistici(),
             )
 
-        lista_eventi = self.__get_eventi_by_spettacolo(current_spettacolo.get_id())
-
-        current_pagina.set_data(spettacolo_data, lista_eventi)
+        current_pagina.set_data(spettacolo_data)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

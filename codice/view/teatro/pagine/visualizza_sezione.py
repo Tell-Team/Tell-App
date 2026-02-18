@@ -195,30 +195,20 @@ class VisualizzaSezioneView(AbstractVisualizzaView):
     # ------------------------- METODI DI VIEW -------------------------
 
     @override
-    def set_data(  # type: ignore[override]
-        self, data: SezioneData, lista_posti: list[Posto]
-    ) -> None:
+    def set_data(self, data: SezioneData) -> None:  # type: ignore[override]
         """Carica i dati della sezione nella pagina.
 
-        :param data: data salvata in una classe immutabile
-        :param lista_posti: lista dei posti associati alla sezione"""
+        :param data: data salvata in una classe immutabile"""
         # Reset layout lista posti
         self.layout_lista_posti.svuota_layout()
         self.__input_error.setText("")
 
         # Salva dati della sezione nella pagina
         self.id_current_sezione = data.id
-        self.lista_posti = lista_posti
 
         # Carica dati della sezione
         self.label_nome.setText(f"{data.nome}")
         self.label_descrizione.setText(f"{data.descrizione}")
-
-        # Carica lista posti
-        if not self.lista_posti:
-            self.layout_lista_posti.mostra_msg_lista_vuota()
-        else:
-            self.displayPostiRequest.emit(self.layout_lista_posti)
 
     @override
     def aggiorna_pagina(self) -> None:

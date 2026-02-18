@@ -7,7 +7,6 @@ from controller.navigation import Pagina
 
 from model.model.model import Model
 from model.organizzazione.sezione import Sezione
-from model.organizzazione.posto import Posto
 from model.exceptions import OggettoInUsoException
 
 from view.teatro.pagine import TeatroSectionView
@@ -50,9 +49,6 @@ class TeatroSectionController(AbstractSectionController):
 
     def __get_sezioni(self) -> list[Sezione]:
         return self._model.get_sezioni()
-
-    def __get_posti_by_sezione(self, id_: int) -> list[Posto]:
-        return self._model.get_posti_by_sezione(id_)
 
     def __elimina_sezione(self, id_: int) -> None:
         self._model.elimina_sezione(id_)
@@ -129,10 +125,8 @@ class TeatroSectionController(AbstractSectionController):
             descrizione=current_sezione.get_descrizione(),
         )
 
-        lista_posti = self.__get_posti_by_sezione(current_sezione.get_id())
-
         current_pagina.reset_pagina()
-        current_pagina.set_data(sezione_data, lista_posti)
+        current_pagina.set_data(sezione_data)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

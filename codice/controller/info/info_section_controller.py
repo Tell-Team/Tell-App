@@ -8,7 +8,6 @@ from controller.navigation import Pagina
 from model.model.model import Model
 from model.pianificazione.opera import Opera
 from model.pianificazione.genere import Genere
-from model.pianificazione.regia import Regia
 from model.exceptions import OggettoInUsoException
 
 from view.info.pagine import InfoSectionView
@@ -74,9 +73,6 @@ class InfoSectionController(AbstractSectionController):
 
     def __elimina_genere(self, id_: int) -> None:
         self._model.elimina_genere(id_)
-
-    def __get_regie_by_opera(self, id_: int) -> list[Regia]:
-        return self._model.get_regie_by_opera(id_)
 
     def __display_opere(self, layout_opere: ListLayout) -> None:
         """Mostra a schermo alcune informazioni delle opere salvate ed assegna a
@@ -219,9 +215,7 @@ class InfoSectionController(AbstractSectionController):
             teatro_rappresentazione=current_opera.get_teatro_prima_rappresentazione(),
         )
 
-        lista_regie = self.__get_regie_by_opera(current_opera.get_id())
-
-        current_pagina.set_data(opera_data, genere_associato.get_nome(), lista_regie)
+        current_pagina.set_data(opera_data, genere_associato.get_nome())
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

@@ -162,20 +162,16 @@ class VisualizzaOperaView(AbstractVisualizzaView):
     # ------------------------- METODI DI VIEW -------------------------
 
     @override
-    def set_data(  # type: ignore[override]
-        self, data: OperaData, genere_nome: str, lista_regie: list[Regia]
-    ) -> None:
+    def set_data(self, data: OperaData, genere_nome: str) -> None:  # type: ignore[override]
         """Carica i dati dell'opera nella pagina.
 
         :param data: data salvata in una classe immutabile
-        :param genere_nome: nome del genere scelto per l'opera
-        :param lista_regie: lista delle regie associate all'opera"""
+        :param genere_nome: nome del genere scelto per l'opera"""
         # Reset layout lista regie
         self.layout_lista_regie.svuota_layout()
 
         # Salva dati dell'opera nella pagina
         self.id_current_opera = data.id
-        self.lista_regie = lista_regie
 
         # Carica dati dell'opera
         self.label_nome.setText(f"{data.nome}")
@@ -189,12 +185,6 @@ class VisualizzaOperaView(AbstractVisualizzaView):
             + f"nel teatro {data.teatro_rappresentazione}"
         )
         self.label_trama.setText(f"{data.trama}")
-
-        # Carica lista regie
-        if not self.lista_regie:
-            self.layout_lista_regie.mostra_msg_lista_vuota()
-        else:
-            self.displayRegieRequest.emit(self.layout_lista_regie)
 
     @override
     def aggiorna_pagina(self) -> None:
