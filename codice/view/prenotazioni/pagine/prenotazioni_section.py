@@ -15,7 +15,7 @@ from view.style.ui_style import WidgetRole, WidgetColor
 class PrenotazioniSectionView(AbstractSectionView):
     """Sezione Prenotazioni dell'app.
 
-    Contiene le informazioni su tutti gli `Prenotazione` memorizzati.
+    Contiene le informazioni su tutti i `Prenotazione` memorizzati.
 
     Segnali
     ---
@@ -70,7 +70,7 @@ class PrenotazioniSectionView(AbstractSectionView):
         layout_header_prenotazioni.addWidget(widget_ricerca)
 
         label_lista_prenotazioni_vuota = EmptyStateLabel(
-            "Non vi sono prenotazioni registrati."
+            "Non vi sono prenotazioni registrate."
         )
         label_lista_prenotazioni_vuota.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_lista_prenotazioni_vuota.setProperty(

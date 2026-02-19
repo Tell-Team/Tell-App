@@ -18,7 +18,7 @@ from view.style.ui_style import WidgetRole, WidgetColor
 class TeatroSectionView(AbstractSectionView):
     """Sezione Teatro dell'app.
 
-    Contiene le informazioni sulle `Sezione` e `Posto` memorizzati.
+    Contiene le informazioni su `Sezione` e `Posto` memorizzati.
 
 
     Segnali

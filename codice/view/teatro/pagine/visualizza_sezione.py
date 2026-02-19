@@ -28,7 +28,7 @@ from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class VisualizzaSezioneView(AbstractVisualizzaView):
-    """Pagina per visualizzare le signole `Sezione` in dettaglio.
+    """Pagina per visualizzare una signola `Sezione` in dettaglio.
 
     Contiene le tutte informazioni della `Sezione` ed una lista con tutti i `Posto`
     associati ad essa.

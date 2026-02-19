@@ -11,7 +11,7 @@ from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class EventoPostiDisplay(ItemDisplay):
-    """View dei posti prenotati per un'evento. È usato nelle pagine `RicevutaView` e
+    """View dei posti prenotati per un evento. È usato nelle pagine `RicevutaView` e
     `VisualizzaPrenotazioneView`."""
 
     def __init__(self, evento_data: datetime, s_p: list[SezionePostiInfo]):

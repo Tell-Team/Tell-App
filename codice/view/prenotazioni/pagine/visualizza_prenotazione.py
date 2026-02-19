@@ -16,7 +16,7 @@ from view.style.ui_style import WidgetRole, WidgetColor
 class VisualizzaPrenotazioneView(AbstractVisualizzaView):
     """Pagina per visualizzare le singoli `Prenotazione` in dettaglio.
 
-    Contiene le tutte informazioni dello `Prenotazione` ed una lista con tutti i `Posto`
+    Contiene le tutte informazioni di `Prenotazione` ed una lista con tutti i `Posto`
     associati ad essa. Permette di segnarla come `pagata` o `non pagata`.
 
     Segnali

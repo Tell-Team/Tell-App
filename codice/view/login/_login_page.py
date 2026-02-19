@@ -5,7 +5,7 @@ from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class LoginPage(QWidget):
-    """View della pagina per scegliere il tipo d'`Account` con cui ingressare all'app."""
+    """View della pagina per scegliere il tipo di `Account` con cui ingressare all'app."""
 
     def __init__(self):
         super().__init__()
