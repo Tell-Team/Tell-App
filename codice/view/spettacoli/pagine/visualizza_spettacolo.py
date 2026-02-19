@@ -19,7 +19,7 @@ from view.utils import make_vline, make_hline, svuota_layout_generico
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class VisualizzaSpettacoloView(AbstractVisualizzaView):
+class VisualizzaSpettacoloPage(AbstractVisualizzaView):
     """Pagina per visualizzare i singoli `Spettacolo` in dettaglio.
 
     Contiene le tutte informazioni dello `Spettacolo` ed una lista con tutti gli `Evento`

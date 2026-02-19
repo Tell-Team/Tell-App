@@ -18,7 +18,7 @@ from view.utils.custom_button import DefaultButton, RicercaButton
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class InfoSectionView(AbstractSectionView):
+class InfoSection(AbstractSectionView):
     """Sezione Info dell'app.
 
     Contiene le informazioni sulle `Opera` e `Genere` memorizzati.

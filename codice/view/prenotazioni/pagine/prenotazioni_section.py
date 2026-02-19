@@ -12,7 +12,7 @@ from view.utils.custom_button import RicercaButton
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class PrenotazioniSectionView(AbstractSectionView):
+class PrenotazioniSection(AbstractSectionView):
     """Sezione Prenotazioni dell'app.
 
     Contiene le informazioni su tutti i `Prenotazione` memorizzati.

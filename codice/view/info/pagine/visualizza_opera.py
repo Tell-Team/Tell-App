@@ -18,7 +18,7 @@ from view.utils import make_vline
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class VisualizzaOperaView(AbstractVisualizzaView):
+class VisualizzaOperaPage(AbstractVisualizzaView):
     """Pagina per visualizzare le singole `Opera` in dettaglio.
 
     Contiene le tutte informazioni dell'`Opera` ed una lista con tutte le `Regia`

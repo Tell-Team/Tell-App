@@ -1,21 +1,21 @@
-from .spettacoli_section import SpettacoliSectionView
-from .visualizza_spettacolo import VisualizzaSpettacoloView
-from .prezzi_associati import PrezziAssociatiView
-from .nuovo_prezzo import NuovoPrezzoView
-from .modifica_prezzo import ModificaPrezzoView
-from .nuovo_spettacolo import NuovoSpettacoloView
-from .modifica_spettacolo import ModificaSpettacoloView
-from .nuovo_evento import NuovoEventoView
-from .modifica_evento import ModificaEventoView
+from .spettacoli_section import SpettacoliSection
+from .visualizza_spettacolo import VisualizzaSpettacoloPage
+from .prezzi_associati import PrezziAssociatiPage
+from .nuovo_prezzo import NuovoPrezzoPage
+from .modifica_prezzo import ModificaPrezzoPage
+from .nuovo_spettacolo import NuovoSpettacoloPage
+from .modifica_spettacolo import ModificaSpettacoloPage
+from .nuovo_evento import NuovoEventoPage
+from .modifica_evento import ModificaEventoPage
 
 __all__ = [
-    "SpettacoliSectionView",
-    "VisualizzaSpettacoloView",
-    "PrezziAssociatiView",
-    "NuovoPrezzoView",
-    "ModificaPrezzoView",
-    "NuovoSpettacoloView",
-    "ModificaSpettacoloView",
-    "NuovoEventoView",
-    "ModificaEventoView",
+    "SpettacoliSection",
+    "VisualizzaSpettacoloPage",
+    "PrezziAssociatiPage",
+    "NuovoPrezzoPage",
+    "ModificaPrezzoPage",
+    "NuovoSpettacoloPage",
+    "ModificaSpettacoloPage",
+    "NuovoEventoPage",
+    "ModificaEventoPage",
 ]

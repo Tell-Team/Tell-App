@@ -1,11 +1,11 @@
 from typing import override
 
-from view.info.pagine import NuovaRegiaView
+from view.info.pagine import NuovaRegiaPage
 from view.info.utils import RegiaData
 
 
-class ModificaRegiaView(NuovaRegiaView):
-    """Pagina per la modifica di regie. Sottoclasse di `NuovaRegiaView`."""
+class ModificaRegiaPage(NuovaRegiaPage):
+    """Pagina per la modifica di regie. Sottoclasse di `NuovaRegiaPage`."""
 
     def __init__(self):
         super().__init__()

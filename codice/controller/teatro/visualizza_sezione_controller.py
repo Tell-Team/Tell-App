@@ -15,7 +15,7 @@ from model.exceptions import (
     OccupatoException,
 )
 
-from view.teatro.pagine import VisualizzaSezioneView
+from view.teatro.pagine import VisualizzaSezionePage
 from view.teatro.utils import PostoData
 from view.teatro.widgets import PostoDisplay
 
@@ -30,18 +30,18 @@ FORMATO_SVAGLIATO = (
 
 
 class VisualizzaSezioneController(AbstractVisualizzaController):
-    """Gestice la pagina `VisualizzaSezioneView` dell'app.
+    """Gestice la pagina `VisualizzaSezionePage` dell'app.
 
     Segnali
     ---
-    - `goBackRequest()`: emesso per tornare alla pagina `TeatroSectionView`.
+    - `goBackRequest()`: emesso per tornare alla pagina `TeatroSection`.
     """
 
-    _view_page: VisualizzaSezioneView
+    _view_page: VisualizzaSezionePage
 
-    def __init__(self, model: Model, sezione_v: VisualizzaSezioneView):
-        if type(sezione_v) is not VisualizzaSezioneView:
-            raise TypeError("Atteso VisualizzaSezioneView per sezione_v.")
+    def __init__(self, model: Model, sezione_v: VisualizzaSezionePage):
+        if type(sezione_v) is not VisualizzaSezionePage:
+            raise TypeError("Atteso VisualizzaSezionePage per sezione_v.")
 
         super().__init__(model, sezione_v)
 
@@ -219,7 +219,7 @@ class VisualizzaSezioneController(AbstractVisualizzaController):
             )
 
     def __modifica_posto(self, id_: int) -> None:
-        """Carica la pagina `ModificaPostoView`, con i dati del posto indicato
+        """Carica la pagina `ModificaPostoPage`, con i dati del posto indicato
         inseriti nei campo di input.
 
         :param id_: id del posto da modificare
@@ -234,15 +234,15 @@ class VisualizzaSezioneController(AbstractVisualizzaController):
             )
             return
 
-        # Ottieni la pagina ModificaPostoView
-        from view.teatro.pagine import ModificaPostoView
+        # Ottieni la pagina ModificaPostoPage
+        from view.teatro.pagine import ModificaPostoPage
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.MODIFICA_POSTO
         self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
         current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
-        if type(current_pagina) is not ModificaPostoView:
+        if type(current_pagina) is not ModificaPostoPage:
             mostra_error_popup(
                 self._view_page,
                 "Pagina non trovata",

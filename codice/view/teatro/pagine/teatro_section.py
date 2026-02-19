@@ -15,7 +15,7 @@ from view.utils.custom_button import DefaultButton
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class TeatroSectionView(AbstractSectionView):
+class TeatroSection(AbstractSectionView):
     """Sezione Teatro dell'app.
 
     Contiene le informazioni su `Sezione` e `Posto` memorizzati.

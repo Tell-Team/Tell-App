@@ -11,7 +11,7 @@ from model.pianificazione.spettacolo import Spettacolo
 from model.organizzazione.evento import Evento
 from model.exceptions import OggettoInUsoException
 
-from view.spettacoli.pagine import VisualizzaSpettacoloView
+from view.spettacoli.pagine import VisualizzaSpettacoloPage
 from view.spettacoli.widgets import EventoDisplay
 from view.spettacoli.utils import EventoData
 
@@ -20,18 +20,18 @@ from view.utils import mostra_error_popup
 
 
 class VisualizzaSpettacoloController(AbstractVisualizzaController):
-    """Gestice la pagina `VisualizzaSpettacoloView` dell'app.
+    """Gestice la pagina `VisualizzaSpettacoloPage` dell'app.
 
     Segnali
     ---
-    - `goBackRequest()`: emesso per tornare alla pagina `SpettacoliSectionView`.
+    - `goBackRequest()`: emesso per tornare alla pagina `SpettacoliSection`.
     """
 
-    _view_page: VisualizzaSpettacoloView
+    _view_page: VisualizzaSpettacoloPage
 
-    def __init__(self, model: Model, spettacolo_v: VisualizzaSpettacoloView):
-        if type(spettacolo_v) is not VisualizzaSpettacoloView:
-            raise TypeError("Atteso VisualizzaSpettacoloView per spettacolo_v.")
+    def __init__(self, model: Model, spettacolo_v: VisualizzaSpettacoloPage):
+        if type(spettacolo_v) is not VisualizzaSpettacoloPage:
+            raise TypeError("Atteso VisualizzaSpettacoloPage per spettacolo_v.")
 
         super().__init__(model, spettacolo_v)
 
@@ -68,7 +68,7 @@ class VisualizzaSpettacoloController(AbstractVisualizzaController):
         self._model.elimina_evento(id_)
 
     def __visualizza_prezzi_associati(self, id_spettacolo: int) -> None:
-        """Carica la pagina `PrezziAssociatiView` con i dati relativi allo spettacolo
+        """Carica la pagina `PrezziAssociatiPage` con i dati relativi allo spettacolo
         indicato.
 
         :param id\\_: id dello spettacolo da visualizzare
@@ -83,13 +83,13 @@ class VisualizzaSpettacoloController(AbstractVisualizzaController):
             )
             return
 
-        # Ottieni la pagina PrezziAssociatiView
-        from view.spettacoli.pagine import PrezziAssociatiView
+        # Ottieni la pagina PrezziAssociatiPage
+        from view.spettacoli.pagine import PrezziAssociatiPage
 
         pagina_nome = Pagina.PREZZI_ASSOCIATI
         try:
-            pagina: PrezziAssociatiView = self._ottieni_pagina(  # type:ignore
-                pagina_nome, PrezziAssociatiView
+            pagina: PrezziAssociatiPage = self._ottieni_pagina(  # type:ignore
+                pagina_nome, PrezziAssociatiPage
             )
         except TypeError:
             return
@@ -145,17 +145,17 @@ class VisualizzaSpettacoloController(AbstractVisualizzaController):
             layout_eventi.aggiungi_list_item(current_evento)
 
     def __nuovo_evento(self) -> None:
-        """Carica la pagina `NuovoEventoView`, dove l'utente può inserire i dati
+        """Carica la pagina `NuovoEventoPage`, dove l'utente può inserire i dati
         necessari per creare un evento."""
-        # Ottieni la pagina NuovoEventoView
-        from view.spettacoli.pagine import NuovoEventoView
+        # Ottieni la pagina NuovoEventoPage
+        from view.spettacoli.pagine import NuovoEventoPage
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.NUOVO_EVENTO
         self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
         current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
-        if type(current_pagina) is not NuovoEventoView:
+        if type(current_pagina) is not NuovoEventoPage:
             mostra_error_popup(
                 self._view_page,
                 "Pagina non trovata",
@@ -172,7 +172,7 @@ class VisualizzaSpettacoloController(AbstractVisualizzaController):
         self.goToPageRequest.emit(pagina_nome, True)
 
     def __modifica_evento(self, id_: int) -> None:
-        """Carica la pagina `ModificaEventoView`, con i dati del evento indicato
+        """Carica la pagina `ModificaEventoPage`, con i dati del evento indicato
         inseriti nei campo di input.
 
         :param id_: id del evento da modificare
@@ -187,15 +187,15 @@ class VisualizzaSpettacoloController(AbstractVisualizzaController):
             )
             return
 
-        # Ottieni la pagina ModificaEventoView
-        from view.spettacoli.pagine import ModificaEventoView
+        # Ottieni la pagina ModificaEventoPage
+        from view.spettacoli.pagine import ModificaEventoPage
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.MODIFICA_EVENTO
         self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
         current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
-        if type(current_pagina) is not ModificaEventoView:
+        if type(current_pagina) is not ModificaEventoPage:
             mostra_error_popup(
                 self._view_page,
                 "Pagina non trovata",

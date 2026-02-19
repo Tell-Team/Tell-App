@@ -1,19 +1,19 @@
-from .info_section import InfoSectionView
-from .visualizza_opera import VisualizzaOperaView
-from .nuova_opera import NuovaOperaView
-from .modifica_opera import ModificaOperaView
-from .nuovo_genere import NuovoGenereView
-from .modifica_genere import ModificaGenereView
-from .nuova_regia import NuovaRegiaView
-from .modifica_regia import ModificaRegiaView
+from .info_section import InfoSection
+from .visualizza_opera import VisualizzaOperaPage
+from .nuova_opera import NuovaOperaPage
+from .modifica_opera import ModificaOperaPage
+from .nuovo_genere import NuovoGenerePage
+from .modifica_genere import ModificaGenerePage
+from .nuova_regia import NuovaRegiaPage
+from .modifica_regia import ModificaRegiaPage
 
 __all__ = [
-    "InfoSectionView",
-    "VisualizzaOperaView",
-    "NuovaOperaView",
-    "ModificaOperaView",
-    "NuovoGenereView",
-    "ModificaGenereView",
-    "NuovaRegiaView",
-    "ModificaRegiaView",
+    "InfoSection",
+    "VisualizzaOperaPage",
+    "NuovaOperaPage",
+    "ModificaOperaPage",
+    "NuovoGenerePage",
+    "ModificaGenerePage",
+    "NuovaRegiaPage",
+    "ModificaRegiaPage",
 ]

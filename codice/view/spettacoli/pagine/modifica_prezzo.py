@@ -3,12 +3,12 @@ from typing import override
 from model.pianificazione.spettacolo import Spettacolo
 from model.organizzazione.sezione import Sezione
 
-from view.spettacoli.pagine import NuovoPrezzoView
+from view.spettacoli.pagine import NuovoPrezzoPage
 from view.spettacoli.utils import PrezzoData
 
 
-class ModificaPrezzoView(NuovoPrezzoView):
-    """Pagina per la modifica di prezzi. Sottoclasse di `NuovoPrezzoView`."""
+class ModificaPrezzoPage(NuovoPrezzoPage):
+    """Pagina per la modifica di prezzi. Sottoclasse di `NuovoPrezzoPage`."""
 
     def __init__(self) -> None:
         super().__init__()

@@ -59,7 +59,7 @@ class NavigationController(QObject):
     forniti dall'`AuthenticationService`, con la sessione utente corrente memorizzata.
     """
 
-    logoutRequest: pyqtSignal = pyqtSignal()
+    logoutRequest = pyqtSignal()
 
     def __init__(
         self, model: Model, main_window: MainWindow, user_session: UserSession
@@ -156,102 +156,96 @@ class NavigationController(QObject):
 
     def __carica_pagine(self) -> None:
         # Acquisto
-        from view.acquisto.pagine import (
-            AcquistoSectionView,
-            ScegliPostiView,
-            RicevutaView,
-        )
+        from view.acquisto.pagine import AcquistoSection, ScegliPostiPage, RicevutaPage
 
-        self.__acquisto_section = AcquistoSectionView(self.__user_session)
-        self.__scegli_posti_view = ScegliPostiView()
-        self.__ricevuta_view = RicevutaView()
+        self.__acquisto_section = AcquistoSection(self.__user_session)
+        self.__scegli_posti_view = ScegliPostiPage()
+        self.__ricevuta_view = RicevutaPage()
 
         # Info
-        from view.info.pagine import InfoSectionView, VisualizzaOperaView
+        from view.info.pagine import InfoSection, VisualizzaOperaPage
 
-        self.__info_section = InfoSectionView(self.__user_session)
-        self.__visualizza_opera_view = VisualizzaOperaView(self.__user_session)
+        self.__info_section = InfoSection(self.__user_session)
+        self.__visualizza_opera_view = VisualizzaOperaPage(self.__user_session)
 
         if self.__user_session.ha_permessi_biglietteria():
             # Spettacoli
             from view.spettacoli.pagine import (
-                SpettacoliSectionView,
-                VisualizzaSpettacoloView,
-                PrezziAssociatiView,
-                NuovoPrezzoView,
-                ModificaPrezzoView,
-                NuovoSpettacoloView,
-                ModificaSpettacoloView,
-                NuovoEventoView,
-                ModificaEventoView,
+                SpettacoliSection,
+                VisualizzaSpettacoloPage,
+                PrezziAssociatiPage,
+                NuovoPrezzoPage,
+                ModificaPrezzoPage,
+                NuovoSpettacoloPage,
+                ModificaSpettacoloPage,
+                NuovoEventoPage,
+                ModificaEventoPage,
             )
 
-            self.__spettacoli_section = SpettacoliSectionView(self.__user_session)
-            self.__visualizza_spettacolo_view = VisualizzaSpettacoloView(
+            self.__spettacoli_section = SpettacoliSection(self.__user_session)
+            self.__visualizza_spettacolo_view = VisualizzaSpettacoloPage(
                 self.__user_session
             )
-            self.__prezzi_associati_view = PrezziAssociatiView()
-            self.__nuovo_prezzo_view = NuovoPrezzoView()
-            self.__modifica_prezzo_view = ModificaPrezzoView()
-            self.__nuovo_spettacolo_view = NuovoSpettacoloView()
-            self.__modifica_spettacolo_view = ModificaSpettacoloView()
-            self.__nuovo_evento_view = NuovoEventoView()
-            self.__modifica_evento_view = ModificaEventoView()
+            self.__prezzi_associati_view = PrezziAssociatiPage()
+            self.__nuovo_prezzo_view = NuovoPrezzoPage()
+            self.__modifica_prezzo_view = ModificaPrezzoPage()
+            self.__nuovo_spettacolo_view = NuovoSpettacoloPage()
+            self.__modifica_spettacolo_view = ModificaSpettacoloPage()
+            self.__nuovo_evento_view = NuovoEventoPage()
+            self.__modifica_evento_view = ModificaEventoPage()
 
             # Prenotazioni
             from view.prenotazioni.pagine import (
-                PrenotazioniSectionView,
-                VisualizzaPrenotazioneView,
+                PrenotazioniSection,
+                VisualizzaPrenotazionePage,
             )
 
-            self.__prenotazioni_section_view = PrenotazioniSectionView(
-                self.__user_session
-            )
-            self.__visualizza_prenotazione_view = VisualizzaPrenotazioneView()
+            self.__prenotazioni_section_view = PrenotazioniSection(self.__user_session)
+            self.__visualizza_prenotazione_view = VisualizzaPrenotazionePage()
 
         if self.__user_session.ha_permessi_admin():
             # Info
             from view.info.pagine import (
-                NuovaOperaView,
-                ModificaOperaView,
-                NuovoGenereView,
-                ModificaGenereView,
-                NuovaRegiaView,
-                ModificaRegiaView,
+                NuovaOperaPage,
+                ModificaOperaPage,
+                NuovoGenerePage,
+                ModificaGenerePage,
+                NuovaRegiaPage,
+                ModificaRegiaPage,
             )
 
-            self.__nuova_opera_view = NuovaOperaView()
-            self.__modifica_opera_view = ModificaOperaView()
-            self.__nuovo_genere_view = NuovoGenereView()
-            self.__modifica_genere_view = ModificaGenereView()
-            self.__nuova_regia_view = NuovaRegiaView()
-            self.__modifica_regia_view = ModificaRegiaView()
+            self.__nuova_opera_view = NuovaOperaPage()
+            self.__modifica_opera_view = ModificaOperaPage()
+            self.__nuovo_genere_view = NuovoGenerePage()
+            self.__modifica_genere_view = ModificaGenerePage()
+            self.__nuova_regia_view = NuovaRegiaPage()
+            self.__modifica_regia_view = ModificaRegiaPage()
 
             # Teatro
             from view.teatro.pagine import (
-                TeatroSectionView,
-                VisualizzaSezioneView,
-                NuovaSezioneView,
-                ModificaSezioneView,
-                ModificaPostoView,
+                TeatroSection,
+                VisualizzaSezionePage,
+                NuovaSezionePage,
+                ModificaSezionePage,
+                ModificaPostoPage,
             )
 
-            self.__teatro_section = TeatroSectionView()
-            self.__visualizza_sezione_view = VisualizzaSezioneView()
-            self.__nuova_sezione_view = NuovaSezioneView()
-            self.__modifica_sezione_view = ModificaSezioneView()
-            self.__modifica_posto_view = ModificaPostoView()
+            self.__teatro_section = TeatroSection()
+            self.__visualizza_sezione_view = VisualizzaSezionePage()
+            self.__nuova_sezione_view = NuovaSezionePage()
+            self.__modifica_sezione_view = ModificaSezionePage()
+            self.__modifica_posto_view = ModificaPostoPage()
 
             # Account
             from view.account.pagine import (
-                AccountSectionView,
-                NuovoAccountView,
-                ModificaAccountView,
+                AccountSection,
+                NuovoAccountPage,
+                ModificaAccountPage,
             )
 
-            self.__account_section = AccountSectionView(self.__user_session)
-            self.__nuovo_account_view = NuovoAccountView()
-            self.__modifica_account_view = ModificaAccountView()
+            self.__account_section = AccountSection(self.__user_session)
+            self.__nuovo_account_view = NuovoAccountPage()
+            self.__modifica_account_view = ModificaAccountPage()
 
     # ------------------------- REGISTRAZIONE DELLE PAGINE -------------------------
 
@@ -557,5 +551,5 @@ class NavigationController(QObject):
             #     print(f" - {sig_name} non trovato o non è un segnale di {controller}")
 
         for c in controllers:
-            for sig_name, handler in signal_map.items():
-                safe_connect(c, sig_name, handler)
+            for signal_name, handler in signal_map.items():
+                safe_connect(c, signal_name, handler)

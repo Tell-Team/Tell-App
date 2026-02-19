@@ -11,7 +11,7 @@ from model.organizzazione.sezione import Sezione
 from model.organizzazione.prezzo import Prezzo
 from model.exceptions import IdInesistenteException
 
-from view.spettacoli.pagine import PrezziAssociatiView
+from view.spettacoli.pagine import PrezziAssociatiPage
 from view.spettacoli.utils import PrezzoData
 from view.spettacoli.widgets import SezioniPrezziDisplay
 
@@ -20,18 +20,18 @@ from view.utils import mostra_error_popup
 
 
 class PrezziAssociatiController(AbstractVisualizzaController):
-    """Gestice la pagina `PrezziAssociatiView` dell'app.
+    """Gestice la pagina `PrezziAssociatiPage` dell'app.
 
     Segnali
     ---
-    - `goBackRequest()`: emesso per tornare alla pagina `SpettacoliSectionView`.
+    - `goBackRequest()`: emesso per tornare alla pagina `SpettacoliSection`.
     """
 
-    _view_page: PrezziAssociatiView
+    _view_page: PrezziAssociatiPage
 
-    def __init__(self, model: Model, prezzi_v: PrezziAssociatiView):
-        if type(prezzi_v) is not PrezziAssociatiView:
-            raise TypeError("Atteso PrezziAssociatiView per prezzi_v.")
+    def __init__(self, model: Model, prezzi_v: PrezziAssociatiPage):
+        if type(prezzi_v) is not PrezziAssociatiPage:
+            raise TypeError("Atteso PrezziAssociatiPage per prezzi_v.")
 
         super().__init__(model, prezzi_v)
 
@@ -111,7 +111,7 @@ class PrezziAssociatiController(AbstractVisualizzaController):
             layout_sezioni_prezzi.aggiungi_list_item(current_sezione_prezzo)
 
     def __nuovo_prezzo(self, sezione: Sezione) -> None:
-        """Carica la pagina `NuovoPrezzoView`, creare un prezzo associato ad uno spettacolo
+        """Carica la pagina `NuovoPrezzoPage`, creare un prezzo associato ad uno spettacolo
         ed una sezione.
 
         :param sezione: `Sezione` a cui il prezzo sarà associato"""
@@ -126,13 +126,13 @@ class PrezziAssociatiController(AbstractVisualizzaController):
             )
             return
 
-        # Ottieni la pagina NuovoPrezzoView
-        from view.spettacoli.pagine import NuovoPrezzoView
+        # Ottieni la pagina NuovoPrezzoPage
+        from view.spettacoli.pagine import NuovoPrezzoPage
 
         pagina_nome = Pagina.NUOVO_PREZZO
         try:
-            pagina: NuovoPrezzoView = self._ottieni_pagina(  # type:ignore
-                pagina_nome, NuovoPrezzoView
+            pagina: NuovoPrezzoPage = self._ottieni_pagina(  # type:ignore
+                pagina_nome, NuovoPrezzoPage
             )
         except TypeError:
             return
@@ -144,7 +144,7 @@ class PrezziAssociatiController(AbstractVisualizzaController):
         self.goToPageRequest.emit(pagina_nome, True)
 
     def __modifica_prezzo(self, sezione: Sezione) -> None:
-        """Carica la pagina `ModificaPrezzoView`, con i dati del prezzo indicato
+        """Carica la pagina `ModificaPrezzoPage`, con i dati del prezzo indicato
         inseriti nei campo di input.
 
         :param sezione: `Sezione` a cui il prezzo è associato
@@ -174,13 +174,13 @@ class PrezziAssociatiController(AbstractVisualizzaController):
             )
             return
 
-        # Ottieni la pagina ModificaPrezzoView
-        from view.spettacoli.pagine import ModificaPrezzoView
+        # Ottieni la pagina ModificaPrezzoPage
+        from view.spettacoli.pagine import ModificaPrezzoPage
 
         pagina_nome = Pagina.MODIFICA_PREZZO
         try:
-            pagina: ModificaPrezzoView = self._ottieni_pagina(  # type:ignore
-                pagina_nome, ModificaPrezzoView
+            pagina: ModificaPrezzoPage = self._ottieni_pagina(  # type:ignore
+                pagina_nome, ModificaPrezzoPage
             )
         except TypeError:
             return

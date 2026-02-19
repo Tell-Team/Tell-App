@@ -12,7 +12,7 @@ from view.utils.custom_button import DefaultButton
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class AccountSectionView(AbstractSectionView):
+class AccountSection(AbstractSectionView):
     """Sezione Account dell'app.
 
     Contiene le informazioni di tutti gli `Account` memorizzati. Non permette di modificare

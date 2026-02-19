@@ -16,7 +16,7 @@ from view.utils import make_vline
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class PrezziAssociatiView(AbstractVisualizzaView):
+class PrezziAssociatiPage(AbstractVisualizzaView):
     """Pagina per visualizzare le coppie sezione-prezzo associate ad uno `Spettacolo`. Permette
     di crea, modificare o eliminare prezzi associati alle sezione per uno `Spettacolo`.
 

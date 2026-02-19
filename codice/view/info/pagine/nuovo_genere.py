@@ -6,7 +6,7 @@ from core.view import AbstractCreaView
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class NuovoGenereView(AbstractCreaView):
+class NuovoGenerePage(AbstractCreaView):
     """Pagina per la creazione di un nuovo genere."""
 
     # ------------------------- SETUP INIT -------------------------

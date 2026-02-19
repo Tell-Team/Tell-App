@@ -1,11 +1,11 @@
 from typing import override
 
-from view.teatro.pagine import NuovaSezioneView
+from view.teatro.pagine import NuovaSezionePage
 from view.teatro.utils import SezioneData
 
 
-class ModificaSezioneView(NuovaSezioneView):
-    """Pagina per la modifica di sezioni. Sottoclasse di `NuovaSezioneView`."""
+class ModificaSezionePage(NuovaSezionePage):
+    """Pagina per la modifica di sezioni. Sottoclasse di `NuovaSezionePage`."""
 
     def __init__(self):
         super().__init__()

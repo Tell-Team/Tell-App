@@ -9,7 +9,7 @@ from model.model.model import Model
 from model.organizzazione.sezione import Sezione
 from model.exceptions import OggettoInUsoException
 
-from view.teatro.pagine import TeatroSectionView
+from view.teatro.pagine import TeatroSection
 from view.teatro.utils import SezioneData
 from view.teatro.widgets import SezioneDisplay
 
@@ -19,13 +19,13 @@ from view.style.ui_style import WidgetRole
 
 
 class TeatroSectionController(AbstractSectionController):
-    """Gestice la sezione Teatro (`TeatroSectionView`) dell'app."""
+    """Gestice la sezione Teatro (`TeatroSection`) dell'app."""
 
-    _view_section: TeatroSectionView
+    _view_page: TeatroSection
 
-    def __init__(self, model: Model, teatro_s: TeatroSectionView):
-        if type(teatro_s) is not TeatroSectionView:
-            raise TypeError("Atteso TeatroSectionView per teatro_s.")
+    def __init__(self, model: Model, teatro_s: TeatroSection):
+        if type(teatro_s) is not TeatroSection:
+            raise TypeError("Atteso TeatroSection per teatro_s.")
 
         super().__init__(model, teatro_s)
 
@@ -34,11 +34,11 @@ class TeatroSectionController(AbstractSectionController):
     def _connect_signals(self) -> None:
         super()._connect_signals()
 
-        self._view_section.displaySezioniRequest.connect(  # type:ignore
+        self._view_page.displaySezioniRequest.connect(  # type:ignore
             self.__display_sezioni
         )
 
-        self._view_section.nuovaSezioneRequest.connect(  # type:ignore
+        self._view_page.nuovaSezioneRequest.connect(  # type:ignore
             self.__nuova_sezione
         )
 
@@ -77,9 +77,9 @@ class TeatroSectionController(AbstractSectionController):
                 self.__elimina_sezione(id_)
             except OggettoInUsoException as exc:
                 widget_sezione.annulla_elimina()
-                mostra_error_popup(self._view_section, "Sezione in uso", str(exc))
+                mostra_error_popup(self._view_page, "Sezione in uso", str(exc))
             else:
-                self._view_section.aggiorna_pagina()
+                self._view_page.aggiorna_pagina()
 
         # Mostra tutte le sezioni salvati a schermo
         for sezione in lista_sezioni:
@@ -104,19 +104,19 @@ class TeatroSectionController(AbstractSectionController):
         current_sezione = self.__get_sezione(id_)
         if not current_sezione:
             mostra_error_popup(
-                self._view_section,
+                self._view_page,
                 "Sezione inesistente",
                 f"Non è presente nessuna sezione con id {id_}.",
             )
             return
 
         # Ottieni la pagina ListaPostiView
-        from view.teatro.pagine import VisualizzaSezioneView
+        from view.teatro.pagine import VisualizzaSezionePage
 
         pagina_nome = Pagina.VISUALIZZA_SEZIONE
         try:
-            pagina: VisualizzaSezioneView = self._ottieni_pagina(  # type:ignore
-                pagina_nome, VisualizzaSezioneView
+            pagina: VisualizzaSezionePage = self._ottieni_pagina(  # type:ignore
+                pagina_nome, VisualizzaSezionePage
             )
         except TypeError:
             return
@@ -134,15 +134,15 @@ class TeatroSectionController(AbstractSectionController):
         self.goToPageRequest.emit(pagina_nome, True)
 
     def __nuova_sezione(self) -> None:
-        """Carica la pagina `NuovaSezioneView`, dove l'utente può inserire i dati
+        """Carica la pagina `NuovaSezionePage`, dove l'utente può inserire i dati
         necessari per creare una sezione."""
-        # Ottieni la pagina NuovaSezioneView
-        from view.teatro.pagine import NuovaSezioneView
+        # Ottieni la pagina NuovaSezionePage
+        from view.teatro.pagine import NuovaSezionePage
 
         pagina_nome = Pagina.NUOVA_SEZIONE
         try:
-            pagina: NuovaSezioneView = self._ottieni_pagina(  # type:ignore
-                pagina_nome, NuovaSezioneView
+            pagina: NuovaSezionePage = self._ottieni_pagina(  # type:ignore
+                pagina_nome, NuovaSezionePage
             )
         except TypeError:
             return
@@ -154,7 +154,7 @@ class TeatroSectionController(AbstractSectionController):
         self.goToPageRequest.emit(pagina_nome, True)
 
     def __modifica_sezione(self, id_: int) -> None:
-        """Carica la pagina `ModificaSezioneView`, con i dati della sezione indicata
+        """Carica la pagina `ModificaSezionePage`, con i dati della sezione indicata
         inseriti nei campo di input.
 
         :param id_: id della sezione da modificare
@@ -163,19 +163,19 @@ class TeatroSectionController(AbstractSectionController):
         current_sezione = self.__get_sezione(id_)
         if not current_sezione:
             mostra_error_popup(
-                self._view_section,
+                self._view_page,
                 "Sezione inesistente",
                 f"Non è presente nessuna sezione con id {id_}.",
             )
             return
 
-        # Ottieni la pagina ModificaSezioneView
-        from view.teatro.pagine import ModificaSezioneView
+        # Ottieni la pagina ModificaSezionePage
+        from view.teatro.pagine import ModificaSezionePage
 
         pagina_nome = Pagina.MODIFICA_SEZIONE
         try:
-            pagina: ModificaSezioneView = self._ottieni_pagina(  # type:ignore
-                pagina_nome, ModificaSezioneView
+            pagina: ModificaSezionePage = self._ottieni_pagina(  # type:ignore
+                pagina_nome, ModificaSezionePage
             )
         except TypeError:
             return

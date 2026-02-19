@@ -1,11 +1,11 @@
 from typing import override
 
-from view.info.pagine import NuovoGenereView
+from view.info.pagine import NuovoGenerePage
 from view.info.utils import GenereData
 
 
-class ModificaGenereView(NuovoGenereView):
-    """Pagina per la modifica di generi. Sottoclasse di `NuovoGenereView`."""
+class ModificaGenerePage(NuovoGenerePage):
+    """Pagina per la modifica di generi. Sottoclasse di `NuovoGenerePage`."""
 
     def __init__(self):
         super().__init__()

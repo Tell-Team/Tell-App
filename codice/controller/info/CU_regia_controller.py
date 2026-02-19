@@ -10,7 +10,7 @@ from model.exceptions import (
     IdOccupatoException,
 )
 
-from view.info.pagine import ModificaRegiaView, NuovaRegiaView
+from view.info.pagine import ModificaRegiaPage, NuovaRegiaPage
 from view.spettacoli.widgets import PersonaleDisplay
 
 from view.utils import mostra_error_popup
@@ -26,19 +26,19 @@ class CURegiaController(AbstractCUController):
 
     Segnali
     ---
-    - `goBackRequest()`: emesso per tornare alla pagina `VisualizzaOperaView`.
+    - `goBackRequest()`: emesso per tornare alla pagina `VisualizzaOperaPage`.
     """
 
-    _view_nuova: NuovaRegiaView
-    _view_modifica: ModificaRegiaView
+    _view_nuova: NuovaRegiaPage
+    _view_modifica: ModificaRegiaPage
 
     def __init__(
-        self, model: Model, n_regia_v: NuovaRegiaView, m_regia_v: ModificaRegiaView
+        self, model: Model, n_regia_v: NuovaRegiaPage, m_regia_v: ModificaRegiaPage
     ):
-        if type(n_regia_v) is not NuovaRegiaView:
-            raise TypeError("Atteso NuovaRegiaView per n_regia_v.")
-        if type(m_regia_v) is not ModificaRegiaView:
-            raise TypeError("Atteso ModificaRegiaView per m_regia_v.")
+        if type(n_regia_v) is not NuovaRegiaPage:
+            raise TypeError("Atteso NuovaRegiaPage per n_regia_v.")
+        if type(m_regia_v) is not ModificaRegiaPage:
+            raise TypeError("Atteso ModificaRegiaPage per m_regia_v.")
 
         super().__init__(model, n_regia_v, m_regia_v)
 
@@ -74,7 +74,7 @@ class CURegiaController(AbstractCUController):
         self._model.modifica_spettacolo(regia_modificata)
 
     def __aggiungi_interprete(
-        self, pagina: NuovaRegiaView, nome: str, ruolo: str
+        self, pagina: NuovaRegiaPage, nome: str, ruolo: str
     ) -> None:
         """Aggiunge un interprete alla `lista_interpreti` della pagina.
 
@@ -95,7 +95,7 @@ class CURegiaController(AbstractCUController):
         pagina.lista_interpreti[nome] = ruolo
         pagina.aggiorna_pagina()
 
-    def __aggiungi_tecnico(self, pagina: NuovaRegiaView, nome: str, posto: str) -> None:
+    def __aggiungi_tecnico(self, pagina: NuovaRegiaPage, nome: str, posto: str) -> None:
         """Aggiunge un tecnico alla `lista_musicisti_e_direttori_artistici` della pagina.
 
         :param pagina: pagina dove il tecnico sarà aggiunto
@@ -118,7 +118,7 @@ class CURegiaController(AbstractCUController):
         pagina.lista_musicisti_e_direttori_artistici[nome] = posto
         pagina.aggiorna_pagina()
 
-    def __display_interpreti(self, pagina: NuovaRegiaView) -> None:
+    def __display_interpreti(self, pagina: NuovaRegiaPage) -> None:
         """Mostra a schermo le informazioni degli interpreti salvati nella
         `lista_interpreti` della pagina ed assegna a ciascuno un pulsante di elimina.
 
@@ -146,7 +146,7 @@ class CURegiaController(AbstractCUController):
 
             pagina.layout_lista_interpreti.aggiungi_list_item(current_interprete)
 
-    def __display_musicisti_e_direttori_artistici(self, pagina: NuovaRegiaView) -> None:
+    def __display_musicisti_e_direttori_artistici(self, pagina: NuovaRegiaPage) -> None:
         """Mostra a schermo le informazioni dei musicisti_e_direttori_artistici salvati nella
         `lista_musicisti_e_direttori_artistici` della pagina ed assegna a ciascuno un pulsante di elimina.
 

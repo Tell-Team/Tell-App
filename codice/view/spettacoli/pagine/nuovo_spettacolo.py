@@ -18,7 +18,7 @@ from view.utils.hyphenate_text import HyphenatedLabel
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class NuovoSpettacoloView(AbstractCreaView):
+class NuovoSpettacoloPage(AbstractCreaView):
     """Pagina per la creazione di un nuovo spettacolo.
 
     Segnali

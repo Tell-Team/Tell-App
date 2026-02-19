@@ -1,13 +1,13 @@
-from .teatro_section import TeatroSectionView
-from .visualizza_sezione import VisualizzaSezioneView
-from .nuova_sezione import NuovaSezioneView
-from .modifica_sezione import ModificaSezioneView
-from .modifica_posto import ModificaPostoView
+from .teatro_section import TeatroSection
+from .visualizza_sezione import VisualizzaSezionePage
+from .nuova_sezione import NuovaSezionePage
+from .modifica_sezione import ModificaSezionePage
+from .modifica_posto import ModificaPostoPage
 
 __all__ = [
-    "TeatroSectionView",
-    "VisualizzaSezioneView",
-    "NuovaSezioneView",
-    "ModificaSezioneView",
-    "ModificaPostoView",
+    "TeatroSection",
+    "VisualizzaSezionePage",
+    "NuovaSezionePage",
+    "ModificaSezionePage",
+    "ModificaPostoPage",
 ]

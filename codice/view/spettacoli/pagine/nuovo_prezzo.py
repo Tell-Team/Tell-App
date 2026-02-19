@@ -9,7 +9,7 @@ from model.pianificazione.spettacolo import Spettacolo
 from model.organizzazione.sezione import Sezione
 
 
-class NuovoPrezzoView(AbstractCreaView):
+class NuovoPrezzoPage(AbstractCreaView):
     """Pagina per la creazione di un nuovo prezzo."""
 
     def __init__(self) -> None:

@@ -18,7 +18,7 @@ from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class RegiaDisplay(ItemDisplay):
-    """View delle singole regia della Lista Regie dentro della pagina `VisualizzaOperaView`.
+    """View delle singole regia della Lista Regie dentro della pagina `VisualizzaOperaPage`.
 
     Segnali
     ---
@@ -26,7 +26,7 @@ class RegiaDisplay(ItemDisplay):
     - `eliminaConfermata()`: emesso quando si clicca il pulsante Sì.
     """
 
-    # In prattica, questo QWidget pottrebe essere nella pagina NuovaRegiaView stessa, ma per
+    # In prattica, questo QWidget pottrebe essere nella pagina NuovaRegiaPage stessa, ma per
     #   tener il codice pulito preferisco creare un file dedicato a questa classe.
     modificaRequest = pyqtSignal(int)
     eliminaConfermata = pyqtSignal()

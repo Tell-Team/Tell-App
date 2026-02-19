@@ -10,7 +10,7 @@ from model.pianificazione.spettacolo import Spettacolo
 from model.pianificazione.regia import Regia
 from model.exceptions import OggettoInUsoException
 
-from view.spettacoli.pagine import SpettacoliSectionView
+from view.spettacoli.pagine import SpettacoliSection
 from view.spettacoli.widgets import SpettacoloDisplay
 from view.spettacoli.utils import SpettacoloData
 from view.info.utils import RegiaData
@@ -21,13 +21,13 @@ from view.style.ui_style import WidgetRole
 
 
 class SpettacoliSectionController(AbstractSectionController):
-    """Gestice la sezione Spettacoli (`SpettacoliSectionView`) dell'app."""
+    """Gestice la sezione Spettacoli (`SpettacoliSection`) dell'app."""
 
-    _view_section: SpettacoliSectionView
+    _view_page: SpettacoliSection
 
-    def __init__(self, model: Model, spettacoli_s: SpettacoliSectionView):
-        if type(spettacoli_s) is not SpettacoliSectionView:
-            raise TypeError("Atteso AcquistoSectionView per spettacoli_s.")
+    def __init__(self, model: Model, spettacoli_s: SpettacoliSection):
+        if type(spettacoli_s) is not SpettacoliSection:
+            raise TypeError("Atteso AcquistoSection per spettacoli_s.")
 
         super().__init__(model, spettacoli_s)
 
@@ -37,12 +37,12 @@ class SpettacoliSectionController(AbstractSectionController):
         super()._connect_signals()
 
         # Display della Lista Spettacoli
-        self._view_section.displaySpettacoliRequest.connect(  # type:ignore
+        self._view_page.displaySpettacoliRequest.connect(  # type:ignore
             self.__display_spettacoli
         )
 
         # Setup della pagina di creazione di spettacoli
-        self._view_section.nuovoSpettacoloRequest.connect(  # type:ignore
+        self._view_page.nuovoSpettacoloRequest.connect(  # type:ignore
             self.__nuovo_spettacolo
         )
 
@@ -68,7 +68,7 @@ class SpettacoliSectionController(AbstractSectionController):
         :param layout_spettacoli: layout dove saranno caricati tutti gli spettacoli
         """
         # Verifica se c'è un filtro di ricerca
-        filtro = self._view_section.filtro_ricerca
+        filtro = self._view_page.filtro_ricerca
 
         lista_spettacoli = (
             self.__get_spettacoli()
@@ -92,9 +92,9 @@ class SpettacoliSectionController(AbstractSectionController):
                 self.__elimina_spettacolo(id_)
             except OggettoInUsoException as exc:
                 widget_spettacolo.annulla_elimina()
-                mostra_error_popup(self._view_section, "Spettacolo in uso", str(exc))
+                mostra_error_popup(self._view_page, "Spettacolo in uso", str(exc))
             else:
-                self._view_section.aggiorna_pagina()
+                self._view_page.aggiorna_pagina()
 
         # Mostra tutti gli spettacoli della lista a schermo
         for spettacolo in lista_spettacoli:
@@ -124,7 +124,7 @@ class SpettacoliSectionController(AbstractSectionController):
             )
 
     def __visualizza_spettacolo(self, id_: int) -> None:
-        """Carica la pagina `VisualizzaSpettacoloView` con i dati relativi allo spettacolo
+        """Carica la pagina `VisualizzaSpettacoloPage` con i dati relativi allo spettacolo
         indicato.
 
         :param id\\_: id dello spettacolo da visualizzare
@@ -133,19 +133,19 @@ class SpettacoliSectionController(AbstractSectionController):
         current_spettacolo = self.__get_spettacolo(id_)
         if not current_spettacolo:
             mostra_error_popup(
-                self._view_section,
+                self._view_page,
                 "Spettacolo inesistente",
                 f"Non è presente nessuno spettacolo con id {id_}.",
             )
             return
 
-        # Ottieni la pagina VisualizzaSpettacoloView
-        from view.spettacoli.pagine import VisualizzaSpettacoloView
+        # Ottieni la pagina VisualizzaSpettacoloPage
+        from view.spettacoli.pagine import VisualizzaSpettacoloPage
 
         pagina_nome = Pagina.VISUALIZZA_SPETTACOLO
         try:
-            pagina: VisualizzaSpettacoloView = self._ottieni_pagina(  # type:ignore
-                pagina_nome, VisualizzaSpettacoloView
+            pagina: VisualizzaSpettacoloPage = self._ottieni_pagina(  # type:ignore
+                pagina_nome, VisualizzaSpettacoloPage
             )
         except TypeError:
             return
@@ -176,15 +176,15 @@ class SpettacoliSectionController(AbstractSectionController):
         self.goToPageRequest.emit(pagina_nome, True)
 
     def __nuovo_spettacolo(self) -> None:
-        """Carica la pagina `NuovoSpettacoloView`, dove l'utente può inserire i dati
+        """Carica la pagina `NuovoSpettacoloPage`, dove l'utente può inserire i dati
         necessari per creare uno spettacolo."""
-        # Ottieni la pagina NuovoSpettacoloView
-        from view.spettacoli.pagine import NuovoSpettacoloView
+        # Ottieni la pagina NuovoSpettacoloPage
+        from view.spettacoli.pagine import NuovoSpettacoloPage
 
         pagina_nome = Pagina.NUOVO_SPETTACOLO
         try:
-            pagina: NuovoSpettacoloView = self._ottieni_pagina(  # type:ignore
-                pagina_nome, NuovoSpettacoloView
+            pagina: NuovoSpettacoloPage = self._ottieni_pagina(  # type:ignore
+                pagina_nome, NuovoSpettacoloPage
             )
         except TypeError:
             return
@@ -196,7 +196,7 @@ class SpettacoliSectionController(AbstractSectionController):
         self.goToPageRequest.emit(pagina_nome, True)
 
     def __modifica_spettacolo(self, id_: int) -> None:
-        """Carica la pagina `ModificaSpettacoloView`, con i dati dello spettacolo indicato
+        """Carica la pagina `ModificaSpettacoloPage`, con i dati dello spettacolo indicato
         inseriti nei campo di input.
 
         :param id_: id dello spettacolo da modificare
@@ -205,19 +205,19 @@ class SpettacoliSectionController(AbstractSectionController):
         current_spettacolo = self.__get_spettacolo(id_)
         if not current_spettacolo:
             mostra_error_popup(
-                self._view_section,
+                self._view_page,
                 "Spettacolo inesistente",
                 f"Non è presente nessuno spettacolo con id {id_}.",
             )
             return
 
-        # Ottieni la pagina ModificaSpettacoloView
-        from view.spettacoli.pagine import ModificaSpettacoloView
+        # Ottieni la pagina ModificaSpettacoloPage
+        from view.spettacoli.pagine import ModificaSpettacoloPage
 
         pagina_nome = Pagina.MODIFICA_SPETTACOLO
         try:
-            pagina: ModificaSpettacoloView = self._ottieni_pagina(  # type:ignore
-                pagina_nome, ModificaSpettacoloView
+            pagina: ModificaSpettacoloPage = self._ottieni_pagina(  # type:ignore
+                pagina_nome, ModificaSpettacoloPage
             )
         except TypeError:
             return

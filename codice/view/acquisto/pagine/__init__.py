@@ -1,5 +1,5 @@
-from .acquisto_section import AcquistoSectionView
-from .scegli_posti import ScegliPostiView
-from .ricevuta import RicevutaView
+from .acquisto_section import AcquistoSection
+from .scegli_posti import ScegliPostiPage
+from .ricevuta import RicevutaPage
 
-__all__ = ["AcquistoSectionView", "ScegliPostiView", "RicevutaView"]
+__all__ = ["AcquistoSection", "ScegliPostiPage", "RicevutaPage"]

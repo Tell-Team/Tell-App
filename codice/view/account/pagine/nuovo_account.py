@@ -8,7 +8,7 @@ from model.account.account import Ruolo
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class NuovoAccountView(AbstractCreaView):
+class NuovoAccountPage(AbstractCreaView):
     """Pagina per la creazione di un nuovo account utente."""
 
     # ------------------------- SETUP INIT -------------------------

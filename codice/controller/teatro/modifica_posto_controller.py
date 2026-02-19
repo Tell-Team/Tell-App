@@ -9,7 +9,7 @@ from model.exceptions import (
     IdInesistenteException,
 )
 
-from view.teatro.pagine import ModificaPostoView
+from view.teatro.pagine import ModificaPostoPage
 
 from view.utils import mostra_error_popup
 
@@ -24,12 +24,12 @@ class ModificaPostoController(QObject):
 
     Segnali
     ---
-    - `goBackRequest()`: emesso per tornare alla pagina `VisualizzaSezioneView`.
+    - `goBackRequest()`: emesso per tornare alla pagina `VisualizzaSezionePage`.
     """
 
-    goBackRequest: pyqtSignal = pyqtSignal()
+    goBackRequest = pyqtSignal()
 
-    def __init__(self, model: Model, modifica: ModificaPostoView):
+    def __init__(self, model: Model, modifica: ModificaPostoPage):
         super().__init__()
 
         self.__model = model

@@ -10,7 +10,7 @@ from model.exceptions import (
     IdOccupatoException,
 )
 
-from view.info.pagine import ModificaGenereView, NuovoGenereView
+from view.info.pagine import ModificaGenerePage, NuovoGenerePage
 
 from view.utils import mostra_error_popup
 
@@ -23,19 +23,19 @@ class CUGenereController(AbstractCUController):
 
     Segnali
     ---
-    - `goBackRequest()`: emesso per tornare alla pagina `InfoSectionView`.
+    - `goBackRequest()`: emesso per tornare alla pagina `InfoSection`.
     """
 
-    _view_nuova: NuovoGenereView
-    _view_modifica: ModificaGenereView
+    _view_nuova: NuovoGenerePage
+    _view_modifica: ModificaGenerePage
 
     def __init__(
-        self, model: Model, n_genere_v: NuovoGenereView, m_genere_v: ModificaGenereView
+        self, model: Model, n_genere_v: NuovoGenerePage, m_genere_v: ModificaGenerePage
     ):
-        if type(n_genere_v) is not NuovoGenereView:
-            raise TypeError("Atteso NuovoGenereView per n_genere_v.")
-        if type(m_genere_v) is not ModificaGenereView:
-            raise TypeError("Atteso ModificaGenereView per m_genere_v.")
+        if type(n_genere_v) is not NuovoGenerePage:
+            raise TypeError("Atteso NuovoGenerePage per n_genere_v.")
+        if type(m_genere_v) is not ModificaGenerePage:
+            raise TypeError("Atteso ModificaGenerePage per m_genere_v.")
 
         super().__init__(model, n_genere_v, m_genere_v)
 

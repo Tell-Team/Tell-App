@@ -1,11 +1,11 @@
 from typing import override
 
-from view.spettacoli.pagine import NuovoEventoView
+from view.spettacoli.pagine import NuovoEventoPage
 from view.spettacoli.utils import EventoData
 
 
-class ModificaEventoView(NuovoEventoView):
-    """Pagina per la modifica di eventi. Sottoclasse di `NuovoEventoView`."""
+class ModificaEventoPage(NuovoEventoPage):
+    """Pagina per la modifica di eventi. Sottoclasse di `NuovoEventoPage`."""
 
     def __init__(self):
         super().__init__()

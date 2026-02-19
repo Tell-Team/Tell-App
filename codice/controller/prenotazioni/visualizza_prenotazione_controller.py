@@ -5,7 +5,7 @@ from core.controller import AbstractVisualizzaController
 from model.model.model import Model
 from model.exceptions import AzioneIncongruenteException
 
-from view.prenotazioni.pagine import VisualizzaPrenotazioneView
+from view.prenotazioni.pagine import VisualizzaPrenotazionePage
 from view.acquisto.widgets import EventoPostiDisplay
 
 from view.utils.list_widgets import ListLayout
@@ -14,18 +14,18 @@ from view.style.ui_style import WidgetRole
 
 
 class VisualizzaPrenotazioneController(AbstractVisualizzaController):
-    """Gestice la pagina `VisualizzaPrenotazioneView` dell'app.
+    """Gestice la pagina `VisualizzaPrenotazionePage` dell'app.
 
     Segnali
     ---
-    - `goBackRequest()`: emesso per tornare alla pagina `SpettacoliSectionView`.
+    - `goBackRequest()`: emesso per tornare alla pagina `SpettacoliSection`.
     """
 
-    _view_page: VisualizzaPrenotazioneView
+    _view_page: VisualizzaPrenotazionePage
 
-    def __init__(self, model: Model, prenotazione_v: VisualizzaPrenotazioneView):
-        if type(prenotazione_v) is not VisualizzaPrenotazioneView:
-            raise TypeError("Atteso VisualizzaPrenotazioneView per prenotazione_v.")
+    def __init__(self, model: Model, prenotazione_v: VisualizzaPrenotazionePage):
+        if type(prenotazione_v) is not VisualizzaPrenotazionePage:
+            raise TypeError("Atteso VisualizzaPrenotazionePage per prenotazione_v.")
 
         super().__init__(model, prenotazione_v)
 

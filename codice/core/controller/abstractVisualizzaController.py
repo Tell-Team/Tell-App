@@ -48,23 +48,18 @@ class AbstractVisualizzaController(QObject, metaclass=ABCQObjectMeta):
 
         :param pagina_nome: nametag associato alla pagina
         :param tipo: tipo atteso della pagina
+
+        :raise TypeError: il tipo atteso non è stato trovato
         """
         temp_dict: dict[str, Optional[QWidget]] = {"value": None}
         self.getPageRequest.emit(pagina_nome, temp_dict)
         pagina = temp_dict.get("value")
 
         if type(pagina) is not tipo:
-            self.__mostra_msg_pagina_non_trovata(pagina_nome, type(pagina))
+            mostra_error_popup(
+                self._view_page,
+                "Pagina non trovata",
+                f"Non è stato trovata la pagina '{pagina_nome}'. Type trovato: {tipo}",
+            )
             raise TypeError("Pagina non trovata")
         return pagina
-
-    def __mostra_msg_pagina_non_trovata(self, pagina_nome: Pagina, tipo: type) -> None:
-        """Metodo associato a `_ottieni_pagina`. È chiamato se la pagina ottenuta non è corretta.
-
-        :param pagina_nome: nametag associato alla pagina attesa
-        :param tipo: tipo ottenuto al chiamare `_ottiene_pagina`"""
-        mostra_error_popup(
-            self._view_page,
-            "Pagina non trovata",
-            f"Non è stato trovata la pagina '{pagina_nome}'. Type trovato: {tipo}",
-        )

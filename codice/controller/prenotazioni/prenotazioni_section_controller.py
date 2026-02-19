@@ -9,7 +9,7 @@ from model.model.model import Model, PrenotazioneData
 from model.organizzazione.prenotazione import Prenotazione
 from model.exceptions import OggettoInUsoException
 
-from view.prenotazioni.pagine import PrenotazioniSectionView
+from view.prenotazioni.pagine import PrenotazioniSection
 from view.prenotazioni.widgets import PrenotazioneDisplay
 
 from view.utils.list_widgets import ListLayout
@@ -19,13 +19,13 @@ from view.style.ui_style import WidgetRole
 
 
 class PrenotazioniSectionController(AbstractSectionController):
-    """Gestice la sezione Prenotazioni (`PrenotazioniSectionView`) dell'app."""
+    """Gestice la sezione Prenotazioni (`PrenotazioniSection`) dell'app."""
 
-    _view_section: PrenotazioniSectionView
+    _view_page: PrenotazioniSection
 
-    def __init__(self, model: Model, prenotazioni_s: PrenotazioniSectionView):
-        if type(prenotazioni_s) is not PrenotazioniSectionView:
-            raise TypeError("Atteso PrenotazioniSectionView per prenotazioni_s.")
+    def __init__(self, model: Model, prenotazioni_s: PrenotazioniSection):
+        if type(prenotazioni_s) is not PrenotazioniSection:
+            raise TypeError("Atteso PrenotazioniSection per prenotazioni_s.")
 
         super().__init__(model, prenotazioni_s)
 
@@ -35,7 +35,7 @@ class PrenotazioniSectionController(AbstractSectionController):
         super()._connect_signals()
 
         # Display della Lista Prenotazioni
-        self._view_section.displayPrenotazioniRequest.connect(  # type:ignore
+        self._view_page.displayPrenotazioniRequest.connect(  # type:ignore
             self.__display_prenotazioni
         )
 
@@ -63,7 +63,7 @@ class PrenotazioniSectionController(AbstractSectionController):
         :param layout_prenotazioni: layout dove saranno caricate tutte le prenotazioni
         """
         # Verifica se c'è un filtro di ricerca
-        filtro = self._view_section.filtro_ricerca
+        filtro = self._view_page.filtro_ricerca
 
         lista_prenotazioni = (
             self.__get_prenotazioni()
@@ -87,9 +87,9 @@ class PrenotazioniSectionController(AbstractSectionController):
                 self.__elimina_prenotazione(id_)
             except OggettoInUsoException as exc:
                 widget_prenotazione.annulla_elimina()
-                mostra_error_popup(self._view_section, "Prenotazione in uso", str(exc))
+                mostra_error_popup(self._view_page, "Prenotazione in uso", str(exc))
             else:
-                self._view_section.aggiorna_pagina()
+                self._view_page.aggiorna_pagina()
 
         # Mostra tutte le prenotazioni della lista a schermo
         for prenotazione in lista_prenotazioni:
@@ -108,7 +108,7 @@ class PrenotazioniSectionController(AbstractSectionController):
             )
 
     def __visualizza_prenotazione(self, id_: int) -> None:
-        """Carica la pagina `VisualizzaPrenotazioneView` con i dati relativi alla prenotazione
+        """Carica la pagina `VisualizzaPrenotazionePage` con i dati relativi alla prenotazione
         indicati.
 
         :param id\\_: id della prenotazione da visualizzare
@@ -116,19 +116,19 @@ class PrenotazioniSectionController(AbstractSectionController):
         # Verifica l'esistenza della prenotazione
         if not self.__get_prenotazione(id_):
             mostra_error_popup(
-                self._view_section,
+                self._view_page,
                 "Prenotazione inesistente",
                 f"Non è presente nessuna prenotazione con id {id_}.",
             )
             return
 
-        # Ottieni la pagina VisualizzaPrenotazioneView
-        from view.prenotazioni.pagine import VisualizzaPrenotazioneView
+        # Ottieni la pagina VisualizzaPrenotazionePage
+        from view.prenotazioni.pagine import VisualizzaPrenotazionePage
 
         pagina_nome = Pagina.VISUALIZZA_PRENOTAZIONE
         try:
-            pagina: VisualizzaPrenotazioneView = self._ottieni_pagina(  # type:ignore
-                pagina_nome, VisualizzaPrenotazioneView
+            pagina: VisualizzaPrenotazionePage = self._ottieni_pagina(  # type:ignore
+                pagina_nome, VisualizzaPrenotazionePage
             )
         except TypeError:
             return

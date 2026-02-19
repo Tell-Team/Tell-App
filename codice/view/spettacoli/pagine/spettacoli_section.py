@@ -12,7 +12,7 @@ from view.utils.custom_button import DefaultButton, RicercaButton
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class SpettacoliSectionView(AbstractSectionView):
+class SpettacoliSection(AbstractSectionView):
     """Sezione Spettacoli dell'app.
 
     Contiene le informazioni su tutti gli `Spettacolo` memorizzati.

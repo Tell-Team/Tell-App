@@ -20,7 +20,7 @@ from model.exceptions import (
     OccupatoException,
 )
 
-from view.acquisto.pagine import ScegliPostiView
+from view.acquisto.pagine import ScegliPostiPage
 from view.acquisto.widgets import PostoSceltoDisplay
 
 from view.utils.list_widgets import ListLayout
@@ -29,13 +29,13 @@ from view.utils import mostra_error_popup
 
 
 class ScegliPostiController(AbstractVisualizzaController):
-    """Gestice la pagina `ScegliPostiView` dell'app."""
+    """Gestice la pagina `ScegliPostiPage` dell'app."""
 
-    _view_page: ScegliPostiView
+    _view_page: ScegliPostiPage
 
-    def __init__(self, model: Model, scegli_posti_v: ScegliPostiView):
-        if type(scegli_posti_v) is not ScegliPostiView:
-            raise TypeError("Atteso ScegliPostiView per scegli_posti_v.")
+    def __init__(self, model: Model, scegli_posti_v: ScegliPostiPage):
+        if type(scegli_posti_v) is not ScegliPostiPage:
+            raise TypeError("Atteso ScegliPostiPage per scegli_posti_v.")
 
         super().__init__(model, scegli_posti_v)
 
@@ -251,7 +251,7 @@ class ScegliPostiController(AbstractVisualizzaController):
             layout_posti_scelti.aggiungi_list_item(current_posto_scelto)
 
     def __inizia_creazione_prenotazione(self) -> None:
-        """Carica la pagina `RicevutaView` con i dati dei posti da prenotare, inclusi le
+        """Carica la pagina `RicevutaPage` con i dati dei posti da prenotare, inclusi le
         sezioni ed eventi associati."""
         pagina = self._view_page
         evento_scelto: Evento = pagina.evento_scelto  # type:ignore
@@ -288,15 +288,15 @@ class ScegliPostiController(AbstractVisualizzaController):
         if id_prenotazione is False:
             return
 
-        # Ottieni la pagina RicevutaView
-        from view.acquisto.pagine import RicevutaView
+        # Ottieni la pagina RicevutaPage
+        from view.acquisto.pagine import RicevutaPage
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.RICEVUTA
         self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
         current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
-        if type(current_pagina) is not RicevutaView:
+        if type(current_pagina) is not RicevutaPage:
             mostra_error_popup(
                 self._view_page,
                 "Pagina non trovata",

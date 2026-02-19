@@ -1,6 +1,6 @@
 from typing import override
 
-from view.spettacoli.pagine import NuovoSpettacoloView
+from view.spettacoli.pagine import NuovoSpettacoloPage
 from view.spettacoli.utils import SpettacoloData
 from view.info.utils import RegiaData
 
@@ -8,8 +8,8 @@ from view.utils.hyphenate_text import HyphenatedLabel
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class ModificaSpettacoloView(NuovoSpettacoloView):
-    """Pagina per la modifica di spettacoli. Sottoclasse di `NuovoSpettacoloView`."""
+class ModificaSpettacoloPage(NuovoSpettacoloPage):
+    """Pagina per la modifica di spettacoli. Sottoclasse di `NuovoSpettacoloPage`."""
 
     def __init__(self):
         super().__init__()

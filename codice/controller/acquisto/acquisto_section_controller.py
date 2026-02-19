@@ -8,7 +8,7 @@ from model.model.model import Model
 from model.pianificazione.spettacolo import Spettacolo
 from model.pianificazione.regia import Regia
 
-from view.acquisto.pagine import AcquistoSectionView
+from view.acquisto.pagine import AcquistoSection
 from view.acquisto.widgets import AcquistoDisplay
 from view.spettacoli.utils import SpettacoloData
 
@@ -19,17 +19,17 @@ from view.style.ui_style import WidgetRole
 
 
 class AcquistoSectionController(AbstractSectionController):
-    """Gestice la sezione Acquisto (`AcquistoSectionView`) dell'app."""
+    """Gestice la sezione Acquisto (`AcquistoSection`) dell'app."""
 
-    _view_section: AcquistoSectionView
+    _view_page: AcquistoSection
 
-    def __init__(self, model: Model, acquisto_s: AcquistoSectionView):
-        if type(acquisto_s) is not AcquistoSectionView:
-            raise TypeError("Atteso AcquistoSectionView per acquisto_v.")
+    def __init__(self, model: Model, acquisto_s: AcquistoSection):
+        if type(acquisto_s) is not AcquistoSection:
+            raise TypeError("Atteso AcquistoSection per acquisto_v.")
 
         super().__init__(model, acquisto_s)
 
-        self._view_section.aggiorna_pagina()
+        self._view_page.aggiorna_pagina()
         # Serve per aggiornare la pagina con i dati del model. Siccome questa è la prima pagina
         #   caricata nella MainWindow, non si chiama nessun metodo del NavigationController al
         #   momento di visualizzarla e non viene aggiornata automanticamente.
@@ -40,7 +40,7 @@ class AcquistoSectionController(AbstractSectionController):
         super()._connect_signals()
 
         # Display della Lista Spettacoli
-        self._view_section.displaySpettacoliRequest.connect(  # type:ignore
+        self._view_page.displaySpettacoliRequest.connect(  # type:ignore
             self.__display_spettacoli
         )
 
@@ -62,7 +62,7 @@ class AcquistoSectionController(AbstractSectionController):
         :param layout_spettacoli: layout dove saranno caricati tutti gli spettacoli
         """
         # Verifica se c'è un filtro di ricerca
-        filtro = self._view_section.filtro_ricerca
+        filtro = self._view_page.filtro_ricerca
 
         lista_spettacoli = (
             self.__get_spettacoli_in_programa()
@@ -95,25 +95,25 @@ class AcquistoSectionController(AbstractSectionController):
             )
 
     def __scegli_posti(self, id_: int) -> None:
-        """Carica la pagina `ScegliPostiView`, dove l'utente può inserire i dati
+        """Carica la pagina `ScegliPostiPage`, dove l'utente può inserire i dati
         necessari per creare una prenotazione."""
         # Copia dello spettacolo per iniziare la prenotazione
         current_spettacolo = self.__get_spettacolo(id_)
         if not current_spettacolo:
             mostra_error_popup(
-                self._view_section,
+                self._view_page,
                 "Spettacolo inesistente",
                 f"Non è presente nessuno spettacolo con id {id_}.",
             )
             return
 
-        # Ottieni la pagina ScegliPostiView
-        from view.acquisto.pagine import ScegliPostiView
+        # Ottieni la pagina ScegliPostiPage
+        from view.acquisto.pagine import ScegliPostiPage
 
         pagina_nome = Pagina.SCEGLI_POSTI
         try:
-            pagina: ScegliPostiView = self._ottieni_pagina(  # type:ignore
-                pagina_nome, ScegliPostiView
+            pagina: ScegliPostiPage = self._ottieni_pagina(  # type:ignore
+                pagina_nome, ScegliPostiPage
             )
         except TypeError:
             return

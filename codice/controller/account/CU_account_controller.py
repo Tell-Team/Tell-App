@@ -15,7 +15,7 @@ from model.exceptions import (
     PermessiInsufficientiException,
 )
 
-from view.account.pagine import NuovoAccountView, ModificaAccountView
+from view.account.pagine import NuovoAccountPage, ModificaAccountPage
 
 from view.utils import mostra_error_popup
 
@@ -29,23 +29,23 @@ class CUAccountController(AbstractCUController):
 
     Segnali
     ---
-    - `goBackRequest()`: emesso per tornare alla pagina `AccountSectionView`.
+    - `goBackRequest()`: emesso per tornare alla pagina `AccountSection`.
     """
 
-    _view_nuova: NuovoAccountView
-    _view_modifica: ModificaAccountView
+    _view_nuova: NuovoAccountPage
+    _view_modifica: ModificaAccountPage
 
     def __init__(
         self,
         model: Model,
-        n_account_v: NuovoAccountView,
-        m_account_v: ModificaAccountView,
+        n_account_v: NuovoAccountPage,
+        m_account_v: ModificaAccountPage,
         session: UserSession,
     ):
-        if type(n_account_v) is not NuovoAccountView:
-            raise TypeError("Atteso NuovoAccountView per n_account_v.")
-        if type(m_account_v) is not ModificaAccountView:
-            raise TypeError("Atteso ModificaAccountView per m_account_v.")
+        if type(n_account_v) is not NuovoAccountPage:
+            raise TypeError("Atteso NuovoAccountPage per n_account_v.")
+        if type(m_account_v) is not ModificaAccountPage:
+            raise TypeError("Atteso ModificaAccountPage per m_account_v.")
 
         self.__user_session_id = session.id
 

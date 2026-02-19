@@ -17,7 +17,7 @@ from model.pianificazione.genere import Genere
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class NuovaOperaView(AbstractCreaView):
+class NuovaOperaPage(AbstractCreaView):
     """Pagina per la creazione di una nuova opera."""
 
     # ------------------------- SETUP INIT -------------------------

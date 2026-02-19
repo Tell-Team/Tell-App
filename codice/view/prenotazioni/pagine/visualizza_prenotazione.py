@@ -13,7 +13,7 @@ from view.utils.hyphenate_text import HyphenatedLabel
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class VisualizzaPrenotazioneView(AbstractVisualizzaView):
+class VisualizzaPrenotazionePage(AbstractVisualizzaView):
     """Pagina per visualizzare le singoli `Prenotazione` in dettaglio.
 
     Contiene le tutte informazioni di `Prenotazione` ed una lista con tutti i `Posto`

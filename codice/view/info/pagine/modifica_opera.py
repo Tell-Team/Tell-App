@@ -1,11 +1,11 @@
 from typing import override
 
-from view.info.pagine import NuovaOperaView
+from view.info.pagine import NuovaOperaPage
 from view.info.utils import OperaData
 
 
-class ModificaOperaView(NuovaOperaView):
-    """Pagina per la modifica di opere. Sottoclasse di `NuovaOperaView`."""
+class ModificaOperaPage(NuovaOperaPage):
+    """Pagina per la modifica di opere. Sottoclasse di `NuovaOperaPage`."""
 
     def __init__(self):
         super().__init__()

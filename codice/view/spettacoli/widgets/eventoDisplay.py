@@ -18,7 +18,7 @@ from view.style.ui_style import WidgetRole, WidgetColor
 
 class EventoDisplay(ItemDisplay):
     """View dei singoli eventi della Lista Eventi dentro della pagina
-    `VisualizzaSpettacoloView`.
+    `VisualizzaSpettacoloPage`.
 
     Segnali
     ---

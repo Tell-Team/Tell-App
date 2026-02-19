@@ -18,7 +18,7 @@ from view.utils.custom_button import RicercaButton
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class AcquistoSectionView(AbstractSectionView):
+class AcquistoSection(AbstractSectionView):
     """Sezione Acquisto dell'app.
 
     Contiene le informazioni su tutti gli `Spettacolo` memorizzati con almeno un `Evento`

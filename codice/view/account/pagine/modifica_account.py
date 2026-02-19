@@ -4,14 +4,14 @@ from typing import override
 
 from model.account.account import Ruolo
 
-from view.account.pagine import NuovoAccountView
+from view.account.pagine import NuovoAccountPage
 from view.account.utils import AccountData
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class ModificaAccountView(NuovoAccountView):
-    """Pagina per la modifica di account utente. Sottoclasse di `NuovoAccountView`."""
+class ModificaAccountPage(NuovoAccountPage):
+    """Pagina per la modifica di account utente. Sottoclasse di `NuovoAccountPage`."""
 
     def __init__(self):
         super().__init__()

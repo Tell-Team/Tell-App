@@ -10,7 +10,7 @@ from model.exceptions import (
     IdOccupatoException,
 )
 
-from view.spettacoli.pagine import ModificaSpettacoloView, NuovoSpettacoloView
+from view.spettacoli.pagine import ModificaSpettacoloPage, NuovoSpettacoloPage
 from view.spettacoli.widgets import PersonaleDisplay
 
 from view.utils import mostra_error_popup
@@ -26,22 +26,22 @@ class CUSpettacoloController(AbstractCUController):
 
     Segnali
     ---
-    - `goBackRequest()`: emesso per tornare alla pagina `SpettacoliSectionView`.
+    - `goBackRequest()`: emesso per tornare alla pagina `SpettacoliSection`.
     """
 
-    _view_nuova: NuovoSpettacoloView
-    _view_modifica: ModificaSpettacoloView
+    _view_nuova: NuovoSpettacoloPage
+    _view_modifica: ModificaSpettacoloPage
 
     def __init__(
         self,
         model: Model,
-        n_spettacolo_v: NuovoSpettacoloView,
-        m_spettacolo_v: ModificaSpettacoloView,
+        n_spettacolo_v: NuovoSpettacoloPage,
+        m_spettacolo_v: ModificaSpettacoloPage,
     ):
-        if type(n_spettacolo_v) is not NuovoSpettacoloView:
-            raise TypeError("Atteso NuovoSpettacoloView per n_spettacolo_v.")
-        if type(m_spettacolo_v) is not ModificaSpettacoloView:
-            raise TypeError("Atteso ModificaSpettacoloView per m_spettacolo_v.")
+        if type(n_spettacolo_v) is not NuovoSpettacoloPage:
+            raise TypeError("Atteso NuovoSpettacoloPage per n_spettacolo_v.")
+        if type(m_spettacolo_v) is not ModificaSpettacoloPage:
+            raise TypeError("Atteso ModificaSpettacoloPage per m_spettacolo_v.")
 
         super().__init__(model, n_spettacolo_v, m_spettacolo_v)
 
@@ -77,7 +77,7 @@ class CUSpettacoloController(AbstractCUController):
         self._model.modifica_spettacolo(spettacolo_modificato)
 
     def __aggiungi_interprete(
-        self, pagina: NuovoSpettacoloView, nome: str, ruolo: str
+        self, pagina: NuovoSpettacoloPage, nome: str, ruolo: str
     ) -> None:
         """Aggiunge un interprete alla `lista_interpreti` della pagina.
 
@@ -99,7 +99,7 @@ class CUSpettacoloController(AbstractCUController):
         pagina.aggiorna_pagina()
 
     def __aggiungi_tecnico(
-        self, pagina: NuovoSpettacoloView, nome: str, posto: str
+        self, pagina: NuovoSpettacoloPage, nome: str, posto: str
     ) -> None:
         """Aggiunge un tecnico alla `lista_musicisti_e_direttori_artistici` della pagina.
 
@@ -124,7 +124,7 @@ class CUSpettacoloController(AbstractCUController):
         pagina.lista_musicisti_e_direttori_artistici[nome] = posto
         pagina.aggiorna_pagina()
 
-    def __display_interpreti(self, pagina: NuovoSpettacoloView) -> None:
+    def __display_interpreti(self, pagina: NuovoSpettacoloPage) -> None:
         """Visualizza a schermo le informazioni degli interpreti salvati nella
         `lista_interpreti` della pagina ed assegna a ciascuno un pulsante di elimina.
 
@@ -153,7 +153,7 @@ class CUSpettacoloController(AbstractCUController):
             pagina.layout_lista_interpreti.aggiungi_list_item(current_interprete)
 
     def __display_musicisti_e_direttori_artistici(
-        self, pagina: NuovoSpettacoloView
+        self, pagina: NuovoSpettacoloPage
     ) -> None:
         """Visualizza a schermo le informazioni dei musicisti_e_direttori_artistici salvati nella
         `lista_musicisti_e_direttori_artistici` della pagina ed assegna a ciascuno un pulsante di elimina.

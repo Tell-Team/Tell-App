@@ -10,7 +10,7 @@ from model.model.model import Model
 from model.account.account import Account, Ruolo
 from model.exceptions import OggettoInUsoException
 
-from view.account.pagine import AccountSectionView
+from view.account.pagine import AccountSection
 from view.account.utils import AccountData
 from view.account.widgets import AccountDisplay
 
@@ -20,15 +20,13 @@ from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class AccountSectionController(AbstractSectionController):
-    """Gestice la sezione Account ('AccountSectionView') dell'app."""
+    """Gestice la sezione Account ('AccountSection') dell'app."""
 
-    _view_section: AccountSectionView
+    _view_page: AccountSection
 
-    def __init__(
-        self, model: Model, account_s: AccountSectionView, session: UserSession
-    ):
-        if type(account_s) is not AccountSectionView:
-            raise TypeError("Atteso AccountSectionView per account_s.")
+    def __init__(self, model: Model, account_s: AccountSection, session: UserSession):
+        if type(account_s) is not AccountSection:
+            raise TypeError("Atteso AccountSection per account_s.")
 
         self.__user_session_id = session.id
 
@@ -40,12 +38,12 @@ class AccountSectionController(AbstractSectionController):
         super()._connect_signals()
 
         # Display della Lista Account
-        self._view_section.displayAccountRequest.connect(  # type:ignore
+        self._view_page.displayAccountRequest.connect(  # type:ignore
             self.__display_account
         )
 
         # Setup della pagina di creazione
-        self._view_section.nuovoAccountRequest.connect(  # type:ignore
+        self._view_page.nuovoAccountRequest.connect(  # type:ignore
             self.__nuovo_account
         )
 
@@ -86,12 +84,12 @@ class AccountSectionController(AbstractSectionController):
             except OggettoInUsoException as e:
                 current_account.annulla_elimina()
                 mostra_error_popup(
-                    self._view_section,
+                    self._view_page,
                     "Account in uso",
                     str(e),
                 )
             else:
-                self._view_section.aggiorna_pagina()
+                self._view_page.aggiorna_pagina()
 
         # Mostra tutti gli account salvati a schermo
         for acc in accounts:
@@ -118,15 +116,15 @@ class AccountSectionController(AbstractSectionController):
             )
 
     def __nuovo_account(self) -> None:
-        """Carica la pagina 'NuovoAccountView',
+        """Carica la pagina 'NuovoAccountPage',
         dove l'utente può inserire i dati necessari per creare un account."""
-        # Ottieni la pagina NuovoAccountView
-        from view.account.pagine import NuovoAccountView
+        # Ottieni la pagina NuovoAccountPage
+        from view.account.pagine import NuovoAccountPage
 
         pagina_nome = Pagina.NUOVO_ACCOUNT
         try:
-            pagina: NuovoAccountView = self._ottieni_pagina(  # type:ignore
-                pagina_nome, NuovoAccountView
+            pagina: NuovoAccountPage = self._ottieni_pagina(  # type:ignore
+                pagina_nome, NuovoAccountPage
             )
         except TypeError:
             return
@@ -138,7 +136,7 @@ class AccountSectionController(AbstractSectionController):
         self.goToPageRequest.emit(pagina_nome, True)
 
     def __modifica_account(self, id_: int) -> None:
-        """Carica la pagina 'ModificaAccountView',
+        """Carica la pagina 'ModificaAccountPage',
         con i dati del account indicato inseriti nei campo di input.
 
         :param id_: id del account da modificare
@@ -148,19 +146,19 @@ class AccountSectionController(AbstractSectionController):
         current_account = self.__get_account(id_)
         if not current_account:
             mostra_error_popup(
-                self._view_section,
+                self._view_page,
                 "Account insesitente",
                 f"Non è presente nessun account con id {id_}",
             )
             return
 
-        # Ottieni la pagina ModificaAccountView
-        from view.account.pagine import ModificaAccountView
+        # Ottieni la pagina ModificaAccountPage
+        from view.account.pagine import ModificaAccountPage
 
         pagina_nome = Pagina.MODIFICA_ACCOUNT
         try:
-            pagina: ModificaAccountView = self._ottieni_pagina(  # type:ignore
-                pagina_nome, ModificaAccountView
+            pagina: ModificaAccountPage = self._ottieni_pagina(  # type:ignore
+                pagina_nome, ModificaAccountPage
             )
         except TypeError:
             return

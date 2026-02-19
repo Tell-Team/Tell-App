@@ -11,7 +11,7 @@ from model.exceptions import (
     OccupatoException,
 )
 
-from view.spettacoli.pagine import ModificaPrezzoView, NuovoPrezzoView
+from view.spettacoli.pagine import ModificaPrezzoPage, NuovoPrezzoPage
 
 from view.utils import mostra_error_popup
 
@@ -24,22 +24,22 @@ class CUPrezzoController(AbstractCUController):
 
     Segnali
     ---
-    - `goBackRequest()`: emesso per tornare alla pagina `VisualizzaSpettacoloView`.
+    - `goBackRequest()`: emesso per tornare alla pagina `VisualizzaSpettacoloPage`.
     """
 
-    _view_nuova: NuovoPrezzoView
-    _view_modifica: ModificaPrezzoView
+    _view_nuova: NuovoPrezzoPage
+    _view_modifica: ModificaPrezzoPage
 
     def __init__(
         self,
         model: Model,
-        n_prezzo_v: NuovoPrezzoView,
-        m_prezzo_v: ModificaPrezzoView,
+        n_prezzo_v: NuovoPrezzoPage,
+        m_prezzo_v: ModificaPrezzoPage,
     ):
-        if type(n_prezzo_v) is not NuovoPrezzoView:
-            raise TypeError("Atteso NuovoPrezzoView per n_prezzo_v.")
-        if type(m_prezzo_v) is not ModificaPrezzoView:
-            raise TypeError("Atteso ModificaPrezzoView per m_prezzo_v.")
+        if type(n_prezzo_v) is not NuovoPrezzoPage:
+            raise TypeError("Atteso NuovoPrezzoPage per n_prezzo_v.")
+        if type(m_prezzo_v) is not ModificaPrezzoPage:
+            raise TypeError("Atteso ModificaPrezzoPage per m_prezzo_v.")
 
         super().__init__(model, n_prezzo_v, m_prezzo_v)
 

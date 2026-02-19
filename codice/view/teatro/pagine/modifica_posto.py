@@ -8,7 +8,7 @@ from view.teatro.utils import PostoData
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class ModificaPostoView(AbstractCreaView):
+class ModificaPostoPage(AbstractCreaView):
     """Pagina per la modifica dei posti di una sezione."""
 
     def __init__(self):

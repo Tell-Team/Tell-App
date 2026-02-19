@@ -1,9 +1,5 @@
-from .account_section import AccountSectionView
-from .nuovo_account import NuovoAccountView
-from .modifica_account import ModificaAccountView
+from .account_section import AccountSection
+from .nuovo_account import NuovoAccountPage
+from .modifica_account import ModificaAccountPage
 
-__all__ = [
-    "AccountSectionView",
-    "NuovoAccountView",
-    "ModificaAccountView",
-]
+__all__ = ["AccountSection", "NuovoAccountPage", "ModificaAccountPage"]

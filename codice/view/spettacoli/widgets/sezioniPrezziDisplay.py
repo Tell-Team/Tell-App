@@ -23,7 +23,7 @@ from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class SezioniPrezziDisplay(ItemDisplay):
-    """View della coppia sezione-prezzo della pagina `PrezziAssociatiView`.
+    """View della coppia sezione-prezzo della pagina `PrezziAssociatiPage`.
 
     Segnali
     ---

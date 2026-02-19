@@ -27,7 +27,7 @@ from view.utils import make_vline
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class VisualizzaSezioneView(AbstractVisualizzaView):
+class VisualizzaSezionePage(AbstractVisualizzaView):
     """Pagina per visualizzare una signola `Sezione` in dettaglio.
 
     Contiene le tutte informazioni della `Sezione` ed una lista con tutti i `Posto`

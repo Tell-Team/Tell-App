@@ -27,7 +27,7 @@ from view.utils import make_hline
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class ScegliPostiView(AbstractVisualizzaView):
+class ScegliPostiPage(AbstractVisualizzaView):
     """Pagina per la creazione di prenotazioni agli spettacoli.
 
     Segnali

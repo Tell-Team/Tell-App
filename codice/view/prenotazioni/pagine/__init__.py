@@ -1,4 +1,4 @@
-from .prenotazioni_section import PrenotazioniSectionView
-from .visualizza_prenotazione import VisualizzaPrenotazioneView
+from .prenotazioni_section import PrenotazioniSection
+from .visualizza_prenotazione import VisualizzaPrenotazionePage
 
-__all__ = ["PrenotazioniSectionView", "VisualizzaPrenotazioneView"]
+__all__ = ["PrenotazioniSection", "VisualizzaPrenotazionePage"]

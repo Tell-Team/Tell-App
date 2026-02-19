@@ -11,7 +11,7 @@ from model.pianificazione.opera import Opera
 from model.pianificazione.regia import Regia, Spettacolo
 from model.exceptions import OggettoInUsoException
 
-from view.info.pagine import VisualizzaOperaView
+from view.info.pagine import VisualizzaOperaPage
 from view.info.widgets import RegiaDisplay
 from view.info.utils import RegiaData
 
@@ -20,18 +20,18 @@ from view.utils import mostra_error_popup
 
 
 class VisualizzaOperaController(AbstractVisualizzaController):
-    """Gestice la pagina `VisualizzaOperaView` dell'app.
+    """Gestice la pagina `VisualizzaOperaPage` dell'app.
 
     Segnali
     ---
-    - `goBackRequest()`: emesso per tornare alla pagina `InfoSectionView`;
+    - `goBackRequest()`: emesso per tornare alla pagina `InfoSection`;
     """
 
-    _view_page: VisualizzaOperaView
+    _view_page: VisualizzaOperaPage
 
-    def __init__(self, model: Model, opera_v: VisualizzaOperaView):
-        if type(opera_v) is not VisualizzaOperaView:
-            raise TypeError("Atteso VisualizzaOperaView per opera_v.")
+    def __init__(self, model: Model, opera_v: VisualizzaOperaPage):
+        if type(opera_v) is not VisualizzaOperaPage:
+            raise TypeError("Atteso VisualizzaOperaPage per opera_v.")
 
         super().__init__(model, opera_v)
 
@@ -106,17 +106,17 @@ class VisualizzaOperaController(AbstractVisualizzaController):
             layout_regie.aggiungi_list_item(current_regia)
 
     def __nuova_regia(self) -> None:
-        """Carica la pagina `NuovaRegiaView`, dove l'utente può inserire i dati
+        """Carica la pagina `NuovaRegiaPage`, dove l'utente può inserire i dati
         necessari per creare una regia."""
-        # Ottieni la pagina NuovaOperaView
-        from view.info.pagine import NuovaRegiaView
+        # Ottieni la pagina NuovaOperaPage
+        from view.info.pagine import NuovaRegiaPage
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.NUOVA_REGIA
         self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
         current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
-        if type(current_pagina) is not NuovaRegiaView:
+        if type(current_pagina) is not NuovaRegiaPage:
             mostra_error_popup(
                 self._view_page,
                 "Pagina non trovata",
@@ -144,7 +144,7 @@ class VisualizzaOperaController(AbstractVisualizzaController):
         self.goToPageRequest.emit(pagina_nome, True)
 
     def __modifica_regia(self, id_: int) -> None:
-        """Carica la pagina `ModificaRegiaView`, con i dati della regia indicata
+        """Carica la pagina `ModificaRegiaPage`, con i dati della regia indicata
         inseriti nei campo di input.
 
         :param id_: id della regia da modificare
@@ -159,15 +159,15 @@ class VisualizzaOperaController(AbstractVisualizzaController):
             )
             return
 
-        # Ottieni la pagina ModificaRegiaView
-        from view.info.pagine import ModificaRegiaView
+        # Ottieni la pagina ModificaRegiaPage
+        from view.info.pagine import ModificaRegiaPage
 
         cur_pagina_dict: dict[str, Optional[QWidget]] = {"value": None}
         pagina_nome = Pagina.MODIFICA_REGIA
         self.getPageRequest.emit(pagina_nome, cur_pagina_dict)
         current_pagina: Optional[QWidget] = cur_pagina_dict.get("value")
 
-        if type(current_pagina) is not ModificaRegiaView:
+        if type(current_pagina) is not ModificaRegiaPage:
             mostra_error_popup(
                 self._view_page,
                 "Pagina non trovata",

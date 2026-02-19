@@ -9,14 +9,14 @@ from typing import override
 
 from model.pianificazione.opera import Opera
 
-from view.spettacoli.pagine import NuovoSpettacoloView
+from view.spettacoli.pagine import NuovoSpettacoloPage
 
 from view.utils import make_hline
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class NuovaRegiaView(NuovoSpettacoloView):
+class NuovaRegiaPage(NuovoSpettacoloPage):
     """Pagina per la creazione di una nuova regia."""
 
     # ------------------------- SETUP INIT -------------------------

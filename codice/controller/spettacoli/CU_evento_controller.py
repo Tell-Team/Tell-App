@@ -11,7 +11,7 @@ from model.exceptions import (
     IdInesistenteException,
 )
 
-from view.spettacoli.pagine import ModificaEventoView, NuovoEventoView
+from view.spettacoli.pagine import ModificaEventoPage, NuovoEventoPage
 
 from view.utils import mostra_error_popup
 
@@ -24,22 +24,22 @@ class CUEventoController(AbstractCUController):
 
     Segnali
     ---
-    - `goBackRequest()`: emesso per tornare alla pagina `VisualizzaSpettacoloView`.
+    - `goBackRequest()`: emesso per tornare alla pagina `VisualizzaSpettacoloPage`.
     """
 
-    _view_nuova: NuovoEventoView
-    _view_modifica: ModificaEventoView
+    _view_nuova: NuovoEventoPage
+    _view_modifica: ModificaEventoPage
 
     def __init__(
         self,
         model: Model,
-        n_evento_v: NuovoEventoView,
-        m_evento_v: ModificaEventoView,
+        n_evento_v: NuovoEventoPage,
+        m_evento_v: ModificaEventoPage,
     ):
-        if type(n_evento_v) is not NuovoEventoView:
-            raise TypeError("Atteso NuovoEventoView per n_evento_v.")
-        if type(m_evento_v) is not ModificaEventoView:
-            raise TypeError("Atteso ModificaEventoView per m_evento_v.")
+        if type(n_evento_v) is not NuovoEventoPage:
+            raise TypeError("Atteso NuovoEventoPage per n_evento_v.")
+        if type(m_evento_v) is not ModificaEventoPage:
+            raise TypeError("Atteso ModificaEventoPage per m_evento_v.")
 
         super().__init__(model, n_evento_v, m_evento_v)
 

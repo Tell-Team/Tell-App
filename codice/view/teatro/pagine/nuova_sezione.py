@@ -6,7 +6,7 @@ from core.view import AbstractCreaView
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class NuovaSezioneView(AbstractCreaView):
+class NuovaSezionePage(AbstractCreaView):
     """Pagina per la creazione di una nuova sezione."""
 
     # ------------------------- SETUP INIT -------------------------

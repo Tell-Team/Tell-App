@@ -10,7 +10,7 @@ from model.exceptions import (
     IdOccupatoException,
 )
 
-from view.teatro.pagine import ModificaSezioneView, NuovaSezioneView
+from view.teatro.pagine import ModificaSezionePage, NuovaSezionePage
 
 from view.utils import mostra_error_popup
 
@@ -23,22 +23,22 @@ class CUSezioneController(AbstractCUController):
 
     Segnali
     ---
-    - `goBackRequest()`: emesso per tornare alla pagina `TeatroSectionView`.
+    - `goBackRequest()`: emesso per tornare alla pagina `TeatroSection`.
     """
 
-    _view_nuova: NuovaSezioneView
-    _view_modifica: ModificaSezioneView
+    _view_nuova: NuovaSezionePage
+    _view_modifica: ModificaSezionePage
 
     def __init__(
         self,
         model: Model,
-        n_sezione_v: NuovaSezioneView,
-        m_sezione_v: ModificaSezioneView,
+        n_sezione_v: NuovaSezionePage,
+        m_sezione_v: ModificaSezionePage,
     ):
-        if type(n_sezione_v) is not NuovaSezioneView:
-            raise TypeError("Atteso NuovaSezioneView per n_sezione_v.")
-        if type(m_sezione_v) is not ModificaSezioneView:
-            raise TypeError("Atteso ModificaSezioneView per m_sezione_v.")
+        if type(n_sezione_v) is not NuovaSezionePage:
+            raise TypeError("Atteso NuovaSezionePage per n_sezione_v.")
+        if type(m_sezione_v) is not ModificaSezionePage:
+            raise TypeError("Atteso ModificaSezionePage per m_sezione_v.")
 
         super().__init__(model, n_sezione_v, m_sezione_v)
 

@@ -10,7 +10,7 @@ from model.exceptions import (
     IdOccupatoException,
 )
 
-from view.info.pagine import ModificaOperaView, NuovaOperaView
+from view.info.pagine import ModificaOperaPage, NuovaOperaPage
 
 from view.utils import mostra_error_popup
 
@@ -23,19 +23,19 @@ class CUOperaController(AbstractCUController):
 
     Segnali
     ---
-    - `goBackRequest()`: emesso per tornare alla pagina `InfoSectionView`.
+    - `goBackRequest()`: emesso per tornare alla pagina `InfoSection`.
     """
 
-    _view_nuova: NuovaOperaView
-    _view_modifica: ModificaOperaView
+    _view_nuova: NuovaOperaPage
+    _view_modifica: ModificaOperaPage
 
     def __init__(
-        self, model: Model, n_opera_v: NuovaOperaView, m_opera_v: ModificaOperaView
+        self, model: Model, n_opera_v: NuovaOperaPage, m_opera_v: ModificaOperaPage
     ):
-        if type(n_opera_v) is not NuovaOperaView:
-            raise TypeError("Atteso NuovaOperaView per n_opera_v.")
-        if type(m_opera_v) is not ModificaOperaView:
-            raise TypeError("Atteso ModificaOperaView per m_regia_v.")
+        if type(n_opera_v) is not NuovaOperaPage:
+            raise TypeError("Atteso NuovaOperaPage per n_opera_v.")
+        if type(m_opera_v) is not ModificaOperaPage:
+            raise TypeError("Atteso ModificaOperaPage per m_regia_v.")
 
         super().__init__(model, n_opera_v, m_opera_v)
 

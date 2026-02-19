@@ -10,7 +10,7 @@ from model.pianificazione.opera import Opera
 from model.pianificazione.genere import Genere
 from model.exceptions import OggettoInUsoException
 
-from view.info.pagine import InfoSectionView
+from view.info.pagine import InfoSection
 from view.info.widgets import OperaDisplay, GenereDisplay
 from view.info.utils import OperaData, GenereData
 
@@ -20,13 +20,13 @@ from view.style.ui_style import WidgetRole
 
 
 class InfoSectionController(AbstractSectionController):
-    """Gestice la sezione Info (`InfoSectionView`) dell'app."""
+    """Gestice la sezione Info (`InfoSection`) dell'app."""
 
-    _view_section: InfoSectionView
+    _view_page: InfoSection
 
-    def __init__(self, model: Model, info_s: InfoSectionView):
-        if type(info_s) is not InfoSectionView:
-            raise TypeError("Atteso InfoSectionView per info_s.")
+    def __init__(self, model: Model, info_s: InfoSection):
+        if type(info_s) is not InfoSection:
+            raise TypeError("Atteso InfoSection per info_s.")
 
         super().__init__(model, info_s)
 
@@ -36,18 +36,18 @@ class InfoSectionController(AbstractSectionController):
         super()._connect_signals()
 
         # Display delle istanze del model
-        self._view_section.displayOpereRequest.connect(  # type:ignore
+        self._view_page.displayOpereRequest.connect(  # type:ignore
             self.__display_opere
         )
-        self._view_section.displayGeneriRequest.connect(  # type:ignore
+        self._view_page.displayGeneriRequest.connect(  # type:ignore
             self.__display_generi
         )
 
         # Setup delle pagine di creazione
-        self._view_section.nuovaOperaRequest.connect(  # type:ignore
+        self._view_page.nuovaOperaRequest.connect(  # type:ignore
             self.__nuova_opera
         )
-        self._view_section.nuovoGenereRequest.connect(  # type:ignore
+        self._view_page.nuovoGenereRequest.connect(  # type:ignore
             self.__nuovo_genere
         )
 
@@ -81,7 +81,7 @@ class InfoSectionController(AbstractSectionController):
         :param layout_opere: layout dove saranno caricate tutte le opere
         """
         # Verifica se c'è un filtro di ricerca
-        filtro = self._view_section.filtro_ricerca
+        filtro = self._view_page.filtro_ricerca
 
         lista_opere = (
             self.__get_opere() if not filtro else self.__get_opere_by_nome(filtro)
@@ -102,13 +102,13 @@ class InfoSectionController(AbstractSectionController):
                 self.__elimina_opera(id_)
             except OggettoInUsoException as exc:
                 widget_opera.annulla_elimina()
-                mostra_error_popup(self._view_section, "Opera in uso", str(exc))
+                mostra_error_popup(self._view_page, "Opera in uso", str(exc))
             else:
-                self._view_section.aggiorna_pagina()
+                self._view_page.aggiorna_pagina()
 
         for opera in lista_opere:
             current_opera = OperaDisplay(
-                opera, editable=self._view_section.is_admin
+                opera, editable=self._view_page.is_admin
             )  # - Esta vaina mejor que la guarde el controller y no las misma página
 
             current_opera.visualizzaRequest.connect(  # type:ignore
@@ -149,13 +149,13 @@ class InfoSectionController(AbstractSectionController):
                 self.__elimina_genere(id_)
             except OggettoInUsoException as exc:
                 widget_genere.annulla_elimina()
-                mostra_error_popup(self._view_section, "Genere in uso", str(exc))
+                mostra_error_popup(self._view_page, "Genere in uso", str(exc))
             else:
-                self._view_section.aggiorna_pagina()
+                self._view_page.aggiorna_pagina()
 
         # Mostra tutti i generi salvati a schermo
         for genere in lista_generi:
-            current_genere = GenereDisplay(genere, editable=self._view_section.is_admin)
+            current_genere = GenereDisplay(genere, editable=self._view_page.is_admin)
 
             # Setup della pagina di modifica dei generi
             current_genere.modificaRequest.connect(  # type:ignore
@@ -169,7 +169,7 @@ class InfoSectionController(AbstractSectionController):
             layout_generi.aggiungi_list_item(current_genere, WidgetRole.Item.CARD)
 
     def __visualizza_opera(self, id_: int) -> None:
-        """Carica la pagina `VisualizzaOperaView` con i dati relativi all'opera
+        """Carica la pagina `VisualizzaOperaPage` con i dati relativi all'opera
         indicata.
 
         :param id_: id dell'opera da visualizzare
@@ -178,19 +178,19 @@ class InfoSectionController(AbstractSectionController):
         current_opera = self.__get_opera(id_)
         if not current_opera:
             mostra_error_popup(
-                self._view_section,
+                self._view_page,
                 "Opera inesistente",
                 f"Non è presente nessuna opera con id {id_}.",
             )
             return
 
-        # Ottieni la pagina VisualizzaOperaView
-        from view.info.pagine import VisualizzaOperaView
+        # Ottieni la pagina VisualizzaOperaPage
+        from view.info.pagine import VisualizzaOperaPage
 
         pagina_nome = Pagina.VISUALIZZA_OPERA
         try:
-            pagina: VisualizzaOperaView = self._ottieni_pagina(  # type:ignore
-                pagina_nome, VisualizzaOperaView
+            pagina: VisualizzaOperaPage = self._ottieni_pagina(  # type:ignore
+                pagina_nome, VisualizzaOperaPage
             )
         except TypeError:
             return
@@ -199,7 +199,7 @@ class InfoSectionController(AbstractSectionController):
         genere_associato = self.__get_genere(current_opera.get_id_genere())
         if not genere_associato:
             mostra_error_popup(
-                self._view_section,
+                self._view_page,
                 "Genere inesistente",
                 f"Non è presente nessun genere con id {current_opera.get_id_genere()}.",
             )
@@ -223,15 +223,15 @@ class InfoSectionController(AbstractSectionController):
         self.goToPageRequest.emit(pagina_nome, True)
 
     def __nuova_opera(self) -> None:
-        """Carica la pagina `NuovaOperaView`, dove l'utente può inserire i dati
+        """Carica la pagina `NuovaOperaPage`, dove l'utente può inserire i dati
         necessari per creare un'opera."""
-        # Ottieni la pagina NuovaOperaView
-        from view.info.pagine import NuovaOperaView
+        # Ottieni la pagina NuovaOperaPage
+        from view.info.pagine import NuovaOperaPage
 
         pagina_nome = Pagina.NUOVA_OPERA
         try:
-            pagina: NuovaOperaView = self._ottieni_pagina(  # type:ignore
-                pagina_nome, NuovaOperaView
+            pagina: NuovaOperaPage = self._ottieni_pagina(  # type:ignore
+                pagina_nome, NuovaOperaPage
             )
         except TypeError:
             return
@@ -244,7 +244,7 @@ class InfoSectionController(AbstractSectionController):
         self.goToPageRequest.emit(pagina_nome, True)
 
     def __modifica_opera(self, id_: int) -> None:
-        """Carica la pagina `ModificaOperaView`, con i dati dell'opera indicata
+        """Carica la pagina `ModificaOperaPage`, con i dati dell'opera indicata
         inseriti nei campo di input.
 
         :param id_: id dell'opera da modificare
@@ -253,19 +253,19 @@ class InfoSectionController(AbstractSectionController):
         current_opera = self.__get_opera(id_)
         if not current_opera:
             mostra_error_popup(
-                self._view_section,
+                self._view_page,
                 "Opera inesistente",
                 f"Non è presente nessuna opera con id {id_}.",
             )
             return
 
-        # Ottieni la pagina ModificaOperaView
-        from view.info.pagine import ModificaOperaView
+        # Ottieni la pagina ModificaOperaPage
+        from view.info.pagine import ModificaOperaPage
 
         pagina_nome = Pagina.MODIFICA_OPERA
         try:
-            pagina: ModificaOperaView = self._ottieni_pagina(  # type:ignore
-                pagina_nome, ModificaOperaView
+            pagina: ModificaOperaPage = self._ottieni_pagina(  # type:ignore
+                pagina_nome, ModificaOperaPage
             )
         except TypeError:
             return
@@ -291,15 +291,15 @@ class InfoSectionController(AbstractSectionController):
         self.goToPageRequest.emit(pagina_nome, True)
 
     def __nuovo_genere(self) -> None:
-        """Carica la pagina `NuovoGenereView`, dove l'utente può inserire i dati
+        """Carica la pagina `NuovoGenerePage`, dove l'utente può inserire i dati
         necessari per creare un genere."""
-        # Ottieni la pagina NuovoGenereView
-        from view.info.pagine import NuovoGenereView
+        # Ottieni la pagina NuovoGenerePage
+        from view.info.pagine import NuovoGenerePage
 
         pagina_nome = Pagina.NUOVO_GENERE
         try:
-            pagina: NuovoGenereView = self._ottieni_pagina(  # type:ignore
-                pagina_nome, NuovoGenereView
+            pagina: NuovoGenerePage = self._ottieni_pagina(  # type:ignore
+                pagina_nome, NuovoGenerePage
             )
         except TypeError:
             return
@@ -311,7 +311,7 @@ class InfoSectionController(AbstractSectionController):
         self.goToPageRequest.emit(pagina_nome, True)
 
     def __modifica_genere(self, id_: int) -> None:
-        """Carica la pagina `ModificaGenereView`, con i dati del genere indicato
+        """Carica la pagina `ModificaGenerePage`, con i dati del genere indicato
         inseriti nei campo di input.
 
         :param id_: id del genere da modificare
@@ -320,19 +320,19 @@ class InfoSectionController(AbstractSectionController):
         current_genere = self.__get_genere(id_)
         if not current_genere:
             mostra_error_popup(
-                self._view_section,
+                self._view_page,
                 "Genere inesistente",
                 f"Non è presente nessun genere con id {id_}.",
             )
             return
 
-        # Ottieni la pagina ModificaGenereView
-        from view.info.pagine import ModificaGenereView
+        # Ottieni la pagina ModificaGenerePage
+        from view.info.pagine import ModificaGenerePage
 
         pagina_nome = Pagina.MODIFICA_GENERE
         try:
-            pagina: ModificaGenereView = self._ottieni_pagina(  # type:ignore
-                pagina_nome, ModificaGenereView
+            pagina: ModificaGenerePage = self._ottieni_pagina(  # type:ignore
+                pagina_nome, ModificaGenerePage
             )
         except TypeError:
             return

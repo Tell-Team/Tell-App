@@ -7,7 +7,7 @@ from core.view import AbstractCreaView
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class NuovoEventoView(AbstractCreaView):
+class NuovoEventoPage(AbstractCreaView):
     """Pagina per la creazione di un nuovo evento."""
 
     # ------------------------- SETUP INIT -------------------------

@@ -18,14 +18,14 @@ from view.utils.custom_button import DefaultButton, CreaButton
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
-class RicevutaView(QWidget):
+class RicevutaPage(QWidget):
     """Pagina per finire il processo di creazione di prenotazioni.
 
     Segnali
     ---
     - `displayPostiSceltiRequest(ListLayout)` : emesso per mostrare a schermo i posti prenotati;
     - `stampaRicevuta()` : emesso per stampare la ricevuta della prenotazione;
-    - `ritornaAllaMainPage()` : emesso per tornare alla pagina `AcquistoSectionView`.
+    - `ritornaAllaMainPage()` : emesso per tornare alla pagina `AcquistoSection`.
     """
 
     displayPostiSceltiRequest = pyqtSignal(ListLayout)

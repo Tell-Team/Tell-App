@@ -5,7 +5,7 @@ from controller.navigation import Pagina
 
 from model.model.model import Model, RicevutaData
 
-from view.acquisto.pagine import RicevutaView
+from view.acquisto.pagine import RicevutaPage
 from view.acquisto.widgets import EventoPostiDisplay
 
 from view.utils.list_widgets import ListLayout
@@ -14,11 +14,11 @@ from view.style.ui_style import WidgetRole
 
 
 class RicevutaController(QObject):
-    """Gestice la pagina `RicevutaView` dell'app."""
+    """Gestice la pagina `RicevutaPage` dell'app."""
 
     goToSectionRequest = pyqtSignal(Pagina)
 
-    def __init__(self, model: Model, pagina_ricevuta: RicevutaView):
+    def __init__(self, model: Model, pagina_ricevuta: RicevutaPage):
         super().__init__()
 
         self.__model = model
