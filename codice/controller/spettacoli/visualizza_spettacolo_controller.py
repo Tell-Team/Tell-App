@@ -87,12 +87,14 @@ class VisualizzaSpettacoloController(AbstractVisualizzaController):
         from view.spettacoli.pagine import PrezziAssociatiView
 
         pagina_nome = Pagina.PREZZI_ASSOCIATI
-        current_pagina = self._ottieni_pagina(pagina_nome)
-        if type(current_pagina) is not PrezziAssociatiView:
-            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+        try:
+            pagina: PrezziAssociatiView = self._ottieni_pagina(  # type:ignore
+                pagina_nome, PrezziAssociatiView
+            )
+        except TypeError:
             return
 
-        current_pagina.set_data(current_spettacolo.get_id())
+        pagina.set_data(current_spettacolo.get_id())
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

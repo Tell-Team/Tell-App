@@ -96,7 +96,7 @@ class PrezziAssociatiController(AbstractVisualizzaController):
 
             current_sezione_prezzo = SezioniPrezziDisplay(sezione, prezzo)
 
-            if not Prezzo:
+            if not prezzo:
                 current_sezione_prezzo.creaRequest.connect(  # type:ignore
                     partial(self.__nuovo_prezzo, sezione)
                 )
@@ -130,13 +130,15 @@ class PrezziAssociatiController(AbstractVisualizzaController):
         from view.spettacoli.pagine import NuovoPrezzoView
 
         pagina_nome = Pagina.NUOVO_PREZZO
-        current_pagina = self._ottieni_pagina(pagina_nome)
-        if type(current_pagina) is not NuovoPrezzoView:
-            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+        try:
+            pagina: NuovoPrezzoView = self._ottieni_pagina(  # type:ignore
+                pagina_nome, NuovoPrezzoView
+            )
+        except TypeError:
             return
 
         # Setup dati nella pagina
-        current_pagina.set_data(current_spettacolo, sezione)
+        pagina.set_data(current_spettacolo, sezione)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
@@ -176,9 +178,11 @@ class PrezziAssociatiController(AbstractVisualizzaController):
         from view.spettacoli.pagine import ModificaPrezzoView
 
         pagina_nome = Pagina.MODIFICA_PREZZO
-        current_pagina = self._ottieni_pagina(pagina_nome)
-        if type(current_pagina) is not ModificaPrezzoView:
-            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+        try:
+            pagina: ModificaPrezzoView = self._ottieni_pagina(  # type:ignore
+                pagina_nome, ModificaPrezzoView
+            )
+        except TypeError:
             return
 
         # Salva i dati dentro di un container
@@ -189,7 +193,7 @@ class PrezziAssociatiController(AbstractVisualizzaController):
             id_sezione=current_prezzo.get_id_sezione(),
         )
 
-        current_pagina.set_data_modifica(prezzo_data, current_spettacolo, sezione)
+        pagina.set_data_modifica(prezzo_data, current_spettacolo, sezione)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

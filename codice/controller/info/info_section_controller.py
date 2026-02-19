@@ -188,9 +188,11 @@ class InfoSectionController(AbstractSectionController):
         from view.info.pagine import VisualizzaOperaView
 
         pagina_nome = Pagina.VISUALIZZA_OPERA
-        current_pagina = self._ottieni_pagina(pagina_nome)
-        if type(current_pagina) is not VisualizzaOperaView:
-            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+        try:
+            pagina: VisualizzaOperaView = self._ottieni_pagina(  # type:ignore
+                pagina_nome, VisualizzaOperaView
+            )
+        except TypeError:
             return
 
         # Setup pagina con i dati dell'opera
@@ -215,7 +217,7 @@ class InfoSectionController(AbstractSectionController):
             teatro_rappresentazione=current_opera.get_teatro_prima_rappresentazione(),
         )
 
-        current_pagina.set_data(opera_data, genere_associato.get_nome())
+        pagina.set_data(opera_data, genere_associato.get_nome())
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
@@ -227,14 +229,16 @@ class InfoSectionController(AbstractSectionController):
         from view.info.pagine import NuovaOperaView
 
         pagina_nome = Pagina.NUOVA_OPERA
-        current_pagina = self._ottieni_pagina(pagina_nome)
-        if type(current_pagina) is not NuovaOperaView:
-            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+        try:
+            pagina: NuovaOperaView = self._ottieni_pagina(  # type:ignore
+                pagina_nome, NuovaOperaView
+            )
+        except TypeError:
             return
 
         # Setup pagina pulendo i campi
-        current_pagina.setup_genere_combobox(self.__get_generi())
-        current_pagina.reset_pagina()
+        pagina.setup_genere_combobox(self.__get_generi())
+        pagina.reset_pagina()
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
@@ -259,9 +263,11 @@ class InfoSectionController(AbstractSectionController):
         from view.info.pagine import ModificaOperaView
 
         pagina_nome = Pagina.MODIFICA_OPERA
-        current_pagina = self._ottieni_pagina(pagina_nome)
-        if type(current_pagina) is not ModificaOperaView:
-            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+        try:
+            pagina: ModificaOperaView = self._ottieni_pagina(  # type:ignore
+                pagina_nome, ModificaOperaView
+            )
+        except TypeError:
             return
 
         # Salva i dati dentro di un container
@@ -278,8 +284,8 @@ class InfoSectionController(AbstractSectionController):
         )
 
         # Setup pagina con i data dell'opera
-        current_pagina.setup_genere_combobox(self.__get_generi())
-        current_pagina.set_data(opera_data)
+        pagina.setup_genere_combobox(self.__get_generi())
+        pagina.set_data(opera_data)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
@@ -291,13 +297,15 @@ class InfoSectionController(AbstractSectionController):
         from view.info.pagine import NuovoGenereView
 
         pagina_nome = Pagina.NUOVO_GENERE
-        current_pagina = self._ottieni_pagina(pagina_nome)
-        if type(current_pagina) is not NuovoGenereView:
-            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+        try:
+            pagina: NuovoGenereView = self._ottieni_pagina(  # type:ignore
+                pagina_nome, NuovoGenereView
+            )
+        except TypeError:
             return
 
         # Setup pagina pulendo i campi
-        current_pagina.reset_pagina()
+        pagina.reset_pagina()
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
@@ -322,9 +330,11 @@ class InfoSectionController(AbstractSectionController):
         from view.info.pagine import ModificaGenereView
 
         pagina_nome = Pagina.MODIFICA_GENERE
-        current_pagina = self._ottieni_pagina(pagina_nome)
-        if type(current_pagina) is not ModificaGenereView:
-            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+        try:
+            pagina: ModificaGenereView = self._ottieni_pagina(  # type:ignore
+                pagina_nome, ModificaGenereView
+            )
+        except TypeError:
             return
 
         # Salva i dati dentro di un container
@@ -335,7 +345,7 @@ class InfoSectionController(AbstractSectionController):
         )
 
         # Setup pagina con i data del genere
-        current_pagina.set_data(genere_data)
+        pagina.set_data(genere_data)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

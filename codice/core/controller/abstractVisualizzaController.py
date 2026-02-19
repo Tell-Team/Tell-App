@@ -43,16 +43,22 @@ class AbstractVisualizzaController(QObject, metaclass=ABCQObjectMeta):
 
     # ------------------------- METODI DEL CONTROLLER -------------------------
 
-    def _ottieni_pagina(self, pagina_nome: Pagina):
+    def _ottieni_pagina(self, pagina_nome: Pagina, tipo: type):
         """Ottiene la pagina indicata senza trasformarla in un `QWidget` generico.
 
         :param pagina_nome: nametag associato alla pagina
+        :param tipo: tipo atteso della pagina
         """
         temp_dict: dict[str, Optional[QWidget]] = {"value": None}
         self.getPageRequest.emit(pagina_nome, temp_dict)
-        return temp_dict.get("value")
+        pagina = temp_dict.get("value")
 
-    def _mostra_msg_pagina_non_trovata(self, pagina_nome: Pagina, tipo: type) -> None:
+        if type(pagina) is not tipo:
+            self.__mostra_msg_pagina_non_trovata(pagina_nome, type(pagina))
+            raise TypeError("Pagina non trovata")
+        return pagina
+
+    def __mostra_msg_pagina_non_trovata(self, pagina_nome: Pagina, tipo: type) -> None:
         """Metodo associato a `_ottieni_pagina`. È chiamato se la pagina ottenuta non è corretta.
 
         :param pagina_nome: nametag associato alla pagina attesa

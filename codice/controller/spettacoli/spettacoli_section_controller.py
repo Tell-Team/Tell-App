@@ -143,9 +143,11 @@ class SpettacoliSectionController(AbstractSectionController):
         from view.spettacoli.pagine import VisualizzaSpettacoloView
 
         pagina_nome = Pagina.VISUALIZZA_SPETTACOLO
-        current_pagina = self._ottieni_pagina(pagina_nome)
-        if type(current_pagina) is not VisualizzaSpettacoloView:
-            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+        try:
+            pagina: VisualizzaSpettacoloView = self._ottieni_pagina(  # type:ignore
+                pagina_nome, VisualizzaSpettacoloView
+            )
+        except TypeError:
             return
 
         if isinstance(current_spettacolo, Regia):
@@ -168,7 +170,7 @@ class SpettacoliSectionController(AbstractSectionController):
                 musicisti_e_direttori_artistici=current_spettacolo.get_musicisti_e_direttori_artistici(),
             )
 
-        current_pagina.set_data(spettacolo_data)
+        pagina.set_data(spettacolo_data)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
@@ -180,10 +182,15 @@ class SpettacoliSectionController(AbstractSectionController):
         from view.spettacoli.pagine import NuovoSpettacoloView
 
         pagina_nome = Pagina.NUOVO_SPETTACOLO
-        current_pagina = self._ottieni_pagina(pagina_nome)
-        if type(current_pagina) is not NuovoSpettacoloView:
-            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+        try:
+            pagina: NuovoSpettacoloView = self._ottieni_pagina(  # type:ignore
+                pagina_nome, NuovoSpettacoloView
+            )
+        except TypeError:
             return
+
+        # Setup pagina pulendo i campi
+        pagina.reset_pagina()
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
@@ -208,9 +215,11 @@ class SpettacoliSectionController(AbstractSectionController):
         from view.spettacoli.pagine import ModificaSpettacoloView
 
         pagina_nome = Pagina.MODIFICA_SPETTACOLO
-        current_pagina = self._ottieni_pagina(pagina_nome)
-        if type(current_pagina) is not ModificaSpettacoloView:
-            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+        try:
+            pagina: ModificaSpettacoloView = self._ottieni_pagina(  # type:ignore
+                pagina_nome, ModificaSpettacoloView
+            )
+        except TypeError:
             return
 
         # Salva i dati dentro di un container
@@ -234,7 +243,7 @@ class SpettacoliSectionController(AbstractSectionController):
                 musicisti_e_direttori_artistici=current_spettacolo.get_musicisti_e_direttori_artistici(),
             )
 
-        current_pagina.set_data(spettacolo_data)
+        pagina.set_data(spettacolo_data)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

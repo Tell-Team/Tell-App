@@ -111,9 +111,11 @@ class AcquistoSectionController(AbstractSectionController):
         from view.acquisto.pagine import ScegliPostiView
 
         pagina_nome = Pagina.SCEGLI_POSTI
-        current_pagina = self._ottieni_pagina(pagina_nome)
-        if type(current_pagina) is not ScegliPostiView:
-            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+        try:
+            pagina: ScegliPostiView = self._ottieni_pagina(  # type:ignore
+                pagina_nome, ScegliPostiView
+            )
+        except TypeError:
             return
 
         # Salva i dati dentro di un container
@@ -125,8 +127,8 @@ class AcquistoSectionController(AbstractSectionController):
             musicisti_e_direttori_artistici=current_spettacolo.get_musicisti_e_direttori_artistici(),
         )
 
-        current_pagina.lista_posti_scelti.clear()
-        current_pagina.set_data(spettacolo_data)
+        pagina.lista_posti_scelti.clear()
+        pagina.set_data(spettacolo_data)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

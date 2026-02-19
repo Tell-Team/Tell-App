@@ -124,13 +124,15 @@ class AccountSectionController(AbstractSectionController):
         from view.account.pagine import NuovoAccountView
 
         pagina_nome = Pagina.NUOVO_ACCOUNT
-        current_pagina = self._ottieni_pagina(pagina_nome)
-        if type(current_pagina) is not NuovoAccountView:
-            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+        try:
+            pagina: NuovoAccountView = self._ottieni_pagina(  # type:ignore
+                pagina_nome, NuovoAccountView
+            )
+        except TypeError:
             return
 
         # Setup pagina pulendo i campi
-        current_pagina.reset_pagina()
+        pagina.reset_pagina()
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
@@ -156,9 +158,11 @@ class AccountSectionController(AbstractSectionController):
         from view.account.pagine import ModificaAccountView
 
         pagina_nome = Pagina.MODIFICA_ACCOUNT
-        current_pagina = self._ottieni_pagina(pagina_nome)
-        if type(current_pagina) is not ModificaAccountView:
-            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+        try:
+            pagina: ModificaAccountView = self._ottieni_pagina(  # type:ignore
+                pagina_nome, ModificaAccountView
+            )
+        except TypeError:
             return
 
         # Salva i dati dentro di un container
@@ -169,7 +173,7 @@ class AccountSectionController(AbstractSectionController):
         )
 
         # Setup pagina con i data dell'account
-        current_pagina.set_data(account_dato)
+        pagina.set_data(account_dato)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

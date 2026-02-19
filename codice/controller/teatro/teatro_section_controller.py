@@ -114,9 +114,11 @@ class TeatroSectionController(AbstractSectionController):
         from view.teatro.pagine import VisualizzaSezioneView
 
         pagina_nome = Pagina.VISUALIZZA_SEZIONE
-        current_pagina = self._ottieni_pagina(pagina_nome)
-        if type(current_pagina) is not VisualizzaSezioneView:
-            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+        try:
+            pagina: VisualizzaSezioneView = self._ottieni_pagina(  # type:ignore
+                pagina_nome, VisualizzaSezioneView
+            )
+        except TypeError:
             return
 
         sezione_data = SezioneData(
@@ -125,8 +127,8 @@ class TeatroSectionController(AbstractSectionController):
             descrizione=current_sezione.get_descrizione(),
         )
 
-        current_pagina.reset_pagina()
-        current_pagina.set_data(sezione_data)
+        pagina.reset_pagina()
+        pagina.set_data(sezione_data)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
@@ -138,13 +140,15 @@ class TeatroSectionController(AbstractSectionController):
         from view.teatro.pagine import NuovaSezioneView
 
         pagina_nome = Pagina.NUOVA_SEZIONE
-        current_pagina = self._ottieni_pagina(pagina_nome)
-        if type(current_pagina) is not NuovaSezioneView:
-            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+        try:
+            pagina: NuovaSezioneView = self._ottieni_pagina(  # type:ignore
+                pagina_nome, NuovaSezioneView
+            )
+        except TypeError:
             return
 
         # Setup pagina pulendo i campi
-        current_pagina.reset_pagina()
+        pagina.reset_pagina()
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
@@ -169,9 +173,11 @@ class TeatroSectionController(AbstractSectionController):
         from view.teatro.pagine import ModificaSezioneView
 
         pagina_nome = Pagina.MODIFICA_SEZIONE
-        current_pagina = self._ottieni_pagina(pagina_nome)
-        if type(current_pagina) is not ModificaSezioneView:
-            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+        try:
+            pagina: ModificaSezioneView = self._ottieni_pagina(  # type:ignore
+                pagina_nome, ModificaSezioneView
+            )
+        except TypeError:
             return
 
         # Salva i dati dentro di un container
@@ -182,7 +188,7 @@ class TeatroSectionController(AbstractSectionController):
         )
 
         # Setup pagina con i data della sezione
-        current_pagina.set_data(sezione_data)
+        pagina.set_data(sezione_data)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)

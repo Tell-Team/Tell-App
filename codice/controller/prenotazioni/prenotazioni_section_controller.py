@@ -126,14 +126,16 @@ class PrenotazioniSectionController(AbstractSectionController):
         from view.prenotazioni.pagine import VisualizzaPrenotazioneView
 
         pagina_nome = Pagina.VISUALIZZA_PRENOTAZIONE
-        current_pagina = self._ottieni_pagina(pagina_nome)
-        if type(current_pagina) is not VisualizzaPrenotazioneView:
-            self._mostra_msg_pagina_non_trovata(pagina_nome, type(current_pagina))
+        try:
+            pagina: VisualizzaPrenotazioneView = self._ottieni_pagina(  # type:ignore
+                pagina_nome, VisualizzaPrenotazioneView
+            )
+        except TypeError:
             return
 
         prenotazione_data = self.__get_dettagli_prenotazione(id_)
 
-        current_pagina.set_data(prenotazione_data)
+        pagina.set_data(prenotazione_data)
 
         # Apri la pagina
         self.goToPageRequest.emit(pagina_nome, True)
