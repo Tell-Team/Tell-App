@@ -1,0 +1,284 @@
+\section{Testing}
+	\definecolor{numbers}{rgb}{0.27,0.30,0.34}
+	\definecolor{comments}{rgb}{0.42,0.45,0.49}
+	\definecolor{keywords}{rgb}{0.84,0.23,0.29}
+	\definecolor{strings}{rgb}{0.02,0.26,0.54}
+
+	\lstdefinestyle{mystyle}{
+		backgroundcolor=\color{white},
+		basicstyle=\ttfamily\footnotesize,
+		commentstyle=\color{comments},
+		keywordstyle=\color{keywords},
+		numberstyle=\footnotesize\ttfamily\color{numbers},
+		stringstyle=\color{strings},
+		breakatwhitespace=false
+		breaklines=true,
+		captionpos=b,
+		keepspaces=true,
+		numbers=left,
+		numbersep=10pt,
+		showspaces=false,
+		showstringspaces=false,
+		showtabs=false,
+		tabsize=2
+	}
+
+	\lstset{style=mystyle}
+
+Il testing è stato effettuato tramite la libreria Python "unittest", ed è strutturato in tre classi separate, ciascuna delle quali è responsabile del testing di uno dei tre package di analisi. Per ciascuna classe, viene prima effettuato un test sulla classe stessa, per verificare le funzionalità di controllo sul formato dei dati ed eventuali metodi di competenza della classe. In seguito, viene effettuato un test denominato "model", che verifica le funzionalità dei metodi esposti dalla classe \texttt{Model}, ovvero le funzionalità CRUD del sistema. Questa seconda porzione funge dunque anche da test delle relative classi "Gestore".
+
+Si riporta di seguito un listato della porzione di codice relativa al testing della classe \texttt{Evento} presente nel file \texttt{"codice/test/test\_organizzazione.py"}. La procedura di testing è analoga in principio per le altre classi.
+
+Nella prima parte, vengono definite alcune costanti e viene creata la classe di test con attributo \texttt{\_\_model}, ovvero l'istanza di \texttt{Model} utilizzata per effettuare il testing di tutte le classi del package \textit{Organizzazione}. La classe \texttt{Model}, appena istanziata, crea un "database" pickle di testing che verrà poi eliminato (vedi l'ultimo paragrafo di questa sezione) alla conclusione di tutti i test.
+
+	\begin{lstlisting}[language=Python]
+import unittest
+from datetime import date, datetime
+import shutil
+
+DATA_ORA_FUTURO = datetime(2970, 1, 1, 0, 0, 0)
+DATA_ORA_PASSATO = datetime(1904, 6, 16, 8)
+ID_NON_ESISTENTE = 777
+STR_NON_VUOTA = "BCNRFF"
+DATA = date(2009, 4, 13)
+FLOAT_NONZERO = 1.30
+
+
+class TestOrganizzazione(unittest.TestCase):
+    def setUp(self) -> None:
+        super().setUp()
+
+        self.__model = Model("./test_db/")
+	\end{lstlisting}
+
+Nella seconda parte, viene effettuato il test sulla classe \texttt{Evento}, verificando che l'id dello spettacolo relativo non possa essere negativo e che il metodo che ritorna lo stato di "attività" dell'evento si comporti come atteso.
+
+	\begin{lstlisting}[language=Python, firstnumber=last]
+    # ### EVENTI ###
+    def test_evento(self):
+        print("\n### EVENTO ###")
+
+        # CONGRUENZA id_spettacolo
+        self.assertRaises(
+            DatoIncongruenteException,
+            Evento,
+            DATA_ORA_PASSATO,
+            -1,
+        )
+        print("Passato CONGRUENZA id_spettacolo")
+
+        # ATTIVO
+        evento = Evento(DATA_ORA_PASSATO, 0)
+        self.assertFalse(evento.attivo())
+        evento.set_data_ora(DATA_ORA_FUTURO)
+        self.assertTrue(evento.attivo())
+        print("Passato ATTIVO")
+	\end{lstlisting}
+
+Nella terza parte, viene effettuato il test sulle funzionalità CRUD riguardanti l'\texttt{Evento}. Viene effettuato per primo il test sull'aggiunta di un nuovo evento, verificando che il metodo sollevi le eccezioni attese in risposta ad input errati.
+
+	\begin{lstlisting}[language=Python, firstnumber=last]
+    def test_model_evento(self):
+        print("\n### MODEL EVENTO ###")
+
+        # AGGIUNGI
+        evento = Evento(DATA_ORA_PASSATO, ID_NON_ESISTENTE)
+        self.assertRaises(
+            IdInesistenteException,
+            self.__model.aggiungi_evento,
+            evento
+        )
+        print("Passato AGGIUNGI IdInesistente")
+
+        spettacolo = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
+        self.__model.aggiungi_spettacolo(spettacolo)
+        evento = Evento(DATA_ORA_PASSATO, spettacolo.get_id())
+        self.__model.aggiungi_evento(evento)
+        self.assertRaises(IdOccupatoException, self.__model.aggiungi_evento, evento)
+        print("Passato AGGIUNGI IdOccupato")
+
+        evento2 = Evento(evento.get_data_ora(), spettacolo.get_id())
+        self.assertRaises(OccupatoException, self.__model.aggiungi_evento, evento2)
+        print("Passato AGGIUNGI Occupato")
+	\end{lstlisting}
+
+Vengono poi effettuati i test sui vari metodi "get" che ritornano uno o più eventi in base a determinati criteri. Per ciascuno di questi metodi, viene verificata l'uguaglianza del valore ritornato con la variabile memorizzata in fase di aggiunta, e viene poi verificata l'assenza di side effect modificando il valore ricevuto in output dal metood "get".
+
+	\begin{lstlisting}[language=Python, firstnumber=last]
+        # GET
+        evento_ = self.__model.get_evento(evento.get_id())
+        assert evento_ is not None
+        self.assertEqual(evento_, evento)
+        print("Passato GET")
+
+        evento_.set_data_ora(DATA_ORA_FUTURO)
+        evento = self.__model.get_evento(evento.get_id())
+        assert evento is not None
+        self.assertEqual(evento.get_id_spettacolo(), evento_.get_id_spettacolo())
+        self.assertNotEqual(evento.get_data_ora(), evento_.get_data_ora())
+        print("Passato GET side effect")
+
+        # GET LISTA
+        evento2 = Evento(datetime.now(), spettacolo.get_id())
+        self.__model.aggiungi_evento(evento2)
+        self.assertEqual(self.__model.get_eventi(), [evento, evento2])
+        print("Passato GET LISTA")
+
+        evento2_ = self.__model.get_eventi()[1]
+        evento2_.set_data_ora(DATA_ORA_FUTURO)
+        evento2 = self.__model.get_eventi()[1]
+        self.assertEqual(evento2.get_id_spettacolo(), evento2_.get_id_spettacolo())
+        self.assertNotEqual(evento2.get_data_ora(), evento2_.get_data_ora())
+        print("Passato GET LISTA side effect")
+
+        # GET LISTA by spettacolo
+        spettacolo2 = Spettacolo(STR_NON_VUOTA, STR_NON_VUOTA, dict(), dict())
+        self.__model.aggiungi_spettacolo(spettacolo2)
+        evento3 = Evento(DATA_ORA_PASSATO, spettacolo2.get_id())
+        self.__model.aggiungi_evento(evento3)
+        self.assertEqual(
+            self.__model.get_eventi_by_spettacolo(spettacolo.get_id()),
+            [evento, evento2],
+        )
+        print("Passato GET LISTA by spettacolo")
+
+        evento2_ = self.__model.get_eventi_by_spettacolo(spettacolo.get_id())[1]
+        evento2_.set_data_ora(DATA_ORA_FUTURO)
+        evento2 = self.__model.get_eventi_by_spettacolo(spettacolo.get_id())[1]
+        self.assertEqual(evento2.get_id_spettacolo(), evento2_.get_id_spettacolo())
+        self.assertNotEqual(evento2.get_data_ora(), evento2_.get_data_ora())
+        print("Passato GET LISTA by spettacolo side effect")
+        self.__model.elimina_evento(evento3.get_id())
+        self.__model.elimina_spettacolo(spettacolo2.get_id())
+
+        # GET LISTA SPETTACOLI in programma
+        genere = Genere(STR_NON_VUOTA, STR_NON_VUOTA)
+        self.__model.aggiungi_genere(genere)
+        opera = Opera(
+            STR_NON_VUOTA,
+            STR_NON_VUOTA,
+            STR_NON_VUOTA,
+            1,
+            DATA,
+            STR_NON_VUOTA,
+            STR_NON_VUOTA,
+            genere.get_id(),
+        )
+        self.__model.aggiungi_opera(opera)
+        regia = Regia(
+            STR_NON_VUOTA,
+            0,
+            opera.get_id(),
+            STR_NON_VUOTA,
+            dict(),
+            dict(),
+        )
+        self.__model.aggiungi_spettacolo(regia)
+        regia2 = Regia(
+            STR_NON_VUOTA,
+            0,
+            opera.get_id(),
+            STR_NON_VUOTA,
+            dict(),
+            dict(),
+        )
+        self.__model.aggiungi_spettacolo(regia2)
+        regia3 = Regia(
+            STR_NON_VUOTA,
+            0,
+            opera.get_id(),
+            STR_NON_VUOTA,
+            dict(),
+            dict(),
+        )
+        self.__model.aggiungi_spettacolo(regia3)
+        evento4 = Evento(DATA_ORA_PASSATO, regia2.get_id())
+        self.__model.aggiungi_evento(evento4)
+        evento5 = Evento(DATA_ORA_FUTURO, regia3.get_id())
+        self.__model.aggiungi_evento(evento5)
+        self.assertEqual(self.__model.get_spettacoli_in_programma(), [regia3])
+        print("Passato GET LISTA SPETTACOLI in programma")
+
+        regia3_ = self.__model.get_spettacoli_in_programma()[0]
+        regia3_.set_titolo(regia3_.get_titolo() + STR_NON_VUOTA)
+        regia3 = self.__model.get_spettacoli_in_programma()[0]
+        self.assertEqual(regia3.get_note(), regia3_.get_note())
+        self.assertNotEqual(regia3.get_titolo(), regia3_.get_titolo())
+        print("Passato GET LISTA SPETTACOLI in programma side effect")
+        self.__model.elimina_evento(evento5.get_id())
+        self.__model.elimina_evento(evento4.get_id())
+        self.__model.elimina_spettacolo(regia3.get_id())
+        self.__model.elimina_spettacolo(regia2.get_id())
+        self.__model.elimina_spettacolo(regia.get_id())
+        self.__model.elimina_opera(opera.get_id())
+        self.__model.elimina_genere(genere.get_id())
+	\end{lstlisting}
+
+In seguito, viene testato il metodo di modifica e le relative eccezioni, e viene inoltre testata la funzionalità di salvataggio, forzando il model a ricaricare da file la lista di eventi e verificando che corrisponda alla lista presente in memoria volatile.
+
+	\begin{lstlisting}[language=Python, firstnumber=last]
+        # MODIFICA
+        evento3 = Evento(DATA_ORA_PASSATO, ID_NON_ESISTENTE)
+        self.assertRaises(
+            IdInesistenteException,
+            self.__model.modifica_evento,
+            evento3
+        )
+        print("Passato MODIFICA IdInesistente")
+
+        evento = self.__model.get_evento(evento.get_id())
+        assert evento is not None
+        evento.set_data_ora(evento2.get_data_ora())
+        self.assertRaises(OccupatoException, self.__model.modifica_evento, evento)
+        print("Passato MODIFICA Occupato")
+
+        evento.set_data_ora(DATA_ORA_FUTURO)
+        self.__model.modifica_evento(evento)
+        evento_ = self.__model.get_evento(evento.get_id())
+        assert evento_ is not None
+        self.assertEqual(evento_, evento)
+        print("Passato MODIFICA")
+
+        # CARICA
+        self.__model._Model__carica_eventi()  # type: ignore
+        self.assertEqual(self.__model.get_eventi(), [evento, evento2])
+        print("Passato CARICA")
+	\end{lstlisting}
+
+In ultimo, viene testata la funzionalità di eliminazione e le relative eccezioni, e viene ridefinito in overriding il metodo \texttt{tearDown} della classe \texttt{unittest.TestCase} per aggiungere il codice che elimina il "database" di testing una volta conclusi tutti i test.
+
+	\begin{lstlisting}[language=Python, firstnumber=last]
+        # ELIMINA
+        self.assertRaises(
+            IdInesistenteException, self.__model.elimina_evento, ID_NON_ESISTENTE
+        )
+        print("Passato ELIMINA IdInesistente")
+
+        sezione = Sezione(STR_NON_VUOTA, STR_NON_VUOTA)
+        self.__model.aggiungi_sezione(sezione)
+        self.__model.aggiungi_prezzo(
+            Prezzo(FLOAT_NONZERO, spettacolo.get_id(), sezione.get_id())
+        )
+        posto = Posto(STR_NON_VUOTA, 1, sezione.get_id())
+        self.__model.aggiungi_posto(posto)
+        prenotazione = Prenotazione(STR_NON_VUOTA, DATA_ORA_PASSATO)
+        self.__model.aggiungi_prenotazione(prenotazione)
+        occupazione = Occupazione(
+            evento.get_id(), posto.get_id(), prenotazione.get_id()
+        )
+        self.__model.aggiungi_occupazione(occupazione)
+        self.assertRaises(
+            OggettoInUsoException, self.__model.elimina_evento, evento.get_id()
+        )
+        print("Passato ELIMINA OggettoInUso")
+
+        self.__model.elimina_occupazione(occupazione.get_id())
+        self.__model.elimina_evento(evento.get_id())
+        self.assertEqual(self.__model.get_eventi(), [evento2])
+        print("Passato ELIMINA")
+
+    def tearDown(self) -> None:
+        super().tearDown()
+
+        shutil.rmtree("./test_db/")
+	\end{lstlisting}

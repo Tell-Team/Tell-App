@@ -2,7 +2,9 @@
 *.txss2
 *.aux
 *.log
-*.synctex.gz
+*.synctex*
+*.fdb_latexmk
+*/%OUTDIR%
 
 #Python
 */.vscode
