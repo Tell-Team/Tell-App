@@ -31,7 +31,7 @@ DATA = date(2009, 4, 13)
 FLOAT_NONZERO = 1.30
 
 
-class TestTell(unittest.TestCase):
+class TestOrganizzazione(unittest.TestCase):
     def setUp(self) -> None:
         super().setUp()
 

@@ -23,7 +23,7 @@ ID_NON_ESISTENTE = 777
 DATA = date(2009, 4, 13)
 
 
-class TestTell(unittest.TestCase):
+class TestPianificazione(unittest.TestCase):
     def setUp(self) -> None:
         super().setUp()
 

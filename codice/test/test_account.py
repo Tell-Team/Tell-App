@@ -18,7 +18,7 @@ PASSWORD_CONFORME = "lavacheapologist"
 ID_NON_ESISTENTE = 777
 
 
-class TestTell(unittest.TestCase):
+class TestAccount(unittest.TestCase):
     def setUp(self) -> None:
         super().setUp()
 
