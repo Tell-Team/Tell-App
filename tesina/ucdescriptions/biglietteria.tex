@@ -1,4 +1,7 @@
 % UC: Crea Spettacolo			[X]
+% UC: Lista Spettacoli		[X]
+% UC: Visualizza Spettacolo	[X]
+% UC: Lista Eventi		[X]
 % UC ext: Modifica Spettacolo		[X]
 % UC ext: Elimina Spettacolo		[X]
 % UC ext: Crea Evento			[X]
@@ -6,11 +9,12 @@
 % UC ext: Elimina Evento		[X]
 % UC: Lista Prenotazioni		[X]
 % UC ext: Ricerca Prenotazione		[X]
+% UC: Visualizza Prenotazione	[X]
 % UC ext: Elimina Prenotazione	[X]
 % UC ext: Segna Prenotazione come pagata	[X]
 
 \renewcommand{\attori}{Biglietteria \\ Amministratore}
-% ID: 14-23
+% ID: 9-22
 
 
 {\ucTable	% UC: Crea Spettacolo
@@ -49,6 +53,121 @@
 	
 }{	% Sequenza Eventi Alternativa
 } }
+
+
+{\ucTable	% UC: Lista Spettacoli
+	{	% Caso d'uso
+		Lista Spettacoli
+		
+	}{	% ID
+		\increaseCount{classId}
+		
+	}{	% Breve descrizione
+		L'Utente visualizza la lista di Spettacoli memorizzati.
+        % "visualizza"
+        % "memorizzate"(1)
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'Utente si trova nella sezione SPETTACOLI.
+			% "si trova"(5)
+			% "SPETTACOLI"(8)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item Il sistema mostra a schermo le informazioni essenziali di tutti gli Spettacoli memorizzati.
+            % "mostra a schermo <oggetto>"(3)
+            \item Il sistema permette all'Utente di visualizzare in più dettaglio, modificare ed eliminare gli Spettacoli.
+            \item[] \textbf{punto di estensione:} Ricerca Spettacolo
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item La lista di Spettacoli memorizzati viene visualizzata a schermo.
+			% "visualizza a schermo <oggetto>"(4)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucTable	% UC: Visualizza Spettacolo
+	{	% Caso d'uso
+		Visualizza Spettacolo
+		
+	}{	% ID
+		\increaseCount{classId}
+		
+	}{	% Breve descrizione
+		L'Utente visualizza le informazioni riguardo un singolo Spettacolo.
+        % "visualizza"
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'Utente si trova nella sezione SPETTACOLI.
+			% "si trova"(5)
+			% "SPETTACOLI"(8)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item L'Utente richiede le informazioni di uno Spettacolo.
+            \item Il sistema mostra a schermo le informazioni.
+            % "mostra a schermo <oggetto>"(3) 
+            \item \textbf{include}(Lista Eventi)
+            \item[] \textbf{punto di estensione:} Nuovo Evento
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item Le informazioni dello Spettacolo vengono visualizzate a schermo.
+			% "visualizza a schermo <oggetto>"(4)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa	
+} }
+
+
+{\ucTable	% UC: Lista Eventi
+	{	% Caso d'uso
+		Lista Eventi
+		
+	}{	% ID
+		\increaseCount{classId}
+		
+	}{	% Breve descrizione
+		L'Utente visualizza la lista di Eventi associati allo Spettacolo che sta visualizzando.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'Utente sta visualizzando un singolo Spettacolo.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item Il sistema mostra a schermo le informazioni essenziali di tutti gli Eventi associati allo Spettacolo.
+            % "mostra a schermo <oggetto>"(3)
+            % "associate"(6)
+			\item Il sistema permette all'Utente di modificare ed eliminare gli Eventi.
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item La lista di Eventi associati allo Spettacolo viene visualizzata a schermo.
+                % "visualizza a schermo <oggetto>"(4)
+                % "associate"(6)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
 
 {\ucExtTable	% UC EXT: Modifica Spettacolo
 {	% Caso d'uso
@@ -148,7 +267,7 @@
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item Il nuovo Evento è memorizzato e immediatamente visibile a tutti gli utenti.
+        \item Il nuovo Evento è memorizzato e immediatamente visibile a tutti gli Utenti.
     \end{enumerate}
 	
 } }
@@ -181,7 +300,7 @@
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
+        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli Utenti.
     \end{enumerate}
 	
 } }
@@ -241,7 +360,7 @@
 	
 }{	% Sequenza Eventi Principale
 	\begin{enumerate}
-        \item Il sistema mostra a schermo il nominativo e l'ora di emmisione di tutte Prenotazioni memorizzate.
+        \item Il sistema mostra a schermo il nominativo e l'ora di emmisione di tutte le Prenotazioni memorizzate.
         % "mostra a schermo <oggetto>"(3)
         \item Il sistema permette all'Utente di visualizzare in più dettaglio ed eliminare le Prenotazioni.
         % "visualizza in più dettaglio"(9)
@@ -255,6 +374,41 @@
     \end{enumerate}
 	
 }{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucTable	% UC: Visualizza Prenotazione
+	{	% Caso d'uso
+		Visualizza Prenotazione
+		
+	}{	% ID
+		\increaseCount{classId}
+		
+	}{	% Breve descrizione
+        L'Utente visualizza le informazioni riguardo una singola Prenotazione.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+            \item L'Utente si trova nella sezione PRENOTAZIONI.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item L'Utente chiama il comando "Visualizza" associato ad una Prenotazione.
+            \item Il sistema mostra a schermo le informazioni.
+            % "mostra a schermo <oggetto>"(3)
+            \item[] \textbf{punto di estensione:} Segna Prenotazione come Pagata
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+            \item Le informazioni della Prenotazione vengono visualizzate a schermo.
+			% "visualizza a schermo <oggetto>"(4)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
 } }
 
 

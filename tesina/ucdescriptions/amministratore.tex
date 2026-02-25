@@ -9,15 +9,21 @@
 % UC ext: Modifica Regia	[X]
 % UC ext: Elimina Regia	[X]
 % UC: Crea Sezione		[X]
+% UC: Lista Sezioni		[X]
 % UC: Visualizza Sezione	[X]
+% UC: Lista Posti		[X]
 % UC ext: Modifica Sezione	[X]
 % UC ext: Elimina Sezione	[X]
 % UC: Crea Posto		[X]
 % UC: Modifica Posto		[X]
 % UC: Elimina Posto		[X]
+% UC: Crea Account  [X]
+% UC: Lista Account [X]
+% UC: Modifica Account [X]
+% UC: Elimina Account [X]
 
 \renewcommand{\attori}{Amministratore}
-% ID: 24-36
+% ID: 23-42
 
 {\ucTable	% UC: Crea Opera
 {	% Caso d'uso
@@ -49,7 +55,7 @@
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item La nuova Opera è memorizzata e immediatamente visibile a tutti gli utenti.
+        \item La nuova Opera è memorizzata e immediatamente visibile a tutti gli Utenti.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Alternativa
@@ -85,7 +91,7 @@
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
+        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli Utenti.
     \end{enumerate}
 	
 } }
@@ -154,7 +160,7 @@
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item La nuova Regia è memorizzata e immediatamente visibile a tutti gli utenti.
+        \item La nuova Regia è memorizzata e immediatamente visibile a tutti gli Utenti.
     \end{enumerate}
 	
 } }
@@ -187,7 +193,7 @@
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
+        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli Utenti.
     \end{enumerate}
 	
 } }
@@ -263,6 +269,42 @@
 } }
 
 
+{\ucTable	% UC: Lista Sezioni
+	{	% Caso d'uso
+		Lista Sezioni
+		
+	}{	% ID
+		\increaseCount{classId}
+		
+	}{	% Breve descrizione
+		L'Utente visualizza l'elenco delle Sezioni memorizzate.
+        % "visualizza"
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'Utente si trova nella sezione TEATRO.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+            \item Il sistema mostra a schermo tutte le Sezioni memorizzate.
+            % "mostra a schermo <oggetto>"(3)
+            \item Il sistema permette all'Utente di visualizzare in più dettaglio, modificare ed eliminare le Sezioni.
+            % "visualizza in più dettaglio"(9)	
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item La lista di Sezioni memorizzate viene visualizzata a schermo.
+            % "visualizza a schermo <oggetto>"(4)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
+
 {\ucTable	% UC: Visualizza Sezione
 {	% Caso d'uso
     Visualizza Sezione
@@ -298,6 +340,43 @@
     
 }{	% Sequenza Eventi Alternativa
 } }
+
+
+{\ucTable	% UC: Lista Posti
+	{	% Caso d'uso
+		Lista Posti
+		
+	}{	% ID
+		\increaseCount{classId}
+		
+	}{	% Breve descrizione
+		L'Utente visualizza la lista di Posti associati alla Sezione che sta visualizzando.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'Utente sta visualizzando una singola Sezione.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+            \item Il sistema mostra a schermo le informazioni essenziali di tutti i Posti associati alla Sezione.
+            % "mostra a schermo <oggetto>"(3)
+            % "associate"(6)
+            \item Il sistema permette all'Utente di creare, modificare ed eliminare i Posti.		
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item La lista di Posti associati alla Sezione viene visualizzata a schermo.
+            % "visualizza a schermo <oggetto>"(4)
+            % "associate"(6)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
 
 {\ucExtTable	% UC EXT: Modifica Sezione
 {	% Caso d'uso
@@ -401,7 +480,7 @@
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item Il nuovo Posto (o Posti) è memorizzato e immediatamente visibile a tutti gli utenti.
+        \item Il nuovo Posto (o Posti) è memorizzato e immediatamente visibile a tutti gli Utenti.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Alternativa
@@ -435,7 +514,7 @@
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
+        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli Utenti.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Alternativa
@@ -468,8 +547,154 @@
 	
 }{	% Postcondizioni
 	\begin{enumerate}
-        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli utenti.
+        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli Utenti.
     \end{enumerate}
 	
 }{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucTable	% UC: Crea Account
+{	% Caso d'uso
+	Crea Account
+	
+}{	% ID
+	\increaseCount{classId}
+	
+}{	% Breve descrizione
+	L'Utente crea un Account di Biglietteria o Amministratore.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'Utente si trova nella sezione ACCOUNT.
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item L'Utente avvia il caso d'uso selezionando il comando "Crea Account".
+        \item Il sistema mostra una interfaccia per inserire username, password ed il ruolo dell'Account.
+        \item L'Utente inserisce le informazioni dell'Account.
+        \item L'Utente conferma la creazione.
+        \item Il sistema verifica i dati e li salva in memoria.
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item Il nuovo Account è memorizzato e immediatamente accessibile. % - REVISARE
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucTable	% UC: Lista Account
+	{	% Caso d'uso
+		Lista Account
+		
+	}{	% ID
+		\increaseCount{classId}
+		
+	}{	% Breve descrizione
+		L'Utente visualizza la lista di Account memorizzati.
+        % "visualizza"
+        % "memorizzate"(1)
+		
+	}{	% Attori Primari
+		\attori
+		
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'Utente si trova nella sezione ACCOUNT.
+			% "si trova"(5)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item Il sistema mostra a schermo l'username di tutti gli Account memorizzati.
+            % "mostra a schermo <oggetto>"(3)
+            \item Il sistema permette all'Utente di modificare ed eliminare gli Account.
+            % "visualizza in più dettaglio"(9)
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item La lista di Account memorizzati viene visualizzata a schermo.
+			% "visualizza a schermo <oggetto>"(4)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucExtTable	% UC EXT: Modifica Account
+{	% Caso d'uso
+	Modifica Account
+	
+}{	% ID
+	\increaseCount{classId}
+	
+}{	% Breve descrizione
+	L'Utente modifica le informazioni di un Account.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'Utente si trova nella sezione ACCOUNT.
+        % "si trova"(5)
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item L'Utente avvia il caso d'uso selezionando il comando "Modifica" associato ad un Account.
+        \item Il sistema consente all'Utente di modificare la password ed il ruolo dell'Account.
+        \item L'Utente inserisce le modifiche desiderate e le conferma.
+        \item Il sistema verifica i dati e li salva in memoria.
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli Utenti.
+    \end{enumerate}
+	
+} }
+
+
+{\ucExtTable	% UC EXT: Elimina Account
+{	% Caso d'uso
+	Elimina Account
+	
+}{	% ID
+	\increaseCount{classId}
+	
+}{	% Breve descrizione
+	L'Utente elimina un Account dalla lista di Account memorizzate.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'Utente si trova nella sezione ACCOUNT.
+        % "si trova"(5)
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item L'Utente avvia il caso d'uso selezionando il comando "Elimina" associato ad un Account.
+        \item Il sistema richiede all'Utente di confermare l'intenzione di eliminare l'Account.
+        \item L'Utente conferma l'elimina.
+        \item Il sistema elimina l'Account permanentemente.
+        % "e la elimina permanentemente"(10)
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item L'Utente effettua l'eliminazione di un Account.
+    \end{enumerate}
+	
 } }
