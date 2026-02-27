@@ -161,10 +161,11 @@ class VisualizzaSezionePage(AbstractVisualizzaView):
         self._layout_content.addWidget(self.label_descrizione)
         self._layout_content.addSpacing(20)
         self._layout_content.addWidget(crea_posto_box)
+        self._layout_content.addStretch(0)
         self._layout_content.addSpacing(20)
         self._layout_content.addWidget(label_lista_posti)
         self._layout_content.addWidget(self.posti)
-        self._layout_content.addStretch()
+        self._layout_content.addStretch(1)
 
     @override
     def _connect_signals(self) -> None:
