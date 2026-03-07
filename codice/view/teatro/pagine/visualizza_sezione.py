@@ -75,30 +75,33 @@ class VisualizzaSezionePage(AbstractVisualizzaView):
         self.fila = QLineEdit()
         self.fila.setPlaceholderText("Inserire nome")
 
-        label_numero = QLabel('Numero<span style="color:red;">*</span> :')
-        label_numero.setProperty(WidgetRole.Label.BODY_TEXT, True)
-        label_numero.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
+        self.__label_numero = QLabel('Numero<span style="color:red;">*</span> :')
+        self.__label_numero.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        self.__label_numero.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
+        self.__label_numero.setMinimumWidth(self.__label_numero.sizeHint().width())
 
         self.single_numero = QSpinBox()
         self.single_numero.setMinimum(1)
+        self.single_numero.setFixedWidth(100)
 
         self.range_numero1 = QSpinBox()
         self.range_numero1.setMinimum(1)
+        self.range_numero1.setFixedWidth(100)
 
         hyphen_label = QLabel("-")
         hyphen_label.setProperty(WidgetRole.Label.BODY_TEXT, True)
 
         self.range_numero2 = QSpinBox()
         self.range_numero2.setMinimum(1)
+        self.range_numero2.setFixedWidth(100)
 
         range_numeri_widget = QWidget()
         layout_range_numeri = QHBoxLayout(range_numeri_widget)
         layout_range_numeri.setContentsMargins(0, 0, 0, 0)
         layout_range_numeri.addWidget(self.range_numero1)
-        layout_range_numeri.addWidget(
-            hyphen_label, alignment=Qt.AlignmentFlag.AlignCenter
-        )
+        layout_range_numeri.addWidget(hyphen_label)
         layout_range_numeri.addWidget(self.range_numero2)
+        layout_range_numeri.addStretch()
 
         self.stack_numeri = QStackedWidget()
         self.stack_numeri.setFixedHeight(self.fila.sizeHint().height())
@@ -128,7 +131,7 @@ class VisualizzaSezionePage(AbstractVisualizzaView):
         crea_posto_fields = QWidget()
         layout_crea_posto_fields = QFormLayout(crea_posto_fields)
         layout_crea_posto_fields.addRow(label_fila, self.fila)
-        layout_crea_posto_fields.addRow(label_numero, self.stack_numeri)
+        layout_crea_posto_fields.addRow(self.__label_numero, self.stack_numeri)
         layout_crea_posto_fields.addRow(checkbox_numeri_widget)
         layout_crea_posto_fields.addRow(aggiungi_box)
 
@@ -207,9 +210,7 @@ class VisualizzaSezionePage(AbstractVisualizzaView):
         )
 
         self.checkbox_numeri.toggled.connect(  # type:ignore
-            lambda: self.stack_numeri.setCurrentIndex(
-                1 if self.checkbox_numeri.isChecked() else 0
-            )
+            lambda: self.opzione_checkbox_numeri(self.checkbox_numeri.isChecked())
         )
 
         self.__btn_aggiungi_posto.clicked.connect(  # type:ignore
@@ -219,6 +220,14 @@ class VisualizzaSezionePage(AbstractVisualizzaView):
         )
 
     # ------------------------- METODI DI VIEW -------------------------
+
+    def opzione_checkbox_numeri(self, is_checked: bool) -> None:
+        self.stack_numeri.setCurrentIndex(is_checked)
+        self.__label_numero.setText(
+            'Range<span style="color:red;">*</span> :'
+            if is_checked
+            else 'Numero<span style="color:red;">*</span> :'
+        )
 
     @override
     def set_data(self, data: SezioneData) -> None:  # type: ignore[override]
