@@ -40,7 +40,7 @@ class SpettacoloDisplay(ItemDisplay):
         titolo.setProperty(WidgetRole.Label.HEADER2, True)
 
         # Pulsanti
-        self.__btn_visualizza = DefaultButton("Maggior info")
+        self.__btn_visualizza = DefaultButton("Maggiori info")
 
         self.__pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.__pulsanti)
@@ -128,7 +128,7 @@ class SpettacoloDisplay(ItemDisplay):
         if not (len(dati) == 2):
             raise ValueError("dati deve essere un tuple[str, str]")
 
-        compositore = HyphenatedLabel(f"Direttore d'orchestra: {dati[0]}")
+        compositore = HyphenatedLabel(f"Compositore: {dati[0]}")
         compositore.setProperty(WidgetRole.Label.BODY_TEXT, True)
         compositore.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
         self.__layout.addWidget(compositore)

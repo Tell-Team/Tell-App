@@ -187,7 +187,7 @@ class ScegliPostiController(AbstractVisualizzaController):
             self._view_page.numero.setEnabled(False)
             return
 
-        self._view_page.numero.setItemText(0, "Scegliere numero...")
+        self._view_page.numero.setItemText(0, "Scegliere numero")
         for i, posto in enumerate(self.__posti, start=1):
             if self._view_page.numero.findData(posto.get_id()) < 0:
                 self._view_page.numero.insertItem(

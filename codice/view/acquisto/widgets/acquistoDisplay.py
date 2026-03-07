@@ -69,7 +69,7 @@ class AcquistoDisplay(ItemDisplay):
         if not (len(dati) == 2):
             raise ValueError("dati deve essere un tuple[str, str]")
 
-        compositore = HyphenatedLabel(f"Direttore d'orchestra: {dati[0]}")
+        compositore = HyphenatedLabel(f"Compositore: {dati[0]}")
         compositore.setProperty(WidgetRole.Label.BODY_TEXT, True)
         compositore.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
         self.__layout.addWidget(compositore)

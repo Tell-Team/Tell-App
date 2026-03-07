@@ -58,17 +58,20 @@ class AcquistoSection(AbstractSectionView):
         self.filtro_ricerca: str = ""
 
         self.ricerca_bar = QLineEdit()
-        self.ricerca_bar.setPlaceholderText("Inserire titolo...")
+        self.ricerca_bar.setPlaceholderText("Inserire titolo")
+        self.ricerca_bar.setFixedWidth(201)
         self.ricerca_bar.setClearButtonEnabled(True)
         self.ricerca_bar.setProperty(WidgetRole.LineEdit.SEARCH_BAR, True)
 
         self.__btn_ricerca = RicercaButton()
+        self.__btn_ricerca.setFixedWidth(40)
         self.__btn_ricerca.setFixedHeight(self.ricerca_bar.sizeHint().height())
 
         widget_ricerca = QWidget()
         layout_ricerca = QHBoxLayout(widget_ricerca)
         layout_ricerca.setSpacing(0)
         layout_ricerca.setContentsMargins(0, 0, 0, 0)
+        layout_ricerca.addStretch()
         layout_ricerca.addWidget(self.ricerca_bar)
         layout_ricerca.addWidget(self.__btn_ricerca)
 
@@ -76,7 +79,6 @@ class AcquistoSection(AbstractSectionView):
         layout_header_spettacoli = QHBoxLayout(widget_header_spettacoli)
         layout_header_spettacoli.setContentsMargins(0, 0, 0, 0)
         layout_header_spettacoli.addWidget(header_spettacoli)
-
         layout_header_spettacoli.addWidget(widget_ricerca)
 
         label_lista_spettacoli_vuota = EmptyStateLabel(

@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QMainWindow, QStackedWidget
+from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QShowEvent
 from typing import Optional
 
@@ -16,6 +17,12 @@ class MainWindow(QMainWindow):
         self.__stack = QStackedWidget()
         self.setCentralWidget(self.__stack)
 
+        self.setWindowFlag(Qt.WindowType.WindowMaximizeButtonHint, False)
+
+        # flags = self.windowFlags()
+        # flags &= ~Qt.WindowType.WindowMaximizeButtonHint
+        # self.setWindowFlags(flags)
+
     def showEvent(self, a0: Optional[QShowEvent]) -> None:
         super().showEvent(a0)
 
@@ -31,8 +38,9 @@ class MainWindow(QMainWindow):
             return
 
         screen_geom = screen.availableGeometry()
-        self.setMinimumHeight(screen_geom.height() - 100)
-        self.setMinimumWidth(int(screen_geom.width() / 1.8))
+
+        self.setFixedHeight(screen_geom.height() - 100)
+        self.setFixedWidth(int(screen_geom.width() / 1.8))
 
         fg = self.frameGeometry()
         fg.moveCenter(screen_geom.center())

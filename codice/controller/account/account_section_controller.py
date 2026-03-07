@@ -7,7 +7,7 @@ from controller.login.user_session import UserSession
 from controller.navigation import Pagina
 
 from model.model.model import Model
-from model.account.account import Account, Ruolo
+from model.account.account import Account
 from model.exceptions import OggettoInUsoException
 
 from view.account.pagine import AccountSection
@@ -16,7 +16,7 @@ from view.account.widgets import AccountDisplay
 
 from view.utils.list_widgets import ListLayout
 from view.utils import mostra_error_popup
-from view.style.ui_style import WidgetRole, WidgetColor
+from view.style.ui_style import WidgetRole
 
 
 class AccountSectionController(AbstractSectionController):
@@ -106,14 +106,7 @@ class AccountSectionController(AbstractSectionController):
                 partial(on_conferma, acc.get_id())
             )
 
-            COLORE = (
-                WidgetColor.Item.RED
-                if acc.get_ruolo() == Ruolo.AMMINISTRATORE
-                else WidgetColor.Item.BLUE
-            )
-            layout_accounts.aggiungi_list_item(
-                current_account, WidgetRole.Item.LIST, COLORE
-            )
+            layout_accounts.aggiungi_list_item(current_account, WidgetRole.Item.LIST)
 
     def __nuovo_account(self) -> None:
         """Carica la pagina 'NuovoAccountPage',

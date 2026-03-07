@@ -24,8 +24,8 @@ from view.utils import mostra_error_popup
 
 
 CAMPI_NECESSARI = "<b>ATTENZIONE</b>: È necessario compilare tutti i campi d'input."
-FORMATO_SVAGLIATO = (
-    "<b>ATTENZIONE</b>: Il formato deve essere ordinato, e.g. 6-3 non è valido."
+RANGE_SVAGLIATO = (
+    "<b>ATTENZIONE</b>: Il primo numero deve essere minore al secondo, e.g. 1-20."
 )
 
 
@@ -153,42 +153,23 @@ class VisualizzaSezioneController(AbstractVisualizzaController):
     def __salva_multipli_posti(self) -> None:
         pagina = self._view_page
 
-        def parse_ranges(text: str) -> list[int]:
-            result: set[int] = set()
+        range1 = pagina.range_numero1.value()
+        range2 = pagina.range_numero2.value()
 
-            for part in text.split(","):
-                part = part.strip()
-                if "-" in part:
-                    start, end = map(int, part.split("-"))
-                    if start > end:
-                        raise ValueError("Rango non valido.")
-                    result.update(range(start, end + 1))
-                else:
-                    result.add(int(part))
-
-            return sorted(result)
-
-        if not pagina.range_numeri.text().strip():
-            pagina.mostra_msg_input_error(CAMPI_NECESSARI)
+        if range1 > range2:
+            pagina.mostra_msg_input_error(RANGE_SVAGLIATO)
             mostra_error_popup(
                 pagina,
                 "Input non valido",
-                "È necessari inserire un rango.",
+                "Il primo numero del range deve essere minore al secondo.",
             )
-            return
-
-        try:
-            numeri = parse_ranges(pagina.range_numeri.text())
-        except ValueError as exc:
-            pagina.mostra_msg_input_error(FORMATO_SVAGLIATO)
-            mostra_error_popup(pagina, "Input non valido", str(exc))
             return
 
         fila = pagina.fila.text()
         id_sezione = pagina.id_current_sezione
 
         lista_posti: list[Posto] = []
-        for num in numeri:
+        for num in range(range1, range2 + 1):
             try:
                 nuovo_posto = Posto(fila, num, id_sezione)
             except DatoIncongruenteException as exc:

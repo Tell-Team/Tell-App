@@ -26,12 +26,14 @@ class LoginPage(QWidget):
 
         self.btn_login_with_credentials = QPushButton("Accedi con credenziali")
         self.btn_login_with_credentials.setProperty(WidgetRole.Button.TRASPARENT, True)
+        self.btn_login_with_credentials.setMinimumHeight(32)
         font = self.btn_login_with_credentials.font()
         font.setUnderline(True)
         self.btn_login_with_credentials.setFont(font)
 
         btn_login_credentials_box = QWidget()
         layout_btn_login_box = QHBoxLayout(btn_login_credentials_box)
+        layout_btn_login_box.setContentsMargins(0, 1, 0, 1)
         layout_btn_login_box.addStretch()
         layout_btn_login_box.addWidget(self.btn_login_with_credentials)
         layout_btn_login_box.addStretch()
@@ -44,5 +46,6 @@ class LoginPage(QWidget):
         main_layout.addStretch()
         main_layout.addWidget(title)
         main_layout.addWidget(self.btn_login_as_cliente)
-        main_layout.addStretch()
+        main_layout.addSpacing(4)
         main_layout.addWidget(btn_login_credentials_box)
+        main_layout.addStretch()

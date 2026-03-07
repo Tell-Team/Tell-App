@@ -1,25 +1,27 @@
 from PyQt6.QtWidgets import QApplication
-import logging
+from PyQt6.QtCore import Qt
 import sys
-from view.style import resources_rc  # type:ignore
+from view import style
 
 from controller.app_context import AppContext
 
 from model.exceptions import DatoIncongruenteException
 
-from view.style import rileva_tema_os, build_qpalette, load_stylesheet
-
 
 def main() -> None:
+    QApplication.setHighDpiScaleFactorRoundingPolicy(  # - TEST. (XÚPAMELA BIEN XUPADA windows11)
+        Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
+    )
+
     app = QApplication(sys.argv)
 
     try:
-        tema_corrente = rileva_tema_os()
+        tema_corrente = style.rileva_tema_os()
     except NotImplementedError as exc:
-        logging.error("%s: %s", type(exc).__name__, exc)
+        print(f"{type(exc).__name__}: {exc}", file=sys.stderr)
         tema_corrente = None  # L'app userà il tema chiaro per default
-    app.setPalette(build_qpalette(tema_corrente))
-    app.setStyleSheet(load_stylesheet(tema_corrente))
+    app.setPalette(style.build_qpalette(tema_corrente))
+    app.setStyleSheet(style.load_stylesheet(tema_corrente))
 
     try:
         context: AppContext
@@ -33,14 +35,14 @@ def main() -> None:
                 f"Wrong number of arguments (expected 0 or 1, got {len(sys.argv)})",
                 file=sys.stderr,
             )
-            exit(1)
+            sys.exit(2)
 
         _ = context
 
         sys.exit(app.exec())
     except DatoIncongruenteException as exc:
-        print(exc, file=sys.stderr)
-        exit(1)
+        print(f"{type(exc).__name__}: {exc}", file=sys.stderr)
+        sys.exit(2)
 
 
 if __name__ == "__main__":

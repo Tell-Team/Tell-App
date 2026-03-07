@@ -35,19 +35,29 @@ class AccountDisplay(ItemDisplay):
 
     def __setup_ui(self, acc: Account) -> None:
         # Labels
-        self.__username = HyphenatedLabel(acc.get_username())
-        self.__username.setProperty(WidgetRole.Label.HEADER2, True)
+        ruolo = HyphenatedLabel(f"{acc.get_ruolo().name}")
+        ruolo.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        username = HyphenatedLabel(acc.get_username())
+        username.setProperty(WidgetRole.Label.HEADER2, True)
+
+        self.__ruolo_username = QWidget()
+        layout_box = QHBoxLayout(self.__ruolo_username)
+        layout_box.addWidget(ruolo)
+        layout_box.addWidget(username)
+        layout_box.addStretch()
 
         # Layout
         layout = QHBoxLayout(self)
         layout.setContentsMargins(1, 1, 1, 1)
-        layout.addWidget(self.__username)
+        layout.addWidget(self.__ruolo_username)
 
         if self.__editable:
             # Pulsanti Modifica-Elimina
             self.__btn_modifica = ModificaButton("Modifica")
+            self.__btn_modifica.setMinimumHeight(32)
 
             self.__btn_elimina = EliminaButton("Elimina")
+            self.__btn_elimina.setMinimumHeight(32)
 
             self.__pulsanti = QWidget()
             layout_pulsanti = QHBoxLayout(self.__pulsanti)
@@ -61,7 +71,9 @@ class AccountDisplay(ItemDisplay):
             domanda.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
             self.__btn_si = EliminaButton("Sì", has_icon=False)
+            self.__btn_si.setMinimumSize(32, 32)
             self.__btn_no = DefaultButton("No")
+            self.__btn_no.setMinimumSize(32, 32)
 
             self.__conferma_elimina = QWidget()
             layout_conferma = QHBoxLayout(self.__conferma_elimina)
@@ -98,12 +110,12 @@ class AccountDisplay(ItemDisplay):
 
     def __on_elimina(self) -> None:
         """Mostra una richiesta di conferma per eliminare il genere."""
-        self.__username.hide()
+        self.__ruolo_username.hide()
         self.__pulsanti.hide()
         self.__conferma_elimina.show()
 
     def annulla_elimina(self) -> None:
         """Annulla l'elimina, nascondendo la richiesta di conferma."""
         self.__conferma_elimina.hide()
-        self.__username.show()
+        self.__ruolo_username.show()
         self.__pulsanti.show()

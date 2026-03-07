@@ -63,16 +63,7 @@ class WidgetColor:
     class Button(StrEnum):
         BLUE = "blue-button"  # QPushButton
 
-    @verify(UNIQUE)
-    class Item(StrEnum):
-        RED = "red-item"  # QWidget
-        BLUE = "blue-item"  # QWidget
 
-
-WidgetColorAlias: TypeAlias = Union[
-    WidgetColor.Label,
-    WidgetColor.Button,
-    WidgetColor.Item,
-]
+WidgetColorAlias: TypeAlias = Union[WidgetColor.Label, WidgetColor.Button]
 
 WidgetStyle: TypeAlias = Union[WidgetRoleAlias, WidgetColorAlias]

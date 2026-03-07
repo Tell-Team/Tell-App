@@ -44,12 +44,12 @@ class OperaDisplay(ItemDisplay):
         librettista.setProperty(WidgetRole.Label.BODY_TEXT, True)
         librettista.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
-        compositore = HyphenatedLabel(f"Direttore d'orchestra: {o.get_compositore()}")
+        compositore = HyphenatedLabel(f"Compositore: {o.get_compositore()}")
         compositore.setProperty(WidgetRole.Label.BODY_TEXT, True)
         compositore.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
 
         # Pulsanti
-        self.__btn_visualizza = DefaultButton("Maggior info")
+        self.__btn_visualizza = DefaultButton("Maggiori info")
 
         self.__pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.__pulsanti)

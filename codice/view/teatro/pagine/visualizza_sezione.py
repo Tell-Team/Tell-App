@@ -3,14 +3,14 @@ from PyQt6.QtWidgets import (
     QLabel,
     QVBoxLayout,
     QHBoxLayout,
+    QFormLayout,
     QGridLayout,
     QLineEdit,
     QSpinBox,
     QCheckBox,
     QStackedWidget,
 )
-from PyQt6.QtCore import Qt, pyqtSignal, QRegularExpression
-from PyQt6.QtGui import QRegularExpressionValidator
+from PyQt6.QtCore import Qt, pyqtSignal
 from typing import override
 
 from core.view import AbstractVisualizzaView
@@ -80,32 +80,57 @@ class VisualizzaSezionePage(AbstractVisualizzaView):
         label_numero.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
 
         self.single_numero = QSpinBox()
-        self.single_numero.setMinimum(0)
+        self.single_numero.setMinimum(1)
 
-        self.range_numeri = QLineEdit()
-        self.range_numeri.setPlaceholderText("Inserire rango, e.g. 1,4-6,9,11")
-        validator_numeri = QRegularExpressionValidator(
-            QRegularExpression(r"^\s*\d+(\s*-\s*\d+)?(\s*,\s*\d+(\s*-\s*\d+)?)*\s*$")
+        self.range_numero1 = QSpinBox()
+        self.range_numero1.setMinimum(1)
+
+        hyphen_label = QLabel("-")
+        hyphen_label.setProperty(WidgetRole.Label.BODY_TEXT, True)
+
+        self.range_numero2 = QSpinBox()
+        self.range_numero2.setMinimum(1)
+
+        range_numeri_widget = QWidget()
+        layout_range_numeri = QHBoxLayout(range_numeri_widget)
+        layout_range_numeri.setContentsMargins(0, 0, 0, 0)
+        layout_range_numeri.addWidget(self.range_numero1)
+        layout_range_numeri.addWidget(
+            hyphen_label, alignment=Qt.AlignmentFlag.AlignCenter
         )
-        self.range_numeri.setValidator(validator_numeri)
+        layout_range_numeri.addWidget(self.range_numero2)
 
         self.stack_numeri = QStackedWidget()
         self.stack_numeri.setFixedHeight(self.fila.sizeHint().height())
         self.stack_numeri.addWidget(self.single_numero)
-        self.stack_numeri.addWidget(self.range_numeri)
+        self.stack_numeri.addWidget(range_numeri_widget)
 
+        #   Checkbox + Label
         self.checkbox_numeri = QCheckBox()
+        label_range_numeri = QLabel("Inserire range di numeri")
+        label_range_numeri.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        checkbox_numeri_widget = QWidget()
+        layout_checkbox_widget = QHBoxLayout(checkbox_numeri_widget)
+        layout_checkbox_widget.setContentsMargins(0, 0, 0, 0)
+        layout_checkbox_widget.addWidget(self.checkbox_numeri)
+        layout_checkbox_widget.addWidget(label_range_numeri)
+        layout_checkbox_widget.addStretch()
 
+        #   Btn aggiungi
         self.__btn_aggiungi_posto = SalvaButton("Aggiungi", has_icon=False)
+        aggiungi_box = QWidget()
+        layout_aggiungi_box = QVBoxLayout(aggiungi_box)
+        layout_aggiungi_box.setContentsMargins(0, 0, 0, 0)
+        layout_aggiungi_box.addWidget(
+            self.__btn_aggiungi_posto, alignment=Qt.AlignmentFlag.AlignLeft
+        )
 
         crea_posto_fields = QWidget()
-        layout_crea_posto_fields = QHBoxLayout(crea_posto_fields)
-        layout_crea_posto_fields.addWidget(label_fila)
-        layout_crea_posto_fields.addWidget(self.fila)
-        layout_crea_posto_fields.addWidget(label_numero)
-        layout_crea_posto_fields.addWidget(self.stack_numeri)
-        layout_crea_posto_fields.addWidget(self.checkbox_numeri)
-        layout_crea_posto_fields.addWidget(self.__btn_aggiungi_posto)
+        layout_crea_posto_fields = QFormLayout(crea_posto_fields)
+        layout_crea_posto_fields.addRow(label_fila, self.fila)
+        layout_crea_posto_fields.addRow(label_numero, self.stack_numeri)
+        layout_crea_posto_fields.addRow(checkbox_numeri_widget)
+        layout_crea_posto_fields.addRow(aggiungi_box)
 
         self.__input_error = QLabel("")
         self.__input_error.setProperty(WidgetRole.Label.BODY_TEXT, True)
@@ -221,8 +246,9 @@ class VisualizzaSezionePage(AbstractVisualizzaView):
     def reset_pagina(self) -> None:
         """Resetta la pagina svuotando i campi d'input per creare posti."""
         self.fila.setText("")
-        self.single_numero.setValue(0)
-        self.range_numeri.setText("")
+        self.single_numero.setValue(1)
+        self.range_numero1.setValue(1)
+        self.range_numero2.setValue(1)
         self.checkbox_numeri.setChecked(False)
 
     def mostra_msg_input_error(self, message: str) -> None:

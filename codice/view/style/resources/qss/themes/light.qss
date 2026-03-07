@@ -35,14 +35,6 @@ QWidget[item-list="true"] {
     background-color: white; 
 }
 
-QWidget[blue-item="true"] {
-    border-color: #0063b1;
-}
-
-QWidget[red-item="true"] {
-    border-color: #e81123;
-}
-
 /* ------------------------ Campi d'input ------------------------ */
 QLineEdit, QTextEdit, QComboBox, QSpinBox, QDateEdit, QTimeEdit {
     border: 1px solid #b0b0b0; 

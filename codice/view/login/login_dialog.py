@@ -76,8 +76,8 @@ class LoginDialog(QDialog):
             return
 
         screen_geom = screen.availableGeometry()
-        self.setMinimumHeight(screen_geom.height() - 100)
-        self.setMinimumWidth(int(screen_geom.width() / 1.8))
+        self.setFixedHeight(screen_geom.height() - 100)
+        self.setFixedWidth(int(screen_geom.width() / 1.8))
 
         fg = self.frameGeometry()
         fg.moveCenter(screen_geom.center())

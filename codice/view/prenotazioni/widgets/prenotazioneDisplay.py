@@ -42,7 +42,15 @@ class PrenotazioneDisplay(ItemDisplay):
         )
         label_emissione.setProperty(WidgetRole.Label.BODY_TEXT, True)
 
-        self.__btn_visualizza = DefaultButton("Maggior info")
+        stato_str = (
+            "<span style='color: green'>Pagata</span>"
+            if p.pagata()
+            else "<span style='color: red'>Non pagata</span>"
+        )
+        label_stato = QLabel(f"<b>Stato: {stato_str}</b>")
+        label_stato.setProperty(WidgetRole.Label.BODY_TEXT, True)
+
+        self.__btn_visualizza = DefaultButton("Maggiori info")
         self.__btn_elimina = EliminaButton("Elimina")
 
         self.__pulsanti = QWidget()
@@ -56,6 +64,7 @@ class PrenotazioneDisplay(ItemDisplay):
         self.__layout.setContentsMargins(1, 1, 1, 1)
         self.__layout.addWidget(label_nominativo)
         self.__layout.addWidget(label_emissione)
+        self.__layout.addWidget(label_stato)
         self.__layout.addWidget(self.__pulsanti)
 
         # Pannello di eliminazione

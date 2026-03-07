@@ -111,13 +111,18 @@ class ScegliPostiPage(AbstractVisualizzaView):
 
         self.__btn_conferma = SalvaButton("Conferma", has_icon=False)
 
+        conferma_box = QWidget()
+        btn_conferma_box = QHBoxLayout(conferma_box)
+        btn_conferma_box.addStretch()
+        btn_conferma_box.addWidget(self.__btn_conferma)
+
         # Layout
         self._layout_content.addWidget(self.label_titolo)
         self._layout_content.addWidget(self.label_note)
         self._layout_content.addWidget(form_content)
         self._layout_content.addWidget(make_hline())
         self._layout_content.addWidget(self.posti_scelti)
-        self._layout_content.addWidget(self.__btn_conferma)
+        self._layout_content.addWidget(conferma_box)
         self._layout_content.addStretch()
 
     def __setup_form(self):
@@ -125,12 +130,14 @@ class ScegliPostiPage(AbstractVisualizzaView):
         label_nominativo.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_nominativo.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         self.nominativo = QLineEdit()
+        self.nominativo.setFixedWidth(230)
         self.nominativo.setPlaceholderText("Inserire nominativo")
 
         label_evento = QLabel('Data evento<span style="color:red;">*</span> :')
         label_evento.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_evento.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         self.evento = QComboBox()
+        self.evento.setFixedWidth(230)
 
         label_sezione = QLabel('Sezione<span style="color:red;">*</span> :')
         label_sezione.setProperty(WidgetRole.Label.BODY_TEXT, True)
@@ -138,6 +145,7 @@ class ScegliPostiPage(AbstractVisualizzaView):
         label_sezione.setMinimumWidth(label_evento.sizeHint().width())
         label_sezione.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.sezione = QComboBox()
+        self.sezione.setFixedWidth(230)
 
         sezione_box = QWidget()
         layout_sezione_box = QFormLayout(sezione_box)
@@ -150,6 +158,7 @@ class ScegliPostiPage(AbstractVisualizzaView):
         label_fila.setMinimumWidth(label_evento.sizeHint().width())
         label_fila.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.fila = QComboBox()
+        self.fila.setFixedWidth(230)
 
         label_numero = QLabel('Numero posto<span style="color:red;">*</span> :')
         label_numero.setProperty(WidgetRole.Label.BODY_TEXT, True)
@@ -157,6 +166,7 @@ class ScegliPostiPage(AbstractVisualizzaView):
         label_numero.setMinimumWidth(label_evento.sizeHint().width())
         label_numero.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.numero = QComboBox()
+        self.numero.setFixedWidth(220)
 
         fila_box = QWidget()
         layout_fila_box = QFormLayout(fila_box)
@@ -176,11 +186,18 @@ class ScegliPostiPage(AbstractVisualizzaView):
 
         self.__btn_aggiungi = DefaultButton("Aggiungi posto")
 
+        aggiungi_box = QWidget()
+        layout_aggiungi_box = QHBoxLayout(aggiungi_box)
+        layout_aggiungi_box.setContentsMargins(0, 0, 0, 0)
+        layout_aggiungi_box.addStretch()
+        layout_aggiungi_box.addWidget(self.__btn_aggiungi)
+
         self.__form_layout.addRow(label_nominativo, self.nominativo)
+        self.__form_layout.addRow(make_hline())
         self.__form_layout.addRow(label_evento, self.evento)
         self.__form_layout.addRow(sezione_box)
         self.__form_layout.addRow(fila_numero_box)
-        self.__form_layout.addRow(self.__btn_aggiungi)
+        self.__form_layout.addRow(aggiungi_box)
 
     @override
     def _connect_signals(self) -> None:
