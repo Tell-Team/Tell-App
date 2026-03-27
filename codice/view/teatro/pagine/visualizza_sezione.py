@@ -5,8 +5,6 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QFormLayout,
     QGridLayout,
-    QLineEdit,
-    QSpinBox,
     QCheckBox,
     QStackedWidget,
 )
@@ -22,6 +20,7 @@ from view.teatro.utils import SezioneData
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
 from view.utils.custom_button import SalvaButton
+from view.utils.fixed_size_widget import FixedSizeLineEdit, FixedSizeSpinBox
 from view.utils import make_vline
 
 from view.style.ui_style import WidgetRole, WidgetColor
@@ -72,32 +71,36 @@ class VisualizzaSezionePage(AbstractVisualizzaView):
         label_fila.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_fila.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
 
-        self.fila = QLineEdit()
+        self.fila = FixedSizeLineEdit(width=230)
         self.fila.setPlaceholderText("Inserire nome")
+
+        fila_box = QWidget()
+        layout_fila_box = QHBoxLayout(fila_box)
+        layout_fila_box.setContentsMargins(0, 0, 0, 0)
+        layout_fila_box.addWidget(label_fila)
+        layout_fila_box.addWidget(self.fila)
+        layout_fila_box.addStretch()
 
         self.__label_numero = QLabel('Numero<span style="color:red;">*</span> :')
         self.__label_numero.setProperty(WidgetRole.Label.BODY_TEXT, True)
         self.__label_numero.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         self.__label_numero.setMinimumWidth(self.__label_numero.sizeHint().width())
 
-        self.single_numero = QSpinBox()
+        self.single_numero = FixedSizeSpinBox(width=100)
         self.single_numero.setMinimum(1)
-        self.single_numero.setFixedWidth(100)
 
-        self.range_numero1 = QSpinBox()
+        self.range_numero1 = FixedSizeSpinBox(width=100)
         self.range_numero1.setMinimum(1)
-        self.range_numero1.setFixedWidth(100)
 
         hyphen_label = QLabel("-")
         hyphen_label.setProperty(WidgetRole.Label.BODY_TEXT, True)
 
-        self.range_numero2 = QSpinBox()
+        self.range_numero2 = FixedSizeSpinBox(width=100)
         self.range_numero2.setMinimum(1)
-        self.range_numero2.setFixedWidth(100)
 
         range_numeri_widget = QWidget()
         layout_range_numeri = QHBoxLayout(range_numeri_widget)
-        layout_range_numeri.setContentsMargins(0, 0, 0, 0)
+        layout_range_numeri.setContentsMargins(1, 1, 5, 1)
         layout_range_numeri.addWidget(self.range_numero1)
         layout_range_numeri.addWidget(hyphen_label)
         layout_range_numeri.addWidget(self.range_numero2)
@@ -108,13 +111,25 @@ class VisualizzaSezionePage(AbstractVisualizzaView):
         self.stack_numeri.addWidget(self.single_numero)
         self.stack_numeri.addWidget(range_numeri_widget)
 
+        numeri_box = QWidget()
+        layout_numeri_box = QHBoxLayout(numeri_box)
+        layout_numeri_box.setContentsMargins(5, 1, 1, 1)
+        layout_numeri_box.addWidget(self.__label_numero)
+        layout_numeri_box.addWidget(self.stack_numeri)
+
+        fila_numeri = QWidget()
+        tmp_layout = QHBoxLayout(fila_numeri)
+        tmp_layout.setContentsMargins(0, 0, 0, 0)
+        tmp_layout.addWidget(fila_box)
+        tmp_layout.addWidget(numeri_box)
+
         #   Checkbox + Label
         self.checkbox_numeri = QCheckBox()
         label_range_numeri = QLabel("Inserire range di numeri")
         label_range_numeri.setProperty(WidgetRole.Label.BODY_TEXT, True)
         checkbox_numeri_widget = QWidget()
         layout_checkbox_widget = QHBoxLayout(checkbox_numeri_widget)
-        layout_checkbox_widget.setContentsMargins(0, 0, 0, 0)
+        layout_checkbox_widget.setContentsMargins(0, 0, 0, 1)
         layout_checkbox_widget.addWidget(self.checkbox_numeri)
         layout_checkbox_widget.addWidget(label_range_numeri)
         layout_checkbox_widget.addStretch()
@@ -130,9 +145,8 @@ class VisualizzaSezionePage(AbstractVisualizzaView):
 
         crea_posto_fields = QWidget()
         layout_crea_posto_fields = QFormLayout(crea_posto_fields)
-        layout_crea_posto_fields.addRow(label_fila, self.fila)
-        layout_crea_posto_fields.addRow(self.__label_numero, self.stack_numeri)
-        layout_crea_posto_fields.addRow(checkbox_numeri_widget)
+        layout_crea_posto_fields.addRow(fila_numeri)
+        layout_crea_posto_fields.addWidget(checkbox_numeri_widget)
         layout_crea_posto_fields.addRow(aggiungi_box)
 
         self.__input_error = QLabel("")

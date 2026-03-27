@@ -7,6 +7,8 @@ from typing import Optional
 from ._login_page import LoginPage
 from ._credentials_page import CredentialsPage
 
+from view.utils import TELL_ICON
+
 
 class LoginDialog(QDialog):
     """Gestice la view della funzione di login dell'app.
@@ -26,6 +28,7 @@ class LoginDialog(QDialog):
 
         self.__stack = QStackedWidget()
 
+        self.setWindowIcon(TELL_ICON)
         self.setWindowTitle("Tell - Login")
 
         self.__login_page = LoginPage()

@@ -1,9 +1,11 @@
-from PyQt6.QtWidgets import QLabel, QLineEdit, QComboBox
+from PyQt6.QtWidgets import QLabel
 from typing import override
 
 from core.view import AbstractCreaView
 
 from model.account.account import Ruolo
+
+from view.utils.fixed_size_widget import FixedSizeLineEdit, FixedSizeComboBox
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
@@ -32,29 +34,29 @@ class NuovoAccountPage(AbstractCreaView):
         self._label_username = QLabel('Username<span style="color:red;">*</span> :')
         self._label_username.setProperty(WidgetRole.Label.BODY_TEXT, True)
         self._label_username.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.username = QLineEdit()
+        self.username = FixedSizeLineEdit(width=230)
         self.username.setPlaceholderText("Inserire username")
 
         self._label_password = QLabel('Password<span style="color:red;">*</span> :')
         self._label_password.setProperty(WidgetRole.Label.BODY_TEXT, True)
         self._label_password.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.password = QLineEdit()
+        self.password = FixedSizeLineEdit(width=230)
         self.password.setPlaceholderText("Inserire password")
-        self.password.setEchoMode(QLineEdit.EchoMode.Password)
+        self.password.setEchoMode(FixedSizeLineEdit.EchoMode.Password)
 
         self._label_conferma = QLabel(
             'Conferma password<span style="color:red;">*</span> :'
         )
         self._label_conferma.setProperty(WidgetRole.Label.BODY_TEXT, True)
         self._label_conferma.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.conferma = QLineEdit()
+        self.conferma = FixedSizeLineEdit(width=230)
         self.conferma.setPlaceholderText("Confermare password")
-        self.conferma.setEchoMode(QLineEdit.EchoMode.Password)
+        self.conferma.setEchoMode(FixedSizeLineEdit.EchoMode.Password)
 
         self._label_ruolo = QLabel('Ruolo<span style="color:red;">*</span> : ')
         self._label_ruolo.setProperty(WidgetRole.Label.BODY_TEXT, True)
         self._label_ruolo.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.ruolo = QComboBox()
+        self.ruolo = FixedSizeComboBox(width=230)
         self.ruolo.insertItem(0, "Scegli ruolo", None)
         self.ruolo.insertItem(1, "Biglietteria", Ruolo.BIGLIETTERIA)
         self.ruolo.insertItem(2, "Amministratore", Ruolo.AMMINISTRATORE)

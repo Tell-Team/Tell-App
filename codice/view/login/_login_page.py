@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayo
 from PyQt6.QtCore import Qt
 
 from view.style.ui_style import WidgetRole, WidgetColor
+from view.utils import TELL_ICON
 
 
 class LoginPage(QWidget):
@@ -16,6 +17,9 @@ class LoginPage(QWidget):
 
     def _setup_ui(self) -> None:
         # Content
+        app_icon = QLabel()
+        app_icon.setPixmap(TELL_ICON.pixmap(120, 120))
+
         title = QLabel("Tell")
         title.setProperty(WidgetRole.Label.TITLE, True)
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -44,6 +48,8 @@ class LoginPage(QWidget):
         main_layout.setSpacing(10)
 
         main_layout.addStretch()
+        main_layout.addWidget(app_icon, alignment=Qt.AlignmentFlag.AlignCenter)
+        main_layout.addSpacing(20)
         main_layout.addWidget(title)
         main_layout.addWidget(self.btn_login_as_cliente)
         main_layout.addSpacing(4)

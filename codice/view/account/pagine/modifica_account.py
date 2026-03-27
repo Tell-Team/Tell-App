@@ -7,6 +7,8 @@ from model.account.account import Ruolo
 from view.account.pagine import NuovoAccountPage
 from view.account.utils import AccountData
 
+from view.utils.fixed_size_widget import FixedSizeLineEdit
+
 from view.style.ui_style import WidgetRole, WidgetColor
 
 
@@ -38,7 +40,7 @@ class ModificaAccountPage(NuovoAccountPage):
         label_nuova_password = QLabel("Nuova password :")
         label_nuova_password.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_nuova_password.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.nuova_password = QLineEdit()
+        self.nuova_password = FixedSizeLineEdit(width=230)
         self.nuova_password.setPlaceholderText("Inserire nuova password")
         self.nuova_password.setEchoMode(QLineEdit.EchoMode.Password)
 

@@ -126,7 +126,10 @@ class VisualizzaSpettacoloPage(AbstractVisualizzaView):
         self._layout_content.addWidget(container_dati_speciali)
         if self.is_biglietteria:
             self.__btn_visualizza_prezzi = DefaultButton("Lista Prezzi")
-            self._layout_content.addWidget(self.__btn_visualizza_prezzi)
+            self.__btn_visualizza_prezzi.setFixedWidth(200)
+            self._layout_content.addWidget(
+                self.__btn_visualizza_prezzi, alignment=Qt.AlignmentFlag.AlignLeft
+            )
         self._layout_content.addWidget(make_hline())
         self._layout_content.addWidget(self.eventi)
         self._layout_content.addStretch()

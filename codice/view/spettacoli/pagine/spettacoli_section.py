@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import Qt, pyqtSignal
 from typing import override
 
@@ -8,6 +8,7 @@ from controller.login.user_session import UserSession
 
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.custom_button import DefaultButton, RicercaButton
+from view.utils.fixed_size_widget import FixedSizeLineEdit
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
@@ -47,9 +48,8 @@ class SpettacoliSection(AbstractSectionView):
 
         self.filtro_ricerca: str = ""
 
-        self.ricerca_bar = QLineEdit()
+        self.ricerca_bar = FixedSizeLineEdit(width=201)
         self.ricerca_bar.setPlaceholderText("Inserire titolo")
-        self.ricerca_bar.setFixedWidth(201)
         self.ricerca_bar.setClearButtonEnabled(True)
         self.ricerca_bar.setProperty(WidgetRole.LineEdit.SEARCH_BAR, True)
 

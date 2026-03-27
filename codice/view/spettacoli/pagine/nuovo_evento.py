@@ -1,8 +1,10 @@
-from PyQt6.QtWidgets import QLabel, QDateEdit, QTimeEdit
+from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import QDate, QTime
 from typing import override
 
 from core.view import AbstractCreaView
+
+from view.utils.fixed_size_widget import FixedSizeDateEdit, FixedSizeTimeEdit
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
@@ -32,7 +34,7 @@ class NuovoEventoPage(AbstractCreaView):
         label_data = QLabel('Data<span style="color:red;">*</span> :')
         label_data.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_data.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.data = QDateEdit()
+        self.data = FixedSizeDateEdit(width=230)
         self.data.setDisplayFormat("dd/MM/yyyy")
         self.data.setDate(QDate.currentDate())
         self.data.setMinimumDate(QDate.currentDate())
@@ -40,7 +42,7 @@ class NuovoEventoPage(AbstractCreaView):
         label_ora = QLabel('Ora<span style="color:red;">*</span> :')
         label_ora.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_ora.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.ora = QTimeEdit()
+        self.ora = FixedSizeTimeEdit(width=230)
         self.ora.setTime(QTime.currentTime())
 
         self._form_layout.addRow(label_data, self.data)

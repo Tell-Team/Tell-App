@@ -1,7 +1,9 @@
-from PyQt6.QtWidgets import QLabel, QLineEdit, QTextEdit, QSizePolicy
+from PyQt6.QtWidgets import QLabel, QSizePolicy
 from typing import override
 
 from core.view import AbstractCreaView
+
+from view.utils.fixed_size_widget import FixedSizeLineEdit, FixedSizeTextEdit
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
@@ -29,15 +31,14 @@ class NuovoGenerePage(AbstractCreaView):
         label_nome = QLabel('Nome<span style="color:red;">*</span> :')
         label_nome.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_nome.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.nome = QLineEdit()
+        self.nome = FixedSizeLineEdit(width=230)
         self.nome.setPlaceholderText("Inserire nome")
 
         label_descrizione = QLabel('Descrizione<span style="color:red;">*</span> :')
         label_descrizione.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_descrizione.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.descrizione = QTextEdit()
+        self.descrizione = FixedSizeTextEdit(height=80)
         self.descrizione.setPlaceholderText("Inserire descrizione")
-        self.descrizione.setFixedHeight(80)
         self.descrizione.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
         )

@@ -1,9 +1,11 @@
-from PyQt6.QtWidgets import QLabel, QLineEdit, QSpinBox
+from PyQt6.QtWidgets import QLabel
 from typing import override
 
 from core.view import AbstractCreaView
 
 from view.teatro.utils import PostoData
+
+from view.utils.fixed_size_widget import FixedSizeLineEdit, FixedSizeSpinBox
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
@@ -36,13 +38,13 @@ class ModificaPostoPage(AbstractCreaView):
         label_fila = QLabel('Fila<span style="color:red;">*</span> :')
         label_fila.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_fila.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.fila = QLineEdit()
+        self.fila = FixedSizeLineEdit(width=150)
         self.fila.setPlaceholderText("Inserire nome")
 
         label_numero = QLabel('Numero<span style="color:red;">*</span> :')
         label_numero.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_numero.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.numero = QSpinBox()
+        self.numero = FixedSizeSpinBox(width=150)
         self.numero.setMinimum(0)
 
         self._form_layout.addRow(label_fila, self.fila)

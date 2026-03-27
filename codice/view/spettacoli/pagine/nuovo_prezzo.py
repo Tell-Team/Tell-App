@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QLabel, QLineEdit, QComboBox
+from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import QRegularExpression
 from PyQt6.QtGui import QRegularExpressionValidator
 from typing import override
@@ -7,6 +7,10 @@ from core.view import AbstractCreaView
 
 from model.pianificazione.spettacolo import Spettacolo
 from model.organizzazione.sezione import Sezione
+
+from view.utils.fixed_size_widget import FixedSizeLineEdit, FixedSizeComboBox
+
+from view.style.ui_style import WidgetRole, WidgetColor
 
 
 class NuovoPrezzoPage(AbstractCreaView):
@@ -36,15 +40,21 @@ class NuovoPrezzoPage(AbstractCreaView):
     @override
     def _setup_form(self) -> None:
         label_spettacolo = QLabel('Spettacolo<span style="color:red;">*</span> :')
-        self.spettacolo = QComboBox()
+        label_spettacolo.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_spettacolo.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
+        self.spettacolo = FixedSizeComboBox(width=250)
         self.spettacolo.setEnabled(False)
 
         label_sezione = QLabel('Sezione<span style="color:red;">*</span> :')
-        self.sezione = QComboBox()
+        label_sezione.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_sezione.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
+        self.sezione = FixedSizeComboBox(width=250)
         self.sezione.setEnabled(False)
 
         label_prezzo = QLabel('Ammontare<span style="color:red;">*</span> :')
-        self.prezzo = QLineEdit()
+        label_prezzo.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        label_prezzo.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
+        self.prezzo = FixedSizeLineEdit(width=250)
         self.prezzo.setPlaceholderText("Inserire prezzo in €, e.g. 30.00, 19.99")
         validator_prezzo = QRegularExpressionValidator(
             QRegularExpression(r"^\d+(\.\d{2})?$")

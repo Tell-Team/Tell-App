@@ -4,8 +4,6 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QFormLayout,
-    QLineEdit,
-    QComboBox,
     QSizePolicy,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
@@ -22,6 +20,7 @@ from view.spettacoli.utils import SpettacoloData
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.hyphenate_text import HyphenatedLabel
 from view.utils.custom_button import DefaultButton, SalvaButton
+from view.utils.fixed_size_widget import FixedSizeLineEdit, FixedSizeComboBox
 from view.utils import make_hline
 
 from view.style.ui_style import WidgetRole, WidgetColor
@@ -129,23 +128,20 @@ class ScegliPostiPage(AbstractVisualizzaView):
         label_nominativo = QLabel('Nominativo<span style="color:red;">*</span> :')
         label_nominativo.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_nominativo.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.nominativo = QLineEdit()
-        self.nominativo.setFixedWidth(230)
+        self.nominativo = FixedSizeLineEdit(width=230)
         self.nominativo.setPlaceholderText("Inserire nominativo")
 
         label_evento = QLabel('Data evento<span style="color:red;">*</span> :')
         label_evento.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_evento.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.evento = QComboBox()
-        self.evento.setFixedWidth(230)
+        self.evento = FixedSizeComboBox(width=230)
 
         label_sezione = QLabel('Sezione<span style="color:red;">*</span> :')
         label_sezione.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_sezione.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         label_sezione.setMinimumWidth(label_evento.sizeHint().width())
         label_sezione.setAlignment(Qt.AlignmentFlag.AlignRight)
-        self.sezione = QComboBox()
-        self.sezione.setFixedWidth(230)
+        self.sezione = FixedSizeComboBox(width=230)
 
         sezione_box = QWidget()
         layout_sezione_box = QFormLayout(sezione_box)
@@ -157,16 +153,14 @@ class ScegliPostiPage(AbstractVisualizzaView):
         label_fila.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         label_fila.setMinimumWidth(label_evento.sizeHint().width())
         label_fila.setAlignment(Qt.AlignmentFlag.AlignRight)
-        self.fila = QComboBox()
-        self.fila.setFixedWidth(230)
+        self.fila = FixedSizeComboBox(width=230)
 
         label_numero = QLabel('Numero posto<span style="color:red;">*</span> :')
         label_numero.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_numero.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
         label_numero.setMinimumWidth(label_evento.sizeHint().width())
         label_numero.setAlignment(Qt.AlignmentFlag.AlignRight)
-        self.numero = QComboBox()
-        self.numero.setFixedWidth(220)
+        self.numero = FixedSizeComboBox(width=220)
 
         fila_box = QWidget()
         layout_fila_box = QFormLayout(fila_box)

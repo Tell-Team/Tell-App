@@ -1,9 +1,4 @@
-from PyQt6.QtWidgets import (
-    QLabel,
-    QLineEdit,
-    QComboBox,
-    QSpinBox,
-)
+from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import QDate
 from typing import override
 
@@ -11,6 +6,11 @@ from model.pianificazione.opera import Opera
 
 from view.spettacoli.pagine import NuovoSpettacoloPage
 
+from view.utils.fixed_size_widget import (
+    FixedSizeLineEdit,
+    FixedSizeSpinBox,
+    FixedSizeComboBox,
+)
 from view.utils import make_hline
 
 from view.style.ui_style import WidgetRole, WidgetColor
@@ -35,19 +35,19 @@ class NuovaRegiaPage(NuovoSpettacoloPage):
         label_regista = QLabel('Regista<span style="color:red;">*</span> :')
         label_regista.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_regista.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.regista = QLineEdit()
+        self.regista = FixedSizeLineEdit(width=230)
         self.regista.setPlaceholderText("Inserire regista")
 
         label_anno = QLabel('Anno di produzione<span style="color:red;">*</span> :')
         label_anno.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_anno.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.anno = QSpinBox()
+        self.anno = FixedSizeSpinBox(width=230)
         self.anno.setRange(0, QDate().currentDate().year())
 
         label_opera = QLabel('Opera<span style="color:red;">*</span> :')
         label_opera.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_opera.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.opera = QComboBox()
+        self.opera = FixedSizeComboBox(width=230)
         self.opera.setEnabled(False)
 
         self._form_layout.addRow(make_hline())

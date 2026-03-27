@@ -89,7 +89,7 @@ class SezioniPrezziDisplay(ItemDisplay):
 
         self.__pulsanti = QWidget()
         layout_pulsanti = QHBoxLayout(self.__pulsanti)
-        layout_pulsanti.setContentsMargins(1, 1, 1, 1)
+        layout_pulsanti.setContentsMargins(1, 3, 1, 3)
         layout_pulsanti.addWidget(self.stack_pulsanti)
         layout_pulsanti.addWidget(self.__btn_elimina)
 

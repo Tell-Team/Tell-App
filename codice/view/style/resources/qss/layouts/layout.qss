@@ -101,6 +101,24 @@ QSpinBox:focus, QDateEdit:focus, QTimeEdit:focus {
     border: 1px solid #2b7cff;
 }
 
+QCheckBox::indicator {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #818181;
+    border-radius: 3px;
+    background-color: white;
+}
+
+QCheckBox::indicator:checked {
+    border: 2px solid white;
+    background-color: #717171;
+    image: url(:/icons/checked.svg);
+}
+
+QCheckBox[stato-pagamento="true"]::indicator:checked {
+    background-color: green;
+}
+
 /* ------------------------ ComboBox & QDateEdit Dropdown ------------------------ */
 QComboBox::drop-down, QDateEdit::drop-down {
     subcontrol-origin: padding;

@@ -3,6 +3,8 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QShowEvent
 from typing import Optional
 
+from view.utils import TELL_ICON
+
 
 class MainWindow(QMainWindow):
     """Widget in cui vengono caricate tutte le pagine dell'app nel suo `QStackedWidget`."""
@@ -12,6 +14,7 @@ class MainWindow(QMainWindow):
         self.__geometry_initialized = False
 
         # Setup finestra
+        self.setWindowIcon(TELL_ICON)
         self.setWindowTitle("Tell")
 
         self.__stack = QStackedWidget()

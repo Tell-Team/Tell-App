@@ -1,18 +1,18 @@
-from PyQt6.QtWidgets import (
-    QLabel,
-    QLineEdit,
-    QTextEdit,
-    QComboBox,
-    QDateEdit,
-    QSpinBox,
-    # QHBoxLayout,
-)
+from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import QDate
 from typing import override
 
 from core.view import AbstractCreaView
 
 from model.pianificazione.genere import Genere
+
+from view.utils.fixed_size_widget import (
+    FixedSizeLineEdit,
+    FixedSizeComboBox,
+    FixedSizeSpinBox,
+    FixedSizeTextEdit,
+    FixedSizeDateEdit,
+)
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
@@ -40,44 +40,43 @@ class NuovaOperaPage(AbstractCreaView):
         label_nome = QLabel('Nome<span style="color:red;">*</span> :')
         label_nome.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_nome.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.nome = QLineEdit()
+        self.nome = FixedSizeLineEdit(width=230)
         self.nome.setPlaceholderText("Inserire nome")
 
         label_trama = QLabel('Trama<span style="color:red;">*</span> :')
         label_trama.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_trama.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.trama = QTextEdit()
+        self.trama = FixedSizeTextEdit(height=80)
         self.trama.setPlaceholderText("Inserire trama")
-        self.trama.setFixedHeight(80)
 
         label_genere = QLabel('Genere<span style="color:red;">*</span> :')
         label_genere.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_genere.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.genere = QComboBox()
+        self.genere = FixedSizeComboBox(width=230)
 
         label_compositore = QLabel('Compositore<span style="color:red;">*</span> :')
         label_compositore.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_compositore.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.compositore = QLineEdit()
+        self.compositore = FixedSizeLineEdit(width=230)
         self.compositore.setPlaceholderText("Inserire compositore")
 
         label_librettista = QLabel('Librettista<span style="color:red;">*</span> :')
         label_librettista.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_librettista.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.librettista = QLineEdit()
+        self.librettista = FixedSizeLineEdit(width=230)
         self.librettista.setPlaceholderText("Inserire librettista")
 
         label_atti = QLabel('Numeri di atti<span style="color:red;">*</span> :')
         label_atti.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_atti.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.atti = QSpinBox()
+        self.atti = FixedSizeSpinBox(width=230)
         self.atti.setRange(0, 10)
         self.atti.setValue(0)
 
         label_data = QLabel('Prima rappresentazione<span style="color:red;">*</span> :')
         label_data.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_data.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.data = QDateEdit()
+        self.data = FixedSizeDateEdit(width=230)
         self.data.setDisplayFormat("dd/MM/yyyy")
 
         label_teatro = QLabel(
@@ -85,7 +84,7 @@ class NuovaOperaPage(AbstractCreaView):
         )
         label_teatro.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_teatro.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.teatro = QLineEdit()
+        self.teatro = FixedSizeLineEdit(width=230)
         self.teatro.setPlaceholderText("Inserire nome del teatro")
 
         self._form_layout.addRow(label_nome, self.nome)

@@ -66,6 +66,7 @@ class VisualizzaPrenotazionePage(AbstractVisualizzaView):
         self.label_stato.setFixedWidth(self.label_stato.sizeHint().width())
 
         self.__checkbox_stato = QCheckBox()
+        self.__checkbox_stato.setProperty("stato-pagamento", True)
 
         content_stato = QWidget()
         layout_stato = QHBoxLayout(content_stato)

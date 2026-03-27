@@ -107,7 +107,7 @@ def render_ricevuta_html(data: RicevutaData) -> str:
             body {{
                 font-family: monospace;
                 padding-left: 5px;
-                color: red;
+                color: #000000;
             }}
 
             body * {{

@@ -1,11 +1,4 @@
-from PyQt6.QtWidgets import (
-    QWidget,
-    QLabel,
-    QLineEdit,
-    QTextEdit,
-    QVBoxLayout,
-    QHBoxLayout,
-)
+from PyQt6.QtWidgets import QWidget, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal
 from typing import override
 
@@ -14,6 +7,7 @@ from core.view import AbstractCreaView
 from view.utils.list_widgets import ListLayout, EmptyStateLabel
 from view.utils.custom_button import DefaultButton
 from view.utils.hyphenate_text import HyphenatedLabel
+from view.utils.fixed_size_widget import FixedSizeLineEdit, FixedSizeTextEdit
 
 from view.style.ui_style import WidgetRole, WidgetColor
 
@@ -56,15 +50,14 @@ class NuovoSpettacoloPage(AbstractCreaView):
         label_titolo = QLabel('Titolo<span style="color:red;">*</span> :')
         label_titolo.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_titolo.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.titolo = QLineEdit()
+        self.titolo = FixedSizeLineEdit(width=230)
         self.titolo.setPlaceholderText("Inserire titolo")
 
         label_note = QLabel("Note :")
         label_note.setProperty(WidgetRole.Label.BODY_TEXT, True)
         label_note.setProperty(WidgetColor.Label.SECONDARY_COLOR, True)
-        self.note = QTextEdit()
+        self.note = FixedSizeTextEdit(height=80)
         self.note.setPlaceholderText("Inserire note")
-        self.note.setFixedHeight(80)
 
         # Lista interpreti
         label_interprete = QLabel("Interprete :")
