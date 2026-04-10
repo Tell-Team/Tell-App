@@ -114,7 +114,7 @@ class NavigationController(QObject):
 
         self.__get_stack().setCurrentWidget(last_widget)
 
-    def __go_to_page(self, nome: Pagina, save_history: bool = True) -> None:
+    def __go_to_page(self, nome: Pagina, save_history: bool = True) -> bool:
         """Visualizza una pagina registrata.
 
         Se la pagina da visualizzare non è trovata, mostra un messaggio d'errore.
@@ -133,20 +133,21 @@ class NavigationController(QObject):
                 attr()
 
             self.__get_stack().setCurrentWidget(widget)
-            return
+            return True
         mostra_error_popup(
             self.__get_central_widget(),
             "Pagina non trovata",
             f"Non c'è una pagina registrata con {nome}",
         )
+        return False
 
     def __go_to_section(self, nome: Pagina) -> None:
         """Visualizza una pagina senza salvare la pagina corrente nell'history.
 
         :param nome: key usata per trovare la pagina
         """
-        self.__go_to_page(nome, save_history=False)
-        self.__history.clear()
+        if self.__go_to_page(nome, save_history=False):
+            self.__history.clear()
 
     # Questo metodo è chiamato per ottenere l'istanza di pagina nei controller della view
     def __get_page(self, nome: Pagina, container: dict[str, Optional[QWidget]]) -> None:
@@ -526,7 +527,7 @@ class NavigationController(QObject):
 
     def __collega_controllers(self, controllers: list[QObject]) -> None:
         # Tutti i controller devono usare, al di più, questi 5 segnali per la navigazione.
-        signal_map: dict[str, Callable[..., None]] = {
+        signal_map: dict[str, Callable[..., Optional[bool]]] = {
             "logoutRequest": self.logoutRequest.emit,
             "goBackRequest": self.__go_back,
             "goToPageRequest": self.__go_to_page,
@@ -535,7 +536,9 @@ class NavigationController(QObject):
         }
 
         def safe_connect(
-            controller: QObject, signal_name: str, handler: Callable[..., None]
+            controller: QObject,
+            signal_name: str,
+            handler: Callable[..., Optional[bool]],
         ) -> None:
             """Verifica che il controller abbia un segnale con un nome specifice
             e lo collega con lo slot corrispondente.
