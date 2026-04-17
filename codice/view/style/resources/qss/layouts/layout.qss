@@ -129,7 +129,7 @@ QComboBox::drop-down, QDateEdit::drop-down {
 }
 
 QComboBox QAbstractItemView {
-    border: 1px solid #b0b0b0; /* # - outline: none; */
+    border: 1px solid #b0b0b0;
     selection-background-color: #2b7cff;
 }
 

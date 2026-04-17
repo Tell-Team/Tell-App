@@ -9,10 +9,6 @@ from model.exceptions import DatoIncongruenteException
 
 
 def main() -> None:
-    QApplication.setHighDpiScaleFactorRoundingPolicy(  # - TEST. (XÚPAMELA BIEN XUPADA windows11)
-        Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
-    )
-
     app = QApplication(sys.argv)
 
     try:

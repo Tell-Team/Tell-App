@@ -62,7 +62,7 @@ class RicevutaController(QObject):
 
     def __stampa_ricevuta(self) -> None:
         data = self.__pagina_ricevuta.data_ricevuta
-        html_output = render_ricevuta_html(data)  # - Corregir el formato del HTML
+        html_output = render_ricevuta_html(data)
         stampa_ricevuta_html(html_output)
 
         # Se è necessario accedere al HTML direttamente

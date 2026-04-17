@@ -109,7 +109,7 @@ class InfoSectionController(AbstractSectionController):
         for opera in lista_opere:
             current_opera = OperaDisplay(
                 opera, editable=self._view_page.is_admin
-            )  # - Esta vaina mejor que la guarde el controller y no las misma página
+            )
 
             current_opera.visualizzaRequest.connect(  # type:ignore
                 self.__visualizza_opera

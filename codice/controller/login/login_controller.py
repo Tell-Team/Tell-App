@@ -2,7 +2,7 @@ from PyQt6.QtCore import pyqtSignal, QObject
 from functools import partial
 from typing import Optional
 
-from controller.login.user_session import UserSession  # - TESTING
+from controller.login.user_session import UserSession
 
 from model.model.model import Model
 from model.account.account import Account
