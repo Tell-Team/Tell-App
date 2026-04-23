@@ -305,6 +305,11 @@ class Model:
         self, id_evento: int
     ) -> list[tuple[Sezione, list[tuple[str, list[Posto]]]]]:
         """Throws: IdInesistenteException"""
+
+        # Un posto è Disponibile se la sezione relativa ha un prezzo
+        # e se non è già occupato
+
+        # Si estrae l'id dello spettacolo relativo all'evento
         evento = self.get_evento(id_evento)
         if evento is None:
             raise IdInesistenteException(
@@ -312,12 +317,15 @@ class Model:
             )
         id_spettacolo = evento.get_id_spettacolo()
 
+        # Si estraggono le sezioni che hanno un prezzo per lo spettacolo
         ids_sezioni_con_prezzo = set(
             map(
                 lambda p: p.get_id_sezione(),
                 self.__gestore_prezzi.get_prezzi_by_spettacolo(id_spettacolo),
             )
         )
+
+        # Si estraggono i posti non occupati
         ids_posti_occupati = list(
             map(
                 lambda o: o.get_id_posto(),
@@ -325,6 +333,9 @@ class Model:
             )
         )
 
+        # Si estraggono i posti Disponibili utilizzando il set e la lista sopra definiti
+        # NOTA: È necessario ordinare i posti Disponibili per sezione, altrimenti la funzione
+        # groupBy, utilizzata sotto, non si comporterà correttamente
         posti_disponibili = sorted(
             list(
                 filter(
@@ -336,10 +347,13 @@ class Model:
             key=lambda p: self.get_sezione(p.get_id_sezione()).get_nome().lower(),  # type: ignore
         )
 
+        # La struttura presentata al Controller è una lista di sezioni con le relative file,
+        # a loro volta con i relativi posti Disponibili
         sezioni_e_file_e_posti_disponibili: list[
             tuple[Sezione, list[tuple[str, list[Posto]]]]
         ] = list()
 
+        # La funzione groupBy ritorna un iteratore di tuple (id della sezione, posti Disponibili nella sezione)
         for id_sezione, posti_sezione in itertools.groupby(
             posti_disponibili, lambda p: p.get_id_sezione()
         ):
@@ -347,16 +361,23 @@ class Model:
 
             file_e_posti_disponibili: list[tuple[str, list[Posto]]] = list()
 
+            # NOTA: Come sopra, è necessario ordinare i posti Disponibili per fila,
+            # altrimenti la funzione groupBy non si comporterà correttamente
             lista_posti_sezione: list[Posto] = sorted(
                 list(posti_sezione), key=lambda p: p.get_fila().lower()
             )
+
+            # La funzione groupBy ritorna un iteratore di tuple (numero fila, posti Disponibili nella fila)
             for fila, posti_fila in itertools.groupby(
                 lista_posti_sezione, lambda p: p.get_fila()
             ):
+                # Si ordinano i posti per numero e si aggiunge la tupla alla lista
                 file_e_posti_disponibili.append(
                     (fila, sorted(list(posti_fila), key=lambda p: p.get_numero()))
                 )
 
+            # Si aggiunge la lista di tuple (fila, posti Disponibili), assieme alla sezione relativa,
+            # alla lista complessiva
             sezioni_e_file_e_posti_disponibili.append(
                 (sezione, file_e_posti_disponibili)
             )
