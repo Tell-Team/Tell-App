@@ -49,9 +49,6 @@ class LoginController(QObject):
     def get_dialog(self) -> LoginDialog:
         return self.__login_dialog
 
-    def get_account(self, id_: int) -> Optional[Account]:
-        return self.__model.get_account(id_)
-
     def __login(self, username: str, password: str) -> None:
         """Verifica la correttezza delle credenziali inserite durante un tentativo di login."""
         try:
