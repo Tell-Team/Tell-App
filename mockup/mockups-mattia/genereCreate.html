@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Aggiungi Nuovo Genere - Teatro</title>
+    <style>
+        /* CSS MINIMALE E COERENTE */
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        h1 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+        h2 { color: #444; margin-top: 20px; margin-bottom: 15px; }
+        hr { border: 0; border-top: 1px solid #eee; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea { resize: vertical; min-height: 100px; }
+        .actions { text-align: right; margin-top: 30px; }
+        .btn { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-primary { background-color: #28a745; color: white; margin-left: 10px; } /* Verde per Creazione */
+        .btn-secondary { background-color: #6c757d; color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <h1>Aggiungi Nuovo Genere</h1>
+
+        <form action="#" method="POST">
+            
+            <h2>Dettagli Genere</h2>
+            <hr>
+
+            <div class="form-group">
+                <label for="nome_genere">Nome Genere * (Visibile al pubblico)</label>
+                <input type="text" id="nome_genere" name="nome_genere" required placeholder="Es. Melodramma, Concerto Sinfonico">
+            </div>
+            
+            <div class="form-group">
+                <label for="descrizione_interna">Descrizione Breve Interna (Non visibile al pubblico)</label>
+                <textarea id="descrizione_interna" name="descrizione_interna" placeholder="Note interne per la gestione o classificazione"></textarea>
+            </div>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Aggiungi Nuovo Evento - Teatro</title>
+    <style>
+        /* CSS MINIMALE E COERENTE */
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #e9f7ff; padding: 30px; border-radius: 8px; border: 2px solid #28a745; }
+        h1 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+        h2, h3 { color: #444; margin-top: 25px; margin-bottom: 15px; }
+        hr { border: 0; border-top: 1px solid #eee; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        input[type="date"], input[type="time"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-row::after { content: ""; display: table; clear: both; }
+        .half-width { width: 48%; display: inline-block; }
+        .actions { text-align: right; margin-top: 30px; }
+        .btn { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-primary { background-color: #28a745; color: white; margin-left: 10px; } /* Verde per Creazione */
+        .btn-secondary { background-color: #6c757d; color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <h1>Aggiungi Nuovo Evento (Replica)</h1>
+
+        <form action="#" method="POST">
+            
+            <h2>Dettagli Data e Luogo</h2>
+            <hr>
+
+            <div class="form-row">
+                <div class="form-group half-width" style="float: left; margin-right: 4%;">
+                    <label for="data_evento">Data Evento *</label>
+                    <input type="date" id="data_evento" required>
+                </div>
+                <div class="form-group half-width" style="float: right;">
+                    <label for="ora_evento">Ora Evento *</label>
+                    <input type="time" id="ora_evento" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="sala">Luogo/Sala *</label>
+                <select id="sala" required>
+                    <option value="">Seleziona Sala</option>
+                    <option value="sala_grande">Sala Grande</option>
+                    <option value="sala_piccola">Sala Piccolo Teatro</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="stato_pubblicazione">Stato Pubblicazione *</label>
+                <select id="stato_pubblicazione" required>
+                    <option value="bozza">Bozza (Non in vendita)</option>
+                    <option value="pubblicato">Pubblicato (In vendita)</option>
+                    <option value="annullato">Annullato</option>
+                </select>
+            </div>
+
+            <h3>Prezzo e Posti</h3>
+            <hr>
+            
+            <div class="form-group">
+                <input type="checkbox" id="override_prezzo" name="override_prezzo">
+                <label for="override_prezzo" style="display: inline-block; font-weight: normal; color: #555;">Applica Prezzo Manuale (Override del prezzo dello Spettacolo)</label>
+            </div>
+
+            <button type="button" class="btn btn-secondary" style="margin-top: 10px;">Vedi/Modifica Mappa Posti</button>
+
+            <div class="actions">
+                <button type="button" class="btn btn-secondary">Annulla</button> 
+                <button type="submit" class="btn btn-primary">Salva Evento</button> 
+            </div>
+
+        </form>
+    </div>
+
+</body>
+</html>

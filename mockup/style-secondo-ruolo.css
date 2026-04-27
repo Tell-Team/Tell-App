@@ -1,0 +1,10 @@
+/*by Ric*/
+button.adminOnly {
+  background-color: red;
+  color: white;
+}
+
+button.ticketOnly {
+  background-color: green;
+  color: white;
+}
