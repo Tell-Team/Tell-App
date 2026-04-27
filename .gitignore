@@ -1,2 +1,16 @@
+#LaTeX
+*.txss2
 *.aux
 *.log
+*.synctex*
+*.fdb_latexmk
+*.fls
+*/%OUTDIR%
+
+#Immagini con copyright
+LOGO_UNIVPM_390x154px.png
+
+#Python
+*/.vscode
+*\__pycache__
+codice/db

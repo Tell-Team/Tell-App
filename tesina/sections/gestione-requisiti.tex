@@ -1,0 +1,80 @@
+\section{Gestione dei Requisiti}
+	\subsection{Requisiti progettuali}
+		\subsubsection{Diagramma}
+			\includegraphics{imgs/requisiti/requisiti}
+		
+		\subsubsection{Requisiti Funzionali}
+			\newcounter{rf}
+			
+			\textbf{Area Cliente} \\
+			\textbf{RF\increaseCount{rf}: Visualizza opere} \\ 
+			Il sistema dovrà mostrare al cliente le informazioni anagrafiche delle opere e l'archivio delle relative regie. \\ \\
+			\textbf{RF\increaseCount{rf}: Visualizza spettacoli} \\ 
+			Il sistema dovrà mostrare al cliente la lista degli spettacoli e dei relativi eventi disponibili all'acquisto. \\ \\
+			\textbf{RF\increaseCount{rf}: Visualizza struttura posti} \\ 
+			Il sistema dovrà consentire al cliente di visualizzare la struttura posti del teatro durante la creazione della prenotazione. \\ \\
+			\textbf{RF\increaseCount{rf}: Gestisci prenotazione} \\ 
+			Il sistema dovrà consentire al cliente di creare una prenotazione e modificarne i posti o eliminarla completamente prima di averla confermata. \\ \\
+			\textbf{RF\increaseCount{rf}: Conferma prenotazione} \\ 
+			Il sistema dovrà consentire al cliente di confermare la prenotazione, e produrre la ricevuta da presentare alla biglietteria per il pagamento. \\ \\
+			
+			\noindent \textbf{Area Biglietteria} \\
+			\textbf{RF\increaseCount{rf}: Gestisci spettacoli} \\ 
+			Il sistema dovrà consentire alla biglietteria di creare, modificare e rimuovere gli spettacoli in programma e i relativi eventi. \\ \\
+			\textbf{RF\increaseCount{rf}: Gestisci lista prenotazioni} \\ 
+			Il sistema dovrà consentire alla biglietteria di visualizzare ed eliminare tutte le prenotazioni effettuate nel sistema e di contrassegnare le prenotazioni che sono state pagate. \\ \\
+			
+			\noindent \textbf{Area Amministratore} \\
+			\textbf{RF\increaseCount{rf}: Gestisci opere} \\ 
+			Il sistema dovrà consentire all'amministratore di creare, modificare e rimuovere le informazioni anagrafiche delle opere e l'archivio delle relative regie. \\ \\
+			\textbf{RF\increaseCount{rf}: Gestisci struttura posti} \\ 
+			Il sistema dovrà consentire all'amministratore di modificare la struttura posti del teatro. \\ \\
+			\textbf{RF\increaseCount{rf}: Gestisci Account} \\
+			Il sistema dovrà consentire all'amministratore di creare, modificare e rimuovere gli account biglietteria e amministratore. \\	
+
+		\subsubsection{Requisiti Non Funzionali}
+			\newcounter{rnf}
+			
+			\textbf{RNF\increaseCount{rnf}: Python 3} \\ Il sistema dovrà essere implementato in linguaggio Python 3. \\ \\
+			\textbf{RNF\increaseCount{rnf}: PyQT} \\ Il sistema dovrà presentarsi all'utente tramite un'interfaccia grafica da realizzarsi con la libreria Python PyQT. \\ \\
+			\textbf{RNF\increaseCount{rnf}: Pickle} \\ Il sistema dovrà memorizzare i dati persistenti utilizzando la libreria Python Pickle. \\
+			\newpage
+	
+	\subsection{Casi d'uso}
+		\newcounter{classId}
+
+		\subsubsection{Attori}
+			\textbf{Diagramma} \\ \\ 
+			\begin{center} \includegraphics[height=.85\textheight]{imgs/use_case/attori} \end{center}
+			\newpage
+		
+		\subsubsection{Cliente}
+			\textbf{Diagramma} \\ \\ 
+			\begin{center} \includegraphics[width=\textwidth]{imgs/use_case/cliente} \end{center}
+			\newpage
+		
+			\textbf{Descrizioni}
+			\input{ucdescriptions/cliente.tex}
+			\newpage
+		
+		\subsubsection{Biglietteria}
+			\textbf{Diagramma} \\ \\ 
+			\begin{center} \includegraphics[width=\textwidth]{imgs/use_case/biglietteria} \end{center}
+			\newpage
+			
+			\textbf{Descrizioni}
+			\input{ucdescriptions/biglietteria.tex}
+			\newpage
+		
+		\subsubsection{Amministratore}
+			\textbf{Diagramma} \\ \\ 
+			\begin{center} \includegraphics[height=0.85\textheight]{imgs/use_case/amministratore} \end{center}
+			\newpage
+			
+			\textbf{Descrizioni}
+			\input{ucdescriptions/amministratore.tex}
+	
+	\subsection{Matrice di mapping}
+		\includegraphics[height=\textheight]{imgs/matrice/matrice_mapping_1}
+                \newpage
+		\includegraphics[height=\textheight]{imgs/matrice/matrice_mapping_2}

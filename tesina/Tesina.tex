@@ -1,0 +1,112 @@
+\documentclass{article}
+
+% Imports
+\usepackage[a4paper, total={6in, 9in}]{geometry} % Imposta i margini della pagina
+\usepackage{array} % Fornisce per le tabelle il tipo di colonna "m", che consente di impostare una larghezza fissa
+\usepackage{tabularray} % Fornisce per le tabelle i tipi di colonna che permettono l'allineamento verticale
+\usepackage{booktabs} % Fornisce decoratori per le tabelle
+\usepackage{graphicx} % Inserimento immagini
+
+% Use case descriptions imports & settings
+\usepackage[dvipsnames, table]{xcolor} % Per colorare celle delle tabelle
+\usepackage{tabularx}
+\usepackage{enumitem}
+\setlist[enumerate]{label*=\arabic*., topsep=0pt, itemsep=0pt, parsep=0pt, partopsep=0pt} % Imposta gli indici di tutti i livelli di enumerazione come numeri arabi (invece del default che passa alle lettere) e rimuove il padding
+\usepackage{float} % Fornisce la posizione 'H' per le tabelle, che le posiziona direttamente dove specificato nel codice latex e non in cima alla pagina o altri comportamenti 'float' non desiderati
+
+\usepackage{etoolbox} % Permette di creare consdizioni nelle macro con \ifstrequal
+
+\usepackage{listings} % Fornisce l'environment per mostrare listati di codice
+\usepackage{xcolor}
+
+% Macros
+\input{macros.tex}
+
+
+\title{Tell: Gestore teatrale}
+\author {
+    Giuseppe Mariotti \\
+    Riccardo Ripa \\
+    Rodrigo Rengifo \\
+    Mattia Praolini
+}
+
+\begin{document}
+    \pagenumbering{gobble}
+
+    \begin{titlepage}
+        \begin{center}
+                
+            \Huge
+            \textbf{Università Politecnica delle Marche}
+                
+            \vspace{0.5cm}
+            \LARGE
+                Facoltà di Ingegneria \\
+                Corso di Laurea Triennale in Ingegneria Informatica e dell'Automazione
+            
+            \vspace{0.5cm}
+            \large
+                Progetto Finale di Ingegneria del Software
+                
+            \vspace{1cm}
+             
+            \includegraphics[height=7cm]{"LOGO_UNIVPM_390x154px.png"}   
+           
+            
+                
+                
+            \Huge
+                Tell: Gestore Teatrale
+                
+            \vspace{0.5cm}
+                
+            
+         \end{center}  
+         
+    \raggedright
+
+    \Large
+        Professori:
+        \vspace{0.2cm}\\
+    \Large
+        Prof. Domenico Ursino
+        \vspace{0.125cm}\\
+    \Large
+        Prof. Davide Traini
+
+    \raggedleft
+
+    \Large
+        Studenti:
+        \vspace{0.2cm}\\
+    \Large
+        Giuseppe Mariotti
+        \vspace{0.125cm}\\
+    \Large
+        Rodrigo Rengifo
+        \vspace{0.125cm}\\
+    \Large
+        Riccardo Ripa
+        \vspace{0.125cm}\\
+    \Large
+        Mattia Praolini
+
+    \begin{center}
+            Anno Accademico 2025/2026  
+    \end{center}
+        
+    \end{titlepage}
+
+    \newpage
+    \pagenumbering{arabic}
+
+
+	\include{sections/panoramica.tex}
+	\include{sections/glossario-termini.tex}
+	\include{sections/gestione-requisiti.tex}
+	\include{sections/analisi.tex}
+	\include{sections/progettazione.tex}
+        \include{sections/testing.tex}
+        \include{sections/mockup.tex}
+\end{document}

@@ -1,0 +1,514 @@
+% UC: Crea Spettacolo			[X]
+% UC: Lista Spettacoli		[X]
+% UC: Visualizza Spettacolo	[X]
+% UC: Lista Eventi		[X]
+% UC ext: Modifica Spettacolo		[X]
+% UC ext: Elimina Spettacolo		[X]
+% UC ext: Crea Evento			[X]
+% UC ext: Modifica Evento		[X]
+% UC ext: Elimina Evento		[X]
+% UC: Lista Prenotazioni		[X]
+% UC ext: Ricerca Prenotazione		[X]
+% UC: Visualizza Prenotazione	[X]
+% UC ext: Elimina Prenotazione	[X]
+% UC ext: Segna Prenotazione come pagata	[X]
+
+\renewcommand{\attori}{Biglietteria \\ Amministratore}
+% ID: 9-22
+
+
+{\ucTable	% UC: Crea Spettacolo
+{	% Caso d'uso
+	Crea Spettacolo
+	
+}{	% ID
+	\increaseCount{classId}
+	
+}{	% Breve descrizione
+	L'Utente crea uno Spettacolo da svolgere nel teatro.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'Utente si trova nella sezione SPETTACOLI.
+        % "si trova"(5)
+        % "SPETTACOLI"(8)
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item L'Utente avvia il caso d'uso selezionando il comando "Crea Spettacolo".
+        \item Il sistema mostra una interfaccia per inserire dati e impostazioni dello Spettacolo.
+        \item L'Utente inserisce le informazioni dello Spettacolo.
+        \item L'Utente conferma la creazione.
+        \item Il sistema verifica i dati e li salva in memoria.
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item L'Utente crea uno Spettacolo.
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucTable	% UC: Lista Spettacoli
+	{	% Caso d'uso
+		Lista Spettacoli
+		
+	}{	% ID
+		\increaseCount{classId}
+		
+	}{	% Breve descrizione
+		L'Utente visualizza la lista di Spettacoli memorizzati.
+        % "visualizza"
+        % "memorizzate"(1)
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'Utente si trova nella sezione SPETTACOLI.
+			% "si trova"(5)
+			% "SPETTACOLI"(8)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item Il sistema mostra a schermo le informazioni essenziali di tutti gli Spettacoli memorizzati.
+            % "mostra a schermo <oggetto>"(3)
+            \item Il sistema permette all'Utente di visualizzare in più dettaglio, modificare ed eliminare gli Spettacoli.
+            \item[] \textbf{punto di estensione:} Ricerca Spettacolo
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item La lista di Spettacoli memorizzati viene visualizzata a schermo.
+			% "visualizza a schermo <oggetto>"(4)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucTable	% UC: Visualizza Spettacolo
+	{	% Caso d'uso
+		Visualizza Spettacolo
+		
+	}{	% ID
+		\increaseCount{classId}
+		
+	}{	% Breve descrizione
+		L'Utente visualizza le informazioni riguardo un singolo Spettacolo.
+        % "visualizza"
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'Utente si trova nella sezione SPETTACOLI.
+			% "si trova"(5)
+			% "SPETTACOLI"(8)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item L'Utente richiede le informazioni di uno Spettacolo.
+            \item Il sistema mostra a schermo le informazioni.
+            % "mostra a schermo <oggetto>"(3) 
+            \item \textbf{include}(Lista Eventi)
+            \item[] \textbf{punto di estensione:} Nuovo Evento
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item Le informazioni dello Spettacolo vengono visualizzate a schermo.
+			% "visualizza a schermo <oggetto>"(4)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa	
+} }
+
+
+{\ucTable	% UC: Lista Eventi
+	{	% Caso d'uso
+		Lista Eventi
+		
+	}{	% ID
+		\increaseCount{classId}
+		
+	}{	% Breve descrizione
+		L'Utente visualizza la lista di Eventi associati allo Spettacolo che sta visualizzando.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+			\item L'Utente sta visualizzando un singolo Spettacolo.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item Il sistema mostra a schermo le informazioni essenziali di tutti gli Eventi associati allo Spettacolo.
+            % "mostra a schermo <oggetto>"(3)
+            % "associate"(6)
+			\item Il sistema permette all'Utente di modificare ed eliminare gli Eventi.
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+			\item La lista di Eventi associati allo Spettacolo viene visualizzata a schermo.
+                % "visualizza a schermo <oggetto>"(4)
+                % "associate"(6)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucExtTable	% UC EXT: Modifica Spettacolo
+{	% Caso d'uso
+	Modifica Spettacolo
+	
+}{	% ID
+	\increaseCount{classId}
+	
+}{	% Breve descrizione
+	L'Utente modifica le informazioni di uno Spettacolo.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'Utente si trova nella sezione SPETTACOLI.
+        % "si trova"(5)
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item L'Utente avvia il caso d'uso selezionando il comando "Modifica" associato ad uno Spettacolo.
+        \item Il sistema consente all'Utente di modificare le informazioni dell'Opera.
+        \item L'Utente inserisce le modifiche desiderate e le conferma.
+        \item Il sistema verifica i dati e li salva in memoria.
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item L'Utente effettua la modifica di uno Spettacolo.
+    \end{enumerate}
+	
+} }
+
+{\ucExtTable	% UC EXT: Elimina Spettacolo
+{	% Caso d'uso
+	Elimina Spettacolo
+	
+}{	% ID
+	\increaseCount{classId}
+	
+}{	% Breve descrizione
+	L'Utente elimina uno Spettacolo dalla lista di Spettacoli memorizzati.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'Utente si trova nella sezione SPETTACOLI.
+        % "si trova"(5)
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item L'Utente avvia il caso d'uso selezionando il comando "Elimina" associato ad uno Spettacolo.
+        \item Il sistema richiede all'Utente di confermare l'intenzione di eliminare lo Spettacolo.
+        \item L'Utente conferma l'elimina.
+        \item Il sistema verifica che non ci siano Eventi associati allo Spettacolo e lo elimina permanentemente.
+        % "e la elimina permanentemente"(10)
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item L'Utente effettua l'eliminazione di uno Spettacolo.
+    \end{enumerate}
+	
+} }
+
+{\ucExtTable	% UC EXT: Crea Evento
+{	% Caso d'uso
+	Crea Evento
+	
+}{	% ID
+	\increaseCount{classId}
+	
+}{	% Breve descrizione
+	L'Utente crea un'Evento per uno Spettacolo.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'Utente sta visualizzando uno Spettacolo.
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item L'Utente avvia il caso d'uso selezionando il comando "Crea Evento".
+        \item Il sistema mostra una interfaccia per inserire la data e ora dell'Evento.
+        \item L'Utente inserisce le informazioni dell'Evento.
+        \item L'Utente conferma la creazione.
+        \item Il sistema verifica i dati e li salva in memoria.
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item Il nuovo Evento è memorizzato e immediatamente visibile a tutti gli Utenti.
+    \end{enumerate}
+	
+} }
+
+{\ucExtTable	% UC EXT: Modifica Evento
+{	% Caso d'uso
+	Modifica Evento
+	
+}{	% ID
+	\increaseCount{classId}
+	
+}{	% Breve descrizione
+	L'Utente modifica le informazioni di un'Evento.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'Utente sta visualizzando un'Opera.
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item L'Utente avvia il caso d'uso selezionando il comando "Modifica" associato ad un'Evento.
+        \item Il sistema consente all'Utente di modificare la data e ora dell'Evento.
+        \item L'Utente inserisce le modifiche desiderate e le conferma.
+        \item Il sistema verifica i dati e li salva in memoria.
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item Le modifiche apportate sono memorizzate e immediatamente disponibili a tutti gli Utenti.
+    \end{enumerate}
+	
+} }
+
+{\ucExtTable	% UC EXT: Elimina Evento
+{	% Caso d'uso
+	Elimina Evento
+	
+}{	% ID
+	\increaseCount{classId}
+	
+}{	% Breve descrizione
+	L'Utente elimina un'Evento dalla lista di Eventi associati allo Spettacolo.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'Utente sta visualizzando un'Opera.
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item L'Utente avvia il caso d'uso selezionando il comando "Elimina" associato ad un'Evento.
+        \item Il sistema richiede all'Utente di confermare l'intenzione di eliminare l'Evento.
+        \item L'Utente conferma l'elimina.
+        \item Il sistema verifica che non ci siano Prenotazioni associate all'Evento e lo elimina permanentemente.
+        % "e la elimina permanentemente"(10)
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item L'Utente effettua l'eliminazione di un'Evento.
+    \end{enumerate}
+	
+} }
+
+{\ucTable	% UC: Lista Prenotazioni
+{	% Caso d'uso
+	Lista Prenotazioni
+	
+}{	% ID
+	\increaseCount{classId}
+	
+}{	% Breve descrizione
+	L'Utente visualizza l'elenco delle Prenotazione memorizzate.
+    % "visualizza"
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'Utente si trova nella sezione PRENOTAZIONI.
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item Il sistema mostra a schermo il nominativo e l'ora di emmisione di tutte le Prenotazioni memorizzate.
+        % "mostra a schermo <oggetto>"(3)
+        \item Il sistema permette all'Utente di visualizzare in più dettaglio ed eliminare le Prenotazioni.
+        % "visualizza in più dettaglio"(9)
+        \item[] \textbf{punto di estensione:} Ricerca Prenotazione
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item La lista di Prenotazioni memorizzate viene visualizzata a schermo.
+        % "visualizza a schermo <oggetto>"(4)
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucTable	% UC: Visualizza Prenotazione
+	{	% Caso d'uso
+		Visualizza Prenotazione
+		
+	}{	% ID
+		\increaseCount{classId}
+		
+	}{	% Breve descrizione
+        L'Utente visualizza le informazioni riguardo una singola Prenotazione.
+		
+	}{	% Attori Primari
+		\attori
+	}{	% Precondizioni
+		\begin{enumerate}
+            \item L'Utente si trova nella sezione PRENOTAZIONI.
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Principale
+		\begin{enumerate}
+			\item L'Utente chiama il comando "Visualizza" associato ad una Prenotazione.
+            \item Il sistema mostra a schermo le informazioni.
+            % "mostra a schermo <oggetto>"(3)
+            \item[] \textbf{punto di estensione:} Segna Prenotazione come Pagata
+		\end{enumerate}
+		
+	}{	% Postcondizioni
+		\begin{enumerate}
+            \item Le informazioni della Prenotazione vengono visualizzate a schermo.
+			% "visualizza a schermo <oggetto>"(4)
+		\end{enumerate}
+		
+	}{	% Sequenza Eventi Alternativa
+} }
+
+
+{\ucExtTable	% UC EXT: Elimina Prenotazione
+{	% Caso d'uso
+    Elimina Prenotazione
+    
+}{	% ID
+    \increaseCount{classId}
+    
+}{	% Breve descrizione
+    L'Utente elimina una Sezione dalla lista di Sezioni memorizzate.
+    
+}{	% Attori Primari
+    \attori
+}{	% Precondizioni
+    \begin{enumerate}
+        \item L'Utente si trova nella sezione PRENOTAZIONI.
+    \end{enumerate}
+    
+}{	% Sequenza Eventi Principale
+    \begin{enumerate}
+        \item L'Utente avvia il caso d'uso selezionando il comando "Elimina" associato ad una Prenotazione.
+        \item Il sistema richiede all'Utente di confermare l'intenzione di eliminare la Prenotazione.
+        \item L'Utente conferma l'elimina.
+        \item Il sistema elimina la Prenotazione permanentemente.
+        % "e la elimina permanentemente"(10)
+    \end{enumerate}
+    
+}{	% Postcondizioni
+    \begin{enumerate}
+        \item L'Utente effettua l'eliminazione di una Prenotazione.
+    \end{enumerate}
+		
+} }
+
+
+{\ucExtTable	% UC EXT: Ricerca Prenotazione
+{	% Caso d'uso
+	Ricerca Prenotazione
+	
+}{	% ID
+	\increaseCount{classId}
+	
+}{	% Breve descrizione
+	L'Utente filtra la lista delle Prenotazioni una parola chiave ricercata nel nominativo.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'Utente si trova nella sezione PRENOTAZIONI.
+			% "si trova"(5)
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item L'Utente effettua una ricerca specificando una chiave di ricerca.
+        \item Le Prenotazioni che non contengono la parola chiave nel suo nominativo non vengono incluse nella lista risultante.
+        % "nel suo nominativo"
+        % "non vengono inclusi"
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item La lista risultante è filtrata. % Versión precedente: L'Utente visualizza l'elenco filtrato.
+    \end{enumerate}
+	
+} }
+
+{\ucExtTable	% UC EXT: Segna Prenotazione come Pagata
+{	% Caso d'uso
+	Segna Prenotazione come Pagata
+	
+}{	% ID
+	\increaseCount{classId}
+	
+}{	% Breve descrizione
+	L'Utente segna una Prenotazione come \emph{pagata}.
+	
+}{	% Attori Primari
+	\attori
+	
+}{	% Precondizioni
+	\begin{enumerate}
+        \item L'Utente sta visualizzando una Prenotazione.
+    \end{enumerate}
+	
+}{	% Sequenza Eventi Principale
+	\begin{enumerate}
+        \item L'Utente avvia il caso d'uso selezionando il comando "Segna come \emph{pagata}" associato ad una Prenotazione.
+        \item Il sistema chiede conferma all'Utente. % - Nella prattica, non chiede mai conferma
+        \item L'Utente conferma l'assegnamento della Prenotazione come \emph{pagata}.
+        \item Il sistema effettua l'assegnamento.
+    \end{enumerate}
+	
+}{	% Postcondizioni
+	\begin{enumerate}
+        \item La Prenotazione è segnata come \emph{pagata}.
+    \end{enumerate}
+	
+} }
