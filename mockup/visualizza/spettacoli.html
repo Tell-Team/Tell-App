@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="../style-secondo-ruolo.css" />
+    <link rel="stylesheet" href="../istanze-elencate.css" />
+  </head>
+  <body>
+    <button onclick="window.location.href = './login.html';">Logout</button>
+
+    <br /><br />
+
+    <div class="singola-riga">
+      <span style="color: gray">Spettacoli</span>
+      <button onclick="window.location.href = './info.html';">Info</button>
+      <button
+        class="adminOnly"
+        onclick="window.location.href = './account.html';"
+      >
+        Account
+      </button>
+    </div>
+
+    <div class="singola-riga">
+      <h2>Spettacoli</h2>
+      <button
+        class="ticketOnly"
+        onclick="window.location.href = '../crea-modifica/crea-spettacolo.html';"
+      >
+        + Nuovo Spettacolo
+      </button>
+    </div>
+
+    <div class="istanza">
+      <h3>Zelmira</h3>
+      <p>Diretto da Giacomo Sagripanti <br />Regia di Calixto Bieito</p>
+      <div class="singola-riga">
+        <button
+          class="ticketOnly"
+          style="margin-left: 10px"
+          onclick="window.location.href = '../crea-modifica/modifica-spettacolo.html'"
+        >
+          Modifica
+        </button>
+        <button
+          style="margin-left: 5px"
+          onclick="window.location.href = './acquista.html';"
+        >
+          Scegli posti
+        </button>
+      </div>
+    </div>
+  </body>
+</html>
