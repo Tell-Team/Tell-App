@@ -14,11 +14,19 @@
 	Posto & Nessuno & Un singolo posto a sedere. \\
 	Sezione & Nessuno & Un raggruppamento di posti della stessa tipologia, che hanno dunque tutti lo stesso prezzo per un determinato spettacolo. \\
 	Fila & Nessuno & Un raggruppamento di posti all'interno di una sezione, posizionati relativamente vicini l'uno all'altro. \\
-	Disponibile & Nessuno & Un \textit{posto}, una \textit{fila} o una \textit{sezione} si dicono disponibili per un dato \textit{evento} se: (1) È stato definito un prezzo per lo \textit{spettacolo} relativo per la \textit{sezione} (in caso di \textit{posto} o \textit{fila}, s'intende la sezione relativa), e (2) Il \textit{posto} non è occupato (in caso di \textit{fila} o \textit{sezione}, s'intende che contengono almeno un \textit{posto} non occupato) \\
+        Disponibile & Nessuno & Un \textit{posto}, una \textit{fila} o una \textit{sezione} si dicono disponibili per un dato \textit{evento} se: (1) È stato definito un prezzo per la coppia (\textit{Spettacolo} relativo, \textit{Sezione}) (in caso di \textit{posto} o \textit{fila}, s'intende la \textit{sezione} relativa), e (2) Il \textit{posto} non è occupato (in caso di \textit{fila} o \textit{sezione}, s'intende che contengono almeno un \textit{posto} non occupato) \\
 	Cliente & Nessuno & L'aquirente di biglietti. \\
 	Biglietteria & Nessuno & Un dipendente o un computer dell'ufficio biglietteria. \\
 	Amministratore & Nessuno & Un gestore del sistema. \\
 	Utente & Nessuno & Uno qualunque tra \textit{cliente}, \textit{biglietteria} e \textit{amministratore}. \\
+	\hline
+\end{tblr}
+\newpage
+
+\begin{tblr}{h{3cm}h{2cm}m{8cm}}
+	\hline
+	\textbf{Termine} & \textbf{Sinonimi} & \textbf{Definizione} \\
+	\hline
 	INFORMAZIONI & Nessuno & Una sezione dell'app dove si può accedere alle Opere, le Regie ed i Generi disponibili. \\
 	SPETTACOLI & Nessuno & Una sezione dell'app dove si può gestire la creazione, modifica ed elimina degli Spettacoli e gli Eventi disponibili \\
 	PRENOTAZIONI & Nessuno & Una sezione dell'app dove si può gestire lo stato di pagamento e l'eliminazione delle Prenotazioni registrate \\

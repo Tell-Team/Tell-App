@@ -7,6 +7,9 @@
 *.fls
 */%OUTDIR%
 
+#Immagini con copyright
+LOGO_UNIVPM_390x154px.png
+
 #Python
 */.vscode
 *\__pycache__
