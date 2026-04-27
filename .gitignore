@@ -14,3 +14,8 @@ LOGO_UNIVPM_390x154px.png
 */.vscode
 *\__pycache__
 codice/db
+*.synctex.gz
+*\.vscode
+*\__pycache__
+codice/db
+codice/sample_db.py
