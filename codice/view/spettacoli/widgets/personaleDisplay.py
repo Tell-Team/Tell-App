@@ -1,0 +1,70 @@
+from PyQt6.QtWidgets import QLabel, QHBoxLayout
+from PyQt6.QtCore import Qt, pyqtSignal
+from functools import partial
+
+from view.utils.list_widgets import ItemDisplay
+from view.utils.horizontal_scroll import HorizontalWheelScrollArea
+from view.utils.custom_button import EliminaButton
+from view.utils import make_vline
+
+from view.style.ui_style import WidgetRole, WidgetColor
+
+
+class PersonaleDisplay(ItemDisplay):
+    """View degli interpreti e musicisti_e_direttori_artistici degli spettacoli.
+
+    Segnali
+    ---
+    - `eliminaRequest(str)`: emesso quando si clicca il pulsante di elimina [X].
+    """
+
+    eliminaRequest = pyqtSignal(str)
+
+    def __init__(self, key: str, value: str):
+        super().__init__()
+
+        self.__setup_ui(key, value)
+        self.__connect_signals()
+
+    def __setup_ui(self, key: str, value: str) -> None:
+        self.__key = key
+
+        widget_key = QLabel(self.__key)
+        widget_key.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        widget_key.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
+        scroll_key = HorizontalWheelScrollArea()
+        scroll_key.setWidget(widget_key)
+        scroll_key.setMinimumWidth(250)
+
+        widget_value = QLabel(value)
+        widget_value.setProperty(WidgetRole.Label.BODY_TEXT, True)
+        widget_value.setProperty(WidgetColor.Label.PRIMARY_COLOR, True)
+        scroll_value = HorizontalWheelScrollArea()
+        scroll_value.setWidget(widget_value)
+        scroll_value.setMinimumWidth(200)
+
+        self.__btn_rimuovi = EliminaButton()
+        self.__btn_rimuovi.setFixedSize(32, 32)
+
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 5, 0)
+        layout.addWidget(
+            scroll_key,
+            alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+        )
+        layout.addWidget(make_vline())
+        layout.addWidget(
+            scroll_value,
+            alignment=Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+        )
+        layout.addWidget(make_vline())
+        layout.addWidget(self.__btn_rimuovi)
+
+        layout.setStretch(0, 1)
+        layout.setStretch(2, 2)
+        layout.setStretch(4, 0)
+
+    def __connect_signals(self) -> None:
+        self.__btn_rimuovi.clicked.connect(  # type:ignore
+            partial(self.eliminaRequest.emit, self.__key)
+        )

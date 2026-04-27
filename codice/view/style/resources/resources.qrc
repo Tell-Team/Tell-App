@@ -1,0 +1,26 @@
+<RCC version="1.0">
+    <qresource>
+        <file>icons/elimina.svg</file>
+        <file>icons/modifica.svg</file>
+        <file>icons/ricerca.svg</file>
+        <file>icons/salva.svg</file>
+        <file>icons/crea.svg</file>
+    </qresource>
+    <qresource>
+        <file>qss/themes/light.qss</file>
+        <file>qss/themes/dark.qss</file>
+        <file>qss/layouts/layout.qss</file>
+    </qresource>
+    <qresource>
+        <file>icons/arrows/dark_down_arrow.svg</file>
+        <file>icons/arrows/dark_up_arrow.svg</file>
+        <file>icons/arrows/light_down_arrow.svg</file>
+        <file>icons/arrows/light_up_arrow.svg</file>
+    </qresource>
+    <qresource>
+        <file>icons/tell_icon.svg</file>
+    </qresource>
+    <qresource>
+        <file>icons/checked.svg</file>
+    </qresource>
+</RCC>

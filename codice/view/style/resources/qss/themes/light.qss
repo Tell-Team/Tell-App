@@ -1,0 +1,124 @@
+/* ------------------------ QLabel ------------------------ */
+QLabel[paragraph="true"] { color: #222222; }
+QLabel[secondary-text="true"] { color: #444444; }
+QLabel[error-message="true"] { color:#c3423f; }
+
+/* ------------------------ QPushButton ------------------------ */
+QPushButton[transparent-button="true"]:hover { color: "#1a0db3"; }
+QPushButton[transparent-button="true"]:pressed { color: "#5500a3"; }
+
+QPushButton[search-button="true"] {
+    border: 1px solid #b0b0b0;
+}
+
+QPushButton[default-button="true"] {
+    background-color: white;
+    color: black;
+    border: 1px solid #b0b0b0;
+}
+QPushButton[default-button="true"]:hover { background-color: #d1d1d1; }
+QPushButton[default-button="true"]:pressed { background-color: #9a9a9a; }
+
+QPushButton:disabled {
+    background-color: #ccc; /* Color: Light gray */
+    color: #777777;
+}
+
+/* ------------------------ QWidget speciali ------------------------ */
+QWidget[item-card="true"] {
+    border: 1px solid #111; 
+    background-color: #f3f3f3; 
+}
+
+QWidget[item-list="true"] {
+    border: 1px solid #b0b0b0; 
+    background-color: white; 
+}
+
+/* ------------------------ Campi d'input ------------------------ */
+QLineEdit, QTextEdit, QComboBox, QSpinBox, QDateEdit, QTimeEdit {
+    border: 1px solid #b0b0b0; 
+    background-color: white; 
+    color: #222222; 
+}
+
+QLineEdit:disabled, QTextEdit:disabled, QComboBox:disabled,
+QSpinBox:disabled, QDateEdit:disabled, QTimeEdit:disabled {
+    background-color: #f0f0f0; 
+    color: #a0a0a0;
+    border: 1px solid #c0c0c0;
+}
+
+/* ------------------------ ComboBox & QDateEdit Dropdown ------------------------ */
+QComboBox::drop-down, QDateEdit::drop-down { border-left: 1px solid #b0b0b0; }
+QComboBox::drop-down:hover, QDateEdit::drop-down:hover { background-color: #d1d1d1; }
+QComboBox::drop-down:pressed, QDateEdit::drop-down:pressed { background-color: #9a9a9a; }
+
+QComboBox QAbstractItemView { selection-color: white; }
+
+QComboBox::down-arrow { image: url(:icons/arrows/light_down_arrow.svg); }
+
+/* ------------------------ QSpinBox & QDateEdit Buttons ------------------------ */
+QSpinBox::up-button, QDateEdit::up-button, QTimeEdit::up-button {
+    border-left: 1px solid #b0b0b0;
+    border-bottom: 1px solid #b0b0b0;
+}
+
+QSpinBox::down-button, QDateEdit::down-button, QTimeEdit::down-button {
+    border-left: 1px solid #b0b0b0;
+}
+
+QSpinBox::up-arrow, QDateEdit::up-arrow,
+QTimeEdit::up-arrow { image: url(:icons/arrows/light_up_arrow.svg); }
+
+QSpinBox::down-arrow, QDateEdit::down-arrow, 
+QTimeEdit::down-arrow { image: url(:icons/arrows/light_down_arrow.svg); }
+
+QSpinBox::up-button:hover, QSpinBox::down-button:hover,
+QDateEdit::up-button:hover, QDateEdit::down-button:hover,
+QTimeEdit::up-button:hover, QTimeEdit::down-button:hover { background-color: #d1d1d1; }
+
+QSpinBox::up-button:pressed, QSpinBox::down-button:pressed,
+QDateEdit::up-button:pressed, QDateEdit::down-button:pressed,
+QTimeEdit::up-button:pressed, QTimeEdit::down-button:pressed { background-color: #9a9a9a; }
+
+/* ------------------------ ScrollArea ------------------------ */
+QScrollArea {
+    border: 1px solid #b0b0b0;
+}
+QScrollBar {
+    border: 2px solid #c0c0c0;
+    background-color: #e0e0e0;
+}
+
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+    background-color: #818181;
+}
+
+/* ------------------------ QMessageBox ------------------------ */
+QMessageBox[icon="Critical"] {
+    background-color: #ffffff;   /* bright dialog background */
+    color: black;              /* readable black text */
+    border: 1px solid #d32f2f;  /* red border for critical */
+}
+
+QMessageBox[icon="Critical"] QLabel {
+    color: black;              /* ensures message text is readable */
+}
+
+QMessageBox[icon="Critical"] QPushButton {
+    background-color: #f0f0f0;
+    color: black;
+    border: 1px solid #c0c0c0;
+    padding: 5px 12px;
+    border-radius: 3px;
+}
+
+QMessageBox[icon="Critical"] QPushButton:hover {
+    background-color: #d32f2f;   /* red hover for urgency */
+    color: white;
+}
+
+QMessageBox[icon="Critical"] QPushButton:pressed {
+    background-color: #b71c1c;   /* pressed feedback */
+}

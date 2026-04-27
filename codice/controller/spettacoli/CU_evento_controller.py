@@ -1,0 +1,121 @@
+from PyQt6.QtCore import QDateTime
+from typing import Optional, override
+
+from core.controller import AbstractCUController
+
+from model.model.model import Model
+from model.organizzazione.evento import Evento
+from model.exceptions import (
+    DatoIncongruenteException,
+    IdOccupatoException,
+    IdInesistenteException,
+)
+
+from view.spettacoli.pagine import ModificaEventoPage, NuovoEventoPage
+
+from view.utils import mostra_error_popup
+
+
+DATI_INCONGRUENTI = "<b>ATTENZIONE</b>: È necessario inserire una data ed ore validi."
+
+
+class CUEventoController(AbstractCUController):
+    """Gestisce il salvataggio degli eventi creati e modificati.
+
+    Segnali
+    ---
+    - `goBackRequest()`: emesso per tornare alla pagina `VisualizzaSpettacoloPage`.
+    """
+
+    _view_nuova: NuovoEventoPage
+    _view_modifica: ModificaEventoPage
+
+    def __init__(
+        self,
+        model: Model,
+        n_evento_v: NuovoEventoPage,
+        m_evento_v: ModificaEventoPage,
+    ):
+        if type(n_evento_v) is not NuovoEventoPage:
+            raise TypeError("Atteso NuovoEventoPage per n_evento_v.")
+        if type(m_evento_v) is not ModificaEventoPage:
+            raise TypeError("Atteso ModificaEventoPage per m_evento_v.")
+
+        super().__init__(model, n_evento_v, m_evento_v)
+
+    # ------------------------- METODI DEL CONTROLLER -------------------------
+
+    def __get_evento(self, id_: int) -> Optional[Evento]:
+        return self._model.get_evento(id_)
+
+    def __aggiungi_evento(self, evento: Evento) -> None:
+        self._model.aggiungi_evento(evento)
+
+    def __modifica_evento(self, evento_modificato: Evento) -> None:
+        self._model.modifica_evento(evento_modificato)
+
+    @override
+    def _richiesta_nuovo(self) -> None:
+        current_pagina = self._view_nuova
+
+        # Ottieni l'input inserito
+        data = current_pagina.data.date()
+        time = current_pagina.ora.time()
+        py_date = QDateTime(data, time).toPyDateTime()
+
+        # Tenta di creare il nuovo evento
+        try:
+            nuovo_evento = Evento(py_date, current_pagina.id_spettacolo)
+        except DatoIncongruenteException as exc:
+            # È stato trovato un campo con input non valido
+            current_pagina.mostra_msg_input_error(DATI_INCONGRUENTI)
+            mostra_error_popup(current_pagina, "Input non valido", str(exc))
+        else:
+            current_pagina.mostra_msg_input_error("")
+
+            try:
+                self.__aggiungi_evento(nuovo_evento)
+            except IdOccupatoException as exc:
+                # Esiste già un evento con quell'id
+                mostra_error_popup(current_pagina, "ID Evento occupato", str(exc))
+            else:
+                self.goBackRequest.emit()
+
+    @override
+    def _richiesta_modifica(self) -> None:
+        current_pagina = self._view_modifica
+
+        # Crea una copia del evento originale
+        copia_evento = self.__get_evento(current_pagina.id_current_evento)
+        if not isinstance(copia_evento, Evento):
+            # Non esiste evento con l'id salvato nella pagina
+            mostra_error_popup(
+                current_pagina,
+                "Errore nel salvataggio",
+                f"Non è presente nessun evento con id {current_pagina.id_current_evento}. "
+                + "Impossibile effettuare le modifiche.",
+            )
+            return
+
+        # Ottieni l'input inserito
+        data = current_pagina.data.date()
+        time = current_pagina.ora.time()
+
+        py_date = QDateTime(data, time).toPyDateTime()
+
+        # Tenta di modificare l'evento
+        try:
+            copia_evento.set_data_ora(py_date)
+        except DatoIncongruenteException as exc:
+            current_pagina.mostra_msg_input_error(DATI_INCONGRUENTI)
+            mostra_error_popup(current_pagina, "Input non valido", str(exc))
+        else:
+            current_pagina.mostra_msg_input_error("")
+
+            try:
+                self.__modifica_evento(copia_evento)
+            except IdInesistenteException as exc:
+                # Non esiste un'evento con quell'id
+                mostra_error_popup(current_pagina, "ID Evento insesistente", str(exc))
+            else:
+                self.goBackRequest.emit()
