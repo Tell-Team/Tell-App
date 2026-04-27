@@ -1,3 +1,0 @@
-rimuovi namespace davanti ai nomi delle classi :: click dx sul diagramma > properties > diagram > UNCHECK show namespace
-salvare diagramma come immagine :: publish > save > save to file
-(nascondi/mostra) label :: Click dx su label > Hide Label  /  Click dx su elemento > Appearence > Show Labels
